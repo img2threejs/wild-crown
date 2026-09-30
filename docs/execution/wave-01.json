@@ -1,0 +1,22 @@
+{
+  "runId": "wild-crown-wave-01-20260930",
+  "startedAt": "2026-09-30T08:22:52.934Z",
+  "scope": "First implementation wave: campaign state/content and guided locomotion laboratory; not the full game.",
+  "repository": "https://github.com/img2threejs/wild-crown",
+  "private": true,
+  "implementationModelConfigured": "openai-codex/gpt-6-luna",
+  "reviewModel": "openai-codex/gpt-6-astra",
+  "setupTimeExcluded": true,
+  "wallElapsedMs": null,
+  "jobs": [],
+  "usagePolicy": {
+    "source": "task harness or matched persisted agent sessions only",
+    "inputTokens": null,
+    "outputTokens": null,
+    "cacheReadTokens": null,
+    "cacheWriteTokens": null,
+    "accountWideDeltas": "not attributable; not used",
+    "unknown": "null, never zero"
+  },
+  "status": "running"
+}

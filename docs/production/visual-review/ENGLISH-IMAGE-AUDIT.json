@@ -1,0 +1,413 @@
+[
+  {
+    "id": "M01",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        93,
+        948,
+        480,
+        979
+      ],
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "Beneath the roots of The Grove",
+      "M01   Erya / World map concept",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "eb3581b91d0b8bd0f429caa873c7f70a1023e4277f1acbc80c81b93e23a40bd4"
+  },
+  {
+    "id": "M02",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "M02   The First Pact / Level layout",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "ae3a918c5cae6c8249d6c2dd757f5f676892ae954c8cb0ea6dc612cba0e3d7f3"
+  },
+  {
+    "id": "U01",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        18,
+        18,
+        465,
+        177
+      ],
+      [
+        1302,
+        32,
+        1652,
+        151
+      ],
+      [
+        634,
+        642,
+        785,
+        693
+      ],
+      [
+        0,
+        941,
+        1671,
+        1016
+      ]
+    ],
+    "newLabels": [
+      "AREN",
+      "Vitality",
+      "Dodge",
+      "2 / 2",
+      "Instinct",
+      "THE EMPTY ORCHARD",
+      "Find a path past the falls",
+      "E  Inspect",
+      "U01   Exploration / HUD",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "649310f3081e6f584160a87402741927020011b65a80591d5504edd17e04ef88"
+  },
+  {
+    "id": "U02",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        18,
+        18,
+        465,
+        177
+      ],
+      [
+        610,
+        135,
+        840,
+        165
+      ],
+      [
+        632,
+        817,
+        1145,
+        901
+      ],
+      [
+        0,
+        941,
+        1671,
+        1016
+      ]
+    ],
+    "newLabels": [
+      "AREN",
+      "Vitality",
+      "Dodge",
+      "2 / 2",
+      "Instinct",
+      "3 cores remain uncleansed",
+      "Space + Direction   Dodge",
+      "U02   Asha / Boss HUD",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "4fc4d2d97db1831867e4ec9163b3e2bb0b8e59a7a8c5a919a3e6a37d40d01d2d"
+  },
+  {
+    "id": "U03",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        0,
+        1671,
+        83
+      ],
+      [
+        1135,
+        494,
+        1651,
+        940
+      ],
+      [
+        24,
+        680,
+        235,
+        847
+      ],
+      [
+        0,
+        883,
+        1134,
+        940
+      ],
+      [
+        0,
+        941,
+        1671,
+        1016
+      ]
+    ],
+    "newLabels": [
+      "WILD CROWN",
+      "MAP",
+      "JOURNAL",
+      "COMPANIONS",
+      "SETTINGS",
+      "Rescue Tali",
+      "TRACKED OBJECTIVE",
+      "Find the hunter camp",
+      "Next: Open the cage",
+      "MARK",
+      "Sanctuary",
+      "Objective",
+      "Locked",
+      "Esc  Back",
+      "W A S D   Pan Map",
+      "U03   Map + Journal / Before Tali rescue",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "3da5101c45f4688fda3177b1aed890c3c66f3e47fbebd766946696efb96b6ab4"
+  },
+  {
+    "id": "U04",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        0,
+        1671,
+        83
+      ],
+      [
+        1080,
+        85,
+        1280,
+        121
+      ],
+      [
+        1080,
+        194,
+        1460,
+        239
+      ],
+      [
+        1080,
+        255,
+        1255,
+        282
+      ],
+      [
+        1080,
+        283,
+        1255,
+        326
+      ],
+      [
+        1080,
+        348,
+        1490,
+        383
+      ],
+      [
+        1174,
+        385,
+        1640,
+        457
+      ],
+      [
+        1174,
+        469,
+        1640,
+        540
+      ],
+      [
+        1174,
+        550,
+        1640,
+        625
+      ],
+      [
+        1080,
+        630,
+        1265,
+        673
+      ],
+      [
+        1050,
+        839,
+        1220,
+        871
+      ],
+      [
+        1252,
+        839,
+        1430,
+        871
+      ],
+      [
+        1460,
+        839,
+        1630,
+        871
+      ],
+      [
+        20,
+        894,
+        230,
+        938
+      ],
+      [
+        0,
+        940,
+        1671,
+        1015
+      ]
+    ],
+    "newLabels": [
+      "WILD CROWN",
+      "MAP",
+      "JOURNAL",
+      "COMPANIONS",
+      "SETTINGS",
+      "COMPANIONS",
+      "Protection / Armor Break",
+      "BOND",
+      "TRUSTED",
+      "COMPANION ABILITIES",
+      "Pounce",
+      "Leap in and stagger the target.",
+      "Charge Block",
+      "Intercept a charge to protect you.",
+      "Break Obstacles",
+      "Clear heavy barriers from the path.",
+      "PARTY",
+      "COMBAT",
+      "UTILITY",
+      "SCOUT",
+      "Esc  Back",
+      "U04   Companions / After Asha recruitment",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "86a1818c8a552aacf0970434a9ded1f2785b92870dca365dd2d496f355f6eb89"
+  },
+  {
+    "id": "C01",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "C01   Aren / Yara / Orun / Marek",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "ede6513f80b74e00490727fcdf1893fbafafe8b6c551ca762204816ddbf5f1eb"
+  },
+  {
+    "id": "C02",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "C02   Vara / Koro / Asha / Tali",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "809a010162efcfff2618f97da5e8d60d5972db6a8e483beff4dfded2a3cc6adb"
+  },
+  {
+    "id": "C03",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        809,
+        1941,
+        884
+      ]
+    ],
+    "newLabels": [
+      "C03   Ruun / Luma / Sable",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "4d57cb29a3eb1ee357692bc7dc9c63e60db17b8450b36c8725deafa58531016e"
+  },
+  {
+    "id": "C04",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "C04   Nyra / Solkar / Ghor",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "e393a8437f6e25666ba3a4f5b4687a2a8f6e35d3dcf7c029a3d4214843dc7490"
+  },
+  {
+    "id": "C05",
+    "language": "en",
+    "approval": "concept-approved-by-user",
+    "copyRegions": [
+      [
+        0,
+        1024,
+        1535,
+        1099
+      ]
+    ],
+    "newLabels": [
+      "C05   Orun / Crowned Beast",
+      "CONCEPT APPROVED / ENGLISH / NOT IMPLEMENTED"
+    ],
+    "unchangedOutsideCopyRegions": true,
+    "sha256": "f04b371b17f4d3377c1cff3baca1be23083be3cee38d5756f9a39698ecb6c3af"
+  }
+]

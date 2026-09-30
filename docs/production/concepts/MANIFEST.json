@@ -1,0 +1,47 @@
+{
+  "project": "Wild Crown: The Broken Pact",
+  "generatedOn": "2026-09-30",
+  "status": "synthetic-concept-candidates-not-approved",
+  "tool": "Codex generate_image",
+  "provider": "openai-codex",
+  "reportedModel": "gpt-image-2-codex",
+  "reportedCatalogEntry": "openai-codex/gpt-image-1",
+  "reportedQuality": "medium",
+  "inputMode": "prompt-only; no workspace reference images uploaded",
+  "seed": null,
+  "rightsStatus": "production terms and distribution rights require review before asset publication",
+  "assets": [
+    {
+      "id": "aren-concept-candidate-01",
+      "file": "aren-candidate.webp",
+      "width": 1024,
+      "height": 1536,
+      "brief": "Original young adult forest warden; athletic acrobat; short dark hair; cropped moss-green/ochre outfit; left forearm root mark; collapsible staff; no long cloak; neutral full-body studio three-quarter view.",
+      "review": "Viewed directly. Direction candidate only; staff currently held in hand, requiring a separate neutral unarmed A-pose production reference. Back view and identity consistency not verified.",
+      "approvedForTripo": false
+    },
+    {
+      "id": "asha-concept-candidate-01",
+      "file": "asha-candidate.webp",
+      "width": 1536,
+      "height": 1024,
+      "brief": "Original protective mother tigress; powerful shoulder silhouette; ochre/charcoal branching stripes; ivory muzzle; scar; neutral quadruped studio pose; no armor or accessories.",
+      "review": "Viewed directly. Paws, shoulder and tail readable in this angle. Fur detail leans realistic and needs stylization alignment. Hidden surfaces and consistent stripe map unverified.",
+      "approvedForTripo": false
+    },
+    {
+      "id": "orun-concept-candidate-01",
+      "file": "orun-candidate.webp",
+      "width": 1024,
+      "height": 1536,
+      "brief": "Original tragic elderly forest warden; incomplete six-tip root crown; rib-like root cuirass with amber resin; readable human face; warped wooden staff; neutral full-body studio view.",
+      "review": "Viewed directly. Face/crown/root-chest direction usable as candidate. Generated long cape conflicts with mirror acrobatics and must be redesigned before mesh generation. Not production-approved.",
+      "approvedForTripo": false
+    }
+  ],
+  "limits": [
+    "No Tripo model has been generated in this planning session.",
+    "These images are not measured multi-view evidence and do not establish rig feasibility.",
+    "Production reference approval, anatomy separation, consistent multi-view identity and relevant disclosure consent remain required."
+  ]
+}
