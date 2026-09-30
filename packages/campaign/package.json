@@ -1,0 +1,18 @@
+{
+  "name": "@wild-crown/campaign-state",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.22.3" },
+  "exports": { ".": { "types": "./dist/src/index.d.ts", "import": "./dist/src/index.js" } },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/content && cp content/*.json dist/content/",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "scenario": "npm run build && node dist/src/scenario.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "~5.8.3"
+  }
+}
