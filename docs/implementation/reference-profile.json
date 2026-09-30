@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-09-30T10:00:33.745Z",
+  "hardware": {
+    "model": "Mac16,8",
+    "chip": "Apple M4 Pro",
+    "memory": "48 GB",
+    "cpu": "12 cores (8 performance, 4 efficiency)"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+    "platform": "MacIntel",
+    "webgl2": true,
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "viewport": [
+      1920,
+      1080
+    ],
+    "devicePixelRatio": 1
+  },
+  "visualReferenceViewports": [
+    {
+      "width": 1672,
+      "height": 941,
+      "source": "U01/U02/U03 scene region, excluding editorial footer"
+    },
+    {
+      "width": 1672,
+      "height": 940,
+      "source": "U04 scene region, excluding editorial footer"
+    }
+  ],
+  "performanceTarget": {
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1,
+    "targetFps": 60,
+    "p95FrameIntervalMs": 17.5,
+    "p99FrameIntervalMs": 25
+  },
+  "status": "hardware and browser capabilities observed; full-game performance not measured"
+}

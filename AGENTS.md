@@ -18,7 +18,7 @@ The approved production plan has P0-P13, six major bosses, five macro-regions pl
 
 Repository: `img2threejs/wild-crown`, private.
 
-Work in one feature branch/worktree per independently reviewable feature. Scope commits explicitly; do not stage unrelated files. No force push, no direct gameplay-code push to main, no self-merge. The coordinator publishes reviewed feature branches and PRs. Workers do not commit/push unless their brief explicitly authorizes it.
+Use independently reviewable feature increments and explicit scoped staging. The latest user instruction authorizes the coordinator to merge each verified increment directly into main and push immediately; do not create new PRs or hold completed merges only locally. No force push. Workers still do not commit, merge or push unless their brief explicitly authorizes it. A pushed increment is not a full-game readiness claim.
 
 ## Boundaries
 
