@@ -1,0 +1,59 @@
+{
+  "harness": "tests/effects/story-effects.smoke.html",
+  "scope": "Presentation-only VFX/audio fixture; it does not represent gameplay success, combat, campaign state, final character assets, or measured animation markers.",
+  "browser": {
+    "url": "http://127.0.0.1:5177/tests/effects/story-effects.smoke.html",
+    "title": "Story presentation runtime smoke",
+    "viewportCssPixels": [1365, 768],
+    "deviceScaleFactor": 1.25,
+    "canvasPixels": [900, 560],
+    "webgl2Context": true,
+    "visibleEffectMeshes": 5,
+    "simulationTickAtCapture": 30,
+    "consoleErrors": 0,
+    "pageErrorsOrFailedRequests": 0,
+    "sectorBoundsReuseProbe": {
+      "apertureBeforeRadians": 0.39269908169872414,
+      "cachedRadiusBefore": 0.1960941472897512,
+      "apertureAfterRadians": 6.283185307179586,
+      "cachedRadiusAfter": 1.0000000250926921,
+      "maximumVertexOutsideDistance": 0,
+      "normalBufferReused": true
+    },
+    "essentialWarningProbe": {
+      "reducedEffects": true,
+      "opacityAtTick59Of60": 0.3,
+      "visibleAtTick59": true,
+      "visibleAtExpiryTick60": false,
+      "activeCountAtTick59": 1,
+      "activeCountAtExpiryTick60": 0
+    }
+  },
+  "audio": {
+    "unlockGesture": "actual pointer click on Unlock authored audio button",
+    "contextState": "running",
+    "cueScheduled": "smoke-audio-danger",
+    "cueKind": "tether",
+    "bus": "effects",
+    "biomeAmbienceStarted": true,
+    "activeVoicesAtSample": 2,
+    "outputRms": 0.00870033894220793,
+    "sharedListenerConsumers": {
+      "firstUnlocked": true,
+      "firstPlayed": true,
+      "secondUnlocked": true,
+      "contextSurvivedFirstDispose": true,
+      "secondReused": true,
+      "secondPlayed": true,
+      "secondOutputRms": 0.012406138449820331
+    },
+    "measurement": "StoryAudio WebAudio AnalyserNode output RMS; not a mock callback or scheduled-event echo"
+  },
+  "screenshot": "evidence/effects/story-effects-smoke.png",
+  "scopedTests": { "command": "bun test tests/effects/story-effects.test.ts", "passed": 8, "failed": 0 },
+  "result": "Actual Three.js WebGL scene rendered pooled cue geometry; a live aperture-reuse probe refreshed cached bounds with every vertex inside the sphere, preallocated normals were reused, and reduced-mode essential warning opacity stayed readable through tick 59 then released at tick 60. Shared AudioListener output remained audible after one consumer disposed.",
+  "limitations": [
+    "The cue fixtures are injected by a presentation smoke harness, not drained from CombatEngine.",
+    "No approved character models or measured animation/socket marker evidence is shown; asset-specific alignment remains pending."
+  ]
+}

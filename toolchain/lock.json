@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "base": {
+    "repository": "https://github.com/img2threejs/img2threejs.git",
+    "tag": "v2.0.0",
+    "tagObject": "fa55277ef5c655805d79bf27f23552b8d7e34a3b",
+    "commit": "a669e9a97cea4452b1c2310c5cca6aa0f6657c1f",
+    "checkedOut": "checkouts/base",
+    "state": "verified"
+  },
+  "harness": {
+    "repository": "https://github.com/img2threejs/img2.git",
+    "tag": "v0.2.3",
+    "tagObject": "e62dbb4e6846f37fd7edd0b2a7c159c526782719",
+    "commit": "7aa41b37ee24dde844390bb05eca76b709e91599",
+    "manifestVersion": "0.2.3",
+    "checkedOut": "checkouts/harness",
+    "requiredByJev": ">=0.2.5",
+    "jevCompatible": false,
+    "state": "pinned-latest-tag-jev-blocked"
+  },
+  "character": {
+    "repository": "https://github.com/img2threejs/plugin-character.git",
+    "tag": "v0.2.0",
+    "tagObject": "83e5e71a761d3300c6868f4ed86807f61127e071",
+    "commit": "796dd9caf3f299958cf75b2294f54b37dc23ada9",
+    "version": "0.2.0",
+    "requiresHarness": ">=0.2.3",
+    "checkedOut": "checkouts/plugin-character",
+    "registeredPath": "plugins/character",
+    "resolvedSha": "796dd9caf3f299958cf75b2294f54b37dc23ada9",
+    "state": "registered-isolated"
+  },
+  "environment": {
+    "sourcePath": "/Users/nhonh/Documents/personal/img2-plugins/plugin-environment",
+    "sourceCommit": "98ef8df746def242e06b0ab94dbd29bb7d6a79ab",
+    "sourceWorkingTreeDirty": true,
+    "upstreamRemote": null,
+    "manifestVersion": "0.3.0",
+    "requiresHarness": ">=0.2.3",
+    "registeredPath": "plugins/environment",
+    "resolvedSha": "local",
+    "isolatedSnapshot": "checkouts/plugin-environment-snapshot",
+    "snapshotArchive": "checkouts/plugin-environment-snapshot.tar.gz",
+    "snapshotArchiveSha256": "bee2010f15fa3ee1581cbed04197158e955d055d8244ab4e87617ee02562544f",
+    "snapshotLocalDelta": "Initialized Git metadata in isolated copy only so doctor can exercise the already-present _img2_local.py ignore rule; plugin source files unchanged.",
+    "state": "registered-active-dirty-snapshot-not-official-tag",
+    "doctor": {
+      "fails": 0,
+      "warns": 2
+    },
+    "capabilityEdges": [
+      [
+        "image",
+        "environment-scene-spec"
+      ],
+      [
+        "multi-source",
+        "scene-layout"
+      ],
+      [
+        "image+depth",
+        "terrain-mesh"
+      ]
+    ]
+  },
+  "jev": {
+    "registered": false,
+    "requiredHarness": ">=0.2.5",
+    "availableOfficialHarness": "0.2.3",
+    "reason": "No official tag or HEAD with required harness version; do not lower requirement",
+    "consent": "absent-or-revoked"
+  },
+  "tripo": {
+    "version": "0.5.1",
+    "profile": "unchanged",
+    "balanceSnapshot": {
+      "credits": 154515,
+      "frozen": 0
+    }
+  },
+  "consent": {
+    "environment": "not-granted",
+    "jev": "absent-or-revoked",
+    "humanGrantRequired": true
+  }
+}

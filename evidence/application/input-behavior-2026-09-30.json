@@ -1,0 +1,29 @@
+{
+  "source": "Independent RuntimeInput behavior QA reported by Wild Crown Luna input behavior verification",
+  "module": "src/input/RuntimeInput.ts served through the existing Vite module",
+  "method": "Chromium with Playwright keyboard input helpers; button tests used a synthetic connected gamepad. Keyboard events exercised the RuntimeInput module, not direct DOM clicks.",
+  "results": {
+    "shortTap": "With the input enabled, key j down+up between sample calls produced lightPressed=true once; the next sample produced false. Repeated keydown did not add another press.",
+    "heavyEdges": "Heavy press sample reported heavyPressed=true and heavyHeld=true. Key release reported heavyReleased=true. Gamepad disconnect while heavy was held also reported heavyReleased=true.",
+    "movement": "W+D normalized to moveX=0.70710678, moveZ=0.70710678; opposed W+S yielded (0,0).",
+    "remappedCommandWheel": "Keyboard moveRight remapped to l and commandWheel to x; after a 100 ms hold and release, the wheel reported commandIndex=4.",
+    "browserDefault": "moveForward remapped to PageDown; the key event was defaultPrevented=true and scrollY stayed 0. Default Space also prevented default and produced dodgePressed=true.",
+    "independentDeviceMaps": "Keyboard dodge=f continued to work with the default gamepad Dodge button 1. Setting the explicit gamepad Dodge binding to Button 2 stopped Button 1 and accepted Button 2, while keyboard f remained active.",
+    "deadzone": "Synthetic pad axis magnitude 0.1 yielded 0; magnitude 0.5 yielded 0.3902439.",
+    "disableAndReenable": "setEnabled(false) while heavy was held cleared input; re-enabling while the held key remained down stayed empty until key-up and a fresh key-down.",
+    "followupBrowserErrors": []
+  },
+  "notVerified": [
+    "Actual hardware gamepad behavior (only a synthetic connected pad was used).",
+    "Real browser window blur, document visibilitychange, or BFCache navigation; automation attempts did not produce those browser lifecycle events. Do not infer those paths from the explicit setEnabled check.",
+    "Full campaign gameplay; required real verified assets remain a separate gate."
+  ],
+  "observationNote": "An earlier broad harness run reported one transient HTTP 500 console resource error; the later focused follow-up reported errors=[]. This evidence preserves both observations rather than treating the transient error as absent.",
+  "executionMetadata": {
+    "startTimestamp": null,
+    "endTimestamp": null,
+    "jobId": null,
+    "resolvedModel": null,
+    "usage": null
+  }
+}

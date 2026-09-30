@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "title": "Wild Crown approved UI component captures",
+  "status": "component-only",
+  "productionParityApproved": false,
+  "capture": {
+    "browser": {
+      "name": "Brave",
+      "headless": true,
+      "version": null
+    },
+    "viewport": {
+      "width": 1672,
+      "height": 941,
+      "deviceScaleFactor": 1
+    },
+    "renderer": "Vite-hosted DOM GameUI component harness; no gameplay scene or 3D renderer",
+    "sourceFiles": [
+      "src/ui/GameUI.ts",
+      "src/ui/game-ui.css",
+      "docs/features/evidence/ui/preview.ts"
+    ],
+    "visibleDisclaimer": "NON-PRODUCTION UI RENDER · SYNTHETIC VIEW MODEL · NO GAMEPLAY SCENE",
+    "pageErrors": "Main reported none across the final U01–U04 capture set."
+  },
+  "fixtures": {
+    "viewModel": "Synthetic GameViewModel, with flat neutral field.",
+    "boss": {
+      "actorId": "asha",
+      "corruptionCores": [
+        {
+          "id": "preview-core-1",
+          "cleansed": false
+        },
+        {
+          "id": "preview-core-2",
+          "cleansed": false
+        },
+        {
+          "id": "preview-core-3",
+          "cleansed": false
+        }
+      ],
+      "note": "The three core records are synthetic U02 layout fixtures; they do not assert live runtime state."
+    },
+    "companion": {
+      "ability": {
+        "id": "fang-guard",
+        "label": "Pounce",
+        "available": false,
+        "reason": "Ability availability is unavailable in this component fixture."
+      },
+      "preview": "Empty host shows Waiting for character renderer; consent-gated native character assets are unavailable."
+    }
+  },
+  "screens": [
+    {
+      "id": "U01",
+      "path": "docs/features/evidence/ui/ui-component-u01.png",
+      "sha256": "68f362898ec7b8e5a810ed5151df17a89fdf9b3ff7a8d89375cdd2b265a93f76",
+      "url": "http://127.0.0.1:5199/docs/features/evidence/ui/preview.html?screen=game",
+      "observed": "Exploration HUD, Inspect prompt, and Koro/Vara party portraits."
+    },
+    {
+      "id": "U02",
+      "path": "docs/features/evidence/ui/ui-component-u02.png",
+      "sha256": "0f43d99966ca75991deb85a461d3b89d8241e195d167268d96d30ef921ad9d10",
+      "url": "http://127.0.0.1:5199/docs/features/evidence/ui/preview.html?screen=game&boss=asha",
+      "observed": "Asha boss meters, corruption label with separated bar, and exactly three core indicators from the synthetic fixture."
+    },
+    {
+      "id": "U03",
+      "path": "docs/features/evidence/ui/ui-component-u03.png",
+      "sha256": "f2f5f5e78f3b7fdecf66981a6aa2041178c26e1a946221377910032dbec7ddbb",
+      "url": "http://127.0.0.1:5199/docs/features/evidence/ui/preview.html?screen=map",
+      "observed": "Full M01 geography and all eight region labels visible; the map side illustration and tracked quest panel remain visible."
+    },
+    {
+      "id": "U04",
+      "path": "docs/features/evidence/ui/ui-component-u04.png",
+      "sha256": "609832e53977263a79b93ea8e87f602b7f429a699c6c7a39cb7bfdbb0bd415f5",
+      "url": "http://127.0.0.1:5199/docs/features/evidence/ui/preview.html?screen=companions",
+      "observed": "Face-centered party portraits and Pounce marked unavailable in the synthetic fixture; the companion preview host honestly waits for the renderer."
+    }
+  ],
+  "interactionProbes": [
+    {
+      "surface": "component harness",
+      "scenario": "Pointerdown on Inspect; render VM with vitality 25 before pointer release.",
+      "result": "Button remained connected while held; mouseup emitted the intended interact action exactly once and the HUD displayed Vitality 25%."
+    },
+    {
+      "surface": "component harness",
+      "scenario": "Press Enter on Inspect after the pointer probe.",
+      "result": "Emitted the intended interact action."
+    },
+    {
+      "surface": "component harness",
+      "scenario": "Use ArrowRight on the settings deadzone range from 0.18 to 0.19.",
+      "result": "Emitted one update-settings patch; the focused range node and value were preserved by the returned view model."
+    }
+  ],
+  "proves": [
+    "Component DOM layout at the specified viewport.",
+    "Data-driven U02 core indicator rendering and U03 map label visibility.",
+    "The reported pointer-release/Enter action behavior and settings range focus behavior in the component harness."
+  ],
+  "doesNotProve": [
+    "Production GameApplication wiring, live campaign state, or persistence.",
+    "Live boss encounter values, core-cleanse runtime behavior, or a rendered boss scene.",
+    "Native Tripo asset loading, character rigging, animation, or U04 3D preview parity.",
+    "Production visual parity or full-game readiness."
+  ]
+}

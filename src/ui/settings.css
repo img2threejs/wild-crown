@@ -1,0 +1,13 @@
+.wc-settings-columns { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); min-height: 100%; }
+.wc-settings-columns > .wc-menu__side { min-width: 0; border-top: 0; }
+.wc-settings-columns > .wc-menu__side:first-child { border-left: 0; }
+.wc-settings-columns .wc-setting-row { gap: 18px; }
+.wc-settings-columns .wc-setting-row > span:first-child { max-width: 28ch; }
+.wc-settings-columns .wc-setting-row input[type="range"] { width: min(220px, 38%); }
+.wc-settings-columns .wc-setting-row input[type="text"] { width: min(180px, 45%); }
+.wc-settings-columns .wc-setting-row select { width: min(190px, 48%); text-transform: capitalize; }
+.wc-settings-columns .wc-setting-row button { min-height: 34px; padding: 5px 10px; }
+@media (max-width: 760px) {
+  .wc-settings-columns { grid-template-columns: minmax(0,1fr); }
+  .wc-settings-columns > .wc-menu__side + .wc-menu__side { border-left: 0; border-top: 1px solid var(--wc-line); }
+}

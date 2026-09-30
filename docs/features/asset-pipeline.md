@@ -1,0 +1,37 @@
+# Asset pipeline
+
+The canonical production catalog is asset-source/manifest.json. scripts/assets/export-runtime-manifest.mjs validates it and emits the exact normalized top-level array at public/assets/manifest.json, fetched as /assets/manifest.json. Runtime kinds are character for actor-* native GLBs, prop for prop-* native GLBs, and environment for composed-recipe entries. The renderer consumes only explicit runtimeUrl values; it never guesses URLs or uses fallbacks. All current native URL/hash/evidence fields are null and evidenceStatus is blocked.
+
+sourceInputHash is the SHA-256 of the exact approved reference crop or upstream source image. sourceReference carries its path and context. sourceHash and outputHash are reserved for the exact native GLB source/derivative bytes; they remain null until a real file exists. For unchanged native exports sourceHash and outputHash are legitimately equal. The immutable runtime path is /assets/<assetId>/<outputHash>.glb, with nativeGlb=assets/<assetId>/<outputHash>.glb. The manifest can be revalidated/repointed to a later immutable revision. External buffer/image URIs are rejected; no sidecar dependencies or signed provider URLs.
+
+EvidenceStatus uses the shared enum: not-started, in-progress, verified, blocked. verified means full applicable gates, raw plugin-row results, all negative controls, action coverage, species/geometry review, visual review, and frozen-output hash parity—not merely structural validation. Evidence files for eventual releases use evidence/assets/<assetId>.json, schemaVersion 1, exact assetId/sourceHash/outputHash, gates, per-check rows, negativeControls, and hashed review images. An unassigned asset-lab upload is a scratch measurement, never release evidence. Run node scripts/assets/test-runtime-manifest-guards.mjs to prove stale public catalogs and wrong native output hashes are rejected without touching production assets.
+
+## Isolated tools and consent
+
+Use the isolated pinned toolchain in toolchain/README.md. Official character plugin 0.2.0 and the active dirty environment plugin snapshot are registered only in the project IMG2_HOME; Jev is unregistered because the official harness is 0.2.3 while Jev requires >=0.2.5. The environment plugin's room-only fixture qualification does not qualify vegetation. R05 vegetation remains blocked until a rights-reviewed, vegetation-specific fixture and negative controls exist; do not rename room evidence or use one opaque forest/island model.
+
+The operator selected both consent grants, but environment helper checks with real HOME still report host-image consent not granted and Jev absent/revoked. Recheck with the exact helpers in toolchain/README.md immediately before any workspace-reference dispatch. Only the human grants consent. No Tripo task has been submitted. Tripo make --dry-run is documented to validate/plans without upload/submission/credits; run it before any paid task. Use no invented params, auto top-up, manual polling, timeout below 900 seconds, or successful task reruns.
+
+## Isolated approved character sources
+
+Run python3 scripts/assets/crop-character-reference.py to create separate Aren/Asha crops from approved C01 human cast and C02 First Pact plates. It records source/output SHA-256 and pixel bounds in asset-source/references/reference-manifest.json. These are concept inputs only, not models; provider dispatch is false. Aren and Asha are separate model tasks, never one castboard-as-character.
+
+Canonical work IDs map poacher-melee to actor-poacher-hunter and poacher-ranged to actor-poacher-scout. Crowned Beast is Orun's separate phase-one/phase-two variant actor-orun-crowned-beast, actorId orun, variantOf actor-orun; use its own hybrid rig and evidence, with no base rig/clip fallback. Current source clips remain absent, so actionToClipMapping entries are null; requiredActionIds are populated from authored combat contracts where available. No actor is model-, rig-, or game-ready.
+
+## Regional environment composition and props
+
+Every region uses an explicit composed recipe entry, not a GLB. Its exact componentAssetIds are distinct native prop-* GLBs. Trees, bamboo, rocks, bridges, cages, camps, shrines, gates, water systems, refuge shelters and ruins remain individual assets. Campaign REGION_PROP_PLACEMENTS owns exact placement order/transforms. Terrain, water, vegetation layout, fog, lighting and collision are procedural. All props currently remain blocked/not-produced; recipe definitions do not imply asset completion.
+
+## Measurement and acceptance
+
+asset-lab.html loads an actual GLB through GLTFLoader and exports the source bytes unchanged, preserving native joints/inverse binds/clips. Temporary synthetic rigs may test measurement code only and are never Aren/Asha or production evidence. Evidence controls:
+
+- Characters: G1 samples real bound properties for every clip at five or more times plus authored markers/transitions; a disconnected native track runs through the same sampler and must fail.
+- Characters: G3 requires nonempty native skins/inverse binds, stop/reset/switch restore, local/world quaternion-equivalent comparisons and a deliberately unrestored-action control.
+- Characters: G6 counts actual framebuffer pixels over eight views using explicit species/body-part mesh or bone-region annotations; hiding the real rendered region must reduce its pixels to zero. Missing authored policy stays incomplete.
+- Static prop G6 reads GLTF asset.extras.wildCrownStaticVisibilityPolicy v1 with an exact required/excluded mesh-node partition and authored minimumVisiblePixels/minimumVisibleViews. It renders the actual loaded subject with source alpha/visibility/depth, measures the same eight views before/after hiding each required node, and fails closed without policy. G10-static records per-node finite positions, indices, materials and local/world bounds with a nonfinite-vertex corruption control. Static prop G1/G3/G12 are not-applicable only when the native GLB has no animations/skins; G11 byte freeze still applies. Test-only visible/hidden/alpha-zero/occluded/declared-exclusion GLBs are in /tmp/wc-static-prop-fixtures; they are not production assets or R05 vegetation qualification.
+- G11 currently proves only byte-copy hash parity for the asset-lab export; it does not prove live runtime geometry/UV/material parity and stays incomplete until the frozen runtime scene is compared. G12 compares native skin joint indices to loaded skeleton correspondence; it remains incomplete until full rig-profile correspondence and wrong-LOD-bind controls are measured.
+- P1 controls still unexercised: broken planted-contact response, mirrored wrist, torn skin with normalized weights, wrong LOD bind, and wrong culling bounds. Do not report 12/12 or verified until every applicable plugin/game row and these controls are exercised on the exact production GLB.
+- All kinds additionally require applicable plugin checks, G11 exact-derivative freeze parity, G12 joint correspondence when skinned, action coverage where applicable, authored species/geometry policy, and human visual review. The raw plugin aggregate is not game acceptance.
+
+LOD IDs remain empty until real derivative files and hashes exist. Numeric switching thresholds are proposals/unprofiled until P11 locked-hardware profiling; no measured distance is invented.

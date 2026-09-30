@@ -1,5 +1,5 @@
 {
-  "name": "wild-crown-first-pact-locomotion",
+  "name": "wild-crown-the-broken-pact",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,7 +7,9 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort"
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "release:validate": "node scripts/release/validate.mjs --dist dist",
+    "release:artifact": "node scripts/release/artifact.mjs --dist dist"
   },
   "dependencies": {
     "three": "0.169.0"

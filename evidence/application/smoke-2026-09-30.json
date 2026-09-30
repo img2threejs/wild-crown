@@ -1,0 +1,25 @@
+{
+  "worktreeServer": "http://127.0.0.1:5291/",
+  "launchCommand": "npm run dev -- --port 5291 --strictPort",
+  "observations": [
+    {
+      "path": "/",
+      "result": "The live page title was Wild Crown — The Broken Pact. The title UI exposed New Game, disabled Continue, Load Game, Settings, and Credits. No uncaught page error was present in the clean observation."
+    },
+    {
+      "path": "settings",
+      "result": "A page DOM click on the Settings action rendered the settings menu with audio/accessibility controls. During that observation the Stick Deadzone control was absent; the UI owner was still editing the screen, so this is not final settings acceptance evidence."
+    },
+    {
+      "path": "load/import",
+      "result": "The Load Game local screen rendered an empty save slot, Save Slot +, Import Save, Export Save, Back, and a JSON file input. The malformed-file dispatch was attempted, but live HMR replaced the screen before the input upload could complete; import-error behavior remains unverified."
+    }
+  ],
+  "interruptedValidation": {
+    "result": "During later reloads, the shared dev server was concurrently hot-reloading CombatEngine.ts; requests to /src/game/combat/CombatEngine.ts returned net::ERR_ABORTED and a subsequent tab had no UI elements. This prevented stable final missing-assets and lifecycle smoke coverage.",
+    "gameplay": "Not exercised; required verified native GLBs/public manifest were not available during the smoke window.",
+    "physicalGamepad": "Not tested.",
+    "bfcache": "Not exercised with a real browser back/forward-cache navigation."
+  },
+  "toolObservation": "Browser helper click on visible overlay buttons returned without firing the page click handler in this session; calling the element's DOM click() did dispatch it. Reported separately to xd://report_issue."
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Story presentation runtime smoke</title>
+  <style>
+    :root { color-scheme: dark; font: 14px/1.45 system-ui, sans-serif; background: #171a16; color: #e7e1d1; }
+    body { margin: 0; padding: 22px; }
+    h1 { margin: 0 0 8px; color: #d4bf91; font: 500 24px Georgia, serif; }
+    p { max-width: 900px; color: #c2bcaf; }
+    canvas { display: block; width: min(900px, calc(100vw - 44px)); height: min(560px, calc(100vh - 230px)); border: 1px solid #655d4b; background: #10130f; }
+    button { margin: 14px 10px 0 0; border: 1px solid #8c7852; background: #27281f; color: #eee2c5; padding: 8px 14px; }
+    output { display: block; margin-top: 10px; color: #c9c4b7; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Story presentation runtime smoke</h1>
+  <p>Presentation-only test cues render actual pooled Three.js geometry. They do not represent combat outcomes or campaign progress.</p>
+  <canvas id="fx-canvas" width="900" height="560" aria-label="Three-dimensional pooled story effects"></canvas>
+  <button id="unlock-audio" type="button">Unlock authored audio (user gesture)</button>
+  <output id="runtime-metadata">Loading presentation modules…</output>
+  <script type="module">
+    import * as THREE from 'three';
+    import { StoryEffects } from '/src/effects/StoryEffects.ts';
+    import { StoryAudio } from '/src/audio/StoryAudio.ts';
+    const SMOKE_SETTINGS = { masterVolume: 1, musicVolume: 0.8, effectsVolume: 1, ambienceVolume: 0.7, dialogueVolume: 1 };
+
+    const canvas = document.querySelector('#fx-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(1);
+    renderer.setSize(900, 560, false);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x10130f);
+    scene.add(new THREE.HemisphereLight(0xd8cfac, 0x353a30, 1.7));
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(24, 20), new THREE.MeshBasicMaterial({ color: 0x25281f }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.03;
+    scene.add(ground);
+    const camera = new THREE.PerspectiveCamera(48, 900 / 560, 0.1, 100);
+    camera.position.set(0, 8, 12);
+    camera.lookAt(0, 0, 0);
+
+    const effects = new StoryEffects({ scene, capacity: 24 });
+    const audio = new StoryAudio();
+    audio.setSettings(SMOKE_SETTINGS);
+    audio.setStoryState({ corruption: 0.4, restoration: 0.4, bond: 0.7, dominion: 0.2 });
+    const cues = [
+      { instanceId: 'smoke-sap', tick: 10, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
+      { instanceId: 'smoke-tether', tick: 10, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-bond', tick: 10, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-ending-pact', tick: 10, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-telegraph', tick: 10, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
+    ];
+    effects.emitAll(cues);
+    const metadata = document.querySelector('#runtime-metadata');
+    window.__storyAudio = audio;
+    window.__storyEffects = effects;
+    window.__storyRenderCount = 0;
+    document.querySelector('#unlock-audio').addEventListener('click', async () => {
+      const event = { ...cues[1], instanceId: 'smoke-audio-danger' };
+      const sharedListener = new THREE.AudioListener();
+      const firstConsumer = new StoryAudio({ listener: sharedListener });
+      const secondConsumer = new StoryAudio({ listener: sharedListener });
+      firstConsumer.setSettings(SMOKE_SETTINGS);
+      secondConsumer.setSettings(SMOKE_SETTINGS);
+      const unlockMain = audio.unlock();
+      const unlockFirst = firstConsumer.unlock();
+      const unlockSecond = secondConsumer.unlock();
+      const [unlocked, firstUnlocked, secondUnlocked] = await Promise.all([unlockMain, unlockFirst, unlockSecond]);
+      const played = unlocked && audio.play(event);
+      const ambience = unlocked && audio.startBiomeAmbience('heartroot-hollow');
+      const firstPlayed = firstUnlocked && firstConsumer.play({ ...cues[1], instanceId: 'shared-context-first' });
+      firstConsumer.dispose();
+      const contextSurvivedDispose = sharedListener.context.state === 'running';
+      const secondReused = await secondConsumer.unlock();
+      const secondPlayed = secondReused && secondConsumer.play({ ...cues[2], instanceId: 'shared-context-after-dispose' });
+      await new Promise((resolve) => setTimeout(resolve, 220));
+      const secondOutputRms = secondConsumer.measureOutputRms();
+      if (!firstUnlocked || !firstPlayed || !secondUnlocked || !contextSurvivedDispose || !secondReused || !secondPlayed || secondOutputRms <= 0) throw new Error('Shared AudioListener context was closed or silent after the first consumer disposed.');
+      secondConsumer.dispose();
+      await new Promise((resolve) => setTimeout(resolve, 320));
+      const state = audio.playbackMetadata;
+      metadata.textContent = JSON.stringify({ unlocked, played, ambience, audioContext: state.contextState, activeVoices: state.activeVoices, lastPlayed: state.lastPlayed, outputRms: state.outputRms, visibleEffects: effects.activeCount, sharedListener: { firstUnlocked, firstPlayed, secondUnlocked, contextSurvivedDispose, secondReused, secondPlayed, secondOutputRms } }, null, 2);
+      document.body.dataset.audioState = state.contextState;
+      document.body.dataset.outputRms = String(state.outputRms);
+      document.body.dataset.sharedContextReusable = String(contextSurvivedDispose && secondReused && secondPlayed && secondOutputRms > 0);
+    });
+    function frame() {
+      effects.update(10 + Math.min(window.__storyRenderCount, 20));
+      renderer.render(scene, camera);
+      window.__storyRenderCount++;
+      requestAnimationFrame(frame);
+    }
+    metadata.textContent = JSON.stringify({ mode: 'presentation-only', visibleEffects: effects.activeCount, activeCanvas: !renderer.getContext().isContextLost() }, null, 2);
+    frame();
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "sourceStatus": "approved-concept-crop-not-model",
+  "references": [
+    {
+      "assetId": "aren",
+      "source": "docs/production/visual-review/plates/C01.png",
+      "sourceSha256": "ede6513f80b74e00490727fcdf1893fbafafe8b6c551ca762204816ddbf5f1eb",
+      "cropBoxPixels": [
+        20,
+        35,
+        430,
+        960
+      ],
+      "dimensions": [
+        410,
+        925
+      ],
+      "output": "asset-source/references/aren-approved-concept.png",
+      "outputSha256": "6239212164ff7e2cc96e79e83d1a23f8ffa3eda393392fa584be4147704cc5f3",
+      "providerDispatch": false,
+      "modelReady": false
+    },
+    {
+      "assetId": "asha",
+      "source": "docs/production/visual-review/plates/C02.png",
+      "sourceSha256": "809a010162efcfff2618f97da5e8d60d5972db6a8e483beff4dfded2a3cc6adb",
+      "cropBoxPixels": [
+        105,
+        515,
+        755,
+        1030
+      ],
+      "dimensions": [
+        650,
+        515
+      ],
+      "output": "asset-source/references/asha-approved-concept.png",
+      "outputSha256": "eb65daea83c6d5a8a43e80005361928c324c7789b37eac698df40a12858e150e",
+      "providerDispatch": false,
+      "modelReady": false
+    }
+  ]
+}
