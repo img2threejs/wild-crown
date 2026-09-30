@@ -1,0 +1,294 @@
+{
+  "kind": "wild-crown.visual-review",
+  "round": 1,
+  "status": "candidates-not-approved",
+  "images": [
+    {
+      "id": "M02-first-pact-level-map",
+      "file": "images/M02-first-pact-level-map.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Professional level design presentation image for WILD CROWN: THE FIRST PACT. A top-down near-orthographic stylized terrain map of a compact tropical forest-to-bamboo adventure route. Six authored segments in a clear left-to-right gently winding sequence: 01 Forest Entry, 02 Monkey Chase, 03 Hunter Camp, 04 Tiger Tracking, 05 Asha Arena, 06 First Pact. This is a playable-level planning concept, not a world map.",
+        "action": "Show a continuous broad traversable ground path with numbered nodes; one optional overlook branch returns before the camp, a rescue cage in the camp lies on the required route, a stream crossing has a built rope bridge, bamboo tracking has an alternate shallow arc returning before the arena. Asha arena is a spacious oval clearing with clear near/middle/far maneuvering bands indicated subtly by ground value, entry on west and sealed root shortcut exit east that opens after cleanse toward restored pond reunion clearing.",
+        "scene": "Terrain cutaway model on dark-green drafting background, tropical trees grouped outside traversable route, bamboo framing but not hiding the arena floor, rocks and stream as readable boundaries. Tiny scale silhouettes of a warden and tiger in arena only, no full combat or gore.",
+        "composition": "1536x1024 landscape masterplan with readable numbered location labels, main route solid warm ivory line, optional route dotted teal, locked exit brass gate icon. Legend bottom-right, small arena detail inset bottom-left showing camera arrow and three depth areas, not a fantasy illustration with incomprehensible paths. Clear reserve whitespace around labels.",
+        "lighting": "Soft even light, terrain forms readable, restrained amber progression path.",
+        "style": "High-end stylized cinematic level-design board meets architectural landscape model, clean accessible game design communication, no complex minimap icon spam.",
+        "text": "THE FIRST PACT — LEVEL CONCEPT\n01 Forest Entry\n02 Monkey Chase\n03 Hunter Camp\n04 Tiger Tracking\n05 Asha Arena\n06 First Pact\nMain path\nOptional route\nOpens after cleanse\nARENA DEPTH",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "M01-erya-world-map",
+      "file": "images/M01-erya-world-map.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "An original art-directed game world map for WILD CROWN: THE BROKEN PACT. Stylized cinematic fantasy forest kingdom Erya, five distinct regional biomes connected to a central sanctuary. Center: The Grove, a warm luminous ancient tree and small lake. South: Greenwake, a humble forest-edge settlement. West: Whispering Canopy, tall tropical layered forest with tiny rope bridges. Northwest: Blood Bamboo Valley, ochre bamboo forest and a small hunter camp. North: Moonpine Ridge, blue-gray pine mountains with limited snow and frozen lake. East: Mistveil Basin, teal foggy wetland with ruins and waterways. Southeast: Sunmane Expanse, golden savanna river and stone temple. Below-ground Heartroot Hollow is shown ONLY in a small lower-left cutaway inset under ancient roots, not as a seventh surface biome.",
+        "action": "Present the whole proposed semi-open world, with distinct region boundaries formed naturally by ridges and rivers, understated footpaths from the central Grove to each region, selective clearly marked gates; no seamless-open-world claim.",
+        "scene": "An illustrated isometric relief map on a dark desaturated forest-green cartographic plate. Sculpted terrain forms, beautiful painterly 3D game art, coherent rivers that flow downhill, readable landmarks and negative space for labels.",
+        "composition": "Wide landscape 3:2 editorial map, no UI windows, no characters, no huge ocean, no compass covering the map. Label each location exactly once with clear ivory labels, restrained brass leader lines, title at top. Clear five-region layout rather than dozens of tiny unlabeled icons.",
+        "lighting": "Soft atmospheric daylight, warm amber Grove light, cool north and mist east, restrained bloom.",
+        "style": "Premium stylized cinematic adventure cartography, elegant organic shape language, tactile painted terrain, not photoreal satellite image, not neon, not medieval parchment clutter.",
+        "text": "WILD CROWN — ERYA\nThe Grove\nGreenwake\nWhispering Canopy\nBlood Bamboo Valley\nMoonpine Ridge\nMistveil Basin\nSunmane Expanse\nHeartroot Hollow\nWORLD MAP CONCEPT",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U01-exploration-hud",
+      "file": "images/U01-exploration-hud.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "A polished proposed gameplay screenshot MOCKUP for original action adventure WILD CROWN, stylized cinematic 3D, guided three-quarter 2.75D side-oriented camera, NOT close over-shoulder camera. Young adult Aren warm brown skin short dark hair compact moss/ochre sleeveless cropped jacket charcoal trousers light boots and short wooden staff, small full body at lower left occupying 18 percent of screen height. Koro a macaque utility companion is several meters behind at mid-depth, Vara a hornbill scout flies above. No tiger companion yet.",
+        "action": "Aren explores Whispering Canopy toward a rope bridge and waterfall. A broad winding readable trail continues to right; clear foreground and background side routes, visible feet and contact shadows. No battle, no particle clouds.",
+        "scene": "Tropical forest with warm shafts of light, giant roots framing edges not blocking floor, distant tree settlement, rounded sculpted foliage and tactile rocks. A small inspectable broken snare at trail edge has a restrained ivory interaction icon.",
+        "composition": "Landscape game screen, all action clear in center. Minimal integrated HUD: upper-left vitality bar with small leaf portrait mark, precisely two dodge diamonds below and small Instinct arc; upper-right a compact opaque dark-green objective panel; bottom-right two clear companion action icons labeled Vara and Koro, keyboard hints. No minimap, no inventory grid, no damage numbers. Dark forest-green/charcoal panels with restrained brass keylines, ivory large readable Vietnamese UI, elegant serif headings and clean sans body. Keep HUD within 5 percent safe margin.",
+        "lighting": "Warm late-afternoon natural lighting with readable ground and silhouettes, moderate contrast, subtle bloom only.",
+        "style": "Original premium stylized cinematic 3D game art direction, painterly sculpted shapes, not photoreal fur, not chibi, no neon cyberpunk, no ornate clutter.",
+        "text": "THE FALLEN SCOUT\nTìm đường qua thác\nE  Quan sát\nVara\nKoro\nUI CONCEPT — NOT GAMEPLAY CAPTURE",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U02-asha-boss-hud",
+      "file": "images/U02-asha-boss-hud.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Art-directed gameplay UI mockup for WILD CROWN, Asha boss encounter in a bamboo arena. Guided three-quarter 2.75D cinematic side-oriented camera sees true foreground/middle/background floor, not overhead RTS and not close over-shoulder. Aren full body lower-left 17 percent of image height, brown skin short dark hair cropped moss/ochre jacket charcoal pants, wooden staff, poised for a lateral cartwheel. Asha a massive but credible mother tigress on right midground, sculpted ochre fur masses and charcoal stripes, lowered shoulders preparing pounce, no gore, no armor. Koro utility macaque far back beside a suspended bamboo bundle, Vara hornbill aerial scout. Asha is HOSTILE and must NOT appear in the companion HUD.",
+        "action": "Frozen anticipation moment BEFORE pounce. Asha feet visible, her locked landing footprint is a clear flattened oval on ground offset from Aren, one directional lane and a small Vara feather marker identify it. A safe lateral/depth escape route is clearly visible. No huge magical effects or impacts yet.",
+        "scene": "Open bamboo oval arena, scarred roots and faint oily Black Sap at perimeter, two terrain depth bands and large central navigable floor; soft contact shadows and fading foreground bamboo. High readability.",
+        "composition": "Top center narrow boss panel ASHA — THE BROKEN FANG with FEROCITY main bar and three discrete CORRUPTION nodes, not generic HP boss label. Top-left player vitality, precisely two dodge diamonds and Instinct. Bottom-right only Vara/Koro ability icons. Lower center small dodge instruction over a solid translucent-dark backing, not blocking feet. Ivory/brass UI on forest charcoal, no minimap or loot icons. Boss/player silhouettes unobscured.",
+        "lighting": "Cinematic warm bamboo light and cool foreground shadows, strong readable subject contrast, subtle amber telegraph border with shape/rhythm meaning not red-only.",
+        "style": "High-end original stylized cinematic real-time game TARGET mockup, hand-sculpted readable fur and leaves, nonlethal combat, no photorealism, no noisy particles.",
+        "text": "ASHA — THE BROKEN FANG\nFEROCITY\nCORRUPTION\nSpace + hướng  Né\nVara\nKoro\nUI CONCEPT — NOT GAMEPLAY CAPTURE",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U04-companion-menu",
+      "file": "images/U04-companion-menu.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Premium original game COMPANION menu mockup for WILD CROWN after Asha has been cleansed. Full-body beautifully stylized mother tigress Asha centered-left in a calm sanctuary environment, sculpted ochre fur and charcoal stripes, ivory cheek mass, amber eyes, no armor or collar, a small warm root mote near paw. Design emphasizes voluntary alliance, not ownership.",
+        "action": "Selected companion Asha shows trusted relationship with three distinct leaf-shaped bond milestones, one short role “Bảo hộ • Phá giáp”, abilities “Vồ”, “Chặn xung phong”, “Phá vật cản”. Right column clear legible ability descriptions very short. Bottom party slots explicitly show Asha COMBAT, Koro UTILITY, Vara SCOUT, only these three active. Below/right future faction silhouettes show locked Sable/Nyra/Solkar without pretending unlocked.",
+        "scene": "Softly blurred The Grove lake and roots behind Asha, clear floor contact. Menu panels are opaque dark forest-charcoal with warm ivory text and subtle brass dividers, not neon and not parchment.",
+        "composition": "1536x1024 landscape interface with 55 percent breathing room for full creature, 35 percent right information card, top nav and bottom party strip. Clear selected border and focus state. No inventory rarity, no pet damage star rating, no domination collar icon, no busy stats spreadsheet. Strong information hierarchy.",
+        "lighting": "Soft warm sanctuary light on tiger, UI text high-contrast with no glow bleeding through.",
+        "style": "Cinematic stylized 3D creature concept integrated with editorial nature-fantasy game UI, simplified fur masses, original IP.",
+        "text": "ĐỒNG HÀNH\nASHA\nBảo hộ • Phá giáp\nTIN CẬY\nVồ\nChặn xung phong\nPhá vật cản\nĐỘI HÌNH\nAsha   CHIẾN ĐẤU\nKoro   HỖ TRỢ\nVara   TRINH SÁT\nEsc  Trở lại\nUI CONCEPT",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U03-world-map-journal",
+      "file": "images/U03-world-map-journal.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Premium original desktop action adventure WORLD MAP and JOURNAL interface mockup for WILD CROWN. Organic dark forest-green charcoal surfaces, warm ivory typography, restrained brass fine borders, elegant carved serif headings and very readable sans body, not medieval parchment clutter and not sci-fi. A large stylized relief map takes the left 68 percent, compact selected quest card right 28 percent.",
+        "scene": "Map topology: The Grove central sanctuary and lake; Greenwake south; Whispering Canopy west; Blood Bamboo Valley northwest; Moonpine Ridge north; Mistveil Basin east; Sunmane Expanse southeast. Early First Pact state: Grove/Greenwake/Canopy/Bamboo illustrated and readable, later regions desaturated under fog with labels and lock icons; Heartroot Hollow NOT revealed. A single highlighted path leads from Canopy through bamboo tracking toward an Asha paw quest marker. No dozens of icons.",
+        "action": "Selected quest A MOTHER’S ROAR; journal shows “Tìm Tali” and “Lần theo dấu bẫy”. Three distinct legend symbols for sanctuary, objective, locked path, supported by text not just colors. Current region corrupted state shown by icon and word, not a red flood over the whole screen. Bottom input legend for mark/back, selected keyboard focus visible.",
+        "composition": "Full landscape flat interface screenshot mockup with map visual and sparse editorial type. Top nav BẢN ĐỒ, NHẬT KÝ, ĐỒNG HÀNH, selected BẢN ĐỒ. Right card bamboo illustration thumbnail, region and quest name, two short objective lines, prominent ĐÁNH DẤU button. No battle HUD and no inventory.",
+        "lighting": "Interface surfaces legible with restrained shadow, map gently lit relief, no bloom behind text.",
+        "style": "Elegant premium nature-fantasy game UI, restrained organic motifs, accessible contrast and large type.",
+        "text": "WILD CROWN\nBẢN ĐỒ     NHẬT KÝ     ĐỒNG HÀNH\nBLOOD BAMBOO VALLEY\nA MOTHER’S ROAR\nTìm Tali\nLần theo dấu bẫy\nĐÁNH DẤU\nThánh địa   Mục tiêu   Chưa mở\nEsc  Trở lại\nUI CONCEPT",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C02-first-pact-creatures",
+      "file": "images/C02-first-pact-creatures.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN original First Pact creature character board with FOUR separate numbered panels, consistent premium STYLIZED cinematic sculpted 3D look, simplified fur masses not individual photoreal fur. Panel 1 VARA: hornbill bird, unmistakable large curved ivory-orange beak with prominent casque on top, black and cream wing blocks, amber small wing patch, alert intelligent eye, standing perched on a plain short branch, full wings folded and feet visible, NOT eagle. Panel 2 KORO: agile macaque-like monkey with expressive wary face, charcoal-brown coat, warm cream cheeks, distinctive swept crest, long flexible tail separated from body, gripping humanlike primate hands, small olive wrist vine, no armor. Panel 3 ASHA: powerful adult female tigress, broad protective shoulder silhouette, burnt-ochre coat, charcoal branching stripes, ivory sculpted cheek/throat mass, amber eyes, subtle crescent muzzle scar; full quadruped neutral standing pose, tail separate, all paws visible, no massive lion mane. Panel 4 TALI: young tiger cub with visibly juvenile large head and paws, short rounded body, warm ochre coat and simple stripes echoing Asha, playful but neutral grounded stance; not miniaturized adult.",
+        "action": "Individual complete-body neutral poses for visual identity review, subjects do not overlap. Consistent animal anatomy and clear paws/hands/beak/tails, no extra limbs or accessories.",
+        "scene": "Four airy panels on neutral warm-gray studio backdrop, soft ground shadows, no forest or story scene. Editorial sizes adjusted per panel; not a physical scale chart.",
+        "composition": "2 by 2 character design board, VARA top left, KORO top right, ASHA bottom left, TALI bottom right, each name large and readable below. Clear panel boundaries and full-body margin.",
+        "lighting": "Uniform soft studio light, warm-neutral balanced materials, strong silhouette read.",
+        "style": "High-end original stylized cinematic creature design, purposeful sculpted fur clumps, clear simplified geometry, restrained PBR, NOT photoreal wildlife, NOT chibi cartoon, no gore.",
+        "text": "WILD CROWN — THE FIRST PACT\nVARA\nKORO\nASHA\nTALI\nCONCEPT CANDIDATES — PANEL SCALES DIFFER",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C03-wolf-cast",
+      "file": "images/C03-wolf-cast.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN original wolf cast character design board, THREE distinct full-body wolves in separate wide studio panels with the same stylized cinematic sculpted-fur rendering. RUUN left: older large male gray wolf, heavy silver-white neck ruff, broad seasoned shoulders, one notched ear and muzzle scar, upright disciplined stance, wise tired gaze, no human clothing. LUMA center: younger female gray-brown wolf with lighter cream throat, slimmer agile legs and high alert ears, athletic scout silhouette, tail naturally relaxed, intelligent forward gaze. SABLE right: charcoal-black wolf with a distinctive narrow warm-ivory crescent throat patch and amber eyes, low deliberate tracking posture, medium build between the other two, snout extended to scent but body fully visible.",
+        "action": "All four paws per wolf readable, tails separated, natural quadruped anatomy, no horns, no armor, no human gestures. Show unmistakable age/body/posture differences, not three recolors of one mesh.",
+        "scene": "Neutral warm-gray seamless studio, shared ground line with even shadows; no forest.",
+        "composition": "Landscape three-column character lineup, each complete wolf visible nose-to-tail with names below and generous negative space. Similar real-world scale; RUUN modestly bulkier, LUMA leaner, SABLE medium.",
+        "lighting": "Soft neutral studio key fill, charcoal fur still readable in shadow, no glowing magical eyes.",
+        "style": "Premium stylized cinematic original game creatures, sculpted fur masses, realistic basic anatomy but simplified high-readability surfaces, not photoreal fur strands, not chibi.",
+        "text": "WILD CROWN — MOONPINE PACK\nRUUN\nLUMA\nSABLE\nCONCEPT CANDIDATES",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C01-human-cast",
+      "file": "images/C01-human-cast.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "An original WILD CROWN human cast design board. FOUR separate full-body characters on a consistent neutral warm-gray studio ground, evenly spaced, no overlap. All are premium STYLIZED cinematic 3D sculpted character designs with simplified strong forms, not photographs. Left to right: AREN young adult brown-skinned forest warden, short textured dark hair, open attentive face, cropped asymmetric sleeveless moss-green jacket with ochre panels, fitted charcoal trousers, light boots, amber branching mark on LEFT forearm. Neutral relaxed A-pose with EMPTY hands. His collapsible staff rests upright beside him not touching hands. YARA older brown-skinned female mentor, silver hair tied compactly above neck, compassionate lined face, sage and ivory layered short practical tunic, trousers, weathered carved seed talisman, uncovered expressive hands, no long skirt. ORUN gaunt elderly male fallen warden with visibly human sad face, short silver hair, broken six-tip black-root crown, short rib-like root cuirass ending above hips with restrained amber core, FITTED TROUSERS fully visible and short root shoulder pads. Absolutely NO cloak, NO cape, NO robe, NO skirt, NO hanging fabric below hips. MAREK middle-aged lean human trapper, short rough hair, utilitarian brown short jacket, fitted work trousers, compact trap tools and sealed black-resin vial on belt, morally conflicted face, hands empty, no firearms.",
+        "action": "All four stand in comparable neutral three-quarter stances, entire figures and feet visible with separated limbs. Postures communicate listener, mentor, grieving controller and wary exploiter. Nonlethal story tone, no gore.",
+        "scene": "Simple pale gray studio, thin ground line and soft shadows, no scenic background, no VFX clouds, no inset portraits.",
+        "composition": "Landscape character line-up with generous margins and each name below respective feet. Four columns, coherent rendering and relative human height. Title small at top. Outfit anatomy clearly visible; no long cloth anywhere on Orun.",
+        "lighting": "Consistent neutral broad studio light, readable faces/hands/fabrics, subtle materials not glossy toy plastic.",
+        "style": "Original premium stylized cinematic action-adventure character sheet, graphic silhouette, simplified tactile cloth/wood/skin, expressive but not chibi, not franchise imitation, not photoreal human photo.",
+        "text": "WILD CROWN — HUMAN CAST\nAREN\nYARA\nORUN\nMAREK\nCONCEPT CANDIDATES",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C04-nyra-solkar-ghor",
+      "file": "images/C04-nyra-solkar-ghor.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN original late-campaign creature design board with THREE separate horizontal studio panels, premium stylized cinematic 3D creatures. NYRA top left panel: athletic female black panther with long supple spine, elegant low stalking stance, restrained rosettes visible through charcoal roughness variation, alert pale-amber eyes, long clean tail, no horns or clothing. SOLKAR top right panel: mature male lion leader with a distinctive sculpted sunburst mane made of broad readable amber/brown clumps and intentional negative spaces, dignified heavy chest, natural paws, small muzzle scar, no crown jewelry or armor, regal yet tense stance. GHOR bottom wide panel: enormous crocodile, unequivocal crocodilian long flat jaw and low belly, four SHORT splayed legs and long muscular tapering tail, sculpted muddy scutes with restrained black-sap residue between dorsal plates, jaws mostly closed, no mammalian limbs, no gore.",
+        "action": "Each creature complete nose-to-tail visible in neutral three-quarter studio stance, paws/feet readable and separated. All silhouettes differ anatomically. Editorial panel scale differs; do not imply a panther is same size as giant crocodile.",
+        "scene": "Neutral warm-gray studio only, consistent light and ground shadows, no swamp or savanna background.",
+        "composition": "Two medium top panels Nyra and Solkar and one full-width bottom Ghor panel, generous margins, clear ivory or charcoal nameplates, no overlay on bodies. Concept identity sheet not multiview or rig proof.",
+        "lighting": "Soft studio lighting shows black-panther surface without making it gray; golden mane subdued not glowing.",
+        "style": "Original premium stylized cinematic game creatures, simplified sculpted fur/scutes with tactile PBR, shape-first and animation-conscious, not photoreal wildlife photo, not cartoon chibi.",
+        "text": "WILD CROWN — SHADOW, CROWN & MIRE\nNYRA\nSOLKAR\nGHOR\nCONCEPT CANDIDATES — PANEL SCALES DIFFER",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C05-crowned-beast",
+      "file": "images/C05-crowned-beast.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Original final-boss concept for WILD CROWN: THE BROKEN PACT, ORUN — THE CROWNED BEAST. A towering coherent root-grown quadrupedal guardian, not a pile of animal heads. One primary leonine/tigerlike head with a broken six-prong crown of living dark wood, massive feline front shoulders and paws, long wolf-like rear stance, supple panther-like arched torso, primate-inspired grasp-capable foredigits still legible as paws, folded bird-wing-shaped ROOT structures along shoulders, a single long braided root tail. The grieving old HUMAN FACE of Orun is visible inside a protected amber hollow in the upper chest. Six restrained amber aspect sockets arranged around the crown, not six additional heads. Materials are sculpted wood, dark resin, subtle moss, no exposed organs, no gore.",
+        "action": "Calm menacing neutral three-quarter full-body stance in a studio-like cavern display, all four support limbs and tail clearly separated, mouth closed, no attack cloud. The primary silhouette must read in one glance and the chest core must be targetable.",
+        "scene": "Plain desaturated charcoal-green background with ground plane, small clearly separate 1.8-meter warden silhouette at lower left indicating proposed colossal scale. No forest, no armies, no magical particle storm.",
+        "composition": "Single dramatic full creature occupying center, generous margins including complete crown/root-wing tips/tail; small title upper left and six simple labeled aspect symbols in a clean bottom strip. Not a multi-headed chimera, not a dragon, not a generic skull demon.",
+        "lighting": "Soft cinematic sculptural side light, restrained amber core readable, silhouette rim with controlled bloom, dark materials not crushed.",
+        "style": "Exceptional original stylized cinematic 3D action-adventure boss design, bold sculpted forms, disciplined negative space, animation-aware anatomy, tactile wood/resin, no photoreal horror.",
+        "text": "ORUN — THE CROWNED BEAST\nSKY   CANOPY   FANG   PACK   SHADOW   CROWN\nFINAL BOSS CONCEPT — PROPOSED SCALE",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U02-asha-boss-hud-v2",
+      "file": "images/U02-asha-boss-hud-v2.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN boss gameplay interface DESIGN MOCKUP, stylized cinematic 3D. CRITICAL CAMERA: elevated three-quarter camera looking DOWN at 25 degrees, 10 meters back, 45mm perspective, clear broad oval ground from foreground to far edge; not low-angle, not cinematic side-on close-up. Aren small complete figure lower-left occupying only 16 percent image height, short moss/ochre sleeveless cropped jacket, dark trousers, short dark hair, both feet fully unobscured. Asha adult mother tigress right-center, only about twice Aren body length not a colossal monster, simplified SCULPTED fur masses and no individual photoreal strands. Hornbill Vara has large curved yellow bill AND CASQUE, black/cream wings. Macaque Koro is high in background on bamboo bundle, visible but small.",
+        "action": "Asha pounce anticipation. Clearly show safe foreground and background diagonal evasion room around Aren. Ground target oval at middle-right offset from player, narrow arrow toward the committed landing point. Avoidance footprint limited, not arena-wide. Keep entire playable arena unobscured; NO blurred foreground leaves crossing feet or floor. Vara and Koro allies only.",
+        "scene": "Stylized bamboo grove arena with smooth readable clay floor, perimeter roots with sparse oily Sap, sculpted bamboo clusters framing edges. Not photoreal forest, not excessive dust/bloom.",
+        "composition": "Flat 16:9-style game screen composition in landscape image: top-center ASHA title and FEROCITY bar with three CORRUPTION nodes; top-left player vitality + exactly TWO dodge diamonds + Instinct meter. Bottom-right simple animal line-art icons: a HORNBILL head with enormous curved bill/casque labeled Vara key Q, a MONKEY face labeled Koro key R. No eagle, no goat, no other portrait. Bottom-center Space + hướng Né. Dark charcoal-green/ivory/brass UI same motif, all essential text large. Small concept watermark.",
+        "lighting": "Soft bright canopy light, floor high readability, subdued vignette and bloom. Clear contact shadows.",
+        "style": "Premium original stylized cinematic GAME CAMERA TARGET, sculpted shapes, simplified surfaces, readable action, no gore, no giant cinematic closeup.",
+        "text": "ASHA — THE BROKEN FANG\nFEROCITY\nCORRUPTION\nInstinct\nQ  Vara\nR  Koro\nSpace + hướng  Né\nUI CONCEPT — NOT GAMEPLAY CAPTURE",
+        "aspect_ratio": "16:9",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U04-companion-menu-v2",
+      "file": "images/U04-companion-menu-v2.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN companion menu mockup, after Asha recruitment. A beautiful stylized mother tigress full-body left 55 percent, simplified sculpted ochre fur masses and dark branching stripes, ivory cheeks, protective intelligent expression, natural paws and tail, no collar, no magical armor. Right 35 percent dark charcoal-green information panel with ivory type and brass rules. Nature-fantasy premium UI, restrained ornament. Top nav ONLY BẢN ĐỒ / ĐỒNG HÀNH / NHẬT KÝ / THIẾT LẬP; NO inventory tab.",
+        "action": "Selected ASHA, role Bảo hộ • Phá giáp, relationship TIN CẬY with three restrained leaf milestones. Abilities Vồ, Chặn xung phong, Phá vật cản. Bottom row ONLY THREE active rectangular cards, each correct animal and role: ASHA clearly orange TIGER face labeled CHIẾN ĐẤU; KORO clearly brown MACAQUE MONKEY face with rounded primate ears and flat nose labeled HỖ TRỢ; VARA clearly HORNBILL face with ENORMOUS LONG CURVED ORANGE BILL AND CASQUE, black/cream neck labeled TRINH SÁT. CRITICAL: Koro is NOT goat/deer/wolf, Vara is NOT eagle. No locked animal silhouettes, no other animals anywhere in UI.",
+        "scene": "Softly blurred Grove roots and clear lake, grounded tiger on readable stone platform. Stylized NOT photoreal hair strand rendering.",
+        "composition": "Full game menu screen landscape, large tiger and clear right ability card, bottom three party slots large enough to distinguish species. No loot rarity, no star power score, no currency, no inventory grid. Clear focus border only around Asha. Minimal UI, generous whitespace.",
+        "lighting": "Warm soft sanctuary lighting, readable charcoal panels, no overdone bloom.",
+        "style": "Original premium STYLIZED cinematic creature menu mockup, geometric sculpted fur clumps with subtle material detail, clean high-contrast UI.",
+        "text": "ĐỒNG HÀNH\nASHA\nBảo hộ • Phá giáp\nTIN CẬY\nVồ\nChặn xung phong\nPhá vật cản\nĐỘI HÌNH\nAsha — CHIẾN ĐẤU\nKoro — HỖ TRỢ\nVara — TRINH SÁT\nEsc Trở lại\nUI CONCEPT",
+        "aspect_ratio": "16:9",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U03-world-map-journal-v2",
+      "file": "images/U03-world-map-journal-v2.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "An elegant nature-fantasy video game world map and quest journal UI for WILD CROWN. Dark forest green, brass borders, ivory text. Left two-thirds is a stylized relief map: The Grove central, Greenwake south, Whispering Canopy west, Blood Bamboo Valley northwest, Moonpine Ridge north, Mistveil Basin east, Sunmane Expanse southeast. Future northern/eastern/southeastern areas fogged with lock icons. Right third is a clearly readable selected quest panel for THE ASH HUNTERS, showing a bamboo hunter camp thumbnail and two objectives: Tìm trại săn; Mở lồng giam. This is BEFORE Tali rescue. Mark the hunter camp cage on map, not tiger boss. Do not show Heartroot Hollow.",
+        "action": "User is viewing map before rescuing Tali. A clear highlighted route leads to the cage objective. The right panel contains a large ĐÁNH DẤU button. Sparse map symbols and a readable legend for sanctuary, objective, locked.",
+        "composition": "Landscape 16:9 desktop game-menu design mockup. Large map left, restrained right quest card, top tabs BẢN ĐỒ / NHẬT KÝ / ĐỒNG HÀNH, bottom keyboard instructions. Strong legible typography and no tiny filler text, no busy icons.",
+        "lighting": "Even map relief lighting and high contrast ivory-on-dark UI.",
+        "style": "Premium original stylized cinematic adventure interface, sculpted terrain, refined organic motifs, no sci-fi/neon or parchment clutter.",
+        "text": "WILD CROWN\nBẢN ĐỒ   NHẬT KÝ   ĐỒNG HÀNH\nBLOOD BAMBOO VALLEY\nTHE ASH HUNTERS\nGiải cứu Tali\nTìm trại săn\nMở lồng giam\nĐÁNH DẤU\nEsc Trở lại\nUI CONCEPT",
+        "aspect_ratio": "16:9",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "U02-asha-boss-hud-v3",
+      "file": "images/U02-asha-boss-hud-v3.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "WILD CROWN stylized cinematic 3D nonlethal boss-combat interface mockup. Aren is a young brown-skinned warden with short dark hair, a compact moss/ochre sleeveless jacket and charcoal trousers. CRITICAL WEAPON RULE: Aren holds ONE LONG BLUNT WOODEN STAFF WITH BOTH HANDS. The staff is a simple smooth wooden pole with rounded wooden ends. NO knife, NO dagger, NO sword, NO blade, NO metal sharp point, NO dual weapons. He is lower-left in a defensive stance with the staff horizontal across his body, complete figure and both feet visible. Asha adult tiger is right-center in pounce anticipation, normal large tiger scale rather than colossal, sculpted ochre fur clumps and dark stripes. Vara is a small hornbill with large yellow curved beak and casque flying above. Koro is a brown macaque on a bamboo platform in rear.",
+        "action": "Asha will pounce into a clearly marked AMBER outlined oval landing zone in middle-right, not yet impact. A short dashed line from Asha to landing oval indicates committed path, NO extra outward arrow. Player has wide visible safe ground to move near and far. This is NONLETHAL rescue combat. NO blood, no injuries, no gore.",
+        "scene": "Wide oval bamboo clearing with broad bare clay floor, ruins/roots at perimeter only. Elevated three-quarter guided camera 25 degrees looking down, 10 meters back; true near/middle/far depth, camera not close behind player, no foreground occluders. Aren roughly one fifth frame height, tiger not oversized.",
+        "composition": "Landscape game HUD: top-center ASHA — THE BROKEN FANG, FEROCITY bar and three labeled CORRUPTION nodes; upper-left vitality plus exactly two dodge diamonds and Instinct; bottom-right only hornbill icon VARA Q and monkey icon KORO R; bottom-center Space + hướng Né. Ivory text on charcoal-green backing, fine brass borders, restrained readable UI. No photoreal dense fur, no particle cloud, no weapons besides ONE blunt wooden staff.",
+        "lighting": "Soft bright canopy light and clear contact shadows; ground telegraph warm amber with dashed shape not red-only; slight rim on actor silhouettes.",
+        "style": "Original premium stylized cinematic action-adventure game TARGET composition, simplified tactile geometry, readable low-complexity fur forms, beautiful but no photorealism.",
+        "text": "ASHA — THE BROKEN FANG\nFEROCITY\nCORRUPTION\nInstinct\nQ  Vara\nR  Koro\nSpace + hướng  Né\nUI CONCEPT — NOT GAMEPLAY CAPTURE",
+        "aspect_ratio": "16:9",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    },
+    {
+      "id": "C04-nyra-solkar-ghor-v2",
+      "file": "images/C04-nyra-solkar-ghor-v2.webp",
+      "provider": "openai-codex",
+      "model": "gpt-image-2-codex",
+      "prompt": {
+        "subject": "Original WILD CROWN creature board rendered as stylized hand-sculpted real-time game models, not wildlife photography. Three panels. Top-left NYRA: black panther with sleek broad simplified muscle planes, very subtle angular rosettes, amber eyes, neutral standing quadruped pose with four legs separated, long clean tapering tail. Top-right SOLKAR: regal male lion with broad stylized SUNBURST MANE CLUMPS separated by deliberate dark wedge-shaped negative spaces; mane is 12–16 large sculpted locks, NOT thousands of fine fur strands, tawny short-coated body, four clear paws, faint muzzle scar. Bottom wide panel GHOR: stylized colossal crocodile, low broad jaw, short splayed legs, large simplified overlapping scute plates, matte muddy ochre/charcoal material with a few oily Black Sap seams. CRITICAL: entire tail is visible from thick base curving gently into a LONG NARROW POINTED TIP with generous empty space beyond; NO blunt amputated/cropped tail. Include full body head-to-tail, tail tip at least 10 percent canvas width from edge.",
+        "action": "Neutral complete-body review poses, clear supports, natural anatomical families. Ghor tail is curved forward into panel if needed to keep pointed tip and all body visible. No attacks or gore. Each panel uses editorial scale, not same physical scale.",
+        "scene": "Neutral warm gray studio, simple smooth ground, no scenery, consistent soft shadows. Surface detail deliberately simplified into geometry-readable planes and painted color shapes.",
+        "composition": "Two top panels panther and lion; one wide bottom crocodile panel. Each subject fully within its panel with generous margin, readable labels. Original premium stylized game art, avoid photoreal texture noise. All visible anatomy stays separate and clear.",
+        "lighting": "Soft neutral studio light emphasizes broad sculpted shapes, no wet photoreal glints, no crushed black shadows.",
+        "style": "Strongly STYLIZED CINEMATIC 3D game character maquettes with tactile sculpted materials and controlled geometry, mature proportions but simplified surfaces; not realistic wildlife photos, not chibi, no individual fur fibers.",
+        "text": "WILD CROWN — SHADOW, CROWN & MIRE\nNYRA\nSOLKAR\nGHOR\nCONCEPT CANDIDATES — PANEL SCALES DIFFER",
+        "aspect_ratio": "3:2",
+        "image_size": "1536x1024"
+      },
+      "status": "candidate-not-approved"
+    }
+  ]
+}

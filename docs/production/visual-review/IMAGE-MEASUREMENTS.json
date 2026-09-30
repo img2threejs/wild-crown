@@ -1,0 +1,231 @@
+[
+  {
+    "id": "M01",
+    "source": "images/M01-erya-world-map.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/M01.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "eb3581b91d0b8bd0f429caa873c7f70a1023e4277f1acbc80c81b93e23a40bd4",
+    "localEdits": [
+      "Caption explicitly locates Hollow beneath Grove.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "M02",
+    "source": "images/M02-first-pact-level-map.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/M02.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "ae3a918c5cae6c8249d6c2dd757f5f676892ae954c8cb0ea6dc612cba0e3d7f3",
+    "localEdits": [
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "U01",
+    "source": "images/U01-exploration-hud.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1672,
+      941
+    ],
+    "plate": "plates/U01.png",
+    "plateDimensions": [
+      1672,
+      1017
+    ],
+    "sha256": "649310f3081e6f584160a87402741927020011b65a80591d5504edd17e04ef88",
+    "localEdits": [
+      "Locally typeset consistent vitality, two dodge charges and separate Instinct meter; static image only.",
+      "Quest heading changed from Fallen Scout to Empty Orchard to avoid implying Koro recruited during first Vara rescue.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "U02",
+    "source": "images/U02-asha-boss-hud-v3.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1672,
+      941
+    ],
+    "plate": "plates/U02.png",
+    "plateDimensions": [
+      1672,
+      1017
+    ],
+    "sha256": "4fc4d2d97db1831867e4ec9163b3e2bb0b8e59a7a8c5a919a3e6a37d40d01d2d",
+    "localEdits": [
+      "Locally typeset consistent vitality, two dodge charges and separate Instinct meter; static image only.",
+      "Boss header locally typeset with separate Ferocity and three uncleansed corruption cores.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "U03",
+    "source": "images/U03-world-map-journal-v2.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1672,
+      941
+    ],
+    "plate": "plates/U03.png",
+    "plateDimensions": [
+      1672,
+      1017
+    ],
+    "sha256": "3da5101c45f4688fda3177b1aed890c3c66f3e47fbebd766946696efb96b6ab4",
+    "localEdits": [
+      "Quest active state typeset: find camp now, open cage afterward; no false completion or simultaneous active steps.",
+      "Shared top navigation order/typesetting standardized across map and companion screens.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "U04",
+    "source": "images/U04-companion-menu-v2.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1672,
+      940
+    ],
+    "plate": "plates/U04.png",
+    "plateDimensions": [
+      1672,
+      1016
+    ],
+    "sha256": "86a1818c8a552aacf0970434a9ded1f2785b92870dca365dd2d496f355f6eb89",
+    "localEdits": [
+      "Shared top navigation order/typesetting standardized across map and companion screens.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "C01",
+    "source": "images/C01-human-cast.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/C01.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "ede6513f80b74e00490727fcdf1893fbafafe8b6c551ca762204816ddbf5f1eb",
+    "localEdits": [
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "C02",
+    "source": "images/C02-first-pact-creatures.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/C02.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "809a010162efcfff2618f97da5e8d60d5972db6a8e483beff4dfded2a3cc6adb",
+    "localEdits": [
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "C03",
+    "source": "images/C03-wolf-cast.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1942,
+      809
+    ],
+    "plate": "plates/C03.png",
+    "plateDimensions": [
+      1942,
+      885
+    ],
+    "sha256": "4d57cb29a3eb1ee357692bc7dc9c63e60db17b8450b36c8725deafa58531016e",
+    "localEdits": [
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "C04",
+    "source": "images/C04-nyra-solkar-ghor-v2.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/C04.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "e393a8437f6e25666ba3a4f5b4687a2a8f6e35d3dcf7c029a3d4214843dc7490",
+    "localEdits": [
+      "Used regenerated v2: pointed full Ghor tail and simplified sculpted mane/scutes.",
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  },
+  {
+    "id": "C05",
+    "source": "images/C05-crowned-beast.webp",
+    "sourceFormatMeasured": "WEBP",
+    "sourceDimensions": [
+      1536,
+      1024
+    ],
+    "plate": "plates/C05.png",
+    "plateDimensions": [
+      1536,
+      1100
+    ],
+    "sha256": "f04b371b17f4d3377c1cff3baca1be23083be3cee38d5756f9a39698ecb6c3af",
+    "localEdits": [
+      "English-only text replacement; approved art unchanged outside declared copy regions."
+    ],
+    "approval": "concept-approved-by-user",
+    "language": "en"
+  }
+]

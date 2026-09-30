@@ -1,0 +1,25 @@
+{
+  "scope": "parent-session coordination, review, verification and user interruption; not review-only",
+  "intervalStart": "2026-09-30T08:22:52.934Z",
+  "asOf": "2026-09-30T09:24:27.249Z",
+  "finalResponseAndLaterOperationsExcluded": true,
+  "assistantRecords": 81,
+  "usageRecords": 81,
+  "recordsWithoutUsage": 0,
+  "models": [
+    "gpt-6-astra"
+  ],
+  "providers": [
+    "openai-codex"
+  ],
+  "firstUsageAt": "2026-09-30T08:23:01.023Z",
+  "lastUsageAt": "2026-09-30T09:24:27.168Z",
+  "reportedCounters": {
+    "input": 294555,
+    "output": 58389,
+    "cacheRead": 41619840,
+    "cacheWrite": 0,
+    "totalTokens": 41972784,
+    "reasoningTokens": null
+  }
+}

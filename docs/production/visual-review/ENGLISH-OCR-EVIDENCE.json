@@ -1,0 +1,809 @@
+[
+  {
+    "id" : "M01",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN- ERYA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Moonpine Ridge"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Blood Bamboo Valley"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Mistveil Basin"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Whispering Canopy"
+      },
+      {
+        "confidence" : 1,
+        "text" : "The Grove"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Sunmane Expanse"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Greenwake"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Heartroot Hollow"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Beneath the roots of The Grove"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WORLD MAP CONCEPT"
+      },
+      {
+        "confidence" : 1,
+        "text" : "M01 Erya \/ World map concept"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "M02",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILDER"
+      },
+      {
+        "confidence" : 1,
+        "text" : "PEOPLES"
+      },
+      {
+        "confidence" : 1,
+        "text" : "DEEPER"
+      },
+      {
+        "confidence" : 1,
+        "text" : "BONDS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "THE FIRST PACT - LEVEL CONCEPT"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "01"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Forest Entry"
+      },
+      {
+        "confidence" : 1,
+        "text" : "02"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Monkey Chase"
+      },
+      {
+        "confidence" : 1,
+        "text" : "03"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Hunter Camp"
+      },
+      {
+        "confidence" : 1,
+        "text" : "04"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Tiger Tracking"
+      },
+      {
+        "confidence" : 1,
+        "text" : "05"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Asha Arena"
+      },
+      {
+        "confidence" : 1,
+        "text" : "NATURE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "REMEMBERS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ITS OWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "06"
+      },
+      {
+        "confidence" : 1,
+        "text" : "First Pact"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Opens after cleanse"
+      },
+      {
+        "confidence" : 1,
+        "text" : "20"
+      },
+      {
+        "confidence" : 1,
+        "text" : "40 m"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ARENA DEPTH"
+      },
+      {
+        "confidence" : 1,
+        "text" : "LEGEND"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Entry"
+      },
+      {
+        "confidence" : 1,
+        "text" : "(from 04)"
+      },
+      {
+        "confidence" : 1,
+        "text" : "5"
+      },
+      {
+        "confidence" : 1,
+        "text" : "FAR"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MIDDLE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "NEAR"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Exit"
+      },
+      {
+        "confidence" : 1,
+        "text" : "(to 06)"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Main path"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Optional route"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Opens after cleanse"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Suggested camera direction"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MO2 The First Pact \/ Level layout"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "U01",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "AREN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Vitality"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Dodge"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Instinct"
+      },
+      {
+        "confidence" : 1,
+        "text" : "212"
+      },
+      {
+        "confidence" : 1,
+        "text" : "THE EMPTY ORCHARD"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Find a path past the falls"
+      },
+      {
+        "confidence" : 1,
+        "text" : "E Inspect"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Q"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Vara"
+      },
+      {
+        "confidence" : 1,
+        "text" : "R"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Koro"
+      },
+      {
+        "confidence" : 1,
+        "text" : "UI CONCEPT - NOT GAMEPLAY CAPTURE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "U01"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Exploration \/ HUD"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ENGLISH \/NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "U02",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "AREN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Vitality"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Dodge"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Instinct"
+      },
+      {
+        "confidence" : 1,
+        "text" : "2\/2"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ASHA — THE BROKEN FANG"
+      },
+      {
+        "confidence" : 1,
+        "text" : "FEROCITY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CORRUPTION"
+      },
+      {
+        "confidence" : 1,
+        "text" : "3 cores remain uncleansed"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Space + Direction Dodge"
+      },
+      {
+        "confidence" : 1,
+        "text" : "UI CONCEPT — NOT GAMEPLAY CAPTURE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "U02 Asha \/ Boss HUD"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ENGLISH \/NOT IMPLEMENTED"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WILD"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CROWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Q"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Vara"
+      },
+      {
+        "confidence" : 1,
+        "text" : "R"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Koro"
+      }
+    ]
+  },
+  {
+    "id" : "U03",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MAP"
+      },
+      {
+        "confidence" : 1,
+        "text" : "BLOOD BAMBOO"
+      },
+      {
+        "confidence" : 1,
+        "text" : "VALLEY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WHISPERING"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CANOPY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "THE GROVE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "GREENWAKE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Sanctuary"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Objective"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Locked"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Esc Back"
+      },
+      {
+        "confidence" : 1,
+        "text" : "U03 Map + Journal \/ Before Tali rescue"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ENGLISH \/NOT IMPLEMENTED"
+      },
+      {
+        "confidence" : 1,
+        "text" : "JOURNAL"
+      },
+      {
+        "confidence" : 1,
+        "text" : "COMPANIONS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SETTINGS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "THE ASH HUNTERS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MOONPINE RIDGE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MISTVEIL BASIN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SUNMANE EXPANSE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Rescue Tali"
+      },
+      {
+        "confidence" : 1,
+        "text" : "TRACKED OBJECTIVE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Find the hunter camp"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Next: Open the cage"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MARK"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WA SD Pan Map"
+      }
+    ]
+  },
+  {
+    "id" : "U04",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MAP"
+      },
+      {
+        "confidence" : 1,
+        "text" : "JOURNAL"
+      },
+      {
+        "confidence" : 1,
+        "text" : "COMPANIONS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SETTINGS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "COMPANIONS"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ASHA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Protection \/ Armor Break"
+      },
+      {
+        "confidence" : 1,
+        "text" : "BOND"
+      },
+      {
+        "confidence" : 1,
+        "text" : "TRUSTED"
+      },
+      {
+        "confidence" : 1,
+        "text" : "COMPANION ABILITIES"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Pounce"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Leap in and stagger the target."
+      },
+      {
+        "confidence" : 1,
+        "text" : "Charge Block"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Intercept a charge to protect you."
+      },
+      {
+        "confidence" : 1,
+        "text" : "Break Obstacles"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Clear heavy barriers from the path."
+      },
+      {
+        "confidence" : 1,
+        "text" : "PARTY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Asha"
+      },
+      {
+        "confidence" : 1,
+        "text" : "COMBAT"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Koro"
+      },
+      {
+        "confidence" : 1,
+        "text" : "UTILITY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Vara"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SCOUT"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Esc Back"
+      },
+      {
+        "confidence" : 1,
+        "text" : "U04"
+      },
+      {
+        "confidence" : 1,
+        "text" : "Companions \/ After Asha recruitment"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      },
+      {
+        "confidence" : 1,
+        "text" : "UI CONCEPT"
+      }
+    ]
+  },
+  {
+    "id" : "C01",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN - HUMAN CAST"
+      },
+      {
+        "confidence" : 1,
+        "text" : "AREN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "YARA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ORUN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "MAREK"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT CANDIDATES"
+      },
+      {
+        "confidence" : 1,
+        "text" : "C01 Aren \/ Yara \/ Orun \/ Marek"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "C02",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN - THE FIRST PACT"
+      },
+      {
+        "confidence" : 1,
+        "text" : "1"
+      },
+      {
+        "confidence" : 1,
+        "text" : "2"
+      },
+      {
+        "confidence" : 1,
+        "text" : "VARA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "KORO"
+      },
+      {
+        "confidence" : 1,
+        "text" : "3"
+      },
+      {
+        "confidence" : 1,
+        "text" : "4"
+      },
+      {
+        "confidence" : 1,
+        "text" : "ASHA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "TALI"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT CANDIDATES - PANEL SCALES DIFFER"
+      },
+      {
+        "confidence" : 1,
+        "text" : "C02 Vara \/ Koro \/ Asha \/ Tali"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "C03",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN - MOONPINE PACK"
+      },
+      {
+        "confidence" : 1,
+        "text" : "RUUN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "LUMA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT CANDIDATES"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SABLE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "C03 Ruun \/ Luma \/ Sable"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "C04",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "NYRA"
+      },
+      {
+        "confidence" : 1,
+        "text" : "WILD CROWN - SHADOW, CROWN & MIRE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SOLKAR"
+      },
+      {
+        "confidence" : 1,
+        "text" : "GHOR"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT CANDIDATES -PANEL SCALES DIFFER"
+      },
+      {
+        "confidence" : 1,
+        "text" : "C04 Nyra \/ Solkar \/ Ghor"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  },
+  {
+    "id" : "C05",
+    "observedText" : [
+      {
+        "confidence" : 1,
+        "text" : "ORUN - THE CROWNED BEAST"
+      },
+      {
+        "confidence" : 1,
+        "text" : "FINAL BOSS CONCEPT - PROPOSED SCALE"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SKY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CANOPY"
+      },
+      {
+        "confidence" : 1,
+        "text" : "FANG"
+      },
+      {
+        "confidence" : 1,
+        "text" : "PACK"
+      },
+      {
+        "confidence" : 1,
+        "text" : "SHADOW"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CROWN"
+      },
+      {
+        "confidence" : 1,
+        "text" : "C05 Orun \/ Crowned Beast"
+      },
+      {
+        "confidence" : 1,
+        "text" : "CONCEPT APPROVED \/ ENGLISH \/ NOT IMPLEMENTED"
+      }
+    ]
+  }
+]

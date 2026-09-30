@@ -1,0 +1,104 @@
+{
+  "job": "Wild Crown Luna campaign state feature",
+  "sessionId": "01a0f168-cf1f-7437-93f2-794003eef196",
+  "sessionStartedAt": "2026-09-30T08:22:52.959Z",
+  "source": "exact persisted task session; provider usage fields only",
+  "rounds": [
+    {
+      "round": "initial-implementation",
+      "handoffAt": "2026-09-30T08:22:52.959Z",
+      "observedRoundSpanMs": 484744,
+      "assistantRecords": 50,
+      "usageRecords": 50,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T08:22:57.980Z",
+      "lastUsageAt": "2026-09-30T08:30:57.703Z",
+      "reportedCounters": {
+        "input": 162220,
+        "output": 22008,
+        "cacheRead": 4523520,
+        "cacheWrite": 0,
+        "totalTokens": 4707748,
+        "reasoningTokens": null
+      }
+    },
+    {
+      "round": "repair-1",
+      "handoffAt": "2026-09-30T08:32:58.838Z",
+      "observedRoundSpanMs": 462595,
+      "assistantRecords": 35,
+      "usageRecords": 35,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T08:33:21.945Z",
+      "lastUsageAt": "2026-09-30T08:40:41.433Z",
+      "reportedCounters": {
+        "input": 188870,
+        "output": 27547,
+        "cacheRead": 8082944,
+        "cacheWrite": 0,
+        "totalTokens": 8299361,
+        "reasoningTokens": 12345
+      }
+    },
+    {
+      "round": "repair-2",
+      "handoffAt": "2026-09-30T08:54:27.793Z",
+      "observedRoundSpanMs": 250423,
+      "assistantRecords": 27,
+      "usageRecords": 27,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T08:54:56.257Z",
+      "lastUsageAt": "2026-09-30T08:58:38.216Z",
+      "reportedCounters": {
+        "input": 404203,
+        "output": 13999,
+        "cacheRead": 9573888,
+        "cacheWrite": 0,
+        "totalTokens": 9992090,
+        "reasoningTokens": 7395
+      }
+    }
+  ],
+  "allRounds": {
+    "assistantRecords": 112,
+    "usageRecords": 112,
+    "recordsWithoutUsage": 0,
+    "models": [
+      "gpt-6-luna"
+    ],
+    "providers": [
+      "openai-codex"
+    ],
+    "firstUsageAt": "2026-09-30T08:22:57.980Z",
+    "lastUsageAt": "2026-09-30T08:58:38.216Z",
+    "reportedCounters": {
+      "input": 755293,
+      "output": 63554,
+      "cacheRead": 22180352,
+      "cacheWrite": 0,
+      "totalTokens": 22999199,
+      "reasoningTokens": null
+    }
+  },
+  "observedActiveRoundSpanSumMs": 1197762,
+  "includesIdleReviewGapsInActiveSum": false,
+  "countingNote": "Counters include repeated cached context per request. Reasoning tokens are reported separately and not added again. These are usage counters, not billing cost. Round spans are observed message spans, not CPU time."
+}
