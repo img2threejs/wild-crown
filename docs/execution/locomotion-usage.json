@@ -1,0 +1,104 @@
+{
+  "job": "Wild Crown Luna guided locomotion feature",
+  "sessionId": "01a0f168-cf1b-75bc-b8b2-947a220d2561",
+  "sessionStartedAt": "2026-09-30T08:22:52.955Z",
+  "source": "exact persisted task session; provider usage fields only",
+  "rounds": [
+    {
+      "round": "initial-implementation",
+      "handoffAt": "2026-09-30T08:22:52.955Z",
+      "observedRoundSpanMs": 1707270,
+      "assistantRecords": 117,
+      "usageRecords": 117,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T08:22:59.419Z",
+      "lastUsageAt": "2026-09-30T08:51:20.225Z",
+      "reportedCounters": {
+        "input": 247668,
+        "output": 88037,
+        "cacheRead": 12199040,
+        "cacheWrite": 0,
+        "totalTokens": 12534745,
+        "reasoningTokens": null
+      }
+    },
+    {
+      "round": "repair-1",
+      "handoffAt": "2026-09-30T08:54:27.867Z",
+      "observedRoundSpanMs": 783698,
+      "assistantRecords": 57,
+      "usageRecords": 57,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T08:55:26.157Z",
+      "lastUsageAt": "2026-09-30T09:07:31.565Z",
+      "reportedCounters": {
+        "input": 100449,
+        "output": 32417,
+        "cacheRead": 12062720,
+        "cacheWrite": 0,
+        "totalTokens": 12195586,
+        "reasoningTokens": 20693
+      }
+    },
+    {
+      "round": "repair-2",
+      "handoffAt": "2026-09-30T09:17:44.580Z",
+      "observedRoundSpanMs": 193333,
+      "assistantRecords": 13,
+      "usageRecords": 13,
+      "recordsWithoutUsage": 0,
+      "models": [
+        "gpt-6-luna"
+      ],
+      "providers": [
+        "openai-codex"
+      ],
+      "firstUsageAt": "2026-09-30T09:18:06.099Z",
+      "lastUsageAt": "2026-09-30T09:20:57.913Z",
+      "reportedCounters": {
+        "input": 243578,
+        "output": 9077,
+        "cacheRead": 2973184,
+        "cacheWrite": 0,
+        "totalTokens": 3225839,
+        "reasoningTokens": 4745
+      }
+    }
+  ],
+  "allRounds": {
+    "assistantRecords": 187,
+    "usageRecords": 187,
+    "recordsWithoutUsage": 0,
+    "models": [
+      "gpt-6-luna"
+    ],
+    "providers": [
+      "openai-codex"
+    ],
+    "firstUsageAt": "2026-09-30T08:22:59.419Z",
+    "lastUsageAt": "2026-09-30T09:20:57.913Z",
+    "reportedCounters": {
+      "input": 591695,
+      "output": 129531,
+      "cacheRead": 27234944,
+      "cacheWrite": 0,
+      "totalTokens": 27956170,
+      "reasoningTokens": null
+    }
+  },
+  "observedActiveRoundSpanSumMs": 2684301,
+  "includesIdleReviewGapsInActiveSum": false,
+  "countingNote": "Counters include repeated cached context per request. Reasoning tokens are reported separately and not added again. These are usage counters, not billing cost. Round spans are observed message spans, not CPU time."
+}

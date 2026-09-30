@@ -7,16 +7,76 @@
   "implementationModelConfigured": "openai-codex/gpt-6-luna",
   "reviewModel": "openai-codex/gpt-6-astra",
   "setupTimeExcluded": true,
-  "wallElapsedMs": null,
-  "jobs": [],
+  "wallElapsedMs": 3694315,
+  "jobs": [
+    {
+      "job": "Wild Crown Luna campaign state feature",
+      "usageFile": "campaign-usage.json",
+      "rounds": 3,
+      "observedActiveRoundSpanSumMs": 1197762
+    },
+    {
+      "job": "Wild Crown Luna guided locomotion feature",
+      "usageFile": "locomotion-usage.json",
+      "rounds": 3,
+      "observedActiveRoundSpanSumMs": 2684301
+    }
+  ],
   "usagePolicy": {
-    "source": "task harness or matched persisted agent sessions only",
-    "inputTokens": null,
-    "outputTokens": null,
-    "cacheReadTokens": null,
-    "cacheWriteTokens": null,
-    "accountWideDeltas": "not attributable; not used",
-    "unknown": "null, never zero"
+    "source": "matched persisted task sessions and parent records in stated interval",
+    "accountWideDeltas": "not used",
+    "unknown": "null, never zero",
+    "reasoning": "not added again to output/total",
+    "pricing": "not a bill or forecast"
   },
-  "status": "running"
+  "status": "features-reviewed-and-published-unmerged",
+  "asOf": "2026-09-30T09:24:27.249Z",
+  "wallTimeIncludes": "parallel authoring, repairs, Astra coordination/review, verification, waits, publishing and session-name interruption",
+  "observedLunaUsage": {
+    "input": 1346988,
+    "output": 193085,
+    "cacheRead": 49415296,
+    "cacheWrite": 0,
+    "totalTokens": 50955369,
+    "reasoningTokens": null
+  },
+  "observedAstraUsage": {
+    "input": 294555,
+    "output": 58389,
+    "cacheRead": 41619840,
+    "cacheWrite": 0,
+    "totalTokens": 41972784,
+    "reasoningTokens": null
+  },
+  "astraUsageFile": "astra-coordination-review-usage.json",
+  "pullRequests": [
+    {
+      "number": 1,
+      "url": "https://github.com/img2threejs/wild-crown/pull/1",
+      "scope": "approved production baseline and measured execution record"
+    },
+    {
+      "number": 2,
+      "url": "https://github.com/img2threejs/wild-crown/pull/2",
+      "commit": "6cbea8d",
+      "scope": "campaign state and English content"
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/img2threejs/wild-crown/pull/3",
+      "commit": "b912f8b",
+      "scope": "guided locomotion lab"
+    }
+  ],
+  "sessionName": {
+    "requested": "Game Jungle",
+    "applied": false,
+    "actionRequired": "Run /rename Game Jungle in the active OMP TUI; headless attempt timed out without changing the title."
+  },
+  "limits": [
+    "Not a completed full game or full First Pact slice.",
+    "No final Tripo assets, rig/environment gate, browser persistence or physical gamepad certification.",
+    "Final response and operations after asOf are excluded.",
+    "Unreported usage from the failed auxiliary headless rename process is unknown, not claimed zero."
+  ]
 }
