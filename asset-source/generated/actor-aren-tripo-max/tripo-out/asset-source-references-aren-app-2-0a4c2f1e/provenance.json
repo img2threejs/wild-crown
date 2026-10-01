@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "assetId": "aren",
+  "candidateNumber": 2,
+  "candidateCount": 4,
+  "selection": "Selected from four previews as the closest visual match to the approved Aren concept crop.",
+  "sourceReference": {
+    "path": "asset-source/references/aren-approved-concept.png",
+    "sha256": "6239212164ff7e2cc96e79e83d1a23f8ffa3eda393392fa584be4147704cc5f3",
+    "cropBoxPixels": [20, 35, 430, 960]
+  },
+  "taskId": "0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861",
+  "output": {
+    "path": "model.glb",
+    "sha256": "12cb95beedbec4e542031c47917574de8b6ba634b464519b8c650b7f7b4533e6",
+    "bytes": 76269096,
+    "format": "glTF 2.0 binary",
+    "nodes": 1,
+    "meshes": 1,
+    "vertices": 1011304,
+    "skins": 0,
+    "animations": 0,
+    "structuralReferencesValid": true
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated; no authored species/body-part policy",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-measured",
+    "animationQuality": "not-measured",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "Single-view reference crop does not establish unseen-side anatomy.",
+      "Static high-poly candidate with no skin or animation clips.",
+      "R09 rigging/clips and the remaining GLTF production gates are still required."
+    ]
+  }
+}

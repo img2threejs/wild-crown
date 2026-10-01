@@ -395,126 +395,302 @@ function contactCoverage(markers, sampleTimes) {
   const windows = markers.filter(marker => marker && typeof marker === "object" && (marker.type === "contact-window" || marker.kind === "contact-window"));
   const covered = windows.filter(window => Number.isFinite(window.startTime) && Number.isFinite(window.endTime) && sampleTimes.some(time => Math.abs(time - window.startTime) < EPSILON) && sampleTimes.some(time => Math.abs(time - window.endTime) < EPSILON));
   return { windows, covered, complete: windows.length > 0 && covered.length === windows.length };}
-export function measureStaticGeometry(gltf, root, assetId) {
+function measureStaticGeometryCore(gltf, root, assetId) {
   const json = gltf.parser.json;
   const parts = [];
   root.updateMatrixWorld(true);
   const asBox = value => {
     if (!value?.min || !value?.max) return null;
-    const vec = item => Array.isArray(item) ? new THREE.Vector3(item[0], item[1], item[2]) : new THREE.Vector3(item.x, item.y, item.z);
-    const box = new THREE.Box3(vec(value.min), vec(value.max));
+    const vector = item => Array.isArray(item) ? new THREE.Vector3(item[0], item[1], item[2]) : new THREE.Vector3(item.x, item.y, item.z);
+    const box = new THREE.Box3(vector(value.min), vector(value.max));
     return box.isEmpty() ? null : box;
   };
   const recordBox = box => box && !box.isEmpty() ? { min: box.min.toArray().map(rounded), max: box.max.toArray().map(rounded) } : null;
   const delta = (actual, declared) => {
     if (!actual || !declared) return null;
-    const min = actual.min.toArray().map((value,index)=>rounded(value-declared.min.getComponent(index)));
-    const max = actual.max.toArray().map((value,index)=>rounded(value-declared.max.getComponent(index)));
+    const min = actual.min.toArray().map((value, index) => rounded(value - declared.min.getComponent(index)));
+    const max = actual.max.toArray().map((value, index) => rounded(value - declared.max.getComponent(index)));
     return { min, max, maxAbs: Math.max(...min.map(Math.abs), ...max.map(Math.abs)) };
   };
   const exactFloat32Match = (actual, declared) => {
     if (!actual || !declared) return null;
-    return actual.min.toArray().every((value,index)=>Math.fround(value)===Math.fround(declared.min.getComponent(index))) && actual.max.toArray().every((value,index)=>Math.fround(value)===Math.fround(declared.max.getComponent(index)));
+    return actual.min.toArray().every((value, index) => Math.fround(value) === Math.fround(declared.min.getComponent(index))) &&
+      actual.max.toArray().every((value, index) => Math.fround(value) === Math.fround(declared.max.getComponent(index)));
   };
   root.traverse(mesh => {
     if (!mesh.isMesh) return;
-    mesh.updateWorldMatrix(true,false);
+    mesh.updateWorldMatrix(true, false);
     const association = gltf.parser.associations?.get(mesh) || {};
     const nodeIndex = Number.isInteger(association.nodes) ? association.nodes : null;
     const nodeName = nodeIndex === null ? null : json.nodes?.[nodeIndex]?.name || null;
     const meshIndex = Number.isInteger(association.meshes) ? association.meshes : null;
     const primitiveIndex = Number.isInteger(association.primitives) ? association.primitives : null;
-    const position = mesh.geometry.getAttribute("position"), index = mesh.geometry.index;
+    const position = mesh.geometry.getAttribute('position');
+    const index = mesh.geometry.index;
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-    let finitePositionCount=0, nonFinitePositionCount=0, invalidIndexCount=0;
-    const actualLocal = new THREE.Box3(), actualWorld = new THREE.Box3(), point = new THREE.Vector3();
-    if(position)for(let vertex=0;vertex<position.count;vertex++){
-      point.fromBufferAttribute(position,vertex);
-      if(!Number.isFinite(point.x)||!Number.isFinite(point.y)||!Number.isFinite(point.z)){nonFinitePositionCount++;continue;}
-      finitePositionCount++;actualLocal.expandByPoint(point);actualWorld.expandByPoint(point.clone().applyMatrix4(mesh.matrixWorld));
+    let finitePositionCount = 0;
+    let nonFinitePositionCount = 0;
+    let invalidIndexCount = 0;
+    const actualLocal = new THREE.Box3();
+    const actualWorld = new THREE.Box3();
+    const point = new THREE.Vector3();
+    if (position) {
+      for (let vertex = 0; vertex < position.count; vertex++) {
+        point.fromBufferAttribute(position, vertex);
+        if (!Number.isFinite(point.x) || !Number.isFinite(point.y) || !Number.isFinite(point.z)) {
+          nonFinitePositionCount++;
+          continue;
+        }
+        finitePositionCount++;
+        actualLocal.expandByPoint(point);
+        actualWorld.expandByPoint(point.clone().applyMatrix4(mesh.matrixWorld));
+      }
     }
-    if(index&&position)for(const value of index.array)if(!Number.isInteger(value)||value<0||value>=position.count)invalidIndexCount++;
-    const materialIndices=[...new Set((mesh.geometry.groups||[]).map(group=>group.materialIndex??0))].sort((a,b)=>a-b);
-    if(!materialIndices.length&&materials.length)materialIndices.push(0);
-    const materialRefsValid=materials.length>0&&materialIndices.every(materialIndex=>materialIndex>=0&&materialIndex<materials.length);
-    const cachedLocal=asBox(mesh.geometry.boundingBox);
-    const meshPrimitives=json.meshes?.[meshIndex]?.primitives||[];
-    const primitiveRows=primitiveIndex===null?meshPrimitives:meshPrimitives[primitiveIndex]?[meshPrimitives[primitiveIndex]]:[];
-    const declaredLocal=new THREE.Box3();let hasAccessorBounds=false;
-    for(const primitive of primitiveRows){const accessor=json.accessors?.[primitive.attributes?.POSITION];const accessorBox=accessor?.min&&accessor?.max?asBox({min:accessor.min,max:accessor.max}):null;if(accessorBox){declaredLocal.union(accessorBox);hasAccessorBounds=true;}}
-    const declaredBox=hasAccessorBounds?declaredLocal:null;
-    const cachedMatch=exactFloat32Match(actualLocal,cachedLocal);
-    const accessorMatch=exactFloat32Match(actualLocal,declaredBox);
-    parts.push({mesh,nodeIndex,nodeName,meshIndex,primitiveIndex,primitiveCount:primitiveRows.length||mesh.geometry.groups.length||1,vertexCount:position?.count||0,finitePositionCount,nonFinitePositionCount,indexCount:index?.count||position?.count||0,invalidIndexCount,materialCount:materials.length,materialIndices,materialRefsValid,measuredLocalBounds:recordBox(actualLocal),measuredWorldBounds:recordBox(actualWorld),cachedLocalBounds:recordBox(cachedLocal),accessorDeclaredLocalBounds:recordBox(declaredBox),cachedBoundsDelta:delta(actualLocal,cachedLocal),accessorBoundsDelta:delta(actualLocal,declaredBox),cachedBoundsMatch:cachedMatch,accessorBoundsMatch:accessorMatch});
+    if (index && position) {
+      for (const value of index.array) {
+        if (!Number.isInteger(value) || value < 0 || value >= position.count) invalidIndexCount++;
+      }
+    }
+    const materialIndices = [...new Set((mesh.geometry.groups || []).map(group => group.materialIndex ?? 0))].sort((a, b) => a - b);
+    if (!materialIndices.length && materials.length) materialIndices.push(0);
+    const materialRefsValid = materials.length > 0 && materialIndices.every(materialIndex => materialIndex >= 0 && materialIndex < materials.length);
+    const cachedLocal = asBox(mesh.geometry.boundingBox);
+    const meshPrimitives = json.meshes?.[meshIndex]?.primitives || [];
+    const primitiveRows = primitiveIndex === null ? meshPrimitives : meshPrimitives[primitiveIndex] ? [meshPrimitives[primitiveIndex]] : [];
+    const declaredLocal = new THREE.Box3();
+    let hasAccessorBounds = false;
+    for (const primitive of primitiveRows) {
+      const accessor = json.accessors?.[primitive.attributes?.POSITION];
+      const accessorBox = accessor?.min && accessor?.max ? asBox({ min: accessor.min, max: accessor.max }) : null;
+      if (accessorBox) {
+        declaredLocal.union(accessorBox);
+        hasAccessorBounds = true;
+      }
+    }
+    const declaredBox = hasAccessorBounds ? declaredLocal : null;
+    const cachedMatch = exactFloat32Match(actualLocal, cachedLocal);
+    const accessorMatch = exactFloat32Match(actualLocal, declaredBox);
+    parts.push({
+      mesh, nodeIndex, nodeName, meshIndex, primitiveIndex,
+      primitiveCount: primitiveRows.length || mesh.geometry.groups.length || 1,
+      vertexCount: position?.count || 0, finitePositionCount, nonFinitePositionCount,
+      indexCount: index?.count || position?.count || 0, invalidIndexCount,
+      materialCount: materials.length, materialIndices, materialRefsValid,
+      measuredLocalBounds: recordBox(actualLocal), measuredWorldBounds: recordBox(actualWorld),
+      cachedLocalBounds: recordBox(cachedLocal), accessorDeclaredLocalBounds: recordBox(declaredBox),
+      cachedBoundsDelta: delta(actualLocal, cachedLocal), accessorBoundsDelta: delta(actualLocal, declaredBox),
+      cachedBoundsMatch: cachedMatch, accessorBoundsMatch: accessorMatch,
+    });
   });
+
   const grouped = new Map();
-  for(const part of parts){const key=part.nodeIndex===null?"missing-node:"+(part.meshIndex??"unknown"):"node:"+part.nodeIndex;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(part);}
-  const union = records => {const box=new THREE.Box3();for(const record of records){const current=asBox(record);if(current)box.union(current);}return box.isEmpty()?null:recordBox(box);};
-  const meshNodes=[];const controls=[];
-  for(const nodeParts of grouped.values()){
-    const first=nodeParts[0];
-    const primitiveIndices=nodeParts.map(part=>part.primitiveIndex).filter(Number.isInteger).sort((a,b)=>a-b);
-    const materialIndices=[...new Set(nodeParts.flatMap(part=>part.materialIndices))].sort((a,b)=>a-b);
-    const vertexCount=nodeParts.reduce((sum,part)=>sum+part.vertexCount,0);
-    const finitePositionCount=nodeParts.reduce((sum,part)=>sum+part.finitePositionCount,0);
-    const nonFinitePositionCount=nodeParts.reduce((sum,part)=>sum+part.nonFinitePositionCount,0);
-    const indexCount=nodeParts.reduce((sum,part)=>sum+part.indexCount,0);
-    const invalidIndexCount=nodeParts.reduce((sum,part)=>sum+part.invalidIndexCount,0);
-    const measuredLocalBounds=union(nodeParts.map(part=>part.measuredLocalBounds));
-    const measuredWorldBounds=union(nodeParts.map(part=>part.measuredWorldBounds));
-    const cachedLocalBounds=nodeParts.every(part=>part.cachedLocalBounds)?union(nodeParts.map(part=>part.cachedLocalBounds)):null;
-    const accessorDeclaredLocalBounds=nodeParts.every(part=>part.accessorDeclaredLocalBounds)?union(nodeParts.map(part=>part.accessorDeclaredLocalBounds)):null;
-    const cachedBoundsMatch=nodeParts.every(part=>part.cachedBoundsMatch!==false)?(nodeParts.some(part=>part.cachedBoundsMatch===null)?null:true):false;
-    const accessorBoundsMatch=nodeParts.every(part=>part.accessorBoundsMatch!==false)?(nodeParts.some(part=>part.accessorBoundsMatch===null)?null:true):false;
-    const row={nodeIndex:first.nodeIndex,meshNodeName:first.nodeName,meshIndices:[...new Set(nodeParts.map(part=>part.meshIndex).filter(Number.isInteger))].sort((a,b)=>a-b),primitiveCount:nodeParts.reduce((sum,part)=>sum+part.primitiveCount,0),primitiveIndices,vertexCount,finitePositionCount,nonFinitePositionCount,indexCount,invalidIndexCount,materialCount:materialIndices.length,materialIndices,materialRefsValid:nodeParts.every(part=>part.materialRefsValid),measuredLocalBounds,measuredWorldBounds,cachedLocalBounds,accessorDeclaredLocalBounds,cachedBoundsDelta:cachedBoundsMatch===null?null:delta(asBox(measuredLocalBounds),asBox(cachedLocalBounds)),accessorBoundsDelta:accessorBoundsMatch===null?null:delta(asBox(measuredLocalBounds),asBox(accessorDeclaredLocalBounds)),cachedBoundsMatch,accessorBoundsMatch,boundsCompareMode:"float32-exact"};
-    const wrongCullBox=asBox(measuredLocalBounds);const offset=wrongCullBox?Math.max(wrongCullBox.max.x-wrongCullBox.min.x,1):0;if(wrongCullBox){wrongCullBox.min.x+=offset;wrongCullBox.max.x+=offset;}
-    const wrongCull={id:"G10-wrong-culling-bounds:"+(row.nodeIndex??first.meshIndex??"unknown"),gate:"G10",expectedFailure:true,measurementBefore:{nodeIndex:row.nodeIndex,measuredLocalBounds,cachedLocalBounds,accessorDeclaredLocalBounds},measurementAfter:{nodeIndex:row.nodeIndex,measuredLocalBounds,corruptedCullBounds:recordBox(wrongCullBox),boundsMatch:exactFloat32Match(asBox(measuredLocalBounds),wrongCullBox)},detectedFailure:!!wrongCullBox&&!exactFloat32Match(asBox(measuredLocalBounds),wrongCullBox),assetId,sourceHash:null};
-    const sourceMesh=parts.find(mesh=>mesh.nodeIndex===row.nodeIndex);
-    const position=sourceMesh?.mesh?.geometry?.getAttribute?.("position");
-    let probeFinite=0,probeNonFinite=0;
-    if(position?.array?.length){const clone=position.clone();const original=clone.array[0];clone.array[0]=NaN;clone.needsUpdate=true;for(let vertex=0;vertex<clone.count;vertex++){const x=clone.getX(vertex),y=clone.getY(vertex),z=clone.getZ(vertex);if(Number.isFinite(x)&&Number.isFinite(y)&&Number.isFinite(z))probeFinite++;else probeNonFinite++;}clone.array[0]=original;}
-    const corrupt={id:"G10-static-bounds-corruption:"+(row.nodeIndex??first.meshIndex??"unknown"),gate:"G10",expectedFailure:true,measurementBefore:{nodeIndex:row.nodeIndex,finitePositionCount,nonFinitePositionCount,measuredLocalBounds},measurementAfter:{nodeIndex:row.nodeIndex,finitePositionCount:probeFinite,nonFinitePositionCount:probeNonFinite,accepted:probeNonFinite===0},detectedFailure:!!position&&probeNonFinite>0&&probeFinite<position.count,assetId,sourceHash:null};
-    row.negativeControlIds=[wrongCull.id,corrupt.id];meshNodes.push(row);controls.push(wrongCull,corrupt);
+  for (const part of parts) {
+    const key = part.nodeIndex === null ? 'missing-node:' + (part.meshIndex ?? 'unknown') : 'node:' + part.nodeIndex;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(part);
   }
-  const externalResources=[...(json.buffers||[]),...(json.images||[])].filter(resource=>resource.uri&&!resource.uri.startsWith("data:")).map(resource=>resource.uri);
-  const sceneBox=new THREE.Box3();for(const row of meshNodes){const box=asBox(row.measuredWorldBounds);if(box)sceneBox.union(box);}
-  const sceneSize=sceneBox.isEmpty()?null:sceneBox.getSize(new THREE.Vector3()).toArray().map(rounded);
-  const sceneBounds=sceneBox.isEmpty()?null:{min:sceneBox.min.toArray().map(rounded),max:sceneBox.max.toArray().map(rounded),size:sceneSize};
-  const valid=meshNodes.length>0&&meshNodes.every(row=>row.vertexCount>0&&row.finitePositionCount===row.vertexCount&&row.nonFinitePositionCount===0&&row.invalidIndexCount===0&&row.materialRefsValid&&row.cachedBoundsMatch!==false&&row.accessorBoundsMatch!==false)&&externalResources.length===0&&controls.length===meshNodes.length*2&&controls.every(control=>control.detectedFailure);
-  return{status:valid?"measurement-complete-review-required":"incomplete",staticGeometry:{meshNodes,sceneBounds,externalResources,boundsDerivedFrom:"native POSITION attributes transformed by matrixWorld",cachedAndAccessorBoundsCompared:true,boundsCompareMode:"float32-exact"},negativeControls:controls,rule:"Static geometry bounds derive from actual POSITION values; cache/accessor metadata is compared and never trusted as measured geometry."};
+  const union = records => {
+    const box = new THREE.Box3();
+    for (const record of records) {
+      const current = asBox(record);
+      if (current) box.union(current);
+    }
+    return box.isEmpty() ? null : recordBox(box);
+  };
+  const meshNodes = [];
+  for (const nodeParts of grouped.values()) {
+    const first = nodeParts[0];
+    const primitiveIndices = nodeParts.map(part => part.primitiveIndex).filter(Number.isInteger).sort((a, b) => a - b);
+    const materialIndices = [...new Set(nodeParts.flatMap(part => part.materialIndices))].sort((a, b) => a - b);
+    const vertexCount = nodeParts.reduce((sum, part) => sum + part.vertexCount, 0);
+    const finitePositionCount = nodeParts.reduce((sum, part) => sum + part.finitePositionCount, 0);
+    const nonFinitePositionCount = nodeParts.reduce((sum, part) => sum + part.nonFinitePositionCount, 0);
+    const indexCount = nodeParts.reduce((sum, part) => sum + part.indexCount, 0);
+    const invalidIndexCount = nodeParts.reduce((sum, part) => sum + part.invalidIndexCount, 0);
+    const measuredLocalBounds = union(nodeParts.map(part => part.measuredLocalBounds));
+    const measuredWorldBounds = union(nodeParts.map(part => part.measuredWorldBounds));
+    const cachedLocalBounds = nodeParts.every(part => part.cachedLocalBounds) ? union(nodeParts.map(part => part.cachedLocalBounds)) : null;
+    const accessorDeclaredLocalBounds = nodeParts.every(part => part.accessorDeclaredLocalBounds) ? union(nodeParts.map(part => part.accessorDeclaredLocalBounds)) : null;
+    const cachedBoundsMatch = nodeParts.every(part => part.cachedBoundsMatch !== false) ? (nodeParts.some(part => part.cachedBoundsMatch === null) ? null : true) : false;
+    const accessorBoundsMatch = nodeParts.every(part => part.accessorBoundsMatch !== false) ? (nodeParts.some(part => part.accessorBoundsMatch === null) ? null : true) : false;
+    meshNodes.push({
+      nodeIndex: first.nodeIndex, meshNodeName: first.nodeName,
+      meshIndices: [...new Set(nodeParts.map(part => part.meshIndex).filter(Number.isInteger))].sort((a, b) => a - b),
+      primitiveCount: nodeParts.reduce((sum, part) => sum + part.primitiveCount, 0), primitiveIndices,
+      vertexCount, finitePositionCount, nonFinitePositionCount, indexCount, invalidIndexCount,
+      materialCount: materialIndices.length, materialIndices,
+      materialRefsValid: nodeParts.every(part => part.materialRefsValid),
+      measuredLocalBounds, measuredWorldBounds, cachedLocalBounds, accessorDeclaredLocalBounds,
+      cachedBoundsDelta: cachedBoundsMatch === null ? null : delta(asBox(measuredLocalBounds), asBox(cachedLocalBounds)),
+      accessorBoundsDelta: accessorBoundsMatch === null ? null : delta(asBox(measuredLocalBounds), asBox(accessorDeclaredLocalBounds)),
+      cachedBoundsMatch, accessorBoundsMatch, boundsCompareMode: 'float32-exact',
+    });
+  }
+  const externalResources = [...(json.buffers || []), ...(json.images || [])]
+    .filter(resource => resource.uri && !resource.uri.startsWith('data:'))
+    .map(resource => resource.uri);
+  const sceneBox = new THREE.Box3();
+  for (const row of meshNodes) {
+    const box = asBox(row.measuredWorldBounds);
+    if (box) sceneBox.union(box);
+  }
+  const sceneSize = sceneBox.isEmpty() ? null : sceneBox.getSize(new THREE.Vector3()).toArray().map(rounded);
+  const sceneBounds = sceneBox.isEmpty() ? null : { min: sceneBox.min.toArray().map(rounded), max: sceneBox.max.toArray().map(rounded), size: sceneSize };
+  const valid = meshNodes.length > 0 && meshNodes.every(row => row.vertexCount > 0 && row.finitePositionCount === row.vertexCount && row.nonFinitePositionCount === 0 && row.invalidIndexCount === 0 && row.materialRefsValid && row.cachedBoundsMatch !== false && row.accessorBoundsMatch !== false) && externalResources.length === 0;
+  return {
+    status: valid ? 'measurement-complete-review-required' : 'incomplete',
+    staticGeometry: { meshNodes, sceneBounds, externalResources, boundsDerivedFrom: 'native POSITION attributes transformed by matrixWorld', cachedAndAccessorBoundsCompared: true, boundsCompareMode: 'float32-exact' },
+    rule: 'Static geometry bounds derive from actual POSITION values; cache/accessor metadata is compared and never trusted as measured geometry.',
+  };
+}
+
+export function measureStaticGeometry(gltf, root, assetId) {
+  const baseline = measureStaticGeometryCore(gltf, root, assetId);
+  const meshes = [];
+  root.traverse(mesh => { if (mesh.isMesh && mesh.geometry.getAttribute('position')) meshes.push(mesh); });
+  const control = { id: 'G10-static-nonfinite-position', gate: 'G10', expectedFailure: true, detectedFailure: false, assetId, sourceHash: null };
+  const mesh = meshes[0];
+  const position = mesh?.geometry.getAttribute('position');
+  const positionArray = position?.array || position?.data?.array;
+  if (position && positionArray?.length) {
+    const arrayIndex = position.offset || 0;
+    const original = positionArray[arrayIndex];
+    const setNeedsUpdate = value => { if (position.data) position.data.needsUpdate = value; else position.needsUpdate = value; };
+    let after = null;
+    try {
+      positionArray[arrayIndex] = Number.NaN;
+      setNeedsUpdate(true);
+      after = measureStaticGeometryCore(gltf, root, assetId);
+    } catch (error) {
+      control.reason = error?.message || String(error);
+    } finally {
+      positionArray[arrayIndex] = original;
+      setNeedsUpdate(true);
+      root.updateMatrixWorld(true);
+    }
+    const measuredNonFinite = after?.staticGeometry.meshNodes.reduce((sum, row) => sum + row.nonFinitePositionCount, 0) || 0;
+    control.measurementBefore = { status: baseline.status, nonFinitePositionCount: baseline.staticGeometry.meshNodes.reduce((sum, row) => sum + row.nonFinitePositionCount, 0) };
+    control.measurementAfter = { status: after?.status || 'observed-fail', nonFinitePositionCount: measuredNonFinite };
+    control.detectedFailure = baseline.status === 'measurement-complete-review-required' && after?.status === 'incomplete' && measuredNonFinite > control.measurementBefore.nonFinitePositionCount;
+    if (!control.detectedFailure && !control.reason) control.reason = 'The normal static-geometry measurement did not reject a native non-finite POSITION corruption.';
+  } else {
+    control.reason = 'No native POSITION attribute is available for the non-finite-vertex control.';
+  }
+  const controls = [control];
+  const status = baseline.status === 'measurement-complete-review-required' && controls.every(item => item.detectedFailure) ? 'measurement-complete-review-required' : 'incomplete';
+  return { ...baseline, status, negativeControls: controls };
 }
 export function measureG10(root, clips, g1Measurements, boundsReader) {
   const skinBefore = inspectSkinIntegrity(root);
   const mixer = new THREE.AnimationMixer(root);
   const clipMeasurements = [];
   for (const [index, clip] of clips.entries()) {
-    const bindingSamples = g1Measurements.clips[index];
-    const times = bindingSamples?.sampleTimes || [];
-    const action = mixer.clipAction(clip).reset(); action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; action.play();
+    const times = g1Measurements.clips[index]?.sampleTimes || [];
+    const action = mixer.clipAction(clip).reset();
+    action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; action.play();
     const samples = [];
     for (const time of times) {
-      mixer.setTime(time); root.updateMatrixWorld(true);      const rootPosition = root.getWorldPosition(new THREE.Vector3()).toArray().map(rounded);
+      mixer.setTime(time); root.updateMatrixWorld(true);
+      const rootPosition = root.getWorldPosition(new THREE.Vector3()).toArray().map(rounded);
       let bounds;
       try { bounds = boundsReader(root); } catch (error) { bounds = { error: error?.message || String(error), vertices: 0 }; }
       samples.push({ time, rootPosition, bounds });
     }
     const markers = clip.userData?.markers || [];
     const contacts = contactCoverage(markers, times);
-    const completeDeformedBounds = samples.length >= 5 && samples.every(sample => sample.bounds?.vertices > 0 && !sample.bounds.error && Array.isArray(sample.bounds.min) && Array.isArray(sample.bounds.max) && sample.bounds.min.every(Number.isFinite) && sample.bounds.max.every(Number.isFinite));    clipMeasurements.push({ clip: clip.name, sampleTimes: times, sampleCount: samples.length, samples, rootMotion: samples.map(sample => ({ time: sample.time, position: sample.rootPosition })), contactWindowCount: contacts.windows.length, coveredContactWindowCount: contacts.covered.length, contactCoverage: contacts.complete, deformedBoundsComplete: completeDeformedBounds });
+    const completeDeformedBounds = samples.length >= 5 && samples.every(sample => sample.bounds?.vertices > 0 && !sample.bounds.error && Array.isArray(sample.bounds.min) && Array.isArray(sample.bounds.max) && sample.bounds.min.every(Number.isFinite) && sample.bounds.max.every(Number.isFinite));
+    clipMeasurements.push({ clip: clip.name, sampleTimes: times, sampleCount: samples.length, samples, rootMotion: samples.map(sample => ({ time: sample.time, position: sample.rootPosition })), contactWindowCount: contacts.windows.length, coveredContactWindowCount: contacts.covered.length, contactCoverage: contacts.complete, deformedBoundsComplete: completeDeformedBounds });
     mixer.stopAllAction(); mixer.update(0); root.updateMatrixWorld(true);
   }
   const skinMeshes = [];
   root.traverse(object => { if (object.isSkinnedMesh) skinMeshes.push(object); });
-  let corruptControl = { id: "G10-corrupt-native-skin-weight", expectedFailure: true, measurementBefore: skinBefore.status, measurementAfter: "not-run", detectedFailure: false, reason: "No actual skinned mesh to perturb." };  if (skinMeshes.length) {
-    const weights = skinMeshes[0].geometry.getAttribute("skinWeight");    if (weights?.array?.length) {
-      const original = weights.array[0];
-      weights.array[0] = -1; weights.needsUpdate = true;      const broken = inspectSkinIntegrity(root);      corruptControl = { id: "G10-corrupt-native-skin-weight", expectedFailure: true, measurementBefore: skinBefore.status, measurementAfter: broken.status, detectedFailure: broken.status === "observed-fail" && broken.meshes.some(mesh => mesh.invalidWeights > 0), perturbedMesh: skinMeshes[0].name || "(unnamed)", restoredAfterTest: true };
-      weights.array[0] = original; weights.needsUpdate = true;
+  const semanticControls = [
+    { id: 'G10-broken-planted-contact', expectedFailure: true, evaluationStatus: 'not-evaluated', detectedFailure: false, reason: 'No authored planted-effector target and position-error tolerance are available.' },
+    { id: 'G10-mirrored-wrist', expectedFailure: true, evaluationStatus: 'not-evaluated', detectedFailure: false, reason: 'No authored wrist handedness or pose invariant is available.' },
+    { id: 'G10-torn-skin-with-normalized-weights', expectedFailure: true, evaluationStatus: 'not-evaluated', detectedFailure: false, reason: 'No authored per-vertex skin-index/topology reference is available to detect a valid-index reassignment.' },
+    { id: 'G10-wrong-lod-bind', expectedFailure: true, evaluationStatus: 'not-evaluated', detectedFailure: false, reason: 'No authored LOD bind-matrix correspondence profile is available.' },
+  ];
+  const controls = [...semanticControls];
+  let wrongCulling = { id: 'G10-wrong-culling-bounds', expectedFailure: true, detectedFailure: false, reason: 'No native skinned mesh is available to perturb.' };
+  const probeMesh = skinMeshes[0];
+  if (probeMesh) {
+    const previousSphere = probeMesh.boundingSphere;
+    const previousSphereValues = previousSphere?.clone() ?? null;
+    try {
+      probeMesh.computeBoundingSphere();
+      const measuredSphere = probeMesh.boundingSphere;
+      if (!measuredSphere) throw new Error('No native mesh bounding sphere is available.');
+      const worldSphere = measuredSphere.clone().applyMatrix4(probeMesh.matrixWorld);
+      const radius = Math.max(worldSphere.radius, 0.5);
+      const camera = new THREE.PerspectiveCamera(60, 1, 0.01, Math.max(100, radius * 20 + 10));
+      camera.position.copy(worldSphere.center).add(new THREE.Vector3(0, 0, radius * 4 + 1));
+      camera.lookAt(worldSphere.center);
+      camera.updateProjectionMatrix();
+      camera.updateMatrixWorld(true);
+      const frustum = new THREE.Frustum();
+      frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+      const visibleBefore = frustum.intersectsObject(probeMesh);
+      const corruptedSphere = measuredSphere.clone();
+      corruptedSphere.center.x += Math.max(10000, radius * 1000);
+      probeMesh.boundingSphere = corruptedSphere;
+      const visibleAfter = frustum.intersectsObject(probeMesh);
+      wrongCulling = {
+        id: 'G10-wrong-culling-bounds', expectedFailure: true,
+        measurementBefore: { frustumVisible: visibleBefore, boundingSphere: { center: measuredSphere.center.toArray(), radius: measuredSphere.radius } },
+        measurementAfter: { frustumVisible: visibleAfter, boundingSphere: { center: corruptedSphere.center.toArray(), radius: corruptedSphere.radius } },
+        detectedFailure: visibleBefore && !visibleAfter, restoredAfterTest: true,
+      };
+    } catch (error) {
+      wrongCulling = { id: 'G10-wrong-culling-bounds', expectedFailure: true, detectedFailure: false, reason: error?.message || String(error) };
+    } finally {
+      if (previousSphere && previousSphereValues) previousSphere.copy(previousSphereValues);
+      probeMesh.boundingSphere = previousSphere;
+      root.updateMatrixWorld(true);
     }
-  }  const missingContactControls = clipMeasurements.map(clip => {
-    const removed = contactCoverage([], clip.sampleTimes);    return { id: "G10-missing-contact-window:" + clip.clip, expectedFailure: true, measurementBefore: clip.contactCoverage ? "complete" : "incomplete", measurementAfter: removed.complete ? "complete" : "incomplete", detectedFailure: !removed.complete, sourceClip: clip.clip };
+  }
+  let corruptWeights = { id: 'G10-corrupt-native-skin-weight', expectedFailure: true, detectedFailure: false, reason: 'No native skinned mesh is available to perturb.' };
+  if (probeMesh) {
+    const weights = probeMesh.geometry.getAttribute('skinWeight');
+    if (weights?.array?.length) {
+      const original = weights.array[0];
+      try {
+        weights.array[0] = -1;
+        weights.needsUpdate = true;
+        const broken = inspectSkinIntegrity(root);
+        corruptWeights = {
+          id: 'G10-corrupt-native-skin-weight', expectedFailure: true,
+          measurementBefore: skinBefore.status, measurementAfter: broken.status,
+          detectedFailure: broken.status === 'observed-fail' && broken.meshes.some(mesh => mesh.invalidWeights > 0),
+          mesh: probeMesh.name || '(unnamed)', restoredAfterTest: true,
+        };
+      } catch (error) {
+        corruptWeights = { id: 'G10-corrupt-native-skin-weight', expectedFailure: true, detectedFailure: false, reason: error?.message || String(error) };
+      } finally {
+        weights.array[0] = original;
+        weights.needsUpdate = true;
+      }
+    }
+  }
+  controls.push(wrongCulling, corruptWeights);
+  const missingContactControls = clipMeasurements.map(clip => {
+    const removed = contactCoverage([], clip.sampleTimes);
+    return {
+      id: 'G10-missing-contact-window:' + clip.clip, expectedFailure: true,
+      measurementBefore: clip.contactCoverage ? 'complete' : 'incomplete',
+      measurementAfter: removed.complete ? 'complete' : 'incomplete',
+      detectedFailure: !removed.complete, sourceClip: clip.clip,
+    };
   });
-  const skinValid = skinBefore.status === "valid" && corruptControl.detectedFailure;  const motionComplete = clipMeasurements.length > 0 && clipMeasurements.every(clip => clip.deformedBoundsComplete && clip.contactCoverage);
-  const status = skinValid && motionComplete ? "measurement-complete-review-required" : "incomplete";
-  return { status, skinIntegrity: skinBefore, clips: clipMeasurements, negativeControls: [corruptControl, ...missingContactControls], measuredRootMotion: true, contactWindowsRequired: true, reviewThresholds: "not-authored; P11 locked-hardware profiling/review required" };
+  controls.push(...missingContactControls);
+  const controlsValid = controls.length > 0 && controls.every(control => control.expectedFailure === true && control.detectedFailure);
+  const skinValid = skinBefore.status === 'valid' && semanticControls.some(control => control.id === 'G10-torn-skin-with-normalized-weights' && control.detectedFailure);
+  const motionComplete = clipMeasurements.length > 0 && clipMeasurements.every(clip => clip.deformedBoundsComplete && clip.contactCoverage);
+  const status = skinValid && motionComplete && controlsValid ? 'measurement-complete-review-required' : 'incomplete';
+  return {
+    status, skinIntegrity: skinBefore, clips: clipMeasurements, negativeControls: controls,
+    unresolvedSemanticControls: semanticControls.map(({ id, reason }) => ({ id, reason })),
+    measuredRootMotion: true, contactWindowsRequired: true,
+    reviewThresholds: 'not-authored; P11 locked-hardware profiling/review required',
+    rule: 'Only native geometry, clips, skin and bind data are measured. Semantic corruption controls remain not-evaluated until authored targets/policies let the normal producer reject them; no bounds delta alone establishes a detected failure.',
+  };
 }

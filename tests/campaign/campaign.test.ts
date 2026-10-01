@@ -16,9 +16,11 @@ import { LATER_ACT_REGION_AUTHORING_STATUS, LATER_ACT_REGIONS } from "../../src/
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
 import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
 import {
+  createCheckpoint,
   createNewRun,
   evaluateEnding,
   recordLeaderDominion,
+  setPackLeader,
   FRAGMENT_IDS,
   FACTION_IDS,
   REGION_IDS,
@@ -755,4 +757,121 @@ test("package ending authority enforces historic Dominion and exile council repr
     evaluateEnding(setCrownCouncilRepresentation(absentSolkar, true)).available,
     true,
   );
+});
+
+test("ending availability follows every authored branch history and its absent-leader alternative", () => {
+  for (const [index, history] of BRANCH_HISTORIES.entries()) {
+    let state = eligibleRun("ending-history-" + index);
+    state = { ...state, world: { ...state.world, marekPresent: history.marek === "present" } };
+    if (history.pack === "dominion") state = recordLeaderDominion(state, "ruun");
+    else state = setPackLeader(state, history.pack);
+    if (history.crown === "dominion") state = recordLeaderDominion(state, "solkar");
+    if (history.crown === "exile") {
+      const crown = state.world.factions.crown;
+      state = {
+        ...state,
+        world: {
+          ...state.world,
+          factions: {
+            ...state.world.factions,
+            crown: {
+              ...crown,
+              leaderStatus: "exiled",
+              representative: { id: "solkar", source: "leader", present: false, willing: false },
+            },
+          },
+        },
+      };
+      assert.equal(
+        (evaluateEnding(state).choices as readonly string[]).includes("living_pact"),
+        false,
+        "exile without a council locks Living Pact: " + JSON.stringify(history),
+      );
+      state = setCrownCouncilRepresentation(state, true);
+      assert.equal(state.world.factions.crown.representative.id, "crown-council");
+      assert.equal(state.world.factions.crown.representative.present, true);
+    }
+
+    const expectedAvailable = history.pack !== "dominion" && history.crown !== "dominion";
+    const evaluation = evaluateEnding(state);
+    assert.equal(evaluation.available, expectedAvailable, JSON.stringify(history));
+    assert.equal(
+      (evaluation.choices as readonly string[]).includes("living_pact"),
+      expectedAvailable,
+      JSON.stringify(history),
+    );
+  }
+
+  const eligible = evaluateEnding(eligibleRun("ending-all-options"));
+  assert.equal(eligible.available, true);
+  assert.deepEqual(eligible.choices, ["dominion", "severance", "living_pact"]);
+
+  const missingObligation = eligibleRun("ending-missing-obligation");
+  const missingPrerequisite: CampaignState = {
+    ...missingObligation,
+    world: {
+      ...missingObligation.world,
+      regionalObligations: { ...missingObligation.world.regionalObligations, moonpine_settlement: false },
+    },
+  };
+  const locked = evaluateEnding(missingPrerequisite);
+  assert.equal(locked.available, false);
+  assert.ok(locked.unmet.some(({ id }) => id === "moonpine_settlement"));
+  assert.equal((locked.choices as readonly string[]).includes("living_pact"), false);
+});
+
+test("Director accepts legitimate final endings and rejects invalid or locked choices without mutation", async () => {
+  for (const ending of ["dominion", "severance"] as const) {
+    const director = new CampaignDirector({ runId: "director-ending-" + ending });
+    await director.processEvent({
+      type: "encounter-resolved",
+      eventId: "orun-resolved-" + ending,
+      idempotencyKey: "orun-resolved:" + ending,
+      encounterId: "encounter-orun",
+      resolution: "cleansed",
+      actorIds: ["orun"],
+    });
+    await director.choose("final-ending", ending);
+    assert.equal(director.snapshot().ending, ending);
+  }
+
+  const director = new CampaignDirector({ runId: "director-ending-locked" });
+  await director.processEvent({
+    type: "encounter-resolved",
+    eventId: "orun-resolved-locked",
+    idempotencyKey: "orun-resolved:locked",
+    encounterId: "encounter-orun",
+    resolution: "cleansed",
+    actorIds: ["orun"],
+  });
+  const before = director.snapshot();
+  await assert.rejects(director.choose("final-ending", "unknown-ending"));
+  assert.deepEqual(director.snapshot(), before);
+  await assert.rejects(director.choose("final-ending", "living_pact"), /Living Pact requirements/);
+  assert.deepEqual(director.snapshot(), before);
+});
+
+test("Director accepts Living Pact through checkpoint restore and the final choice", async () => {
+  const runId = "director-ending-living-pact";
+  const director = new CampaignDirector({ runId });
+  const checkpoint = await director.captureCheckpoint();
+  assert.equal(
+    await director.restoreCheckpoint({
+      ...checkpoint,
+      worldCheckpoint: createCheckpoint(eligibleRun(runId)),
+    }),
+    true,
+  );
+  await director.processEvent({
+    type: "encounter-resolved",
+    eventId: "orun-resolved-living-pact",
+    idempotencyKey: "orun-resolved:living-pact",
+    encounterId: "encounter-orun",
+    resolution: "cleansed",
+    actorIds: ["orun"],
+  });
+  const snapshot = await director.choose("final-ending", "living_pact");
+  assert.equal(snapshot.ending, "living_pact");
+  assert.equal(snapshot.worldFacts.circleOfTheWild, true);
+  assert.equal(snapshot.lastEvent?.type, "choice");
 });
