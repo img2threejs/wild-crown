@@ -18,3 +18,9 @@ Build output includes `dist/release-compatibility.json` from the exported build,
 ## Current runtime boundary
 
 Title, Settings, and their error/recovery surfaces are independently usable, but a full gameplay region remains blocked until its exact native assets have verified evidence. Input-level behavior is documented separately from that asset gate. Physical gamepad hardware, real window blur/document-hide, BFCache navigation, and full authored campaign traversal are not claimed as exercised by the scoped input QA.
+
+## Local contextual traversal prompts
+
+The existing E/interact binding and prompt button choose the nearest available typed in-region traversal start or ordinary interaction, using the engine's full 3D start, support/collision and worldFacts gate checks. Prompt labels are Vault, Climb low ledge, Slide and Swing; dispatch preserves the precise authored route ID. A route button is routed to CombatInput.traversalId, not resolveInteraction or a fabricated campaign event. Prompts and pending world interactions are suppressed while the engine owns an active path.
+
+Cross-region exits are not local traversal affordances, even when remote coordinates numerically overlap the current floor. Explicit Travel still uses the existing CampaignDirector.travel/loading flow. The four authored local path scenarios have actual-engine deterministic proof; native rig/clip evidence and parent-only browser visual acceptance remain blocked separately, as detailed in combat.md. No simulation result qualifies the final visuals for release.
