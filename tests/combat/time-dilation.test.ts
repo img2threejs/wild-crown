@@ -172,6 +172,44 @@ describe('Perfect Dodge world-clock time dilation', () => {
     delayed.fixedStep(idle);
     expect(delayed.snapshot().telegraphs[0]?.attackId).toBe(expectedAttack);
   });
+  it('preserves subsequent Koro attack choices across a monotonic checkpoint clock rebase', () => {
+    const region = REGIONS.find(region => region.id === 'whispering-canopy')!;
+    const makeEncounter = () => {
+      const engine = new CombatEngine();
+      engine.startEncounter({ encounterId: 'encounter-koro', regionId: region.id, runId: 'koro-clock-reset-sequence' });
+      const state = engine.snapshotState();
+      expect(state.encounter?.phases[0]?.attackIds.length).toBeGreaterThan(1);
+      state.checkpoint!.lastAttackTick = 1;
+      state.lastAttackTick = 1;
+      return state;
+    };
+    const attackSequence = (engine: CombatEngine) => {
+      engine.resetToCheckpoint();
+      const attacks: string[] = [];
+      let previousTelegraphId: string | undefined;
+      for (let step = 0; step < 720 && attacks.length < 2; step++) {
+        engine.fixedStep(idle);
+        const telegraph = engine.snapshot().telegraphs.find(item => item.sourceId === 'koro');
+        if (telegraph && telegraph.id !== previousTelegraphId) {
+          attacks.push(telegraph.attackId);
+          previousTelegraphId = telegraph.id;
+        }
+      }
+      return attacks;
+    };
+    const baseline = attackSequence(new CombatEngine(makeEncounter()));
+    const delayedState = makeEncounter();
+    delayedState.worldTick += 120;
+    const delayedEngine = new CombatEngine(delayedState);
+    delayedEngine.resetToCheckpoint();
+    expect(delayedEngine.snapshotState().attackSelectionWorldOffset).toBe(120);
+    const restoredDelayed = new CombatEngine();
+    restoredDelayed.restore(delayedEngine.serialize());
+    expect(restoredDelayed.snapshotState().attackSelectionWorldOffset).toBe(120);
+    const delayed = attackSequence(restoredDelayed);
+    expect(baseline).toHaveLength(2);
+    expect(delayed).toEqual(baseline);
+  });
 
   it('freezes the world clock on pause and restores normal time on checkpoint reset and region load', () => {
     const state = makeClockState();
@@ -471,7 +509,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(engine.snapshotState().lastAttackTick).toBe(360);
 
     engine.resetToCheckpoint();
-    expect(engine.snapshotState().lastAttackTick).toBe(239);
+    expect(engine.snapshotState().lastAttackTick).toBe(299);
     engine.fixedStep(idle);
     expect(engine.snapshot().telegraphs.find(telegraph => telegraph.sourceId === 'koro')?.attackId).toBe('koro-fruit-burst');
   });

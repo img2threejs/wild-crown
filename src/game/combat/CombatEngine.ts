@@ -50,7 +50,7 @@ export interface LiveHazard extends HazardDefinition {
 }
 export interface LiveTelegraph { id: string; attackId: AttackId; sourceId: ActorId; targetPosition: Vec3; phase: 'windup'|'commit'|'active'|'recovery'; remainingTicks: number; cue: string }
 export interface CombatEvent { id: string; tick: number; kind: 'cue'|'damage'|'perfect-dodge'|'counter-open'|'action'|'companion'|'traversal'|'world'|'attack-interrupted'; actorId?: ActorId; targetId?: ActorId; actionId?: string; attackId?: AttackId; message: string; worldEvent?: WorldEvent }
-export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; }
+export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; }
 export interface PlayerResources { vitality: number; maxVitality: number; instinct: number; ferocity: number; corruption: number; dodgeCharges: number; maxDodgeCharges: number; nextDodgeRechargeTick: number; }
 export interface PendingImpact { activeAt: number; activeUntil: number; target: ActorId; action: string; range: number; radius: number; damage: number; interrupt: boolean; counter:boolean; startVitality: number; resolved: boolean; interactionId?:string; interactionPosition?:Vec3; }
 export interface LiveMovableObject extends MovableObjectSnapshot {
@@ -64,7 +64,7 @@ export interface EngineState {
   actors: CombatActor[]; playerId: ActorId; player: PlayerResources; targetId?: ActorId; arena: CombatArena; hazards: LiveHazard[]; telegraphs: LiveTelegraph[];
   movableObjects: LiveMovableObject[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
-  actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
+  actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; attackSelectionWorldOffset: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
   companionState: CompanionRosterState; companionSlots: { combat?: CompanionId; utility?: CompanionId; scout?: 'vara' };
   eventSequence: number; rewardEmitted: boolean; checkpoint: EncounterCheckpoint | null; traversalGates: TraversalGate[]; pendingImpact?: PendingImpact; presentationCues: StoryCue[];
 }
@@ -435,7 +435,7 @@ export class CombatEngine {
     return structuredClone(event);
   }
   private captureEncounterCheckpoint(): EncounterCheckpoint {
-    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState) };
+    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState) };
   }
   resetToCheckpoint(): void {
     const checkpoint = this.state.checkpoint;
@@ -445,9 +445,9 @@ export class CombatEngine {
     const worldOffset=this.state.worldTick-checkpoint.worldTick;
     this.state.actors = checkpoint.actors.map(cloneActor);
     for(const actor of this.state.actors){actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);if(actor.id!==this.state.playerId)actor.invulnerableUntil=shiftDeadline(actor.invulnerableUntil,worldOffset);actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);if(actor.actionEndsTick>0){actor.actionStartedTick+=worldOffset;actor.actionEndsTick+=worldOffset;}}
-    // This checkpoint value selects the next authored attack; it is not a world-clock deadline.
-    this.state.lastAttackTick=checkpoint.lastAttackTick;
-    this.state.counterUntil=checkpoint.counterUntil;
+    // Rebase the selector timestamp and its virtual-clock offset together.
+    this.state.lastAttackTick=shiftDeadline(checkpoint.lastAttackTick,worldOffset);
+    this.state.attackSelectionWorldOffset=(checkpoint.attackSelectionWorldOffset??0)+worldOffset;
     this.state.player = structuredClone(checkpoint.player);
     this.state.phaseIndex = checkpoint.phaseIndex;
     this.state.phaseLatch = checkpoint.phaseLatch;
@@ -897,7 +897,7 @@ export class CombatEngine {
       if(!source||source.downed||this.state.worldTick<source.recoveringUntil||this.state.telegraphs.some(telegraph=>telegraph.sourceId===source.id))continue;
       const attackIds=phase.attackIds.filter(id=>ATTACKS[id]?.bossId===source.id);
       if(!attackIds.length)continue;
-      const attackIndex=Math.floor(this.state.lastAttackTick/120)%attackIds.length;
+      const selectorTick=Math.max(0,this.state.lastAttackTick-this.state.attackSelectionWorldOffset);const attackIndex=Math.floor(selectorTick/120)%attackIds.length;
       const attackId=attackIds[attackIndex];if(!attackId)continue;
       let def:AttackDefinition|undefined=ATTACKS[attackId];
       if(def?.targetClass==='companion'&&!this.selectedCompanion())def=attackIds.map(id=>ATTACKS[id]).find(attack=>attack&&attack.targetClass!=='companion');
@@ -1180,7 +1180,7 @@ export function createEngineState():EngineState{
     movableObjects:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,0,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
     hazards:[],telegraphs:[],events:[],worldEvents:[],seenWorldKeys:[],perfectDodgeKeys:[],phaseIndex:0,phaseLatch:0,phaseActionFlags:[],
-    actionId:'idle',actionUntil:0,actionRecoveryUntil:0,actionCancelable:false,counterUntil:0,lastAttackTick:0,heavyChargeStartTick:null,
+    actionId:'idle',actionUntil:0,actionRecoveryUntil:0,actionCancelable:false,counterUntil:0,lastAttackTick:0,attackSelectionWorldOffset:0,heavyChargeStartTick:null,
     companionState:createCompanionState({}),companionSlots:{},eventSequence:0,rewardEmitted:false,checkpoint:null,traversalGates:[],presentationCues:[],
   };
 }
@@ -1191,7 +1191,7 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   state.worldTick=legacy?seed.tick??base.tick:seed.worldTick??base.worldTick;
   state.timePolicy=legacy?'normal':seed.timePolicy??base.timePolicy;
   state.slowMotionRemainingTicks=legacy?0:seed.slowMotionRemainingTicks??base.slowMotionRemainingTicks;
-  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;
+  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;state.attackSelectionWorldOffset=legacy?0:seed.attackSelectionWorldOffset??0;
   if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
   state.worldTimeScale=state.timePolicy==='paused'?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
   state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues??[]).map(cue=>({...cue,worldTimeSeconds:cue.worldTimeSeconds??cue.tick/60}));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
