@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Game UI mounted DOM smoke</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/src/ui/game-ui.css">
+  <style>
+    body { min-height: 100vh; margin: 0; padding: 24px; background: #171a16; color: #e7e1d1; font: 14px/1.45 system-ui, sans-serif; }
+    h1 { margin: 0 0 8px; color: #d4bf91; font: 500 24px Georgia, serif; }
+    p, output { max-width: 900px; color: #c2bcaf; }
+    #game-ui-root { position: relative; min-height: 360px; }
+    output { display: block; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Game UI mounted DOM smoke</h1>
+  <p>Real-browser regression for target weak-point exposure invalidation. This is a component smoke, not gameplay acceptance.</p>
+  <main id="game-ui-root" aria-label="Mounted game interface"></main>
+  <output id="smoke-result">Running real DOM transition…</output>
+  <script type="module">
+    import { mountGameUI } from '/src/ui/GameUI.ts';
+
+    const target = { id: 'hunter-melee-west', weakPointExposed: true };
+    const viewModel = (exposed) => ({
+      screen: 'game',
+      loading: { active: false, label: '', progress: null },
+      error: null,
+      trackedObjectiveId: null,
+      hud: { vitality: 100, maxVitality: 100, dodgeCharges: 2, maxDodgeCharges: 2, instinct: 20, boss: undefined, targetId: target.id, target: { ...target, weakPointExposed: exposed } },
+      campaign: null,
+      journal: { quests: [], region: null },
+      map: { currentRegion: null, regions: [] },
+      party: null,
+      abilities: [],
+      relationships: null,
+      settings: { reducedMotion: false, controlGlyphs: 'keyboard' },
+      bindings: { keyboard: {}, gamepad: {} },
+      saves: { slots: [], continueSlotId: null },
+      dialogue: null,
+      choice: null,
+      ending: null,
+    });
+
+    const root = document.querySelector('#game-ui-root');
+    const ui = mountGameUI(root, { onAction: () => {}, initialViewModel: viewModel(true) });
+    const before = ui.element.textContent.includes('WEAK POINT EXPOSED');
+    ui.render(viewModel(false));
+    const after = ui.element.textContent.includes('WEAK POINT EXPOSED');
+    const vitalityRemains = ui.element.innerHTML.includes('aria-label="Vitality 100%"');
+    const result = { before, after, vitalityRemains, mounted: root.contains(ui.element) };
+    if (!before || after || !vitalityRemains || !result.mounted) throw new Error('GameUI did not clear target exposure on a real DOM update.');
+    document.body.dataset.weakpointTransition = 'passed';
+    document.querySelector('#smoke-result').textContent = JSON.stringify(result, null, 2);
+    window.__gameUiDomSmoke = { result, ui };
+  </script>
+</body>
+</html>

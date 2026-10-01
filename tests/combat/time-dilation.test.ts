@@ -148,6 +148,31 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(replay.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(0);
   });
 
+  it('preserves Koro attack selection across a monotonic checkpoint clock rebase', () => {
+    const region = REGIONS.find(region => region.id === 'whispering-canopy')!;
+    const makeEncounter = () => {
+      const engine = new CombatEngine();
+      engine.startEncounter({ encounterId: 'encounter-koro', regionId: region.id, runId: 'koro-clock-reset-selection' });
+      const state = engine.snapshotState();
+      expect(state.encounter?.phases[0]?.attackIds.length).toBeGreaterThan(1);
+      state.checkpoint!.lastAttackTick = 1;
+      state.lastAttackTick = 1;
+      return state;
+    };
+    const baseline = new CombatEngine(makeEncounter());
+    baseline.resetToCheckpoint();
+    baseline.fixedStep(idle);
+    const expectedAttack = baseline.snapshot().telegraphs[0]?.attackId;
+    expect(expectedAttack).toBeDefined();
+
+    const delayedState = makeEncounter();
+    delayedState.worldTick += 120;
+    const delayed = new CombatEngine(delayedState);
+    delayed.resetToCheckpoint();
+    delayed.fixedStep(idle);
+    expect(delayed.snapshot().telegraphs[0]?.attackId).toBe(expectedAttack);
+  });
+
   it('freezes the world clock on pause and restores normal time on checkpoint reset and region load', () => {
     const state = makeClockState();
     state.counterUntil = 14;
@@ -433,7 +458,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(replay.snapshotState().perfectDodgeKeys).toHaveLength(2);
     expect(replay.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(1);
   });
-  it('restores checkpoint-relative Koro attack ordering on the world clock', () => {
+  it('preserves checkpoint Koro attack choice across monotonic world-time rebase', () => {
     const region = REGIONS.find(candidate => candidate.id === 'whispering-canopy')!;
     const seed = createEngineState();
     seed.tick = 359;
@@ -446,8 +471,8 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(engine.snapshotState().lastAttackTick).toBe(360);
 
     engine.resetToCheckpoint();
-    expect(engine.snapshotState().lastAttackTick).toBe(299);
+    expect(engine.snapshotState().lastAttackTick).toBe(239);
     engine.fixedStep(idle);
-    expect(engine.snapshot().telegraphs.find(telegraph => telegraph.sourceId === 'koro')?.attackId).toBe('koro-branch-swing');
+    expect(engine.snapshot().telegraphs.find(telegraph => telegraph.sourceId === 'koro')?.attackId).toBe('koro-fruit-burst');
   });
 });

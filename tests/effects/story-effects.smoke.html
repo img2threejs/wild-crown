@@ -25,7 +25,7 @@
     import { StoryEffects } from '/src/effects/StoryEffects.ts';
     import { StoryAudio } from '/src/audio/StoryAudio.ts';
     const SMOKE_SETTINGS = { masterVolume: 1, musicVolume: 0.8, effectsVolume: 1, ambienceVolume: 0.7, dialogueVolume: 1 };
-    const SMOKE_WORLD_CLOCK = { simulationTick: 10, worldTick: 10, worldTimeSeconds: 10 / 60, timeScale: 1, policy: 'normal' };
+    const SMOKE_CLOCK = { cueTimeSeconds: 10 / 60, snapshot: { simulationTick: 100, worldTick: 100, worldTimeSeconds: 100 / 60, timeScale: 1, policy: 'normal' } }; // 90 world ticks into each 180-tick cue; tether and bond beams are at their visible midpoint.
 
     const canvas = document.querySelector('#fx-canvas');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -47,13 +47,17 @@
     audio.setSettings(SMOKE_SETTINGS);
     audio.setStoryState({ corruption: 0.4, restoration: 0.4, bond: 0.7, dominion: 0.2 });
     const cues = [
-      { instanceId: 'smoke-sap', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
-      { instanceId: 'smoke-tether', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-bond', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-ending-pact', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-telegraph', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
+      { instanceId: 'smoke-sap', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
+      { instanceId: 'smoke-tether', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-bond', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-ending-pact', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-telegraph', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
     ];
-    effects.emitAll(cues);
+    const acceptedEffects = effects.emitAll(cues);
+    effects.update(SMOKE_CLOCK.snapshot);
+    const visibleBeams = scene.getObjectByName('story-effects').children.filter(child => child instanceof THREE.Mesh && child.geometry instanceof THREE.CylinderGeometry && child.visible && child.material instanceof THREE.MeshBasicMaterial && child.material.opacity > 0).length;
+    document.body.dataset.visibleStoryBeams = String(visibleBeams);
+    if (acceptedEffects !== 5 || effects.activeCount !== 5 || visibleBeams !== 2) throw new Error('Expected five active cues with both tether and bond beams visible at the smoke snapshot.');
     const metadata = document.querySelector('#runtime-metadata');
     window.__storyAudio = audio;
     window.__storyEffects = effects;
@@ -87,7 +91,7 @@
       document.body.dataset.sharedContextReusable = String(contextSurvivedDispose && secondReused && secondPlayed && secondOutputRms > 0);
     });
     function frame() {
-      effects.update(SMOKE_WORLD_CLOCK);
+      effects.update(SMOKE_CLOCK.snapshot);
       renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }

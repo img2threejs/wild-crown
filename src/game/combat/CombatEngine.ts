@@ -445,7 +445,8 @@ export class CombatEngine {
     const worldOffset=this.state.worldTick-checkpoint.worldTick;
     this.state.actors = checkpoint.actors.map(cloneActor);
     for(const actor of this.state.actors){actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);if(actor.id!==this.state.playerId)actor.invulnerableUntil=shiftDeadline(actor.invulnerableUntil,worldOffset);actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);if(actor.actionEndsTick>0){actor.actionStartedTick+=worldOffset;actor.actionEndsTick+=worldOffset;}}
-    this.state.lastAttackTick=shiftDeadline(checkpoint.lastAttackTick,worldOffset);
+    // This checkpoint value selects the next authored attack; it is not a world-clock deadline.
+    this.state.lastAttackTick=checkpoint.lastAttackTick;
     this.state.counterUntil=checkpoint.counterUntil;
     this.state.player = structuredClone(checkpoint.player);
     this.state.phaseIndex = checkpoint.phaseIndex;
