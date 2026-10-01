@@ -18,6 +18,7 @@ interface ActiveVoice { readonly id: string; readonly sources: readonly AudioSch
 
 const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
   cancel: [],
+  active: [-7, 0],
   anticipation: [0, 7], commit: [-5, 0], hit: [-12], landing: [-7], 'perfect-dodge': [7, 12],
   heartroot: [0, 7, 12], tether: [0, 5, 12], cleanse: [0, 4, 7], bond: [0, 5, 9], dominion: [-12, -5, 2],
   restoration: [0, 4, 7, 11], possession: [-12, -9], phase: [-5, 0, 7], ending: [0, 4, 7, 12],
@@ -28,6 +29,7 @@ const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
 };
 const KIND_BUS: Readonly<Record<StoryCue['kind'], AudioBusName>> = {
   cancel: 'effects',
+  active: 'effects',
   anticipation: 'effects', commit: 'effects', hit: 'effects', landing: 'effects', 'perfect-dodge': 'effects',
   heartroot: 'music', tether: 'effects', cleanse: 'effects', bond: 'effects', dominion: 'effects', restoration: 'music',
   possession: 'effects', phase: 'music', ending: 'music', 'ending-living-pact': 'music', 'ending-dominion': 'music', 'ending-severance': 'music',
@@ -119,7 +121,7 @@ export class StoryAudio {
     if (cue.kind === 'heartroot' || cue.kind === 'bond' || cue.kind === 'heartbeat') this.bond = Math.min(1, this.bond + 0.2);
     if (cue.kind === 'dominion' || cue.kind === 'ending-dominion') this.dominion = Math.min(1, this.dominion + 0.2);
     const family = dangerFamily(cue);
-    const phasePitch = cue.phase === 'commit' ? -5 : cue.phase === 'hit' ? -12 : 0;
+    const phasePitch = cue.phase === 'commit' ? -5 : cue.phase === 'active' ? -7 : cue.phase === 'hit' ? -12 : 0;
     const notes = family ? DANGER_NOTES[family].map(step => MIDI_C4 + step + phasePitch) : this.arrangement(cue.kind);
     const position = sourcePosition ?? cue.position ?? cue.from;
     const voice = this.schedule(cue, notes, KIND_BUS[cue.kind], position);

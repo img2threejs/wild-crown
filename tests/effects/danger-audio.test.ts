@@ -57,6 +57,10 @@ test('real-family sound schedules are distinct, phase-sensitive, one-shot and sc
       const commit = { ...anticipation, instanceId: anticipation.instanceId + ':commit', kind: 'commit' as const, phase: 'commit' as const };
       assert.ok(presentation.audio.play(commit));
       assert.ok(context.oscillators.slice(start + voices.length).every((node, i) => node.frequency.value < voices[i]!.frequency.value), 'commit shifts the same family motif lower without replaying the windup');
+      const commitVoices = context.oscillators.slice(start + voices.length);
+      const active = { ...anticipation, instanceId: anticipation.instanceId + ':active', kind: 'active' as const, phase: 'active' as const };
+      assert.ok(presentation.audio.play(active));
+      assert.ok(context.oscillators.slice(start + voices.length + commitVoices.length).every((node, i) => node.frequency.value < commitVoices[i]!.frequency.value), 'active retains its family motif with a distinct phase pitch even without hit');
       presentation.consumeTick([{ ...anticipation, instanceId: anticipation.instanceId + ':cancel', kind: 'cancel', cancellationReason: 'interrupt' }]);
       assert.ok(context.oscillators.slice(start).every(node => node.stopped && node.disconnected));
       assert.equal(presentation.audio.playbackMetadata.activeVoices, 0);

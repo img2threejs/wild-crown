@@ -14,7 +14,7 @@
   <p>Selected authored encounter attacks, not fabricated presentation cues. Ground-outline qualification only: no native body/rig/contact or full-game acceptance is implied.</p>
   <select id="family" aria-label="Authored danger attack"></select>
   <label><input id="reduced" type="checkbox">Reduced effects</label>
-  <button id="restart">Restart selected real attack</button><button id="commit">Advance to actual commit</button><button id="hit">Advance to actual active hit</button>
+  <button id="restart">Restart selected real attack</button><button id="commit">Advance to actual commit</button><button id="active">Advance to actual active footprint</button><button id="miss">Move clear, then actual active footprint</button><button id="hit">Advance to actual impact</button>
   <button id="slow">12 fixed steps at 0.25</button><button id="pause">Pause and render</button>
   <button id="interrupt">Actual root-tether interrupt</button><button id="death">Actual lethal hazard</button>
   <button id="unload">Region unload</button><button id="skip">Cinematic skip</button><button id="load">Campaign load</button>
@@ -48,14 +48,16 @@
       window.__dangerSmoke.lastBatch = lastBatch;
       document.querySelector('#runtime-metadata').textContent = JSON.stringify(window.__dangerSmoke, null, 2);
     }
-    function start() {
+    function start(deferConsumption = false) {
       presentation.onCampaignLoad();
       const scenario = startDangerScenario(Number(select.value)); engine = scenario.engine; lastCue = scenario.anticipation;
       lastBatch = [lastCue];
-      lastResult = presentation.consumeTick([lastCue]);
+      lastResult = { effects: 0, sounds: 0 };
       const p = lastCue.position;
       ground.position.set(p.x, p.y - 0.03, p.z);
       camera.position.set(p.x + 1, p.y + 9, p.z + 10); camera.lookAt(p.x, p.y, p.z);
+      presentation.update(engine.snapshot().worldClock, { position: camera.position, forward: camera.getWorldDirection(new THREE.Vector3()), up: camera.up });
+      if (!deferConsumption) lastResult = presentation.consumeTick([lastCue]);
       render();
     }
     function advanceTo(kind) {
@@ -69,10 +71,17 @@
       }
       throw new Error('Real producer failed to emit ' + kind);
     }
-    document.querySelector('#restart').onclick = start; select.onchange = start;
+    document.querySelector('#restart').onclick = () => start(); select.onchange = () => start();
     document.querySelector('#reduced').onchange = event => { settings.reducedMotion = event.target.checked; presentation.setSettings(settings); render(); };
     document.querySelector('#commit').onclick = () => advanceTo('commit');
     document.querySelector('#hit').onclick = () => advanceTo('hit');
+    document.querySelector('#active').onclick = () => advanceTo('active');
+    document.querySelector('#miss').onclick = () => {
+      const state = engine.snapshotState(); const player = state.actors.find(actor => actor.id === 'aren');
+      player.position.x += 12; player.position.z += 12; engine = new CombatEngine(state);
+      advanceTo('active');
+      if (lastBatch.some(cue => cue.kind === 'hit') || presentation.activeEffectCount === 0) throw new Error('Missed hazard did not retain its actual active footprint.');
+    };
     document.querySelector('#slow').onclick = () => {
       const state = engine.snapshotState(); state.timePolicy = 'perfect-dodge-slow'; state.slowMotionRemainingTicks = 12; state.slowMotionElapsedTicks = 0; engine = new CombatEngine(state);
       for (let i = 0; i < 12; i++) { engine.fixedStep(); presentation.consumeTick(engine.drainPresentationCues()); }
@@ -87,7 +96,17 @@
     };
     document.querySelector('#death').onclick = () => {
       engine.setTimePolicy('normal'); const state = engine.snapshotState(); state.player.vitality = 1; engine = new CombatEngine(state);
-      advanceTo('hit');
+      for (let i = 0; i < 200; i++) {
+        engine.fixedStep(); lastBatch = engine.drainPresentationCues();
+        lastResult = presentation.consumeTick(lastBatch);
+        const terminal = lastBatch.find(cue => cue.kind === 'cancel' && cue.cancellationReason === 'death');
+        if (terminal) {
+          lastCue = terminal;
+          if (engine.snapshot().player.vitality !== 0 || presentation.activeEffectCount !== 0) throw new Error('Terminal death failed to clear the presentation.');
+          render(); return;
+        }
+      }
+      throw new Error('Real producer failed to emit terminal death cancellation.');
     };
     for (const [id, action] of [['unload', () => presentation.onRegionUnload()], ['skip', () => presentation.onCinematicSkip()]]) document.querySelector('#' + id).onclick = () => { action(); render(); };
     document.querySelector('#load').onclick = () => { engine.restore(engine.serialize()); lastBatch = engine.drainPresentationCues(); lastResult = presentation.consumeTick(lastBatch); render(); };
@@ -95,12 +114,21 @@
       if (!await presentation.unlockAudio()) throw new Error('Audio unlock denied.');
       const measurements = [];
       for (let i = 0; i < 5; i++) {
-        select.value = String(i); start();
+        select.value = String(i); start(true);
+        // Settle the real graph and listener pose BEFORE consuming the one authentic voice.
+        await new Promise(resolve => setTimeout(resolve, 200));
+        lastResult = presentation.consumeTick([lastCue]); render();
         const first = lastResult.sounds; const replay = presentation.consumeTick([lastCue]);
-        await new Promise(resolve => setTimeout(resolve, 120));
-        const rms = presentation.audio.measureOutputRms();
-        if (first !== 1 || replay.sounds !== 0 || rms <= 0) throw new Error('Missing/silent/replayed real family audio: ' + DANGER_SCENARIOS[i].family);
-        measurements.push({ family: DANGER_SCENARIOS[i].family, attackId: lastCue.attackId, instanceId: lastCue.instanceId, rms, replaySounds: replay.sounds });
+        const samples = [];
+        const scheduledAt = presentation.audio.playbackMetadata.lastPlayed.at;
+        for (let sample = 0; sample < 40; sample++) {
+          await new Promise(resolve => setTimeout(resolve, 16));
+          const rms = presentation.audio.measureOutputRms();
+          samples.push(rms);
+        }
+        const rms = Math.max(...samples);
+        if (first !== 1 || replay.sounds !== 0 || rms < 0.0001) throw new Error('Missing/near-silent/replayed real family audio: ' + DANGER_SCENARIOS[i].family);
+        measurements.push({ family: DANGER_SCENARIOS[i].family, attackId: lastCue.attackId, instanceId: lastCue.instanceId, scheduledAt, rms, samples, replaySounds: replay.sounds });
       }
       const listener = new THREE.AudioListener();
       const first = new StoryAudio({ listener }); const second = new StoryAudio({ listener });
@@ -108,7 +136,7 @@
       const reusable = await second.unlock(); const played = second.play(lastCue);
       await new Promise(resolve => setTimeout(resolve, 120)); const sharedRms = second.measureOutputRms();
       const sharedState = listener.context.state; second.dispose();
-      if (!reusable || !played || sharedState !== 'running' || sharedRms <= 0) throw new Error('Shared context lifetime failed.');
+      if (!reusable || !played || sharedState !== 'running' || sharedRms < 0.0001) throw new Error('Shared context lifetime or meaningful output failed.');
       audioEvidence = { measurements, sharedContext: { reusable, played, state: sharedState, rms: sharedRms } }; render();
     };
     start();
