@@ -537,6 +537,11 @@ export class SaveRepository {
       return summary;
     } catch (error) {
       try {
+        transaction.abort();
+      } catch {
+        // A request failure may already have aborted the transaction.
+      }
+      try {
         await done;
       } catch {
         // The transaction's abort is the rollback boundary.
@@ -801,17 +806,9 @@ export class SaveRepository {
     chapter: number,
     regionId: RegionId,
   ): Promise<SaveSlotSummary> {
-    if (
-      envelope.kind !== "campaign" ||
-      !envelope.campaign ||
-      !envelope.checkpoint
-    ) {
-      throw new SaveRepositoryError(
-        "replay-isolated",
-        "Only complete campaign saves can be committed to campaign slots.",
-      );
-    }
-    return this.persist(slotId, label, envelope, chapter, regionId);
+    const validated = await this.importSave(envelope);
+    await this.init();
+    return this.persist(slotId, label, validated.envelope, chapter, regionId);
   }
 
   async appendRunLedger(
@@ -960,6 +957,7 @@ export class SaveRepository {
       !Array.isArray(campaign.dominionHistory) ||
       !campaign.dominionHistory.every(
         (event, index) =>
+          isRecord(event) &&
           Number.isInteger(event.sequence) &&
           event.sequence >= index + 1 &&
           leaders.includes(event.leaderId),
