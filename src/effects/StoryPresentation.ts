@@ -33,10 +33,17 @@ export class StoryPresentation {
 
   consumeTick(cues: readonly StoryCue[]): { effects: number; sounds: number } {
     if (this.disposed) return { effects: 0, sounds: 0 };
-    const effects = this.effects.emitAll(cues);
+    let effects = 0;
     let sounds = 0;
     for (const cue of cues) {
-      let position = cue.position ?? cue.from;
+      if (cue.kind === 'cancel') {
+        if (!cue.cancellationReason) throw new Error('Cancellation cues require an authoritative reason.');
+        if (cue.scopeId) this.cancelScope(cue.scopeId, cue.cancellationReason);
+        else this.cancelAll(cue.cancellationReason);
+        continue;
+      }
+      if (this.effects.emit(cue)) effects++;
+      let position = cue.kind === 'anticipation' || cue.kind === 'commit' ? cue.from ?? cue.position : cue.position ?? cue.from;
       if (!position && cue.actorId) position = this.resolveSocket?.(cue.actorId, 'root')?.getWorldPosition(this.audioAnchor);
       if (this.audio.play(cue, position)) sounds++;
     }
