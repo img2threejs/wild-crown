@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test';
+import * as THREE from 'three';
+import { StoryEffects } from '../../src/effects/StoryEffects.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { CombatEngine, createEngineState, makeActor, type CombatInput, type EngineState, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
@@ -157,9 +159,11 @@ describe('Perfect Dodge world-clock time dilation', () => {
     state.timePolicy = 'perfect-dodge-slow';
     state.worldTimeScale = 0.25;
     state.slowMotionRemainingTicks = 8;
+    state.slowMotionElapsedTicks = 4;
     const engine = new CombatEngine(state);
 
     engine.setTimePolicy('paused');
+    expect(engine.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 0, slowMotionRemainingTicks: 0 });
     const paused = engine.snapshot().worldClock;
     expect(paused.timeScale).toBe(0);
     expect(engine.step({ ...idle, lightPressed: true }, 0.1)).toBe(0);
@@ -171,6 +175,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
 
     engine.resetToCheckpoint();
     expect(engine.snapshot().worldClock).toMatchObject({ timeScale: 1, policy: 'normal' });
+    expect(engine.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 0, slowMotionRemainingTicks: 0 });
     engine.setTimePolicy('paused');
     const worldTickBeforeLoad = engine.snapshot().worldClock.worldTick;
     const region = REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!;
@@ -226,20 +231,45 @@ describe('Perfect Dodge world-clock time dilation', () => {
     duringSlow.fixedStep({ ...idle, dodgePressed: true, dodgeDirection: 'left' });
     expect(duringSlow.snapshotState().player.instinct).toBe(20);
     expect(duringSlow.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(1);
+    const immediateState = makeClockState(true);
+    immediateState.tick = 1;
+    immediateState.worldTick = 1;
+    immediateState.timePolicy = 'perfect-dodge-slow';
+    immediateState.worldTimeScale = 0.25;
+    immediateState.slowMotionRemainingTicks = 12;
+    immediateState.hazards[0]!.hitIds = ['aren'];
+    immediateState.hazards[1]!.hitGroup = 'unique-immediate-group';
+    immediateState.hazards[1]!.activeFrom = 2;
+    immediateState.hazards[1]!.activeUntil = 120;
+    immediateState.hazards[1]!.threatTicks = [2];
+    const immediateExtension = new CombatEngine(immediateState);
+    immediateExtension.fixedStep({ ...idle, dodgePressed: true, dodgeDirection: 'left' });
+    expect(immediateExtension.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(1);
+    expect(immediateExtension.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 1, slowMotionRemainingTicks: 17 });
+    expect(immediateExtension.snapshotState().slowMotionElapsedTicks + immediateExtension.snapshotState().slowMotionRemainingTicks).toBe(18);
+
     const extensionBoundary = makeClockState();
     extensionBoundary.tick = 34;
     extensionBoundary.worldTick = 34;
     extensionBoundary.timePolicy = 'perfect-dodge-slow';
     extensionBoundary.worldTimeScale = 0.25;
-    extensionBoundary.slowMotionRemainingTicks = 2;
-    extensionBoundary.hazards[0]!.activeFrom = 40;
+    extensionBoundary.slowMotionElapsedTicks = 6;
+    extensionBoundary.slowMotionRemainingTicks = 6;
+    extensionBoundary.hazards[0]!.hitGroup = 'unique-delayed-group';
+    extensionBoundary.hazards[0]!.activeFrom = 35.75;
     extensionBoundary.hazards[0]!.activeUntil = 45;
     extensionBoundary.hazards[0]!.threatTicks = [];
     const extended = new CombatEngine(extensionBoundary);
     extended.fixedStep({ ...idle, dodgePressed: true, dodgeDirection: 'left' });
-    expect(extended.snapshotState().player.instinct).toBe(0);
-    expect(extended.snapshotState().slowMotionRemainingTicks).toBe(1);
-    expect(extended.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(0);
+    expect(extended.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(1);
+    expect(extended.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 7, slowMotionRemainingTicks: 11 });
+    expect(extended.snapshotState().slowMotionElapsedTicks + extended.snapshotState().slowMotionRemainingTicks).toBe(18);
+    const serializedEpisode = new CombatEngine();
+    serializedEpisode.restore(extended.serialize());
+    expect(serializedEpisode.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 7, slowMotionRemainingTicks: 11 });
+    for (let tick = 0; tick < 11; tick++) serializedEpisode.fixedStep(idle);
+    expect(serializedEpisode.snapshot().worldClock.policy).toBe('normal');
+    expect(serializedEpisode.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 0, slowMotionRemainingTicks: 0 });
 
     const consumedGroup = makeClockState();
     consumedGroup.tick = 34;
@@ -297,6 +327,37 @@ describe('Perfect Dodge world-clock time dilation', () => {
     fractional.restore(fractionalSource.serialize());
     expect(fractional.snapshot().worldClock.worldTick).toBe(7.25);
     expect(fractional.snapshotState().schemaVersion).toBe(2);
+  });
+
+  it('hydrates legacy StoryCue time from tick and ages the restored cue through StoryEffects', () => {
+    const source = new CombatEngine(makeClockState());
+    const cue = source.queuePresentationCue({ kind: 'hit', phase: 'hit', position: vec(0, 0, 0), durationTicks: 6, priority: 'essential' });
+    const legacy = JSON.parse(source.serialize()) as Record<string, unknown>;
+    legacy.schemaVersion = 1;
+    delete legacy.worldTick;
+    delete legacy.worldTimeScale;
+    delete legacy.timePolicy;
+    delete legacy.slowMotionRemainingTicks;
+    delete legacy.slowMotionElapsedTicks;
+    const legacyCues = legacy.presentationCues as Array<Record<string, unknown>>;
+    delete legacyCues[0]!.worldTimeSeconds;
+    const restored = new CombatEngine();
+    restored.restore(JSON.stringify(legacy));
+    const migratedCue = restored.drainPresentationCues()[0]!;
+    expect(migratedCue.worldTimeSeconds).toBe(cue.tick / 60);
+
+    const scene = new THREE.Scene();
+    const effects = new StoryEffects({ scene, capacity: 8 });
+    expect(effects.emit(migratedCue)).toBe(true);
+    effects.update(restored.snapshot().worldClock);
+    expect(effects.activeCount).toBe(1);
+    const activeMaterials = scene.getObjectByName('story-effects')!.children.map(child => (child as THREE.Mesh).material as THREE.MeshBasicMaterial);
+    expect(activeMaterials.some(material => Number.isFinite(material.opacity) && material.opacity > 0)).toBe(true);
+    for (let tick = 0; tick < 6; tick++) restored.fixedStep(idle);
+    effects.update(restored.snapshot().worldClock);
+    expect(effects.activeCount).toBe(0);
+    expect(activeMaterials.every(material => Number.isFinite(material.opacity))).toBe(true);
+    effects.dispose();
   });
 
   it('publishes weakpoint exposure for a non-boss target and keeps boss exposure aligned', () => {

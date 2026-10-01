@@ -60,7 +60,7 @@ export interface LiveMovableObject extends MovableObjectSnapshot {
   actorId?: ActorId;
 }
 export interface EngineState {
-  schemaVersion: 2; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
+  schemaVersion: 2; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; slowMotionElapsedTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
   actors: CombatActor[]; playerId: ActorId; player: PlayerResources; targetId?: ActorId; arena: CombatArena; hazards: LiveHazard[]; telegraphs: LiveTelegraph[];
   movableObjects: LiveMovableObject[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
@@ -106,7 +106,7 @@ export class CombatEngine {
     }
     this.state.regionId=region.id;
     this.state.runId=input.runId;
-    this.state.timePolicy='normal';this.state.slowMotionRemainingTicks=0;this.state.worldTimeScale=1;this.state.accumulator=0;
+    this.state.timePolicy='normal';this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=1;this.state.accumulator=0;
     this.state.worldFacts=structuredClone(input.worldFacts??{});
     this.state.movableObjects=region.movableObjects.map(definition=>{
       const settled=input.worldFacts?.[definition.movedFactId]===true;
@@ -391,7 +391,8 @@ export class CombatEngine {
     if(this.state.actionRecoveryUntil>0&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.actionId!=='idle')this.finishAction();
     if(slowMotionActive&&this.state.timePolicy==='perfect-dodge-slow'){
       this.state.slowMotionRemainingTicks=Math.max(0,this.state.slowMotionRemainingTicks-1);
-      if(this.state.slowMotionRemainingTicks===0)this.state.timePolicy='normal';
+      this.state.slowMotionElapsedTicks++;
+      if(this.state.slowMotionRemainingTicks===0){this.state.timePolicy='normal';this.state.slowMotionElapsedTicks=0;}
     }
     this.state.worldTimeScale=this.effectiveWorldTimeScale();
     for(const event of this.state.events.slice(firstEvent).flatMap(item=>item.worldEvent?[item.worldEvent]:[])){
@@ -466,7 +467,7 @@ export class CombatEngine {
   get pendingAssets(): readonly { action: string; clip: ActionId; status:'pending' }[] { return Object.entries(ACTION_CLIPS).map(([action,clip])=>({action,clip,status:'pending'})); }
   get simulationTick(): number { return this.state.tick; }
   setTimePolicy(policy:'normal'|'paused'):void{
-    this.state.timePolicy=policy;this.state.slowMotionRemainingTicks=0;this.state.worldTimeScale=policy==='paused'?0:1;this.state.accumulator=0;
+    this.state.timePolicy=policy;this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=policy==='paused'?0:1;this.state.accumulator=0;
   }
   private effectiveWorldTimeScale():number{
     if(this.state.timePolicy==='paused')return 0;
@@ -668,8 +669,10 @@ export class CombatEngine {
       const key=threatened.sourceId+':'+threatened.attackId+':'+threatened.startTick+':'+threatened.hitGroup;
       if(!this.state.perfectDodgeKeys.includes(key)){
         this.state.perfectDodgeKeys.push(key);
+        if(this.state.timePolicy!=='perfect-dodge-slow')this.state.slowMotionElapsedTicks=0;
         this.state.timePolicy='perfect-dodge-slow';
-        this.state.slowMotionRemainingTicks=Math.min(PERFECT_DODGE_EFFECTS.maxSlowMotionTicks,this.state.slowMotionRemainingTicks+PERFECT_DODGE_EFFECTS.slowMotionTicks);
+        const extension=Math.min(PERFECT_DODGE_EFFECTS.slowMotionTicks,PERFECT_DODGE_EFFECTS.maxSlowMotionTicks-this.state.slowMotionElapsedTicks-this.state.slowMotionRemainingTicks);
+        this.state.slowMotionRemainingTicks+=Math.max(0,extension);
         this.state.worldTimeScale=this.effectiveWorldTimeScale();
         this.state.player.instinct=Math.min(100,this.state.player.instinct+PERFECT_DODGE_EFFECTS.instinctGain);
         this.state.counterUntil=this.state.tick+PERFECT_DODGE_EFFECTS.counterWindowTicks;
@@ -700,7 +703,8 @@ export class CombatEngine {
       const key=h.sourceId+':'+h.attackId+':'+h.startTick+':'+h.hitGroup;
       const grantsEffect=!this.state.perfectDodgeKeys.includes(key);
       const remainingSlowTicks=this.state.timePolicy==='perfect-dodge-slow'?this.state.slowMotionRemainingTicks:0;
-      const projectedSlowTicks=grantsEffect?Math.min(PERFECT_DODGE_EFFECTS.maxSlowMotionTicks,remainingSlowTicks+PERFECT_DODGE_EFFECTS.slowMotionTicks):remainingSlowTicks;
+      const episodeElapsed=this.state.timePolicy==='perfect-dodge-slow'?this.state.slowMotionElapsedTicks:0;
+      const projectedSlowTicks=grantsEffect?remainingSlowTicks+Math.max(0,Math.min(PERFECT_DODGE_EFFECTS.slowMotionTicks,PERFECT_DODGE_EFFECTS.maxSlowMotionTicks-episodeElapsed-remainingSlowTicks)):remainingSlowTicks;
       const slowedIFrames=Math.min(iframes,projectedSlowTicks);
       const evasionUntil=this.state.worldTick+slowedIFrames*PERFECT_DODGE_EFFECTS.worldTimeScale+(iframes-slowedIFrames);
       const timely=this.state.worldTick<h.activeUntil&&evasionUntil>h.activeFrom;
@@ -1170,7 +1174,7 @@ export class CombatEngine {
 export function createEngineState():EngineState{
   const player=makeActor('aren','human','player',vec(0,0,0),false,false,100);
   return {
-    schemaVersion:2,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
+    schemaVersion:2,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
     actors:[player],playerId:'aren',player:{vitality:100,maxVitality:100,instinct:0,ferocity:100,corruption:0,dodgeCharges:2,maxDodgeCharges:2,nextDodgeRechargeTick:0},
     movableObjects:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,0,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
@@ -1186,9 +1190,10 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   state.worldTick=legacy?seed.tick??base.tick:seed.worldTick??base.worldTick;
   state.timePolicy=legacy?'normal':seed.timePolicy??base.timePolicy;
   state.slowMotionRemainingTicks=legacy?0:seed.slowMotionRemainingTicks??base.slowMotionRemainingTicks;
+  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;
   if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
   state.worldTimeScale=state.timePolicy==='paused'?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
-  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=seed.presentationCues??[];if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
+  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues??[]).map(cue=>({...cue,worldTimeSeconds:cue.worldTimeSeconds??cue.tick/60}));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
 }
 export function makeActor(id:ActorId,species:string,allegiance:CombatActor['allegiance'],position:Vec3,large:boolean,aerial:boolean,vitality:number,archetypeId:ActorId=id):CombatActor{
   const idle=ACTION_CLIPS[`${archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!;

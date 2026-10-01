@@ -136,7 +136,7 @@ function gameUiSignature(viewModel: GameViewModel): string {
   const { hud, campaign, map } = viewModel;
   return JSON.stringify([
     viewModel.screen, viewModel.loading, viewModel.error,
-    [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.interaction],
+    [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction],
     viewModel.trackedObjectiveId,
     campaign && [campaign.runId, campaign.revision, campaign.chapter, campaign.chapterId, campaign.regionId, campaign.activeQuestIds, campaign.completedQuestIds, campaign.activeObjectiveIds, campaign.completedObjectiveIds, campaign.fragments, campaign.ending],
     viewModel.journal.region, viewModel.journal.quests.map(quest => [quest.id, quest.title, quest.description, quest.objectives.map(objective => [objective.id, objective.title, objective.description, objective.optional])]),
