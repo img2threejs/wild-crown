@@ -15,6 +15,8 @@ export type CueShape = 'ring' | 'arc' | 'sector' | 'beam' | 'trail' | 'pulse' | 
 export interface StoryCue {
   readonly instanceId: string;
   readonly tick: number;
+  /** Engine-owned scaled world time at event creation; `tick` remains simulation identity. */
+  readonly worldTimeSeconds: number;
   readonly kind: StoryCueKind;
   readonly phase: CuePhase;
   readonly actorId?: string;
@@ -27,6 +29,7 @@ export interface StoryCue {
   readonly to?: Vec3;
   /** Authored hazard footprint in meters, plus orientation and actual arc aperture in radians. */
   readonly footprint?: Readonly<{ width: number; length: number; angleRadians?: number; sectorRadians?: number }>;
+  /** Presentation lifetime in 60-Hz world ticks, aged by worldTimeSeconds. */
   readonly durationTicks?: number;
   readonly intensity?: number;
   readonly priority?: CuePriority;

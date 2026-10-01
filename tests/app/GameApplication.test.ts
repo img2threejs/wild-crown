@@ -32,7 +32,8 @@ function headlessApp(): Record<string, any> {
   app.worldGeneration = 0;
   app.campaign = snapshot(false);
   app.campaignDirector = {};
-  app.combat = { commandCompanionCalls: 0, stepCalls: 0 };
+  app.timePolicies = [] as string[];
+  app.combat = { commandCompanionCalls: 0, stepCalls: 0, setTimePolicy: (policy: string) => { app.timePolicies.push(policy); } };
   app.pendingWorldEvents = [event];
   app.failedWorldEvent = null;
   app.durableEvents = Promise.resolve();
@@ -116,6 +117,7 @@ it("blocks gameplay and saves while a durable move is pending, then retries the 
   expect(saveCalls).toBe(0);
   expect(app.combat.commandCompanionCalls).toBe(0);
   expect(app.combat.stepCalls).toBe(0);
+  expect(app.timePolicies).toEqual(["paused", "normal"]);
 });
 
 it("marks blocked asset evidence and invalid manifests terminal while keeping transient requests retryable", async () => {
@@ -235,4 +237,15 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
   expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
   expect(app.renderer).toBeNull();
   expect(app.combat.loadRegionCalls).toBe(0);
+});
+
+it("pauses the combat world for every blocking screen and restores normal time only on gameplay", () => {
+  const app = headlessApp();
+  const policies: string[] = app.timePolicies;
+  for (const screen of ["pause", "map", "journal", "companions", "settings", "dialogue", "choice", "loading", "title", "credits", "ending"]) {
+    app.setScreen(screen);
+  }
+  expect(policies).toEqual(Array(11).fill("paused"));
+  app.setScreen("game");
+  expect(policies.at(-1)).toBe("normal");
 });

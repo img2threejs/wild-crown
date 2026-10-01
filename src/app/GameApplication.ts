@@ -119,6 +119,7 @@ export class GameApplication {
     private readonly onUserGesture = () => { void this.presentation?.unlockAudio(); };
     constructor(root: HTMLElement) {
         this.root = root;
+        this.combat.setTimePolicy('paused');
         root.replaceChildren();
         root.classList.add('wc-app');
         this.world.className = 'wc-world';
@@ -214,6 +215,7 @@ export class GameApplication {
         this.pendingAbility = null;
         this.input.clear();
         this.screen = 'loading';
+        this.combat.setTimePolicy('paused');
         this.loading = { active: true, label: 'Checking required native assets', progress: null, operationId: 'region-load' };
         this.error = null;
         this.render();
@@ -247,6 +249,7 @@ export class GameApplication {
         if (party.scout && presentActors.get(party.scout) !== 1) delete party.scout;
         this.activeCompanionSlots = party;
         this.combat.loadRegion({ regionId: region.id, runId: snapshot.runId, presentActorIds: present, companionSlots: party, chapter: snapshot.chapter, wardenCall: snapshot.worldFacts.wardenCall === true, dominionUsed: snapshot.campaign.dominionHistory.length > 0, worldFacts: snapshot.worldFacts });
+        this.combat.setTimePolicy('paused');
         this.refreshInteraction();
         this.presentation?.dispose();
         this.presentation = null;
@@ -258,6 +261,7 @@ export class GameApplication {
         this.syncStoryState();
         this.loading = { active: false, label: '', progress: null };
         this.screen = showIntro ? 'dialogue' : 'game';
+        this.combat.setTimePolicy(showIntro ? 'paused' : 'normal');
         this.dialogue = showIntro ? DIALOGUE['prologue-vision'] ?? null : null;
         this.render();
         await this.startOrunEncounterIfReady(generation);
@@ -274,13 +278,16 @@ export class GameApplication {
             return;
         this.input.clear();
         this.screen = 'loading';
+        this.combat.setTimePolicy('paused');
         this.loading = { active: true, label: 'Preparing Orun’s crowned-beast phase', progress: null, operationId: 'region-load' };
         this.render();
         await this.renderer.preloadActorVariant('orun', 'actor-orun-crowned-beast', this.manifest);
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
         this.combat.startEncounter({ encounterId: 'encounter-orun', regionId: 'heartroot-hollow', runId: this.campaign.runId, companionSlots: this.activeCompanionSlots });
+        this.combat.setTimePolicy('paused');
         this.loading = { active: false, label: '', progress: null };
         this.screen = 'game';
+        this.combat.setTimePolicy('normal');
         this.render();
     }
     private async startGreenwakePrologueEncounterIfReady(): Promise<void> {
@@ -295,11 +302,14 @@ export class GameApplication {
         }
         this.input.clear();
         this.screen = 'loading';
+        this.combat.setTimePolicy('paused');
         this.loading = { active: true, label: 'Beginning the Greenwake encounter', progress: null, operationId: 'region-load' };
         this.render();
         this.combat.startEncounter({ encounterId: 'greenwake-boar', regionId: 'greenwake', runId: this.campaign.runId, companionSlots: this.activeCompanionSlots });
+        this.combat.setTimePolicy('paused');
         this.loading = { active: false, label: '', progress: null };
         this.screen = 'game';
+        this.combat.setTimePolicy('normal');
         this.render();
     }
     private assertAssets(region: RegionDefinition, manifest: Manifest): void {
@@ -417,6 +427,7 @@ export class GameApplication {
                     this.pendingNewRunId = action.runId;
                     this.loading = { active: true, label: 'Starting a new journey', progress: null, operationId: 'new-game' };
                     this.screen = 'loading';
+                    this.combat.setTimePolicy('paused');
                     this.render();
                     await this.initializeIfNeeded();
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -438,6 +449,7 @@ export class GameApplication {
                     this.pendingLoadSlotId = action.slotId;
                     this.loading = { active: true, label: 'Loading saved journey', progress: null, operationId: 'continue' };
                     this.screen = 'loading';
+                    this.combat.setTimePolicy('paused');
                     this.render();
                     await this.initializeIfNeeded();
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -470,6 +482,7 @@ export class GameApplication {
                         if (!this.failedWorldEvent && this.pendingWorldEvents.length === 0 && this.screen === 'loading' && this.loading.operationId === 'durable-event') {
                             this.loading = { active: false, label: '', progress: null };
                             this.screen = 'game';
+                            this.combat.setTimePolicy('normal');
                             this.render();
                         }
                     }
@@ -578,6 +591,7 @@ export class GameApplication {
                     this.pendingLoadSlotId = action.slotId;
                     this.loading = { active: true, label: 'Loading saved journey', progress: null, operationId: 'load' };
                     this.screen = 'loading';
+                    this.combat.setTimePolicy('paused');
                     this.render();
                     await this.initializeIfNeeded();
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -599,6 +613,7 @@ export class GameApplication {
                     this.pendingImportPayload = action.payload;
                     this.loading = { active: true, label: 'Importing saved journey', progress: null, operationId: 'import' };
                     this.screen = 'loading';
+                    this.combat.setTimePolicy('paused');
                     this.render();
                     await this.initializeIfNeeded();
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -667,6 +682,7 @@ export class GameApplication {
                             throw new Error('The requested choice is not available at this site.');
                         this.choice = null;
                         this.screen = 'game';
+                        this.combat.setTimePolicy('normal');
                         this.input.clear();
                         const cues = this.combat.drainPresentationCues();
                         if (cues.length)
@@ -727,6 +743,7 @@ export class GameApplication {
             this.error = { code, message: errorText(error), recoverable: !terminalAssetError };
             this.loading = { active: false, label: 'Operation failed', progress: null, ...(operationId ? { operationId } : {}) };
             this.screen = 'loading';
+            this.combat.setTimePolicy('paused');
             this.render();
         }
     }
@@ -747,6 +764,7 @@ export class GameApplication {
         this.input.clear();
         this.presentation?.onRegionUnload();
         this.screen = 'loading';
+        this.combat.setTimePolicy('paused');
         this.loading = { active: true, label: 'Traveling to region', progress: null, operationId: 'travel' };
         this.render();
         await this.durableEvents;
@@ -783,6 +801,7 @@ export class GameApplication {
             this.previousScreen = this.screen;
         }
         this.screen = screen;
+        this.combat.setTimePolicy(screen === 'game' ? 'normal' : 'paused');
         this.pendingInteraction = null;
         this.pendingAbility = null;
         this.input.clear();
@@ -852,6 +871,7 @@ export class GameApplication {
                 boss: snap.boss,
                 interaction: this.interaction,
                 targetId: snap.targetId,
+                target: snap.actors.find(actor => actor.id === snap.targetId),
             },
             abilities,
             dialogue: this.dialogue,
@@ -900,6 +920,7 @@ export class GameApplication {
                 this.error = { code: error instanceof SaveRepositoryError ? error.code : 'durable-event', message: 'Story event was not committed: ' + errorText(error), recoverable: true };
                 this.loading = { active: false, label: 'Story progress was not saved', progress: null, operationId: 'durable-event' };
                 this.screen = 'loading';
+                this.combat.setTimePolicy('paused');
                 this.render();
                 return;
             }
@@ -915,6 +936,7 @@ export class GameApplication {
                 this.sceneBlocked = true;
                 this.loading = { active: true, label: 'Following the authored route', progress: null, operationId: 'region-load' };
                 this.screen = 'loading';
+                this.combat.setTimePolicy('paused');
                 this.render();
                 try {
                     await this.prepareWorld(this.campaign, false, generation);
@@ -948,6 +970,7 @@ export class GameApplication {
         this.error = { code, message: errorText(error), recoverable: !terminalAssetError };
         this.loading = { active: false, label: 'World operation failed', progress: null, operationId };
         this.screen = 'loading';
+        this.combat.setTimePolicy('paused');
         this.render();
     }
     private frame = (nowMs: number): void => {
@@ -992,7 +1015,7 @@ export class GameApplication {
             this.renderer.sync(snapshot.actors, snapshot, STEP * steps);
             const camera = this.renderer.camera;
             const forward = camera.getWorldDirection(camera.position.clone());
-            this.presentation?.update(this.combat.simulationTick, { position: camera.position, forward, up: camera.up });
+            this.presentation?.update(snapshot.worldClock, { position: camera.position, forward, up: camera.up });
             this.ui.render(this.model());
         }
     };
@@ -1055,6 +1078,7 @@ export class GameApplication {
                 this.error = { code: 'interaction-unavailable', message: 'The authored interaction is not available at this position or under the current world conditions.', recoverable: true };
                 this.loading = { active: false, label: 'Interaction unavailable', progress: null, operationId: 'region-load' };
                 this.screen = 'loading';
+                this.combat.setTimePolicy('paused');
                 this.render();
                 return;
             }

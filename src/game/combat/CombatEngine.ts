@@ -13,7 +13,7 @@ const MAX_HOSTILES = 6;
 const MAX_GROUNDED_LARGE = 2;
 const MAX_TOTAL_LARGE=2;
 const DODGE_RECHARGE_TICKS = 105;
-const PERFECT_WINDOW_TICKS = 12;
+const PERFECT_DODGE_EFFECTS={worldTimeScale:0.25,slowMotionTicks:12,maxSlowMotionTicks:18,instinctGain:20,petRecoveryReductionTicks:18,playerRecoveryReductionTicks:12,weakPointDurationTicks:36,weakPointDamageMultiplier:1.5,counterWindowTicks:36} as const;
 const PLAYER_RADIUS = 0.42;
 const ACTION_CLIPS: Readonly<Record<string, ActionId>> = {
   idle: 'aren-idle' as ActionId, walk: 'aren-walk' as ActionId, strafe: 'aren-strafe' as ActionId,
@@ -42,7 +42,7 @@ export interface CameraBasis { forward: Vec3; right: Vec3 }
 export interface CombatInput extends InputFrame { dodgeDirection?: EvasionDirection; heavyHeldTicks?: number; targetCycle?: -1 | 1; tetherPressed?: boolean; cleansePressed?: boolean; ferocityPressed?: boolean; corruptionPressed?: boolean; interactTargetId?: ActorId; interactionId?:string; interactionTargetId?:string; choiceOptionId?:string; traversalId?: string }
 export interface CombatActor extends ActorSnapshot {
   radius: number; collisionHeight:number; maxVitality: number; large: boolean; aerial: boolean; command?: CompanionCommand; corruptionCoreIds?: readonly string[]; cleansedCoreIds?: string[];
-  recoveringUntil: number; invulnerableUntil: number; staggerUntil: number; possessedUntil: number; possessionInstanceId?:string; possessionSourceId?:ActorId; actionStartedTick: number; actionEndsTick: number;
+  recoveringUntil: number; invulnerableUntil: number; staggerUntil: number; possessedUntil: number; weakPointUntil?:number; possessionInstanceId?:string; possessionSourceId?:ActorId; actionStartedTick: number; actionEndsTick: number;
 }
 export interface LiveHazard extends HazardDefinition {
   id: string; attackId: AttackId; sourceId: ActorId; startTick: number; activeFrom: number; activeUntil: number;
@@ -50,24 +50,25 @@ export interface LiveHazard extends HazardDefinition {
 }
 export interface LiveTelegraph { id: string; attackId: AttackId; sourceId: ActorId; targetPosition: Vec3; phase: 'windup'|'commit'|'active'|'recovery'; remainingTicks: number; cue: string }
 export interface CombatEvent { id: string; tick: number; kind: 'cue'|'damage'|'perfect-dodge'|'counter-open'|'action'|'companion'|'traversal'|'world'|'attack-interrupted'; actorId?: ActorId; targetId?: ActorId; actionId?: string; attackId?: AttackId; message: string; worldEvent?: WorldEvent }
-export interface EncounterCheckpoint { tick: number; actors: CombatActor[]; player: PlayerResources; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; }
+export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; }
 export interface PlayerResources { vitality: number; maxVitality: number; instinct: number; ferocity: number; corruption: number; dodgeCharges: number; maxDodgeCharges: number; nextDodgeRechargeTick: number; }
 export interface PendingImpact { activeAt: number; activeUntil: number; target: ActorId; action: string; range: number; radius: number; damage: number; interrupt: boolean; counter:boolean; startVitality: number; resolved: boolean; interactionId?:string; interactionPosition?:Vec3; }
 export interface LiveMovableObject extends MovableObjectSnapshot {
   authored: RegionMovableObjectDefinition;
-  startedAtTick?: number;
+  startedAtWorldTick?: number;
   interactionId?: string;
   actorId?: ActorId;
 }
 export interface EngineState {
-  schemaVersion: 1; tick: number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
+  schemaVersion: 2; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; slowMotionElapsedTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
   actors: CombatActor[]; playerId: ActorId; player: PlayerResources; targetId?: ActorId; arena: CombatArena; hazards: LiveHazard[]; telegraphs: LiveTelegraph[];
   movableObjects: LiveMovableObject[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
-  actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
+  actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; attackSelectionWorldOffset: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
   companionState: CompanionRosterState; companionSlots: { combat?: CompanionId; utility?: CompanionId; scout?: 'vara' };
   eventSequence: number; rewardEmitted: boolean; checkpoint: EncounterCheckpoint | null; traversalGates: TraversalGate[]; pendingImpact?: PendingImpact; presentationCues: StoryCue[];
 }
+export type EngineStateSeed = Partial<Omit<EngineState, 'schemaVersion'>> & { schemaVersion?: 1 | 2 };
 export interface TraversalGate { id:string; routeId:string; from:Vec3; to:Vec3; anchors:readonly Vec3[]; fromRegion:RegionId; toRegion:RegionId; width:number; rise:number; unlocked:boolean; unlockFact?:string; traversalEvent:string; colliderIds:readonly string[] }
 export interface EncounterStart { encounterId:string; regionId:RegionId; runId:string; playerPosition?:Vec3; bossPosition?:Vec3; companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'}; actors?:readonly CombatActor[]; worldFacts?:Readonly<Record<string,boolean|number|string>>;}
 export interface RegionLoadInput { regionId:RegionId;runId:string;presentActorIds:readonly string[];playerPosition?:Vec3;companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'};chapter?:number;wardenCall?:boolean;bond?:number;dominionUsed?:boolean;worldFacts?:Readonly<Record<string,boolean|number|string>>; }
@@ -75,7 +76,7 @@ export interface AttackImpact { targetId: ActorId; damage: number; avoided: bool
 
 export class CombatEngine {
   private state: EngineState;
-  constructor(seed?: Partial<EngineState>) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); }
+  constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); }
 
   loadRegion(input:RegionLoadInput):void{
     const region=REGIONS.find(candidate=>candidate.id===input.regionId);
@@ -105,6 +106,7 @@ export class CombatEngine {
     }
     this.state.regionId=region.id;
     this.state.runId=input.runId;
+    this.state.timePolicy='normal';this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=1;this.state.accumulator=0;
     this.state.worldFacts=structuredClone(input.worldFacts??{});
     this.state.movableObjects=region.movableObjects.map(definition=>{
       const settled=input.worldFacts?.[definition.movedFactId]===true;
@@ -146,6 +148,7 @@ export class CombatEngine {
     if(definition.regionId!==input.regionId)throw new Error(`Encounter ${input.encounterId} does not belong to ${input.regionId}`);
     const region=REGIONS.find(candidate=>candidate.id===input.regionId);
     if(!region)throw new Error(`Unknown authored region: ${input.regionId}`);
+    this.setTimePolicy('normal');
     const mustLoadRegion=this.state.runId!==input.runId||this.state.regionId!==input.regionId||this.state.arena.surfaces.length===0;
     if(input.actors)this.state.actors=input.actors.map(cloneActor);
     else if(mustLoadRegion){
@@ -357,6 +360,7 @@ export class CombatEngine {
   }
   step(input: CombatInput, deltaSeconds = FIXED_STEP_SECONDS, basis?: CameraBasis): number {
     if (basis) this.setCameraBasis(basis);
+    if(this.state.timePolicy==='paused'){this.state.accumulator=0;return 0;}
     this.state.accumulator = Math.min(this.state.accumulator + Math.max(0, deltaSeconds), FIXED_STEP_SECONDS * MAX_CATCH_UP_TICKS);
     let steps = 0;
     while (this.state.accumulator + 1e-10 >= FIXED_STEP_SECONDS && steps < MAX_CATCH_UP_TICKS) {
@@ -365,13 +369,19 @@ export class CombatEngine {
     return steps;
   }
   fixedStep(input: CombatInput = { tick: this.state.tick+1, move: vec(0,0,0), dodgePressed:false, lightPressed:false, heavyPressed:false, heavyHeld:false, heavyReleased:false, interactPressed:false }): void {
+    if(this.state.timePolicy==='paused')return;
     const firstEvent=this.state.events.length;
     this.state.tick++;
+    if(this.state.timePolicy==='perfect-dodge-slow'&&this.state.slowMotionRemainingTicks<=0)this.state.timePolicy='normal';
+    const slowMotionActive=this.state.timePolicy==='perfect-dodge-slow';
+    const worldScale=this.effectiveWorldTimeScale();
+    this.state.worldTimeScale=worldScale;
+    this.state.worldTick+=worldScale;
     if(this.state.player.dodgeCharges<this.state.player.maxDodgeCharges&&this.state.tick>=this.state.player.nextDodgeRechargeTick){
       this.state.player.dodgeCharges++;
       this.state.player.nextDodgeRechargeTick=this.state.player.dodgeCharges<this.state.player.maxDodgeCharges?this.state.tick+DODGE_RECHARGE_TICKS:0;
     }
-    this.updateActors();
+    this.updateActors(worldScale);
     this.updateHazards();
     this.updateBossAI();
     this.updatePlayer(input);
@@ -379,6 +389,12 @@ export class CombatEngine {
     this.updateMovableObjects();
     this.updatePhase();
     if(this.state.actionRecoveryUntil>0&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.actionId!=='idle')this.finishAction();
+    if(slowMotionActive&&this.state.timePolicy==='perfect-dodge-slow'){
+      this.state.slowMotionRemainingTicks=Math.max(0,this.state.slowMotionRemainingTicks-1);
+      this.state.slowMotionElapsedTicks++;
+      if(this.state.slowMotionRemainingTicks===0){this.state.timePolicy='normal';this.state.slowMotionElapsedTicks=0;}
+    }
+    this.state.worldTimeScale=this.effectiveWorldTimeScale();
     for(const event of this.state.events.slice(firstEvent).flatMap(item=>item.worldEvent?[item.worldEvent]:[])){
       if(!this.state.worldEvents.some(existing=>existing.idempotencyKey===event.idempotencyKey))this.state.worldEvents.push(structuredClone(event));
     }
@@ -388,41 +404,51 @@ export class CombatEngine {
     const actors=this.state.actors.map(actor=>{
       const variantId=actor.id===this.state.encounter?.bossId?currentPhase?.actorVariantId:undefined;
       const renderVariantId=variantId??ACTORS[actor.archetypeId]?.assetId;
-      return {id:actor.id,archetypeId:actor.archetypeId,species:actor.species,allegiance:actor.allegiance,position:copy(actor.position),velocity:copy(actor.velocity),facing:copy(actor.facing),actionId:actor.actionId,phase:actor.phase,normalizedTime:actor.normalizedTime,vitality:actor.vitality,ferocity:actor.ferocity,corruption:actor.corruption,targetId:actor.targetId,renderVariantId,sockets:structuredClone(actor.sockets),interactionRequirements:structuredClone(actor.interactionRequirements),visible:actor.visible,downed:actor.downed,possessed:actor.possessed};
+      const weakPointExposed=this.state.worldTick<(actor.weakPointUntil??0);
+      return {id:actor.id,archetypeId:actor.archetypeId,species:actor.species,allegiance:actor.allegiance,position:copy(actor.position),velocity:copy(actor.velocity),facing:copy(actor.facing),actionId:actor.actionId,phase:actor.phase,normalizedTime:actor.normalizedTime,vitality:actor.vitality,ferocity:actor.ferocity,corruption:actor.corruption,targetId:actor.targetId,renderVariantId,sockets:structuredClone(actor.sockets),interactionRequirements:structuredClone(actor.interactionRequirements),visible:actor.visible,downed:actor.downed,possessed:actor.possessed,weakPointExposed};
     });
     const boss=this.currentBoss();
     return {
       actors,
       movableObjects:this.state.movableObjects.map(object=>({objectId:object.objectId,position:copy(object.position),phase:object.phase,...(object.rotationY===undefined?{}:{rotationY:object.rotationY})})),
+      worldClock:{simulationTick:this.state.tick,worldTick:this.state.worldTick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS,timeScale:this.state.worldTimeScale,policy:this.state.timePolicy},
       player:{vitality:this.state.player.vitality,maxVitality:this.state.player.maxVitality,instinct:this.state.player.instinct,dodgeCharges:this.state.player.dodgeCharges,maxDodgeCharges:this.state.player.maxDodgeCharges},
       encounterId:this.state.encounterId,
-      boss:boss?{actorId:boss.id,phaseId:currentPhase?.id??'resolved',phaseIndex:this.state.phaseIndex,ferocity:boss.ferocity??0,maxFerocity:100,corruption:boss.corruption??0,exposed:this.state.tick<boss.staggerUntil,...(boss.corruptionCoreIds?{corruptionCores:boss.corruptionCoreIds.map(id=>({id,cleansed:boss.cleansedCoreIds?.includes(id)??false}))}:{})}:undefined,
+      boss:boss?{actorId:boss.id,phaseId:currentPhase?.id??'resolved',phaseIndex:this.state.phaseIndex,ferocity:boss.ferocity??0,maxFerocity:100,corruption:boss.corruption??0,exposed:this.state.worldTick<boss.staggerUntil||this.state.worldTick<(boss.weakPointUntil??0),...(boss.corruptionCoreIds?{corruptionCores:boss.corruptionCoreIds.map(id=>({id,cleansed:boss.cleansedCoreIds?.includes(id)??false}))}:{})}:undefined,
       telegraphs:this.state.telegraphs.map(telegraph=>({id:telegraph.id,attackId:telegraph.attackId,sourceId:telegraph.sourceId,targetPosition:copy(telegraph.targetPosition),phase:telegraph.phase,remainingTicks:telegraph.remainingTicks})),
-      hazards:this.state.hazards.map(hazard=>({id:hazard.id,kind:hazard.kind==='cone'?'area':hazard.kind,bounds:{min:copy(hazard.bounds.min),max:copy(hazard.bounds.max)},active:this.state.tick>=hazard.activeFrom&&this.state.tick<hazard.activeUntil})),
+      hazards:this.state.hazards.map(hazard=>({id:hazard.id,kind:hazard.kind==='cone'?'area':hazard.kind,bounds:{min:copy(hazard.bounds.min),max:copy(hazard.bounds.max)},active:this.state.worldTick>=hazard.activeFrom&&this.state.worldTick<hazard.activeUntil})),
       targetId:this.state.targetId,events:structuredClone(this.state.worldEvents),
     };
   }
   serialize(): string { return JSON.stringify(this.state); }
-  restore(serialized: string): void { this.state = hydrateEngineState(JSON.parse(serialized) as Partial<EngineState>); }
+  restore(serialized: string): void { this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); }
   consumeEvents(): CombatEvent[] { const events = structuredClone(this.state.events); this.state.events.length=0; return events; }
   consumeWorldEvents(): WorldEvent[] { const events = structuredClone(this.state.worldEvents); this.state.worldEvents.length=0; return events; }
   drainPresentationCues(): readonly StoryCue[] { const cues=structuredClone(this.state.presentationCues);this.state.presentationCues.length=0;return cues; }
-  queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'>):StoryCue{
+  queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTimeSeconds'>):StoryCue{
     const normalized=structuredClone(cue);
     const hazard=cue.attackId?ATTACKS[cue.attackId]?.hazard:undefined;
     const footprint=normalized.shape==='sector'&&normalized.footprint&&hazard?{...normalized.footprint,length:2*(hazard.range??hazard.depth),sectorRadians:((hazard.angleDeg??70)*Math.PI)/180}:normalized.footprint;
-    const event:StoryCue={...normalized,...(footprint?{footprint}:{}),instanceId:`${this.state.runId}:${this.state.encounterId??'free'}:cue:${this.state.tick}:${++this.state.eventSequence}`,tick:this.state.tick};
+    const instanceId=this.state.runId+':'+(this.state.encounterId??'free')+':cue:'+this.state.tick+':'+(++this.state.eventSequence);
+    const event:StoryCue={...normalized,...(footprint?{footprint}:{}),instanceId,tick:this.state.tick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
     this.state.presentationCues.push(event);
     return structuredClone(event);
   }
   private captureEncounterCheckpoint(): EncounterCheckpoint {
-    return { tick: this.state.tick, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState) };
+    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState) };
   }
   resetToCheckpoint(): void {
     const checkpoint = this.state.checkpoint;
     if (!checkpoint) return;
+    this.setTimePolicy('normal');
     this.state.tick = checkpoint.tick;
+    const worldOffset=this.state.worldTick-checkpoint.worldTick;
     this.state.actors = checkpoint.actors.map(cloneActor);
+    for(const actor of this.state.actors){actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);if(actor.id!==this.state.playerId)actor.invulnerableUntil=shiftDeadline(actor.invulnerableUntil,worldOffset);actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);if(actor.actionEndsTick>0){actor.actionStartedTick+=worldOffset;actor.actionEndsTick+=worldOffset;}}
+    // Rebase the selector timestamp and its virtual-clock offset together.
+    this.state.lastAttackTick=shiftDeadline(checkpoint.lastAttackTick,worldOffset);
+    this.state.attackSelectionWorldOffset=(checkpoint.attackSelectionWorldOffset??0)+worldOffset;
+    this.state.counterUntil=checkpoint.counterUntil;
     this.state.player = structuredClone(checkpoint.player);
     this.state.phaseIndex = checkpoint.phaseIndex;
     this.state.phaseLatch = checkpoint.phaseLatch;
@@ -434,7 +460,7 @@ export class CombatEngine {
     this.state.events = [];
     this.state.worldEvents = [];
     this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.state.lightIndex=0;this.state.pendingImpact=undefined;this.state.actionCancelable=false;
-    this.state.actionId='idle';
+    this.state.presentationCues = [];
     this.state.actionUntil = this.state.tick;
     this.state.actionRecoveryUntil = 0;
   }
@@ -442,18 +468,26 @@ export class CombatEngine {
   getActionClipMapping(): Readonly<Record<string,ActionId>> { return ACTION_CLIPS; }
   get pendingAssets(): readonly { action: string; clip: ActionId; status:'pending' }[] { return Object.entries(ACTION_CLIPS).map(([action,clip])=>({action,clip,status:'pending'})); }
   get simulationTick(): number { return this.state.tick; }
+  setTimePolicy(policy:'normal'|'paused'):void{
+    this.state.timePolicy=policy;this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=policy==='paused'?0:1;this.state.accumulator=0;
+  }
+  private effectiveWorldTimeScale():number{
+    if(this.state.timePolicy==='paused')return 0;
+    if(this.state.timePolicy==='perfect-dodge-slow'&&this.state.slowMotionRemainingTicks>0)return PERFECT_DODGE_EFFECTS.worldTimeScale;
+    return 1;
+  }
   get companions(): CompanionRosterState { return structuredClone(this.state.companionState); }
-  private updateActors(): void {
+  private updateActors(worldScale:number):void{
     for(const actor of this.state.actors){
       if(actor.downed)continue;
-      if(actor.possessed&&actor.possessedUntil>0&&this.state.tick>=actor.possessedUntil)this.breakPossession(actor,true);
+      if(actor.possessed&&actor.possessedUntil>0&&this.state.worldTick>=actor.possessedUntil)this.breakPossession(actor,true);
       const actionDuration=Math.max(1,actor.actionEndsTick-actor.actionStartedTick);
-      actor.normalizedTime=Math.min(1,Math.max(0,(this.state.tick-actor.actionStartedTick)/actionDuration));
-      if(actor.actionEndsTick>0&&this.state.tick>=actor.actionEndsTick){
+      if(actor.actionEndsTick>0)actor.normalizedTime=Math.min(1,actor.normalizedTime+worldScale/actionDuration);
+      if(actor.actionEndsTick>0&&actor.normalizedTime>=1){
         actor.phase='idle';
         actor.actionId=ACTION_CLIPS.idle!;
         actor.normalizedTime=0;
-        actor.actionStartedTick=this.state.tick;
+        actor.actionStartedTick=this.state.worldTick;
         actor.actionEndsTick=0;
       }
     }
@@ -505,8 +539,8 @@ export class CombatEngine {
       this.state.actionRecoveryUntil=this.state.actionUntil;
       this.state.actionCancelable=true;
       player.actionId='aren-charged-heavy-charge' as ActionId;
-      player.actionStartedTick=this.state.tick;
-      player.actionEndsTick=this.state.actionUntil;
+      player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;
+      player.actionEndsTick=this.state.worldTick+(this.state.actionUntil-this.state.tick);
       player.phase='anticipation';
       this.emit('cue','Charged Heavy: release Heavy to strike; Dodge cancels the charge.',player.id,this.state.targetId,'charged_heavy');
       return;
@@ -541,8 +575,13 @@ export class CombatEngine {
       const target=this.state.actors.find(actor=>actor.id===this.state.targetId&&actor.visible&&!actor.downed);
       if(target)player.facing=facingFrom(sub(target.position,player.position));
       else if(Math.hypot(dx,dz)>.05)player.facing=facingFrom(vec(dx,0,dz));
-      player.actionId=(Math.hypot(dx,dz)>.05?(target?'aren-strafe':'aren-walk'):'aren-idle') as ActionId;
-      player.phase='idle';
+      const moving=Math.hypot(dx,dz)>.05;
+      if(moving){
+        player.actionId=(target?'aren-strafe':'aren-walk') as ActionId;
+        player.phase='idle';player.actionStartedTick=this.state.worldTick;player.actionEndsTick=0;player.normalizedTime=0;
+      }else if(player.actionEndsTick===0||player.normalizedTime>=1){
+        player.actionId=ACTION_CLIPS.idle!;player.phase='idle';
+      }
       const attackIndex=this.state.lightIndex??0;
       if(input.lightPressed){const next=attackIndex%3+1;this.state.lightIndex=next;this.startPlayerAction(`light_${next}`,this.state.targetId);}
       else if(input.heavyPressed)this.startPlayerAction('heavy',this.state.targetId);
@@ -569,7 +608,7 @@ export class CombatEngine {
     const attackId=('aren-'+action) as AttackId;
     const target=object.objectId as ActorId;
     this.state.targetId=target;this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.actionEndsTick=this.state.actionRecoveryUntil;player.phase='anticipation';player.targetId=target;
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;player.actionEndsTick=this.state.worldTick+duration+18;player.phase='anticipation';player.targetId=target;
     const cue='Aren draws the staff back toward the loose snare.';
     const id=this.state.runId+':'+this.state.tick+':'+interaction.id+':'+action;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(object.position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -595,7 +634,7 @@ export class CombatEngine {
     const attackId=`aren-${action}` as AttackId;
     this.state.targetId=interaction.targetId as ActorId;
     this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.actionEndsTick=this.state.actionRecoveryUntil;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;player.actionEndsTick=this.state.worldTick+duration+18;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
     const cue=action==='cleanse'?'Root light gathers around the world mechanism.':'Aren draws back the staff for a heavy strike.';
     const id=`${this.state.runId}:${this.state.tick}:${interaction.id}:${action}`;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -607,7 +646,7 @@ export class CombatEngine {
   private tryDodge(player: CombatActor,direction:EvasionDirection): void {
     if(this.state.tick<this.state.actionUntil&&!this.state.actionCancelable)return;
     if(this.state.player.dodgeCharges<=0){this.emit('cue','No Dodge charges; create distance until one recovers.',player.id);return;}
-    const profile=resolveProfile(direction,this.state.arena.traversalAffordances??[],player.position,this.state.hazards,this.state.tick);
+    const profile=resolveProfile(direction,this.state.arena.traversalAffordances??[],player.position,this.state.hazards,this.state.worldTick);
     const start=copy(player.position);
     const vector=profileVector(profile.id,direction,player.facing,this.state.arena.cameraBasis);
     const moved=moveCircle(this.state.arena,player.position,scale(vector,profile.distance),PLAYER_RADIUS,profile.collisionHeight??player.collisionHeight);
@@ -617,22 +656,35 @@ export class CombatEngine {
     this.state.bufferedAction=undefined;
     player.position=moved;
     player.velocity=scale(sub(moved,start),1/(profile.durationTicks*FIXED_STEP_SECONDS));
-    player.actionStartedTick=this.state.tick;
-    player.actionEndsTick=this.state.tick+profile.durationTicks+profile.recoveryTicks;
+    player.actionStartedTick=this.state.worldTick;
+    player.normalizedTime=0;
+    player.actionEndsTick=this.state.worldTick+profile.durationTicks+profile.recoveryTicks;
     player.actionId=(ACTION_CLIPS[profile.id]??ACTION_CLIPS.stumble_recovery!) as ActionId;
     player.phase='start';
     player.invulnerableUntil=this.state.tick+profile.iframes;
     this.state.actionId=profile.id;
     this.state.actionUntil=this.state.tick+profile.durationTicks;
-    this.state.actionRecoveryUntil=player.actionEndsTick;
+    this.state.actionRecoveryUntil=this.state.tick+profile.durationTicks+profile.recoveryTicks;
     this.state.actionCancelable=true;
     const threatened=this.findThreatenedHazard(start,player,profile.id);
     if(threatened){
-      const key=`${threatened.id}:${threatened.hitGroup}`;
+      const key=threatened.sourceId+':'+threatened.attackId+':'+threatened.startTick+':'+threatened.hitGroup;
       if(!this.state.perfectDodgeKeys.includes(key)){
         this.state.perfectDodgeKeys.push(key);
-        this.state.player.instinct=Math.min(100,this.state.player.instinct+20);
-        this.state.counterUntil=this.state.tick+36;
+        if(this.state.timePolicy!=='perfect-dodge-slow')this.state.slowMotionElapsedTicks=0;
+        this.state.timePolicy='perfect-dodge-slow';
+        const extension=Math.min(PERFECT_DODGE_EFFECTS.slowMotionTicks,PERFECT_DODGE_EFFECTS.maxSlowMotionTicks-this.state.slowMotionElapsedTicks-this.state.slowMotionRemainingTicks);
+        this.state.slowMotionRemainingTicks+=Math.max(0,extension);
+        this.state.worldTimeScale=this.effectiveWorldTimeScale();
+        this.state.player.instinct=Math.min(100,this.state.player.instinct+PERFECT_DODGE_EFFECTS.instinctGain);
+        this.state.counterUntil=this.state.tick+PERFECT_DODGE_EFFECTS.counterWindowTicks;
+        const recoveryReduction=Math.min(PERFECT_DODGE_EFFECTS.playerRecoveryReductionTicks,Math.max(0,this.state.actionRecoveryUntil-this.state.tick));
+        this.state.actionRecoveryUntil-=recoveryReduction;
+        const companionId=this.state.companionState.combat??this.state.companionState.utility;
+        const companionSlot=companionId?this.state.companionState.slots[companionId]:undefined;
+        if(companionSlot)companionSlot.readyAt=Math.max(this.state.tick,companionSlot.readyAt-PERFECT_DODGE_EFFECTS.petRecoveryReductionTicks);
+        const weakPointTarget=this.state.actors.find(actor=>actor.id===threatened.sourceId);
+        if(weakPointTarget)weakPointTarget.weakPointUntil=Math.max(weakPointTarget.weakPointUntil??0,this.state.worldTick+PERFECT_DODGE_EFFECTS.weakPointDurationTicks);
         const side=dot(vector,this.state.arena.cameraBasis?.right??vec(1,0,0))<0?'left':'right';
         const perfectAction=`perfect_dodge_${side}` as EvasionProfileId;
         player.actionId=ACTION_CLIPS[perfectAction]!;
@@ -648,8 +700,16 @@ export class CombatEngine {
   private findThreatenedHazard(start:Vec3,player:CombatActor,profile:EvasionProfileId):LiveHazard|undefined{
     const initial={...player,position:start};
     return this.state.hazards.find(h=>{
-      const timely=h.threatTicks.some(t=>t>=this.state.tick&&t<=this.state.tick+PERFECT_WINDOW_TICKS);
       const threatened=hazardThreatens(h,initial);
+      const iframes=EVASION_PROFILES[profile].iframes;
+      const key=h.sourceId+':'+h.attackId+':'+h.startTick+':'+h.hitGroup;
+      const grantsEffect=!this.state.perfectDodgeKeys.includes(key);
+      const remainingSlowTicks=this.state.timePolicy==='perfect-dodge-slow'?this.state.slowMotionRemainingTicks:0;
+      const episodeElapsed=this.state.timePolicy==='perfect-dodge-slow'?this.state.slowMotionElapsedTicks:0;
+      const projectedSlowTicks=grantsEffect?remainingSlowTicks+Math.max(0,Math.min(PERFECT_DODGE_EFFECTS.slowMotionTicks,PERFECT_DODGE_EFFECTS.maxSlowMotionTicks-episodeElapsed-remainingSlowTicks)):remainingSlowTicks;
+      const slowedIFrames=Math.min(iframes,projectedSlowTicks);
+      const evasionUntil=this.state.worldTick+slowedIFrames*PERFECT_DODGE_EFFECTS.worldTimeScale+(iframes-slowedIFrames);
+      const timely=this.state.worldTick<h.activeUntil&&evasionUntil>h.activeFrom;
       const cleared=!hazardThreatens(h,player)||avoids(profile,h);
       return timely&&threatened&&cleared&&!h.hitIds.includes(player.id);
     });
@@ -675,8 +735,8 @@ export class CombatEngine {
     this.state.actionRecoveryUntil=this.state.actionUntil+18;
     this.state.actionCancelable=false;
     player.actionId=(ACTION_CLIPS[action]??`aren-${action}`) as ActionId;
-    player.actionStartedTick=this.state.tick;
-    player.actionEndsTick=this.state.actionRecoveryUntil;
+    player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;
+    player.actionEndsTick=this.state.worldTick+duration+18;
     player.phase='anticipation';
     player.targetId=target.id;
     player.facing=facingFrom(sub(target.position,player.position));
@@ -691,17 +751,17 @@ export class CombatEngine {
   }
   private updateHazards():void{
     for(const hazard of this.state.hazards){
-      if(this.state.tick<hazard.activeFrom||this.state.tick>=hazard.activeUntil)continue;
+      if(this.state.worldTick<hazard.activeFrom||this.state.worldTick>=hazard.activeUntil)continue;
       const targetClass=ATTACKS[hazard.attackId]?.targetClass;
       for(const actor of this.state.actors){
         if(actor.downed||hazard.hitIds.includes(actor.id)||(targetClass==='companion'?actor.id!==hazard.targetActorId:actor.id!==this.state.playerId))continue;
         if(!hazardThreatens(hazard,actor))continue;
         const profileId=actor.id==='aren'?this.state.actionId as EvasionProfileId:'stumble_recovery';
-        if(this.state.tick<actor.invulnerableUntil&&avoids(profileId,hazard))continue;
+        if((actor.id===this.state.playerId?this.state.tick:this.state.worldTick)<actor.invulnerableUntil&&avoids(profileId,hazard))continue;
         hazard.hitIds.push(actor.id);
         if(targetClass==='companion'&&hazard.attackId==='orun-crown-possession'){
           const phaseId=this.state.encounter?.phases[this.state.phaseIndex]?.id??'unknown';
-          actor.possessed=true;actor.allegiance='hostile';actor.possessedUntil=this.state.tick+180;actor.targetId=this.state.playerId;actor.possessionInstanceId=hazard.id;actor.possessionSourceId=hazard.sourceId;
+          actor.possessed=true;actor.allegiance='hostile';actor.possessedUntil=this.state.worldTick+180;actor.targetId=this.state.playerId;actor.possessionInstanceId=hazard.id;actor.possessionSourceId=hazard.sourceId;
           const eventId=`${this.state.runId}:${this.state.encounterId}:possession:${hazard.id}:began`;
           this.emitWorldEvent({type:'possession',eventId,idempotencyKey:eventId,actorId:hazard.sourceId,targetId:actor.id,phaseId,state:'began',simulationTick:this.state.tick});
           this.emit('companion','Orun’s Crown holds the companion briefly; cleanse or coordinate a break before the hold ends.',hazard.sourceId,actor.id,'possession',hazard.attackId);
@@ -715,13 +775,13 @@ export class CombatEngine {
         this.queuePresentationCue({kind:'hit',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,position:copy(actor.position),from:copy(hazard.origin),to:copy(actor.position),scopeId:this.state.encounterId,attackId:hazard.attackId,footprint:{width:hazard.width,length:hazard.depth,angleRadians:Math.atan2(hazard.direction.x,hazard.direction.z)},priority:'essential',shape:storyShape(hazard.kind)});
       }
     }
-    this.state.hazards=this.state.hazards.filter(hazard=>{const attack=ATTACKS[hazard.attackId];return this.state.tick<hazard.activeUntil+(attack?.recoveryTicks??0);});
+    this.state.hazards=this.state.hazards.filter(hazard=>{const attack=ATTACKS[hazard.attackId];return this.state.worldTick<hazard.activeUntil+(attack?.recoveryTicks??0);});
     this.state.telegraphs=this.state.telegraphs.filter(telegraph=>{
       if(telegraph.sourceId===this.state.playerId)return !!this.state.pendingImpact;
       const hazard=this.state.hazards.find(current=>current.id===telegraph.id);
       if(!hazard)return false;
       const attack=ATTACKS[telegraph.attackId];
-      return this.state.tick<hazard.activeUntil+(attack?.recoveryTicks??0);
+      return this.state.worldTick<hazard.activeUntil+(attack?.recoveryTicks??0);
     });
     for(const telegraph of this.state.telegraphs){
       if(telegraph.sourceId===this.state.playerId){
@@ -738,9 +798,9 @@ export class CombatEngine {
       const attack=ATTACKS[telegraph.attackId];
       const commitAt=hazard.startTick+(attack?.windupTicks??0);
       const priorPhase=telegraph.phase;
-      telegraph.phase=this.state.tick<commitAt?'windup':this.state.tick<hazard.activeFrom?'commit':this.state.tick<hazard.activeUntil?'active':'recovery';
+      telegraph.phase=this.state.worldTick<commitAt?'windup':this.state.worldTick<hazard.activeFrom?'commit':this.state.worldTick<hazard.activeUntil?'active':'recovery';
       const phaseEnd=telegraph.phase==='windup'?commitAt:telegraph.phase==='commit'?hazard.activeFrom:telegraph.phase==='active'?hazard.activeUntil:hazard.activeUntil+(attack?.recoveryTicks??0);
-      telegraph.remainingTicks=Math.max(0,phaseEnd-this.state.tick);
+      telegraph.remainingTicks=Math.max(0,phaseEnd-this.state.worldTick);
       const source=this.state.actors.find(actor=>actor.id===telegraph.sourceId);
       if(source)source.phase=telegraph.phase==='active'?'active':telegraph.phase==='recovery'?'recovery':'anticipation';
       if(priorPhase==='windup'&&telegraph.phase==='commit')this.queuePresentationCue({kind:'commit',phase:'commit',actorId:telegraph.sourceId,targetId:this.state.playerId,position:copy(telegraph.targetPosition),scopeId:this.state.encounterId,attackId:telegraph.attackId,footprint:{width:hazard.width,length:hazard.depth,angleRadians:Math.atan2(hazard.direction.x,hazard.direction.z)},priority:'essential',shape:storyShape(hazard.kind)});
@@ -811,9 +871,10 @@ export class CombatEngine {
     }
     if(p.action==='ferocity')this.state.player.ferocity-=30;
     if(p.action==='corruption')this.state.player.corruption-=25;
-    target.vitality=Math.max(0,(target.vitality??100)-p.damage);
+    const damage=target.weakPointUntil!==undefined&&target.weakPointUntil>this.state.worldTick?Math.ceil(p.damage*PERFECT_DODGE_EFFECTS.weakPointDamageMultiplier):p.damage;
+    target.vitality=Math.max(0,(target.vitality??100)-damage);
     this.recordResolvedAction(p.action,target.id);
-    if(target.ferocity!==undefined)target.ferocity=Math.max(0,target.ferocity-p.damage);
+    if(target.ferocity!==undefined)target.ferocity=Math.max(0,target.ferocity-damage);
     if(p.counter)this.markPhaseAction('counter');
     if(p.action.startsWith('light_'))this.state.player.instinct=Math.min(100,this.state.player.instinct+8);
     if(p.interrupt)this.interruptAttack(target,p.action);
@@ -834,16 +895,16 @@ export class CombatEngine {
     for(const sourceId of encounter.actorIds){
       if(sourceId===this.state.playerId)continue;
       const source=this.state.actors.find(actor=>actor.id===sourceId&&actor.visible&&actor.allegiance==='hostile');
-      if(!source||source.downed||this.state.tick<source.recoveringUntil||this.state.telegraphs.some(telegraph=>telegraph.sourceId===source.id))continue;
+      if(!source||source.downed||this.state.worldTick<source.recoveringUntil||this.state.telegraphs.some(telegraph=>telegraph.sourceId===source.id))continue;
       const attackIds=phase.attackIds.filter(id=>ATTACKS[id]?.bossId===source.id);
       if(!attackIds.length)continue;
-      const attackIndex=Math.floor(this.state.lastAttackTick/120)%attackIds.length;
+      const selectorTick=Math.max(0,this.state.lastAttackTick-this.state.attackSelectionWorldOffset);const attackIndex=Math.floor(selectorTick/120)%attackIds.length;
       const attackId=attackIds[attackIndex];if(!attackId)continue;
       let def:AttackDefinition|undefined=ATTACKS[attackId];
       if(def?.targetClass==='companion'&&!this.selectedCompanion())def=attackIds.map(id=>ATTACKS[id]).find(attack=>attack&&attack.targetClass!=='companion');
       if(!def)continue;
       this.beginAttack(source,def);
-      this.state.lastAttackTick=this.state.tick;
+      this.state.lastAttackTick=this.state.worldTick;
     }
   }
   private beginAttack(source:CombatActor,def:AttackDefinition):void{
@@ -865,7 +926,7 @@ export class CombatEngine {
     this.state.telegraphs.push({id,attackId:def.id as AttackId,sourceId:source.id,targetPosition:aim,phase:'windup',remainingTicks:def.windupTicks+def.commitTicks,cue:def.cue});
     this.emit('cue',def.cue,source.id,target.id,undefined,def.id as AttackId);
     this.queuePresentationCue({kind:'anticipation',phase:'anticipation',actorId:source.id,targetId:target.id,position:copy(aim),from:copy(origin),to:copy(aim),scopeId:this.state.encounterId,attackId:def.id as AttackId,footprint:{width:shape.width,length:shape.depth,angleRadians:Math.atan2(direction.x,direction.z)},durationTicks:def.windupTicks+def.commitTicks,intensity:1,priority:'essential',shape:storyShape(shape.kind)});
-    const h:LiveHazard={...shape,id,attackId:def.id as AttackId,sourceId:source.id,startTick:this.state.tick,activeFrom:this.state.tick+def.windupTicks+def.commitTicks,activeUntil:this.state.tick+def.windupTicks+def.commitTicks+def.activeTicks,target:aim,origin,direction,range:shape.depth,angleDeg:shape.angleDeg??70,hitIds:[],threatTicks:[this.state.tick+def.windupTicks+def.commitTicks-8,this.state.tick+def.windupTicks+def.commitTicks-4],cue:def.cue,targetActorId:target.id};
+    const h:LiveHazard={...shape,id,attackId:def.id as AttackId,sourceId:source.id,startTick:this.state.worldTick,activeFrom:this.state.worldTick+def.windupTicks+def.commitTicks,activeUntil:this.state.worldTick+def.windupTicks+def.commitTicks+def.activeTicks,target:aim,origin,direction,range:shape.depth,angleDeg:shape.angleDeg??70,hitIds:[],threatTicks:[this.state.worldTick+def.windupTicks+def.commitTicks-8,this.state.worldTick+def.windupTicks+def.commitTicks-4],cue:def.cue,targetActorId:target.id};
     this.state.hazards.push(h);
     if(def.targetClass==='companion'&&this.state.encounterId){
       const phaseId=this.state.encounter?.phases[this.state.phaseIndex]?.id??'unknown';
@@ -878,14 +939,14 @@ export class CombatEngine {
     source.facing=h.direction;
     source.recoveringUntil=h.activeUntil+def.recoveryTicks;
     source.normalizedTime=0;
-    source.actionStartedTick=this.state.tick;
+    source.actionStartedTick=this.state.worldTick;
     source.actionEndsTick=source.recoveringUntil;
   }
   private interruptAttack(source:CombatActor,action:string):boolean{
     const tele=this.state.telegraphs.find(t=>t.sourceId===source.id);if(!tele)return false;
     const def=ATTACKS[tele.attackId];if(def?.interruptibleBy.length&&!def.interruptibleBy.includes(action as never))return false;
-    const hazard=this.state.hazards.find(h=>h.id===tele.id);if(hazard)hazard.activeUntil=this.state.tick;
-    this.state.telegraphs=this.state.telegraphs.filter(t=>t.id!==tele.id);source.phase='recovery';source.actionId=`${source.id}-stagger` as ActionId;source.staggerUntil=this.state.tick+42;source.recoveringUntil=source.staggerUntil;this.emit('attack-interrupted',`${tele.attackId} interrupted before its active window.`,this.state.playerId,source.id,action,tele.attackId);return true;
+    const hazard=this.state.hazards.find(h=>h.id===tele.id);if(hazard)hazard.activeUntil=this.state.worldTick;
+    this.state.telegraphs=this.state.telegraphs.filter(t=>t.id!==tele.id);source.phase='recovery';source.actionId=(source.id+'-stagger') as ActionId;source.normalizedTime=0;source.actionStartedTick=this.state.worldTick;source.staggerUntil=this.state.worldTick+42;source.recoveringUntil=source.staggerUntil;source.actionEndsTick=source.recoveringUntil;this.emit('attack-interrupted',tele.attackId+' interrupted before its active window.',this.state.playerId,source.id,action,tele.attackId);return true;
   }
   private markPhaseAction(action:string):void{
     if(!this.state.phaseActionFlags.includes(action))this.state.phaseActionFlags.push(action);
@@ -999,22 +1060,22 @@ export class CombatEngine {
     return false;
   }
   private startMovableObjectMove(object:LiveMovableObject,interaction:InteractionDefinition,actor:CombatActor):boolean{
-    object.phase='in-flight';object.position=copy(object.authored.from);object.startedAtTick=this.state.tick;object.interactionId=interaction.id;object.actorId=actor.id;
+    object.phase='in-flight';object.position=copy(object.authored.from);object.startedAtWorldTick=this.state.worldTick;object.interactionId=interaction.id;object.actorId=actor.id;
     return true;
   }
   private updateMovableObjects():void{
     for(const object of this.state.movableObjects){
       if(object.phase!=='in-flight')continue;
       const definition=object.authored;
-      const startedAtTick=object.startedAtTick;
+      const startedAtWorldTick=object.startedAtWorldTick;
       const actorId=object.actorId;
-      if(startedAtTick===undefined||actorId===undefined||!object.interactionId){object.phase='resting';object.position=copy(definition.from);delete object.startedAtTick;delete object.actorId;delete object.interactionId;continue;}
-      const progress=Math.min(1,(this.state.tick-startedAtTick)/definition.animationTicks);
+      if(startedAtWorldTick===undefined||actorId===undefined||!object.interactionId){object.phase='resting';object.position=copy(definition.from);delete object.startedAtWorldTick;delete object.actorId;delete object.interactionId;continue;}
+      const progress=Math.min(1,(this.state.worldTick-startedAtWorldTick)/definition.animationTicks);
       const desired=vec(definition.from.x+(definition.to.x-definition.from.x)*progress,definition.from.y+(definition.to.y-definition.from.y)*progress,definition.from.z+(definition.to.z-definition.from.z)*progress);
       const surface=this.state.arena.surfaces.find(candidate=>candidate.id===definition.supportSurfaceId&&candidate.walkable);
       const swept=moveCircle(this.state.arena,object.position,sub(desired,object.position),definition.radiusMeters,.3);
       if(!surface||distance2(swept,desired)>.02||Math.abs(swept.y-desired.y)>.12||!pointInPolygonXZ(swept,surface.points)||this.movableObjectOccupied(object,swept,actorId)){
-        object.phase='resting';object.position=copy(definition.from);delete object.startedAtTick;delete object.actorId;delete object.interactionId;continue;
+        object.phase='resting';object.position=copy(definition.from);delete object.startedAtWorldTick;delete object.actorId;delete object.interactionId;continue;
       }
       object.position=progress>=1?copy(definition.to):copy(swept);
       if(progress<1)continue;
@@ -1027,7 +1088,7 @@ export class CombatEngine {
         const hazardIndex=this.state.hazards.findIndex(candidate=>candidate.id===telegraph.id);
         if(hazardIndex>=0)this.state.hazards.splice(hazardIndex,1);
         this.state.counterUntil=this.state.tick+definition.effect.interruptRangedWindupTicks;
-        target.staggerUntil=this.state.tick+definition.effect.interruptRangedWindupTicks;
+        target.staggerUntil=this.state.worldTick+definition.effect.interruptRangedWindupTicks;
         this.emit('attack-interrupted','The thrown snare distracts the ranged hunter and opens a counter.',actorId,target.id,'object-distraction',telegraph.attackId);
       }
       const eventId=this.state.runId+':object-moved:'+object.objectId;
@@ -1084,9 +1145,9 @@ export class CombatEngine {
   private hasActiveThreatNear(position:Vec3):boolean{
     const player=this.playerActor();
     const probe=player?{...player,position}:makeActor('aren','human','player',position,false,false,100);
-    return this.state.hazards.some(hazard=>this.state.tick<hazard.activeUntil&&hazardThreatens(hazard,probe))||this.state.telegraphs.some(telegraph=>(telegraph.phase==='windup'||telegraph.phase==='commit')&&distance2(position,telegraph.targetPosition)<=Math.max(ATTACKS[telegraph.attackId]?.hazard.width??0,ATTACKS[telegraph.attackId]?.hazard.depth??0)/2+1);
+    return this.state.hazards.some(hazard=>this.state.worldTick<hazard.activeUntil&&hazardThreatens(hazard,probe))||this.state.telegraphs.some(telegraph=>(telegraph.phase==='windup'||telegraph.phase==='commit')&&distance2(position,telegraph.targetPosition)<=Math.max(ATTACKS[telegraph.attackId]?.hazard.width??0,ATTACKS[telegraph.attackId]?.hazard.depth??0)/2+1);
   }
-  private finishAction():void{this.state.actionId='idle';this.state.actionUntil=this.state.tick;this.state.actionRecoveryUntil=0;this.state.actionCancelable=false;const p=this.playerActor();if(p){p.actionId=ACTION_CLIPS.idle!;p.phase='idle';}}
+  private finishAction():void{this.state.actionId='idle';this.state.actionUntil=this.state.tick;this.state.actionRecoveryUntil=0;this.state.actionCancelable=false;}
   private commandCompanionForInput(targetId:ActorId|undefined,command:CompanionCommand):boolean{const actor=this.state.companionSlots.combat??this.state.companionSlots.utility;if(!actor)return false;return this.commandCompanion(actor,command,targetId);}
   private breakPossession(actor:CombatActor,escaped=false):void{
     const instance=actor.possessionInstanceId;
@@ -1097,7 +1158,7 @@ export class CombatEngine {
       const eventId=`${this.state.runId}:${this.state.encounterId}:possession:${instance}:${state}`;
       this.emitWorldEvent({type:'possession',eventId,idempotencyKey:eventId,actorId:source??('orun' as ActorId),targetId:actor.id,phaseId,state,simulationTick:this.state.tick});
     }
-    actor.possessed=false;actor.allegiance='ally';actor.possessedUntil=0;actor.possessionInstanceId=undefined;actor.possessionSourceId=undefined;actor.staggerUntil=this.state.tick+24;
+    actor.possessed=false;actor.allegiance='ally';actor.possessedUntil=0;actor.possessionInstanceId=undefined;actor.possessionSourceId=undefined;actor.staggerUntil=this.state.worldTick+24;
     this.emit('attack-interrupted',escaped?'Orun’s hold releases the companion; they escape unharmed.':'Orun’s hold breaks. Your companion is safe.',actor.id,source??('orun' as ActorId),'possession-break');
   }
   private enforceCaps():void{
@@ -1115,18 +1176,26 @@ export class CombatEngine {
 export function createEngineState():EngineState{
   const player=makeActor('aren','human','player',vec(0,0,0),false,false,100);
   return {
-    schemaVersion:1,tick:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
+    schemaVersion:2,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
     actors:[player],playerId:'aren',player:{vitality:100,maxVitality:100,instinct:0,ferocity:100,corruption:0,dodgeCharges:2,maxDodgeCharges:2,nextDodgeRechargeTick:0},
     movableObjects:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,0,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
     hazards:[],telegraphs:[],events:[],worldEvents:[],seenWorldKeys:[],perfectDodgeKeys:[],phaseIndex:0,phaseLatch:0,phaseActionFlags:[],
-    actionId:'idle',actionUntil:0,actionRecoveryUntil:0,actionCancelable:false,counterUntil:0,lastAttackTick:0,heavyChargeStartTick:null,
+    actionId:'idle',actionUntil:0,actionRecoveryUntil:0,actionCancelable:false,counterUntil:0,lastAttackTick:0,attackSelectionWorldOffset:0,heavyChargeStartTick:null,
     companionState:createCompanionState({}),companionSlots:{},eventSequence:0,rewardEmitted:false,checkpoint:null,traversalGates:[],presentationCues:[],
   };
 }
-export function hydrateEngineState(seed:Partial<EngineState>):EngineState{
+export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   const base=createEngineState();const state={...base,...structuredClone(seed)} as EngineState;
-  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=seed.presentationCues??[];return state;
+  const legacy=seed.schemaVersion===1||seed.worldTick===undefined;
+  state.schemaVersion=2;
+  state.worldTick=legacy?seed.tick??base.tick:seed.worldTick??base.worldTick;
+  state.timePolicy=legacy?'normal':seed.timePolicy??base.timePolicy;
+  state.slowMotionRemainingTicks=legacy?0:seed.slowMotionRemainingTicks??base.slowMotionRemainingTicks;
+  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;state.attackSelectionWorldOffset=legacy?0:seed.attackSelectionWorldOffset??0;
+  if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
+  state.worldTimeScale=state.timePolicy==='paused'?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
+  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues??[]).map(cue=>({...cue,worldTimeSeconds:cue.worldTimeSeconds??cue.tick/60}));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
 }
 export function makeActor(id:ActorId,species:string,allegiance:CombatActor['allegiance'],position:Vec3,large:boolean,aerial:boolean,vitality:number,archetypeId:ActorId=id):CombatActor{
   const idle=ACTION_CLIPS[`${archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!;
@@ -1154,8 +1223,8 @@ function directionFromMove(move:Vec3):EvasionDirection{
   if(Math.abs(x)>Math.abs(z))return x<0?'left':'right';
   return z>0?'forward':'back';
 }
-function resolveProfile(direction:EvasionDirection,affordances:readonly {kind:string;bounds:Rect}[],position:Vec3,hazards:readonly LiveHazard[],tick:number):EvasionProfile{
-  const nearby=hazards.find(h=>tick<h.activeUntil&&distance2(position,h.origin)<4.5);
+function resolveProfile(direction:EvasionDirection,affordances:readonly {kind:string;bounds:Rect}[],position:Vec3,hazards:readonly LiveHazard[],worldTick:number):EvasionProfile{
+  const nearby=hazards.find(h=>worldTick<h.activeUntil&&distance2(position,h.origin)<4.5);
   if(nearby?.kind==='wave'&&affordances.some(a=>a.kind==='staff-vault'&&pointInRect(position,a.bounds)))return EVASION_PROFILES.staff_vault;
   if(nearby?.kind==='sweep'&&affordances.some(a=>a.kind==='low-slide'&&pointInRect(position,a.bounds)))return EVASION_PROFILES.low_slide;
   if(direction==='forward-left')return EVASION_PROFILES.forward_left_dive_roll;
@@ -1168,6 +1237,7 @@ function resolveProfile(direction:EvasionDirection,affordances:readonly {kind:st
   if(direction==='right')return EVASION_PROFILES.quick_step_right;
   return direction==='forward'?EVASION_PROFILES.forward_shoulder_roll:EVASION_PROFILES.back_handspring;
 }
+function shiftDeadline(deadline:number,offset:number):number{return deadline===0?0:deadline+offset;}
 function pointInRect(p:Vec3,r:Rect):boolean{return p.x>=r.minX&&p.x<=r.maxX&&p.z>=r.minZ&&p.z<=r.maxZ;}
 function profileVector(id:EvasionProfileId,direction:EvasionDirection,facing:Vec3,basis?:CameraBasis):Vec3{
   const right=basis?.right??vec(facing.z,0,-facing.x);

@@ -91,7 +91,7 @@ export function companionCommand(engine: EngineState, id: CompanionId, command: 
       actor.targetId = targetId;
       actor.actionId = id + '-' + definition.ability as never;
       actor.phase = 'anticipation';
-      actor.actionStartedTick = engine.tick;
+      actor.actionStartedTick = engine.worldTick;
       return true;
     }
     const target = targetId ?? engine.targetId ?? (id === 'asha' || id === 'solkar' ? engine.encounter?.bossId as ActorId | undefined : undefined);
@@ -121,7 +121,7 @@ function issueReady(engine: EngineState, id: CompanionId, mode: CompanionSlotSta
   actor.targetId = resolvedTargetId;
   const ability = COMPANION_ROSTER.find(companion => companion.id === id)!.ability;
   actor.actionId = special ? `${id}-${ability}` as never : `${id}-${mode}` as never;
-  actor.phase = 'anticipation'; actor.actionStartedTick = engine.tick;
+  actor.phase = 'anticipation'; actor.actionStartedTick = engine.worldTick;
   return true;
 }
 
@@ -160,12 +160,12 @@ function activeCompanions(state: CompanionRosterState): CompanionId[] {
 function applyCompanionSupport(engine: EngineState, actor: CombatActor, slot: CompanionSlotState): void {
   if (slot.mode !== 'focus' && slot.mode !== 'defend' && slot.mode !== 'distract' && slot.mode !== 'search') return;
   const target = slot.targetId ? findAvailableActorByReference(engine, slot.targetId) : undefined;
-  if (!target || distance2(actor.position, target.position) > 2.3 || actor.recoveringUntil > engine.tick) return;
+  if (!target || distance2(actor.position, target.position) > 2.3 || actor.recoveringUntil > engine.worldTick) return;
     if (actor.id === 'koro' && slot.mode !== 'search' && target.allegiance === 'hostile' && target.phase !== 'anticipation') return;
   if (actor.id === 'asha' && slot.mode === 'defend' && target.id === engine.playerId) {
     target.invulnerableUntil = Math.max(target.invulnerableUntil, engine.tick + 6);
     engine.events.push({ id: `${engine.runId}:companion-asha-defend:${engine.tick}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Charge Block' });
-    actor.recoveringUntil = engine.tick + 45;
+    actor.recoveringUntil = engine.worldTick + 45;
     actor.phase = 'recovery';
     return;
   }
@@ -173,11 +173,11 @@ function applyCompanionSupport(engine: EngineState, actor: CombatActor, slot: Co
     engine.events.push({ id: `${engine.runId}:companion-search:${engine.tick}:${actor.id}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Track' });
   } else if (actor.id === 'vara') {
     engine.events.push({ id: `${engine.runId}:companion-mark:${engine.tick}:${target.id}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Mark Weakness' });
-  } else if (actor.id === 'koro' && target.allegiance === 'hostile' && target.phase === 'anticipation' && target.staggerUntil < engine.tick) {
-    target.staggerUntil = engine.tick + 6;
+  } else if (actor.id === 'koro' && target.allegiance === 'hostile' && target.phase === 'anticipation' && target.staggerUntil < engine.worldTick) {
+    target.staggerUntil = engine.worldTick + 6;
     engine.events.push({ id: `${engine.runId}:companion-koro:${engine.tick}:${target.id}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Throw' });
-  } else if (actor.id === 'asha' && target.id === engine.encounter?.bossId && target.phase === 'anticipation' && target.staggerUntil < engine.tick) {
-    target.staggerUntil = engine.tick + 12;
+  } else if (actor.id === 'asha' && target.id === engine.encounter?.bossId && target.phase === 'anticipation' && target.staggerUntil < engine.worldTick) {
+    target.staggerUntil = engine.worldTick + 12;
     engine.events.push({ id: `${engine.runId}:companion-asha:${engine.tick}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Charge Block' });
   } else if (actor.id === 'sable' && target.allegiance === 'hostile') {
     target.ferocity = Math.max(0, (target.ferocity ?? 100) - 3);
@@ -185,9 +185,9 @@ function applyCompanionSupport(engine: EngineState, actor: CombatActor, slot: Co
   } else if (actor.id === 'nyra' && target.allegiance === 'hostile') {
     const counterOpen = engine.counterUntil > engine.tick && (engine.targetId === target.id || engine.lastResolvedTargetId === target.id);
     if (counterOpen) {
-      target.staggerUntil = Math.max(target.staggerUntil, engine.tick + 12);
-    } else if (target.phase === 'recovery' || target.staggerUntil > engine.tick) {
-      target.staggerUntil = Math.max(target.staggerUntil, engine.tick + 6);
+      target.staggerUntil = Math.max(target.staggerUntil, engine.worldTick + 12);
+    } else if (target.phase === 'recovery' || target.staggerUntil > engine.worldTick) {
+      target.staggerUntil = Math.max(target.staggerUntil, engine.worldTick + 6);
     } else {
       return;
     }
@@ -197,10 +197,10 @@ function applyCompanionSupport(engine: EngineState, actor: CombatActor, slot: Co
       message: counterOpen ? 'Ambush Counter' : 'Ambush',
     });
   } else if (actor.id === 'solkar' && target.id === engine.encounter?.bossId && target.phase === 'anticipation') {
-    target.staggerUntil = Math.max(target.staggerUntil, engine.tick + 6);
+    target.staggerUntil = Math.max(target.staggerUntil, engine.worldTick + 6);
     engine.events.push({ id: `${engine.runId}:companion-solkar:${engine.tick}`, tick: engine.tick, kind: 'companion', actorId: actor.id, targetId: target.id, message: 'Rally' });
   }
-  actor.recoveringUntil = engine.tick + 45;
+  actor.recoveringUntil = engine.worldTick + 45;
   actor.phase = 'recovery';
 }
 
@@ -218,7 +218,7 @@ function moveWithNavigation(engine: EngineState, actor: CombatActor, slot: Compa
       const dx = goal.x - actor.position.x, dy = goal.y - actor.position.y, dz = goal.z - actor.position.z;
       const distance = Math.hypot(dx, dy, dz);
       if (distance < FOLLOW_DISTANCE) { slot.pathFallback = false; return; }
-      const stride = Math.min(0.055, distance);
+      const stride = Math.min(0.055, distance) * engine.worldTimeScale;
       const next = moveAerialCircle(engine.arena, actor.position, { x: dx / distance * stride, y: dy / distance * stride, z: dz / distance * stride }, COMPANION_RADIUS, actor.collisionHeight);
       slot.pathFallback = distance2(actor.position, next) < 1e-6 && Math.abs(actor.position.y - next.y) < 1e-6;
       if (!slot.pathFallback) actor.position = next;
@@ -231,7 +231,7 @@ function moveWithNavigation(engine: EngineState, actor: CombatActor, slot: Compa
   if (!route) return;
   const dx = route.x - actor.position.x, dz = route.z - actor.position.z, distance = Math.hypot(dx, dz);
   if (distance < 0.08) return;
-  const stride = Math.min(0.055, distance);
+  const stride = Math.min(0.055, distance) * engine.worldTimeScale;
   const next = moveCircle(engine.arena, actor.position, { x: dx / distance * stride, y: 0, z: dz / distance * stride }, COMPANION_RADIUS, actor.collisionHeight);
   if (distance2(actor.position, next) > 1e-6) actor.position = next;
   else slot.pathFallback = true;
@@ -296,7 +296,7 @@ function roleOf(state: CompanionRosterState, id: CompanionId): 'combat' | 'utili
   return null;
 }
 function isPossessed(engine: EngineState, slot: CompanionSlotState, actor: CombatActor): boolean {
-  return slot.possessed || actor.possessed || actor.possessedUntil > engine.tick;
+  return slot.possessed || actor.possessed || actor.possessedUntil > engine.worldTick;
 }
 function findActorByReference(engine: EngineState, id: ActorId): CombatActor | undefined {
   const exact = engine.actors.find(actor => actor.id === id);
@@ -320,7 +320,7 @@ export function configureCompanionSlots(engine: EngineState, slots: { combat?: C
   for (const id of selected) {
     if (!COMPANION_ROSTER.some(companion => companion.id === id)) return false;
     const actor = findActorByReference(engine, id);
-    if (!actor || !actor.visible || actor.downed || actor.possessed || actor.possessedUntil > engine.tick || engine.companionState.slots[id]?.possessed) return false;
+    if (!actor || !actor.visible || actor.downed || actor.possessed || actor.possessedUntil > engine.worldTick || engine.companionState.slots[id]?.possessed) return false;
   }
   const state = engine.companionState;
   const next: Partial<Record<CompanionId, CompanionSlotState>> = {};

@@ -11,7 +11,7 @@ function actor(id: string, position: Vec3): CombatActor {
 }
 function engine(): EngineState {
   return {
-    tick: 12, actors: [actor('koro', { x: -2, y: 0, z: 1 }), actor('asha', { x: 3, y: 2, z: -1 })],
+    tick: 12, worldTick: 12, worldTimeScale: 1, actors: [actor('koro', { x: -2, y: 0, z: 1 }), actor('asha', { x: 3, y: 2, z: -1 })],
     companionState: createCompanionState({ utility: 'koro' }), companionSlots: { utility: 'koro' },
   } as unknown as EngineState;
 }

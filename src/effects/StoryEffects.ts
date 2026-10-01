@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import type { WorldClockSnapshot } from '../game/contracts.js';
 import type { CueCancellationReason, CueShape, StoryCue } from './story-cues.js';
 
 export interface StoryEffectsOptions {
@@ -16,7 +17,7 @@ interface EffectSlot {
   active: boolean;
   essential: boolean;
   priority: number;
-  startTick: number;
+  startWorldTimeSeconds: number;
   durationTicks: number;
   scopeId: string | undefined;
   instanceId: string;
@@ -57,6 +58,7 @@ export class StoryEffects {
   private reduced: boolean;
   private destroyed = false;
   private tick = 0;
+  private worldTimeSeconds = 0;
   private readonly socket?: StoryEffectsOptions['resolveSocket'];
 
   constructor(options: StoryEffectsOptions) {
@@ -80,7 +82,7 @@ export class StoryEffects {
       const mesh = new THREE.Mesh(this.geometries[i % this.geometries.length]!, material);
       mesh.visible = false;
       this.group.add(mesh);
-      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, active: false, essential: false, priority: 0, startTick: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
+      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, active: false, essential: false, priority: 0, startWorldTimeSeconds: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
     }
     options.scene.add(this.group);
   }
@@ -103,7 +105,7 @@ export class StoryEffects {
     slot.active = true;
     slot.essential = priority === 3;
     slot.priority = priority;
-    slot.startTick = cue.tick;
+    slot.startWorldTimeSeconds = cue.worldTimeSeconds;
     slot.durationTicks = Math.max(1, Math.round(cue.durationTicks ?? (priority === 3 ? 42 : 36)));
     slot.scopeId = cue.scopeId;
     slot.instanceId = cue.instanceId;
@@ -131,14 +133,15 @@ export class StoryEffects {
     return accepted;
   }
 
-  /** VFX lifetimes advance only with the authoritative fixed-step simulation clock. */
-  update(simulationTick: number): void {
+  /** Age VFX against engine-owned scaled world time; simulation tick remains the event identity clock. */
+  update(worldClock: WorldClockSnapshot): void {
     if (this.destroyed) return;
-    this.tick = simulationTick;
+    this.tick = worldClock.simulationTick;
+    this.worldTimeSeconds = worldClock.worldTimeSeconds;
     for (const slot of this.slots) {
       if (!slot.active) continue;
-      const elapsedTicks = Math.max(0, simulationTick - slot.startTick);
-      const t = Math.min(1, elapsedTicks / slot.durationTicks);
+      const elapsedWorldSeconds = Math.max(0, this.worldTimeSeconds - slot.startWorldTimeSeconds);
+      const t = Math.min(1, elapsedWorldSeconds / (slot.durationTicks / 60));
       this.animate(slot, t);
       if (t >= 1) this.release(slot);
     }
@@ -191,8 +194,8 @@ export class StoryEffects {
     if (priority === 0) return undefined;
     let victim: EffectSlot | undefined;
     for (const slot of this.slots) {
-      const candidateAge = (this.tick - slot.startTick) / slot.durationTicks;
-      const victimAge = victim ? (this.tick - victim.startTick) / victim.durationTicks : 0;
+      const candidateAge = Math.max(0, this.worldTimeSeconds - slot.startWorldTimeSeconds) * 60 / slot.durationTicks;
+      const victimAge = victim ? Math.max(0, this.worldTimeSeconds - victim.startWorldTimeSeconds) * 60 / victim.durationTicks : 0;
       if (!slot.essential && slot.priority < priority && (!victim || slot.priority < victim.priority || candidateAge > victimAge)) victim = slot;
     }
     if (victim) this.release(victim);

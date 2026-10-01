@@ -18,7 +18,7 @@ function actor(id: string, position: Vec3, allegiance: string): CombatActor {
 function engine(): EngineState {
   const slots = { utility: 'nyra' as CompanionId };
   return {
-    tick: 1, runId: 'nyra-test', playerId: 'aren', targetId: 'hostile', counterUntil: 0,
+    tick: 1, worldTick: 1, worldTimeScale: 1, runId: 'nyra-test', playerId: 'aren', targetId: 'hostile', counterUntil: 0,
     worldFacts: {}, actors: [actor('aren', { x: 0, y: 0, z: 0 }, 'player'), actor('nyra', { x: 0, y: 0, z: 0 }, 'ally'), actor('hostile', { x: 0, y: 0, z: 0 }, 'hostile')],
     arena: { bounds, groundY: 0, surfaces: [], colliders: [], routes: [], obstacles: [] },
     companionState: createCompanionState(slots), companionSlots: slots, movableObjects: [], events: [], traversalGates: [],
@@ -59,6 +59,7 @@ describe('Nyra authored ambush support', () => {
     expect(state.events.some(event => event.actorId === 'nyra')).toBe(false);
 
     state.tick = 2;
+    state.worldTick = 2;
     state.counterUntil = 10;
     state.targetId = 'other' as ActorId;
     state.companionState.slots.nyra!.readyAt = 0;
@@ -70,6 +71,7 @@ describe('Nyra authored ambush support', () => {
 
     state.targetId = target.id;
     state.tick = 3;
+    state.worldTick = 3;
     state.companionState.tokens.available = 1;
     state.companionState.slots.nyra!.readyAt = 0;
     expect(companionCommand(state, 'nyra', 'special', target.id)).toBe(true);
