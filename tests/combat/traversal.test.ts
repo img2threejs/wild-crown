@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
 import type { RegionRouteDefinition } from '../../src/game/contracts.js';
 import { REGIONS } from '../../src/content/campaign.js';
-import { isSupportedCapsulePose } from '../../src/game/combat/geometry.js';
+import { distance2, isSupportedCapsulePose, moveCircle } from '../../src/game/combat/geometry.js';
 
 const v = (x: number, y = 0, z = 0) => ({ x, y, z });
 const route: RegionRouteDefinition = { id: 'test-vault', from: v(0), to: v(4), anchors: [v(0, 1.2), v(4, 1.2)], destinationRegionId: 'greenwake', kind: 'path', traversalActionId: 'aren-staff-vault', traversal: { kind: 'vault', durationTicks: 60, startRadius: 1 }, colliderIds: [], traversalEvent: 'test-vaulted' };
@@ -140,5 +140,32 @@ describe('contextual traversal lifetime', () => {
       expect(e.snapshotState().regionId).toBe(region.id);
     }
     expect(kinds.sort()).toEqual(['low-ledge', 'slide', 'swing', 'vault']);
+  });
+  it('uses a bounded source-face ledge rather than an airborne shortcut over a walkable ramp', () => {
+    const region = REGIONS.find(candidate => candidate.traversalArcs.some(arc => arc.traversal?.kind === 'low-ledge'))!;
+    const arc = region.traversalArcs.find(candidate => candidate.traversal?.kind === 'low-ledge')!;
+    const e = new CombatEngine(); e.loadRegion({ regionId: region.id, runId: 'ledge-semantics', presentActorIds: [], playerPosition: arc.from });
+    const arena = e.snapshotState().arena;
+    const walked = moveCircle(arena, arc.from, { x: arc.to.x - arc.from.x, y: 0, z: arc.to.z - arc.from.z }, .42, 1.6);
+    expect(Math.hypot(walked.x - arc.to.x, walked.y - arc.to.y, walked.z - arc.to.z)).toBeGreaterThan(.5);
+    const ledge = arc.traversal?.ledge;
+    expect(ledge).toBeDefined();
+    expect(arc.to.y - arc.from.y).toBe(ledge!.riseMeters);
+    expect(distance2(arc.from, arc.to)).toBeLessThanOrEqual(ledge!.maxCrossingMeters);
+    const face = arena.colliders.find(collider => collider.id === ledge!.faceColliderId)!;
+    expect(face.blocksMovement).toBe(true);
+    expect(face.from.y + face.halfExtents!.y).toBeCloseTo(arc.to.y);
+    e.fixedStep(input({ interactPressed: true, traversalId: arc.id }));
+    for (let tick = 0; tick < arc.traversal!.durationTicks; tick++) {
+      e.fixedStep();
+      expect(player(e).position.y).toBeLessThanOrEqual(arc.to.y + .15);
+      expect(distance2(player(e).position, arc.from)).toBeLessThanOrEqual(ledge!.maxCrossingMeters);
+    }
+    expect(player(e).position).toEqual(arc.to);
+    const invalid = { ...arc, anchors: [arc.from, { ...arc.to, y: arc.to.y + 2.5 }] };
+    e.loadRegion({ regionId: region.id, runId: 'ledge-semantics', presentActorIds: [], playerPosition: arc.from });
+    e.setTraversalGates([invalid]); e.fixedStep(input({ interactPressed: true, traversalId: arc.id }));
+    expect(e.isTraversing).toBe(false);
+    expect(player(e).position).toEqual(arc.from);
   });
 });
