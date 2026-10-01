@@ -8,10 +8,10 @@ The approved production plan has P0-P13, six major bosses, five macro-regions pl
 
 ## Models and review
 
-- Execution: configured `coder` or `implementer` agent resolving to `openai-codex/gpt-6-luna`.
-- Verification execution: configured `tester` resolving to Luna.
-- Review and acceptance: Astra. Review actual code and evidence in two stages: spec compliance, then code quality/state lifetime/regression risk.
-- Do not use generic `task` for coding: it is configured to a different model. Do not silently fall back if the requested execution model cannot run.
+- Execution: configured `implementer` resolving to `openai-codex/gpt-6.1-sol`, explicitly approved by the user after the Luna routing mismatch. Use `coder` only after confirming it resolves to the same approved model.
+- Verification execution: main or a configured `tester` whose resolved model is verified before work; never silently substitute a different model.
+- Review and acceptance: configured Astra reviewer (`openai-codex/gpt-6-astra`). Review actual code and evidence in two stages: spec compliance, then code quality/state lifetime/regression risk. Main retains planning and publication decisions.
+- The current Sol/Astra approval supersedes the earlier Luna/Astra preference only; do not alter global model settings or credentials. Inspect actual resolved-model metadata for every dispatched role and pause unexpected substitutions.
 - Do not change global model settings or credentials.
 
 ## Git workflow
