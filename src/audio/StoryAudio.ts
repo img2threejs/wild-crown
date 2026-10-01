@@ -1,6 +1,6 @@
 import type { AudioListener } from 'three';
 import type { GameSettings, Vec3 } from '../game/contracts.js';
-import type { CueCancellationReason, StoryCue } from '../effects/story-cues.js';
+import { dangerFamily, type CueCancellationReason, type StoryCue } from '../effects/story-cues.js';
 
 export type AudioBusName = 'master' | 'music' | 'effects' | 'ambience' | 'dialogue';
 export interface StoryAudioOptions {
@@ -17,6 +17,7 @@ export interface AudioListenerPose { readonly position: Vec3; readonly forward: 
 interface ActiveVoice { readonly id: string; readonly sources: readonly AudioScheduledSourceNode[]; readonly scopeId?: string; readonly cleanup: readonly AudioNode[] }
 
 const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
+  cancel: [],
   anticipation: [0, 7], commit: [-5, 0], hit: [-12], landing: [-7], 'perfect-dodge': [7, 12],
   heartroot: [0, 7, 12], tether: [0, 5, 12], cleanse: [0, 4, 7], bond: [0, 5, 9], dominion: [-12, -5, 2],
   restoration: [0, 4, 7, 11], possession: [-12, -9], phase: [-5, 0, 7], ending: [0, 4, 7, 12],
@@ -26,6 +27,7 @@ const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
   grovebreak: [-12, -5, 0], march: [-7, 0], reunion: [0, 5, 9], heartbeat: [0],
 };
 const KIND_BUS: Readonly<Record<StoryCue['kind'], AudioBusName>> = {
+  cancel: 'effects',
   anticipation: 'effects', commit: 'effects', hit: 'effects', landing: 'effects', 'perfect-dodge': 'effects',
   heartroot: 'music', tether: 'effects', cleanse: 'effects', bond: 'effects', dominion: 'effects', restoration: 'music',
   possession: 'effects', phase: 'music', ending: 'music', 'ending-living-pact': 'music', 'ending-dominion': 'music', 'ending-severance': 'music',
@@ -35,6 +37,8 @@ const KIND_BUS: Readonly<Record<StoryCue['kind'], AudioBusName>> = {
 };
 const MIDI_C4 = 60;
 const A4 = 440;
+const DANGER_NOTES = { strike: [0], sweep: [0, 3, 7], wave: [-12, -7], area: [0, 4, 7, 12], projectile: [12, 19] } as const;
+const DANGER_WAVEFORMS = { strike: 'triangle', sweep: 'sawtooth', wave: 'sine', area: 'triangle', projectile: 'square' } as const;
 
 /** Browser-unlocked, procedurally authored score and SFX. No recorded voice assets are implied. */
 export class StoryAudio {
@@ -106,7 +110,7 @@ export class StoryAudio {
   }
 
   play(cue: StoryCue, sourcePosition?: Vec3): boolean {
-    if (this.disposed || !this.context || this.context.state !== 'running' || this.seen.has(cue.instanceId)) return false;
+    if (this.disposed || cue.kind === 'cancel' || !this.context || this.context.state !== 'running' || this.seen.has(cue.instanceId)) return false;
     this.seen.add(cue.instanceId);
     this.seenOrder.push(cue.instanceId);
     if (this.seenOrder.length > 512) this.seen.delete(this.seenOrder.shift()!);
@@ -114,7 +118,9 @@ export class StoryAudio {
     if (cue.kind === 'grovebreak') this.restoration = Math.max(0, this.restoration - 0.12);
     if (cue.kind === 'heartroot' || cue.kind === 'bond' || cue.kind === 'heartbeat') this.bond = Math.min(1, this.bond + 0.2);
     if (cue.kind === 'dominion' || cue.kind === 'ending-dominion') this.dominion = Math.min(1, this.dominion + 0.2);
-    const notes = this.arrangement(cue.kind);
+    const family = dangerFamily(cue);
+    const phasePitch = cue.phase === 'commit' ? -5 : cue.phase === 'hit' ? -12 : 0;
+    const notes = family ? DANGER_NOTES[family].map(step => MIDI_C4 + step + phasePitch) : this.arrangement(cue.kind);
     const position = sourcePosition ?? cue.position ?? cue.from;
     const voice = this.schedule(cue, notes, KIND_BUS[cue.kind], position);
     this.voices.push(voice);
@@ -255,11 +261,12 @@ export class StoryAudio {
     }
     let voice: ActiveVoice | undefined;
     let remaining = notes.length;
+    const family = dangerFamily(cue);
     for (let i = 0; i < notes.length; i++) {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
       const frequency = this.frequency(notes[i]!, cue.kind);
-      oscillator.type = this.waveform(cue.kind, i);
+      oscillator.type = family ? DANGER_WAVEFORMS[family] : this.waveform(cue.kind, i);
       oscillator.frequency.setValueAtTime(frequency, at);
       if (cue.kind === 'anticipation' || cue.kind === 'phase' || cue.kind === 'ending') {
         oscillator.frequency.exponentialRampToValueAtTime(Math.max(55, frequency * (cue.phase === 'anticipation' ? 0.82 : 1.04)), at + 0.24);

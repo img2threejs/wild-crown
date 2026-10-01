@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { WorldClockSnapshot } from '../game/contracts.js';
-import type { CueCancellationReason, CueShape, StoryCue } from './story-cues.js';
+import { dangerFamily, type CueCancellationReason, type CueShape, type StoryCue } from './story-cues.js';
 
 export interface StoryEffectsOptions {
   readonly scene: THREE.Scene;
@@ -14,6 +14,9 @@ interface EffectSlot {
   readonly material: THREE.MeshBasicMaterial;
   readonly sectorGeometry: THREE.BufferGeometry;
   readonly sectorPositions: Float32Array;
+  readonly dangerGeometry: THREE.BufferGeometry;
+  readonly dangerPositions: Float32Array;
+  family: ReturnType<typeof dangerFamily>;
   active: boolean;
   essential: boolean;
   priority: number;
@@ -33,6 +36,7 @@ interface EffectSlot {
 }
 
 const COLORS: Readonly<Record<StoryCue['kind'], number>> = {
+  cancel: 0xffffff,
   anticipation: 0xbfa06e, commit: 0xc9a568, hit: 0x9c6949, landing: 0x816f55,
   heartroot: 0xc1a66d, 'perfect-dodge': 0xd1c29b, tether: 0x9dbc99, cleanse: 0xb7c69e, bond: 0xa5c3a4,
   dominion: 0x78573c, restoration: 0x9cb890, 'restoration-water': 0x83a9a1, 'restoration-roots': 0x997c5b,
@@ -79,10 +83,13 @@ export class StoryEffects {
       const sectorGeometry = new THREE.BufferGeometry();
       sectorGeometry.setAttribute('position', new THREE.BufferAttribute(sectorPositions, 3));
       sectorGeometry.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(SECTOR_SEGMENTS * 6 * 3), 3));
+      const dangerPositions = new Float32Array(64 * 6 * 3);
+      const dangerGeometry = new THREE.BufferGeometry();
+      dangerGeometry.setAttribute('position', new THREE.BufferAttribute(dangerPositions, 3));
       const mesh = new THREE.Mesh(this.geometries[i % this.geometries.length]!, material);
       mesh.visible = false;
       this.group.add(mesh);
-      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, active: false, essential: false, priority: 0, startWorldTimeSeconds: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
+      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, dangerGeometry, dangerPositions, family: undefined, active: false, essential: false, priority: 0, startWorldTimeSeconds: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
     }
     options.scene.add(this.group);
   }
@@ -90,9 +97,13 @@ export class StoryEffects {
   setReducedEffects(reduced: boolean): void { this.reduced = reduced; }
 
   emit(cue: StoryCue): boolean {
-    if (this.destroyed || this.seen.has(cue.instanceId)) return false;
+    if (this.destroyed || cue.kind === 'cancel' || this.seen.has(cue.instanceId)) return false;
     const shape = cue.shape ?? this.defaultShape(cue.kind);
     const sectorRadians = cue.footprint?.sectorRadians;
+    const family = dangerFamily(cue);
+    if (family && (!cue.position || !cue.footprint || !Number.isFinite(cue.footprint.width) || !Number.isFinite(cue.footprint.length) || cue.footprint.width <= 0 || cue.footprint.length <= 0 || !Number.isFinite(cue.durationTicks) || cue.durationTicks! <= 0)) {
+      throw new RangeError('Danger cues require engine-authored position, positive footprint dimensions and phase duration.');
+    }
     if (shape === 'sector' && (!Number.isFinite(sectorRadians) || sectorRadians! <= 0 || sectorRadians! > Math.PI * 2)) {
       throw new RangeError('Sector cues require authored footprint.sectorRadians in (0, 2π].');
     }
@@ -106,14 +117,15 @@ export class StoryEffects {
     slot.essential = priority === 3;
     slot.priority = priority;
     slot.startWorldTimeSeconds = cue.worldTimeSeconds;
-    slot.durationTicks = Math.max(1, Math.round(cue.durationTicks ?? (priority === 3 ? 42 : 36)));
+    slot.durationTicks = family ? cue.durationTicks! : Math.max(1, Math.round(cue.durationTicks ?? (priority === 3 ? 42 : 36)));
     slot.scopeId = cue.scopeId;
     slot.instanceId = cue.instanceId;
     slot.kind = cue.kind;
     slot.phase = cue.phase;
     slot.shape = shape;
-    slot.width = Math.max(0.08, cue.footprint?.width ?? (priority === 3 ? 1.6 : 1.1));
-    slot.length = Math.max(0.08, cue.footprint?.length ?? slot.width);
+    slot.family = family;
+    slot.width = family ? cue.footprint!.width : Math.max(0.08, cue.footprint?.width ?? (priority === 3 ? 1.6 : 1.1));
+    slot.length = family ? cue.footprint!.length : Math.max(0.08, cue.footprint?.length ?? slot.width);
     slot.angle = cue.footprint?.angleRadians ?? 0;
     slot.sectorRadians = sectorRadians ?? 0;
     const fallback = cue.actorId ? this.socket?.(cue.actorId, 'root')?.getWorldPosition(slot.start) : undefined;
@@ -165,7 +177,7 @@ export class StoryEffects {
     this.destroyed = true;
     this.group.removeFromParent();
     for (const geometry of this.geometries) geometry.dispose();
-    for (const slot of this.slots) { slot.material.dispose(); slot.sectorGeometry.dispose(); }
+    for (const slot of this.slots) { slot.material.dispose(); slot.sectorGeometry.dispose(); slot.dangerGeometry.dispose(); }
     this.geometries.length = 0;
     this.slots.length = 0;
     this.seen.clear();
@@ -236,11 +248,20 @@ export class StoryEffects {
     mesh.rotation.set(0, 0, 0);
     mesh.position.copy(slot.start);
     mesh.scale.set(1, 1, 1);
-    if (slot.shape === 'sector') {
-      this.writeSectorGeometry(slot);
-      mesh.geometry = slot.sectorGeometry;
+    if (slot.family && slot.shape !== 'sector') {
+      this.writeDangerGeometry(slot);
+      mesh.geometry = slot.dangerGeometry;
       mesh.rotation.set(0, slot.angle, 0);
-      mesh.scale.set(slot.length / 2, 1, slot.length / 2);
+    } else if (slot.shape === 'sector') {
+      if (slot.family) {
+        this.writeDangerGeometry(slot);
+        mesh.geometry = slot.dangerGeometry;
+      } else {
+        this.writeSectorGeometry(slot);
+        mesh.geometry = slot.sectorGeometry;
+        mesh.scale.set(slot.length / 2, 1, slot.length / 2);
+      }
+      mesh.rotation.set(0, slot.angle, 0);
     } else if (slot.shape === 'arc') {
       mesh.geometry = this.geometries[1]!;
       mesh.rotation.set(-Math.PI / 2, 0, slot.angle);
@@ -268,6 +289,73 @@ export class StoryEffects {
       mesh.rotation.set(-Math.PI / 2, 0, slot.angle);
       mesh.scale.set(slot.width / 2, slot.length / 2, 1);
     }
+  }
+
+  /** Ground outlines match collision footprints; internal glyphs distinguish families without color. */
+  private writeDangerGeometry(slot: EffectSlot): void {
+    const points = slot.dangerPositions;
+    points.fill(0);
+    const w = slot.width / 2;
+    const l = slot.length / 2;
+    const thickness = Math.min(slot.width, slot.length) * (slot.phase === 'anticipation' ? 0.025 : slot.phase === 'commit' ? 0.045 : 0.065);
+    let offset = 0;
+    if (slot.shape === 'sector') {
+      const radius = slot.length / 2;
+      const inner = radius - thickness;
+      const half = slot.sectorRadians / 2;
+      for (let i = 0; i < SECTOR_SEGMENTS; i++) {
+        const a = -half + i * slot.sectorRadians / SECTOR_SEGMENTS;
+        const b = -half + (i + 1) * slot.sectorRadians / SECTOR_SEGMENTS;
+        offset = this.writeDangerQuad(points, offset, Math.sin(a) * radius, Math.cos(a) * radius, Math.sin(b) * radius, Math.cos(b) * radius, Math.sin(a) * inner, Math.cos(a) * inner, Math.sin(b) * inner, Math.cos(b) * inner);
+      }
+      for (let edge = 0; edge < 2; edge++) {
+        const a = edge === 0 ? -half : half;
+        const side = edge === 0 ? 1 : -1;
+        offset = this.writeDangerQuad(points, offset, 0, 0, Math.sin(a) * radius, Math.cos(a) * radius, 0, 0, Math.sin(a) * inner + Math.cos(a) * thickness * side, Math.cos(a) * inner - Math.sin(a) * thickness * side);
+      }
+    } else if (slot.family === 'strike' || slot.family === 'projectile') {
+      for (let i = 0; i < 32; i++) {
+        const a = i * Math.PI / 16; const b = (i + 1) * Math.PI / 16;
+        offset = this.writeDangerQuad(points, offset, Math.cos(a) * w, Math.sin(a) * l, Math.cos(b) * w, Math.sin(b) * l, Math.cos(a) * (w - thickness), Math.sin(a) * (l - thickness), Math.cos(b) * (w - thickness), Math.sin(b) * (l - thickness));
+      }
+    } else {
+      offset = this.writeDangerQuad(points, offset, -w, -l, w, -l, -w, -l + thickness, w, -l + thickness);
+      offset = this.writeDangerQuad(points, offset, -w, l, w, l, -w, l - thickness, w, l - thickness);
+      offset = this.writeDangerQuad(points, offset, -w, -l, -w, l, -w + thickness, -l, -w + thickness, l);
+      offset = this.writeDangerQuad(points, offset, w, -l, w, l, w - thickness, -l, w - thickness, l);
+    }
+    if (slot.family === 'strike') {
+      offset = this.writeDangerQuad(points, offset, -w * 0.35, -thickness / 2, w * 0.35, -thickness / 2, -w * 0.35, thickness / 2, w * 0.35, thickness / 2);
+      offset = this.writeDangerQuad(points, offset, -thickness / 2, -l * 0.35, -thickness / 2, l * 0.35, thickness / 2, -l * 0.35, thickness / 2, l * 0.35);
+    } else if (slot.family === 'wave') {
+      for (let band = 0; band < 2; band++) {
+        const z = band === 0 ? -l * 0.35 : l * 0.35;
+        offset = this.writeDangerQuad(points, offset, -w * 0.65, z, w * 0.65, z, -w * 0.65, z + thickness, w * 0.65, z + thickness);
+      }
+    } else if (slot.family === 'projectile') {
+      offset = this.writeDangerQuad(points, offset, -w * 0.4, -l * 0.2, 0, l * 0.35, -w * 0.4 + thickness, -l * 0.2, thickness, l * 0.35);
+      offset = this.writeDangerQuad(points, offset, 0, l * 0.35, w * 0.4, -l * 0.2, -thickness, l * 0.35, w * 0.4 - thickness, -l * 0.2);
+    } else if (slot.shape !== 'sector') {
+      const aperture = slot.family === 'sweep' ? Math.PI : Math.PI * 2;
+      for (let i = 0; i < 16; i++) {
+        const a = i * aperture / 16; const b = (i + 1) * aperture / 16;
+        offset = this.writeDangerQuad(points, offset, Math.cos(a) * w * 0.65, Math.sin(a) * l * 0.65, Math.cos(b) * w * 0.65, Math.sin(b) * l * 0.65, Math.cos(a) * (w * 0.65 - thickness), Math.sin(a) * (l * 0.65 - thickness), Math.cos(b) * (w * 0.65 - thickness), Math.sin(b) * (l * 0.65 - thickness));
+      }
+    }
+    slot.dangerGeometry.setDrawRange(0, offset / 3);
+    (slot.dangerGeometry.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
+    slot.dangerGeometry.computeBoundingBox();
+    slot.dangerGeometry.computeBoundingSphere();
+  }
+
+  private writeDangerQuad(points: Float32Array, offset: number, ax: number, az: number, bx: number, bz: number, cx: number, cz: number, dx: number, dz: number): number {
+    points[offset++] = ax; points[offset++] = 0; points[offset++] = az;
+    points[offset++] = bx; points[offset++] = 0; points[offset++] = bz;
+    points[offset++] = cx; points[offset++] = 0; points[offset++] = cz;
+    points[offset++] = bx; points[offset++] = 0; points[offset++] = bz;
+    points[offset++] = dx; points[offset++] = 0; points[offset++] = dz;
+    points[offset++] = cx; points[offset++] = 0; points[offset++] = cz;
+    return offset;
   }
 
   private writeSectorGeometry(slot: EffectSlot): void {

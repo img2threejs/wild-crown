@@ -1,6 +1,8 @@
 import type { ActionId, AttackId, Vec3 } from '../game/contracts.js';
+import { ATTACKS } from '../game/combat/content.js';
 
 export type StoryCueKind =
+  | 'cancel'
   | 'anticipation' | 'commit' | 'hit' | 'landing' | 'perfect-dodge'
   | 'heartroot' | 'tether' | 'cleanse' | 'bond' | 'dominion' | 'restoration'
   | 'restoration-water' | 'restoration-roots' | 'restoration-seeds' | 'restoration-animals'
@@ -22,6 +24,7 @@ export interface StoryCue {
   readonly actorId?: string;
   readonly targetId?: string;
   readonly scopeId?: string;
+  readonly cancellationReason?: CueCancellationReason;
   readonly attackId?: AttackId;
   readonly actionId?: ActionId;
   readonly position?: Vec3;
@@ -54,3 +57,10 @@ export interface StoryCueWorldState {
 }
 
 export type CueCancellationReason = 'interrupt' | 'death' | 'unload' | 'skip' | 'load';
+
+/** Authored family identity only; geometry and phase time always come from the emitted cue. */
+export function dangerFamily(cue: StoryCue): 'strike' | 'sweep' | 'wave' | 'area' | 'projectile' | undefined {
+  if (!cue.attackId || (cue.kind !== 'anticipation' && cue.kind !== 'commit' && cue.kind !== 'hit')) return undefined;
+  const kind = ATTACKS[cue.attackId]?.hazard.kind;
+  return kind === 'cone' ? 'area' : kind;
+}
