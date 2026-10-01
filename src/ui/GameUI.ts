@@ -136,7 +136,7 @@ function gameUiSignature(viewModel: GameViewModel): string {
   const { hud, campaign, map } = viewModel;
   return JSON.stringify([
     viewModel.screen, viewModel.loading, viewModel.error,
-    [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.interaction],
+    [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction],
     viewModel.trackedObjectiveId,
     campaign && [campaign.runId, campaign.revision, campaign.chapter, campaign.chapterId, campaign.regionId, campaign.activeQuestIds, campaign.completedQuestIds, campaign.activeObjectiveIds, campaign.completedObjectiveIds, campaign.fragments, campaign.ending],
     viewModel.journal.region, viewModel.journal.quests.map(quest => [quest.id, quest.title, quest.description, quest.objectives.map(objective => [objective.id, objective.title, objective.description, objective.optional])]),
@@ -226,6 +226,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
         ${meter(playerCopy.hud.instinct, hud.instinct, 100, 'instinct', playerCopy.hud.instinct_description)}
       </section>
       ${boss ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
+      ${vm.hud.target?.weakPointExposed ? `<aside class="wc-panel wc-target-exposure" role="status"><strong>${esc(vm.hud.target.id.toString().replaceAll('-', ' ').toUpperCase())}</strong><span>WEAK POINT EXPOSED</span></aside>` : ''}
       ${objective && !boss ? `<aside class="wc-panel wc-objective"><strong>${esc(quest?.title ?? 'Current Objective')}</strong><p>${esc(objective.title)}</p></aside>` : ''}
       ${boss ? `<div class="wc-brand-mark">${esc(playerCopy.title.name)}</div>` : ''}
       ${interactionPrompt(vm)}

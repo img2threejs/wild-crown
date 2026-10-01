@@ -21,7 +21,7 @@ function makeEngine(companionIds: readonly ('vara' | 'koro' | 'asha' | 'sable' |
   const slots = { combat: companionIds.includes('asha') ? 'asha' as const : undefined, utility: companionIds.includes('koro') ? 'koro' as const : undefined, scout: companionIds.includes('vara') ? 'vara' as const : undefined };
   const companionState = createCompanionState(slots, 1);
   return {
-    tick: 0, runId: 'companion-test', playerId: 'aren', player: {}, regionId: 'greenwake', encounter: null,
+    tick: 0, worldTick: 0, worldTimeScale: 1, runId: 'companion-test', playerId: 'aren', player: {}, regionId: 'greenwake', encounter: null,
     worldFacts: {}, actors: [actor('aren', { x: 2, y: 0, z: 0 }, 'player'), ...companionIds.map(id => actor(id, { x: -2, y: 0, z: 0 }))],
     arena: arenaFromRegion(region as never), movableObjects: [], companionState, companionSlots: slots, events: [], traversalGates: [],
   } as unknown as EngineState;
@@ -51,8 +51,10 @@ describe('companion commands and grounded navigation', () => {
     expect(companionCommand(engine, 'koro', 'special', 'aren' as ActorId)).toBe(true);
     expect(engine.companionState.tokens.available).toBe(0);
     engine.tick = 75;
+    engine.worldTick = 75;
     expect(companionCommand(engine, 'asha', 'special', 'aren' as ActorId)).toBe(false);
     engine.tick = 90;
+    engine.worldTick = 90;
     stepCompanions(engine);
     expect(engine.companionState.tokens.available).toBe(1);
   });
@@ -77,17 +79,18 @@ describe('companion commands and grounded navigation', () => {
         ];
     configureCompanions(engine, { navNodes: nodes });
         const closedPosition = { ...koro.position };
-        engine.tick = 0; stepCompanions(engine);
+        engine.tick = 0; engine.worldTick = 0; stepCompanions(engine);
         expect(koro.position).toEqual(closedPosition);
         expect(engine.companionState.slots.koro?.pathFallback).toBe(true);
         engine.worldFacts = { bridge_open: true };
-    for (let tick = 0; tick < 300; tick++) { engine.tick = tick; stepCompanions(engine); }
+    for (let tick = 0; tick < 300; tick++) { engine.tick = tick; engine.worldTick = tick; stepCompanions(engine); }
     expect(koro.position.x).toBeGreaterThan(0.5);
     expect(koro.position.z).toBeGreaterThan(0);
     engine.companionState.navNodes = [];
     koro.position = { x: -2, y: 0, z: 0 };
     const stopped = { ...koro.position };
     engine.tick++;
+    engine.worldTick++;
     stepCompanions(engine);
     expect(koro.position).toEqual(stopped);
     expect(engine.companionState.slots.koro?.pathFallback).toBe(true);
@@ -99,6 +102,7 @@ describe('companion commands and grounded navigation', () => {
     engine.companionState.navNodes = [{ id: 'closed-gate', position: { x: -1, y: 0, z: 3 }, links: [], requirement: 'canopy_bridge_open' }];
     const before = { ...koro.position };
     engine.tick = 1;
+    engine.worldTick = 1;
     stepCompanions(engine);
     expect(koro.position).toEqual(before);
     expect(engine.companionState.slots.koro?.pathFallback).toBe(true);

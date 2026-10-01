@@ -235,6 +235,34 @@ describe("camp-loose-snare movable-object contract", () => {
     expect(replayed.lastSafeCheckpoint?.progress.eventLog.filter((event) => event.type === "object-moved")).toHaveLength(1);
   });
 
+  it("restores an in-flight legacy Koro object from its world-time start and emits movement once", () => {
+    const runId = "movable-koro-v1-flight";
+    const source = campEngine(runId, { [movedFactId]: false }, true);
+    source.fixedStep(idle);
+    expect(source.commandCompanion("koro", "special", movable.id)).toBe(true);
+    const legacy = JSON.parse(source.serialize()) as Record<string, unknown>;
+    legacy.schemaVersion = 1;
+    delete legacy.worldTick;
+    delete legacy.worldTimeScale;
+    delete legacy.timePolicy;
+    delete legacy.slowMotionRemainingTicks;
+    delete legacy.slowMotionElapsedTicks;
+    const objects = legacy.movableObjects as Array<Record<string, unknown>>;
+    const inFlight = objects.find((object) => object.objectId === movable.id)!;
+    expect(inFlight.phase).toBe("in-flight");
+    inFlight.startedAtTick = inFlight.startedAtWorldTick as number;
+    delete inFlight.startedAtWorldTick;
+
+    const restored = new CombatEngine();
+    restored.restore(JSON.stringify(legacy));
+    const migrated = JSON.parse(restored.serialize()) as { movableObjects: Array<Record<string, unknown>> };
+    expect(migrated.movableObjects.find((object) => object.objectId === movable.id)).toMatchObject({ phase: "in-flight", startedAtWorldTick: source.snapshotState().worldTick });
+    expect(advanceObjectFlight(restored)).toBe(movable.animationTicks);
+    expect(restored.snapshot().movableObjects.find((object) => object.objectId === movable.id)).toMatchObject({ phase: "settled", position: movable.to });
+    expect(restored.consumeWorldEvents().filter((event) => event.type === "object-moved")).toHaveLength(1);
+    expect(restored.consumeWorldEvents().filter((event) => event.type === "object-moved")).toHaveLength(0);
+  });
+
   it("uses Aren staff-heavy when Koro is absent and rejects a missed target without emitting movement", async () => {
     const runId = "movable-player-heavy";
     const director = await directorAtCamp(runId);

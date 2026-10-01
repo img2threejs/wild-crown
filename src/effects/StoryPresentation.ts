@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { AudioListener } from 'three';
-import type { GameSettings } from '../game/contracts.js';
+import type { GameSettings, WorldClockSnapshot } from '../game/contracts.js';
 import { StoryAudio, type AudioListenerPose, type StoryAudioOptions } from '../audio/StoryAudio.js';
 import type { CueCancellationReason, StoryCue } from './story-cues.js';
 import { StoryEffects, type StoryEffectsOptions } from './StoryEffects.js';
@@ -43,10 +43,10 @@ export class StoryPresentation {
     return { effects, sounds };
   }
 
-  /** Pass the fixed-step game tick; a paused or slowed simulation therefore pauses VFX decay too. */
-  update(simulationTick: number, listenerPose?: AudioListenerPose): void {
+  /** Pass the authoritative scaled world clock; never derive VFX time from renderer delta. */
+  update(worldClock: WorldClockSnapshot, listenerPose?: AudioListenerPose): void {
     if (this.disposed) return;
-    this.effects.update(simulationTick);
+    this.effects.update(worldClock);
     if (listenerPose) this.audio.setListenerPose(listenerPose);
   }
 

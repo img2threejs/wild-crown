@@ -2,10 +2,15 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import * as THREE from 'three';
 import { StoryEffects } from '../../src/effects/StoryEffects.js';
+import type { WorldClockSnapshot } from '../../src/game/contracts.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
 
 function cue(instanceId: string, kind: StoryCue['kind'], phase: StoryCue['phase'] = 'hit', extra: Partial<StoryCue> = {}): StoryCue {
-  return { instanceId, tick: 120, kind, phase, position: { x: 4, y: 0.1, z: -3 }, scopeId: 'encounter-a', ...extra };
+  return { instanceId, tick: 120, worldTimeSeconds: 2, kind, phase, position: { x: 4, y: 0.1, z: -3 }, scopeId: 'encounter-a', ...extra };
+}
+
+function worldClock(simulationTick: number, worldTick: number, timeScale = 1, policy: WorldClockSnapshot['policy'] = 'normal'): WorldClockSnapshot {
+  return { simulationTick, worldTick, worldTimeSeconds: worldTick / 60, timeScale, policy };
 }
 
 test('cue instances deduplicate and cancellation only releases matching scope', () => {
@@ -36,7 +41,7 @@ test('essential telegraphs retain reserved capacity and evict cosmetics first', 
   assert.equal(effects.activeCount, 8);
   assert.equal(effects.emit(cue('last-telegraph', 'commit', 'commit', { priority: 'essential' })), true);
   assert.equal(effects.activeCount, 8);
-  effects.update(120);
+  effects.update(worldClock(120, 120));
   const meshes = effects.group.children as THREE.Mesh[];
   assert.equal(meshes.some((mesh) => mesh.position.x >= 12 && mesh.position.x < 18 && mesh.visible), false);
   const telegraph = meshes.find((mesh) => mesh.position.x === 0 && mesh.position.z === 0);
@@ -52,16 +57,20 @@ test('reduced effects retains tether endpoints and shape, and elapsed time relea
   assert.equal(effects.emit(cue('tether-1', 'tether', 'sustain', { position: undefined, from: { x: 2, y: 0.8, z: 1 }, to: { x: 7, y: 1.1, z: 3 }, shape: 'beam', durationTicks: 12 })), true);
   const beam = effects.group.children[0] as THREE.Mesh;
   assert.ok(beam.geometry instanceof THREE.CylinderGeometry);
+  assert.ok(beam.material instanceof THREE.MeshBasicMaterial);
   assert.equal(beam.position.x, 4.5);
   assert.ok(Math.abs(beam.position.y - 0.95) < 1e-9);
   assert.equal(beam.position.z, 2);
-  effects.update(123);
-  assert.equal(effects.currentTick, 123);
-  assert.equal(effects.activeCount, 1);
-  effects.update(123);
-  assert.equal(effects.activeCount, 1, 'simulation pause does not decay presentation cues');
-  effects.update(132);
+  effects.update(worldClock(132, 123, 0.25, 'perfect-dodge-slow'));
   assert.equal(effects.currentTick, 132);
+  assert.equal(effects.activeCount, 1);
+  const slowOpacity = beam.material.opacity;
+  effects.update(worldClock(144, 123, 0, 'paused'));
+  assert.equal(effects.currentTick, 144, 'simulation ticks still advance while world time is paused');
+  assert.equal(effects.activeCount, 1);
+  assert.equal(beam.material.opacity, slowOpacity, 'zero world-time advancement freezes VFX');
+  effects.update(worldClock(145, 132));
+  assert.equal(effects.currentTick, 145);
   assert.equal(effects.activeCount, 0);
   effects.dispose();
 });
@@ -73,7 +82,7 @@ test('restoration stages keep distinct ecological geometry at the same fixed tic
   for (const [index, kind] of stages.entries()) {
     assert.equal(effects.emit(cue(`restore-${kind}`, kind, 'resolve', { position: { x: index, y: 0.05, z: 0 }, durationTicks: 60 })), true);
   }
-  effects.update(120);
+  effects.update(worldClock(120, 120));
   const meshes = effects.group.children as THREE.Mesh[];
   assert.ok(meshes[0]!.geometry instanceof THREE.TorusGeometry);
   assert.ok(meshes[1]!.geometry instanceof THREE.CircleGeometry);
@@ -104,7 +113,7 @@ test('authored sector keeps world angle/normal, dimensions, and footprint across
    }
    assert.ok(Math.abs(maxRadius - 2) < 1e-6);
   const before = new THREE.Box3().setFromObject(sector).getSize(new THREE.Vector3());
-  effects.update(150);
+  effects.update(worldClock(150, 150));
   sector.updateMatrixWorld(true);
   const after = new THREE.Box3().setFromObject(sector).getSize(new THREE.Vector3());
   assert.ok(before.distanceTo(after) < 1e-9, 'telegraph footprint must not grow or shrink across simulation time');
@@ -118,11 +127,11 @@ test('non-square telegraph ring matches its authored width and range at all simu
   assert.equal(effects.emit(cue('rectangle-danger', 'anticipation', 'anticipation', { position: { x: 0, y: 0, z: 0 }, footprint: { width: 2, length: 4, angleRadians: Math.PI / 2 }, durationTicks: 60 })), true);
   const ring = effects.group.children[0] as THREE.Mesh;
   const measure = () => new THREE.Box3().setFromObject(ring).getSize(new THREE.Vector3());
-  effects.update(120);
+  effects.update(worldClock(120, 120));
   const initial = measure();
   assert.ok(Math.abs(initial.x - 4) < 1e-6);
   assert.ok(Math.abs(initial.z - 2) < 1e-6);
-  effects.update(150);
+  effects.update(worldClock(150, 150));
   const later = measure();
   assert.ok(initial.distanceTo(later) < 1e-9);
   effects.dispose();
@@ -160,13 +169,41 @@ test('essential anticipation remains readable through the last active tick in re
   const effects = new StoryEffects({ scene, capacity: 8, reducedEffects: true });
   assert.equal(effects.emit(cue('warning-fade', 'anticipation', 'anticipation', { durationTicks: 60 })), true);
   const warning = effects.group.children[0] as THREE.Mesh;
-  effects.update(179);
+  effects.update(worldClock(179, 179));
   assert.equal(effects.activeCount, 1);
   assert.equal(warning.visible, true);
   assert.ok(warning.material instanceof THREE.MeshBasicMaterial);
   assert.ok(warning.material.opacity >= 0.3, 'essential warning keeps a readable opacity floor until authoritative expiry');
-  effects.update(180);
+  effects.update(worldClock(180, 180));
   assert.equal(effects.activeCount, 0);
+  assert.equal(warning.visible, false);
+  effects.dispose();
+});
+
+test('roar telegraph lifetime follows scaled world time and freezes when world time pauses', () => {
+  const scene = new THREE.Scene();
+  const effects = new StoryEffects({ scene, capacity: 8 });
+  assert.equal(effects.emit(cue('roar-slow-warning', 'anticipation', 'anticipation', {
+    tick: 100, worldTimeSeconds: 5, shape: 'sector', durationTicks: 60, priority: 'essential',
+    position: { x: 0, y: 0, z: 0 }, footprint: { width: 3, length: 6, angleRadians: 0, sectorRadians: Math.PI / 3 },
+  })), true);
+  const warning = effects.group.children[0] as THREE.Mesh;
+  assert.ok(warning.material instanceof THREE.MeshBasicMaterial);
+  effects.update(worldClock(100, 300));
+  effects.update(worldClock(112, 303, 0.25, 'perfect-dodge-slow'));
+  assert.equal(effects.currentTick, 112);
+  assert.equal(effects.activeCount, 1, '12 simulation steps at 0.25 scale advance only 3 of 60 world ticks');
+  assert.ok(warning.visible);
+  assert.ok(Math.abs(warning.material.opacity - 0.798) < 1e-9);
+  const slowOpacity = warning.material.opacity;
+
+  effects.update(worldClock(124, 303, 0, 'paused'));
+  assert.equal(effects.currentTick, 124, 'simulation tick advances independently of paused world time');
+  assert.equal(effects.activeCount, 1);
+  assert.equal(warning.material.opacity, slowOpacity);
+
+  effects.update(worldClock(181, 360, 1, 'normal'));
+  assert.equal(effects.activeCount, 0, 'one full second of world time exhausts the 60-tick warning lifetime');
   assert.equal(warning.visible, false);
   effects.dispose();
 });
