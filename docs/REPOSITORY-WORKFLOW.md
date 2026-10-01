@@ -22,13 +22,13 @@ The imported folder is a historical design/provenance snapshot. Original generat
 
 ## Model routing
 
-Verified effective configuration:
+Current user-approved routing:
 
-- `coder`, `implementer`, `tester`: `openai-codex/gpt-6-luna`.
-- `reviewer`: `openai-codex/gpt-6-astra`.
-- The active coordinating/review session is Astra.
+- Execution: `implementer` → `openai-codex/gpt-6.1-sol`; verify other execution roles before use.
+- Review: `reviewer` → `openai-codex/gpt-6-astra`, spec compliance before code quality.
+- Main retains planning, final decision and publication authority; worker reports alone never approve a merge.
 
-Both first-wave implementation jobs resolved to `openai-codex/gpt-6-luna:high`, confirmed by task process metadata. Generic `task` is configured differently and is not used for implementation. Existing generic MiniMax orchestration guidance is superseded by the user's explicit Luna/Astra choice for this project; no global configuration was changed.
+Earlier first-wave jobs resolved to `openai-codex/gpt-6-luna:high`. Later actual process metadata exposed a Sol execution route; writers checkpointed, and the user explicitly selected “Sol + Astra để chạy ngay” to continue without changing global configuration. Preserve actual historical model attribution rather than relabeling those jobs Luna. This current approval supersedes the earlier Luna preference and generic MiniMax orchestration guidance.
 
 ## First wave (historical)
 
@@ -39,7 +39,7 @@ Two independent feature worktrees start from the same initial main commit:
 
 `docs/production-baseline` imports the approved design/content/concept evidence and execution record. It does not imply the gameplay PRs depend on local Desktop paths after merging.
 
-Astra reviews spec compliance first, then code quality/state lifetime and actual exercised behavior. Required fixes return to Luna. Commits and PRs are issue-scoped; the current coordinator merges only after both review stages and task-specific smoke verification pass.
+Astra reviews spec compliance first, then code quality/state lifetime and actual exercised behavior. Required fixes return to the approved execution model (currently Sol). Commits and PRs are issue-scoped; the current coordinator merges only after both review stages and task-specific smoke verification pass.
 
 ## Parallel execution and portable resume
 
@@ -47,7 +47,7 @@ The [phase issues](https://github.com/img2threejs/wild-crown/issues?q=is%3Aissue
 
 On another machine, clone `img2threejs/wild-crown`, fetch current main, and read `AGENTS.md` and the chosen issue before editing. Use `gh issue list --repo img2threejs/wild-crown --state open` and `gh pr list --repo img2threejs/wild-crown --state open` to recover the queue and unfinished PRs. Continue the existing PR branch when work is already published; otherwise create a new task branch from current main. Install the locked npm dependencies with `npm ci`, then use `npm run typecheck`, `bun test`, `npm run build`, and the issue-specific smoke command. Tests/builds do not replace gameplay/native-asset acceptance.
 
-Independent Luna issue agents run concurrently in separate code worktrees with explicit file ownership. Astra review and final decisions remain coordinator-owned. Concurrent Tripo jobs use explicit task IDs and unique per-asset output directories; never rely on account-wide `@last`, account-wide credit deltas, or success status as rig/animation quality. Read actual riggability/output records before each dependent provider step. Do not self-grant consent or weaken toolchain/evidence gates.
+Independent Sol issue agents run concurrently in separate code worktrees with explicit file ownership. Astra review and final decisions remain coordinator-owned. Concurrent Tripo jobs use explicit task IDs and unique per-asset output directories; never rely on account-wide `@last`, account-wide credit deltas, or success status as rig/animation quality. Read actual riggability/output records before each dependent provider step. Do not self-grant consent or weaken toolchain/evidence gates.
 
 The coordinator alone exercises browser scenarios, always headless in one shared Brave profile/session. Workers provide the exact route/action/assertions without launching browsers. Before handing off, push verified code/assets/provenance and record outstanding requirements on the issue. Authentication grants, credentials and signed download URLs are machine-local/external prerequisites, never files to commit or infer on the next machine.
 
