@@ -107,7 +107,6 @@ async function buildEvidence(gltf, file, digest, assetId) {
   const staticProp = (catalogEntry?.kind === "prop" || Boolean(staticVisibilityPolicy)) && gltf.animations.length === 0 && skinIntegrity.skinnedMeshCount === 0;
   const g6 = staticProp ? measureStaticPropVisibility(gltf, root, renderer, scene, camera, assetId) : measureG6Visibility(root, coveragePolicy, renderer, scene, camera);
   const g10 = staticProp ? measureStaticGeometry(gltf, root, assetId) : measureG10(root, gltf.animations, g1, animatedBounds);
-  const g10MeasurementStatus = g10.status; g10.status = "incomplete"; g10.measurementStatus = g10MeasurementStatus; g10.missingAcceptanceControls = ["broken-planted-contact", "mirrored-wrist", "torn-skin-with-normalized-weights", "wrong-lod-bind", "wrong-culling-bounds"];
   const g12 = measureJointCorrespondence(gltf, root, catalogEntry?.kind || null);
   const g12MeasurementStatus = g12.status; g12.status = "incomplete"; g12.measurementStatus = g12MeasurementStatus; g12.missingAcceptanceControls = ["wrong-lod-bind", "full-rig-profile-correspondence-review"];
   const frozenHash = await hash(sourceBytes.slice(0));
@@ -163,27 +162,29 @@ function download(blob, name) {
 function renderSummary(evidence) {
   const meshCount = evidence.loadedScene.meshes.length;
   const skinCount = evidence.inverseBindAccessors.length;
+  const unresolvedG10Controls = (evidence.measurements.G10.negativeControls || []).filter(control => !control.detectedFailure);
   const lines = [
-    "Catalog asset: " + (evidence.assetId || "unassigned scratch file"),
-    "Loaded native GLB: " + evidence.source.fileName,
-    "SHA-256: " + evidence.source.sha256,
-    "Scene nodes: " + evidence.loadedScene.sceneNodeCount + " | bones: " + evidence.loadedScene.bones.length + " | meshes: " + meshCount + " | skins: " + skinCount,
-    "Animation clips: " + evidence.measurements.G1.clips.length,
-    "Required semantic actions missing: " + (evidence.actionCoverage?.missingActionIds?.length || 0),
-    "G1: " + evidence.gates.G1,
-    "G3: " + evidence.gates.G3,
-    "G6: " + evidence.gates.G6,
-    "G10: " + evidence.gates.G10,
-    "G11: " + evidence.gates.G11,
-    "G12: " + evidence.gates.G12,
-    "Evidence status: " + evidence.evidenceStatus,
-    "Production acceptance: NOT ESTABLISHED. This lab report is not a full character acceptance."
+    'Catalog asset: ' + (evidence.assetId || 'unassigned scratch file'),
+    'Loaded native GLB: ' + evidence.source.fileName,
+    'SHA-256: ' + evidence.source.sha256,
+    'Scene nodes: ' + evidence.loadedScene.sceneNodeCount + ' | bones: ' + evidence.loadedScene.bones.length + ' | meshes: ' + meshCount + ' | skins: ' + skinCount,
+    'Animation clips: ' + evidence.measurements.G1.clips.length,
+    'Required semantic actions missing: ' + (evidence.actionCoverage?.missingActionIds?.length || 0),
+    'G1: ' + evidence.gates.G1,
+    'G3: ' + evidence.gates.G3,
+    'G6: ' + evidence.gates.G6,
+    'G10: ' + evidence.gates.G10,
+    ...(unresolvedG10Controls.length ? ['G10 unresolved controls: ' + unresolvedG10Controls.map(control => control.id + (control.reason ? ': ' + control.reason : '')).join('; ')] : []),
+    'G11: ' + evidence.gates.G11,
+    'G12: ' + evidence.gates.G12,
+    'Evidence status: ' + evidence.evidenceStatus,
+    'Production acceptance: NOT ESTABLISHED. This lab report is not a full character acceptance.',
   ];
-  output.textContent = lines.join("\n");
-  const list = $("#mesh-list"); list.replaceChildren();
+  output.textContent = lines.join('\n');
+  const list = $('#mesh-list'); list.replaceChildren();
   for (const mesh of evidence.loadedScene.meshes) {
-    const row = document.createElement("li");
-    row.textContent = mesh.name + " — " + mesh.type + " — " + mesh.vertexCount + " vertices";
+    const row = document.createElement('li');
+    row.textContent = mesh.name + ' — ' + mesh.type + ' — ' + mesh.vertexCount + ' vertices';
     list.append(row);
   }
 }
