@@ -1,0 +1,19 @@
+{
+  "command": "node asset-source/rigged/actor-aren/verify-native.mjs asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928/model.glb",
+  "versions": {"sharp":"0.34.5","three":"169","node":"v22.22.3"},
+  "browserLaunched": false,
+  "reports": [{
+    "file":"asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928/model.glb",
+    "bytes":96501240,
+    "sha256":"7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+    "generator":"Tripo",
+    "loader":"Three.js 0.169.0 GLTFLoader.parseAsync",
+    "skinnedMeshes":1,
+    "bones":18,
+    "skins":[{"mesh":"tripo_node_0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861","vertices":1011304,"bones":18,"usedJoints":18,"invalidJointInfluences":0,"nonfiniteWeights":0,"zeroWeightVertices":0,"maxWeightSumError":5.21540641784668e-8}],
+    "nativeAnimationChannels":[],
+    "loadedClips":[],
+    "decodedImages":[{"width":4096,"height":4096,"channels":4,"decodedBytes":67108864},{"width":4096,"height":4096,"channels":4,"decodedBytes":67108864},{"width":8192,"height":8192,"channels":4,"decodedBytes":268435456}],
+    "limitations":["Node loader and CPU skin/animation sampling only; no GPU texture upload or visual review.","Samples do not establish deformation quality, contact, anatomy, likeness, gameplay usability or production acceptance."]
+  }]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "sha256": "d6d1c1b23ec1daed291b6d3c36425baa00fb4f5b04157b910271c7efadfcafe9",
+  "bytes": 99541840,
+  "gltfVersion": "2.0",
+  "counts": {"accessors": 24, "bufferViews": 27, "buffers": 1, "meshes": 1, "nodes": 23, "skins": 1, "animations": 1, "scenes": 1},
+  "binaryChunkBytes": 99530124,
+  "skin": {"name": "Armature", "jointCount": 21, "inverseBindMatricesAccessor": 6, "inverseBindMatricesCount": 21, "finiteInverseBindMatrices": true},
+  "primitive": {"vertices": 989606, "attributes": ["POSITION", "NORMAL", "TEXCOORD_0", "JOINTS_0", "WEIGHTS_0"], "minWeightSum": 0.999999851163011, "maxWeightSum": 1.0000001341104507, "maxJointIndex": 20, "nonzeroInfluences": 3697912},
+  "nativeClip": {
+    "name": "preset:quadruped:walk",
+    "durationSeconds": 2.5999999046325684,
+    "channels": 16,
+    "samplers": 16,
+    "rotationChannels": 15,
+    "translationChannels": 1,
+    "samplesPerTrack": 78,
+    "channelTargets": [{"node": 20, "path": "translation"}, {"node": 19, "path": "rotation"}, {"node": 2, "path": "rotation"}, {"node": 1, "path": "rotation"}, {"node": 0, "path": "rotation"}, {"node": 12, "path": "rotation"}, {"node": 11, "path": "rotation"}, {"node": 9, "path": "rotation"}, {"node": 8, "path": "rotation"}, {"node": 7, "path": "rotation"}, {"node": 16, "path": "rotation"}, {"node": 15, "path": "rotation"}, {"node": 14, "path": "rotation"}, {"node": 13, "path": "rotation"}, {"node": 18, "path": "rotation"}, {"node": 17, "path": "rotation"}]
+  },
+  "cpuPlayback": {
+    "engine": "three 0.169.0",
+    "method": "Read native accessor bytes and node transforms; instantiate Three Bone/Skeleton/SkinnedMesh; play native quaternion/translation tracks using AnimationMixer. No replacement/authored clip data.",
+    "timesSeconds": [0, 0.6499999761581421, 1.2999999523162842],
+    "sampledVertexIndices": [0, 247401, 494803, 742204, 989605],
+    "quarterCycleDisplacementsNativeUnits": [0.12956023999284821, 0.1287938917562312, 0.016331485232857722, 0.05282234370689419, 0.09340029050597093],
+    "finiteNativePlayback": true,
+    "nativeSampledVerticesDeformed": true,
+    "textureDecodeMeasured": false,
+    "gltfLoaderMeasured": false,
+    "browserRenderMeasured": false
+  },
+  "structuralReferencesValid": true,
+  "binarySkinChecksPassed": true,
+  "rigQuality": "not-measured",
+  "animationQuality": "not-measured",
+  "idleClipPresent": false,
+  "gameReady": false
+}

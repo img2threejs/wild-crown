@@ -1,0 +1,21 @@
+{
+  "type": "animate_retarget",
+  "status": "failed",
+  "progress": 100,
+  "input": {
+    "animations": ["preset:idle", "preset:quadruped:walk"],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "15fc35a2-5113-4d6c-8207-13eaf0d18ef1"
+  },
+  "output": {},
+  "task_id": "1cebacef-b0a8-4758-b6ad-6b49dd4033ed",
+  "created_at": "2026-10-01T07:16:32.840571Z",
+  "completed_at": "2026-10-01T07:16:56.058648Z",
+  "error_code": 1004,
+  "error_message": "Invalid input parameter",
+  "credits_consumed": null,
+  "refund_evidence": "CLI exit 6 stated frozen credits have been refunded automatically; exact frozen/refunded amount not supplied.",
+  "retrieval_command": "tripo --no-open task get 1cebacef-b0a8-4758-b6ad-6b49dd4033ed --step --json",
+  "retry_submitted": false
+}

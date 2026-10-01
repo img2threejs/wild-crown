@@ -1,0 +1,9 @@
+{
+  "sourceCommand": "tripo --no-open history --limit 50 --json; filtered by the four task IDs from this assignment",
+  "records": [
+    {"task_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","type":"animate_rig","name":"rig-3","status":"success","created_at":"2026-10-01T07:14:35.306Z","endpoint":"/v3/animations/rig","payload":{"input":"0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861","rig_type":"biped","spec":"tripo","out_format":"glb","model":"v2.5-20260210"},"credits_consumed":25,"output_dir":"asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928"},
+    {"task_id":"209976c2-1460-4e30-a5a2-ca36f7f8ed9b","type":"animate_retarget","name":"retarget-2","status":"failed","created_at":"2026-10-01T07:17:08.265Z","endpoint":"/v3/animations/retarget","payload":{"input":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","out_format":"glb","animate_in_place":true,"animations":["preset:idle","preset:walk"]}},
+    {"task_id":"48749f45-d585-4010-8101-22e40efa7d81","type":"animate_retarget","name":"retarget-3","status":"failed","created_at":"2026-10-01T07:20:33.743Z","endpoint":"/v3/animations/retarget","payload":{"input":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","animation":"preset:walk","out_format":"glb","animate_in_place":true}},
+    {"task_id":"f98d1301-bbae-4b6d-8728-d88854bbc24a","type":"animate_retarget","name":"retarget-4","status":"failed","created_at":"2026-10-01T07:20:34.100Z","endpoint":"/v3/animations/retarget","payload":{"input":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","animation":"preset:idle","out_format":"glb","animate_in_place":true}}
+  ]
+}

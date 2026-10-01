@@ -1,0 +1,13 @@
+{
+  "dry_run": true,
+  "valid": true,
+  "input": "0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861",
+  "source_task_id": "0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861",
+  "steps": [{"name":"rig","endpoint":"/v3/animations/rig","task_type":"animate_rig","payload":{"input":"<upstream>","model":"v2.5-20260210","rig_type":"biped","spec":"tripo","out_format":"glb"}}],
+  "pending_uploads": [],
+  "deliverables": [],
+  "candidates": 1,
+  "warnings": ["chain legality unverified: upstream task type unknown (no local history for 0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861); the real run checks it via the API"],
+  "errors": [],
+  "cost_notes": []
+}

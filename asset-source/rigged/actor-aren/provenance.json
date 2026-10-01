@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-aren",
+  "issue": 23,
+  "status": "NATIVE_RIG_OBTAINED_PRESET_CLIPS_BLOCKED",
+  "upstream": {
+    "taskId": "0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861",
+    "path": "asset-source/generated/actor-aren-tripo-max/tripo-out/asset-source-references-aren-app-2-0a4c2f1e/model.glb",
+    "sha256": "12cb95beedbec4e542031c47917574de8b6ba634b464519b8c650b7f7b4533e6",
+    "bytes": 76269096,
+    "referenceProvenance": "asset-source/generated/actor-aren-tripo-max/tripo-out/asset-source-references-aren-app-2-0a4c2f1e/provenance.json",
+    "unchanged": true
+  },
+  "admission": {"taskId":"4b7abdab-e36e-489f-aa75-5eff1ebe6dab","riggable":true,"rig_type":"biped","retrievedExistingCheck":true,"checkReruns":0},
+  "rig": {
+    "taskId": "1fc43928-8af8-4cf2-a97d-2c2a5b4ee658",
+    "requestedModel": "v2.5-20260210",
+    "resolvedModel": null,
+    "versionEvidence": "request-history.json persists actual CLI outgoing payload. Provider task input omits model and native GLB generator is only Tripo, so the resolved rig model cannot be established independently.",
+    "spec": "tripo",
+    "rigType": "biped",
+    "createdAt": "2026-10-01T07:14:35.314503Z",
+    "completedAt": "2026-10-01T07:15:57.303857Z",
+    "creditsConsumed": 25,
+    "commandWallSeconds": 110.90,
+    "nativeOutput": {"path":"rig/tripo-out/rig-3-1fc43928/model.glb","sha256":"7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151","bytes":96501240,"format":"glTF 2.0 binary","skins":1,"joints":18,"skinnedMeshes":1,"vertices":1011304,"animations":0},
+    "nativeImages": [
+      {"path":"rig/tripo-out/rig-3-1fc43928/rendered_image.webp","sha256":"c5d49b6daebbc315da468a03a0b65f97ddfe7cffe443f12a8e1fd52b8866efae","bytes":134845,"detectedFormat":"png","width":512,"height":512},
+      {"path":"rig/tripo-out/rig-3-1fc43928/preview.png","sha256":"c5d49b6daebbc315da468a03a0b65f97ddfe7cffe443f12a8e1fd52b8866efae","bytes":134845,"detectedFormat":"png","width":512,"height":512}
+    ],
+    "preservation": "Provider-native bytes and CLI filenames preserved, including the rendered_image.webp filename whose actual format is PNG. No local remesh, rig conversion or re-rig.",
+    "sanitizedTaskRecord": "rig/tripo-out/rig-3-1fc43928/task.json"
+  },
+  "retarget": {
+    "taskIds": ["209976c2-1460-4e30-a5a2-ca36f7f8ed9b","f98d1301-bbae-4b6d-8728-d88854bbc24a","48749f45-d585-4010-8101-22e40efa7d81"],
+    "allStatus": "failed",
+    "allErrorCode": 1004,
+    "allErrorMessage": "Invalid input parameter",
+    "nativeClips": [],
+    "creditsConsumed": null,
+    "refund": "CLI reports frozen credits refunded automatically; refund amount not independently exposed.",
+    "authorization": "Initial one plural idle+walk request; parent subsequently allowed up to two additional documented, dry-run-validated singular requests. All three allowances consumed; no further requests.",
+    "exactPrerequisite": "Provider must explain/resolve error1004 for documented v2.5 biped presets on rig1fc43928, expose actual resolved rig version and accepted preset mapping, or parent must author genuine native clips separately. No accepted idle or walk artifact exists."
+  },
+  "usage": {"observedSuccessfulRigCredits":25,"failedRetargetCredits":null,"harnessCost":null,"inputTokens":null,"outputTokens":null},
+  "evidence": {"structure":"inspection.json","realLoader":"loader-smoke.json","taskFailures":"retarget.failures.json","currentContract":"single-retarget.contract.json","browserLaunched":false,"projectWideChecksRun":false},
+  "productionAcceptance": "NOT_ESTABLISHED",
+  "modelReady": false,
+  "runtimeManifestUpdated": false,
+  "visualReview": "parent-only; not performed by worker",
+  "limitations": [
+    "Static bind pose is not an idle animation. Native rig contains zero clips/channels; no fabricated clips and walk is never labeled dodge.",
+    "Actual GLTFLoader loads the complete native rig and decodes three embedded images with sharp; no browser or WebGL renderer. GPU upload/rendering and visual deformation quality remain unmeasured.",
+    "Loader traversed 1,011,304 vertices: all 18 joints are used, no invalid influences, nonfinite weights or zero-weight vertices; maximum weight-sum error5.21540641784668e-8. Weight integrity alone is not deformation or game readiness.",
+    "Native rig remains96,501,240 bytes with two4096 textures and one8192 texture; runtime performance gates remain unmeasured.",
+    "Remaining art/production gates, licensing/rights acceptance, likeness, unseen-side anatomy, animation/contact quality and gameplay integration remain parent-owned and unestablished."
+  ]
+}

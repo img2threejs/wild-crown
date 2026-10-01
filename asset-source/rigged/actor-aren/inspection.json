@@ -1,0 +1,15 @@
+{
+  "command": "node scripts/assets/inspect-glb.mjs asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928/model.glb",
+  "reportPathRecordedRelativeToWorktree": true,
+  "path": "asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928/model.glb",
+  "sha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "bytes": 96501240,
+  "gltfVersion": "2.0",
+  "counts": {"accessors":7,"bufferViews":10,"buffers":1,"meshes":1,"nodes":20,"skins":1,"animations":0,"scenes":1},
+  "binaryChunkBytes": 96494136,
+  "skins": [{"index":0,"name":"Armature","jointCount":18,"inverseBindMatricesAccessor":6,"hasInverseBindMatrices":true}],
+  "animationClips": [],
+  "structuralReferencesValid": true,
+  "rigQuality": "not-measured",
+  "animationQuality": "not-measured"
+}
