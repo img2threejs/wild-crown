@@ -219,6 +219,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
       tick: state.tick, worldTick: state.worldTick, lastAttackTick: state.lastAttackTick, counterUntil: state.counterUntil, actors: state.actors.map(actor => structuredClone(actor)), player: structuredClone(state.player),
       phaseIndex: 0, phaseLatch: 0, phaseActionFlags: [], rewardEmitted: false, companions: structuredClone(state.companionState),
     };
+    state.counterUntil = 0;
     state.timePolicy = 'perfect-dodge-slow';
     state.worldTimeScale = 0.25;
     state.slowMotionRemainingTicks = 8;
@@ -238,6 +239,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
 
     engine.resetToCheckpoint();
     expect(engine.snapshot().worldClock).toMatchObject({ timeScale: 1, policy: 'normal' });
+    expect(engine.snapshotState().counterUntil).toBe(14);
     expect(engine.snapshotState()).toMatchObject({ slowMotionElapsedTicks: 0, slowMotionRemainingTicks: 0 });
     engine.setTimePolicy('paused');
     const worldTickBeforeLoad = engine.snapshot().worldClock.worldTick;

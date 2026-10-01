@@ -448,6 +448,7 @@ export class CombatEngine {
     // Rebase the selector timestamp and its virtual-clock offset together.
     this.state.lastAttackTick=shiftDeadline(checkpoint.lastAttackTick,worldOffset);
     this.state.attackSelectionWorldOffset=(checkpoint.attackSelectionWorldOffset??0)+worldOffset;
+    this.state.counterUntil=checkpoint.counterUntil;
     this.state.player = structuredClone(checkpoint.player);
     this.state.phaseIndex = checkpoint.phaseIndex;
     this.state.phaseLatch = checkpoint.phaseLatch;
