@@ -48,6 +48,7 @@ export interface CombatActor extends ActorSnapshot {
 export interface LiveHazard extends HazardDefinition {
   id: string; attackId: AttackId; sourceId: ActorId; startTick: number; activeFrom: number; activeUntil: number;
   target: Vec3; origin: Vec3; direction: Vec3; hitIds: string[]; threatTicks: number[]; cue: string; targetActorId?:ActorId;
+  activePresentationEmitted?:boolean;
 }
 export interface LiveTelegraph { id: string; attackId: AttackId; sourceId: ActorId; targetPosition: Vec3; phase: 'windup'|'commit'|'active'|'recovery'; remainingTicks: number; cue: string }
 export interface CombatEvent { id: string; tick: number; kind: 'cue'|'damage'|'perfect-dodge'|'counter-open'|'action'|'companion'|'traversal'|'world'|'attack-interrupted'; actorId?: ActorId; targetId?: ActorId; actionId?: string; attackId?: AttackId; message: string; worldEvent?: WorldEvent }
@@ -257,6 +258,7 @@ export class CombatEngine {
     this.state.traversalGates=routes.map(route=>({id:route.id,routeId:route.id,from:copy(route.from),to:copy(route.to),anchors:structuredClone(route.anchors),fromRegion:this.state.regionId,toRegion:route.destinationRegionId,width:route.traversal?.startRadius??2,rise:Math.abs(route.to.y-route.from.y),unlocked:route.unlockFact===undefined||worldFacts[route.unlockFact]===true,unlockFact:route.unlockFact,traversalEvent:route.traversalEvent,colliderIds:structuredClone(route.colliderIds),traversalActionId:route.traversalActionId,traversal:route.traversal?{...route.traversal}:undefined}));
   }
   commandCompanion(companionId:CompanionId,command:CompanionCommand,targetId?:ActorId):boolean{
+    if(this.playerIsDown())return false;
     const companion=this.actorForId(companionId);
     if(companion?.possessed&&(command==='ask'||command==='signal')&&!this.state.companionState.wardenCall&&this.state.companionState.bond>=10){
       this.breakPossession(companion);
@@ -273,6 +275,7 @@ export class CombatEngine {
     return companionCommand(this.state,companionId,command,targetId);
   }
   resolveInteraction(interactionId:string,targetId:string,choiceOptionId?:string):boolean{
+    if(this.playerIsDown())return false;
     if(this.state.traversal)return false;
     const interaction=INTERACTIONS.find(candidate=>candidate.id===interactionId);
     if(!interaction||interaction.regionId!==this.state.regionId)return false;
@@ -389,13 +392,14 @@ export class CombatEngine {
       this.state.player.nextDodgeRechargeTick=this.state.player.dodgeCharges<this.state.player.maxDodgeCharges?this.state.tick+DODGE_RECHARGE_TICKS:0;
     }
     const wasTraversing=this.state.traversal!==undefined;
-    this.updateActors(worldScale);
-    this.updateHazards();
-    this.updateBossAI();
-    if(wasTraversing)this.updateTraversal(worldScale);else this.updatePlayer(input);
-    stepCompanions(this.state);
-    this.updateMovableObjects();
-    this.updatePhase();
+    if(this.playerIsDown())this.endPlayerCombat();else {this.updateActors(worldScale);this.updateHazards();}
+    if(!this.playerIsDown()){
+      this.updateBossAI();
+      if(wasTraversing)this.updateTraversal(worldScale);else this.updatePlayer(input);
+      stepCompanions(this.state);
+      this.updateMovableObjects();
+      this.updatePhase();
+    }
     if(this.state.actionRecoveryUntil>0&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.actionId!=='idle')this.finishAction();
     if(slowMotionActive&&this.state.timePolicy==='perfect-dodge-slow'){
       this.state.slowMotionRemainingTicks=Math.max(0,this.state.slowMotionRemainingTicks-1);
@@ -430,14 +434,14 @@ export class CombatEngine {
     };
   }
   serialize(): string { return JSON.stringify(this.state); }
-  restore(serialized: string): void { this.cancelTraversal(); this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); this.cancelTraversal(); this.state.presentationCues=[]; this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); }
+  restore(serialized: string): void { this.cancelTraversal(); this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); this.cancelTraversal(); this.state.presentationCues=[]; for(const hazard of this.state.hazards)hazard.activePresentationEmitted=false; this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); }
   consumeEvents(): CombatEvent[] { const events = structuredClone(this.state.events); this.state.events.length=0; return events; }
   consumeWorldEvents(): WorldEvent[] { const events = structuredClone(this.state.worldEvents); this.state.worldEvents.length=0; return events; }
   drainPresentationCues(): readonly StoryCue[] { const cues=structuredClone(this.state.presentationCues);this.state.presentationCues.length=0;return cues; }
-  queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTimeSeconds'>):StoryCue{
+  queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTick'|'worldTimeSeconds'>):StoryCue{
     const normalized=structuredClone(cue);
     const instanceId=this.state.runId+':'+(this.state.encounterId??'free')+':cue:'+this.state.tick+':'+(++this.state.eventSequence);
-    const event:StoryCue={...normalized,instanceId,tick:this.state.tick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
+    const event:StoryCue={...normalized,instanceId,tick:this.state.tick,worldTick:this.state.worldTick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
     this.state.presentationCues.push(event);
     return structuredClone(event);
   }
@@ -657,6 +661,7 @@ export class CombatEngine {
     return true;
   }
   private tryDodge(player: CombatActor,direction:EvasionDirection): void {
+    if(this.playerIsDown())return;
     if(this.state.traversal)return;
     if(this.state.tick<this.state.actionUntil&&!this.state.actionCancelable)return;
     if(this.state.player.dodgeCharges<=0){this.emit('cue','No Dodge charges; create distance until one recovers.',player.id);return;}
@@ -730,6 +735,7 @@ export class CombatEngine {
   }
   private startPlayerAction(action:string,targetId?:ActorId,counter=false):boolean{
     const player=this.playerActor();
+    if(this.playerIsDown())return false;
     if(this.state.traversal)return false;
     if(!player||player.downed)return false;
     if(!counter&&this.state.tick<this.state.actionRecoveryUntil)return false;
@@ -765,8 +771,13 @@ export class CombatEngine {
     return true;
   }
   private updateHazards():void{
+    if(this.playerIsDown()){this.endPlayerCombat();return;}
     for(const hazard of this.state.hazards){
       if(this.state.worldTick<hazard.activeFrom||this.state.worldTick>=hazard.activeUntil)continue;
+      if(!hazard.activePresentationEmitted){
+        hazard.activePresentationEmitted=true;
+        this.queuePresentationCue({kind:'active',phase:'active',actorId:hazard.sourceId,targetId:hazard.targetActorId??this.state.playerId,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),durationTicks:hazard.activeUntil-this.state.worldTick,priority:'essential'});
+      }
       const targetClass=ATTACKS[hazard.attackId]?.targetClass;
       for(const actor of this.state.actors){
         if(actor.downed||hazard.hitIds.includes(actor.id)||(targetClass==='companion'?actor.id!==hazard.targetActorId:actor.id!==this.state.playerId))continue;
@@ -790,7 +801,8 @@ export class CombatEngine {
         else actor.vitality=Math.max(0,(actor.vitality??100)-hazard.damage);
         if(actor.id===this.state.playerId&&this.state.traversal)this.cancelTraversal();
         this.emit('damage',hazard.cue,actor.id,hazard.sourceId,undefined,hazard.attackId);
-        if(actor.id!==this.state.playerId||this.state.player.vitality>0)this.queuePresentationCue({kind:'hit',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeUntil-this.state.worldTick),priority:'essential'});
+        this.queuePresentationCue({kind:'hit',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeUntil-this.state.worldTick),priority:'essential'});
+        if(this.playerIsDown()){this.endPlayerCombat();return;}
       }
     }
     this.state.hazards=this.state.hazards.filter(hazard=>{const attack=ATTACKS[hazard.attackId];return this.state.worldTick<hazard.activeUntil+(attack?.recoveryTicks??0);});
@@ -821,7 +833,7 @@ export class CombatEngine {
       telegraph.remainingTicks=Math.max(0,phaseEnd-this.state.worldTick);
       const source=this.state.actors.find(actor=>actor.id===telegraph.sourceId);
       if(source)source.phase=telegraph.phase==='active'?'active':telegraph.phase==='recovery'?'recovery':'anticipation';
-      if(this.state.player.vitality>0&&priorPhase==='windup'&&telegraph.phase==='commit')this.queuePresentationCue({kind:'commit',phase:'commit',actorId:telegraph.sourceId,targetId:hazard.targetActorId??this.state.playerId,scopeId:hazard.id,attackId:telegraph.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeFrom-this.state.worldTick),priority:'essential'});
+      if(priorPhase==='windup'&&telegraph.phase==='commit')this.queuePresentationCue({kind:'commit',phase:'commit',actorId:telegraph.sourceId,targetId:hazard.targetActorId??this.state.playerId,scopeId:hazard.id,attackId:telegraph.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeFrom-this.state.worldTick),priority:'essential'});
     }
     const pending=this.state.pendingImpact;
     const player=this.playerActor();
@@ -835,6 +847,7 @@ export class CombatEngine {
     if(pending?.resolved&&this.state.tick>=pending.activeUntil)this.state.pendingImpact=undefined;
   }
   private resolvePlayerImpact(p:PendingImpact):void{
+    if(this.playerIsDown())return;
     const player=this.playerActor();
     const target=this.state.actors.find(actor=>actor.id===p.target);
     const objectTarget=!target&&(p.action==='heavy'||p.action==='charged_heavy')?this.state.movableObjects.find(object=>object.objectId===p.target&&object.phase==='resting'&&object.authored.playerInteractionId===p.interactionId):undefined;
@@ -906,6 +919,7 @@ export class CombatEngine {
     this.queuePresentationCue({kind:'hit',phase:'hit',actorId:player.id,targetId:target.id,position:copy(target.position),from:copy(player.position),to:copy(target.position),scopeId:this.state.encounterId,attackId:`aren-${p.action}` as AttackId,actionId:(ACTION_CLIPS[p.action]??'aren-hit') as ActionId,footprint:{width:1.2,length:p.range},intensity:Math.min(1,p.damage/36),priority:'essential',shape:'burst'});
   }
   private updateBossAI():void{
+    if(this.playerIsDown())return;
     const encounter=this.state.encounter;
     if(!encounter||this.state.rewardEmitted)return;
     const phase=encounter.phases[this.state.phaseIndex];
@@ -926,8 +940,9 @@ export class CombatEngine {
     }
   }
   private beginAttack(source:CombatActor,def:AttackDefinition):void{
+    if(this.playerIsDown())return;
     const target=def.targetClass==='companion'?this.selectedCompanion():this.playerActor();
-    if(!target||target.id===this.state.playerId&&this.state.player.vitality<=0)return;
+    if(!target)return;
     const id=`${source.id}:${def.id}:${this.state.tick}`;
     const aim=copy(target.position);
     const origin=copy(source.position);
@@ -1010,6 +1025,18 @@ export class CombatEngine {
       this.emitWorldEvent(restoration);
     }
   }
+  private playerIsDown():boolean{
+    const player=this.playerActor();
+    return !player||player.downed||this.state.player.vitality<=0;
+  }
+  private endPlayerCombat():void{
+    this.cancelTraversal();
+    this.state.pendingImpact=undefined;this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.state.counterUntil=0;
+    this.state.hazards=[];this.state.telegraphs=[];this.finishAction();
+    const player=this.playerActor();
+    if(player){player.downed=true;player.vitality=0;player.velocity=vec(0,0,0);player.actionEndsTick=0;player.actionId=ACTION_CLIPS.idle!;player.phase='idle';player.normalizedTime=0;}
+    this.state.player.vitality=0;
+  }
   /** Returns only an available local affordance; remote routes belong to CampaignDirector.travel. */
   nearestTraversal(position:Vec3):TraversalGate|undefined{
     if(this.state.traversal||this.state.timePolicy==='paused')return undefined;
@@ -1026,6 +1053,14 @@ export class CombatEngine {
   private canTraverse(gate:TraversalGate,player:CombatActor):boolean{
     const authored=gate.traversal;
     if(!authored||!gate.unlocked||gate.toRegion!==this.state.regionId||!Number.isInteger(authored.durationTicks)||authored.durationTicks<=0)return false;
+    if(authored.kind==='low-ledge'){
+      const ledge=authored.ledge;
+      if(!ledge||ledge.riseMeters<=0||Math.abs(gate.to.y-gate.from.y-ledge.riseMeters)>1e-6||distance2(gate.from,gate.to)>ledge.maxCrossingMeters)return false;
+      const face=this.state.arena.colliders.find(collider=>collider.id===ledge.faceColliderId&&gate.colliderIds.includes(collider.id));
+      if(!face?.blocksMovement||face.kind!=='box'||!face.halfExtents||Math.abs(face.from.y+face.halfExtents.y-gate.to.y)>1e-6)return false;
+      if(gate.to.x<face.from.x-face.halfExtents.x||gate.to.x>face.from.x+face.halfExtents.x||gate.to.z<face.from.z-face.halfExtents.z||gate.to.z>face.from.z+face.halfExtents.z)return false;
+      for(const point of gate.anchors)if(point.y<gate.from.y||point.y>gate.to.y+.15||distance2(point,gate.from)>ledge.maxCrossingMeters)return false;
+    }
     if(Math.hypot(player.position.x-gate.from.x,player.position.y-gate.from.y,player.position.z-gate.from.z)>authored.startRadius||Math.abs(player.position.y-gate.from.y)>.35)return false;
     if(!isSupportedCapsulePose(this.state.arena,player.position,player.radius,player.collisionHeight)||!isSupportedCapsulePose(this.state.arena,gate.from,player.radius,player.collisionHeight)||!isSupportedCapsulePose(this.state.arena,gate.to,player.radius,player.collisionHeight))return false;
     if(!isCirclePathClear(this.state.arena,player.position,gate.from,player.radius,player.collisionHeight))return false;
@@ -1284,7 +1319,7 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;state.attackSelectionWorldOffset=legacy?0:seed.attackSelectionWorldOffset??0;
   if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
   state.worldTimeScale=state.timePolicy==='paused'?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
-  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues??[]).map(cue=>({...cue,worldTimeSeconds:cue.worldTimeSeconds??cue.tick/60}));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
+  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues ?? []).map(cue => ({ ...cue, worldTick: cue.worldTick ?? (cue.worldTimeSeconds === undefined ? cue.tick : cue.worldTimeSeconds * 60), worldTimeSeconds: cue.worldTimeSeconds ?? cue.tick / 60 }));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
 }
 export function makeActor(id:ActorId,species:string,allegiance:CombatActor['allegiance'],position:Vec3,large:boolean,aerial:boolean,vitality:number,archetypeId:ActorId=id):CombatActor{
   const idle=ACTION_CLIPS[`${archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!;

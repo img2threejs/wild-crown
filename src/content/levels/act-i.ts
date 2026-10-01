@@ -1,5 +1,5 @@
 import { v, type RegionDefinition } from "./schema.js";
-import type { Vec3 } from "../../game/contracts.js";
+import type { RegionRouteDefinition, Vec3 } from "../../game/contracts.js";
 export const ACT_I_REGION_AUTHORING_STATUS = "unaccepted" as const;
 
 /** Six mission locations checked against the authored graph and concrete actor/interaction instances. */
@@ -17,7 +17,7 @@ const actor = (id: string, actorId: string, assetId: string, position: Vec3, pla
 const target = (id: string, position: Vec3, placement: "ground" | "canopy" | "water" | "elevated" | "underground" = "ground", visibleWhen?: string) => ({ id, kind: "interaction" as const, position, placement, interactionId: id, ...(visibleWhen ? { visibleWhen } : {}) });
 const landmark = (id: string, assetId: string, position: Vec3, placement: "ground" | "canopy" | "water" | "elevated" | "underground" = "ground", visibleWhen?: string) => ({ id, kind: "landmark" as const, assetId, position, placement, ...(visibleWhen ? { visibleWhen } : {}) });
 const route = (id: string, from: Vec3, to: Vec3, destinationRegionId: RegionDefinition["id"], kind: "path" | "bridge" | "canopy" | "water" | "cavern" | "gate", traversalActionId: string, colliderIds: readonly string[], traversalEvent: string, unlockFact?: string) => ({ id, from, to, anchors: [from, to], destinationRegionId, kind, traversalActionId, colliderIds, traversalEvent, ...(unlockFact ? { unlockFact } : {}) });
-const contextualRoute = (definition: ReturnType<typeof route>, kind: NonNullable<RegionDefinition['traversalArcs'][number]['traversal']>['kind'], durationTicks: number, anchors: readonly Vec3[]) => ({ ...definition, anchors, traversal: { kind, durationTicks, startRadius: 1.25 } });
+const contextualRoute = (definition: RegionRouteDefinition, kind: NonNullable<RegionRouteDefinition['traversal']>['kind'], durationTicks: number, anchors: readonly Vec3[], ledge?: NonNullable<RegionRouteDefinition['traversal']>['ledge']) => ({ ...definition, anchors, traversal: { kind, durationTicks, startRadius: 1.25, ...(ledge ? { ledge } : {}) } });
 
 export const ACT_I_REGIONS: readonly RegionDefinition[] = [
   {
@@ -173,6 +173,7 @@ export const ACT_I_REGIONS: readonly RegionDefinition[] = [
     traversalArcs: [
       contextualRoute(route("canopy-vine-bridge-arc", v(-7, 0, 0), v(2, 5, 17), "whispering-canopy", "bridge", "aren-staff-vault", ["canopy-vault-log", "canopy-root-ramp-collider", "canopy-vine-bridge-collider"], "canopy-vine-vault"), "vault", 240, [v(-7, 1.2, 0), v(-7, 1.2, 3), v(-7, 5.5, 14), v(2, 5.5, 17)]),
       route("canopy-bough-ramp-arc", v(12, 5, 17), v(15, 6, 20), "whispering-canopy", "bridge", "contextual-traverse", ["canopy-vine-bridge-collider", "canopy-bough-ramp-collider"], "canopy-bough-climb"),
+      contextualRoute(route("canopy-bridge-bough-ledge-arc", v(11.4, 5, 19), v(12.6, 7, 19), "whispering-canopy", "canopy", "aren-low-ledge", ["canopy-vine-bridge-collider", "canopy-upper-bough-collider"], "canopy-bough-side-climb"), "low-ledge", 72, [v(11.4, 7.1, 19), v(12.6, 7.1, 19)], { riseMeters: 2, maxCrossingMeters: 1.5, faceColliderId: "canopy-upper-bough-collider" }),
       contextualRoute(route("canopy-upper-bough-arc", v(18, 7, 23), v(23, 7, 23), "whispering-canopy", "canopy", "aren-swing", ["canopy-upper-bough-collider"], "canopy-monkey-chase"), "swing", 90, [v(18, 8, 23), v(20.5, 9, 23), v(23, 8, 23)]),
       route("canopy-bough-ramp-top-arc", v(15, 6, 20), v(18, 7, 23), "whispering-canopy", "bridge", "contextual-traverse", ["canopy-bough-ramp-collider", "canopy-upper-bough-collider"], "canopy-bough-top-climb"),
       route("canopy-east-bough-entry-arc", v(23, 7, 23), v(32, 7, 23.5), "whispering-canopy", "canopy", "contextual-traverse", ["canopy-upper-bough-collider"], "canopy-east-bough-entry"),
@@ -395,8 +396,8 @@ export const ACT_I_REGIONS: readonly RegionDefinition[] = [
       route("grove-refuge-out", v(29, 0, -10), v(-27, 0, -20), "refuge", "path", "contextual-traverse", ["grove-refuge-passage-collider"], "grove-refuge", "refugeOpen"),
     ],
     traversalArcs: [
-      contextualRoute(route("grove-oath-ramp-arc", v(-8.5, 0, 3), v(-8.5, 2, 11), "the-grove", "bridge", "aren-low-ledge", ["grove-oath-ramp-collider", "grove-oath-terrace-collider"], "first-pact-approach"), "low-ledge", 120, [v(-8.5, 2.5, 3), v(-8.5, 2.5, 11)]),
-      contextualRoute(route("grove-oath-terrace-arc", v(-8.5, 2, 11), v(-9, 2, 14), "the-grove", "path", "aren-low-slide", ["grove-oath-slide-ceiling", "grove-oath-terrace-collider"], "first-pact-approach"), "slide", 54, [v(-8.75, 2, 12.5)]),
+      route("grove-oath-ramp-arc", v(-8.5, 0, 3), v(-8.5, 2, 11), "the-grove", "bridge", "contextual-traverse", ["grove-oath-ramp-collider"], "first-pact-approach"),
+      contextualRoute(route("grove-oath-terrace-arc", v(-8.5, 2, 11), v(-9, 2, 14), "the-grove", "path", "aren-low-slide", ["grove-oath-slide-ceiling", "grove-oath-terrace-collider"], "first-pact-approach"), "slide", 54, [v(-8.6, 2, 11.6), v(-8.8, 2, 13.2)]),
       route("grove-canopy-overlook-arc", v(-22.5, 0, -7), v(-22.5, 3, 9), "the-grove", "canopy", "staff-vault", ["grove-canopy-overlook-ramp-collider"], "grove-overlook"),
       route("grove-overlook-branch-arc", v(-22.5, 3, 9), v(-22.5, 3, 14), "the-grove", "canopy", "staff-vault", ["grove-canopy-step-collider"], "grove-overlook"),
       route("grove-refuge", v(29, 0, -10), v(-27, 0, -20), "refuge", "path", "contextual-traverse", ["grove-refuge-passage-collider"], "grove-refuge", "refugeOpen"),

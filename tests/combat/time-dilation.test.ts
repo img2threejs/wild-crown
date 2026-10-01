@@ -406,9 +406,11 @@ describe('Perfect Dodge world-clock time dilation', () => {
     delete legacy.slowMotionElapsedTicks;
     const legacyCues = legacy.presentationCues as Array<Record<string, unknown>>;
     delete legacyCues[0]!.worldTimeSeconds;
+    delete legacyCues[0]!.worldTick;
     const restored = new CombatEngine(legacy as EngineStateSeed);
     const migratedCue = restored.drainPresentationCues()[0]!;
     expect(migratedCue.worldTimeSeconds).toBe(cue.tick / 60);
+    expect(migratedCue.worldTick).toBe(cue.tick);
 
     const scene = new THREE.Scene();
     const effects = new StoryEffects({ scene, capacity: 8 });
@@ -422,6 +424,18 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(effects.activeCount).toBe(0);
     expect(activeMaterials.every(material => Number.isFinite(material.opacity))).toBe(true);
     effects.dispose();
+  });
+
+  it('stamps and hydrates exact fractional cue ticks without quantizing through seconds', () => {
+    const state = makeClockState(); state.worldTick = 1.25;
+    const source = new CombatEngine(state);
+    source.queuePresentationCue({ kind: 'hit', phase: 'hit', position: vec(0, 0, 0), durationTicks: 54, priority: 'essential' });
+    const hydrated = new CombatEngine(JSON.parse(source.serialize()) as EngineStateSeed);
+    expect(hydrated.drainPresentationCues()[0]?.worldTick).toBe(1.25);
+    const legacy = JSON.parse(source.serialize()) as EngineStateSeed;
+    if (legacy.presentationCues) for (const cue of legacy.presentationCues) Reflect.deleteProperty(cue, 'worldTick');
+    const migrated = new CombatEngine(legacy);
+    expect(migrated.drainPresentationCues()[0]?.worldTick).toBe(1.25);
   });
 
   it('publishes weakpoint exposure for a non-boss target and keeps boss exposure aligned', () => {
