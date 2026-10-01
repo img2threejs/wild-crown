@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "assetId": "asha",
+  "candidateNumber": 2,
+  "candidateCount": 4,
+  "selection": "Selected from four previews as the closest silhouette match to the approved Asha side-profile crop.",
+  "sourceReference": {
+    "path": "asset-source/references/asha-approved-concept.png",
+    "sha256": "eb65daea83c6d5a8a43e80005361928c324c7789b37eac698df40a12858e150e",
+    "cropBoxPixels": [105, 515, 755, 1030]
+  },
+  "taskId": "05baf3f0-a4e0-4cdf-bb60-ba484e1da612",
+  "output": {
+    "path": "model.glb",
+    "sha256": "ede4cf7d1560856a1c86aad86cc8b30da7bc273e6de3d717ca82546ffee0bb26",
+    "bytes": 79718876,
+    "format": "glTF 2.0 binary",
+    "nodes": 1,
+    "meshes": 1,
+    "vertices": 989606,
+    "skins": 0,
+    "animations": 0,
+    "structuralReferencesValid": true
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated; no authored species/body-part policy",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-measured",
+    "animationQuality": "not-measured",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "Single-view side-profile crop does not establish unseen-side anatomy.",
+      "Static high-poly candidate with no skin or animation clips.",
+      "R09 rigging/clips and the remaining GLTF production gates are still required."
+    ]
+  }
+}
