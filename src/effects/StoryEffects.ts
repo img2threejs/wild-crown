@@ -20,7 +20,7 @@ interface EffectSlot {
   active: boolean;
   essential: boolean;
   priority: number;
-  startWorldTimeSeconds: number;
+  startWorldTick: number;
   durationTicks: number;
   scopeId: string | undefined;
   instanceId: string;
@@ -37,6 +37,7 @@ interface EffectSlot {
 
 const COLORS: Readonly<Record<StoryCue['kind'], number>> = {
   cancel: 0xffffff,
+  active: 0xc9a568,
   anticipation: 0xbfa06e, commit: 0xc9a568, hit: 0x9c6949, landing: 0x816f55,
   heartroot: 0xc1a66d, 'perfect-dodge': 0xd1c29b, tether: 0x9dbc99, cleanse: 0xb7c69e, bond: 0xa5c3a4,
   dominion: 0x78573c, restoration: 0x9cb890, 'restoration-water': 0x83a9a1, 'restoration-roots': 0x997c5b,
@@ -45,7 +46,7 @@ const COLORS: Readonly<Record<StoryCue['kind'], number>> = {
   'sap-vein': 0x51332a, footprint: 0x9a815f, pounce: 0x997c5b, 'roar-cone': 0xb39769, 'low-wave': 0x847859,
   grovebreak: 0x876547, march: 0x74634a, reunion: 0xa7bd9c, heartbeat: 0x6e9577,
 };
-const ESSENTIAL: Readonly<Partial<Record<StoryCue['kind'], true>>> = { anticipation: true, commit: true, phase: true };
+const ESSENTIAL: Readonly<Partial<Record<StoryCue['kind'], true>>> = { anticipation: true, commit: true, active: true, phase: true };
 const COSMETIC: Readonly<Partial<Record<StoryCue['kind'], true>>> = { 'sap-vein': true, footprint: true, heartbeat: true, march: true };
 const CAPACITY_MIN = 8;
 const CAPACITY_MAX = 96;
@@ -62,7 +63,7 @@ export class StoryEffects {
   private reduced: boolean;
   private destroyed = false;
   private tick = 0;
-  private worldTimeSeconds = 0;
+  private worldTick = 0;
   private readonly socket?: StoryEffectsOptions['resolveSocket'];
 
   constructor(options: StoryEffectsOptions) {
@@ -89,7 +90,7 @@ export class StoryEffects {
       const mesh = new THREE.Mesh(this.geometries[i % this.geometries.length]!, material);
       mesh.visible = false;
       this.group.add(mesh);
-      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, dangerGeometry, dangerPositions, family: undefined, active: false, essential: false, priority: 0, startWorldTimeSeconds: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
+      this.slots.push({ mesh, material, sectorGeometry, sectorPositions, dangerGeometry, dangerPositions, family: undefined, active: false, essential: false, priority: 0, startWorldTick: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kind: 'hit', phase: 'hit', shape: 'ring', start: new THREE.Vector3(), end: new THREE.Vector3(), width: 1, length: 1, angle: 0, sectorRadians: 0 });
     }
     options.scene.add(this.group);
   }
@@ -116,7 +117,7 @@ export class StoryEffects {
     slot.active = true;
     slot.essential = priority === 3;
     slot.priority = priority;
-    slot.startWorldTimeSeconds = cue.worldTimeSeconds;
+    slot.startWorldTick = cue.worldTick;
     slot.durationTicks = family ? cue.durationTicks! : Math.max(1, Math.round(cue.durationTicks ?? (priority === 3 ? 42 : 36)));
     slot.scopeId = cue.scopeId;
     slot.instanceId = cue.instanceId;
@@ -145,17 +146,19 @@ export class StoryEffects {
     return accepted;
   }
 
-  /** Age VFX against engine-owned scaled world time; simulation tick remains the event identity clock. */
+  /** Age VFX in authoritative world ticks, avoiding seconds-roundtrip errors at phase boundaries. */
   update(worldClock: WorldClockSnapshot): void {
     if (this.destroyed) return;
     this.tick = worldClock.simulationTick;
-    this.worldTimeSeconds = worldClock.worldTimeSeconds;
+    this.worldTick = worldClock.worldTick;
     for (const slot of this.slots) {
       if (!slot.active) continue;
-      const elapsedWorldSeconds = Math.max(0, this.worldTimeSeconds - slot.startWorldTimeSeconds);
-      const t = Math.min(1, elapsedWorldSeconds / (slot.durationTicks / 60));
-      this.animate(slot, t);
-      if (t >= 1) this.release(slot);
+      if (this.worldTick >= slot.startWorldTick + slot.durationTicks) {
+        this.release(slot);
+        continue;
+      }
+      const elapsedWorldTicks = Math.max(0, this.worldTick - slot.startWorldTick);
+      this.animate(slot, elapsedWorldTicks / slot.durationTicks);
     }
   }
 
@@ -206,8 +209,8 @@ export class StoryEffects {
     if (priority === 0) return undefined;
     let victim: EffectSlot | undefined;
     for (const slot of this.slots) {
-      const candidateAge = Math.max(0, this.worldTimeSeconds - slot.startWorldTimeSeconds) * 60 / slot.durationTicks;
-      const victimAge = victim ? Math.max(0, this.worldTimeSeconds - victim.startWorldTimeSeconds) * 60 / victim.durationTicks : 0;
+      const candidateAge = Math.max(0, this.worldTick - slot.startWorldTick) / slot.durationTicks;
+      const victimAge = victim ? Math.max(0, this.worldTick - victim.startWorldTick) / victim.durationTicks : 0;
       if (!slot.essential && slot.priority < priority && (!victim || slot.priority < victim.priority || candidateAge > victimAge)) victim = slot;
     }
     if (victim) this.release(victim);

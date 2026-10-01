@@ -47,11 +47,11 @@
     audio.setSettings(SMOKE_SETTINGS);
     audio.setStoryState({ corruption: 0.4, restoration: 0.4, bond: 0.7, dominion: 0.2 });
     const cues = [
-      { instanceId: 'smoke-sap', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
-      { instanceId: 'smoke-tether', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-bond', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-ending-pact', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-telegraph', tick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
+      { instanceId: 'smoke-sap', tick: 10, worldTick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
+      { instanceId: 'smoke-tether', tick: 10, worldTick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-bond', tick: 10, worldTick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-ending-pact', tick: 10, worldTick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-telegraph', tick: 10, worldTick: 10, worldTimeSeconds: SMOKE_CLOCK.cueTimeSeconds, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
     ];
     const acceptedEffects = effects.emitAll(cues);
     effects.update(SMOKE_CLOCK.snapshot);

@@ -6,7 +6,7 @@ import type { WorldClockSnapshot } from '../../src/game/contracts.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
 
 function cue(instanceId: string, kind: StoryCue['kind'], phase: StoryCue['phase'] = 'hit', extra: Partial<StoryCue> = {}): StoryCue {
-  return { instanceId, tick: 120, worldTimeSeconds: 2, kind, phase, position: { x: 4, y: 0.1, z: -3 }, scopeId: 'encounter-a', ...extra };
+  return { instanceId, tick: 120, worldTick: 120, worldTimeSeconds: 2, kind, phase, position: { x: 4, y: 0.1, z: -3 }, scopeId: 'encounter-a', ...extra };
 }
 
 function worldClock(simulationTick: number, worldTick: number, timeScale = 1, policy: WorldClockSnapshot['policy'] = 'normal'): WorldClockSnapshot {
@@ -184,7 +184,7 @@ test('roar telegraph lifetime follows scaled world time and freezes when world t
   const scene = new THREE.Scene();
   const effects = new StoryEffects({ scene, capacity: 8 });
   assert.equal(effects.emit(cue('roar-slow-warning', 'anticipation', 'anticipation', {
-    tick: 100, worldTimeSeconds: 5, shape: 'sector', durationTicks: 60, priority: 'essential',
+    tick: 100, worldTick: 300, worldTimeSeconds: 5, shape: 'sector', durationTicks: 60, priority: 'essential',
     position: { x: 0, y: 0, z: 0 }, footprint: { width: 3, length: 6, angleRadians: 0, sectorRadians: Math.PI / 3 },
   })), true);
   const warning = effects.group.children[0] as THREE.Mesh;

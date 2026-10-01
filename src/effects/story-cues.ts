@@ -3,13 +3,13 @@ import { ATTACKS } from '../game/combat/content.js';
 
 export type StoryCueKind =
   | 'cancel'
-  | 'anticipation' | 'commit' | 'hit' | 'landing' | 'perfect-dodge'
+  | 'anticipation' | 'commit' | 'active' | 'hit' | 'landing' | 'perfect-dodge'
   | 'heartroot' | 'tether' | 'cleanse' | 'bond' | 'dominion' | 'restoration'
   | 'restoration-water' | 'restoration-roots' | 'restoration-seeds' | 'restoration-animals'
   | 'possession' | 'phase' | 'ending' | 'ending-living-pact' | 'ending-dominion' | 'ending-severance'
   | 'sap-vein' | 'footprint' | 'pounce' | 'roar-cone' | 'low-wave'
   | 'grovebreak' | 'march' | 'reunion' | 'heartbeat';
-export type CuePhase = 'anticipation' | 'commit' | 'hit' | 'landing' | 'sustain' | 'resolve';
+export type CuePhase = 'anticipation' | 'commit' | 'active' | 'hit' | 'landing' | 'sustain' | 'resolve';
 export type CuePriority = 'essential' | 'story' | 'cosmetic';
 export type CueShape = 'ring' | 'arc' | 'sector' | 'beam' | 'trail' | 'pulse' | 'footprint' | 'wave' | 'vein' | 'burst';
 
@@ -17,6 +17,8 @@ export type CueShape = 'ring' | 'arc' | 'sector' | 'beam' | 'trail' | 'pulse' | 
 export interface StoryCue {
   readonly instanceId: string;
   readonly tick: number;
+  /** Exact engine-owned scaled world tick, including quarter ticks during slow motion. */
+  readonly worldTick: number;
   /** Engine-owned scaled world time at event creation; `tick` remains simulation identity. */
   readonly worldTimeSeconds: number;
   readonly kind: StoryCueKind;
@@ -32,7 +34,7 @@ export interface StoryCue {
   readonly to?: Vec3;
   /** Authored hazard footprint in meters, plus orientation and actual arc aperture in radians. */
   readonly footprint?: Readonly<{ width: number; length: number; angleRadians?: number; sectorRadians?: number }>;
-  /** Presentation lifetime in 60-Hz world ticks, aged by worldTimeSeconds. */
+  /** Presentation lifetime in 60-Hz world ticks, aged by exact engine worldTick. */
   readonly durationTicks?: number;
   readonly intensity?: number;
   readonly priority?: CuePriority;
@@ -60,7 +62,7 @@ export type CueCancellationReason = 'interrupt' | 'death' | 'unload' | 'skip' | 
 
 /** Authored family identity only; geometry and phase time always come from the emitted cue. */
 export function dangerFamily(cue: StoryCue): 'strike' | 'sweep' | 'wave' | 'area' | 'projectile' | undefined {
-  if (!cue.attackId || (cue.kind !== 'anticipation' && cue.kind !== 'commit' && cue.kind !== 'hit')) return undefined;
+  if (!cue.attackId || (cue.kind !== 'anticipation' && cue.kind !== 'commit' && cue.kind !== 'active' && cue.kind !== 'hit')) return undefined;
   const kind = ATTACKS[cue.attackId]?.hazard.kind;
   return kind === 'cone' ? 'area' : kind;
 }
