@@ -25,6 +25,7 @@
     import { StoryEffects } from '/src/effects/StoryEffects.ts';
     import { StoryAudio } from '/src/audio/StoryAudio.ts';
     const SMOKE_SETTINGS = { masterVolume: 1, musicVolume: 0.8, effectsVolume: 1, ambienceVolume: 0.7, dialogueVolume: 1 };
+    const SMOKE_WORLD_CLOCK = { simulationTick: 10, worldTick: 10, worldTimeSeconds: 10 / 60, timeScale: 1, policy: 'normal' };
 
     const canvas = document.querySelector('#fx-canvas');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
@@ -46,17 +47,16 @@
     audio.setSettings(SMOKE_SETTINGS);
     audio.setStoryState({ corruption: 0.4, restoration: 0.4, bond: 0.7, dominion: 0.2 });
     const cues = [
-      { instanceId: 'smoke-sap', tick: 10, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
-      { instanceId: 'smoke-tether', tick: 10, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-bond', tick: 10, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-ending-pact', tick: 10, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
-      { instanceId: 'smoke-telegraph', tick: 10, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
+      { instanceId: 'smoke-sap', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'sap-vein', phase: 'sustain', position: { x: -4, y: 0.02, z: 0 }, footprint: { width: 2.4, length: 0.45, angleRadians: -0.2 }, shape: 'vein', durationTicks: 180, priority: 'cosmetic' },
+      { instanceId: 'smoke-tether', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'tether', phase: 'sustain', from: { x: -2.5, y: 1.1, z: -1 }, to: { x: 2.3, y: 0.8, z: -1 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-bond', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'bond', phase: 'sustain', from: { x: 1.5, y: 0.15, z: 2 }, to: { x: 3, y: 0.15, z: 2 }, shape: 'beam', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-ending-pact', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'ending-living-pact', phase: 'resolve', position: { x: 0, y: 0.25, z: 2 }, shape: 'arc', durationTicks: 180, priority: 'story' },
+      { instanceId: 'smoke-telegraph', tick: 10, worldTimeSeconds: SMOKE_WORLD_CLOCK.worldTimeSeconds, kind: 'anticipation', phase: 'anticipation', position: { x: 0, y: 0.04, z: -3 }, footprint: { width: 1.8, length: 1.8 }, shape: 'ring', durationTicks: 180, priority: 'essential' },
     ];
     effects.emitAll(cues);
     const metadata = document.querySelector('#runtime-metadata');
     window.__storyAudio = audio;
     window.__storyEffects = effects;
-    window.__storyRenderCount = 0;
     document.querySelector('#unlock-audio').addEventListener('click', async () => {
       const event = { ...cues[1], instanceId: 'smoke-audio-danger' };
       const sharedListener = new THREE.AudioListener();
@@ -87,9 +87,8 @@
       document.body.dataset.sharedContextReusable = String(contextSurvivedDispose && secondReused && secondPlayed && secondOutputRms > 0);
     });
     function frame() {
-      effects.update(10 + Math.min(window.__storyRenderCount, 20));
+      effects.update(SMOKE_WORLD_CLOCK);
       renderer.render(scene, camera);
-      window.__storyRenderCount++;
       requestAnimationFrame(frame);
     }
     metadata.textContent = JSON.stringify({ mode: 'presentation-only', visibleEffects: effects.activeCount, activeCanvas: !renderer.getContext().isContextLost() }, null, 2);

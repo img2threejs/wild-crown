@@ -226,6 +226,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
         ${meter(playerCopy.hud.instinct, hud.instinct, 100, 'instinct', playerCopy.hud.instinct_description)}
       </section>
       ${boss ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
+      ${vm.hud.target?.weakPointExposed ? `<aside class="wc-panel wc-target-exposure" role="status"><strong>${esc(vm.hud.target.id.toString().replaceAll('-', ' ').toUpperCase())}</strong><span>WEAK POINT EXPOSED</span></aside>` : ''}
       ${objective && !boss ? `<aside class="wc-panel wc-objective"><strong>${esc(quest?.title ?? 'Current Objective')}</strong><p>${esc(objective.title)}</p></aside>` : ''}
       ${boss ? `<div class="wc-brand-mark">${esc(playerCopy.title.name)}</div>` : ''}
       ${interactionPrompt(vm)}

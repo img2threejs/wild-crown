@@ -23,7 +23,7 @@ describe('Vara aerial scout mark', () => {
     const region = { id: 'whispering-canopy', bounds, ground: { y: 0, surfaces: [floor], colliders: [] }, traversalArcs: [] };
     const slots = { scout: 'vara' as const };
     const state = {
-      tick: 1, runId: 'vara-test', playerId: 'aren', targetId: 'hostile', regionId: 'whispering-canopy', encounter: null,
+      tick: 1, worldTick: 1, worldTimeScale: 1, runId: 'vara-test', playerId: 'aren', targetId: 'hostile', regionId: 'whispering-canopy', encounter: null,
       worldFacts: {}, actors: [actor('aren', { x: 0, y: 0, z: 0 }, 'player'), actor('vara', { x: 0, y: 0, z: 0 }, 'ally'), actor('hostile', { x: 0, y: 0, z: 0 }, 'hostile')],
       arena: arenaFromRegion(region as never), companionState: createCompanionState(slots, 1), companionSlots: slots, events: [], traversalGates: [],
     } as unknown as EngineState;

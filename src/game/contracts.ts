@@ -125,6 +125,8 @@ export interface ActorSnapshot {
   visible: boolean;
   downed: boolean;
   possessed: boolean;
+  /** True while the authoritative world-clock stagger or Perfect Dodge weakpoint window is open. */
+  weakPointExposed?: boolean;
 }
 
 export interface MovableObjectSnapshot {
@@ -134,9 +136,23 @@ export interface MovableObjectSnapshot {
   rotationY?: number;
 }
 
+export interface WorldClockSnapshot {
+  /** Fixed simulation-step count; new engines start at zero and snapshot restore preserves it. */
+  readonly simulationTick: number;
+  /** Fractional 60Hz ticks; monotonic across region loads/checkpoint resets and preserved by snapshot restore. */
+  readonly worldTick: number;
+  /** `worldTick / 60`; do not derive this from render delta. */
+  readonly worldTimeSeconds: number;
+  /** World ticks advanced per simulation tick: 1 normal, 0.25 slow, 0 paused. */
+  readonly timeScale: number;
+  /** Perfect-dodge slow motion is engine-controlled, not accepted by `setTimePolicy`. */
+  readonly policy: "normal" | "perfect-dodge-slow" | "paused";
+}
+
 export interface CombatSnapshot {
   actors: readonly ActorSnapshot[];
   movableObjects: readonly MovableObjectSnapshot[];
+  readonly worldClock: WorldClockSnapshot;
   player: {
     vitality: number;
     maxVitality: number;
@@ -806,6 +822,7 @@ export interface GameViewModel {
       playerActionId?: ActionId;
     };
     targetId?: ActorId;
+    target?: ActorSnapshot;
   };
   campaign: CampaignSnapshot | null;
   journal: { quests: readonly QuestDefinition[]; region: RegionId | null };

@@ -15,8 +15,8 @@ const presentation = new StoryPresentation({
 // Call after draining CombatEngine.drainPresentationCues() for this fixed-step tick.
 presentation.consumeTick(cues);
 
-// Call with the authoritative simulation tick, not frame delta or wall time.
-presentation.update(simulationTick, {
+// Pass the complete engine-owned clock; never derive effect time from RAF delta.
+presentation.update(snapshot.worldClock, {
   position: listenerPosition,
   forward: cameraForward,
   up: cameraUp,
@@ -27,9 +27,9 @@ presentation.update(simulationTick, {
 await presentation.unlockAudio();
 ```
 
-`consumeTick` is separate from durable-world-event processing. The simulation tick owns cue start/order and effect aging; unchanged tick means no effect age progression during pause, while Perfect Dodge slow motion advances only as fixed-step simulation ticks advance. Audio event scheduling is one-shot at the committed cue; the audio graph and ambience continue on the browser audio clock. The caller cancels scopes on interrupt, death, cinematic skip, region unload, and campaign load, then disposes the presentation module on renderer destruction.
+`consumeTick` is separate from durable-world-event processing. Simulation tick owns cue identity/order; each cue also carries engine-provided `worldTimeSeconds`. VFX age by scaled world-time elapsed (60-Hz `worldTick / 60`): slow motion erodes at the authored rate, and zero-scale pause freezes effects. Never derive it from RAF delta. Sound cues remain one-shot on event consumption; ambience and menu audio are not replayed or rate-scaled per update. The caller cancels scopes on interrupt, death, cinematic skip, region unload, and campaign load, then disposes the presentation module on renderer destruction.
 
-`StoryCue` uses stable `instanceId` plus `tick`, a semantic `kind`, explicit `phase`, optional actor/target/attack/action/scope IDs, world position/endpoints, authored footprint in meters, optional duration/priority/shape. Never derive a cue or its timing from animation clip names, resource bars, or VFX output. The combat owner emits the cue only when the authoritative phase/hit/success happens. The audio/VFX consumers never grant gameplay success.
+`StoryCue` retains its simulation `tick`/`instanceId` identity and carries engine `worldTimeSeconds`, a semantic `kind`, explicit `phase`, optional actor/target/attack/action/scope IDs, world position/endpoints, authored footprint in meters, optional 60-Hz world-tick duration/priority/shape. Never derive a cue or its timing from animation clip names, resource bars, or VFX output. The combat owner emits the cue only when the authoritative phase/hit/success happens. The audio/VFX consumers never grant gameplay success.
 
 ## Pooled VFX
 
@@ -59,7 +59,7 @@ Adaptive cue arrangements shift with supplied corruption/restoration/Bond/Domini
 
 ## Evidence and checks
 
-- `tests/effects/story-effects.test.ts` covers event-instance deduplication and load reset, scoped/global cancellation, reserved capacity/cosmetic eviction, tether endpoints, cone facing/aperture/range, cached bounds after aperture reuse, exact telegraph bounds, essential warning visibility through expiry, reduced-mode geometry, and fixed-step pause/expiry behavior.
+- `tests/effects/story-effects.test.ts` covers event-instance deduplication/load reset, scope cancellation, pool priority, exact geometry/cache bounds, reduced-mode warning floor, and scaled world-clock aging: 12 ticks at 0.25, zero-rate freeze, and expiry by world duration.
  - `tests/effects/story-effects.smoke.html` injects presentation-only cues into a real Three.js renderer and has a user-gesture audio control. Its cues are visual/audio fixtures only and never imply a successful gameplay event.
  - The browser harness exercises independent audio consumers sharing the renderer's `AudioListener`; disposing one consumer must not close the listener-owned context.
  - `evidence/effects/browser-smoke.json` records the actual browser capture and audio output metadata. The screenshot is a runtime harness, not a gameplay scene or a readiness claim.

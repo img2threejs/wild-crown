@@ -21,7 +21,7 @@ function engine(companions: { combat?: CompanionId; utility?: CompanionId }): En
   const region = { id: 'whispering-canopy', bounds, ground: { y: 0, surfaces: [floor], colliders: [] }, traversalArcs: [] };
   const companionState = createCompanionState(companions, 1);
   return {
-    tick: 1, runId: 'support-test', playerId: 'aren', targetId: 'hostile', regionId: 'whispering-canopy', encounter: null,
+    tick: 1, worldTick: 1, worldTimeScale: 1, runId: 'support-test', playerId: 'aren', targetId: 'hostile', regionId: 'whispering-canopy', encounter: null,
     worldFacts: {}, actors: [actor('aren', { x: 0, y: 0, z: 0 }, 'player'), ...Object.values(companions).map(id => actor(id, { x: 0, y: 0, z: 0 })), actor('hostile', { x: 0, y: 0, z: 0 }, 'hostile')],
     arena: arenaFromRegion(region as never), movableObjects: [], companionState, companionSlots: companions, events: [], traversalGates: [],
   } as unknown as EngineState;
@@ -49,6 +49,7 @@ describe('distinct nonlethal companion support', () => {
     hostile.phase = 'active';
     hostile.staggerUntil = 0;
     state.tick = 91;
+    state.worldTick = 91;
     state.companionState.tokens.available = 1;
     expect(companionCommand(state, 'koro', 'special', hostile.id)).toBe(true);
     stepCompanions(state);
@@ -57,6 +58,7 @@ describe('distinct nonlethal companion support', () => {
     expect(hostile.vitality).toBe(100);
 
     state.tick = 92;
+    state.worldTick = 92;
     hostile.phase = 'anticipation';
     stepCompanions(state);
     expect(hostile.staggerUntil).toBe(98);
