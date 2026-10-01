@@ -43,3 +43,26 @@ Actor snapshots use `id` for the exact placed runtime instance and `archetypeId`
 The object sweeps its authored source-to-destination path on its support surface over 24 ticks. A collision or occupied path returns it to its authored source without a world event. A successful landing emits one stable `object-moved` WorldEvent; it does not deal damage, subdue hunters, complete a quest, or change a route/collider. Only a living `hunter-ranged` instance with a windup telegraph still open and within the authored effect radius is interrupted; that exact actor receives a 24-tick stagger/counter window.
 
 Region loading places the object at its source unless the persisted `movedFactId` is true, in which case it loads settled at the authored destination. Campaign persistence owns the fact; presentation never advances movement or invents a second event.
+
+## Contextual traversal (M04)
+
+Only local arcs carrying explicit `RegionRouteDefinition.traversal` metadata are E affordances. Four existing route IDs now carry authored start, intermediate foot-pose anchors, supported landing, native action ID and world-tick duration:
+
+| Route | Type / action ID | Duration |
+| --- | --- | --- |
+| `canopy-vine-bridge-arc` | Vault / `aren-staff-vault` | 240 ticks |
+| `grove-oath-ramp-arc` | Low ledge / `aren-low-ledge` | 120 ticks |
+| `grove-oath-terrace-arc` | Slide / `aren-low-slide` | 54 ticks |
+| `canopy-upper-bough-arc` | Swing / `aren-swing` | 90 ticks |
+
+The engine owns one transient traversal and moves continuously from the current supported pose through the authored start and every anchor. It validates the approach, full-height start/landing capsule, route gate and complete swept path before starting; every fixed-step segment is checked again against the current capsule solver. Vault clears the authored canopy log; Slide uses a 0.65-meter capsule under the Grove overhead obstacle and must stand safely at its landing. Existing walkable surfaces are unchanged. No jump input, collision-ignore list, rendering root motion, or remote-coordinate walk grants traversal. Untyped ordinary arcs remain ordinary world paths, not fabricated animation affordances.
+
+During traversal, movement, Dodge, attacks, ability actions and world interactions cannot move or replace Aren's path. ActorSnapshot exposes the exact authored action ID and authoritative normalizedTime from scaled world ticks, consumed by the existing GameRenderer animation controller. Pause freezes both pose and timing. Incoming damage, down/death, possession, gate loss or newly blocked geometry abort without success; rollback uses the last full-height supported pose and clears pending combat state. Reset also clears in-flight state, retaining that safe pose even when restoring an encounter checkpoint. Region replacement discards the old traversal and loads the requested authored supported spawn.
+
+Runtime schema 2 retains the optional transient traversal only to record its safe rollback pose. Constructor/restore intentionally discard an in-flight path to that pose and clear its pending action, rather than resuming an airborne save; completed poses remain unchanged. Campaign IndexedDB format is untouched. Successful landing emits one transient CombatEvent with the exact local route ID. It emits no cross-region WorldEvent, campaign fact, quest reward, or region change. CampaignDirector.travel remains the only cross-region travel/loading authority.
+
+Scoped proof: deterministic traversal regressions cover success, locked/wrong-height/remote starts, blocked landing/ceiling, mid-flight landing obstruction, incoming damage/death, downing, pause, runtime restore, reset and region load. Actual-engine smoke completed all four authored routes at their supported endpoints with one local completion and zero WorldEvents each. This is simulation proof, not native visual/release acceptance: current producer/runtime Aren manifests have null nativeGlb/runtimeUrl, blocked evidence, null Vault/Slide clip bindings and no Low Ledge/Swing bindings. The inspected Aren source candidate has no skin or animation clips. Verified native traversal clips, root/contact evidence and parent-owned browser visual proof remain required.
+
+### R08 producer dependency
+
+Attack anticipation/commit/hit cues now share the actual collision predicate's geometry: target-centered radius-only disks for strike/projectile, target-centered oriented rectangles for sweep/wave, an axis-aligned area rectangle, and an origin-centered cone sector. Bounds metadata no longer centers lanes at their midpoint or pads them with unrelated radius. Anticipation lasts the authored windup; commit/hit carry remaining authoritative world-tick deadlines. Cues use attack-instance scopes; actual interrupts emit scoped cancellation, while terminal death and reset/restore emit global cancellation through the existing stream. This producer depends on R08's cancellation-aware presentation consumer and StoryCue contract; no effects/audio ownership moved to the engine.

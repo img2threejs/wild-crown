@@ -5,7 +5,7 @@ import { ACTORS, INTERACTIONS, REGIONS } from '../../content/campaign.js';
 import { COMPANION_ROSTER, type CompanionCommand, type CompanionRosterState, companionCommand, configureCompanionSlots, configureCompanions, createCompanionState, stepCompanions } from '../companions/CompanionSystem.js';
 import { ATTACKS, BOSS_ENCOUNTERS, WILDLIFE_ENCOUNTERS, type AttackDefinition, type BossEncounterDefinition } from './content.js';
 import { EVASION_PROFILES, type EvasionDirection, type EvasionProfile, type EvasionProfileId, type HazardDefinition } from './evasion.js';
-import { arenaFromRegion, distance2, facingFrom, groundHeightAt, moveCircle, pointInSector, vec, type CombatArena, type Rect } from './geometry.js';
+import { arenaFromRegion, distance2, facingFrom, groundHeightAt, isAerialCirclePathClear, isCirclePathClear, isSupportedCapsulePose, moveCircle, pointInSector, vec, type CombatArena, type Rect } from './geometry.js';
 
 export const FIXED_STEP_SECONDS = 1 / 60;
 const MAX_CATCH_UP_TICKS = 8;
@@ -23,6 +23,7 @@ const ACTION_CLIPS: Readonly<Record<string, ActionId>> = {
   forward_left_dive_roll: 'aren-forward-left-dive-roll' as ActionId, forward_right_dive_roll: 'aren-forward-right-dive-roll' as ActionId,
   back_left_pivot_roll: 'aren-back-left-pivot-roll' as ActionId, back_right_pivot_roll: 'aren-back-right-pivot-roll' as ActionId,
   low_slide: 'aren-low-slide' as ActionId, staff_vault: 'aren-staff-vault' as ActionId,
+  low_ledge: 'aren-low-ledge' as ActionId, swing: 'aren-swing' as ActionId,
   perfect_dodge_left: 'aren-perfect-dodge-left' as ActionId, perfect_dodge_right: 'aren-perfect-dodge-right' as ActionId,
   dodge_recovery: 'aren-dodge-recovery' as ActionId, hard_landing: 'aren-hard-landing' as ActionId,
   stumble_recovery: 'aren-stumble-recovery' as ActionId, light_1: 'aren-light-1' as ActionId,
@@ -67,16 +68,18 @@ export interface EngineState {
   actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; attackSelectionWorldOffset: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
   companionState: CompanionRosterState; companionSlots: { combat?: CompanionId; utility?: CompanionId; scout?: 'vara' };
   eventSequence: number; rewardEmitted: boolean; checkpoint: EncounterCheckpoint | null; traversalGates: TraversalGate[]; pendingImpact?: PendingImpact; presentationCues: StoryCue[];
+  traversal?: LiveTraversal;
 }
 export type EngineStateSeed = Partial<Omit<EngineState, 'schemaVersion'>> & { schemaVersion?: 1 | 2 };
-export interface TraversalGate { id:string; routeId:string; from:Vec3; to:Vec3; anchors:readonly Vec3[]; fromRegion:RegionId; toRegion:RegionId; width:number; rise:number; unlocked:boolean; unlockFact?:string; traversalEvent:string; colliderIds:readonly string[] }
+export interface TraversalGate { id:string; routeId:string; from:Vec3; to:Vec3; anchors:readonly Vec3[]; fromRegion:RegionId; toRegion:RegionId; width:number; rise:number; unlocked:boolean; unlockFact?:string; traversalEvent:string; colliderIds:readonly string[]; traversalActionId:ActionId; traversal?:RegionRouteDefinition['traversal'] }
+interface LiveTraversal { gate:TraversalGate; points:Vec3[]; lengths:number[]; length:number; segment:number; segmentDistance:number; startedAtWorldTick:number; lastSafePose:Vec3; lastSafeFacing:Vec3; standingHeight:number; }
 export interface EncounterStart { encounterId:string; regionId:RegionId; runId:string; playerPosition?:Vec3; bossPosition?:Vec3; companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'}; actors?:readonly CombatActor[]; worldFacts?:Readonly<Record<string,boolean|number|string>>;}
 export interface RegionLoadInput { regionId:RegionId;runId:string;presentActorIds:readonly string[];playerPosition?:Vec3;companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'};chapter?:number;wardenCall?:boolean;bond?:number;dominionUsed?:boolean;worldFacts?:Readonly<Record<string,boolean|number|string>>; }
 export interface AttackImpact { targetId: ActorId; damage: number; avoided: boolean; interrupt: boolean; }
 
 export class CombatEngine {
   private state: EngineState;
-  constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); }
+  constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); this.cancelTraversal(); }
 
   loadRegion(input:RegionLoadInput):void{
     const region=REGIONS.find(candidate=>candidate.id===input.regionId);
@@ -84,6 +87,7 @@ export class CombatEngine {
     const presence=new Set(input.presentActorIds);
     const entry=input.playerPosition??region.entrances[0]?.from??region.navigation.nodes[0]?.position;
     if(!entry)throw new Error(`Region ${region.id} has no authored player entry`);
+    this.cancelTraversal();
     const arena=arenaFromRegion(region,this.state.arena.cameraBasis);
     const playerGround=groundHeightAt(arena,entry.x,entry.z,entry.y);
     const playerPosition=vec(entry.x,playerGround??entry.y,entry.z);
@@ -148,6 +152,7 @@ export class CombatEngine {
     if(definition.regionId!==input.regionId)throw new Error(`Encounter ${input.encounterId} does not belong to ${input.regionId}`);
     const region=REGIONS.find(candidate=>candidate.id===input.regionId);
     if(!region)throw new Error(`Unknown authored region: ${input.regionId}`);
+    this.cancelTraversal();
     this.setTimePolicy('normal');
     const mustLoadRegion=this.state.runId!==input.runId||this.state.regionId!==input.regionId||this.state.arena.surfaces.length===0;
     if(input.actors)this.state.actors=input.actors.map(cloneActor);
@@ -249,7 +254,7 @@ export class CombatEngine {
     }
   }
   setTraversalGates(routes:readonly RegionRouteDefinition[],worldFacts:Readonly<Record<string,boolean|number|string>>={}):void{
-    this.state.traversalGates=routes.map(route=>({id:route.id,routeId:route.id,from:route.from,to:route.to,anchors:structuredClone(route.anchors),fromRegion:this.state.regionId,toRegion:route.destinationRegionId,width:2,rise:Math.abs(route.to.y-route.from.y),unlocked:route.unlockFact===undefined||worldFacts[route.unlockFact]===true,unlockFact:route.unlockFact,traversalEvent:route.traversalEvent,colliderIds:structuredClone(route.colliderIds)}));
+    this.state.traversalGates=routes.map(route=>({id:route.id,routeId:route.id,from:copy(route.from),to:copy(route.to),anchors:structuredClone(route.anchors),fromRegion:this.state.regionId,toRegion:route.destinationRegionId,width:route.traversal?.startRadius??2,rise:Math.abs(route.to.y-route.from.y),unlocked:route.unlockFact===undefined||worldFacts[route.unlockFact]===true,unlockFact:route.unlockFact,traversalEvent:route.traversalEvent,colliderIds:structuredClone(route.colliderIds),traversalActionId:route.traversalActionId,traversal:route.traversal?{...route.traversal}:undefined}));
   }
   commandCompanion(companionId:CompanionId,command:CompanionCommand,targetId?:ActorId):boolean{
     const companion=this.actorForId(companionId);
@@ -268,6 +273,7 @@ export class CombatEngine {
     return companionCommand(this.state,companionId,command,targetId);
   }
   resolveInteraction(interactionId:string,targetId:string,choiceOptionId?:string):boolean{
+    if(this.state.traversal)return false;
     const interaction=INTERACTIONS.find(candidate=>candidate.id===interactionId);
     if(!interaction||interaction.regionId!==this.state.regionId)return false;
     const actor=this.interactionTargetActor(interaction,targetId);
@@ -371,6 +377,7 @@ export class CombatEngine {
   fixedStep(input: CombatInput = { tick: this.state.tick+1, move: vec(0,0,0), dodgePressed:false, lightPressed:false, heavyPressed:false, heavyHeld:false, heavyReleased:false, interactPressed:false }): void {
     if(this.state.timePolicy==='paused')return;
     const firstEvent=this.state.events.length;
+    const playerWasAlive=this.state.player.vitality>0;
     this.state.tick++;
     if(this.state.timePolicy==='perfect-dodge-slow'&&this.state.slowMotionRemainingTicks<=0)this.state.timePolicy='normal';
     const slowMotionActive=this.state.timePolicy==='perfect-dodge-slow';
@@ -381,10 +388,11 @@ export class CombatEngine {
       this.state.player.dodgeCharges++;
       this.state.player.nextDodgeRechargeTick=this.state.player.dodgeCharges<this.state.player.maxDodgeCharges?this.state.tick+DODGE_RECHARGE_TICKS:0;
     }
+    const wasTraversing=this.state.traversal!==undefined;
     this.updateActors(worldScale);
     this.updateHazards();
     this.updateBossAI();
-    this.updatePlayer(input);
+    if(wasTraversing)this.updateTraversal(worldScale);else this.updatePlayer(input);
     stepCompanions(this.state);
     this.updateMovableObjects();
     this.updatePhase();
@@ -398,6 +406,7 @@ export class CombatEngine {
     for(const event of this.state.events.slice(firstEvent).flatMap(item=>item.worldEvent?[item.worldEvent]:[])){
       if(!this.state.worldEvents.some(existing=>existing.idempotencyKey===event.idempotencyKey))this.state.worldEvents.push(structuredClone(event));
     }
+    if(playerWasAlive&&this.state.player.vitality===0)this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'death'});
   }
   snapshot(): CombatSnapshot {
     const currentPhase=this.state.encounter?.phases[this.state.phaseIndex];
@@ -421,16 +430,14 @@ export class CombatEngine {
     };
   }
   serialize(): string { return JSON.stringify(this.state); }
-  restore(serialized: string): void { this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); }
+  restore(serialized: string): void { this.cancelTraversal(); this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); this.cancelTraversal(); this.state.presentationCues=[]; this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); }
   consumeEvents(): CombatEvent[] { const events = structuredClone(this.state.events); this.state.events.length=0; return events; }
   consumeWorldEvents(): WorldEvent[] { const events = structuredClone(this.state.worldEvents); this.state.worldEvents.length=0; return events; }
   drainPresentationCues(): readonly StoryCue[] { const cues=structuredClone(this.state.presentationCues);this.state.presentationCues.length=0;return cues; }
   queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTimeSeconds'>):StoryCue{
     const normalized=structuredClone(cue);
-    const hazard=cue.attackId?ATTACKS[cue.attackId]?.hazard:undefined;
-    const footprint=normalized.shape==='sector'&&normalized.footprint&&hazard?{...normalized.footprint,length:2*(hazard.range??hazard.depth),sectorRadians:((hazard.angleDeg??70)*Math.PI)/180}:normalized.footprint;
     const instanceId=this.state.runId+':'+(this.state.encounterId??'free')+':cue:'+this.state.tick+':'+(++this.state.eventSequence);
-    const event:StoryCue={...normalized,...(footprint?{footprint}:{}),instanceId,tick:this.state.tick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
+    const event:StoryCue={...normalized,instanceId,tick:this.state.tick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
     this.state.presentationCues.push(event);
     return structuredClone(event);
   }
@@ -438,8 +445,10 @@ export class CombatEngine {
     return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState) };
   }
   resetToCheckpoint(): void {
+    const traversalSafePose=this.state.traversal?copy(this.state.traversal.lastSafePose):undefined;
+    this.cancelTraversal();
     const checkpoint = this.state.checkpoint;
-    if (!checkpoint) return;
+    if (!checkpoint) { this.state.presentationCues=[]; this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); return; }
     this.setTimePolicy('normal');
     this.state.tick = checkpoint.tick;
     const worldOffset=this.state.worldTick-checkpoint.worldTick;
@@ -461,6 +470,8 @@ export class CombatEngine {
     this.state.worldEvents = [];
     this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.state.lightIndex=0;this.state.pendingImpact=undefined;this.state.actionCancelable=false;
     this.state.presentationCues = [];
+    if(traversalSafePose){const player=this.playerActor();if(player)player.position=traversalSafePose;}
+    this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'});
     this.state.actionUntil = this.state.tick;
     this.state.actionRecoveryUntil = 0;
   }
@@ -479,6 +490,7 @@ export class CombatEngine {
   get companions(): CompanionRosterState { return structuredClone(this.state.companionState); }
   private updateActors(worldScale:number):void{
     for(const actor of this.state.actors){
+      if(actor.id===this.state.playerId&&this.state.traversal)continue;
       if(actor.downed)continue;
       if(actor.possessed&&actor.possessedUntil>0&&this.state.worldTick>=actor.possessedUntil)this.breakPossession(actor,true);
       const actionDuration=Math.max(1,actor.actionEndsTick-actor.actionStartedTick);
@@ -495,6 +507,8 @@ export class CombatEngine {
   private updatePlayer(input: CombatInput): void {
     const player=this.playerActor();
     if(!player)return;
+    if(player.downed||this.state.player.vitality<=0)return;
+    if(input.interactPressed&&input.traversalId){this.traverse(input.traversalId);return;}
     if(input.targetCycle)this.cycleTarget(input.targetCycle);
     if(input.dodgePressed){this.tryDodge(player,input.dodgeDirection??directionFromMove(input.move));return;}
     if(this.state.counterUntil>this.state.tick&&(input.lightPressed||input.heavyPressed&&!input.heavyHeld)){
@@ -590,7 +604,6 @@ export class CombatEngine {
       else if(input.corruptionPressed)this.startPlayerAction('corruption',this.state.targetId);
       else if(input.cleansePressed)this.startPlayerAction('cleanse',input.interactTargetId??this.state.targetId);
       else if(input.command)this.commandCompanion(input.command.companionId,input.command.command,input.command.targetId);
-      else if(input.interactPressed&&input.traversalId)this.traverse(input.traversalId);
     }
   }
   private startPlayerObjectHeavyAction(interaction:InteractionDefinition,action:'heavy'|'charged_heavy',targetId?:ActorId):boolean{
@@ -644,6 +657,7 @@ export class CombatEngine {
     return true;
   }
   private tryDodge(player: CombatActor,direction:EvasionDirection): void {
+    if(this.state.traversal)return;
     if(this.state.tick<this.state.actionUntil&&!this.state.actionCancelable)return;
     if(this.state.player.dodgeCharges<=0){this.emit('cue','No Dodge charges; create distance until one recovers.',player.id);return;}
     const profile=resolveProfile(direction,this.state.arena.traversalAffordances??[],player.position,this.state.hazards,this.state.worldTick);
@@ -716,6 +730,7 @@ export class CombatEngine {
   }
   private startPlayerAction(action:string,targetId?:ActorId,counter=false):boolean{
     const player=this.playerActor();
+    if(this.state.traversal)return false;
     if(!player||player.downed)return false;
     if(!counter&&this.state.tick<this.state.actionRecoveryUntil)return false;
     if(action==='ferocity'&&this.state.player.ferocity<30)return false;
@@ -768,11 +783,14 @@ export class CombatEngine {
           this.queuePresentationCue({kind:'possession',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,position:copy(actor.position),scopeId:this.state.encounterId,durationTicks:180,priority:'essential',shape:'pulse'});
           continue;
         }
-        if(actor.id===this.state.playerId)this.state.player.vitality=Math.max(0,this.state.player.vitality-hazard.damage);
+        if(actor.id===this.state.playerId){
+          this.state.player.vitality=Math.max(0,this.state.player.vitality-hazard.damage);
+        }
         else if(actor.possessed){this.breakPossession(actor);continue;}
         else actor.vitality=Math.max(0,(actor.vitality??100)-hazard.damage);
+        if(actor.id===this.state.playerId&&this.state.traversal)this.cancelTraversal();
         this.emit('damage',hazard.cue,actor.id,hazard.sourceId,undefined,hazard.attackId);
-        this.queuePresentationCue({kind:'hit',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,position:copy(actor.position),from:copy(hazard.origin),to:copy(actor.position),scopeId:this.state.encounterId,attackId:hazard.attackId,footprint:{width:hazard.width,length:hazard.depth,angleRadians:Math.atan2(hazard.direction.x,hazard.direction.z)},priority:'essential',shape:storyShape(hazard.kind)});
+        if(actor.id!==this.state.playerId||this.state.player.vitality>0)this.queuePresentationCue({kind:'hit',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeUntil-this.state.worldTick),priority:'essential'});
       }
     }
     this.state.hazards=this.state.hazards.filter(hazard=>{const attack=ATTACKS[hazard.attackId];return this.state.worldTick<hazard.activeUntil+(attack?.recoveryTicks??0);});
@@ -803,7 +821,7 @@ export class CombatEngine {
       telegraph.remainingTicks=Math.max(0,phaseEnd-this.state.worldTick);
       const source=this.state.actors.find(actor=>actor.id===telegraph.sourceId);
       if(source)source.phase=telegraph.phase==='active'?'active':telegraph.phase==='recovery'?'recovery':'anticipation';
-      if(priorPhase==='windup'&&telegraph.phase==='commit')this.queuePresentationCue({kind:'commit',phase:'commit',actorId:telegraph.sourceId,targetId:this.state.playerId,position:copy(telegraph.targetPosition),scopeId:this.state.encounterId,attackId:telegraph.attackId,footprint:{width:hazard.width,length:hazard.depth,angleRadians:Math.atan2(hazard.direction.x,hazard.direction.z)},priority:'essential',shape:storyShape(hazard.kind)});
+      if(this.state.player.vitality>0&&priorPhase==='windup'&&telegraph.phase==='commit')this.queuePresentationCue({kind:'commit',phase:'commit',actorId:telegraph.sourceId,targetId:hazard.targetActorId??this.state.playerId,scopeId:hazard.id,attackId:telegraph.attackId,...hazardPresentation(hazard),durationTicks:Math.max(0,hazard.activeFrom-this.state.worldTick),priority:'essential'});
     }
     const pending=this.state.pendingImpact;
     const player=this.playerActor();
@@ -909,25 +927,25 @@ export class CombatEngine {
   }
   private beginAttack(source:CombatActor,def:AttackDefinition):void{
     const target=def.targetClass==='companion'?this.selectedCompanion():this.playerActor();
-    if(!target)return;
+    if(!target||target.id===this.state.playerId&&this.state.player.vitality<=0)return;
     const id=`${source.id}:${def.id}:${this.state.tick}`;
     const aim=copy(target.position);
     const origin=copy(source.position);
     const direction=facingFrom(sub(aim,origin));
     const shape=structuredClone(def.hazard);
-    const longAxis=shape.kind==='sweep'||shape.kind==='wave';
-    const center=longAxis?vec((origin.x+aim.x)/2,aim.y,(origin.z+aim.z)/2):aim;
-    const right={x:-direction.z,y:0,z:direction.x};
-    const longHalf=shape.depth/2+shape.radius;
-    const wideHalf=shape.width/2+shape.radius;
-    const extentX=Math.abs(direction.x)*longHalf+Math.abs(right.x)*wideHalf;
-    const extentZ=Math.abs(direction.z)*longHalf+Math.abs(right.z)*wideHalf;
-    shape.bounds={min:vec(center.x-extentX,center.y-.15,center.z-extentZ),max:vec(center.x+extentX,center.y+Math.max(.1,shape.heightAboveGround),center.z+extentZ)};
+    const cone=shape.kind==='cone',disk=shape.kind==='strike'||shape.kind==='projectile',longAxis=shape.kind==='sweep'||shape.kind==='wave';
+    const center=cone?origin:aim;
+    const range=shape.depth;
+    const longHalf=cone?range:disk?shape.radius:shape.depth/2;
+    const wideHalf=cone?range:disk?shape.radius:shape.width/2;
+    const extentX=longAxis?Math.abs(direction.x)*longHalf+Math.abs(direction.z)*wideHalf:wideHalf;
+    const extentZ=longAxis?Math.abs(direction.z)*longHalf+Math.abs(direction.x)*wideHalf:longHalf;
+    shape.bounds={min:vec(center.x-extentX,origin.y-.15,center.z-extentZ),max:vec(center.x+extentX,origin.y+Math.max(.15,shape.heightAboveGround),center.z+extentZ)};
     this.state.telegraphs.push({id,attackId:def.id as AttackId,sourceId:source.id,targetPosition:aim,phase:'windup',remainingTicks:def.windupTicks+def.commitTicks,cue:def.cue});
     this.emit('cue',def.cue,source.id,target.id,undefined,def.id as AttackId);
-    this.queuePresentationCue({kind:'anticipation',phase:'anticipation',actorId:source.id,targetId:target.id,position:copy(aim),from:copy(origin),to:copy(aim),scopeId:this.state.encounterId,attackId:def.id as AttackId,footprint:{width:shape.width,length:shape.depth,angleRadians:Math.atan2(direction.x,direction.z)},durationTicks:def.windupTicks+def.commitTicks,intensity:1,priority:'essential',shape:storyShape(shape.kind)});
     const h:LiveHazard={...shape,id,attackId:def.id as AttackId,sourceId:source.id,startTick:this.state.worldTick,activeFrom:this.state.worldTick+def.windupTicks+def.commitTicks,activeUntil:this.state.worldTick+def.windupTicks+def.commitTicks+def.activeTicks,target:aim,origin,direction,range:shape.depth,angleDeg:shape.angleDeg??70,hitIds:[],threatTicks:[this.state.worldTick+def.windupTicks+def.commitTicks-8,this.state.worldTick+def.windupTicks+def.commitTicks-4],cue:def.cue,targetActorId:target.id};
     this.state.hazards.push(h);
+    this.queuePresentationCue({kind:'anticipation',phase:'anticipation',actorId:source.id,targetId:target.id,scopeId:h.id,attackId:def.id as AttackId,...hazardPresentation(h),durationTicks:def.windupTicks,intensity:1,priority:'essential'});
     if(def.targetClass==='companion'&&this.state.encounterId){
       const phaseId=this.state.encounter?.phases[this.state.phaseIndex]?.id??'unknown';
       const eventId=`${this.state.runId}:${this.state.encounterId}:possession:${id}:telegraphed`;
@@ -946,6 +964,7 @@ export class CombatEngine {
     const tele=this.state.telegraphs.find(t=>t.sourceId===source.id);if(!tele)return false;
     const def=ATTACKS[tele.attackId];if(def?.interruptibleBy.length&&!def.interruptibleBy.includes(action as never))return false;
     const hazard=this.state.hazards.find(h=>h.id===tele.id);if(hazard)hazard.activeUntil=this.state.worldTick;
+    this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:tele.id,cancellationReason:'interrupt'});
     this.state.telegraphs=this.state.telegraphs.filter(t=>t.id!==tele.id);source.phase='recovery';source.actionId=(source.id+'-stagger') as ActionId;source.normalizedTime=0;source.actionStartedTick=this.state.worldTick;source.staggerUntil=this.state.worldTick+42;source.recoveringUntil=source.staggerUntil;source.actionEndsTick=source.recoveringUntil;this.emit('attack-interrupted',tele.attackId+' interrupted before its active window.',this.state.playerId,source.id,action,tele.attackId);return true;
   }
   private markPhaseAction(action:string):void{
@@ -964,6 +983,7 @@ export class CombatEngine {
     this.state.phaseIndex=next;
     this.state.phaseLatch=next;
     this.state.phaseActionFlags=[];
+    for(const hazard of this.state.hazards)this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:hazard.id,cancellationReason:'interrupt'});
     this.state.hazards=[];
     this.state.telegraphs=[];
     const nextPhase=this.state.encounter.phases[next];
@@ -990,11 +1010,79 @@ export class CombatEngine {
       this.emitWorldEvent(restoration);
     }
   }
+  /** Returns only an available local affordance; remote routes belong to CampaignDirector.travel. */
+  nearestTraversal(position:Vec3):TraversalGate|undefined{
+    if(this.state.traversal||this.state.timePolicy==='paused')return undefined;
+    const player=this.playerActor();
+    if(!player||player.downed||this.state.player.vitality<=0||this.state.tick<this.state.actionRecoveryUntil)return undefined;
+    let best:TraversalGate|undefined;let nearest=Infinity;
+    for(const gate of this.state.traversalGates){
+      const distance=Math.hypot(position.x-gate.from.x,position.y-gate.from.y,position.z-gate.from.z);
+      if(distance<nearest&&this.canTraverse(gate,player)){best=gate;nearest=distance;}
+    }
+    return best;
+  }
+  get isTraversing():boolean{return this.state.traversal!==undefined;}
+  private canTraverse(gate:TraversalGate,player:CombatActor):boolean{
+    const authored=gate.traversal;
+    if(!authored||!gate.unlocked||gate.toRegion!==this.state.regionId||!Number.isInteger(authored.durationTicks)||authored.durationTicks<=0)return false;
+    if(Math.hypot(player.position.x-gate.from.x,player.position.y-gate.from.y,player.position.z-gate.from.z)>authored.startRadius||Math.abs(player.position.y-gate.from.y)>.35)return false;
+    if(!isSupportedCapsulePose(this.state.arena,player.position,player.radius,player.collisionHeight)||!isSupportedCapsulePose(this.state.arena,gate.from,player.radius,player.collisionHeight)||!isSupportedCapsulePose(this.state.arena,gate.to,player.radius,player.collisionHeight))return false;
+    if(!isCirclePathClear(this.state.arena,player.position,gate.from,player.radius,player.collisionHeight))return false;
+    const height=authored.kind==='slide' ? .65 : player.collisionHeight;
+    let prior=gate.from;
+    for(const point of [...gate.anchors,gate.to]){
+      if(!isAerialCirclePathClear(this.state.arena,prior,point,player.radius,height))return false;
+      prior=point;
+    }
+    return true;
+  }
   private traverse(id:string):boolean{
-    const gate=this.state.traversalGates.find(g=>g.id===id);if(!gate||!gate.unlocked)return false;const player=this.playerActor();if(!player)return false;
-    const d=distance2(player.position,gate.from);if(d>gate.width+1)return false;
-    const moved=moveCircle(this.state.arena,player.position,sub(gate.to,player.position),PLAYER_RADIUS,player.collisionHeight);if(distance2(moved,gate.to)>1.25)return false;
-    player.position=moved;this.emit('traversal',`Traversal ${id} completed.`,player.id,undefined,id);return true;
+    const gate=this.state.traversalGates.find(g=>g.id===id);const player=this.playerActor();
+    if(this.state.traversal||this.state.timePolicy==='paused'||!gate||!player||player.downed||this.state.player.vitality<=0||this.state.tick<this.state.actionRecoveryUntil||!this.canTraverse(gate,player))return false;
+    const points=[copy(player.position),copy(gate.from),...gate.anchors.map(copy),copy(gate.to)].filter((point,index,array)=>index===0||Math.hypot(point.x-array[index-1]!.x,point.y-array[index-1]!.y,point.z-array[index-1]!.z)>1e-6);
+    const lengths=points.slice(1).map((point,index)=>Math.hypot(point.x-points[index]!.x,point.y-points[index]!.y,point.z-points[index]!.z));
+    const length=lengths.reduce((total,value)=>total+value,0);if(length<=0)return false;
+    this.state.traversal={gate:structuredClone(gate),points,lengths,length,segment:0,segmentDistance:0,startedAtWorldTick:this.state.worldTick,lastSafePose:copy(player.position),lastSafeFacing:copy(player.facing),standingHeight:player.collisionHeight};
+    this.state.bufferedAction=undefined;this.state.pendingImpact=undefined;this.state.heavyChargeStartTick=null;this.state.counterUntil=0;
+    this.state.actionId='traversal';this.state.actionCancelable=false;
+    player.collisionHeight=gate.traversal!.kind==='slide' ? .65 : player.collisionHeight;
+    player.actionId=gate.traversalActionId;player.actionStartedTick=this.state.worldTick;player.actionEndsTick=0;player.normalizedTime=0;player.phase='anticipation';player.velocity=vec(0,0,0);
+    return true;
+  }
+  private updateTraversal(worldScale:number):void{
+    const traversal=this.state.traversal;const player=this.playerActor();if(!traversal||!player)return;
+    if(player.downed||player.possessed||this.state.player.vitality<=0||player.actionId!==traversal.gate.traversalActionId){this.cancelTraversal();return;}
+    const gate=this.state.traversalGates.find(candidate=>candidate.id===traversal.gate.id);
+    if(!gate?.unlocked){this.cancelTraversal();return;}
+    const duration=traversal.gate.traversal!.durationTicks;
+    let remaining=traversal.length*worldScale/duration;
+    const previous=copy(player.position);
+    while(remaining>1e-8&&traversal.segment<traversal.lengths.length){
+      const segmentLength=traversal.lengths[traversal.segment]!;
+      const distance=Math.min(remaining,segmentLength-traversal.segmentDistance);
+      const from=traversal.points[traversal.segment]!,to=traversal.points[traversal.segment+1]!;
+      const ratio=Math.min(1,(traversal.segmentDistance+distance)/segmentLength);
+      const point=segmentLength-traversal.segmentDistance-distance<1e-8?copy(to):vec(from.x+(to.x-from.x)*ratio,from.y+(to.y-from.y)*ratio,from.z+(to.z-from.z)*ratio);
+      if(!isAerialCirclePathClear(this.state.arena,player.position,point,player.radius,player.collisionHeight)){this.cancelTraversal();return;}
+      player.position=point;traversal.segmentDistance+=distance;remaining-=distance;
+      if(isSupportedCapsulePose(this.state.arena,point,player.radius,traversal.standingHeight)){traversal.lastSafePose=copy(point);traversal.lastSafeFacing=copy(player.facing);}
+      if(segmentLength-traversal.segmentDistance<1e-8){traversal.segment++;traversal.segmentDistance=0;}
+    }
+    player.velocity=scale(sub(player.position,previous),1/FIXED_STEP_SECONDS);
+    if(distance2(previous,player.position)>1e-8)player.facing=facingFrom(sub(player.position,previous));
+    player.normalizedTime=Math.min(1,(this.state.worldTick-traversal.startedAtWorldTick)/duration);player.phase=player.normalizedTime<.15?'anticipation':player.normalizedTime>.85?'recovery':'active';
+    if(traversal.segment<traversal.lengths.length)return;
+    if(!isSupportedCapsulePose(this.state.arena,player.position,player.radius,traversal.standingHeight)){this.cancelTraversal();return;}
+    this.state.traversal=undefined;player.collisionHeight=traversal.standingHeight;player.velocity=vec(0,0,0);player.phase='recovery';player.normalizedTime=1;
+    this.finishAction();
+    this.emit('traversal',`Traversal ${traversal.gate.id} completed.`,player.id,undefined,traversal.gate.id);
+  }
+  private cancelTraversal():void{
+    const traversal=this.state.traversal;if(!traversal)return;
+    const player=this.playerActor();
+    if(player){player.position=copy(traversal.lastSafePose);player.facing=copy(traversal.lastSafeFacing);player.collisionHeight=traversal.standingHeight;player.velocity=vec(0,0,0);player.actionId=ACTION_CLIPS.idle!;player.normalizedTime=0;player.phase='idle';player.actionEndsTick=0;}
+    this.state.traversal=undefined;this.state.pendingImpact=undefined;this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.finishAction();
   }
   private cycleTarget(direction:-1|1):void{const candidates=this.state.actors.filter(a=>a.allegiance==='hostile'&&a.visible&&!a.downed).sort((a,b)=>distance2(this.playerActor()?.position??vec(0,0,0),a.position)-distance2(this.playerActor()?.position??vec(0,0,0),b.position));if(!candidates.length)return;let i=candidates.findIndex(a=>a.id===this.state.targetId);i=(i+direction+candidates.length)%candidates.length;const player=this.playerActor();const next=candidates[i]!;if(player&&dot(facingFrom(sub(next.position,player.position)),player.facing)<-.2)return;this.state.targetId=next.id;}
   private selectedCompanion():CombatActor|undefined{
@@ -1084,6 +1172,7 @@ export class CombatEngine {
       const telegraphIndex=target&&distance2(target.position,object.position)<=definition.effect.radiusMeters?this.state.telegraphs.findIndex(candidate=>candidate.sourceId===target.id&&candidate.phase==='windup'):-1;
       if(telegraphIndex>=0&&target){
         const telegraph=this.state.telegraphs[telegraphIndex]!;
+        this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:telegraph.id,cancellationReason:'interrupt'});
         this.state.telegraphs.splice(telegraphIndex,1);
         const hazardIndex=this.state.hazards.findIndex(candidate=>candidate.id===telegraph.id);
         if(hazardIndex>=0)this.state.hazards.splice(hazardIndex,1);
@@ -1284,3 +1373,8 @@ function storyShape(kind:HazardDefinition['kind']):NonNullable<StoryCue['shape']
   }
 }
 function isLargeSpecies(species:string):boolean{return species==='tiger'||species==='lion'||species==='boar'||species==='crocodile';}
+function hazardPresentation(h:LiveHazard):Pick<StoryCue,'position'|'from'|'to'|'footprint'|'shape'>{
+  const cone=h.kind==='cone',disk=h.kind==='strike'||h.kind==='projectile';
+  const radius=h.range??h.depth;
+  return {position:copy(cone?h.origin:h.target),from:copy(h.origin),to:copy(h.target),shape:storyShape(h.kind),footprint:{width:disk?2*h.radius:h.width,length:cone?2*radius:disk?2*h.radius:h.depth,angleRadians:h.kind==='area'?0:Math.atan2(h.direction.x,h.direction.z),...(cone?{sectorRadians:(h.angleDeg??70)*Math.PI/180}:{})}};
+}

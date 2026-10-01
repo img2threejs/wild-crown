@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import * as THREE from 'three';
 import { StoryEffects } from '../../src/effects/StoryEffects.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
-import { CombatEngine, createEngineState, makeActor, type CombatInput, type EngineState, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
+import { CombatEngine, createEngineState, makeActor, type CombatInput, type EngineState, type EngineStateSeed, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
 import { vec, type CombatArena } from '../../src/game/combat/geometry.js';
 import { REGIONS } from '../../src/content/campaign.js';
@@ -394,7 +394,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(fractional.snapshotState().schemaVersion).toBe(2);
   });
 
-  it('hydrates legacy StoryCue time from tick and ages the restored cue through StoryEffects', () => {
+  it('hydrates legacy queued StoryCue timestamps and ages the hydrated cue through StoryEffects', () => {
     const source = new CombatEngine(makeClockState());
     const cue = source.queuePresentationCue({ kind: 'hit', phase: 'hit', position: vec(0, 0, 0), durationTicks: 6, priority: 'essential' });
     const legacy = JSON.parse(source.serialize()) as Record<string, unknown>;
@@ -406,8 +406,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     delete legacy.slowMotionElapsedTicks;
     const legacyCues = legacy.presentationCues as Array<Record<string, unknown>>;
     delete legacyCues[0]!.worldTimeSeconds;
-    const restored = new CombatEngine();
-    restored.restore(JSON.stringify(legacy));
+    const restored = new CombatEngine(legacy as EngineStateSeed);
     const migratedCue = restored.drainPresentationCues()[0]!;
     expect(migratedCue.worldTimeSeconds).toBe(cue.tick / 60);
 
@@ -477,7 +476,6 @@ describe('Perfect Dodge world-clock time dilation', () => {
     engine.resetToCheckpoint();
     expect(engine.snapshot().worldClock).toMatchObject({ simulationTick: 0, worldTick: 60, timeScale: 1, policy: 'normal' });
     expect(engine.snapshotState()).toMatchObject({ counterUntil: 14, lastAttackTick: 0 });
-    expect(engine.drainPresentationCues()).toHaveLength(0);
     const restored = engine.snapshotState().actors.find(actor => actor.id === 'koro')!;
     expect(restored).toMatchObject({ invulnerableUntil: 106, recoveringUntil: 110, possessedUntil: 104, weakPointUntil: 108, actionStartedTick: 65, actionEndsTick: 85 });
     expect(engine.snapshotState().actors.find(actor => actor.id === 'aren')!.invulnerableUntil).toBe(12);

@@ -1053,9 +1053,11 @@ export class GameApplication {
         const route = this.nearestRoute(player.position);
         const currentInteractionDefinition = this.interaction ? INTERACTIONS.find(item => item.id === this.interaction?.interactionId) : undefined;
         const activateCurrentInteraction = actions.interactPressed || actions.abilityPressed && currentInteractionDefinition?.inputHint === 'ability';
-        const requested = this.pendingInteraction ?? (activateCurrentInteraction && this.interaction ? { interactionId: this.interaction.interactionId, targetId: this.interaction.targetId } : null);
+        const selectedRoute = this.interaction?.interactionId === route?.id ? route : undefined;
+        const pendingTraversal = Boolean(selectedRoute && this.pendingInteraction?.interactionId === selectedRoute.id && this.pendingInteraction.targetId === selectedRoute.id);
+        const requested = this.combat.isTraversing || pendingTraversal ? null : this.pendingInteraction ?? (activateCurrentInteraction && this.interaction && !selectedRoute ? { interactionId: this.interaction.interactionId, targetId: this.interaction.targetId } : null);
         this.pendingInteraction = null;
-        const traversalPressed = actions.interactPressed && !requested && Boolean(route);
+        const traversalPressed = (actions.interactPressed || pendingTraversal) && !requested && Boolean(selectedRoute);
         const requestedDefinition = requested ? INTERACTIONS.find(item => item.id === requested.interactionId) : undefined;
         if (requestedDefinition?.success.type === 'choice') {
             const choiceId = requestedDefinition.success.choiceId;
@@ -1120,6 +1122,7 @@ export class GameApplication {
         return archetypeMatches.length === 1 ? archetypeMatches[0] : undefined;
     }
     private nearestInteraction(snapshot: CombatSnapshot, position: { x: number; y: number; z: number }): GameViewModel['hud']['interaction'] {
+        if (this.combat.isTraversing) return undefined;
         if (!this.region || !this.campaign) return undefined;
         const actors = snapshot.actors;
         let found: GameViewModel['hud']['interaction'];
@@ -1148,6 +1151,11 @@ export class GameApplication {
                 found = { interactionId: interaction.id, targetId: actor?.id ?? movableDefinition?.id ?? interaction.targetId, label: interaction.promptLabel, actionId: interaction.actionId, inputHint: interaction.inputHint, activation: interaction.activation, requiresCompanionCommand: interaction.requiresCompanionCommand, playerActionId: interaction.playerActionId };
             }
         }
+        const route = this.nearestRoute(position);
+        if (route && Math.hypot(route.from.x - position.x, route.from.y - position.y, route.from.z - position.z) < nearest) {
+            const label = { vault: 'Vault', 'low-ledge': 'Climb low ledge', slide: 'Slide', swing: 'Swing' }[route.traversal!.kind];
+            return { interactionId: route.id, targetId: route.id, label, actionId: route.traversalActionId, inputHint: 'interact' };
+        }
         return found;
     }
     private refreshInteraction(): void {
@@ -1159,7 +1167,7 @@ export class GameApplication {
         x: number;
         y: number;
         z: number;
-    }) { return this.region?.exits.find(route => Math.hypot(route.from.x - position.x, route.from.z - position.z) < 3.2 && (!route.unlockFact || this.campaign?.worldFacts[route.unlockFact] === true)); }
+    }) { return this.combat.nearestTraversal(position); }
     private onBlur = () => { this.input.clear(); if (this.screen === 'game')
         this.setScreen('pause'); };
     private onVisibility = () => { if (document.hidden) {
