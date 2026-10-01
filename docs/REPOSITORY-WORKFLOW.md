@@ -6,7 +6,7 @@ The user requested a new private repository under the img2threejs organization. 
 
 This supersedes only the repository-placement/integration assumption in the imported production plan. The existing `img2threejs-showcase` checkout is read-only reference material. Its gallery may link to the game in a later separate feature; no existing showcase files are changed by this wave.
 
-The remote was initialized by GitHub with a README so feature PRs have a base branch. Gameplay implementation is published through feature branches and PRs. No automatic merge or force-push is authorized.
+The remote was initialized by GitHub with a README so feature PRs have a base branch. The current user instruction is issue → task branch → verified PR → merge into main → close the task issue → pick the next actionable issue. The coordinator may merge after Astra acceptance without waiting for another confirmation. Publish/synchronize main immediately after each merge; never force-push. This supersedes the historical direct-to-main/no-new-PR instruction and the first-wave user-only merge restriction.
 
 ## Sources and approval
 
@@ -30,7 +30,7 @@ Verified effective configuration:
 
 Both first-wave implementation jobs resolved to `openai-codex/gpt-6-luna:high`, confirmed by task process metadata. Generic `task` is configured differently and is not used for implementation. Existing generic MiniMax orchestration guidance is superseded by the user's explicit Luna/Astra choice for this project; no global configuration was changed.
 
-## First wave
+## First wave (historical)
 
 Two independent feature worktrees start from the same initial main commit:
 
@@ -39,7 +39,17 @@ Two independent feature worktrees start from the same initial main commit:
 
 `docs/production-baseline` imports the approved design/content/concept evidence and execution record. It does not imply the gameplay PRs depend on local Desktop paths after merging.
 
-Astra reviews spec compliance first, then code quality/state lifetime and actual exercised behavior. Required fixes return to Luna. Commits and PRs are feature-scoped. The user decides when to merge.
+Astra reviews spec compliance first, then code quality/state lifetime and actual exercised behavior. Required fixes return to Luna. Commits and PRs are issue-scoped; the current coordinator merges only after both review stages and task-specific smoke verification pass.
+
+## Parallel execution and portable resume
+
+The [phase issues](https://github.com/img2threejs/wild-crown/issues?q=is%3Aissue%20label%3Aepic) retain P0–P13 plus character production. Their linked child issues retain scope, acceptance, blockers, PRs and measured evidence. An issue closing proves only its named acceptance, not game readiness.
+
+On another machine, clone `img2threejs/wild-crown`, fetch current main, and read `AGENTS.md` and the chosen issue before editing. Use `gh issue list --repo img2threejs/wild-crown --state open` and `gh pr list --repo img2threejs/wild-crown --state open` to recover the queue and unfinished PRs. Continue the existing PR branch when work is already published; otherwise create a new task branch from current main. Install the locked npm dependencies with `npm ci`, then use `npm run typecheck`, `bun test`, `npm run build`, and the issue-specific smoke command. Tests/builds do not replace gameplay/native-asset acceptance.
+
+Independent Luna issue agents run concurrently in separate code worktrees with explicit file ownership. Astra review and final decisions remain coordinator-owned. Concurrent Tripo jobs use explicit task IDs and unique per-asset output directories; never rely on account-wide `@last`, account-wide credit deltas, or success status as rig/animation quality. Read actual riggability/output records before each dependent provider step. Do not self-grant consent or weaken toolchain/evidence gates.
+
+The coordinator alone exercises browser scenarios, always headless in one shared Brave profile/session. Workers provide the exact route/action/assertions without launching browsers. Before handing off, push verified code/assets/provenance and record outstanding requirements on the issue. Authentication grants, credentials and signed download URLs are machine-local/external prerequisites, never files to commit or infer on the next machine.
 
 ## Measurement contract
 

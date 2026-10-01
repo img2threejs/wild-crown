@@ -18,7 +18,11 @@ The approved production plan has P0-P13, six major bosses, five macro-regions pl
 
 Repository: `img2threejs/wild-crown`, private.
 
-Use independently reviewable feature increments and explicit scoped staging. The latest user instruction authorizes the coordinator to merge each verified increment directly into main and push immediately; do not create new PRs or hold completed merges only locally. No force push. Workers still do not commit, merge or push unless their brief explicitly authorizes it. A pushed increment is not a full-game readiness claim.
+Use the GitHub P0–P13 phase issues and their child issues as the durable backlog. Pick an actionable issue, create an isolated task branch from current main, implement and exercise its acceptance, then open a PR targeting main with `Closes #<task-issue>`. Astra reviews spec compliance before code quality; the coordinator may merge verified PRs without another confirmation, then immediately synchronize/publish main and pick the next actionable issue. Keep blocked issues open with exact prerequisites; close a phase only when all child issues and its exit criteria pass. This supersedes the historical direct-main/no-new-PR workflow. No force push. Workers do not commit, push, merge, or close issues unless their brief explicitly authorizes it. A merged increment is not a full-game readiness claim.
+
+Independent issue agents may run in parallel, with exclusive file/output ownership and separate code worktrees. Provider jobs use explicit task IDs and per-asset output directories, never shared `@last`. Tripo generation/rigging remains bounded by the assigned approved reference or upstream asset and actual user authorization; do not upload unrelated references, top up, bypass a consent gate, or fabricate provider evidence.
+
+All browser operations are headless, in exactly one coordinator-owned Brave profile/session. Workers must not open browsers; supply runnable scenarios for the coordinator to exercise sequentially in that shared tab. Record evidence, provider task IDs, asset hashes, limitations, branch/PR links, and the next actionable task in repository artifacts and issue comments before a handoff. Machine-local sessions, build output, and signed provider URLs are not portable sources of truth.
 
 ## Boundaries
 
