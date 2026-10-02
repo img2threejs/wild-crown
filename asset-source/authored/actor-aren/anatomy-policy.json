@@ -1,0 +1,36 @@
+{
+  "recordedBeforeKeyframing": true,
+  "authority": "Measured native joint hierarchy, rest-world transforms and dominant-weight vertex regions; anatomy.json retains every local TRS and joint order.",
+  "nodeMap": {
+    "17": "ground-origin root with pelvis skin influence, NOT a hip-position root",
+    "8": "lumbar/abdomen; dominant vertices y 0.605–0.705",
+    "7": "chest and shoulder branch; dominant vertices y 0.694–0.849",
+    "1": "neck/base of head; parent of 0",
+    "0": "head; dominant vertices y 0.865–0.979",
+    "3": "negative-native-lateral shoulder/upper-arm; branch to 2",
+    "2": "negative-native-lateral elbow/forearm/hand influence; no wrist child",
+    "6": "positive-z shoulder/upper-arm; branch to 5",
+    "5": "positive-z elbow/forearm/hand and upper-staff influence",
+    "4": "lower staff influence, NOT a wrist: weighted bounds y 0.002–0.399 and width x 0.03245",
+    "12": "provider-left hip, upper leg",
+    "11": "provider-left knee",
+    "10": "provider-left ankle",
+    "9": "provider-left toe",
+    "16": "provider-right hip, upper leg",
+    "15": "provider-right knee",
+    "14": "provider-right ankle",
+    "13": "provider-right toe"
+  },
+  "coordinatePolicy": {
+    "up": [0, 1, 0],
+    "forward": "Normalize horizontal mean of measured ankle-to-toe vectors (9−10 + 13−14); foot geometry, not generic bone names, defines forward.",
+    "lateral": "up cross forward; positive projects toward provider-left hip12 from hip16. Literal anatomical left/right still requires parent visual review.",
+    "units": "Preserve all native units/TRS. Parent-approved game normalization is1.70m playable height, not provider real-world size; runtime parent applies measured1.7360917117448456 scale exactly once, no mesh scaling baked into derivative.",
+    "rootMode": "in-place-authoritative-capsule: native root never carries net horizontal travel. Measured reference root curve is evidence only and MUST NOT additionally move the actor.",
+    "simulation": "evasion quick_step_left distance1.45m,15 action ticks,12 recovery ticks at60Hz; CombatEngine currently applies displacement instantaneously. Continuous reference contacts do not assert current gameplay contact.",
+    "staff": "Keep node5→4 local transforms fixed and modest chest tilt; no attack, strike, lethal silhouette or guessed wrist animation. Staff/hand surface landmarks are measured weighted mesh regions, not new skin joints."
+  },
+  "contactPolicy": "Idle: both sole regions planted for whole loop. Dodge: brief anticipation/push, airborne lateral transfer, provider-left landing followed by provider-right settle and recovery. Foot IK uses real chain lengths and world rest ankle orientation. Maximum planted sole displacement budget0.025m; report measured values even if failed.",
+  "productionAccepted": false,
+  "visualReview": "pending parent only; browser forbidden"
+}

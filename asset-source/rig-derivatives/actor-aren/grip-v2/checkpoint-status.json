@@ -1,0 +1,32 @@
+{
+  "status": "WORK_IN_PROGRESS_SHUTDOWN_CHECKPOINT",
+  "productionAccepted": false,
+  "gripAccepted": false,
+  "glbExported": false,
+  "newRigSourceFreezeHash": null,
+  "optimizerStopped": true,
+  "nativeHandControlCount": 16,
+  "nativeSkeletonJointCount": 34,
+  "originalJointCountPreserved": 18,
+  "editableTerminalHandVertexCount": 19012,
+  "staffComponentVertexCount": 75684,
+  "latestNativeVerification": "native-hand-verification.json",
+  "remainingBlocker": "No candidate passes both opposed hand/handle surface contact and complete nonpenetration, self-intersection and hand edge-strain checks.",
+  "staleIntermediateArtifacts": [
+    "candidate-grip-pose.json describes an earlier rejected optimizer result, not the current 34-joint rig freeze.",
+    "Contact/self-surface reports and CPU candidate images describe rejected intermediate poses.",
+    "The latest plan-hand-rig.mjs wording and axis metadata edit was not regenerated into its design receipt before shutdown."
+  ],
+  "resume": [
+    "Reconcile script/design provenance before publishing a rig freeze.",
+    "Continue anatomical grip fitting with the actual 34-joint native loader and complete surface controls.",
+    "Never promote a penetrating, one-sided, or stale candidate.",
+    "Export a new immutable rig only after processing proof, then reauthor canaries and obtain independent and parent GPU review."
+  ],
+  "r04UserDecision": "Ordinary Aren continuous motion and native action sampling use simulation time; enemy, hazard, AI and world FX use world time. Contextual traversal remains world-clock. This decision is not yet implemented.",
+  "r04RemainingPrerequisites": [
+    "Freeze pounce phase, range, normalization, collision-envelope and root-component ownership contracts.",
+    "Measure contact-safe action exits and production controller blending.",
+    "Preserve input/resource windows without silent extension; do not alias unsupported native clips."
+  ]
+}

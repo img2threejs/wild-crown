@@ -1,0 +1,112 @@
+{
+  "browserLaunched": false,
+  "reports": [
+    {
+      "file": "asset-source/authored/actor-aren/aren-idle-lateral-dodge.glb",
+      "bytes": 96589512,
+      "sha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152",
+      "generator": "Tripo",
+      "loader": "Three.js 0.169.0 GLTFLoader.parseAsync",
+      "skinnedMeshes": 1,
+      "bones": 18,
+      "skins": [
+        {
+          "mesh": "tripo_node_0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861",
+          "vertices": 1011304,
+          "bones": 18,
+          "usedJoints": 18,
+          "invalidJointInfluences": 0,
+          "nonfiniteWeights": 0,
+          "zeroWeightVertices": 0,
+          "maxWeightSumError": 5.21540641784668e-8
+        }
+      ],
+      "nativeAnimationChannels": [
+        {
+          "name": "Idle",
+          "channels": 11,
+          "channelsTargetingSkinJoints": 11,
+          "paths": [
+            "translation",
+            "rotation"
+          ],
+          "targetNodeCount": 11
+        },
+        {
+          "name": "LateralDodge",
+          "channels": 11,
+          "channelsTargetingSkinJoints": 11,
+          "paths": [
+            "translation",
+            "rotation"
+          ],
+          "targetNodeCount": 11
+        }
+      ],
+      "loadedClips": [
+        {
+          "name": "Idle",
+          "durationSeconds": 3,
+          "tracks": 11,
+          "trackValueTypes": [
+            "vector",
+            "quaternion"
+          ],
+          "sampledFractions": [
+            0,
+            0.25,
+            0.5,
+            0.75
+          ],
+          "changedBones": 18,
+          "sampledVertices": 128,
+          "changedSampleVertices": 128,
+          "maxSampleVertexDisplacement": 0.006555228461630622
+        },
+        {
+          "name": "LateralDodge",
+          "durationSeconds": 0.44999998807907104,
+          "tracks": 11,
+          "trackValueTypes": [
+            "vector",
+            "quaternion"
+          ],
+          "sampledFractions": [
+            0,
+            0.25,
+            0.5,
+            0.75
+          ],
+          "changedBones": 18,
+          "sampledVertices": 128,
+          "changedSampleVertices": 128,
+          "maxSampleVertexDisplacement": 0.05637514971486901
+        }
+      ],
+      "decodedImages": [
+        {
+          "width": 4096,
+          "height": 4096,
+          "channels": 4,
+          "decodedBytes": 67108864
+        },
+        {
+          "width": 4096,
+          "height": 4096,
+          "channels": 4,
+          "decodedBytes": 67108864
+        },
+        {
+          "width": 8192,
+          "height": 8192,
+          "channels": 4,
+          "decodedBytes": 268435456
+        }
+      ],
+      "limitations": [
+        "Node loader and CPU skin/animation sampling only; no GPU texture upload or visual review.",
+        "Samples do not establish deformation quality, contact, anatomy, likeness, gameplay usability or production acceptance."
+      ]
+    }
+  ]
+}

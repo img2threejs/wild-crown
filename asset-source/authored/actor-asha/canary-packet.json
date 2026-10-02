@@ -1,0 +1,848 @@
+{
+  "status": "BLOCKED_MISSING_INDEPENDENT_FORELEG",
+  "blockers": [
+    "Native negative-X foreleg shares front-torso influence and has no independent articulated chain. Custom quadruped rig/skin correction required; no constraint-pass or complete canary claimed."
+  ],
+  "startedAt": "2026-10-01T07:34:42.663Z",
+  "finishedAt": "2026-10-01T07:34:45.221Z",
+  "sourceSHA256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "derivativeSHA256": "7cec55eec3a90827f98b93915223023e4fa5d7fbd6957ea82ca895c48f08e93c",
+  "loader": "three@0.169.0 GLTFLoader.parseAsync",
+  "texturesDecoded": false,
+  "browserRenderMeasured": false,
+  "authoritativeExternalActorPose": "identity CPU scenario only; gameplay integration unmeasured",
+  "rootPolicy": "in-place horizontal; native visual root Y retained (no root stripping)",
+  "nativeSkinJoints": 21,
+  "vertices": 989606,
+  "triangles": 1934187,
+  "sourceLOD": {
+    "lodCount": 1,
+    "lowerLODs": null,
+    "optimizationMeasured": false,
+    "productionMemoryAndFrameTime": null
+  },
+  "originalBinaryPrefixPreserved": true,
+  "nativeSkinAndHierarchyPreserved": true,
+  "controls": {
+    "plantedRestPositiveControl": {
+      "maximumDisplacement": 0,
+      "detectorAccepts": true
+    },
+    "injectedSlideNegativeControl": {
+      "injectedWorldX": 0.05,
+      "measuredDisplacement": 0.05000000223517419,
+      "detectorRejects": true
+    },
+    "noOpNegativeControl": {
+      "measuredDeformation": 0,
+      "deformationDetectorRejects": true
+    },
+    "authoredDeformationPositiveControl": [
+      {
+        "clip": "Idle",
+        "measuredDeformation": 0.012237639508655146,
+        "detectorAccepts": true
+      },
+      {
+        "clip": "Pounce",
+        "measuredDeformation": 0.20481127969498514,
+        "detectorAccepts": true
+      }
+    ]
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "durationSeconds": 3.200000047683716,
+      "channels": 14,
+      "denseSampleCount": 386,
+      "finiteSampledVertices": 2080,
+      "skinMatricesFinite": true,
+      "maximumSampledDeformationFromStart": 0.012237639508655146,
+      "loopOrRecoveryClosure": 0,
+      "rootHorizontalExcursion": 0,
+      "rootMinY": 0.029661983251571655,
+      "rootMaxY": 0.029661983251571655,
+      "pawMeasurements": [
+        {
+          "paw": "front-negative-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 3.200000047683716,
+              "maxHorizontalSlip": 0.00613340431079191,
+              "maxVerticalOffset": 0.009237190191440536,
+              "minWorldY": -0.00848503254432098,
+              "maxWorldY": 0.009825194074536636,
+              "worstVertex": 601145,
+              "worstTime": 0.7979220898120434
+            }
+          ]
+        },
+        {
+          "paw": "front-positive-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 3.200000047683716,
+              "maxHorizontalSlip": 0.000009228479575818236,
+              "maxVerticalOffset": 0.0007921354076885212,
+              "minWorldY": -0.000248509529334362,
+              "maxWorldY": 0.0013746118041847444,
+              "worstVertex": 167624,
+              "worstTime": 2.3854545810005883
+            }
+          ]
+        },
+        {
+          "paw": "rear-negative-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 3.200000047683716,
+              "maxHorizontalSlip": 0.0000024975094123498742,
+              "maxVerticalOffset": 0.00006255883497119363,
+              "minWorldY": 0.0005068512097861078,
+              "maxWorldY": 0.001012557535707559,
+              "worstVertex": 765813,
+              "worstTime": 2.4020779578716724
+            }
+          ]
+        },
+        {
+          "paw": "rear-positive-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 3.200000047683716,
+              "maxHorizontalSlip": 0.000004328512122785159,
+              "maxVerticalOffset": 0.00008249175076868731,
+              "minWorldY": 0.0002163327470615095,
+              "maxWorldY": 0.001088800220054864,
+              "worstVertex": 231250,
+              "worstTime": 0.8145454666831277
+            }
+          ]
+        }
+      ],
+      "boundsSamples": [
+        {
+          "time": 0,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970453300104,
+              4.977167750164213e-8,
+              -0.49072415162491534
+            ],
+            "max": [
+              0.23069691472904458,
+              0.5428019885477067,
+              0.4907242964366592
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.00024509042757975275,
+              "maxY": 0.0005880038830960999
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 4.977167750164213e-8,
+              "maxY": 0.0005920774515929539
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005236756716187063,
+              "maxY": 0.0009499987007363653
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002302235924169782,
+              "maxY": 0.001036764966497128
+            }
+          ]
+        },
+        {
+          "time": 0.8,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.230697045475826,
+              -0.008803437902454858,
+              -0.4929032551829633
+            ],
+            "max": [
+              0.23069690861544384,
+              0.5386667244609703,
+              0.4921663328196499
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": -0.008485630417245371,
+              "maxY": -0.0072691382113654335
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": -0.00020964743616758152,
+              "maxY": 0.0009033181550389124
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005405759928209797,
+              "maxY": 0.0010125612618409052
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.00021633088956135582,
+              "maxY": 0.0010888047170150572
+            }
+          ]
+        },
+        {
+          "time": 1.6,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704861189833,
+              4.386162538727589e-8,
+              -0.4907241371602574
+            ],
+            "max": [
+              0.23069690538430765,
+              0.5428019309945888,
+              0.4907242420056734
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.00024507441378607275,
+              "maxY": 0.0005879838938078197
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 4.386162538727589e-8,
+              "maxY": 0.0005920697267070008
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005237056871013057,
+              "maxY": 0.0009500298777138094
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.00023026702498740725,
+              "maxY": 0.0010368091135322666
+            }
+          ]
+        },
+        {
+          "time": 2.4,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970451193239,
+              -0.00024852431371213957,
+              -0.48849543357716185
+            ],
+            "max": [
+              0.2306969041208898,
+              0.5523224301479769,
+              0.49467323969551413
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.008174296833655947,
+              "maxY": 0.009825819262540003
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": -0.00024852431371213957,
+              "maxY": 0.0013746668022366904
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005068623343540968,
+              "maxY": 0.0009716115496760658
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002442379910702619,
+              "maxY": 0.0010139164960405456
+            }
+          ]
+        },
+        {
+          "time": 3.200000047683716,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970453300104,
+              4.977167750164213e-8,
+              -0.49072415162491534
+            ],
+            "max": [
+              0.23069691472904458,
+              0.5428019885477067,
+              0.4907242964366592
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.00024509042757975275,
+              "maxY": 0.0005880038830960999
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 4.977167750164213e-8,
+              "maxY": 0.0005920774515929539
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005236756716187063,
+              "maxY": 0.0009499987007363653
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002302235924169782,
+              "maxY": 0.001036764966497128
+            }
+          ]
+        }
+      ],
+      "rootStripNegativeControl": null
+    },
+    {
+      "name": "Pounce",
+      "durationSeconds": 1.7999999523162842,
+      "channels": 21,
+      "denseSampleCount": 217,
+      "finiteSampledVertices": 2080,
+      "skinMatricesFinite": true,
+      "maximumSampledDeformationFromStart": 0.20481127969498514,
+      "loopOrRecoveryClosure": 0,
+      "rootHorizontalExcursion": 5.421010862427522e-20,
+      "rootMinY": 0.0016619864102051518,
+      "rootMaxY": 0.21966198155504385,
+      "pawMeasurements": [
+        {
+          "paw": "front-negative-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 0.38,
+              "maxHorizontalSlip": 0.0027496045062262785,
+              "maxVerticalOffset": 0.01855225950665651,
+              "minWorldY": -0.018307169079076757,
+              "maxWorldY": 0.0005880038830960999,
+              "worstVertex": 601145,
+              "worstTime": 0.29999999205271405
+            },
+            {
+              "start": 1.16,
+              "end": 1.7999999523162842,
+              "maxHorizontalSlip": 0.002161115952137742,
+              "maxVerticalOffset": 0.014598174316900359,
+              "minWorldY": -0.014353083889320606,
+              "maxWorldY": 0.002308196712560273,
+              "worstVertex": 601145,
+              "worstTime": 1.28333329933661
+            }
+          ]
+        },
+        {
+          "paw": "front-positive-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 0.38,
+              "maxHorizontalSlip": 0.000014126276195648382,
+              "maxVerticalOffset": 0.000989988770085326,
+              "minWorldY": -0.00031016423107216307,
+              "maxWorldY": 0.0015725278473631144,
+              "worstVertex": 167624,
+              "worstTime": 0.29999999205271405
+            },
+            {
+              "start": 1.16,
+              "end": 1.7999999523162842,
+              "maxHorizontalSlip": 0.000009693308923318614,
+              "maxVerticalOffset": 0.000791904344706218,
+              "minWorldY": -0.00024809798536523653,
+              "maxWorldY": 0.0013744434219840063,
+              "worstVertex": 167624,
+              "worstTime": 1.28333329933661
+            }
+          ]
+        },
+        {
+          "paw": "rear-negative-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 0.38,
+              "maxHorizontalSlip": 0.000028777556888258278,
+              "maxVerticalOffset": 0.0005465342959499742,
+              "minWorldY": 0.00045764389011071493,
+              "maxWorldY": 0.0014965329966863394,
+              "worstVertex": 901332,
+              "worstTime": 0.3666666569533171
+            },
+            {
+              "start": 1.16,
+              "end": 1.7999999523162842,
+              "maxHorizontalSlip": 0.00001993845740024015,
+              "maxVerticalOffset": 0.00043735505614816983,
+              "minWorldY": 0.0005033354872378548,
+              "maxWorldY": 0.001387353756884535,
+              "worstVertex": 901332,
+              "worstTime": 1.28333329933661
+            }
+          ]
+        },
+        {
+          "paw": "rear-positive-X",
+          "windows": [
+            {
+              "start": 0,
+              "end": 0.38,
+              "maxHorizontalSlip": 0.000044567751552503914,
+              "maxVerticalOffset": 0.0007204085232565549,
+              "minWorldY": -0.00022846036612250709,
+              "maxWorldY": 0.0017267169925427317,
+              "worstVertex": 264533,
+              "worstTime": 0.29999999205271405
+            },
+            {
+              "start": 1.16,
+              "end": 1.7999999523162842,
+              "maxHorizontalSlip": 0.00003292095988436878,
+              "maxVerticalOffset": 0.0005765075370013362,
+              "minWorldY": -0.00008777231040474343,
+              "maxWorldY": 0.001582816006287513,
+              "worstVertex": 231250,
+              "worstTime": 1.241666633773733
+            }
+          ]
+        }
+      ],
+      "boundsSamples": [
+        {
+          "time": 0,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970453300104,
+              4.977167750164213e-8,
+              -0.49072415162491534
+            ],
+            "max": [
+              0.23069691472904458,
+              0.5428019885477067,
+              0.4907242964366592
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.00024509042757975275,
+              "maxY": 0.0005880038830960999
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 4.977167750164213e-8,
+              "maxY": 0.0005920774515929539
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005236756716187063,
+              "maxY": 0.0009499987007363653
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002302235924169782,
+              "maxY": 0.001036764966497128
+            }
+          ]
+        },
+        {
+          "time": 0.3,
+          "root": [
+            -7.451490091625601e-9,
+            0.0016619862911609329,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970531176708,
+              -0.01854559432717795,
+              -0.5058431617778062
+            ],
+            "max": [
+              0.23069690318141015,
+              0.5216716935578958,
+              0.48996951294381386
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": -0.018307169157498082,
+              "maxY": -0.014575800250544502
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": -0.00031014204138934964,
+              "maxY": 0.0015725182965836693
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0004576904581647945,
+              "maxY": 0.0014965329989746201
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": -0.00022839373228111803,
+              "maxY": 0.0017267169955703099
+            }
+          ]
+        },
+        {
+          "time": 0.45,
+          "root": [
+            -7.451490091625601e-9,
+            0.039088005890056565,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704819951448,
+              -0.0010396237828746435,
+              -0.5031053931226613
+            ],
+            "max": [
+              0.23069690843451446,
+              0.5555635584806125,
+              0.49045224006967153
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.0053773488061720776,
+              "maxY": 0.007503376206102752
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 0.0001066604196455212,
+              "maxY": 0.0007199108650142727
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005357768972467647,
+              "maxY": 0.0011230644618973051
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.00009364663434591192,
+              "maxY": 0.0013971468336876902
+            }
+          ]
+        },
+        {
+          "time": 0.55,
+          "root": [
+            -7.451490091625601e-9,
+            0.09966197424848214,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704688441112,
+              0.05915700720598019,
+              -0.5008856584866849
+            ],
+            "max": [
+              0.23069691889565436,
+              0.6128101152966253,
+              0.49078891501201666
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.06524110165429292,
+              "maxY": 0.07163550498912818
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 0.06374687687763497,
+              "maxY": 0.06824869567100361
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.05942532117707325,
+              "maxY": 0.06325298864319351
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.06563473254224444,
+              "maxY": 0.06640220121788615
+            }
+          ]
+        },
+        {
+          "time": 0.8,
+          "root": [
+            -7.451490091625601e-9,
+            0.21966198349912852,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704941842753,
+              0.17808114064932043,
+              -0.5041613821047726
+            ],
+            "max": [
+              0.23069689963731832,
+              0.7324354723719457,
+              0.4907727119906633
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.18566218902134132,
+              "maxY": 0.19157485652507267
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 0.18426731675404504,
+              "maxY": 0.18881497526713054
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.1783236164328941,
+              "maxY": 0.18199681075187124
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.1868852260052622,
+              "maxY": 0.1876729082598511
+            }
+          ]
+        },
+        {
+          "time": 1.08,
+          "root": [
+            -7.451490091625601e-9,
+            0.05477807536242252,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704745565367,
+              0.025011612683530693,
+              -0.490750309148774
+            ],
+            "max": [
+              0.23069690314907637,
+              0.5679194050411284,
+              0.4907241116258393
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.025325182387743672,
+              "maxY": 0.025673996914438224
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 0.025011612683530693,
+              "maxY": 0.025602017904114482
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.02552021513521105,
+              "maxY": 0.025945543493599982
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.025243803597374492,
+              "maxY": 0.026050494540490576
+            }
+          ]
+        },
+        {
+          "time": 1.16,
+          "root": [
+            -7.451490091625601e-9,
+            0.029973975259963898,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.23069704404803948,
+              -0.00005419916661075774,
+              -0.4950966285864612
+            ],
+            "max": [
+              0.23069690982836788,
+              0.5450382864781993,
+              0.49059758735667236
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.0003155193776271936,
+              "maxY": 0.0024664425526684797
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": -0.00005419916661075774,
+              "maxY": 0.0008955741626304747
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005696083047058709,
+              "maxY": 0.001109937895262203
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002471605222176265,
+              "maxY": 0.0012613536661790214
+            }
+          ]
+        },
+        {
+          "time": 1.28,
+          "root": [
+            -7.451490091625601e-9,
+            0.007815031906914016,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.230697046742757,
+              -0.014390190489291854,
+              -0.502911279571175
+            ],
+            "max": [
+              0.2306969071747741,
+              0.526444873980121,
+              0.4901909048670246
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": -0.014254967754344872,
+              "maxY": -0.01116618442818984
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": -0.0002474667364182892,
+              "maxY": 0.0013724490736278794
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005035663210730124,
+              "maxY": 0.0013862655826079595
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": -0.0000863367276435767,
+              "maxY": 0.0015813794061654285
+            }
+          ]
+        },
+        {
+          "time": 1.7999999523162842,
+          "root": [
+            -7.451490091625601e-9,
+            0.029661983251571655,
+            -2.977321855723858e-8
+          ],
+          "deformedAllVertexBounds": {
+            "min": [
+              -0.2306970453300104,
+              4.977167750164213e-8,
+              -0.49072415162491534
+            ],
+            "max": [
+              0.23069691472904458,
+              0.5428019885477067,
+              0.4907242964366592
+            ]
+          },
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "minY": 0.00024509042757975275,
+              "maxY": 0.0005880038830960999
+            },
+            {
+              "paw": "front-positive-X",
+              "minY": 4.977167750164213e-8,
+              "maxY": 0.0005920774515929539
+            },
+            {
+              "paw": "rear-negative-X",
+              "minY": 0.0005236756716187063,
+              "maxY": 0.0009499987007363653
+            },
+            {
+              "paw": "rear-positive-X",
+              "minY": 0.0002302235924169782,
+              "maxY": 0.001036764966497128
+            }
+          ]
+        }
+      ],
+      "rootStripNegativeControl": {
+        "peakNativeRootY": 0.21966198349912852,
+        "strippedRootY": 0.029661983251571655,
+        "lostVisualLift": 0.19000000024755687
+      }
+    }
+  ],
+  "usage": null,
+  "releaseVerified": false,
+  "canaryComplete": false,
+  "constraintAcceptance": null,
+  "actualRenderReview": null
+}

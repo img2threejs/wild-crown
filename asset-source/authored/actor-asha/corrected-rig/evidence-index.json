@@ -1,0 +1,50 @@
+{
+  "sourceRevision": "asha-negativeX-foreleg-v1",
+  "sourceSHA256": "c93dcd4f8ef93de40093e2c5b89a5296e7afaa5b47f0ecab495c380f08578712",
+  "derivativeSHA256": "0ed8c19f1d17921c4fa3f54023de388dff75eb9325ec5fa0b222fef6a94a6143",
+  "artifacts": [
+    {
+      "path": "runtime.mjs",
+      "sha256": "d518317d151d84e06b0003244aed330f0906a5f1984e8d7ce7e4926b6f26b10b"
+    },
+    {
+      "path": "inspect.mjs",
+      "sha256": "46adb60f2bf1629bdf998baabdc179a4f5295ad653ed0ff69590a19ee27b7bf4"
+    },
+    {
+      "path": "author.mjs",
+      "sha256": "47876af82f1bf70d46e91dfdbd23f0c37f57b40fc792a466f78b882daa31d881"
+    },
+    {
+      "path": "measure.mjs",
+      "sha256": "3a0492040114cf7fb9bf7fd9eacfbf8c10cd64d041a8db8ccfd554c4673e665f"
+    },
+    {
+      "path": "anatomy.json",
+      "sha256": "9b1a8517746b0ae2776a389c49879bc067210105c0bcfe4d551252f5ee759d27"
+    },
+    {
+      "path": "contacts.json",
+      "sha256": "995257e7fa72fa32c1e83cd98d0acf2ecf4eee1b2fe8253ba3efb4d43e16144e"
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "b3bec3b4af064637acf87a9a61d87201a36512b43301ddecdcad0a39bef3c593"
+    },
+    {
+      "path": "idle-samples.json",
+      "sha256": "c00fd44a047a01ab801bc7d99b7fae43f6ad897dfefb187824099a7dcaf9dba2"
+    },
+    {
+      "path": "pounce-samples.json",
+      "sha256": "3b2907e558d3ad45cbf8af5b2c69e679fd1501946b65fa043e7436be4d9ea5c4"
+    },
+    {
+      "path": "canary-packet.json",
+      "sha256": "4a049f608b59f3caa3796d52df12d488340b59977e304637a2e0f3c8d68e20c9"
+    }
+  ],
+  "AstraReview": null,
+  "parentRenderAcceptance": null,
+  "releaseVerified": false
+}

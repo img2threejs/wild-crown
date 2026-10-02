@@ -1,0 +1,417 @@
+{
+  "status": "BLOCKED_MISSING_INDEPENDENT_FORELEG",
+  "sourceSHA256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "sourcePositionAccessor": 0,
+  "coordinates": "+Y up, head-side +Z; X side is geometric, animal left/right unverified",
+  "regions": [
+    {
+      "id": "missing-foreleg-lower",
+      "selectionNativeWorldBounds": {
+        "x": [
+          -0.24,
+          -0.07
+        ],
+        "y": [
+          0,
+          0.2
+        ],
+        "z": [
+          0.18,
+          0.49
+        ]
+      },
+      "vertexIndexFile": "missing-foreleg-lower.uint32le",
+      "encoding": "Uint32 little-endian, native primitive POSITION accessor vertex index, not triangle indices",
+      "sha256": "4ea354c8e0905400b7459c2b6c85872aa2a4fe8b90e2323f6757811ab09be166",
+      "vertexCount": 86688,
+      "actualBounds": {
+        "min": [
+          -0.2155172131774538,
+          0.00024509042757975275,
+          0.1800060151456277
+        ],
+        "max": [
+          -0.07000237499117457,
+          0.1999998261943195,
+          0.4889779023111143
+        ]
+      },
+      "influences": [
+        {
+          "skinJoint": 7,
+          "gltfNode": 10,
+          "originalName": "tripo::0_Right_Limb_1",
+          "influenceMass": 69926.28849866986,
+          "meanWeight": 0.8066432320352283
+        },
+        {
+          "skinJoint": 12,
+          "gltfNode": 8,
+          "originalName": "tripo::0_Right_Limb_3",
+          "influenceMass": 9547.923458907026,
+          "meanWeight": 0.11014123591393302
+        },
+        {
+          "skinJoint": 9,
+          "gltfNode": 4,
+          "originalName": "bone_9",
+          "influenceMass": 4301.441292002513,
+          "meanWeight": 0.04961980080290829
+        },
+        {
+          "skinJoint": 8,
+          "gltfNode": 5,
+          "originalName": "tripo::Head_0",
+          "influenceMass": 1284.388890615577,
+          "meanWeight": 0.014816224744088884
+        },
+        {
+          "skinJoint": 17,
+          "gltfNode": 14,
+          "originalName": "tripo::1_Right_Limb_2",
+          "influenceMass": 830.8604683317244,
+          "meanWeight": 0.00958449229803115
+        },
+        {
+          "skinJoint": 6,
+          "gltfNode": 11,
+          "originalName": "tripo::0_Right_Limb_0",
+          "influenceMass": 512.6415314016267,
+          "meanWeight": 0.005913638928128769
+        },
+        {
+          "skinJoint": 20,
+          "gltfNode": 17,
+          "originalName": "tripo::0_Left_Limb_1",
+          "influenceMass": 192.12113615256385,
+          "meanWeight": 0.0022162368050083502
+        },
+        {
+          "skinJoint": 13,
+          "gltfNode": 7,
+          "originalName": "tripo::0_Right_Limb_4",
+          "influenceMass": 92.33033181906649,
+          "meanWeight": 0.001065087807067489
+        },
+        {
+          "skinJoint": 5,
+          "gltfNode": 12,
+          "originalName": "tripo::Spine_1",
+          "influenceMass": 0.004417722258949652,
+          "meanWeight": 5.096117408349082e-8
+        }
+      ]
+    },
+    {
+      "id": "missing-foreleg-upper-candidate",
+      "selectionNativeWorldBounds": {
+        "x": [
+          -0.24,
+          -0.07
+        ],
+        "y": [
+          0.2,
+          0.34
+        ],
+        "z": [
+          0.16,
+          0.49
+        ]
+      },
+      "vertexIndexFile": "missing-foreleg-upper-candidate.uint32le",
+      "encoding": "Uint32 little-endian, native primitive POSITION accessor vertex index, not triangle indices",
+      "sha256": "e1e87d1ef944167c019aba0238793b9403e0a598baf8253877537743728ed37a",
+      "vertexCount": 48463,
+      "actualBounds": {
+        "min": [
+          -0.21788795004816555,
+          0.20000044918792165,
+          0.16008395381226156
+        ],
+        "max": [
+          -0.07001178598738134,
+          0.3399966771064899,
+          0.4529923297580188
+        ]
+      },
+      "influences": [
+        {
+          "skinJoint": 7,
+          "gltfNode": 10,
+          "originalName": "tripo::0_Right_Limb_1",
+          "influenceMass": 46956.066958487034,
+          "meanWeight": 0.9689054940570545
+        },
+        {
+          "skinJoint": 6,
+          "gltfNode": 11,
+          "originalName": "tripo::0_Right_Limb_0",
+          "influenceMass": 1339.118077682615,
+          "meanWeight": 0.02763176191491684
+        },
+        {
+          "skinJoint": 8,
+          "gltfNode": 5,
+          "originalName": "tripo::Head_0",
+          "influenceMass": 83.09793902514502,
+          "meanWeight": 0.0017146676645099358
+        },
+        {
+          "skinJoint": 9,
+          "gltfNode": 4,
+          "originalName": "bone_9",
+          "influenceMass": 58.900691819231724,
+          "meanWeight": 0.0012153744468817805
+        },
+        {
+          "skinJoint": 12,
+          "gltfNode": 8,
+          "originalName": "tripo::0_Right_Limb_3",
+          "influenceMass": 25.363578348427836,
+          "meanWeight": 0.0005233596423751695
+        },
+        {
+          "skinJoint": 5,
+          "gltfNode": 12,
+          "originalName": "tripo::Spine_1",
+          "influenceMass": 0.24081145836680662,
+          "meanWeight": 0.000004968975473388082
+        },
+        {
+          "skinJoint": 10,
+          "gltfNode": 3,
+          "originalName": "bone_10",
+          "influenceMass": 0.156748448338476,
+          "meanWeight": 0.000003234394245888121
+        },
+        {
+          "skinJoint": 20,
+          "gltfNode": 17,
+          "originalName": "tripo::0_Left_Limb_1",
+          "influenceMass": 0.04656780639925273,
+          "meanWeight": 9.608940098477753e-7
+        },
+        {
+          "skinJoint": 15,
+          "gltfNode": 16,
+          "originalName": "tripo::1_Right_Limb_0",
+          "influenceMass": 0.008627318893559277,
+          "meanWeight": 1.7801867184365964e-7
+        }
+      ]
+    }
+  ],
+  "exactSoleMarkers": {
+    "id": "front-negative-X",
+    "candidateCount": 12861,
+    "markers": [
+      {
+        "vertex": 791041,
+        "rest": [
+          -0.14713782773386555,
+          0.00024509042757975275,
+          0.41166879836611847
+        ],
+        "joints": [
+          7,
+          12,
+          17,
+          9
+        ],
+        "weights": [
+          0.4140050709247589,
+          0.3208600580692291,
+          0.1385815292596817,
+          0.12655332684516907
+        ]
+      },
+      {
+        "vertex": 729372,
+        "rest": [
+          -0.1242634525777867,
+          0.00043944736360385095,
+          0.4178359678697394
+        ],
+        "joints": [
+          7,
+          12,
+          9,
+          17
+        ],
+        "weights": [
+          0.3852579593658447,
+          0.3659232556819916,
+          0.1506793200969696,
+          0.0981394425034523
+        ]
+      },
+      {
+        "vertex": 776466,
+        "rest": [
+          -0.14197855234041204,
+          0.0005108662656537755,
+          0.4084129785716988
+        ],
+        "joints": [
+          7,
+          12,
+          17,
+          9
+        ],
+        "weights": [
+          0.3956224322319031,
+          0.33245816826820374,
+          0.14438992738723755,
+          0.12752944231033325
+        ]
+      },
+      {
+        "vertex": 695594,
+        "rest": [
+          -0.10993887990212495,
+          0.0005372887141024685,
+          0.40340557816699696
+        ],
+        "joints": [
+          12,
+          7,
+          9,
+          17
+        ],
+        "weights": [
+          0.38260576128959656,
+          0.3754391074180603,
+          0.14232127368450165,
+          0.09963387250900269
+        ]
+      },
+      {
+        "vertex": 604253,
+        "rest": [
+          -0.07221181724125592,
+          0.0005380387745507198,
+          0.42610145041011116
+        ],
+        "joints": [
+          12,
+          7,
+          9,
+          17
+        ],
+        "weights": [
+          0.3994128108024597,
+          0.3225710093975067,
+          0.18768754601478577,
+          0.0903286337852478
+        ]
+      },
+      {
+        "vertex": 626071,
+        "rest": [
+          -0.08031042470116298,
+          0.0005502077489662471,
+          0.41101266495353017
+        ],
+        "joints": [
+          12,
+          7,
+          9,
+          17
+        ],
+        "weights": [
+          0.3924497067928314,
+          0.3371441662311554,
+          0.16969403624534607,
+          0.10071205347776413
+        ]
+      },
+      {
+        "vertex": 777106,
+        "rest": [
+          -0.14222300906685967,
+          0.0005700218671200186,
+          0.4157114554969567
+        ],
+        "joints": [
+          7,
+          12,
+          17,
+          9
+        ],
+        "weights": [
+          0.38675084710121155,
+          0.3418966829776764,
+          0.14485929906368256,
+          0.1264931559562683
+        ]
+      },
+      {
+        "vertex": 601145,
+        "rest": [
+          -0.07109449027250564,
+          0.0005880038830960999,
+          0.4409554477523167
+        ],
+        "joints": [
+          12,
+          7,
+          9,
+          8
+        ],
+        "weights": [
+          0.369853138923645,
+          0.3539503812789917,
+          0.1996629387140274,
+          0.07653351128101349
+        ]
+      }
+    ]
+  },
+  "sourceJointChainLimitation": {
+    "frontTorsoNodes": [
+      12,
+      11,
+      10
+    ],
+    "frontTorsoSkinJoints": [
+      5,
+      6,
+      7
+    ],
+    "headNodes": [
+      5,
+      4,
+      3
+    ],
+    "segmentedPositiveXFrontNodes": [
+      9,
+      8,
+      7,
+      6
+    ],
+    "segmentedNegativeXRearNodes": [
+      16,
+      15,
+      14,
+      13
+    ],
+    "segmentedPositiveXRearNodes": [
+      18,
+      17
+    ],
+    "tailNodes": [
+      2,
+      1,
+      0
+    ]
+  },
+  "selectionWarning": "Regions are exact reproducible spatial candidate selections, NOT reviewed anatomical segmentation or ready-to-apply skin weights. Upper candidate includes neck/chest overlap; custom rig owner must inspect surface/topology and author genuine fourth limb chain and skin. No random bone aliases or substituted geometry.",
+  "reusableMeasurements": [
+    "anatomy-inspection.json: every original node/rest transform + native joint order + weighted region bounds",
+    "contact-markers.json: four actual sole sets and original JOINTS_0/WEIGHTS_0 coefficients",
+    "canary-packet.json: original-rig finite playback, contact-slip failure and native-root stripping negative control"
+  ],
+  "originalSourcePreserved": true,
+  "rigCorrected": false,
+  "releaseVerified": false
+}

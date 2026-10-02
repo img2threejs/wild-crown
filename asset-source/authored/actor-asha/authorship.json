@@ -1,0 +1,52 @@
+{
+  "status": "BLOCKED_MISSING_INDEPENDENT_FORELEG",
+  "canaryComplete": false,
+  "constraintAcceptance": null,
+  "blocker": "No independent negative-X foreleg chain; derivative is diagnostic original-rig material only. Custom rig/skin correction required.",
+  "sourceSHA256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "derivativeSHA256": "7cec55eec3a90827f98b93915223023e4fa5d7fbd6957ea82ca895c48f08e93c",
+  "sourceBytes": 99518156,
+  "derivativeBytes": 99595212,
+  "originalBinaryPrefixPreserved": true,
+  "nativeJointOrderPreserved": true,
+  "nativeNodesMeshesMaterialsAccessorsPreserved": true,
+  "clips": [
+    {
+      "name": "Idle",
+      "channels": 14,
+      "samplesPerChannel": 193
+    },
+    {
+      "name": "Pounce",
+      "channels": 21,
+      "samplesPerChannel": 109
+    }
+  ],
+  "phases": {
+    "anticipation": [
+      0,
+      0.38
+    ],
+    "takeoff": [
+      0.38,
+      0.55
+    ],
+    "flight": [
+      0.55,
+      1.08
+    ],
+    "landing": [
+      1.08,
+      1.28
+    ],
+    "recovery": [
+      1.28,
+      1.8
+    ]
+  },
+  "rootPolicy": "in-place horizontal; visual native root Y retained; authoritative external actor pose",
+  "providerSpends": 0,
+  "usage": null,
+  "renderReview": null,
+  "releaseVerified": false
+}

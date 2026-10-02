@@ -1,0 +1,35 @@
+{
+  "finishedAt": "2026-10-01T07:37:08.303Z",
+  "checks": [
+    {
+      "command": "node asset-source/authored/actor-aren/verify-authored.mjs --counterexample-static=Idle",
+      "exitCode": 1,
+      "expectedRejection": true,
+      "inertnessFailures": 1
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/verify-authored.mjs --counterexample-static=LateralDodge",
+      "exitCode": 1,
+      "expectedRejection": true,
+      "inertnessFailures": 1
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/author-clips.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/verify-authored.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node asset-source/rigged/actor-aren/verify-native.mjs asset-source/authored/actor-aren/aren-idle-lateral-dodge.glb",
+      "exitCode": 0
+    }
+  ],
+  "deterministicReexport": true,
+  "deterministicRepeatedMixerAndSocketMeasurements": true,
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "derivativeSha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152",
+  "browserLaunched": false,
+  "productionAccepted": false
+}
