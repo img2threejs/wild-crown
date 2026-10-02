@@ -104,7 +104,51 @@ function gltfNodeMatrix(node) {
   object.updateMatrix();
   return object.matrix.toArray();
 }
+const POSITION_STORAGE_LIMIT = 256 * 1024 * 1024;
+const POSITION_VERTEX_LIMIT = 8_000_000;
+function positionResourceBudget(gltf) {
+  const widths = new Map([[5120, 1], [5121, 1], [5122, 2], [5123, 2], [5125, 4], [5126, 4]]);
+  const seenAccessors = new Set(), seenViews = new Set(), renderedMeshes = new Set();
+  let decodedStorageBytes = 0, positionVertexOccurrences = 0;
+  const storage = bytes => {
+    if (!Number.isSafeInteger(bytes) || bytes < 0 || bytes > POSITION_STORAGE_LIMIT - decodedStorageBytes) throw new Error('POSITION validation resource refusal: decoded storage exceeds ' + POSITION_STORAGE_LIMIT + ' bytes.');
+    decodedStorageBytes += bytes;
+  };
+  const vertices = count => {
+    if (!Number.isSafeInteger(count) || count < 0 || count > POSITION_VERTEX_LIMIT - positionVertexOccurrences) throw new Error('POSITION validation resource refusal: vertex occurrences exceed ' + POSITION_VERTEX_LIMIT + '.');
+    positionVertexOccurrences += count;
+  };
+  for (const { node } of sceneMeshNodes(gltf)) {
+    renderedMeshes.add(node.mesh);
+    for (const primitive of gltf.meshes[node.mesh].primitives) vertices(gltf.accessors[primitive.attributes.POSITION].count);
+  }
+  // Unrendered declarations are also decoded; active instances are counted above
+  // instead of charging both their definition and occurrence a second time.
+  for (const [meshIndex, mesh] of gltf.meshes.entries()) if (!renderedMeshes.has(meshIndex)) for (const primitive of mesh.primitives) vertices(gltf.accessors[primitive.attributes.POSITION].count);
+  for (const buffer of gltf.buffers) if (buffer.uri) storage(buffer.byteLength);
+  for (const mesh of gltf.meshes) for (const primitive of mesh.primitives) {
+    const id = primitive.attributes.POSITION, accessor = gltf.accessors[id], width = widths.get(accessor.componentType);
+    if (!seenAccessors.has(id)) {
+      seenAccessors.add(id);
+      storage(accessor.count * 3 * Float64Array.BYTES_PER_ELEMENT);
+      if (accessor.sparse || accessor.bufferView === undefined) storage(accessor.count * 3 * width);
+      else if (!seenViews.has(accessor.bufferView)) {
+        seenViews.add(accessor.bufferView); storage(gltf.bufferViews[accessor.bufferView].byteLength);
+      }
+      if (accessor.sparse) storage(accessor.sparse.count * Uint32Array.BYTES_PER_ELEMENT);
+    }
+    if (primitive.mode === 5 || primitive.mode === 6) {
+      const stride = !accessor.sparse && accessor.bufferView !== undefined ? gltf.bufferViews[accessor.bufferView].byteStride || width * 3 : width * 3;
+      // toTrianglesDrawMode owns a POSITION clone per converted primitive,
+      // including the full interleaved slice, even when accessor IDs are shared.
+      storage(accessor.count * stride);
+    }
+  }
+  return { decodedStorageBytes, positionVertexOccurrences };
+}
+
 function nativePositions(gltf, bytes) {
+  positionResourceBudget(gltf); // Refuse before any count-sized decoding allocation.
   const result = new Map();
   const memories = new Map(), viewBuffers = new Map();
   const arrays = new Map([[5120, Int8Array], [5121, Uint8Array], [5122, Int16Array], [5123, Uint16Array], [5125, Uint32Array], [5126, Float32Array]]);
@@ -133,11 +177,11 @@ function nativePositions(gltf, bytes) {
     if (accessor.sparse) {
       const sparse = accessor.sparse, indexView = gltf.bufferViews[sparse.indices.bufferView], indexBuffer = buffers[indexView.buffer];
       const [indexReader, indexWidth] = readers.get(sparse.indices.componentType);
-      const indices = [];
+      const indices = new Uint32Array(sparse.count);
       for (let index = 0; index < sparse.count; index++) {
         const vertex = indexBuffer[indexReader]((indexView.byteOffset || 0) + (sparse.indices.byteOffset || 0) + index * indexWidth);
         if (vertex >= accessor.count || (index > 0 && vertex <= indices[index - 1])) throw new Error('Invalid native sparse POSITION index.');
-        indices.push(vertex);
+        indices[index] = vertex;
       }
       readValues(sparse.values.bufferView, sparse.values.byteOffset || 0, sparse.count, (vertex, axis, value) => assignValue(indices[vertex], axis, value));
     }
@@ -158,7 +202,7 @@ function nativePositions(gltf, bytes) {
       // different bufferViews are not aliases of the same loaded ArrayBuffer.
       memory = viewBuffers.get(accessor.bufferView); offset = accessor.byteOffset || 0; stride = view.byteStride || width * 3;
     }
-    memories.set(id, { memory, offset, stride, width, count: accessor.count, ArrayType, read: (vertex, axis) => normalize(memory[reader](offset + vertex * stride + axis * width)) });
+    memories.set(id, { memory, offset, stride, width, count: accessor.count, ArrayType, interleaved: !rawValues && stride !== width * 3, read(vertex, axis) { return normalize(this.memory[reader](this.offset + vertex * this.stride + axis * width)); } });
   }
   return { positions: result, memories };
 }
@@ -168,7 +212,13 @@ function positionBounds(values) {
   return box;
 }
 function nativePositionFault(primitives, memories) {
-  const targets = primitives.map(primitive => memories.get(primitive.attributes.POSITION));
+  const targets = primitives.map(primitive => {
+    const source = memories.get(primitive.attributes.POSITION);
+    if (primitive.mode !== 5 && primitive.mode !== 6) return source;
+    const base = source.interleaved ? Math.floor(source.offset / source.stride) * source.stride : source.offset;
+    const memory = Buffer.from(source.memory.subarray(base, base + source.count * source.stride));
+    return { ...source, memory, offset: source.offset - base };
+  });
   const originals = new Map(), bounds = new THREE.Box3();
   let finitePositionCount = 0, nonFinitePositionCount = 0;
   try {
@@ -299,7 +349,10 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
     const primitiveIndices = primitives.map((_, primitiveIndex) => primitiveIndex);
     const positionAccessors = primitives.map((primitive) => accessors[primitive.attributes?.POSITION]);
     const vertexCount = positionAccessors.reduce((sum, accessor) => sum + (accessor?.count ?? 0), 0);
-    const indexCount = primitives.reduce((sum, primitive) => sum + (primitive.indices === undefined ? 0 : (accessors[primitive.indices]?.count ?? 0)), 0);
+    const indexCount = primitives.reduce((sum, primitive) => {
+      const nativeCount = primitive.indices === undefined ? 0 : accessors[primitive.indices]?.count ?? 0;
+      return sum + (primitive.mode === 5 || primitive.mode === 6 ? Math.max(0, (primitive.indices === undefined ? accessors[primitive.attributes.POSITION].count : nativeCount) - 2) * 3 : nativeCount);
+    }, 0);
     const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
     for (const primitive of primitives) { const bounds = positionBounds(positions.get(primitive.attributes.POSITION)); for (let axis = 0; axis < 3; axis++) { min[axis] = Math.min(min[axis], bounds.min.getComponent(axis)); max[axis] = Math.max(max[axis], bounds.max.getComponent(axis)); } }
     const materialIndices = [...new Set(primitives.map((primitive) => primitive.material).filter(Number.isInteger))].sort((a, b) => a - b);
