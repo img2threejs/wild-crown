@@ -395,7 +395,32 @@ function contactCoverage(markers, sampleTimes) {
   const windows = markers.filter(marker => marker && typeof marker === "object" && (marker.type === "contact-window" || marker.kind === "contact-window"));
   const covered = windows.filter(window => Number.isFinite(window.startTime) && Number.isFinite(window.endTime) && sampleTimes.some(time => Math.abs(time - window.startTime) < EPSILON) && sampleTimes.some(time => Math.abs(time - window.endTime) < EPSILON));
   return { windows, covered, complete: windows.length > 0 && covered.length === windows.length };}
-function measureStaticGeometryCore(gltf, root, assetId) {
+function staticNodeIndices(gltf, root) {
+  const json = gltf.parser.json, indices = new Map();
+  const scene = json.scenes?.[json.scene ?? 0];
+  if (scene) {
+    // GLTFLoader shares association objects for instanced meshes. Native scene/child
+    // order identifies node objects without rewriting those shared mappings.
+    const visit = (object, nodeIndex) => {
+      if (!object) return;
+      object.traverse(child => { if (child.isMesh) indices.set(child, nodeIndex); });
+      const children = json.nodes[nodeIndex].children || [];
+      const offset = object.children.length - children.length;
+      children.forEach((childIndex, index) => visit(object.children[offset + index], childIndex));
+    };
+    scene.nodes.forEach((nodeIndex, index) => visit(root.children[index], nodeIndex));
+  } else {
+    root.traverse(mesh => {
+      if (!mesh.isMesh) return;
+      let object = mesh;
+      while (object && !Number.isInteger(gltf.parser.associations?.get(object)?.nodes)) object = object.parent;
+      indices.set(mesh, gltf.parser.associations?.get(object)?.nodes ?? null);
+    });
+  }
+  return indices;
+}
+
+function measureStaticGeometryCore(gltf, root, assetId, nodeIndices = staticNodeIndices(gltf, root)) {
   const json = gltf.parser.json;
   const parts = [];
   root.updateMatrixWorld(true);
@@ -405,11 +430,11 @@ function measureStaticGeometryCore(gltf, root, assetId) {
     const box = new THREE.Box3(vector(value.min), vector(value.max));
     return box.isEmpty() ? null : box;
   };
-  const recordBox = box => box && !box.isEmpty() ? { min: box.min.toArray().map(rounded), max: box.max.toArray().map(rounded) } : null;
+  const recordBox = box => box && !box.isEmpty() ? { min: box.min.toArray(), max: box.max.toArray() } : null;
   const delta = (actual, declared) => {
     if (!actual || !declared) return null;
-    const min = actual.min.toArray().map((value, index) => rounded(value - declared.min.getComponent(index)));
-    const max = actual.max.toArray().map((value, index) => rounded(value - declared.max.getComponent(index)));
+    const min = actual.min.toArray().map((value, index) => Math.fround(value) - Math.fround(declared.min.getComponent(index)));
+    const max = actual.max.toArray().map((value, index) => Math.fround(value) - Math.fround(declared.max.getComponent(index)));
     return { min, max, maxAbs: Math.max(...min.map(Math.abs), ...max.map(Math.abs)) };
   };
   const exactFloat32Match = (actual, declared) => {
@@ -421,7 +446,7 @@ function measureStaticGeometryCore(gltf, root, assetId) {
     if (!mesh.isMesh) return;
     mesh.updateWorldMatrix(true, false);
     const association = gltf.parser.associations?.get(mesh) || {};
-    const nodeIndex = Number.isInteger(association.nodes) ? association.nodes : null;
+    const nodeIndex = nodeIndices.get(mesh) ?? null;
     const nodeName = nodeIndex === null ? null : json.nodes?.[nodeIndex]?.name || null;
     const meshIndex = Number.isInteger(association.meshes) ? association.meshes : null;
     const primitiveIndex = Number.isInteger(association.primitives) ? association.primitives : null;
@@ -474,10 +499,11 @@ function measureStaticGeometryCore(gltf, root, assetId) {
       mesh, nodeIndex, nodeName, meshIndex, primitiveIndex,
       primitiveCount: primitiveRows.length || mesh.geometry.groups.length || 1,
       vertexCount: position?.count || 0, finitePositionCount, nonFinitePositionCount,
-      indexCount: index?.count || position?.count || 0, invalidIndexCount,
-      materialCount: materials.length, materialIndices, materialRefsValid,
+      indexCount: index?.count || 0, invalidIndexCount,
+      materialCount: materials.length, materialIndices: primitiveRows.map(primitive => primitive.material).filter(Number.isInteger), materialRefsValid,
       measuredLocalBounds: recordBox(actualLocal), measuredWorldBounds: recordBox(actualWorld),
       cachedLocalBounds: recordBox(cachedLocal), accessorDeclaredLocalBounds: recordBox(declaredBox),
+      primitiveDeclarations: primitiveRows.map((primitive, index) => ({ nodeIndex, meshIndex, primitiveIndex: primitiveIndex ?? index, positionAccessorIndex: primitive.attributes?.POSITION ?? null, accessorDeclaredLocalBounds: recordBox(asBox(json.accessors?.[primitive.attributes?.POSITION])) })),
       cachedBoundsDelta: delta(actualLocal, cachedLocal), accessorBoundsDelta: delta(actualLocal, declaredBox),
       cachedBoundsMatch: cachedMatch, accessorBoundsMatch: accessorMatch,
     });
@@ -514,13 +540,13 @@ function measureStaticGeometryCore(gltf, root, assetId) {
     const cachedBoundsMatch = nodeParts.every(part => part.cachedBoundsMatch !== false) ? (nodeParts.some(part => part.cachedBoundsMatch === null) ? null : true) : false;
     const accessorBoundsMatch = nodeParts.every(part => part.accessorBoundsMatch !== false) ? (nodeParts.some(part => part.accessorBoundsMatch === null) ? null : true) : false;
     meshNodes.push({
-      nodeIndex: first.nodeIndex, meshNodeName: first.nodeName,
-      meshIndices: [...new Set(nodeParts.map(part => part.meshIndex).filter(Number.isInteger))].sort((a, b) => a - b),
+      nodeIndex: first.nodeIndex, meshNodeName: first.nodeName || '(unnamed)', meshIndex: first.meshIndex,
       primitiveCount: nodeParts.reduce((sum, part) => sum + part.primitiveCount, 0), primitiveIndices,
       vertexCount, finitePositionCount, nonFinitePositionCount, indexCount, invalidIndexCount,
       materialCount: materialIndices.length, materialIndices,
       materialRefsValid: nodeParts.every(part => part.materialRefsValid),
       measuredLocalBounds, measuredWorldBounds, cachedLocalBounds, accessorDeclaredLocalBounds,
+      primitiveDeclarations: nodeParts.flatMap(part => part.primitiveDeclarations).sort((left, right) => left.primitiveIndex - right.primitiveIndex),
       cachedBoundsDelta: cachedBoundsMatch === null ? null : delta(asBox(measuredLocalBounds), asBox(cachedLocalBounds)),
       accessorBoundsDelta: accessorBoundsMatch === null ? null : delta(asBox(measuredLocalBounds), asBox(accessorDeclaredLocalBounds)),
       cachedBoundsMatch, accessorBoundsMatch, boundsCompareMode: 'float32-exact',
@@ -534,8 +560,8 @@ function measureStaticGeometryCore(gltf, root, assetId) {
     const box = asBox(row.measuredWorldBounds);
     if (box) sceneBox.union(box);
   }
-  const sceneSize = sceneBox.isEmpty() ? null : sceneBox.getSize(new THREE.Vector3()).toArray().map(rounded);
-  const sceneBounds = sceneBox.isEmpty() ? null : { min: sceneBox.min.toArray().map(rounded), max: sceneBox.max.toArray().map(rounded), size: sceneSize };
+  const sceneSize = sceneBox.isEmpty() ? null : sceneBox.getSize(new THREE.Vector3()).toArray();
+  const sceneBounds = sceneBox.isEmpty() ? null : { min: sceneBox.min.toArray(), max: sceneBox.max.toArray(), size: sceneSize };
   const valid = meshNodes.length > 0 && meshNodes.every(row => row.vertexCount > 0 && row.finitePositionCount === row.vertexCount && row.nonFinitePositionCount === 0 && row.invalidIndexCount === 0 && row.materialRefsValid && row.cachedBoundsMatch !== false && row.accessorBoundsMatch !== false) && externalResources.length === 0;
   return {
     status: valid ? 'measurement-complete-review-required' : 'incomplete',
@@ -544,40 +570,100 @@ function measureStaticGeometryCore(gltf, root, assetId) {
   };
 }
 
-export function measureStaticGeometry(gltf, root, assetId) {
-  const baseline = measureStaticGeometryCore(gltf, root, assetId);
+export function measureStaticGeometry(gltf, root, assetId, sourceHash = null) {
+  const nodeIndices = staticNodeIndices(gltf, root);
+  const baseline = measureStaticGeometryCore(gltf, root, assetId, nodeIndices);
   const meshes = [];
-  root.traverse(mesh => { if (mesh.isMesh && mesh.geometry.getAttribute('position')) meshes.push(mesh); });
-  const control = { id: 'G10-static-nonfinite-position', gate: 'G10', expectedFailure: true, detectedFailure: false, assetId, sourceHash: null };
-  const mesh = meshes[0];
-  const position = mesh?.geometry.getAttribute('position');
-  const positionArray = position?.array || position?.data?.array;
-  if (position && positionArray?.length) {
-    const arrayIndex = position.offset || 0;
-    const original = positionArray[arrayIndex];
-    const setNeedsUpdate = value => { if (position.data) position.data.needsUpdate = value; else position.needsUpdate = value; };
-    let after = null;
+  root.traverse(mesh => { if (mesh.isMesh) meshes.push(mesh); });
+  const controls = [];
+  for (const row of baseline.staticGeometry.meshNodes) {
+    const nodeMeshes = meshes.filter(mesh => nodeIndices.get(mesh) === row.nodeIndex);
+    const identity = { nodeIndex: row.nodeIndex, nodeName: row.meshNodeName, meshIndex: row.meshIndex };
+    const snapshot = measurement => ({ ...identity, status: measurement.status, finitePositionCount: measurement.finitePositionCount, nonFinitePositionCount: measurement.nonFinitePositionCount, bounds: measurement.measuredLocalBounds });
+    const control = { id: 'G10-static-bounds-corruption:' + row.nodeIndex, gate: 'G10', assetId, sourceHash, expectedFailure: true, detectedFailure: false };
+    const savedPositionBytes = new Map();
+    const positionTargets = [];
     try {
-      positionArray[arrayIndex] = Number.NaN;
-      setNeedsUpdate(true);
-      after = measureStaticGeometryCore(gltf, root, assetId);
+      // Capture all original byte addresses before mutating any aliased typed-array view.
+      for (const mesh of nodeMeshes) {
+        const position = mesh.geometry.getAttribute('position');
+        const array = position?.array || position?.data?.array;
+        if (!array?.length) throw new Error('Native POSITION data is missing.');
+        const index = position.offset || 0;
+        const byteOffset = array.byteOffset + index * array.BYTES_PER_ELEMENT;
+        let saved = savedPositionBytes.get(array.buffer);
+        if (!saved) {
+          saved = { bytes: new Uint8Array(array.buffer), originals: new Map() };
+          savedPositionBytes.set(array.buffer, saved);
+        }
+        for (let byte = byteOffset; byte < byteOffset + array.BYTES_PER_ELEMENT; byte++) if (!saved.originals.has(byte)) saved.originals.set(byte, saved.bytes[byte]);
+        positionTargets.push({ array, index });
+      }
+      for (const target of positionTargets) target.array[target.index] = Number.NaN;
+      const after = measureStaticGeometryCore(gltf, root, assetId, nodeIndices);
+      const afterRow = after.staticGeometry.meshNodes.find(item => item.nodeIndex === row.nodeIndex);
+      control.measurementBefore = snapshot({ ...row, status: baseline.status });
+      control.measurementAfter = { ...snapshot({ ...afterRow, status: after.status }), accepted: after.status === 'measurement-complete-review-required', injectedFault: 'non-finite-position' };
+      control.detectedFailure = baseline.status === 'measurement-complete-review-required' && after.status === 'incomplete' && afterRow.nonFinitePositionCount > row.nonFinitePositionCount && afterRow.finitePositionCount < row.finitePositionCount;
     } catch (error) {
       control.reason = error?.message || String(error);
     } finally {
-      positionArray[arrayIndex] = original;
-      setNeedsUpdate(true);
-      root.updateMatrixWorld(true);
+      for (const saved of savedPositionBytes.values()) for (const [byte, value] of saved.originals) saved.bytes[byte] = value;
     }
-    const measuredNonFinite = after?.staticGeometry.meshNodes.reduce((sum, row) => sum + row.nonFinitePositionCount, 0) || 0;
-    control.measurementBefore = { status: baseline.status, nonFinitePositionCount: baseline.staticGeometry.meshNodes.reduce((sum, row) => sum + row.nonFinitePositionCount, 0) };
-    control.measurementAfter = { status: after?.status || 'observed-fail', nonFinitePositionCount: measuredNonFinite };
-    control.detectedFailure = baseline.status === 'measurement-complete-review-required' && after?.status === 'incomplete' && measuredNonFinite > control.measurementBefore.nonFinitePositionCount;
-    if (!control.detectedFailure && !control.reason) control.reason = 'The normal static-geometry measurement did not reject a native non-finite POSITION corruption.';
-  } else {
-    control.reason = 'No native POSITION attribute is available for the non-finite-vertex control.';
+    control.restoredAfterTest = true;
+    if (!control.detectedFailure && !control.reason) control.reason = 'The native geometry predicate did not reject the POSITION mutation.';
+    controls.push(control);
+
+    const culling = { id: 'G10-wrong-culling-bounds:' + row.nodeIndex, gate: 'G10', assetId, sourceHash, expectedFailure: true, detectedFailure: false };
+    const savedCaches = [];
+    const probes = [];
+    const sphereRecord = sphere => ({ center: sphere.center.toArray(), radius: sphere.radius });
+    const boxRecord = box => ({ min: box.min.toArray(), max: box.max.toArray() });
+    try {
+      for (const mesh of nodeMeshes) {
+        const geometry = mesh.geometry;
+        if (!savedCaches.some(saved => saved.geometry === geometry)) savedCaches.push({ geometry, box: geometry.boundingBox, boxValues: geometry.boundingBox?.clone(), sphere: geometry.boundingSphere, sphereValues: geometry.boundingSphere?.clone() });
+        // Recompute from restored native POSITION, never accessor min/max or a detached probe mesh.
+        const position = geometry.getAttribute('position');
+        for (let vertex = 0; vertex < position.count; vertex++) if (!finiteArray([position.getX(vertex), position.getY(vertex), position.getZ(vertex)])) throw new Error('Native POSITION is non-finite before the culling probe.');
+        geometry.boundingBox = new THREE.Box3().setFromBufferAttribute(geometry.getAttribute('position'));
+        geometry.boundingSphere = null;
+        geometry.computeBoundingSphere();
+        const sphere = geometry.boundingSphere;
+        const worldSphere = sphere.clone().applyMatrix4(mesh.matrixWorld);
+        if (!Number.isFinite(worldSphere.radius) || !finiteArray(worldSphere.center.toArray())) throw new Error('Non-finite native culling sphere.');
+        const radius = Math.max(worldSphere.radius, 0.5);
+        const camera = new THREE.PerspectiveCamera(60, 1, 0.01, Math.max(100, radius * 20 + 10));
+        camera.position.copy(worldSphere.center).add(new THREE.Vector3(0, 0, radius * 4 + 1));
+        camera.lookAt(worldSphere.center); camera.updateMatrixWorld(true);
+        const frustum = new THREE.Frustum().setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+        const inverse = mesh.matrixWorld.clone().invert();
+        const offset = worldSphere.center.clone().add(new THREE.Vector3(Math.max(10000, radius * 1000), 0, 0)).applyMatrix4(inverse).sub(worldSphere.center.clone().applyMatrix4(inverse));
+        const before = { ...identity, primitiveIndex: gltf.parser.associations?.get(mesh)?.primitives ?? null, frustumVisible: frustum.intersectsObject(mesh), boundingSphere: sphereRecord(sphere), cullBounds: boxRecord(geometry.boundingBox), matrixWorld: mesh.matrixWorld.toArray(), cameraProjection: camera.projectionMatrix.toArray(), cameraWorldInverse: camera.matrixWorldInverse.toArray() };
+        geometry.boundingSphere = sphere.clone(); geometry.boundingSphere.center.add(offset);
+        geometry.boundingBox = geometry.boundingBox.clone().translate(offset);
+        const after = { ...identity, primitiveIndex: before.primitiveIndex, frustumVisible: frustum.intersectsObject(mesh), boundingSphere: sphereRecord(geometry.boundingSphere), corruptedCullBounds: boxRecord(geometry.boundingBox), corruptionOffset: offset.toArray() };
+        probes.push({ measurementBefore: before, measurementAfter: after });
+      }
+      const after = measureStaticGeometryCore(gltf, root, assetId, nodeIndices).staticGeometry.meshNodes.find(item => item.nodeIndex === row.nodeIndex);
+      culling.measurementBefore = { ...identity, measuredLocalBounds: row.measuredLocalBounds, cachedLocalBounds: row.cachedLocalBounds, accessorDeclaredLocalBounds: row.accessorDeclaredLocalBounds, frustumVisible: probes.length > 0 && probes.every(probe => probe.measurementBefore.frustumVisible), primitives: probes.map(probe => probe.measurementBefore) };
+      culling.measurementAfter = { ...identity, measuredLocalBounds: after.measuredLocalBounds, boundsMatch: after.cachedBoundsMatch, frustumVisible: probes.some(probe => probe.measurementAfter.frustumVisible), primitives: probes.map(probe => probe.measurementAfter) };
+      culling.detectedFailure = baseline.status === 'measurement-complete-review-required' && culling.measurementBefore.frustumVisible && !culling.measurementAfter.frustumVisible && after.cachedBoundsMatch === false;
+    } catch (error) {
+      culling.reason = error?.message || String(error);
+    } finally {
+      for (const saved of savedCaches) {
+        if (saved.box && saved.boxValues) saved.box.copy(saved.boxValues);
+        if (saved.sphere && saved.sphereValues) saved.sphere.copy(saved.sphereValues);
+        saved.geometry.boundingBox = saved.box; saved.geometry.boundingSphere = saved.sphere;
+      }
+    }
+    culling.restoredAfterTest = true;
+    if (!culling.detectedFailure && !culling.reason) culling.reason = 'The loaded mesh frustum predicate did not reject corrupted culling caches.';
+    controls.push(culling);
+    row.negativeControlIds = [control.id, culling.id];
   }
-  const controls = [control];
-  const status = baseline.status === 'measurement-complete-review-required' && controls.every(item => item.detectedFailure) ? 'measurement-complete-review-required' : 'incomplete';
+  const status = baseline.status === 'measurement-complete-review-required' && controls.length > 0 && controls.every(item => item.detectedFailure) ? 'measurement-complete-review-required' : 'incomplete';
   return { ...baseline, status, negativeControls: controls };
 }
 export function measureG10(root, clips, g1Measurements, boundsReader) {

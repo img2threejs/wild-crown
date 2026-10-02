@@ -6,22 +6,56 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { inspectAssets, verifyPreview } from '../../scripts/release/validate.mjs';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { measureStaticGeometry } from '../../src/asset-lab/measurements.js';
 
 const digest = (data) => createHash('sha256').update(data).digest('hex');
-function minimalTriangleGlb() {
+function minimalTriangleGlb({ coordinates = [[0, 0, 0], [1, 0, 0], [0, 1, 0]], min = [0, 0, 0], max = [1, 1, 0], twoPrimitives = false, sharedView = true, secondMin = min, secondMax = max } = {}) {
   const positions = Buffer.alloc(36);
-  [[0, 0, 0], [1, 0, 0], [0, 1, 0]].flat().forEach((value, index) => positions.writeFloatLE(value, index * 4));
-  const json = Buffer.from(JSON.stringify({ asset: { version: '2.0', extras: { wildCrownStaticVisibilityPolicy: { version: 1, policyId: 'prop-fixture-policy', assetId: 'prop-fixture', requiredMeshNodes: [{ nodeIndex: 0, minimumVisiblePixels: 1, minimumVisibleViews: 1 }], excludedMeshNodes: [] } } }, scene: 0, scenes: [{ nodes: [0] }], nodes: [{ mesh: 0 }], meshes: [{ name: 'triangle', primitives: [{ attributes: { POSITION: 0 }, material: 0 }] }], materials: [{ pbrMetallicRoughness: { baseColorFactor: [0.3, 0.4, 0.2, 1] } }], buffers: [{ byteLength: positions.length }], bufferViews: [{ buffer: 0, byteOffset: 0, byteLength: positions.length, target: 34962 }], accessors: [{ bufferView: 0, componentType: 5126, count: 3, type: 'VEC3', min: [0, 0, 0], max: [1, 1, 0] }] }));
-  const jsonPadding = Buffer.alloc((4 - json.length % 4) % 4, 0x20);
-  const jsonChunk = Buffer.concat([json, jsonPadding]);
-  const binPadding = Buffer.alloc((4 - positions.length % 4) % 4);
-  const binChunk = Buffer.concat([positions, binPadding]);
+  coordinates.flat().forEach((value, index) => positions.writeFloatLE(value, index * 4));
+  const json = Buffer.from(JSON.stringify({
+    asset: { version: '2.0', extras: { wildCrownStaticVisibilityPolicy: { version: 1, policyId: 'prop-fixture-policy', assetId: 'prop-fixture', requiredMeshNodes: [{ nodeIndex: 0, minimumVisiblePixels: 1, minimumVisibleViews: 1 }], excludedMeshNodes: [] } } },
+    scene: 0, scenes: [{ nodes: [0] }], nodes: [{ mesh: 0 }],
+    meshes: [{ name: 'triangle', primitives: Array.from({ length: twoPrimitives ? 2 : 1 }, (_, index) => ({ attributes: { POSITION: index }, material: 0 })) }],
+    materials: [{ pbrMetallicRoughness: { baseColorFactor: [0.3, 0.4, 0.2, 1] } }], buffers: [{ byteLength: positions.length }],
+    bufferViews: Array.from({ length: twoPrimitives && !sharedView ? 2 : 1 }, () => ({ buffer: 0, byteOffset: 0, byteLength: positions.length, target: 34962 })),
+    accessors: Array.from({ length: twoPrimitives ? 2 : 1 }, (_, index) => ({ bufferView: index === 1 && !sharedView ? 1 : 0, componentType: 5126, count: 3, type: 'VEC3', min: index === 1 ? secondMin : min, max: index === 1 ? secondMax : max })),
+  }));
+  const jsonChunk = Buffer.concat([json, Buffer.alloc((4 - json.length % 4) % 4, 0x20)]);
+  const binChunk = Buffer.concat([positions, Buffer.alloc((4 - positions.length % 4) % 4)]);
   const total = 12 + 8 + jsonChunk.length + 8 + binChunk.length;
   const header = Buffer.alloc(12); header.writeUInt32LE(0x46546c67, 0); header.writeUInt32LE(2, 4); header.writeUInt32LE(total, 8);
   const jsonHeader = Buffer.alloc(8); jsonHeader.writeUInt32LE(jsonChunk.length, 0); jsonHeader.writeUInt32LE(0x4e4f534a, 4);
   const binHeader = Buffer.alloc(8); binHeader.writeUInt32LE(binChunk.length, 0); binHeader.writeUInt32LE(0x004e4942, 4);
   return Buffer.concat([header, jsonHeader, jsonChunk, binHeader, binChunk]);
 }
+function overlappingTriangleGlb({ interleaved = false, separateViews = false, sparse = false } = {}) {
+  const seed = minimalTriangleGlb(), jsonLength = seed.readUInt32LE(12);
+  const json = JSON.parse(seed.toString('utf8', 20, 20 + jsonLength));
+  const vertices = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0]];
+  const stride = interleaved ? 16 : 12, positionBytes = stride * vertices.length;
+  const binary = Buffer.alloc(positionBytes + (sparse ? 16 : 0));
+  vertices.forEach((vertex, index) => vertex.forEach((value, axis) => binary.writeFloatLE(value, index * stride + axis * 4)));
+  json.buffers = [{ byteLength: binary.length }];
+  json.bufferViews = Array.from({ length: separateViews ? 2 : 1 }, () => ({ buffer: 0, byteLength: positionBytes, byteStride: interleaved ? stride : undefined }));
+  json.accessors = [
+    { bufferView: 0, componentType: 5126, count: 3, type: 'VEC3', min: [0, 0, 0], max: [1, 1, 0] },
+    { bufferView: separateViews ? 1 : 0, byteOffset: stride, componentType: 5126, count: 3, type: 'VEC3', min: [0, 0, 0], max: [1, 1, 0] },
+  ];
+  if (sparse) {
+    const indexView = json.bufferViews.length;
+    binary[positionBytes] = 2;
+    vertices[3].forEach((value, axis) => binary.writeFloatLE(value, positionBytes + 4 + axis * 4));
+    json.bufferViews.push({ buffer: 0, byteOffset: positionBytes, byteLength: 1 }, { buffer: 0, byteOffset: positionBytes + 4, byteLength: 12 });
+    json.accessors[1].sparse = { count: 1, indices: { bufferView: indexView, componentType: 5121 }, values: { bufferView: indexView + 1 } };
+  }
+  json.meshes[0].primitives.push({ attributes: { POSITION: 1 }, material: 0 });
+  const raw = Buffer.from(JSON.stringify(json)), chunk = Buffer.concat([raw, Buffer.alloc((4 - raw.length % 4) % 4, 32)]);
+  const header = Buffer.from(seed.subarray(0, 20)); header.writeUInt32LE(28 + chunk.length + binary.length, 8); header.writeUInt32LE(chunk.length, 12);
+  const binHeader = Buffer.alloc(8); binHeader.writeUInt32LE(binary.length); binHeader.writeUInt32LE(0x004e4942, 4);
+  return Buffer.concat([header, chunk, binHeader, binary]);
+}
+
 function withExternalImageUri(glb) {
   const oldJsonLength = glb.readUInt32LE(12);
   const json = JSON.parse(glb.toString('utf8', 20, 20 + oldJsonLength).replace(/[\u0000\u0020]+$/g, ''));
@@ -34,7 +68,7 @@ function withExternalImageUri(glb) {
   const jsonHeader = Buffer.alloc(8); jsonHeader.writeUInt32LE(jsonChunk.length, 0); jsonHeader.writeUInt32LE(0x4e4f534a, 4);
   return Buffer.concat([header, jsonHeader, jsonChunk, binaryChunks]);
 }
-async function fixture() {
+async function fixture(glb = minimalTriangleGlb()) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'wild-crown-release-test-'));
   const dist = path.join(root, 'dist');
   const evidenceRoot = path.join(root, 'evidence');
@@ -43,7 +77,6 @@ async function fixture() {
   await mkdir(path.join(root, 'docs/implementation'), { recursive: true });
   for (const name of ['reference-profile.json', 'BENCHMARK-ROUTES.md']) await writeFile(path.join(root, 'docs/implementation', name), await readFile(path.resolve(process.cwd(), 'docs/implementation', name)));
   await mkdir(path.join(evidenceRoot, 'release'), { recursive: true });
-  const glb = minimalTriangleGlb();
   await writeFile(path.join(dist, 'index.html'), '<!doctype html><script type="module" src="/entry.js"></script>');
   await writeFile(path.join(dist, 'entry.js'), 'console.log("release validator fixture");');
   await writeFile(path.join(dist, 'release-compatibility.json'), JSON.stringify({ buildSchema: 1, saveSchema: 1, authority: 'isolated test fixture only' }));
@@ -60,10 +93,11 @@ async function fixture() {
   await writeFile(path.join(root, environmentEvidenceFile), JSON.stringify({ schemaVersion: 1, recipeId: 'environment-fixture', status: 'verified', componentAssetIds: ['prop-fixture'], componentOutputHashes: { 'prop-fixture': sourceHash }, sceneEvidence: [{ path: visualPath, sha256: digest(visualBytes) }] }));
   const staticPolicyRow = { nodeIndex: 0, minimumVisiblePixels: 1, minimumVisibleViews: 1 };
   const gates = { G1: 'not-applicable', G3: 'not-applicable', G6: 'passed', G10: 'passed', G11: 'passed', G12: 'not-applicable' };
+  const native = await new GLTFLoader().parseAsync(glb.buffer.slice(glb.byteOffset, glb.byteOffset + glb.byteLength), '');
+  const staticMeasurement = measureStaticGeometry(native, native.scene, 'prop-fixture', sourceHash);
   const negativeControls = [
     { id: 'G6-hidden-static-mesh:0', gate: 'G6', assetId: 'prop-fixture', sourceHash, expectedFailure: true, detectedFailure: true, measurementBefore: { nodeIndex: 0, nodeName: '(unnamed)', meshIndex: 0, minimumVisiblePixels: 1, minimumVisibleViews: 1, visiblePixelsByView: [1], visibleViews: 1, vertexCount: 3 }, measurementAfter: { nodeIndex: 0, nodeName: '(unnamed)', meshIndex: 0, minimumVisiblePixels: 1, minimumVisibleViews: 1, visiblePixelsByView: [0], visibleViews: 0, vertexCount: 3 } },
-    { id: 'G10-static-bounds-corruption:0', gate: 'G10', assetId: 'prop-fixture', sourceHash, expectedFailure: true, detectedFailure: true, measurementBefore: { nodeIndex: 0, finitePositionCount: 3, bounds: { min: [0, 0, 0], max: [1, 1, 0] } }, measurementAfter: { nodeIndex: 0, finitePositionCount: 0, accepted: false, injectedFault: 'non-finite-position' } },
-    { id: 'G10-wrong-culling-bounds:0', gate: 'G10', assetId: 'prop-fixture', sourceHash, expectedFailure: true, detectedFailure: true, measurementBefore: { nodeIndex: 0, measuredLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, cachedLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, accessorDeclaredLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] } }, measurementAfter: { nodeIndex: 0, measuredLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, corruptedCullBounds: { min: [2, 0, 0], max: [3, 1, 0] }, corruptionOffset: [2, 0, 0], boundsMatch: false } },
+    ...staticMeasurement.negativeControls,
   ];
   const propEvidence = {
     schemaVersion: 1, assetId: 'prop-fixture', sourceInputHash, sourceHash, outputHash: sourceHash, gates,
@@ -72,8 +106,8 @@ async function fixture() {
     pluginChecks: [{ id: 'G6-visibility', gate: 'G6', status: 'passed' }, { id: 'G10-geometry', gate: 'G10', status: 'passed' }, { id: 'G11-freeze', gate: 'G11', status: 'passed' }],
     negativeControls,
     measurements: {
-      G6: { status: 'measurement-complete-review-required', policyId: 'prop-fixture-policy', requiredMeshNodes: [staticPolicyRow], excludedMeshNodes: [], excludedNodeMeasurements: [], meshInventory: [{ nodeIndex: 0, nodeName: '(unnamed)', meshIndex: 0, visible: true, alphaVisible: true, primitiveCount: 1, vertexCount: 3, indexCount: 0, materialCount: 1 }], renderedCoverage: [{ viewId: 'front', pixelCount: 1 }] },
-      G10: { status: 'measurement-complete-review-required', staticGeometry: { meshNodes: [{ nodeIndex: 0, meshNodeName: '(unnamed)', meshIndex: 0, primitiveCount: 1, primitiveIndices: [0], vertexCount: 3, finitePositionCount: 3, nonFinitePositionCount: 0, indexCount: 0, invalidIndexCount: 0, materialCount: 1, materialIndices: [0], materialRefsValid: true, measuredLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, accessorDeclaredLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, cachedLocalBounds: { min: [0, 0, 0], max: [1, 1, 0] }, cachedBoundsDelta: { min: [0, 0, 0], max: [0, 0, 0], maxAbs: 0 }, accessorBoundsDelta: { min: [0, 0, 0], max: [0, 0, 0], maxAbs: 0 }, cachedBoundsMatch: true, accessorBoundsMatch: true, boundsCompareMode: 'float32-exact', measuredWorldBounds: { min: [0, 0, 0], max: [1, 1, 0] }, negativeControlIds: ['G10-static-bounds-corruption:0', 'G10-wrong-culling-bounds:0'] }], sceneBounds: { min: [0, 0, 0], max: [1, 1, 0], size: [1, 1, 0] }, externalResources: [] } },
+      G6: { status: 'measurement-complete-review-required', policyId: 'prop-fixture-policy', requiredMeshNodes: [staticPolicyRow], excludedMeshNodes: [], excludedNodeMeasurements: [], meshInventory: staticMeasurement.staticGeometry.meshNodes.map(row => ({ nodeIndex: row.nodeIndex, nodeName: row.meshNodeName, meshIndex: row.meshIndex, visible: true, alphaVisible: true, primitiveCount: row.primitiveCount, vertexCount: row.vertexCount, indexCount: row.indexCount, materialCount: row.materialCount })), renderedCoverage: [{ viewId: 'front', pixelCount: 1 }] },
+      G10: staticMeasurement,
       G11: { status: 'measurement-complete-review-required', derivativeHash: sourceHash, frozenHash: sourceHash, parity: true, negativeControl: { id: 'G11-byte-flip', expectedFailure: true, detectedFailure: true, measurementBefore: { hash: sourceHash }, measurementAfter: { hash: digest(Buffer.from('byte-flipped copy')) } } },
     },
     visualEvidence: { status: 'passed', outputHash: sourceHash, files: [{ path: visualPath, sha256: digest(visualBytes), outputHash: sourceHash, viewSet: ['front'] }] },
@@ -102,6 +136,35 @@ async function fixture() {
   await writeFile(configFile, "export default { plugins: [{ name: 'release-fixture-cache', configurePreviewServer(server) { server.middlewares.use((req, res, next) => { if ((req.url ?? '').startsWith('/assets/prop-fixture/') && (req.url ?? '').endsWith('.glb')) res.setHeader('cache-control', 'public, max-age=31536000, immutable'); next(); }); } }] };\n");
   return { root, dist, evidenceRoot, manifestPath, manifest, configFile, assetPath, benchmarkPath };
 }
+async function rebindNativeFixture(f, bytes) {
+  const asset = f.manifest.assets[0], hash = digest(bytes), previousPath = f.assetPath;
+  f.assetPath = 'assets/' + asset.id + '/' + hash + '.glb';
+  asset.nativeGlb = f.assetPath; asset.runtimeUrl = '/' + f.assetPath; asset.sourceHash = hash; asset.outputHash = hash;
+  await writeFile(path.join(f.dist, f.assetPath), bytes);
+  if (previousPath !== f.assetPath) await rm(path.join(f.dist, previousPath));
+  await writeFile(f.manifestPath, JSON.stringify(f.manifest));
+  await writeFile(path.join(f.dist, 'assets/manifest.json'), JSON.stringify([...f.manifest.assets, ...f.manifest.environmentRecipes]));
+  const evidencePath = path.join(f.root, asset.evidence), evidence = JSON.parse(await readFile(evidencePath, 'utf8'));
+  evidence.sourceHash = hash; evidence.outputHash = hash; evidence.visualEvidence.outputHash = hash;
+  for (const file of evidence.visualEvidence.files) file.outputHash = hash;
+  for (const control of [...evidence.negativeControls, ...evidence.measurements.G10.negativeControls]) control.sourceHash = hash;
+  evidence.measurements.G11.derivativeHash = hash; evidence.measurements.G11.frozenHash = hash; evidence.measurements.G11.negativeControl.measurementBefore.hash = hash;
+  await writeFile(evidencePath, JSON.stringify(evidence));
+  for (const recipe of f.manifest.environmentRecipes) {
+    const recipePath = path.join(f.root, recipe.evidence), sceneEvidence = JSON.parse(await readFile(recipePath, 'utf8'));
+    sceneEvidence.componentOutputHashes[asset.id] = hash;
+    await writeFile(recipePath, JSON.stringify(sceneEvidence));
+  }
+  const entries = [];
+  for (const [file, mime] of [[f.assetPath, 'model/gltf-binary'], ['assets/manifest.json', 'application/json'], ['entry.js', 'text/javascript'], ['index.html', 'text/html'], ['release-compatibility.json', 'application/json']]) {
+    const content = await readFile(path.join(f.dist, file));
+    entries.push({ path: file, bytes: content.length, sha256: digest(content), mime });
+  }
+  entries.sort((a, b) => a.path.localeCompare(b.path));
+  const benchmark = JSON.parse(await readFile(f.benchmarkPath, 'utf8')); benchmark.buildIdentity = digest(JSON.stringify(entries));
+  await writeFile(f.benchmarkPath, JSON.stringify(benchmark));
+}
+
 
 test('accepts complete isolated fixture and validates actual Vite preview and CLI output', async (t) => {
   const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
@@ -314,3 +377,151 @@ test('rejects static evidence that omits the per-node wrong-culling negative con
   const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
   assert(result.errors.some((error) => error.includes('lacks negative control G10-wrong-culling-bounds:0')));
 });
+
+for (const [name, controlId, mutate, errorText] of [
+  ['no-op POSITION counts', 'G10-static-bounds-corruption:0', control => { control.measurementAfter.finitePositionCount = 3; control.measurementAfter.nonFinitePositionCount = 0; }, 'non-finite-position G10 control'],
+  ['cross-node POSITION evidence', 'G10-static-bounds-corruption:0', control => { control.measurementAfter.nodeIndex = 1; }, 'non-finite-position G10 control'],
+  ['no-op real frustum visibility', 'G10-wrong-culling-bounds:0', control => { control.measurementAfter.frustumVisible = true; control.measurementAfter.primitives[0].frustumVisible = true; }, 'wrong-culling-bounds G10 control'],
+  ['cross-node culling primitive', 'G10-wrong-culling-bounds:0', control => { control.measurementAfter.primitives[0].nodeIndex = 1; }, 'wrong-culling-bounds G10 control'],
+  ['detached culling sphere', 'G10-wrong-culling-bounds:0', control => { control.measurementAfter.primitives[0].boundingSphere = control.measurementBefore.primitives[0].boundingSphere; }, 'wrong-culling-bounds G10 control'],
+  ['malformed frustum camera', 'G10-wrong-culling-bounds:0', control => { control.measurementBefore.primitives[0].cameraProjection = [1]; }, 'wrong-culling-bounds G10 control'],
+  ['missing primitive measurement', 'G10-wrong-culling-bounds:0', control => { control.measurementAfter.primitives = []; }, 'wrong-culling-bounds G10 control'],
+  ['unrestored native cache', 'G10-wrong-culling-bounds:0', control => { control.restoredAfterTest = false; }, 'wrong-culling-bounds G10 control'],
+]) test('rejects producer evidence with ' + name, async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidencePath = path.join(f.root, f.manifest.assets[0].evidence);
+  const evidence = JSON.parse(await readFile(evidencePath, 'utf8'));
+  mutate(evidence.negativeControls.find(control => control.id === controlId));
+  mutate(evidence.measurements.G10.negativeControls.find(control => control.id === controlId));
+  await writeFile(evidencePath, JSON.stringify(evidence));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.ok(result.errors.some(error => error.includes(errorText)), JSON.stringify(result.errors));
+});
+
+for (const mode of ['missing nested controls', 'stale nested hash', 'duplicate per-node control', 'cross-node row', 'missing nested control IDs']) test('rejects ' + mode, async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidencePath = path.join(f.root, f.manifest.assets[0].evidence);
+  const evidence = JSON.parse(await readFile(evidencePath, 'utf8'));
+  if (mode === 'missing nested controls') delete evidence.measurements.G10.negativeControls;
+  if (mode === 'stale nested hash') evidence.measurements.G10.negativeControls[0].sourceHash = digest('stale native bytes');
+  if (mode === 'duplicate per-node control') evidence.negativeControls.push(evidence.negativeControls.find(control => control.id === 'G10-static-bounds-corruption:0'));
+  if (mode === 'cross-node row') evidence.measurements.G10.staticGeometry.meshNodes[0].nodeIndex = 1;
+  if (mode === 'missing nested control IDs') delete evidence.measurements.G10.staticGeometry.meshNodes[0].negativeControlIds;
+  await writeFile(evidencePath, JSON.stringify(evidence));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.ok(result.errors.some(error => error.includes(mode === 'cross-node row' || mode === 'missing nested control IDs' ? 'G10 mesh-node measurements' : 'G10 per-node controls')), JSON.stringify(result.errors));
+});
+
+for (const value of [NaN, 7]) test('rejects independently changed native POSITION bytes even with current source/output hashes: ' + value, async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const bytes = await readFile(path.join(f.dist, f.assetPath));
+  bytes.writeFloatLE(value, 28 + bytes.readUInt32LE(12));
+  await rebindNativeFixture(f, bytes);
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.equal(result.errors.length, 1, JSON.stringify(result.errors));
+  assert.match(result.errors[0], /native POSITION measurement failed/);
+});
+
+
+for (const x of [0.1, 100000.1]) test('accepts float32-equivalent decimal POSITION declarations without an absolute epsilon: ' + x, async (t) => {
+  const f = await fixture(minimalTriangleGlb({ coordinates: [[x, 0, 0], [x + 1, 0, 0], [x, 1, 0]], min: [x, 0, 0], max: [x + 1, 1, 0] }));
+  t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidence = JSON.parse(await readFile(path.join(f.root, f.manifest.assets[0].evidence), 'utf8'));
+  const row = evidence.measurements.G10.staticGeometry.meshNodes[0];
+  assert.notEqual(row.measuredLocalBounds.min[0], row.accessorDeclaredLocalBounds.min[0]);
+  assert.equal(Math.fround(row.measuredLocalBounds.min[0]), Math.fround(row.accessorDeclaredLocalBounds.min[0]));
+  assert.equal(row.accessorBoundsDelta.maxAbs, 0); assert.equal(row.cachedBoundsDelta.maxAbs, 0);
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.deepEqual(result.errors, []);
+});
+
+for (const [name, bounds] of [
+  ['wrong native accessor max', { max: [9, 9, 9] }],
+  ['one-float32-step native max', { max: [1.0000001192092896, 1, 0] }],
+  ['missing native accessor min', { min: undefined }],
+  ['reversed native accessor bounds', { min: [2, 0, 0] }],
+]) test('rejects retained good evidence after changing ' + name, async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const options = { min: [0, 0, 0], max: [1, 1, 0], ...bounds };
+  // Null is malformed JSON-native metadata, while all actual POSITION bytes stay valid.
+  if (options.min === undefined) options.min = null;
+  await rebindNativeFixture(f, minimalTriangleGlb(options));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.equal(result.errors.length, 1, JSON.stringify(result.errors));
+  assert.match(result.errors[0], /native POSITION measurement failed: Native POSITION accessor 0 declared bounds do not match decoded native values in float32 space/);
+});
+
+
+test('rejects stale declared-bounds evidence even when changed native metadata is float32-equivalent', async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  await rebindNativeFixture(f, minimalTriangleGlb({ max: [1 + 1e-10, 1, 0] }));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.ok(result.errors.some(error => error.includes('G10 declared bounds evidence does not identify native accessor metadata')), JSON.stringify(result.errors));
+});
+
+for (const sharedView of [true, false]) test('accepts independently evidenced native primitive accessors with ' + (sharedView ? 'aliased' : 'separate') + ' loaded buffers', async (t) => {
+  const f = await fixture(minimalTriangleGlb({ twoPrimitives: true, sharedView })); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidence = JSON.parse(await readFile(path.join(f.root, f.manifest.assets[0].evidence), 'utf8'));
+  assert.deepEqual(evidence.measurements.G10.staticGeometry.meshNodes[0].primitiveDeclarations.map(declaration => declaration.positionAccessorIndex), [0, 1]);
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.deepEqual(result.errors, []);
+});
+
+test('rejects stale float32-equivalent interior primitive metadata while accepting fresh evidence for it', async (t) => {
+  const f = await fixture(minimalTriangleGlb({ twoPrimitives: true, sharedView: false })); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const changed = minimalTriangleGlb({ twoPrimitives: true, sharedView: false, secondMin: [1e-50, 0, 0] });
+  await rebindNativeFixture(f, changed);
+  const rejected = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.equal(rejected.errors.length, 1, JSON.stringify(rejected.errors));
+  assert.match(rejected.errors[0], /G10 primitive declaration evidence does not identify native accessor metadata/);
+  const fresh = await fixture(changed); t.after(() => rm(fresh.root, { recursive: true, force: true }));
+  const accepted = await inspectAssets({ dist: fresh.dist, manifestPath: fresh.manifestPath, repoRoot: fresh.root });
+  assert.deepEqual(accepted.errors, []);
+});
+
+for (const [name, mutate] of [
+  ['missing primitive declarations', row => { delete row.primitiveDeclarations; }],
+  ['missing second declaration', row => { row.primitiveDeclarations.pop(); }],
+  ['cross-accessor declaration', row => { row.primitiveDeclarations[1].positionAccessorIndex = 0; }],
+  ['cross-node declaration', row => { row.primitiveDeclarations[1].nodeIndex = 1; }],
+]) test('rejects ' + name + ' even with unchanged node union bounds', async (t) => {
+  const f = await fixture(minimalTriangleGlb({ twoPrimitives: true, sharedView: false })); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidencePath = path.join(f.root, f.manifest.assets[0].evidence), evidence = JSON.parse(await readFile(evidencePath, 'utf8'));
+  mutate(evidence.measurements.G10.staticGeometry.meshNodes[0]);
+  await writeFile(evidencePath, JSON.stringify(evidence));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.equal(result.errors.length, 1, JSON.stringify(result.errors));
+  assert.match(result.errors[0], /G10 primitive declaration evidence does not identify native accessor metadata/);
+});
+
+for (const [name, options, finiteCount, nonFiniteCount, min] of [
+  ['shared contiguous view', {}, 3, 3, [0, 1, 0]],
+  ['shared interleaved view', { interleaved: true }, 3, 3, [0, 1, 0]],
+  ['distinct views of overlapping file bytes', { separateViews: true }, 4, 2, [0, 0, 0]],
+  ['sparse accessor-private copy', { sparse: true }, 4, 2, [0, 0, 0]],
+]) test('validates actual physical POSITION fault footprint for ' + name, async (t) => {
+  const f = await fixture(overlappingTriangleGlb(options)); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidence = JSON.parse(await readFile(path.join(f.root, f.manifest.assets[0].evidence), 'utf8'));
+  assert.equal(evidence.measurements.G10.status, 'measurement-complete-review-required');
+  const control = evidence.negativeControls.find(control => control.id === 'G10-static-bounds-corruption:0');
+  assert.equal(control.detectedFailure, true); assert.equal(control.restoredAfterTest, true);
+  assert.equal(control.measurementAfter.finitePositionCount, finiteCount);
+  assert.equal(control.measurementAfter.nonFinitePositionCount, nonFiniteCount);
+  assert.deepEqual(control.measurementAfter.bounds, { min, max: [1, 1, 0] });
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.deepEqual(result.errors, []);
+});
+
+for (const [name, mutate] of [
+  ['invented disjoint counts', after => { after.finitePositionCount = 4; after.nonFinitePositionCount = 2; }],
+  ['bounds including a physically corrupted later vertex', after => { after.bounds.min = [0, 0, 0]; }],
+]) test('rejects overlapping-accessor evidence with ' + name, async (t) => {
+  const f = await fixture(overlappingTriangleGlb()); t.after(() => rm(f.root, { recursive: true, force: true }));
+  const evidencePath = path.join(f.root, f.manifest.assets[0].evidence), evidence = JSON.parse(await readFile(evidencePath, 'utf8'));
+  for (const controls of [evidence.negativeControls, evidence.measurements.G10.negativeControls]) mutate(controls.find(control => control.id === 'G10-static-bounds-corruption:0').measurementAfter);
+  await writeFile(evidencePath, JSON.stringify(evidence));
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, repoRoot: f.root });
+  assert.equal(result.errors.length, 1, JSON.stringify(result.errors));
+  assert.match(result.errors[0], /lacks a detected non-finite-position G10 control/);
+});
+

@@ -106,7 +106,7 @@ async function buildEvidence(gltf, file, digest, assetId) {
   const staticVisibilityPolicy = gltf.parser.json.asset?.extras?.wildCrownStaticVisibilityPolicy || null;
   const staticProp = (catalogEntry?.kind === "prop" || Boolean(staticVisibilityPolicy)) && gltf.animations.length === 0 && skinIntegrity.skinnedMeshCount === 0;
   const g6 = staticProp ? measureStaticPropVisibility(gltf, root, renderer, scene, camera, assetId) : measureG6Visibility(root, coveragePolicy, renderer, scene, camera);
-  const g10 = staticProp ? measureStaticGeometry(gltf, root, assetId) : measureG10(root, gltf.animations, g1, animatedBounds);
+  const g10 = staticProp ? measureStaticGeometry(gltf, root, assetId, digest) : measureG10(root, gltf.animations, g1, animatedBounds);
   const g12 = measureJointCorrespondence(gltf, root, catalogEntry?.kind || null);
   const g12MeasurementStatus = g12.status; g12.status = "incomplete"; g12.measurementStatus = g12MeasurementStatus; g12.missingAcceptanceControls = ["wrong-lod-bind", "full-rig-profile-correspondence-review"];
   const frozenHash = await hash(sourceBytes.slice(0));

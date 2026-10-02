@@ -3,6 +3,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
+import * as THREE from 'three';
 const MIME = new Map([
   ['.html', 'text/html'], ['.js', 'text/javascript'], ['.mjs', 'text/javascript'],
   ['.css', 'text/css'], ['.json', 'application/json'], ['.glb', 'model/gltf-binary'],
@@ -89,52 +90,128 @@ function parseGlbJson(bytes) {
     return hasExternalUri(json) ? null : json;
   } catch { return null; }
 }
-function multiply4(left, right) {
-  const result = new Array(16);
-  for (let column = 0; column < 4; column += 1) for (let row = 0; row < 4; row += 1) {
-    result[column * 4 + row] = left[row] * right[column * 4] + left[4 + row] * right[column * 4 + 1] + left[8 + row] * right[column * 4 + 2] + left[12 + row] * right[column * 4 + 3];
-  }
-  return result;
-}
 function gltfNodeMatrix(node) {
-  if (node.matrix) return node.matrix.length === 16 && node.matrix.every(Number.isFinite) ? node.matrix : null;
-  const [tx, ty, tz] = node.translation ?? [0, 0, 0];
-  const [x, y, z, w] = node.rotation ?? [0, 0, 0, 1];
-  const [sx, sy, sz] = node.scale ?? [1, 1, 1];
-  if (![tx, ty, tz, x, y, z, w, sx, sy, sz].every(Number.isFinite)) return null;
-  const xx = x * x, yy = y * y, zz = z * z, xy = x * y, xz = x * z, yz = y * z, wx = w * x, wy = w * y, wz = w * z;
-  return [(1 - 2 * (yy + zz)) * sx, (2 * (xy + wz)) * sx, (2 * (xz - wy)) * sx, 0, (2 * (xy - wz)) * sy, (1 - 2 * (xx + zz)) * sy, (2 * (yz + wx)) * sy, 0, (2 * (xz + wy)) * sz, (2 * (yz - wx)) * sz, (1 - 2 * (xx + yy)) * sz, 0, tx, ty, tz, 1];
+  const object = new THREE.Object3D();
+  if (node.matrix) {
+    if (node.matrix.length !== 16 || !node.matrix.every(Number.isFinite)) return null;
+    object.applyMatrix4(new THREE.Matrix4().fromArray(node.matrix));
+  } else {
+    if (![...(node.translation ?? [0, 0, 0]), ...(node.rotation ?? [0, 0, 0, 1]), ...(node.scale ?? [1, 1, 1])].every(Number.isFinite)) return null;
+    object.position.fromArray(node.translation ?? [0, 0, 0]);
+    object.quaternion.fromArray(node.rotation ?? [0, 0, 0, 1]);
+    object.scale.fromArray(node.scale ?? [1, 1, 1]);
+  }
+  object.updateMatrix();
+  return object.matrix.toArray();
 }
-function staticWorldBounds(gltf) {
-  const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity], meshNodes = new Map();
-  let hasVertices = false;
-  const nodes = gltf.nodes ?? [], accessors = gltf.accessors ?? [], scene = gltf.scenes?.[gltf.scene ?? 0];
-  const visit = (nodeIndex, parentMatrix) => {
-    const node = nodes[nodeIndex], local = gltfNodeMatrix(node);
-    if (!local) return false;
-    const world = multiply4(parentMatrix, local);
-    if (node.mesh !== undefined) {
-      const nodeMin = [Infinity, Infinity, Infinity], nodeMax = [-Infinity, -Infinity, -Infinity];
-      for (const primitive of gltf.meshes[node.mesh].primitives) {
-        const bounds = accessors[primitive.attributes.POSITION];
-        if (!Array.isArray(bounds.min) || !Array.isArray(bounds.max)) return false;
-        for (let mask = 0; mask < 8; mask += 1) {
-          const point = [0, 1, 2].map((axis) => (mask & (1 << axis)) ? bounds.max[axis] : bounds.min[axis]);
-          const transformed = [world[0] * point[0] + world[4] * point[1] + world[8] * point[2] + world[12], world[1] * point[0] + world[5] * point[1] + world[9] * point[2] + world[13], world[2] * point[0] + world[6] * point[1] + world[10] * point[2] + world[14]];
-          for (let axis = 0; axis < 3; axis += 1) {
-            nodeMin[axis] = Math.min(nodeMin[axis], transformed[axis]); nodeMax[axis] = Math.max(nodeMax[axis], transformed[axis]);
-            min[axis] = Math.min(min[axis], transformed[axis]); max[axis] = Math.max(max[axis], transformed[axis]);
-          }
-          hasVertices = true;
-        }
+function nativePositions(gltf, bytes) {
+  const result = new Map();
+  const memories = new Map(), viewBuffers = new Map();
+  const arrays = new Map([[5120, Int8Array], [5121, Uint8Array], [5122, Int16Array], [5123, Uint16Array], [5125, Uint32Array], [5126, Float32Array]]);
+  const readers = new Map([[5120, ['readInt8', 1, 127]], [5121, ['readUInt8', 1, 255]], [5122, ['readInt16LE', 2, 32767]], [5123, ['readUInt16LE', 2, 65535]], [5125, ['readUInt32LE', 4, 4294967295]], [5126, ['readFloatLE', 4, null]]]);
+  const binStart = 28 + bytes.readUInt32LE(12);
+  const buffers = gltf.buffers.map(buffer => buffer.uri ? Buffer.from(buffer.uri.slice(buffer.uri.indexOf(',') + 1), 'base64') : bytes.subarray(binStart, binStart + buffer.byteLength));
+  for (const mesh of gltf.meshes) for (const primitive of mesh.primitives) {
+    const id = primitive.attributes.POSITION;
+    if (result.has(id)) continue;
+    const accessor = gltf.accessors[id], [reader, width, divisor] = readers.get(accessor.componentType);
+    const values = new Float64Array(accessor.count * 3);
+    const ArrayType = arrays.get(accessor.componentType);
+    const rawValues = accessor.sparse || accessor.bufferView === undefined ? new ArrayType(accessor.count * 3) : null;
+    const normalize = value => accessor.normalized && divisor ? Math.max(accessor.componentType === 5120 || accessor.componentType === 5122 ? -1 : 0, value / divisor) : value;
+    const assignValue = (vertex, axis, value) => {
+      const index = vertex * 3 + axis;
+      values[index] = normalize(value);
+      if (rawValues) rawValues[index] = value;
+    };
+    const readValues = (viewId, offset, count, assign, stride = width * 3) => {
+      const view = gltf.bufferViews[viewId], buffer = buffers[view.buffer];
+      if (offset < 0 || offset + (count - 1) * stride + width * 3 > view.byteLength) throw new Error('POSITION values exceed native buffer view.');
+      for (let vertex = 0; vertex < count; vertex++) for (let axis = 0; axis < 3; axis++) assign(vertex, axis, buffer[reader]((view.byteOffset || 0) + offset + vertex * stride + axis * width));
+    };
+    if (accessor.bufferView !== undefined) readValues(accessor.bufferView, accessor.byteOffset || 0, accessor.count, assignValue, gltf.bufferViews[accessor.bufferView].byteStride || width * 3);
+    if (accessor.sparse) {
+      const sparse = accessor.sparse, indexView = gltf.bufferViews[sparse.indices.bufferView], indexBuffer = buffers[indexView.buffer];
+      const [indexReader, indexWidth] = readers.get(sparse.indices.componentType);
+      const indices = [];
+      for (let index = 0; index < sparse.count; index++) {
+        const vertex = indexBuffer[indexReader]((indexView.byteOffset || 0) + (sparse.indices.byteOffset || 0) + index * indexWidth);
+        if (vertex >= accessor.count || (index > 0 && vertex <= indices[index - 1])) throw new Error('Invalid native sparse POSITION index.');
+        indices.push(vertex);
       }
-      meshNodes.set(nodeIndex, { min: nodeMin, max: nodeMax });
+      readValues(sparse.values.bufferView, sparse.values.byteOffset || 0, sparse.count, (vertex, axis, value) => assignValue(indices[vertex], axis, value));
+    }
+    if (!values.every(Number.isFinite)) throw new Error('Native POSITION contains non-finite values.');
+    // Validate the declaration from these exact native bytes, not from retained evidence.
+    const measured = positionBounds(values);
+    const declaredVector = vector => Array.isArray(vector) && vector.length === 3 && vector.every(Number.isFinite);
+    if (!declaredVector(accessor.min) || !declaredVector(accessor.max) || accessor.min.some((value, axis) => value > accessor.max[axis]) || accessor.min.some((value, axis) => Math.fround(normalize(value)) !== Math.fround(measured.min.getComponent(axis))) || accessor.max.some((value, axis) => Math.fround(normalize(value)) !== Math.fround(measured.max.getComponent(axis)))) throw new Error('Native POSITION accessor ' + id + ' declared bounds do not match decoded native values in float32 space.');
+    result.set(id, values);
+    let memory, offset, stride;
+    if (rawValues) {
+      // GLTFLoader materializes sparse/zero-filled accessors in accessor-private arrays.
+      memory = Buffer.from(rawValues.buffer); offset = 0; stride = width * 3;
+    } else {
+      const view = gltf.bufferViews[accessor.bufferView];
+      if (!viewBuffers.has(accessor.bufferView)) viewBuffers.set(accessor.bufferView, Buffer.from(buffers[view.buffer].subarray(view.byteOffset || 0, (view.byteOffset || 0) + view.byteLength)));
+      // The loader caches each bufferView separately: overlapping file ranges in
+      // different bufferViews are not aliases of the same loaded ArrayBuffer.
+      memory = viewBuffers.get(accessor.bufferView); offset = accessor.byteOffset || 0; stride = view.byteStride || width * 3;
+    }
+    memories.set(id, { memory, offset, stride, width, count: accessor.count, ArrayType, read: (vertex, axis) => normalize(memory[reader](offset + vertex * stride + axis * width)) });
+  }
+  return { positions: result, memories };
+}
+function positionBounds(values) {
+  const box = new THREE.Box3();
+  for (let index = 0; index < values.length; index += 3) box.expandByPoint(new THREE.Vector3(values[index], values[index + 1], values[index + 2]));
+  return box;
+}
+function nativePositionFault(primitives, memories) {
+  const targets = primitives.map(primitive => memories.get(primitive.attributes.POSITION));
+  const originals = new Map(), bounds = new THREE.Box3();
+  let finitePositionCount = 0, nonFinitePositionCount = 0;
+  try {
+    for (const target of targets) {
+      if (!originals.has(target.memory)) originals.set(target.memory, new Map());
+      const saved = originals.get(target.memory);
+      for (let byte = target.offset; byte < target.offset + target.width; byte++) if (!saved.has(byte)) saved.set(byte, target.memory[byte]);
+    }
+    for (const target of targets) new target.ArrayType(target.memory.buffer, target.memory.byteOffset + target.offset, 1)[0] = NaN;
+    // Reread every vertex after all physical writes. A first-X fault in one view
+    // can hit any component of a later vertex in another overlapping view.
+    for (const target of targets) for (let vertex = 0; vertex < target.count; vertex++) {
+      const x = target.read(vertex, 0), y = target.read(vertex, 1), z = target.read(vertex, 2);
+      if (![x, y, z].every(Number.isFinite)) { nonFinitePositionCount++; continue; }
+      finitePositionCount++; bounds.expandByPoint(new THREE.Vector3(x, y, z));
+    }
+    return { bounds, finitePositionCount, nonFinitePositionCount };
+  } finally {
+    for (const [memory, saved] of originals) for (const [byte, value] of saved) memory[byte] = value;
+  }
+}
+
+function staticWorldBounds(gltf, positions) {
+  const sceneBox = new THREE.Box3(), meshNodes = new Map();
+  const visit = (nodeIndex, parentMatrix) => {
+    const node = gltf.nodes[nodeIndex], local = gltfNodeMatrix(node);
+    if (!local) return false;
+    const world = new THREE.Matrix4().multiplyMatrices(parentMatrix, new THREE.Matrix4().fromArray(local));
+    if (node.mesh !== undefined) {
+      const box = new THREE.Box3();
+      for (const primitive of gltf.meshes[node.mesh].primitives) {
+        const values = positions.get(primitive.attributes.POSITION);
+        for (let index = 0; index < values.length; index += 3) box.expandByPoint(new THREE.Vector3(values[index], values[index + 1], values[index + 2]).applyMatrix4(world));
+      }
+      sceneBox.union(box);
+      meshNodes.set(nodeIndex, { min: box.min.toArray(), max: box.max.toArray(), matrixWorld: world });
     }
     for (const child of node.children ?? []) if (!visit(child, world)) return false;
     return true;
   };
-  if (!scene || scene.nodes.some((node) => !visit(node, [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1])) || !hasVertices) return null;
-  return { min, max, meshNodes };
+  const scene = gltf.scenes?.[gltf.scene ?? 0];
+  if (!scene || scene.nodes.some(node => !visit(node, new THREE.Matrix4())) || sceneBox.isEmpty()) return null;
+  return { min: sceneBox.min.toArray(), max: sceneBox.max.toArray(), meshNodes };
 }
 function sceneMeshNodes(gltf) {
   const nodes = gltf.nodes ?? [], scene = gltf.scenes?.[gltf.scene ?? 0], result = [];
@@ -178,7 +255,7 @@ function containsSensitive(value, trail = '') {
   }
   return null;
 }
-function validateStaticPropEvidence(gltf, evidence, assetId, controls) {
+function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
   const errors = [];
   const meshNodes = sceneMeshNodes(gltf);
   const accessors = gltf.accessors ?? [];
@@ -202,10 +279,20 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls) {
   const geometry = geometryMeasurement?.staticGeometry;
 
   const geometryRows = geometry?.meshNodes;
-  const world = staticWorldBounds(gltf);
+  const expectedControlIds = meshNodes.flatMap(({ nodeIndex }) => ['G10-static-bounds-corruption:' + nodeIndex, 'G10-wrong-culling-bounds:' + nodeIndex]);
+  const nativeControls = controls.filter(control => control?.gate === 'G10');
+  const nestedControls = geometryMeasurement?.negativeControls;
+  if (!Array.isArray(nestedControls) || nativeControls.length !== expectedControlIds.length || nestedControls.length !== expectedControlIds.length || expectedControlIds.some(id => {
+    const matching = nativeControls.filter(control => control.id === id), nested = nestedControls.filter(control => control?.id === id);
+    return matching.length !== 1 || nested.length !== 1 || ['gate', 'assetId', 'sourceHash', 'expectedFailure', 'detectedFailure', 'restoredAfterTest'].some(key => matching[0][key] !== nested[0][key]) || JSON.stringify(matching[0].measurementBefore) !== JSON.stringify(nested[0].measurementBefore) || JSON.stringify(matching[0].measurementAfter) !== JSON.stringify(nested[0].measurementAfter);
+  })) fail(errors, 'Static prop ' + assetId + ' G10 per-node controls are missing, duplicated, or differ from nested native producer evidence.');
+  let native;
+  try { native = nativePositions(gltf, bytes); } catch (error) { fail(errors, 'Static prop ' + assetId + ' G10 native POSITION measurement failed: ' + error.message); return errors; }
+  const { positions, memories } = native;
+  const world = staticWorldBounds(gltf, positions);
   const finiteVector = (value) => Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
-  const boxMatches = (actual, min, max) => actual && finiteVector(actual.min) && finiteVector(actual.max) && actual.min.every((value, axis) => Math.abs(value - min[axis]) <= 1e-5) && actual.max.every((value, axis) => Math.abs(value - max[axis]) <= 1e-5);
   if (!Array.isArray(geometryRows) || geometryRows.length !== meshNodes.length || !Array.isArray(geometry?.externalResources) || geometry.externalResources.length !== 0 || !world) fail(errors, 'Static prop ' + assetId + ' lacks per-node G10 geometry and closed-resource inventory.');
+  if (!world) return errors;
   if (geometryRows?.length === meshNodes.length) for (let index = 0; index < meshNodes.length; index += 1) {
     const { node, nodeIndex } = meshNodes[index];
     const meshIndex = node.mesh, mesh = gltf.meshes[meshIndex], primitives = mesh?.primitives ?? [];
@@ -214,9 +301,19 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls) {
     const vertexCount = positionAccessors.reduce((sum, accessor) => sum + (accessor?.count ?? 0), 0);
     const indexCount = primitives.reduce((sum, primitive) => sum + (primitive.indices === undefined ? 0 : (accessors[primitive.indices]?.count ?? 0)), 0);
     const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
-    for (const accessor of positionAccessors) if (finiteVector(accessor?.min) && finiteVector(accessor?.max)) for (let axis = 0; axis < 3; axis += 1) { min[axis] = Math.min(min[axis], accessor.min[axis]); max[axis] = Math.max(max[axis], accessor.max[axis]); }
+    for (const primitive of primitives) { const bounds = positionBounds(positions.get(primitive.attributes.POSITION)); for (let axis = 0; axis < 3; axis++) { min[axis] = Math.min(min[axis], bounds.min.getComponent(axis)); max[axis] = Math.max(max[axis], bounds.max.getComponent(axis)); } }
     const materialIndices = [...new Set(primitives.map((primitive) => primitive.material).filter(Number.isInteger))].sort((a, b) => a - b);
     const row = geometryRows[index], inventoryRow = inventory?.find((entry) => entry.nodeIndex === nodeIndex);
+    const nativeDeclaredBounds = new THREE.Box3();
+    for (const accessor of positionAccessors) nativeDeclaredBounds.union(new THREE.Box3(new THREE.Vector3().fromArray(accessor.min), new THREE.Vector3().fromArray(accessor.max)));
+    const reportedDeclared = row?.accessorDeclaredLocalBounds;
+    if (!reportedDeclared || !finiteVector(reportedDeclared.min) || !finiteVector(reportedDeclared.max) || reportedDeclared.min.some((value, axis) => value !== nativeDeclaredBounds.min.getComponent(axis)) || reportedDeclared.max.some((value, axis) => value !== nativeDeclaredBounds.max.getComponent(axis))) fail(errors, 'Static prop ' + assetId + ' G10 declared bounds evidence does not identify native accessor metadata for node ' + nodeIndex + '.');
+    const declarations = row?.primitiveDeclarations;
+    const primitiveDeclarationsMatch = Array.isArray(declarations) && declarations.length === primitives.length && declarations.every((declaration, primitiveIndex) => {
+      const accessorIndex = primitives[primitiveIndex].attributes.POSITION, accessor = accessors[accessorIndex], bounds = declaration?.accessorDeclaredLocalBounds;
+      return declaration?.nodeIndex === nodeIndex && declaration.meshIndex === meshIndex && declaration.primitiveIndex === primitiveIndex && declaration.positionAccessorIndex === accessorIndex && finiteVector(bounds?.min) && finiteVector(bounds?.max) && bounds.min.every((value, axis) => value === accessor.min[axis]) && bounds.max.every((value, axis) => value === accessor.max[axis]);
+    });
+    if (!primitiveDeclarationsMatch) fail(errors, 'Static prop ' + assetId + ' G10 primitive declaration evidence does not identify native accessor metadata for node ' + nodeIndex + '.');
     const nodeName = node.name || '(unnamed)';
     const requiredPolicy = requiredRows.find((required) => required.nodeIndex === nodeIndex);
     const excludedPolicy = excludedRows.find((excluded) => excluded.nodeIndex === nodeIndex);
@@ -231,19 +328,39 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls) {
       if (!control || before?.nodeIndex !== nodeIndex || after?.nodeIndex !== nodeIndex || before?.nodeName !== nodeName || after?.nodeName !== nodeName || before?.meshIndex !== meshIndex || after?.meshIndex !== meshIndex || before?.minimumVisiblePixels !== requiredPolicy.minimumVisiblePixels || after?.minimumVisiblePixels !== requiredPolicy.minimumVisiblePixels || before?.minimumVisibleViews !== requiredPolicy.minimumVisibleViews || after?.minimumVisibleViews !== requiredPolicy.minimumVisibleViews || !viewCountsMatch || visibleViews !== before.visibleViews || visibleViews < requiredPolicy.minimumVisibleViews || !after.visiblePixelsByView.every((pixels) => pixels === 0) || after.visibleViews !== 0) fail(errors, 'Static prop ' + assetId + ' lacks policy-matched rerendered G6 hide-mesh evidence for node ' + nodeIndex + '.');
     }
     const expectedWorld = world.meshNodes.get(nodeIndex);
-    const exactBounds = (actual, expectedMin, expectedMax) => boxMatches(actual, expectedMin, expectedMax) && actual.min.every((value, axis) => Math.fround(value) === Math.fround(expectedMin[axis])) && actual.max.every((value, axis) => Math.fround(value) === Math.fround(expectedMax[axis]));
+    const exactBounds = (actual, expectedMin, expectedMax) => actual && finiteVector(actual.min) && finiteVector(actual.max) && actual.min.every((value, axis) => Math.fround(value) === Math.fround(expectedMin[axis])) && actual.max.every((value, axis) => Math.fround(value) === Math.fround(expectedMax[axis]));
     const zeroDelta = (delta) => delta && Array.isArray(delta.min) && Array.isArray(delta.max) && delta.min.length === 3 && delta.max.length === 3 && delta.min.every((value) => value === 0) && delta.max.every((value) => value === 0) && delta.maxAbs === 0;
-    const boundsComparison = (bounds, delta, matches, expectedMin, expectedMax) => bounds === null ? delta === null && matches === false : matches === true && zeroDelta(delta) && exactBounds(bounds, expectedMin, expectedMax);
+    const boundsComparison = (bounds, delta, matches, expectedMin, expectedMax) => bounds === null ? delta === null && matches === null : matches === true && zeroDelta(delta) && exactBounds(bounds, expectedMin, expectedMax);
     const g10ControlId = 'G10-static-bounds-corruption:' + nodeIndex, cullingControlId = 'G10-wrong-culling-bounds:' + nodeIndex;
-    const rowBoundsAreValid = row && row.meshNodeName === nodeName && row.meshIndex === meshIndex && row.primitiveCount === primitives.length && JSON.stringify(row.primitiveIndices) === JSON.stringify(primitiveIndices) && row.vertexCount === vertexCount && row.finitePositionCount === vertexCount && row.nonFinitePositionCount === 0 && row.indexCount === indexCount && row.invalidIndexCount === 0 && row.materialCount === materialIndices.length && JSON.stringify(row.materialIndices) === JSON.stringify(materialIndices) && row.materialRefsValid === true && row.boundsCompareMode === 'float32-exact' && exactBounds(row.measuredLocalBounds, min, max) && boundsComparison(row.accessorDeclaredLocalBounds, row.accessorBoundsDelta, row.accessorBoundsMatch, min, max) && boundsComparison(row.cachedLocalBounds, row.cachedBoundsDelta, row.cachedBoundsMatch, min, max) && expectedWorld && exactBounds(row.measuredWorldBounds, expectedWorld.min, expectedWorld.max) && row.negativeControlIds?.includes(g10ControlId) && row.negativeControlIds?.includes(cullingControlId);
+    const rowBoundsAreValid = row && row.nodeIndex === nodeIndex && row.meshNodeName === nodeName && row.meshIndex === meshIndex && row.primitiveCount === primitives.length && JSON.stringify(row.primitiveIndices) === JSON.stringify(primitiveIndices) && row.vertexCount === vertexCount && row.finitePositionCount === vertexCount && row.nonFinitePositionCount === 0 && row.indexCount === indexCount && row.invalidIndexCount === 0 && row.materialCount === materialIndices.length && JSON.stringify(row.materialIndices) === JSON.stringify(materialIndices) && row.materialRefsValid === true && row.boundsCompareMode === 'float32-exact' && exactBounds(row.measuredLocalBounds, min, max) && boundsComparison(row.accessorDeclaredLocalBounds, row.accessorBoundsDelta, row.accessorBoundsMatch, min, max) && boundsComparison(row.cachedLocalBounds, row.cachedBoundsDelta, row.cachedBoundsMatch, min, max) && expectedWorld && exactBounds(row.measuredWorldBounds, expectedWorld.min, expectedWorld.max) && JSON.stringify(row.negativeControlIds) === JSON.stringify([g10ControlId, cullingControlId]);
     if (!rowBoundsAreValid) fail(errors, 'Static prop ' + assetId + ' G10 mesh-node measurements do not match exact GLB geometry for node ' + nodeIndex + '.');
     const control = controls.find((entry) => entry.id === g10ControlId);
     const before = control?.measurementBefore, after = control?.measurementAfter;
-    if (!control || before?.nodeIndex !== nodeIndex || before?.finitePositionCount !== vertexCount || !exactBounds(before?.bounds, min, max) || after?.nodeIndex !== nodeIndex || after?.accepted !== false || after?.injectedFault !== 'non-finite-position' || !Number.isInteger(after?.finitePositionCount) || after.finitePositionCount >= vertexCount) fail(errors, 'Static prop ' + assetId + ' lacks a detected non-finite-position G10 control for node ' + nodeIndex + '.');
+    const fault = nativePositionFault(primitives, memories);
+    const afterBoundsMatch = fault.bounds.isEmpty() ? after?.bounds === null : exactBounds(after?.bounds, fault.bounds.min.toArray(), fault.bounds.max.toArray());
+    if (!control || control.restoredAfterTest !== true || before?.nodeIndex !== nodeIndex || before?.nodeName !== nodeName || before?.meshIndex !== meshIndex || before?.status !== 'measurement-complete-review-required' || before?.nonFinitePositionCount !== 0 || before?.finitePositionCount !== vertexCount || !exactBounds(before?.bounds, min, max) || after?.nodeIndex !== nodeIndex || after?.nodeName !== nodeName || after?.meshIndex !== meshIndex || after?.status !== 'incomplete' || after?.accepted !== false || after?.injectedFault !== 'non-finite-position' || fault.nonFinitePositionCount === 0 || after?.finitePositionCount !== fault.finitePositionCount || after?.nonFinitePositionCount !== fault.nonFinitePositionCount || !afterBoundsMatch) fail(errors, 'Static prop ' + assetId + ' lacks a detected non-finite-position G10 control for node ' + nodeIndex + '.');
     const cullingControl = controls.find((entry) => entry.id === cullingControlId);
     const cullingBefore = cullingControl?.measurementBefore, cullingAfter = cullingControl?.measurementAfter;
-    const corruptionOffset = cullingAfter?.corruptionOffset;
-    if (!cullingControl || cullingBefore?.nodeIndex !== nodeIndex || !exactBounds(cullingBefore?.measuredLocalBounds, min, max) || JSON.stringify(cullingBefore?.cachedLocalBounds ?? null) !== JSON.stringify(row.cachedLocalBounds ?? null) || JSON.stringify(cullingBefore?.accessorDeclaredLocalBounds ?? null) !== JSON.stringify(row.accessorDeclaredLocalBounds ?? null) || cullingAfter?.nodeIndex !== nodeIndex || !exactBounds(cullingAfter?.measuredLocalBounds, min, max) || !finiteVector(corruptionOffset) || !corruptionOffset.some((value) => value !== 0) || !cullingAfter?.corruptedCullBounds || boxMatches(cullingAfter.corruptedCullBounds, min, max) || cullingAfter.boundsMatch !== false) fail(errors, 'Static prop ' + assetId + ' lacks a detected wrong-culling-bounds G10 control for node ' + nodeIndex + '.');
+    const nativeCulling = primitives.every((primitive, primitiveIndex) => {
+      const before = cullingBefore?.primitives?.[primitiveIndex], after = cullingAfter?.primitives?.[primitiveIndex];
+      const values = positions.get(primitive.attributes.POSITION), box = positionBounds(values);
+      const center = box.getCenter(new THREE.Vector3());
+      let radiusSq = 0;
+      for (let index = 0; index < values.length; index += 3) radiusSq = Math.max(radiusSq, center.distanceToSquared(new THREE.Vector3(values[index], values[index + 1], values[index + 2])));
+      const sphere = new THREE.Sphere(center, Math.sqrt(radiusSq));
+      const worldSphere = sphere.clone().applyMatrix4(expectedWorld.matrixWorld), radius = Math.max(worldSphere.radius, 0.5);
+      const camera = new THREE.PerspectiveCamera(60, 1, 0.01, Math.max(100, radius * 20 + 10));
+      camera.position.copy(worldSphere.center).add(new THREE.Vector3(0, 0, radius * 4 + 1)); camera.lookAt(worldSphere.center); camera.updateMatrixWorld(true);
+      const frustum = new THREE.Frustum().setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+      const inverse = expectedWorld.matrixWorld.clone().invert();
+      const offset = worldSphere.center.clone().add(new THREE.Vector3(Math.max(10000, radius * 1000), 0, 0)).applyMatrix4(inverse).sub(worldSphere.center.clone().applyMatrix4(inverse));
+      const wrongSphere = sphere.clone(); wrongSphere.center.add(offset);
+      const wrongBox = box.clone().translate(offset);
+      const same = (actual, expected) => Array.isArray(actual) && actual.length === expected.length && actual.every((value, index) => Number.isFinite(value) && value === expected[index]);
+      const identity = payload => payload?.nodeIndex === nodeIndex && payload.nodeName === nodeName && payload.meshIndex === meshIndex && payload.primitiveIndex === primitiveIndex;
+      return identity(before) && identity(after) && before.frustumVisible === true && after.frustumVisible === false && frustum.intersectsSphere(worldSphere) && !frustum.intersectsSphere(wrongSphere.clone().applyMatrix4(expectedWorld.matrixWorld)) && same(before.matrixWorld, expectedWorld.matrixWorld.toArray()) && same(before.cameraProjection, camera.projectionMatrix.toArray()) && same(before.cameraWorldInverse, camera.matrixWorldInverse.toArray()) && same(before.boundingSphere?.center, sphere.center.toArray()) && before.boundingSphere?.radius === sphere.radius && exactBounds(before.cullBounds, box.min.toArray(), box.max.toArray()) && same(after.corruptionOffset, offset.toArray()) && same(after.boundingSphere?.center, wrongSphere.center.toArray()) && after.boundingSphere?.radius === wrongSphere.radius && exactBounds(after.corruptedCullBounds, wrongBox.min.toArray(), wrongBox.max.toArray());
+    });
+    if (!cullingControl || cullingControl.restoredAfterTest !== true || cullingBefore?.nodeIndex !== nodeIndex || cullingBefore?.nodeName !== nodeName || cullingBefore?.meshIndex !== meshIndex || !exactBounds(cullingBefore?.measuredLocalBounds, min, max) || JSON.stringify(cullingBefore?.cachedLocalBounds ?? null) !== JSON.stringify(row?.cachedLocalBounds ?? null) || JSON.stringify(cullingBefore?.accessorDeclaredLocalBounds ?? null) !== JSON.stringify(row?.accessorDeclaredLocalBounds ?? null) || cullingBefore?.frustumVisible !== true || cullingAfter?.nodeIndex !== nodeIndex || cullingAfter?.nodeName !== nodeName || cullingAfter?.meshIndex !== meshIndex || !exactBounds(cullingAfter?.measuredLocalBounds, min, max) || cullingAfter?.frustumVisible !== false || cullingAfter.boundsMatch !== false || cullingBefore?.primitives?.length !== primitives.length || cullingAfter?.primitives?.length !== primitives.length || !nativeCulling) fail(errors, 'Static prop ' + assetId + ' lacks a detected wrong-culling-bounds G10 control for node ' + nodeIndex + '.');
   }
   if (geometry && world) {
     const sceneBounds = geometry.sceneBounds;
@@ -424,7 +541,7 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
           if (isStaticProp) {
             if (gltf.skins?.length || gltf.animations?.length) fail(errors, 'Static prop ' + asset.id + ' unexpectedly contains skin/animation structures.');
             if (!evidence.notApplicableReasons?.G1 || !evidence.notApplicableReasons?.G3 || !evidence.notApplicableReasons?.G12) fail(errors, 'Static prop ' + asset.id + ' lacks explicit no-skin/no-animation G1/G3/G12 applicability reasons.');
-            errors.push(...validateStaticPropEvidence(gltf, evidence, asset.id, controls));
+            errors.push(...validateStaticPropEvidence(gltf, evidence, asset.id, controls, bytes));
           }
           if (containsSensitive(evidence)) fail(errors, 'Native asset ' + asset.id + ' evidence contains credentials or signed URLs.');
         } catch { fail(errors, 'Native asset ' + asset.id + ' evidence file is missing or invalid JSON.'); }
