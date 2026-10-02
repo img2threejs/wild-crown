@@ -1,0 +1,565 @@
+{
+  "candidateParameters": {
+    "centerY": 0.449,
+    "centerZ": 0.092,
+    "pose": {
+      "wrist": 0.5235987755982988,
+      "palm": 0,
+      "proximal": [
+        0.96,
+        1.297,
+        1.297,
+        1.39
+      ],
+      "distal": [
+        0.56,
+        0.76,
+        0.4000000000000001,
+        0.46000000000000013
+      ],
+      "thumbOpposition": 0.443,
+      "thumbFlexion": 0.1,
+      "thumbDistal": 0.81
+    }
+  },
+  "handVertices": 19012,
+  "allOtherBodyVertices": 916608,
+  "allStaffVertices": 75684,
+  "toleranceNative": 0.000091552734375,
+  "completeBodyVertexContainment": {
+    "insideBodyVertices": 170,
+    "maxBodyPenetration": 0.0017092133665111615,
+    "insideBodyExamples": [
+      {
+        "vertex": 507737,
+        "hand": true,
+        "distanceNative": 0.00010384831602536665
+      },
+      {
+        "vertex": 511157,
+        "hand": true,
+        "distanceNative": 0.0001912774878926811
+      },
+      {
+        "vertex": 512734,
+        "hand": true,
+        "distanceNative": 0.00017689599647129978
+      },
+      {
+        "vertex": 513734,
+        "hand": true,
+        "distanceNative": 0.00021633362080306732
+      },
+      {
+        "vertex": 514546,
+        "hand": true,
+        "distanceNative": 0.00014594833789761242
+      },
+      {
+        "vertex": 516980,
+        "hand": true,
+        "distanceNative": 0.00025747274654052457
+      },
+      {
+        "vertex": 517762,
+        "hand": true,
+        "distanceNative": 0.00011097857863946954
+      },
+      {
+        "vertex": 521108,
+        "hand": true,
+        "distanceNative": 0.00009960495608221203
+      },
+      {
+        "vertex": 521216,
+        "hand": true,
+        "distanceNative": 0.00023515653133872897
+      },
+      {
+        "vertex": 525818,
+        "hand": true,
+        "distanceNative": 0.00010097996211193938
+      },
+      {
+        "vertex": 564821,
+        "hand": true,
+        "distanceNative": 0.0001309481061403934
+      },
+      {
+        "vertex": 565611,
+        "hand": true,
+        "distanceNative": 0.00009858207296371435
+      },
+      {
+        "vertex": 566843,
+        "hand": true,
+        "distanceNative": 0.0002908945926419434
+      },
+      {
+        "vertex": 567058,
+        "hand": true,
+        "distanceNative": 0.00020434686161899975
+      },
+      {
+        "vertex": 567709,
+        "hand": true,
+        "distanceNative": 0.00025729947270393763
+      },
+      {
+        "vertex": 567768,
+        "hand": true,
+        "distanceNative": 0.00035494595694435526
+      },
+      {
+        "vertex": 568699,
+        "hand": true,
+        "distanceNative": 0.00022397729832526292
+      },
+      {
+        "vertex": 569142,
+        "hand": true,
+        "distanceNative": 0.0004032051259510235
+      },
+      {
+        "vertex": 570236,
+        "hand": true,
+        "distanceNative": 0.0004075432883475352
+      },
+      {
+        "vertex": 570606,
+        "hand": true,
+        "distanceNative": 0.0001616289879575711
+      }
+    ]
+  },
+  "completeStaffVertexContainment": {
+    "insideStaffVertices": 106,
+    "maxStaffPenetration": 0.0016723412096572912
+  },
+  "allHandBoundaryTriangleEdges": {
+    "edges": 55908,
+    "crossingEdges": 299,
+    "examples": [
+      {
+        "bodyEdge": [
+          584797,
+          584587
+        ],
+        "staffTriangles": [
+          [
+            590410,
+            599796,
+            594555
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          584587,
+          580909
+        ],
+        "staffTriangles": [
+          [
+            600066,
+            592185,
+            600290
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          589150,
+          584587
+        ],
+        "staffTriangles": [
+          [
+            599796,
+            603900,
+            594555
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          576467,
+          576120
+        ],
+        "staffTriangles": [
+          [
+            600290,
+            602297,
+            608237
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          580909,
+          576467
+        ],
+        "staffTriangles": [
+          [
+            600066,
+            600290,
+            608237
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          580909,
+          580270
+        ],
+        "staffTriangles": [
+          [
+            600066,
+            592185,
+            600290
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          589150,
+          584271
+        ],
+        "staffTriangles": [
+          [
+            595473,
+            594555,
+            603900
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          589150,
+          588482
+        ],
+        "staffTriangles": [
+          [
+            595473,
+            603900,
+            603852
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          593180,
+          588482
+        ],
+        "staffTriangles": [
+          [
+            603852,
+            610825,
+            603821
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          576467,
+          572447
+        ],
+        "staffTriangles": [
+          [
+            600290,
+            602297,
+            608237
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          593255,
+          588482
+        ],
+        "staffTriangles": [
+          [
+            603852,
+            610825,
+            603821
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          593255,
+          588898
+        ],
+        "staffTriangles": [
+          [
+            603852,
+            611968,
+            610825
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          575362,
+          572447
+        ],
+        "staffTriangles": [
+          [
+            608237,
+            602297,
+            606260
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          575362,
+          570853
+        ],
+        "staffTriangles": [
+          [
+            608237,
+            610560,
+            614357
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          593255,
+          592877
+        ],
+        "staffTriangles": [
+          [
+            610825,
+            620341,
+            611761
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          597482,
+          592877
+        ],
+        "staffTriangles": [
+          [
+            610825,
+            620341,
+            611761
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          570853,
+          573084
+        ],
+        "staffTriangles": [
+          [
+            608237,
+            614357,
+            614116
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          573084,
+          567802
+        ],
+        "staffTriangles": [
+          [
+            619787,
+            618094,
+            624048
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          717879,
+          717771
+        ],
+        "staffTriangles": [
+          [
+            599466,
+            599386,
+            603512
+          ]
+        ]
+      },
+      {
+        "bodyEdge": [
+          717771,
+          714777
+        ],
+        "staffTriangles": [
+          [
+            599466,
+            599386,
+            603512
+          ]
+        ]
+      }
+    ]
+  },
+  "opposition": [
+    {
+      "digit": 1,
+      "thumb": 5,
+      "cosine": 0.7339391083278901,
+      "radians": 0.7466929040870188
+    },
+    {
+      "digit": 2,
+      "thumb": 5,
+      "cosine": 0.6849498532443059,
+      "radians": 0.8162614572790938
+    },
+    {
+      "digit": 3,
+      "thumb": 5,
+      "cosine": 0.6943767156306433,
+      "radians": 0.8032429282188289
+    },
+    {
+      "digit": 4,
+      "thumb": 5,
+      "cosine": 0.634207931080029,
+      "radians": 0.8838126910608601
+    }
+  ],
+  "contacts": [
+    {
+      "distance": 0.0000012988700672474985,
+      "vertex": 828050,
+      "staffSurfacePoint": [
+        -0.04040216034783589,
+        0.4146771986483874,
+        0.21048537097260037
+      ],
+      "staffTriangle": [
+        605522,
+        605636,
+        606423
+      ],
+      "worldPoint": [
+        -0.06272714686665312,
+        0.4412371365578292,
+        0.10318644778630204
+      ],
+      "sourceStaffFramePoint": [
+        -0.04040288494884541,
+        0.4146772106185207,
+        0.21048644887498208
+      ]
+    },
+    {
+      "distance": 0.000007680686006770359,
+      "vertex": 800629,
+      "staffSurfacePoint": [
+        -0.041201200888469444,
+        0.4196240088851361,
+        0.20986752748868887
+      ],
+      "staffTriangle": [
+        609268,
+        612453,
+        612552
+      ],
+      "worldPoint": [
+        -0.0588445216542291,
+        0.4444059556468736,
+        0.10257363961822208
+      ],
+      "sourceStaffFramePoint": [
+        -0.041205850485428956,
+        0.4196240723597239,
+        0.20987364060218572
+      ]
+    },
+    {
+      "distance": 0.0000031560986479694656,
+      "vertex": 694422,
+      "staffSurfacePoint": [
+        -0.04106811159866946,
+        0.4382698492190461,
+        0.2097548941678522
+      ],
+      "staffTriangle": [
+        608019,
+        607851,
+        611352
+      ],
+      "worldPoint": [
+        -0.042628818374178895,
+        0.4536111258328201,
+        0.10245748611060661
+      ],
+      "sourceStaffFramePoint": [
+        -0.04106991125920228,
+        0.4382698686219711,
+        0.20975748681209483
+      ]
+    },
+    {
+      "distance": 0.00002269051814196716,
+      "vertex": 592877,
+      "staffSurfacePoint": [
+        -0.042027474533565506,
+        0.45278457543790723,
+        0.21272045633782355
+      ],
+      "staffTriangle": [
+        610825,
+        620341,
+        611761
+      ],
+      "worldPoint": [
+        -0.030520649773769712,
+        0.4617065875888148,
+        0.10540808473433788
+      ],
+      "sourceStaffFramePoint": [
+        -0.042026703364157085,
+        0.45280358120845965,
+        0.21270808517793438
+      ]
+    },
+    {
+      "distance": 0.0000030612016193583738,
+      "vertex": 507896,
+      "staffSurfacePoint": [
+        -0.030378975522643528,
+        0.45726696915189347,
+        0.209177889001488
+      ],
+      "staffTriangle": [
+        531376,
+        534121,
+        536797
+      ],
+      "worldPoint": [
+        -0.020830174765598064,
+        0.45384912288392804,
+        0.10187993700689568
+      ],
+      "sourceStaffFramePoint": [
+        -0.03037670230231642,
+        0.45726704576340294,
+        0.20917993779512706
+      ]
+    }
+  ],
+  "noPenetration": false,
+  "opposedContact": false,
+  "acceptedForExport": false,
+  "instrumentCounterexamples": {
+    "realShaftInteriorDetected": true,
+    "realShaftCrossingCount": 2
+  },
+  "limitations": [
+    "Triangle edge/contact geometry numerics are not parent GPU/anatomic approval.",
+    "Whole-body projection subset retains all crossings at staff x/y extent; no hand-only nearest-body claim."
+  ],
+  "productionAccepted": false
+}

@@ -1,0 +1,175 @@
+{
+  "nativeGLTFLoader": true,
+  "nativeJointCount": 34,
+  "allNativeVertices": 1011304,
+  "sourceBodyNeutralVertices": 935620,
+  "bodyNeutralErrorNative": 1.428088707005576e-7,
+  "sourceBodyNeutralChangeNative": 1.8387128811593695e-7,
+  "alignedStaffNeutralErrorNative": 6.494728179468943e-9,
+  "toleranceNative": 0.000091552734375,
+  "original18JointsAndIBMValuesPreserved": true,
+  "proofs": [
+    {
+      "control": "aren_authored_wrist",
+      "node": 20,
+      "skinIndex": 18,
+      "maxHandMotionNative": 0.01839985847031557,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0.10856037996180946,
+      "staffSpanChangeNative": 1.2273890792613429e-9
+    },
+    {
+      "control": "aren_authored_palm",
+      "node": 21,
+      "skinIndex": 19,
+      "maxHandMotionNative": 0.013008557815329985,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0.10820704341473789,
+      "staffSpanChangeNative": 7.154955183885647e-9
+    },
+    {
+      "control": "aren_authored_digit_1_proximal",
+      "node": 22,
+      "skinIndex": 20,
+      "maxHandMotionNative": 0.006937912083355659,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_1_intermediate",
+      "node": 23,
+      "skinIndex": 21,
+      "maxHandMotionNative": 0.004413119349457293,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_1_distal",
+      "node": 24,
+      "skinIndex": 22,
+      "maxHandMotionNative": 0.001734672355003044,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_2_proximal",
+      "node": 25,
+      "skinIndex": 23,
+      "maxHandMotionNative": 0.01192569860568405,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_2_intermediate",
+      "node": 26,
+      "skinIndex": 24,
+      "maxHandMotionNative": 0.008039822668313452,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_2_distal",
+      "node": 27,
+      "skinIndex": 25,
+      "maxHandMotionNative": 0.0029820897984887125,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_3_proximal",
+      "node": 28,
+      "skinIndex": 26,
+      "maxHandMotionNative": 0.013362183939597856,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_3_intermediate",
+      "node": 29,
+      "skinIndex": 27,
+      "maxHandMotionNative": 0.008804705494017209,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_3_distal",
+      "node": 30,
+      "skinIndex": 28,
+      "maxHandMotionNative": 0.0037362885348676276,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_4_proximal",
+      "node": 31,
+      "skinIndex": 29,
+      "maxHandMotionNative": 0.01168705260812563,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_4_intermediate",
+      "node": 32,
+      "skinIndex": 30,
+      "maxHandMotionNative": 0.007822881385778184,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_digit_4_distal",
+      "node": 33,
+      "skinIndex": 31,
+      "maxHandMotionNative": 0.0033103790245934627,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_thumb_opposition",
+      "node": 34,
+      "skinIndex": 32,
+      "maxHandMotionNative": 0.006587694575992233,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    },
+    {
+      "control": "aren_authored_thumb_distal",
+      "node": 35,
+      "skinIndex": 33,
+      "maxHandMotionNative": 0.003168687125299815,
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxStaffMotionNative": 0,
+      "staffSpanChangeNative": 0
+    }
+  ],
+  "allStaffToeProofVertices": 75684,
+  "maxIndependentToeMotionNative": 0,
+  "readyPoseStaffSpanChangeNative": 9.778295617657307e-9,
+  "counterexamples": [
+    {
+      "name": "actual staff toe contamination",
+      "rejected": true,
+      "reason": "Native toe flex moves anatomical staff 0.12828259463310357"
+    },
+    {
+      "name": "actual new palm bind corruption",
+      "rejected": true,
+      "reason": "Native wrong palm bind drift 0.010000000000000082"
+    }
+  ],
+  "glbExported": false,
+  "contactValidated": false,
+  "productionAccepted": false
+}

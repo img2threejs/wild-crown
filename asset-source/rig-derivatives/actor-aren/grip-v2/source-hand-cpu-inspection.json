@@ -1,0 +1,12 @@
+{
+  "kind": "Orthographic CPU triangle/z-buffer geometry instrument; untextured, no GPU/production anatomy acceptance",
+  "views": [
+    "Native positive-z side",
+    "Native negative-z side",
+    "Native positive-x side"
+  ],
+  "scalePixelsPerNativeUnit": 6000,
+  "originalHandGeometryOnly": true,
+  "productionAccepted": false,
+  "externalSharpPrerequisite": "Existing sharp0.34.5; not npm-ci declared dependency"
+}

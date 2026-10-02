@@ -1,0 +1,415 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "handSurfaceSeed": 685164,
+  "terminalHandVertices": 19012,
+  "originalNativeJoints": [
+    {
+      "node": 17,
+      "skinIndex": 0,
+      "restWorldPosition": [
+        -2.977321855723858e-8,
+        0.023418545722961426,
+        3.7238351069390774e-8
+      ],
+      "terminalHandBoxDistanceMeters": 0.6744294999506678,
+      "children": [
+        8,
+        12,
+        16
+      ]
+    },
+    {
+      "node": 8,
+      "skinIndex": 1,
+      "restWorldPosition": [
+        -0.026060129468266798,
+        0.6116172583816233,
+        -0.046463468754579
+      ],
+      "terminalHandBoxDistanceMeters": 0.3471372694524145,
+      "children": [
+        7
+      ]
+    },
+    {
+      "node": 7,
+      "skinIndex": 2,
+      "restWorldPosition": [
+        -0.030116679607684438,
+        0.7089741213373315,
+        -0.05863310254439093
+      ],
+      "terminalHandBoxDistanceMeters": 0.49031238589424353,
+      "children": [
+        1,
+        3,
+        6
+      ]
+    },
+    {
+      "node": 1,
+      "skinIndex": 3,
+      "restWorldPosition": [
+        -0.026060162218163086,
+        0.8428399406532069,
+        -0.07080273641363835
+      ],
+      "terminalHandBoxDistanceMeters": 0.7037561215897655,
+      "children": [
+        0
+      ]
+    },
+    {
+      "node": 0,
+      "skinIndex": 4,
+      "restWorldPosition": [
+        -0.009833999476594163,
+        0.8996315453912869,
+        -0.066746200275313
+      ],
+      "terminalHandBoxDistanceMeters": 0.7920216494952199,
+      "children": []
+    },
+    {
+      "node": 3,
+      "skinIndex": 5,
+      "restWorldPosition": [
+        0.014505278130863275,
+        0.8022745760471681,
+        -0.1113681675759365
+      ],
+      "terminalHandBoxDistanceMeters": 0.6790091578785663,
+      "children": [
+        2
+      ]
+    },
+    {
+      "node": 2,
+      "skinIndex": 6,
+      "restWorldPosition": [
+        -0.017947028714185,
+        0.7170870909415584,
+        -0.2087251952330414
+      ],
+      "terminalHandBoxDistanceMeters": 0.6805290742398458,
+      "children": []
+    },
+    {
+      "node": 6,
+      "skinIndex": 7,
+      "restWorldPosition": [
+        -0.005777432871845858,
+        0.8144442583186255,
+        -0.009954604371131694
+      ],
+      "terminalHandBoxDistanceMeters": 0.619898433350285,
+      "children": [
+        5
+      ]
+    },
+    {
+      "node": 5,
+      "skinIndex": 8,
+      "restWorldPosition": [
+        -0.10719099072913864,
+        0.7454830802056306,
+        0.0752327962364161
+      ],
+      "terminalHandBoxDistanceMeters": 0.472426974015951,
+      "children": [
+        4
+      ]
+    },
+    {
+      "node": 4,
+      "skinIndex": 9,
+      "restWorldPosition": [
+        -0.058512428440726544,
+        0.4006770624825331,
+        0.23749441719869865
+      ],
+      "terminalHandBoxDistanceMeters": 0.14399184404545956,
+      "children": []
+    },
+    {
+      "node": 12,
+      "skinIndex": 10,
+      "restWorldPosition": [
+        0.002335676594309992,
+        0.49397747922693586,
+        -0.07485928112929306
+      ],
+      "terminalHandBoxDistanceMeters": 0.30762704896614734,
+      "children": [
+        11
+      ]
+    },
+    {
+      "node": 11,
+      "skinIndex": 11,
+      "restWorldPosition": [
+        0.006392300716668935,
+        0.28709377336630826,
+        -0.13165086543672833
+      ],
+      "terminalHandBoxDistanceMeters": 0.4481844849409855,
+      "children": [
+        10
+      ]
+    },
+    {
+      "node": 10,
+      "skinIndex": 12,
+      "restWorldPosition": [
+        0.002335897700946071,
+        0.05587085642943124,
+        -0.184385860308801
+      ],
+      "terminalHandBoxDistanceMeters": 0.773399746381209,
+      "children": [
+        9
+      ]
+    },
+    {
+      "node": 9,
+      "skinIndex": 13,
+      "restWorldPosition": [
+        0.06724063511297591,
+        0.023418496282267887,
+        -0.18032931609178496
+      ],
+      "terminalHandBoxDistanceMeters": 0.8269627585717845,
+      "children": []
+    },
+    {
+      "node": 16,
+      "skinIndex": 14,
+      "restWorldPosition": [
+        -0.03011668782595038,
+        0.5020905074780508,
+        -0.018067672331344004
+      ],
+      "terminalHandBoxDistanceMeters": 0.2095236763319843,
+      "children": [
+        15
+      ]
+    },
+    {
+      "node": 15,
+      "skinIndex": 15,
+      "restWorldPosition": [
+        -0.07068214167562145,
+        0.2911504056848159,
+        0.022497789940357057
+      ],
+      "terminalHandBoxDistanceMeters": 0.22903406938286763,
+      "children": [
+        14
+      ]
+    },
+    {
+      "node": 14,
+      "skinIndex": 16,
+      "restWorldPosition": [
+        -0.11530409315605063,
+        0.0558709933951734,
+        0.04278054546434634
+      ],
+      "terminalHandBoxDistanceMeters": 0.6041083429507317,
+      "children": [
+        13
+      ]
+    },
+    {
+      "node": 13,
+      "skinIndex": 17,
+      "restWorldPosition": [
+        -0.05851249565997125,
+        0.023418569030979434,
+        0.09551561293577956
+      ],
+      "terminalHandBoxDistanceMeters": 0.6507671507763305,
+      "children": []
+    }
+  ],
+  "nearestNativeJointToTerminalHandBox": {
+    "node": 4,
+    "skinIndex": 9,
+    "restWorldPosition": [
+      -0.058512428440726544,
+      0.4006770624825331,
+      0.23749441719869865
+    ],
+    "terminalHandBoxDistanceMeters": 0.14399184404545956,
+    "children": []
+  },
+  "localGeometricBands": [
+    {
+      "name": "proximal-terminal-hand-transition",
+      "minY": 0.465,
+      "maxY": 0.475,
+      "vertexCount": 2079,
+      "centroidNative": [
+        -0.05715607725954675,
+        0.4701994495531755,
+        0.12709592954721974
+      ],
+      "interpretation": "Geometrically bounded band, not an approved wrist/finger pivot or named anatomical digit."
+    },
+    {
+      "name": "palm-and-digit-root-band",
+      "minY": 0.44,
+      "maxY": 0.455,
+      "vertexCount": 3994,
+      "centroidNative": [
+        -0.05613913302928671,
+        0.4474886455011176,
+        0.1284266744512257
+      ],
+      "interpretation": "Geometrically bounded band, not an approved wrist/finger pivot or named anatomical digit."
+    },
+    {
+      "name": "distal-open-digit-band",
+      "minY": 0.398,
+      "maxY": 0.415,
+      "vertexCount": 3386,
+      "centroidNative": [
+        -0.05038105712172658,
+        0.40799776090191303,
+        0.11874517028941181
+      ],
+      "interpretation": "Geometrically bounded band, not an approved wrist/finger pivot or named anatomical digit."
+    }
+  ],
+  "measuredRejectedStaffOnlyPoses": [
+    {
+      "label": "Opposed upright local fit rejected by neighboring palm",
+      "angleX": 0,
+      "angleZ": 0,
+      "dx": -0.008,
+      "dz": -0.079,
+      "planes": [
+        {
+          "y": 0.395,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.405,
+          "staffContourPointsInsideBody": 102,
+          "bodyContourPointsInsideStaff": 127,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.015919073560352298
+        },
+        {
+          "y": 0.415,
+          "staffContourPointsInsideBody": 118,
+          "bodyContourPointsInsideStaff": 91,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.015903087727361077
+        },
+        {
+          "y": 0.424940527,
+          "staffContourPointsInsideBody": 30,
+          "bodyContourPointsInsideStaff": 21,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.002237256128281557
+        },
+        {
+          "y": 0.435,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.445,
+          "staffContourPointsInsideBody": 79,
+          "bodyContourPointsInsideStaff": 39,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.007426116274537041
+        },
+        {
+          "y": 0.455,
+          "staffContourPointsInsideBody": 129,
+          "bodyContourPointsInsideStaff": 106,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.024504778748991787
+        },
+        {
+          "y": 0.465,
+          "staffContourPointsInsideBody": 181,
+          "bodyContourPointsInsideStaff": 25,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.026101793395650004
+        }
+      ],
+      "maximumMeasuredRequiredLocalSeparationMeters": 0.026101793395650004
+    },
+    {
+      "label": "Best broad coarse fit rejected by exact containment",
+      "angleX": 1.2,
+      "angleZ": -1.2,
+      "dx": 0.016,
+      "dz": -0.059000000000000004,
+      "planes": [
+        {
+          "y": 0.395,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.405,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.415,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.424940527,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 29,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.00605785263643257
+        },
+        {
+          "y": 0.435,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 159,
+          "maxRequiredLocalSurfaceSeparationMeters": 0.018182209246866917
+        },
+        {
+          "y": 0.445,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.455,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        },
+        {
+          "y": 0.465,
+          "staffContourPointsInsideBody": 0,
+          "bodyContourPointsInsideStaff": 0,
+          "maxRequiredLocalSurfaceSeparationMeters": 0
+        }
+      ],
+      "maximumMeasuredRequiredLocalSeparationMeters": 0.018182209246866917
+    }
+  ],
+  "missingPrerequisite": {
+    "description": "An anatomically approved terminal-hand/digit pivot and pose/skin partition is required before changing body hand weights or introducing new hand controls. Existing node5 is upstream full forearm/hand, not a proven wrist; node4 is outside actual hand and mostly drives lower staff. No independent thumb/finger joints exist in original skin.",
+    "requiredControlScope": "Measured local hand region only; proximal wrist/palm orientation plus independent digit/thumb curling/opposition, with real rest-world pivots and inverse binds. Preserve original body POSITION/NORMAL/UV/topology/materials and outside-hand weights; quantify each posed hand surface contact and penetration before export.",
+    "measuredClearance": "Rejected poses quantify how far source hand or attachment must change locally. These are actual tested-candidate penetration depths, NOT a global lower bound over all possible rigid poses.",
+    "authorization": "No hand-body weights, rest nodes or geometry changed in this investigation. No grip-v2 GLB/source hash frozen; parent must approve concrete anatomical hand control/pose contract or a different legitimate staff-only contact pose."
+  },
+  "limitations": [
+    "81 coarse X/Z orientation pairs and finite translations explored; not an exhaustive proof that every conceivable staff-only rigid transform is impossible.",
+    "CPU hand sections and original native joint locations only. No whole-body penetration proof, articulation-contact proof, GPU visual review or grip acceptance.",
+    "No arbitrary body-nearest contact or plane-offset workaround exported."
+  ],
+  "productionAccepted": false,
+  "g6g10Waived": false
+}

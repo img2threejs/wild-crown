@@ -1,0 +1,403 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "recordedBeforePose": true,
+  "selection": {
+    "handSeed": 685164,
+    "vertexCount": 19012,
+    "vertexIdsSha256": "efc2994ec10a6f2838b4a7ed9529fbc9675f16f14282e26b88d62965ac3a8e75",
+    "rule": "Body-only, distance<.065native from measured hand685164, y<.475, combined skin8/9 influence>.8; contact decision must inspect actual triangle sections, not this coarse ROI alone."
+  },
+  "authoredJoints": {
+    "wrist": {
+      "world": [
+        -0.05715607725954675,
+        0.4701994495531755,
+        0.12709592954721974
+      ],
+      "parentOriginalNode": 5,
+      "basis": "Measured proximal terminal-hand transition band; new actual local control, not reclassifying upstream node5."
+    },
+    "palm": {
+      "world": [
+        -0.05613913302928671,
+        0.4474886455011176,
+        0.1284266744512257
+      ],
+      "parent": "wrist",
+      "basis": "Measured palm/digit-root band; independent hand-only control."
+    },
+    "digits": [
+      {
+        "name": "digit-farthest-from-thumb",
+        "minX": -0.095,
+        "maxX": -0.072,
+        "rootY": 0.437,
+        "midY": 0.428,
+        "tipY": 0.419,
+        "root": {
+          "world": [
+            -0.07924999999999999,
+            0.437,
+            0.12496314165152937
+          ],
+          "surfaceVertices": 109,
+          "lateralMeanBeforeVolumeConstraint": -0.07947599040258915,
+          "selection": {
+            "x": [
+              -0.095,
+              -0.072
+            ],
+            "y": [
+              0.435,
+              0.439
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.11889562984055918,
+            0.13103065346249956
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "mid": {
+          "world": [
+            -0.07974999999999999,
+            0.428,
+            0.11759073390029737
+          ],
+          "surfaceVertices": 123,
+          "lateralMeanBeforeVolumeConstraint": -0.07971103556030165,
+          "selection": {
+            "x": [
+              -0.095,
+              -0.072
+            ],
+            "y": [
+              0.426,
+              0.43
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.10722426317131205,
+            0.12795720462928267
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "tip": {
+          "world": [
+            -0.07424999999999998,
+            0.419,
+            0.12599530410193302
+          ],
+          "surfaceVertices": 353,
+          "lateralMeanBeforeVolumeConstraint": -0.07554410144728912,
+          "selection": {
+            "x": [
+              -0.095,
+              -0.072
+            ],
+            "y": [
+              0.417,
+              0.421
+            ],
+            "zGreaterThan": 0.1
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.12192126739279738,
+            0.13006934081106866
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        }
+      },
+      {
+        "name": "digit-next-farthest",
+        "minX": -0.072,
+        "maxX": -0.058,
+        "rootY": 0.442,
+        "midY": 0.424,
+        "tipY": 0.413,
+        "root": {
+          "world": [
+            -0.06474999999999999,
+            0.442,
+            0.13555752715069144
+          ],
+          "surfaceVertices": 124,
+          "lateralMeanBeforeVolumeConstraint": -0.06473336864503161,
+          "selection": {
+            "x": [
+              -0.072,
+              -0.058
+            ],
+            "y": [
+              0.44,
+              0.444
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.12428765696468387,
+            0.146827397336699
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "mid": {
+          "world": [
+            -0.06374999999999999,
+            0.424,
+            0.1303644976992162
+          ],
+          "surfaceVertices": 136,
+          "lateralMeanBeforeVolumeConstraint": -0.06345092286081876,
+          "selection": {
+            "x": [
+              -0.072,
+              -0.058
+            ],
+            "y": [
+              0.422,
+              0.426
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.12434664334931059,
+            0.13638235204912186
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "tip": {
+          "world": [
+            -0.06374999999999999,
+            0.413,
+            0.11330293526665947
+          ],
+          "surfaceVertices": 445,
+          "lateralMeanBeforeVolumeConstraint": -0.06367268939031645,
+          "selection": {
+            "x": [
+              -0.072,
+              -0.058
+            ],
+            "y": [
+              0.411,
+              0.415
+            ],
+            "zGreaterThan": 0.1
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.10420317057758696,
+            0.12240269995573197
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        }
+      },
+      {
+        "name": "digit-next-to-thumb-side",
+        "minX": -0.058,
+        "maxX": -0.045,
+        "rootY": 0.444,
+        "midY": 0.423,
+        "tipY": 0.409,
+        "root": {
+          "world": [
+            -0.05175,
+            0.444,
+            0.1384173272428289
+          ],
+          "surfaceVertices": 184,
+          "lateralMeanBeforeVolumeConstraint": -0.05160094694355907,
+          "selection": {
+            "x": [
+              -0.058,
+              -0.045
+            ],
+            "y": [
+              0.442,
+              0.446
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.1277828197196466,
+            0.14905183476601122
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "mid": {
+          "world": [
+            -0.05125,
+            0.423,
+            0.1346033551467292
+          ],
+          "surfaceVertices": 209,
+          "lateralMeanBeforeVolumeConstraint": -0.05102698200128295,
+          "selection": {
+            "x": [
+              -0.058,
+              -0.045
+            ],
+            "y": [
+              0.421,
+              0.425
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.1305145424761613,
+            0.1386921678172971
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "tip": {
+          "world": [
+            -0.050249999999999996,
+            0.409,
+            0.11970269291893293
+          ],
+          "surfaceVertices": 293,
+          "lateralMeanBeforeVolumeConstraint": -0.05038246536570198,
+          "selection": {
+            "x": [
+              -0.058,
+              -0.045
+            ],
+            "y": [
+              0.407,
+              0.411
+            ],
+            "zGreaterThan": 0.1
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.11089864752796129,
+            0.12850673830990458
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        }
+      },
+      {
+        "name": "digit-nearest-thumb",
+        "minX": -0.045,
+        "maxX": -0.03,
+        "rootY": 0.442,
+        "midY": 0.424,
+        "tipY": 0.41,
+        "root": {
+          "world": [
+            -0.040249999999999994,
+            0.442,
+            0.1392534884246667
+          ],
+          "surfaceVertices": 126,
+          "lateralMeanBeforeVolumeConstraint": -0.0403157299059251,
+          "selection": {
+            "x": [
+              -0.045,
+              -0.03
+            ],
+            "y": [
+              0.44,
+              0.444
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.1339827540866085,
+            0.1445242227627249
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "mid": {
+          "world": [
+            -0.03924999999999999,
+            0.424,
+            0.13853037673161211
+          ],
+          "surfaceVertices": 191,
+          "lateralMeanBeforeVolumeConstraint": -0.03915517209634107,
+          "selection": {
+            "x": [
+              -0.045,
+              -0.03
+            ],
+            "y": [
+              0.422,
+              0.426
+            ],
+            "zGreaterThan": 0.125
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.1317957032422366,
+            0.14526505022098765
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        },
+        "tip": {
+          "world": [
+            -0.03774999999999999,
+            0.41,
+            0.12695993673758826
+          ],
+          "surfaceVertices": 254,
+          "lateralMeanBeforeVolumeConstraint": -0.03794341600375382,
+          "selection": {
+            "x": [
+              -0.045,
+              -0.03
+            ],
+            "y": [
+              0.408,
+              0.412
+            ],
+            "zGreaterThan": 0.1
+          },
+          "actualNativeSurfaceDepthCrossings": [
+            0.11895827285079798,
+            0.13496160062437854
+          ],
+          "basis": "Measured bounded digit section, native interior volume-constrained lateral centroid and exact depth midpoint. Authored pivot, not provider anatomy truth."
+        }
+      }
+    ],
+    "thumb": {
+      "root": [
+        -0.035,
+        0.452,
+        0.119
+      ],
+      "mid": [
+        -0.03,
+        0.438,
+        0.117
+      ],
+      "surfaceVertices": 2117,
+      "bounds": {
+        "xGreaterThan": -0.04,
+        "y": [
+          0.423,
+          0.46
+        ],
+        "zLessThan": 0.126
+      },
+      "basis": "Actual separate thumb lobe in native positive/negative-z CPU views and y.435 section, not generic body nearest vertex."
+    }
+  },
+  "weightPolicy": {
+    "outsideHand": "Original skin tuple byte-identical",
+    "wristTransition": "Original arm skin8 -> new wrist over native y.460–.475; zero change outside bounded hand. Exactly coincident source POSITION seams receive identical tuple.",
+    "palmToDigits": "Continuous root and intermediate-joint blends inside actual morphology columns; two phalange controls each, no whole-arm patch.",
+    "thumb": "Bounded thumb lobe with smooth root/web transition to palm. No clothing/chest/feet controls."
+  },
+  "nativeSkinPolicy": {
+    "preserveFirstJoints": 18,
+    "preserveOriginalNodeTRSAndIBMs": true,
+    "newInverseBinds": "Derived from actual parent world × authored local pivot transforms in neutral bind pose; appended only."
+  },
+  "posePolicy": {
+    "sourceBindPose": "All original body vertices neutral-preserved at calibration; hand grip is explicit authored pose, not a fake inverse bind.",
+    "readyGrip": "Optimize hand-only wrist/digit/thumb articulation and rigid staff source alignment against actual surfaces before exporting any GLB.",
+    "surfaceAcceptance": "Opposed actual hand/handle contacts plus triangle/containment nonpenetration and seam/edge tear controls; no nearest-any-body or arbitrary plane-offset claim."
+  },
+  "productionAccepted": false
+}

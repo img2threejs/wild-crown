@@ -1,0 +1,377 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "allBodyNeutralVertices": 935620,
+  "maxNativeNeutralError": 2.291590317703732e-7,
+  "maxSourceNeutralChange": 1.7880047967657964e-7,
+  "toleranceNative": 0.000091552734375,
+  "original18JointTrsWorldInverseBindPreserved": true,
+  "bodyOutsideHandVertices": 916608,
+  "handVertices": 19012,
+  "jointMap": [
+    {
+      "name": "aren_authored_wrist",
+      "node": 20,
+      "skinIndex": 18,
+      "parent": 5,
+      "neutralWorldPosition": [
+        -0.05715607725954675,
+        0.4701994495531755,
+        0.12709592954721974
+      ],
+      "neutralLocalRotation": [
+        0.6170201541772239,
+        0.20896411892294905,
+        0.7536902537599665,
+        -0.08701216888035031
+      ]
+    },
+    {
+      "name": "aren_authored_palm",
+      "node": 21,
+      "skinIndex": 19,
+      "parent": 20,
+      "neutralWorldPosition": [
+        -0.05613913302928671,
+        0.4474886455011176,
+        0.1284266744512257
+      ],
+      "neutralLocalRotation": [
+        1.1765802489678906e-8,
+        -5.1619713963272736e-9,
+        2.278598141485184e-8,
+        0.9999999999999989
+      ]
+    },
+    {
+      "name": "aren_authored_digit_1_proximal",
+      "node": 22,
+      "skinIndex": 20,
+      "parent": 21,
+      "neutralWorldPosition": [
+        -0.07947599040258915,
+        0.437,
+        0.12494027898806445
+      ],
+      "neutralLocalRotation": [
+        4.741944962204059e-16,
+        -6.860194914724979e-16,
+        5.022048550452297e-16,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_1_distal",
+      "node": 23,
+      "skinIndex": 21,
+      "parent": 22,
+      "neutralWorldPosition": [
+        -0.07753466479898838,
+        0.424,
+        0.11127095932399719
+      ],
+      "neutralLocalRotation": [
+        2.316105715148479e-23,
+        -1.4889251025954507e-23,
+        2.5642598989143876e-23,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_2_proximal",
+      "node": 24,
+      "skinIndex": 22,
+      "parent": 21,
+      "neutralWorldPosition": [
+        -0.06473336864503161,
+        0.442,
+        0.13556444185204033
+      ],
+      "neutralLocalRotation": [
+        4.741944962204059e-16,
+        -6.860194914724979e-16,
+        5.022048550452297e-16,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_2_distal",
+      "node": 25,
+      "skinIndex": 23,
+      "parent": 24,
+      "neutralWorldPosition": [
+        -0.06438091260481016,
+        0.421,
+        0.12473005595800066
+      ],
+      "neutralLocalRotation": [
+        2.316105715148479e-23,
+        -1.4889251025954507e-23,
+        2.5642598989143876e-23,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_3_proximal",
+      "node": 26,
+      "skinIndex": 24,
+      "parent": 21,
+      "neutralWorldPosition": [
+        -0.05160094694355907,
+        0.444,
+        0.13847816925682305
+      ],
+      "neutralLocalRotation": [
+        4.741944962204059e-16,
+        -6.860194914724979e-16,
+        5.022048550452297e-16,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_3_distal",
+      "node": 27,
+      "skinIndex": 25,
+      "parent": 26,
+      "neutralWorldPosition": [
+        -0.049477352122516194,
+        0.419,
+        0.13247749662531838
+      ],
+      "neutralLocalRotation": [
+        2.316105715148479e-23,
+        -1.4889251025954507e-23,
+        2.5642598989143876e-23,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_4_proximal",
+      "node": 28,
+      "skinIndex": 26,
+      "parent": 21,
+      "neutralWorldPosition": [
+        -0.0403157299059251,
+        0.442,
+        0.13924420854973282
+      ],
+      "neutralLocalRotation": [
+        4.741944962204059e-16,
+        -6.860194914724979e-16,
+        5.022048550452297e-16,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_digit_4_distal",
+      "node": 29,
+      "skinIndex": 27,
+      "parent": 28,
+      "neutralWorldPosition": [
+        -0.03887257093246082,
+        0.419,
+        0.13601969267920855
+      ],
+      "neutralLocalRotation": [
+        2.316105715148479e-23,
+        -1.4889251025954507e-23,
+        2.5642598989143876e-23,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_thumb_opposition",
+      "node": 30,
+      "skinIndex": 28,
+      "parent": 21,
+      "neutralWorldPosition": [
+        -0.035,
+        0.452,
+        0.119
+      ],
+      "neutralLocalRotation": [
+        4.741944962204059e-16,
+        -6.860194914724979e-16,
+        5.022048550452297e-16,
+        0.9999999999999993
+      ]
+    },
+    {
+      "name": "aren_authored_thumb_distal",
+      "node": 31,
+      "skinIndex": 29,
+      "parent": 30,
+      "neutralWorldPosition": [
+        -0.03,
+        0.438,
+        0.117
+      ],
+      "neutralLocalRotation": [
+        2.316105715148479e-23,
+        -1.4889251025954507e-23,
+        2.5642598989143876e-23,
+        0.9999999999999993
+      ]
+    }
+  ],
+  "proofs": [
+    {
+      "control": "aren_authored_wrist",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.01839985940709045,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.7198604425149457,
+      "worstEdge": [
+        881069,
+        881681
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_palm",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.013008558738000645,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.823141185767119,
+      "worstEdge": [
+        892382,
+        893040
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_digit_1_proximal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0042781563690501056,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 4.262709459861435,
+      "worstEdge": [
+        787657,
+        784475
+      ],
+      "seamAndTearingAccepted": false
+    },
+    {
+      "control": "aren_authored_digit_1_distal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0027147519107956213,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 4.800587327642637,
+      "worstEdge": [
+        787657,
+        784475
+      ],
+      "seamAndTearingAccepted": false
+    },
+    {
+      "control": "aren_authored_digit_2_proximal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.011940627096329478,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 4.9263297586640356,
+      "worstEdge": [
+        787657,
+        784475
+      ],
+      "seamAndTearingAccepted": false
+    },
+    {
+      "control": "aren_authored_digit_2_distal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0064539546843681165,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.8599766085937226,
+      "worstEdge": [
+        787534,
+        787461
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_digit_3_proximal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0134566467464978,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 7.31714175987238,
+      "worstEdge": [
+        775651,
+        774470
+      ],
+      "seamAndTearingAccepted": false
+    },
+    {
+      "control": "aren_authored_digit_3_distal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.007819784644727368,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.6154170427890862,
+      "worstEdge": [
+        756289,
+        753980
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_digit_4_proximal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.01168602805674824,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 3.9127429600413954,
+      "worstEdge": [
+        727750,
+        725925
+      ],
+      "seamAndTearingAccepted": false
+    },
+    {
+      "control": "aren_authored_digit_4_distal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0064932946011404084,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.2643547958069554,
+      "worstEdge": [
+        645792,
+        645524
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_thumb_opposition",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.003261904674332684,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.356841719750956,
+      "worstEdge": [
+        644167,
+        638339
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "aren_authored_thumb_distal",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.0033123349726729904,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 1.239547051454739,
+      "worstEdge": [
+        540130,
+        540119
+      ],
+      "seamAndTearingAccepted": true
+    },
+    {
+      "control": "candidate-ready-grip",
+      "maxOutsideHandBodyMotionNative": 0,
+      "maxHandMotionNative": 0.07603390731297391,
+      "maxWeldedSeamErrorNative": 0,
+      "maxNativeTriangleEdgeStretchRatio": 27.071108225662638,
+      "worstEdge": [
+        775651,
+        774470
+      ],
+      "seamAndTearingAccepted": false
+    }
+  ],
+  "allSeamAndTearingControlsAccepted": false,
+  "exportAllowed": false,
+  "productionAccepted": false
+}

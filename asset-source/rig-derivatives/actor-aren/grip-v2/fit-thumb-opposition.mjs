@@ -1,0 +1,12 @@
+import { readFile,writeFile } from 'node:fs/promises';
+import { buildHandRig,poseMatrices,point,staffAlignment } from './hand-rig.mjs';
+import { surfaceIndex } from './surface-index.mjs';
+const rig=await buildHandRig(),candidate=JSON.parse(await readFile(new URL('candidate-grip-pose.json',import.meta.url))),parameters=candidate.fullHandMeasurement.parameters,neutral=poseMatrices(rig,{}),surface=surfaceIndex(rig.positions,rig.staffTriangles),opposed=surfaceIndex(rig.positions,rig.staffTriangles.filter(ids=>ids.reduce((sum,v)=>sum+rig.positions[v*3],0)/3>-.039)),thumb=[];
+for(const v of rig.hand){let influence=0;for(let s=0;s<4;s++)if([rig.thumbRootSkin,rig.thumbMidSkin].includes(rig.joints[4*v+s]))influence+=rig.weights[4*v+s];if(influence>.55)thumb.push(v);}
+const samples=thumb.filter((v,i)=>i%16===0),fits=[];let best=null;
+for(const opposition of [-1.2,-.8,-.4,0,.4,.8,1.2])for(const flexion of [-1.2,-.8,-.4,0,.4,.8,1.2])for(const distal of [-.8,0,.8]){
+ const pose={...parameters.pose,thumbOpposition:opposition,thumbFlexion:flexion,thumbDistal:distal},posed=poseMatrices(rig,pose),inverse=staffAlignment(rig,parameters.centerY,parameters.centerZ).clone().invert().multiply(posed.world[rig.palm].clone().multiply(neutral.world[rig.palm].clone().invert()).invert());
+ let minimum=Infinity,inside=0,maxPenetration=0;for(const v of samples){const q=point(rig,v,posed.matrices).applyMatrix4(inverse),test=surface.query(q);if(test.inside){inside++;maxPenetration=Math.max(maxPenetration,test.distance);}minimum=Math.min(minimum,opposed.query(q,{nearest:true,radius:16}).distance);}
+ const fit={opposition,flexion,distal,opposedContactGapNative:minimum,insideSampledThumbVertices:inside,maxPenetrationNative:maxPenetration};fits.push(fit);if(!inside&&minimum<(best?.opposedContactGapNative??Infinity))best=fit;
+}
+const report={basis:'Actual bounded thumb weights and original staff opposing native surface triangles. Isolated thumb search preserves other candidate hand controls.',thumbVertices:thumb.length,sampledThumbVertices:samples.length,staffParameters:{centerY:parameters.centerY,centerZ:parameters.centerZ},fits,best,acceptedForExport:false,productionAccepted:false};await writeFile(new URL('thumb-opposition-search.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({best,thumbVertices:thumb.length,sampledThumbVertices:samples.length,poses:fits.length}));

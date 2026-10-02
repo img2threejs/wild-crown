@@ -1,0 +1,414 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "handLandmark": {
+    "vertex": 685164,
+    "position": [
+      -0.05178367719054222,
+      0.42494040727615356,
+      0.13908636569976807
+    ],
+    "jointInfluences": [
+      {
+        "skinIndex": 8,
+        "node": 5,
+        "weight": 0.8796038627624512
+      },
+      {
+        "skinIndex": 9,
+        "node": 4,
+        "weight": 0.12011758983135223
+      },
+      {
+        "skinIndex": 7,
+        "node": 6,
+        "weight": 0.0002785750257316977
+      },
+      {
+        "skinIndex": 0,
+        "node": 17,
+        "weight": 0
+      }
+    ]
+  },
+  "boundedTerminalHand": {
+    "vertexCount": 19012,
+    "bounds": {
+      "min": [
+        -0.08994374424219131,
+        0.3982430398464203,
+        0.09953933209180832
+      ],
+      "max": [
+        -0.02262573130428791,
+        0.47499915957450867,
+        0.15455418825149536
+      ]
+    },
+    "selection": "Body-only, distance<.065native from measured hand685164, y<.475, combined skin8/9 influence>.8; contact decision must inspect actual triangle sections, not this coarse ROI alone."
+  },
+  "staff": {
+    "vertexCount": 75684,
+    "bounds": {
+      "min": [
+        -0.07044458389282227,
+        0.0021834075450897217,
+        0.17594949901103973
+      ],
+      "max": [
+        -0.022282617166638374,
+        0.7481202483177185,
+        0.2212444394826889
+      ]
+    }
+  },
+  "slices": [
+    {
+      "y": 0.395,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 0,
+      "staffSegmentCount": 286
+    },
+    {
+      "y": 0.405,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.11035529717399346,
+            0.12182108084322218
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.11050815939161249,
+            0.11684917352373587
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.11671705257921601,
+            0.1261512950263903
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 260,
+      "staffSegmentCount": 283
+    },
+    {
+      "y": 0.415,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.10608307769674663,
+            0.12542287431483057
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.11965702074823642,
+            0.13875739175295215
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.12847595927640026,
+            0.13919791503674478
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.12644698691975081,
+            0.13532812802276376
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 392,
+      "staffSegmentCount": 282
+    },
+    {
+      "y": 0.424940527,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": [
+            0.10023326769179348,
+            0.13283095717277255
+          ]
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.12284564726413333,
+            0.1338522007276046
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.12842495705945767,
+            0.14115670638806485
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.1329402312761131,
+            0.14546679391276449
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": []
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 526,
+      "staffSegmentCount": 290
+    },
+    {
+      "y": 0.435,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": [
+            0.12421062688188847,
+            0.13658652142923292
+          ]
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.12767835396645877,
+            0.14065178567241646
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.1310300815078143,
+            0.1431030196779205
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.1323546009195884,
+            0.14704690825246236
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.11014603844437411,
+            0.12281257517487018
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": [
+            0.11336042316913011,
+            0.1196936906042334
+          ]
+        }
+      ],
+      "segmentCount": 575,
+      "staffSegmentCount": 280
+    },
+    {
+      "y": 0.445,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": [
+            0.11879746327372781,
+            0.1420772943458487
+          ]
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.12272451511243522,
+            0.1474970773144467
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.12565930834491484,
+            0.14737720800759027
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.12864533056122343,
+            0.1488786182422462
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.11029802294372079,
+            0.1235370077804368
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": [
+            0.11219361162636024,
+            0.12281575849192249
+          ]
+        }
+      ],
+      "segmentCount": 474,
+      "staffSegmentCount": 279
+    },
+    {
+      "y": 0.455,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": [
+            0.11670667830940087,
+            0.1439571070370879
+          ]
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.12034780620009775,
+            0.14626242681367774
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.12446734487198123,
+            0.14740728123098104
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.11505473222179427,
+            0.14615305377961746
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.10958615263034241,
+            0.12504011011438249
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 474,
+      "staffSegmentCount": 220
+    },
+    {
+      "y": 0.465,
+      "rays": [
+        {
+          "x": -0.075,
+          "zSurfaceCrossings": [
+            0.11489111946103478,
+            0.14345723784624154
+          ]
+        },
+        {
+          "x": -0.065,
+          "zSurfaceCrossings": [
+            0.11861708025259574,
+            0.14767036878849135
+          ]
+        },
+        {
+          "x": -0.055,
+          "zSurfaceCrossings": [
+            0.11248893355726307,
+            0.14875403698264483
+          ]
+        },
+        {
+          "x": -0.045,
+          "zSurfaceCrossings": [
+            0.10795330308544698,
+            0.1448687691885681
+          ]
+        },
+        {
+          "x": -0.035,
+          "zSurfaceCrossings": [
+            0.1083333728983846,
+            0.13507011870814425
+          ]
+        },
+        {
+          "x": -0.025,
+          "zSurfaceCrossings": []
+        }
+      ],
+      "segmentCount": 459,
+      "staffSegmentCount": 209
+    }
+  ],
+  "productionAccepted": false
+}

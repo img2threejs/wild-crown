@@ -1,0 +1,1197 @@
+{
+  "basis": "Actual bounded thumb weights and original staff opposing native surface triangles. Isolated thumb search preserves other candidate hand controls.",
+  "thumbVertices": 1148,
+  "sampledThumbVertices": 72,
+  "staffParameters": {
+    "centerY": 0.414,
+    "centerZ": 0.106
+  },
+  "fits": [
+    {
+      "opposition": -1.2,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02769538839118149,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.025989788529578478,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.023275000155038715,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.022020313217431222,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.01950744107130581,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.018041959133397678,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01726454590643998,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.015117801517443118,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015531787533359214,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.015522875382293714,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.014736442427595203,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015204921726517351,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.016152085521324917,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.016426806930251586,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.019510142053210784,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.020429085970406023,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.020796480201090223,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02536611304951646,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02544671055635804,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.027774788336210405,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -1.2,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.030819792999951613,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.027847918504606148,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02631523418736253,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.023482452716317232,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02202257340422413,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.019632002758757032,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.018164114344907178,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.017377461059956568,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.015197745541131862,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015733855566853954,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.015356792418053855,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.014907117123313577,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015129660749638077,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.015733211206040085,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.016212087808507757,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.01944813117305109,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.0202910757305198,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.021154593544646414,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02585549814121721,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.025123703674265585,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.028763022688492748,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.8,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.03085749861484583,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.028069520415557568,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.026503512877420768,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.023794521524152512,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02214039709766006,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.01981630313817352,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.01785490028661144,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01757456122435695,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.014495181457992739,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015199679991551857,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.014984467440900666,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.01487460908613934,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.014941324667268364,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.015679695465700135,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.0161328727400679,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.020365385901299445,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.020789251402091768,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.022551718712875826,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.026929694908440233,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026106506782143605,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02889710823085569,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": -0.4,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.031006700605017336,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.027358891275092192,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.026514687685099132,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.022864972025191718,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02225818098751409,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.019448219762606463,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.017590255662451728,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01702359270924347,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.014167087955148908,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.014688584678299402,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.014742806297112306,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.014924630644477473,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.015540148508581805,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01649361099650335,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.016860014427766662,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02123707141289945,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.021201984566672653,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.022354958049740085,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02626439605178204,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026661266079976025,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02845150113319441,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.031338053351984904,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026783782294545158,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.025678491343295827,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.022266562735055236,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.021813866360489154,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.01887506819618398,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.017522681390876007,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01673436624644204,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.014291410902171358,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.014591772024657045,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01486895136226132,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.014974830843363077,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.0030008394089743595
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.016560803965862014,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.0013707840879666477
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01775869855517523,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.001300457682399031
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.01819383763875261,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02125385107819107,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.021845946366032147,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.022388895401694493,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.026251621480792606,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02652213888531944,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02842385515430269,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.4,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.0313408675305728,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026449236465305698,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02430505162032846,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02165900826989235,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.021383647847829167,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.01859979077571442,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.01756542952294546,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.01659473923508899,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.014138832404706184,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.014614852829902446,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.014822816130746286,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.015235618563637697,
+      "insideSampledThumbVertices": 5,
+      "maxPenetrationNative": 0.004346407244517098
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.01676498732592865,
+      "insideSampledThumbVertices": 5,
+      "maxPenetrationNative": 0.0039418816091060516
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.017769120474178505,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.0019151469060123272
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.0181376201316466,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.0013295732858660536
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.021106131202848447,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02176907356891283,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.022000354948617018,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02675269171233932,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026267552993711318,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.028868562877154755,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 0.8,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.031002469220230856,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02576574948265584,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.02348217457876267,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.020868770035217046,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.021058385611225486,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.017679779510691856,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.01760190581874799,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.016584442880083514,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.01471848952443505,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": -0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.014901333448671495,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.015464636727175777,
+      "insideSampledThumbVertices": 1,
+      "maxPenetrationNative": 0.0013559852386231808
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0,
+      "distal": 0,
+      "opposedContactGapNative": 0.015540758387850002,
+      "insideSampledThumbVertices": 4,
+      "maxPenetrationNative": 0.0054272216472601165
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.0161913171108827,
+      "insideSampledThumbVertices": 4,
+      "maxPenetrationNative": 0.0021985657972626027
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.4,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.017160675984533785,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.4,
+      "distal": 0,
+      "opposedContactGapNative": 0.01732848497324957,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.4,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.02057143439720492,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.8,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.02134682285802592,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.8,
+      "distal": 0,
+      "opposedContactGapNative": 0.022545726857207442,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 0.8,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.026176431730210177,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 1.2,
+      "distal": -0.8,
+      "opposedContactGapNative": 0.026547889611633187,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 1.2,
+      "distal": 0,
+      "opposedContactGapNative": 0.029564235989087893,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    },
+    {
+      "opposition": 1.2,
+      "flexion": 1.2,
+      "distal": 0.8,
+      "opposedContactGapNative": 0.030895739403360753,
+      "insideSampledThumbVertices": 0,
+      "maxPenetrationNative": 0
+    }
+  ],
+  "best": {
+    "opposition": 0.8,
+    "flexion": -0.4,
+    "distal": 0,
+    "opposedContactGapNative": 0.014138832404706184,
+    "insideSampledThumbVertices": 0,
+    "maxPenetrationNative": 0
+  },
+  "acceptedForExport": false,
+  "productionAccepted": false
+}
