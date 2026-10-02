@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "operation": "offline-texture-only-derivative",
+  "maxDimension": 2048,
+  "tool": {
+    "path": "scripts/assets/derive-texture-budget.py",
+    "pillowVersion": "12.3.0",
+    "algorithmRevision": 2,
+    "scriptSha256": "f24f2143118e63e004062e8ee3280dee8cd00eac585d6ee4fe0f401eef5655c8"
+  },
+  "source": {
+    "sha256": "ede4cf7d1560856a1c86aad86cc8b30da7bc273e6de3d717ca82546ffee0bb26",
+    "bytes": 79718876,
+    "path": "asset-source/generated/actor-asha-tripo-max/tripo-out/asset-source-references-asha-app-2-05baf3f0/model.glb"
+  },
+  "output": {
+    "sha256": "691d40d569c0e19dfbcd61cc96d81581870d9be9631135266a1524b16c113d20",
+    "bytes": 59920400,
+    "path": "asset-source/derived/textures2048/asha/model.v2.glb"
+  },
+  "images": [
+    {
+      "image": 0,
+      "sourceBufferView": 4,
+      "outputBufferView": 4,
+      "before": {
+        "dimensions": [
+          8192,
+          8192
+        ],
+        "encodedBytes": 16339344,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 268435456,
+          "rgba8FullMipChain": 357913940
+        }
+      },
+      "after": {
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "encodedBytes": 1841488,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 16777216,
+          "rgba8FullMipChain": 22369620
+        }
+      },
+      "semantics": "srgb",
+      "mimeType": "image/jpeg"
+    },
+    {
+      "image": 1,
+      "sourceBufferView": 5,
+      "outputBufferView": 5,
+      "before": {
+        "dimensions": [
+          4096,
+          4096
+        ],
+        "encodedBytes": 1783080,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 67108864,
+          "rgba8FullMipChain": 89478484
+        }
+      },
+      "after": {
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "encodedBytes": 895788,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 16777216,
+          "rgba8FullMipChain": 22369620
+        }
+      },
+      "semantics": "linear",
+      "mimeType": "image/jpeg"
+    },
+    {
+      "image": 2,
+      "sourceBufferView": 6,
+      "outputBufferView": 6,
+      "before": {
+        "dimensions": [
+          4096,
+          4096
+        ],
+        "encodedBytes": 6716630,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 67108864,
+          "rgba8FullMipChain": 89478484
+        }
+      },
+      "after": {
+        "dimensions": [
+          2048,
+          2048
+        ],
+        "encodedBytes": 2303301,
+        "decodedGpuBytesEstimate": {
+          "rgba8Base": 16777216,
+          "rgba8FullMipChain": 22369620
+        }
+      },
+      "semantics": "normal",
+      "mimeType": "image/png"
+    }
+  ],
+  "parity": {
+    "meshes": true,
+    "accessors": true,
+    "nodes": true,
+    "skins": true,
+    "animations": true,
+    "materials": true,
+    "textures": true,
+    "samplers": true,
+    "scenes": true,
+    "nonImageBufferViewBytes": true,
+    "allOtherJsonFields": true,
+    "extraChunks": true
+  },
+  "counts": {
+    "meshes": 1,
+    "accessors": 4,
+    "nodes": 1,
+    "skins": 0,
+    "animations": 0
+  },
+  "nonImageBufferViewsPreserved": 4,
+  "providerDispatch": false,
+  "modelReady": false,
+  "runtimeManifestUpdated": false,
+  "productionAcceptance": "NOT_ESTABLISHED",
+  "limitations": [
+    "Geometry is frozen, including source high-poly counts; no triangle/LOD budget pass.",
+    "Decoded GPU bytes are RGBA8 estimates, not measured VRAM or performance.",
+    "Source rig/animation quality is unchanged, not accepted by this operation.",
+    "Culling, LODs, runtime visual review and locked-hardware profiling remain open."
+  ],
+  "beforeDecodedGpuBytesEstimate": {
+    "rgba8Base": 402653184,
+    "rgba8FullMipChain": 536870908
+  },
+  "afterDecodedGpuBytesEstimate": {
+    "rgba8Base": 50331648,
+    "rgba8FullMipChain": 67108860
+  }
+}
