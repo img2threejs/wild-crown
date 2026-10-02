@@ -1,0 +1,145 @@
+{
+  "rigRevision": "aren-rigid-staff-component-r1",
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "derivativeSha256": "86348eb084aa42f6c7e6ecfb7416255dac062a499f6349a369a1e7da49f62ac3",
+  "originalAuthoredCanarySha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152",
+  "originalCanaryUnchanged": true,
+  "nativeGLTFLoaderUsed": true,
+  "verificationPrerequisite": "Existing external sharp0.34.5 through authored loader; not declared npm-ci dependency.",
+  "preservation": {
+    "documentIdentical": true,
+    "binIdenticalOutsideExactStaffJointWeightEdits": true,
+    "bodyVerticesUntouched": 935620
+  },
+  "neutralPreExport": {
+    "vertices": 1011304,
+    "float32Epsilon": 1.1920928955078125e-7,
+    "maxHierarchyDepth": 7,
+    "sceneScale": 1,
+    "toleranceNative": 0.00005340576171875,
+    "sourceNeutralErrorNative": 2.291590317703732e-7,
+    "derivativeNeutralErrorNative": 2.491232234909614e-7,
+    "neutralChangeNative": 1.331772180159483e-7
+  },
+  "nativeLoaderAllVertexNeutral": {
+    "vertices": 1011304,
+    "maxChangeNative": 1.3206921867499842e-7
+  },
+  "controlledPoses": {
+    "entireStaffVertices": 75684,
+    "maxIndependentToeMotionMeters": 0,
+    "maxHandSocketErrorMeters": 4.2513483210490487e-7,
+    "maxStaffSpanChangeMeters": 1.544218028288326e-8,
+    "maxStaffHandPoseMotionMeters": 0.44556177901997623,
+    "maxFootChangeNative": 0,
+    "maxActualHandSurfaceSocketErrorMeters": 0.000054166588504679324,
+    "maxEntireStaffRigidSurfaceErrorMeters": 9.697290677046223e-16
+  },
+  "counterexamples": [
+    {
+      "name": "Unfixed original rig: independent toe flex",
+      "rejected": true,
+      "reason": "Independent toe flex moves staff: 0.03431060890227268 native > 0.00005340576171875"
+    },
+    {
+      "name": "Actual base-weight mutation: toe contamination restored",
+      "rejected": true,
+      "reason": "Independent toe flex moves staff: 0.030724362718491847 native > 0.00005340576171875"
+    },
+    {
+      "name": "Actual native IBM mutation: attachment bind shifted .01native",
+      "rejected": true,
+      "reason": "Native neutral bind error 0.010000037851767072 > 0.00005340576171875"
+    }
+  ],
+  "clips": [
+    {
+      "name": "Idle",
+      "durationSeconds": 3,
+      "frames": 721,
+      "staffSampleVertices": 2050,
+      "footVertices": 64,
+      "maxFootChangeNative": 0,
+      "maxStaffSpanChangeMeters": 3.9090920927510374e-7,
+      "maxSocketErrorMeters": 4.251347960914226e-7,
+      "maxRigidStaffSurfaceErrorMeters": 9.751759786988934e-16,
+      "contactWindows": [
+        {
+          "foot": "left",
+          "start": 0,
+          "end": 3,
+          "maxSlipMeters": 0.0016323222704771622,
+          "samples": 721
+        },
+        {
+          "foot": "right",
+          "start": 0,
+          "end": 3,
+          "maxSlipMeters": 0.0012385281133725989,
+          "samples": 721
+        }
+      ]
+    },
+    {
+      "name": "LateralDodge",
+      "durationSeconds": 0.44999998807907104,
+      "frames": 217,
+      "staffSampleVertices": 2050,
+      "footVertices": 64,
+      "maxFootChangeNative": 0,
+      "maxStaffSpanChangeMeters": 3.438169550060918e-7,
+      "maxSocketErrorMeters": 4.251348504587014e-7,
+      "maxRigidStaffSurfaceErrorMeters": 9.649283992694461e-16,
+      "contactWindows": [
+        {
+          "foot": "left",
+          "start": 0,
+          "end": 0.03333333333333333,
+          "maxSlipMeters": 0.00458768605922168,
+          "samples": 17
+        },
+        {
+          "foot": "right",
+          "start": 0,
+          "end": 0.03333333333333333,
+          "maxSlipMeters": 0.004526455619042893,
+          "samples": 17
+        },
+        {
+          "foot": "left",
+          "start": 0.23333333333333334,
+          "end": 0.2833333333333333,
+          "maxSlipMeters": 0.008742761505669563,
+          "samples": 25
+        },
+        {
+          "foot": "right",
+          "start": 0.25,
+          "end": 0.45,
+          "maxSlipMeters": 0.0019391687626028758,
+          "samples": 97
+        },
+        {
+          "foot": "left",
+          "start": 0.35,
+          "end": 0.45,
+          "maxSlipMeters": 6.195954875116935e-9,
+          "samples": 49
+        }
+      ]
+    }
+  ],
+  "contactSlipBudgetMeters": 0.025,
+  "staffRigidityBudgetMeters": 0.00009271730027934203,
+  "anatomicalGripContact": {
+    "accepted": false,
+    "restSurfaceSeparationLowerBoundNative": 0.02065044641494751,
+    "restSurfaceSeparationLowerBoundMeters": 0.03585106886482143,
+    "reason": "Disconnected immutable staff and hand/body surfaces; weights cannot close original geometry gap."
+  },
+  "productionAccepted": false,
+  "g6g10Waived": false,
+  "animationReady": false,
+  "providerSpend": 0,
+  "browserLaunched": false
+}

@@ -1,0 +1,213 @@
+{
+  "sourceRevision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "94bd738c8348e1713309d2023a4307eabdfb826bea4d23e203e571c3bddd41d6",
+  "derivativeSHA256": "769b67ef5c82b34f631a12799b12c48d8bffc9eb50e0809be53e6143a6ec7254",
+  "time": 0.8,
+  "coordinateEvidence": "Actual loaded four segmented leg chains, local quaternion changes exclude whole-root translation and parent/torso motion.",
+  "noOpAllowance": "64 * Number.EPSILON for normalized quaternion double-precision inactive-channel algebra, independent of positive motion",
+  "controls": [
+    {
+      "chain": "front-negative-X",
+      "positiveJoints": [
+        {
+          "node": 23,
+          "skinJoint": 21,
+          "name": "asha_custom_negativeX_fore_shoulder",
+          "localRotationDeltaRadians": 0.11999999904065886
+        },
+        {
+          "node": 24,
+          "skinJoint": 22,
+          "name": "asha_custom_negativeX_fore_elbow",
+          "localRotationDeltaRadians": 0.24999999530339043
+        },
+        {
+          "node": 25,
+          "skinJoint": 23,
+          "name": "asha_custom_negativeX_fore_wrist",
+          "localRotationDeltaRadians": 0.14999999262741034
+        }
+      ],
+      "inertJoints": [
+        {
+          "node": 23,
+          "skinJoint": 21,
+          "name": "asha_custom_negativeX_fore_shoulder",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 24,
+          "skinJoint": 22,
+          "name": "asha_custom_negativeX_fore_elbow",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 25,
+          "skinJoint": 23,
+          "name": "asha_custom_negativeX_fore_wrist",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "positiveMaxLocalRotationRadians": 0.24999999530339043,
+      "inertMaxLocalRotationRadians": 0,
+      "positiveMotionDetected": true,
+      "inertMotionRejected": true
+    },
+    {
+      "chain": "front-positive-X",
+      "positiveJoints": [
+        {
+          "node": 9,
+          "skinJoint": 11,
+          "name": "tripo::0_Right_Limb_2",
+          "localRotationDeltaRadians": 0.16000004010234514
+        },
+        {
+          "node": 8,
+          "skinJoint": 12,
+          "name": "tripo::0_Right_Limb_3",
+          "localRotationDeltaRadians": 0.21999999757943745
+        },
+        {
+          "node": 7,
+          "skinJoint": 13,
+          "name": "tripo::0_Right_Limb_4",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 6,
+          "skinJoint": 14,
+          "name": "tripo::0_Right_Limb_5",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "inertJoints": [
+        {
+          "node": 9,
+          "skinJoint": 11,
+          "name": "tripo::0_Right_Limb_2",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 8,
+          "skinJoint": 12,
+          "name": "tripo::0_Right_Limb_3",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 7,
+          "skinJoint": 13,
+          "name": "tripo::0_Right_Limb_4",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 6,
+          "skinJoint": 14,
+          "name": "tripo::0_Right_Limb_5",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "positiveMaxLocalRotationRadians": 0.21999999757943745,
+      "inertMaxLocalRotationRadians": 0,
+      "positiveMotionDetected": true,
+      "inertMotionRejected": true
+    },
+    {
+      "chain": "rear-negative-X",
+      "positiveJoints": [
+        {
+          "node": 16,
+          "skinJoint": 15,
+          "name": "tripo::1_Right_Limb_0",
+          "localRotationDeltaRadians": 0.15000004233227157
+        },
+        {
+          "node": 15,
+          "skinJoint": 16,
+          "name": "tripo::1_Right_Limb_1",
+          "localRotationDeltaRadians": 0.2299999745584696
+        },
+        {
+          "node": 14,
+          "skinJoint": 17,
+          "name": "tripo::1_Right_Limb_2",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 13,
+          "skinJoint": 18,
+          "name": "tripo::1_Right_Limb_3",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "inertJoints": [
+        {
+          "node": 16,
+          "skinJoint": 15,
+          "name": "tripo::1_Right_Limb_0",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 15,
+          "skinJoint": 16,
+          "name": "tripo::1_Right_Limb_1",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 14,
+          "skinJoint": 17,
+          "name": "tripo::1_Right_Limb_2",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 13,
+          "skinJoint": 18,
+          "name": "tripo::1_Right_Limb_3",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "positiveMaxLocalRotationRadians": 0.2299999745584696,
+      "inertMaxLocalRotationRadians": 0,
+      "positiveMotionDetected": true,
+      "inertMotionRejected": true
+    },
+    {
+      "chain": "rear-positive-X",
+      "positiveJoints": [
+        {
+          "node": 18,
+          "skinJoint": 19,
+          "name": "tripo::0_Left_Limb_0",
+          "localRotationDeltaRadians": 0.13000005494125624
+        },
+        {
+          "node": 17,
+          "skinJoint": 20,
+          "name": "tripo::0_Left_Limb_1",
+          "localRotationDeltaRadians": 0.11999999823118498
+        }
+      ],
+      "inertJoints": [
+        {
+          "node": 18,
+          "skinJoint": 19,
+          "name": "tripo::0_Left_Limb_0",
+          "localRotationDeltaRadians": 0
+        },
+        {
+          "node": 17,
+          "skinJoint": 20,
+          "name": "tripo::0_Left_Limb_1",
+          "localRotationDeltaRadians": 0
+        }
+      ],
+      "positiveMaxLocalRotationRadians": 0.13000005494125624,
+      "inertMaxLocalRotationRadians": 0,
+      "positiveMotionDetected": true,
+      "inertMotionRejected": true
+    }
+  ],
+  "allFourChainsDetected": true,
+  "renderAcceptance": null,
+  "releaseVerified": false
+}
