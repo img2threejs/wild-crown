@@ -131,8 +131,20 @@ export function deformedBounds(root: Object3D): Box3 {
 
 /** GLTFLoader r169 can swallow dependency errors and return null without a manager error. */
 export async function assertNativeTextures(gltf: GLTF): Promise<void> {
-  const textures: unknown[] = await gltf.parser.getDependencies('texture');
-  if (textures.some((texture) => !(texture instanceof Texture) || !texture.image)) throw new Error('A native texture dependency failed or has no decoded image; an untextured fallback is not permitted.');
+  const count = (gltf.parser.json as { textures?: unknown[] }).textures?.length ?? 0;
+  // Wrap each call: parser.getDependency can throw synchronously after another load has started.
+  // Settle the whole group before upload cleanup collects its Texture/ImageBitmap resources.
+  const outcomes = await Promise.allSettled(Array.from({ length: count }, (_, index) => Promise.resolve().then(() => gltf.parser.getDependency('texture', index))));
+  for (const outcome of outcomes) {
+    if (outcome.status === 'rejected') throw outcome.reason;
+    if (!(outcome.value instanceof Texture) || !outcome.value.image) throw new Error('A native texture dependency failed or has no decoded image; an untextured fallback is not permitted.');
+  }
+}
+
+/** Release r169's pending Control-key listener through its public event path before canvas detachment. */
+export function disposeCanaryOrbitControls(controls: OrbitControls): void {
+  controls.domElement?.getRootNode().dispatchEvent(new KeyboardEvent('keyup', { key: 'Control' }));
+  controls.dispose();
 }
 
 function disposeGltf(gltf: GLTF): void {
@@ -241,7 +253,7 @@ function mount(): void {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.debug.onShaderError = () => { throw new Error('Native material shader failed to compile/link on this GPU; no substitute shader is used.'); };
       const controls = new OrbitControls(camera, canvas);
-      cleanup.push(() => controls.dispose());
+      cleanup.push(() => disposeCanaryOrbitControls(controls));
       const pose = new NativeCanaryPose(root, gltf.animations);
       cleanup.push(() => pose.dispose());
       const meshes = nativeMeshes(root);
