@@ -35,7 +35,7 @@ export function circleHits(circle: Circle, rect: Rect): boolean {
 export function arenaFromRegion(region: RegionDefinition, cameraBasis?: CameraBasis): CombatArena {
   const traversalAffordances: TraversalAffordance[] = [];
   for (const route of region.traversalArcs) {
-    const action = String(route.traversalActionId);
+    const action = route.traversal?.kind === 'vault' ? 'staff-vault' : route.traversal?.kind === 'slide' ? 'low-slide' : String(route.traversalActionId);
     if (action !== 'staff-vault' && action !== 'low-slide') continue;
     const points = [route.from, ...route.anchors, route.to];
     traversalAffordances.push({
@@ -112,6 +112,36 @@ export function moveAerialCircle(arena: CombatArena, start: Vec3, delta: Vec3, r
   }
   return { x, y, z };
 }
+
+/** Contextual paths cannot slide off their authored line or enter a floor. */
+export function isAerialCirclePathClear(arena: CombatArena, start: Vec3, end: Vec3, radius: number, height: number): boolean {
+  const delta = { x: end.x - start.x, y: end.y - start.y, z: end.z - start.z };
+  const steps = Math.max(1, Math.ceil(Math.hypot(delta.x, delta.y, delta.z) / Math.min(MAX_SWEEP_STEP, radius * 0.1)));
+  let prior = start;
+  for (let step = 0; step <= steps; step++) {
+    const point = { x: start.x + delta.x * step / steps, y: start.y + delta.y * step / steps, z: start.z + delta.z * step / steps };
+    if (point.x < arena.bounds.min.x + radius || point.x > arena.bounds.max.x - radius || point.z < arena.bounds.min.z + radius || point.z > arena.bounds.max.z - radius || point.y < arena.bounds.min.y || point.y + height > arena.bounds.max.y || blocked(arena, point, radius, prior.y, height)) return false;
+    const floor = groundHeightAt(arena, point.x, point.z, point.y);
+    if (floor !== null && floor > point.y + 1e-6) return false;
+    const moved = moveAerialCircle(arena, prior, { x: point.x - prior.x, y: point.y - prior.y, z: point.z - prior.z }, radius, height);
+    if (Math.hypot(moved.x - point.x, moved.y - point.y, moved.z - point.z) > 1e-6) return false;
+    prior = point;
+  }
+  return true;
+}
+
+/** Landing supports the capsule footprint and permits standing at full height. */
+export function isSupportedCapsulePose(arena: CombatArena, point: Vec3, radius: number, height: number): boolean {
+  if (!isAerialCirclePathClear(arena, point, point, radius, height)) return false;
+  const centerFloor = groundHeightAt(arena, point.x, point.z, point.y);
+  if (centerFloor === null || Math.abs(centerFloor - point.y) > 1e-6) return false;
+  for (const [dx, dz] of [[0, 0], [radius, 0], [-radius, 0], [0, radius], [0, -radius]]) {
+    const floor = groundHeightAt(arena, point.x + dx!, point.z + dz!, point.y);
+    if (floor === null || Math.abs(floor - point.y) > 0.15) return false;
+  }
+  return true;
+}
+
 
 /** Test a straight grounded capsule path without allowing collision sliding to create a detour. */
 export function isCirclePathClear(arena: CombatArena, start: Vec3, end: Vec3, radius: number, height = 1.7): boolean {

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>R08 real producer danger qualification</title>
+  <style>
+    :root { color-scheme: dark; font: 14px/1.5 system-ui; background: #171a16; color: #eee6d6; }
+    body { margin: 20px; } canvas { width: min(900px, 95vw); height: 500px; display: block; }
+    button, select, label { margin: 8px 10px 8px 0; } output { display: block; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>R08 real CombatEngine → StoryPresentation</h1>
+  <p>Selected authored encounter attacks, not fabricated presentation cues. Ground-outline qualification only: no native body/rig/contact or full-game acceptance is implied.</p>
+  <select id="family" aria-label="Authored danger attack"></select>
+  <label><input id="reduced" type="checkbox">Reduced effects</label>
+  <button id="restart">Restart selected real attack</button><button id="commit">Advance to actual commit</button><button id="active">Advance to actual active footprint</button><button id="miss">Move clear, then actual active footprint</button><button id="hit">Advance to actual impact</button>
+  <button id="slow">12 fixed steps at 0.25</button><button id="pause">Pause and render</button>
+  <button id="interrupt">Actual root-tether interrupt</button><button id="death">Actual lethal hazard</button>
+  <button id="unload">Region unload</button><button id="skip">Cinematic skip</button><button id="load">Campaign load</button>
+  <button id="unlock-audio">Unlock and measure each real danger family</button>
+  <canvas id="danger-canvas" width="900" height="500" aria-label="Actual authored danger footprint"></canvas>
+  <output id="runtime-metadata">Loading…</output>
+  <script type="module">
+    import * as THREE from 'three';
+    import { StoryPresentation } from '/src/effects/StoryPresentation.ts';
+    import { StoryAudio } from '/src/audio/StoryAudio.ts';
+    import { CombatEngine } from '/src/game/combat/CombatEngine.ts';
+    import { startDangerScenario, DANGER_SCENARIOS } from '/tests/effects/danger-scenario.ts';
+    const canvas = document.querySelector('#danger-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(900, 500, false);
+    const scene = new THREE.Scene(); scene.background = new THREE.Color(0x171a16);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(24, 24), new THREE.MeshBasicMaterial({ color: 0x30352c }));
+    ground.rotation.x = -Math.PI / 2; scene.add(ground);
+    const camera = new THREE.PerspectiveCamera(48, 1.8, 0.1, 100);
+    const presentation = new StoryPresentation({ scene, capacity: 24 });
+    const settings = { masterVolume: 1, musicVolume: 0.8, effectsVolume: 1, ambienceVolume: 0.7, dialogueVolume: 1, reducedMotion: false };
+    presentation.setSettings(settings);
+    const select = document.querySelector('#family');
+    DANGER_SCENARIOS.forEach((scenario, i) => { const option = document.createElement('option'); option.value = String(i); option.textContent = scenario.family + ' — ' + scenario.attackId; select.append(option); });
+    let engine; let lastCue; let lastResult; let lastBatch = []; let audioEvidence = null;
+    function render() {
+      presentation.update(engine.snapshot().worldClock, { position: camera.position, forward: camera.getWorldDirection(new THREE.Vector3()), up: camera.up });
+      renderer.render(scene, camera);
+      const meshes = presentation.effects.group.children.filter(mesh => mesh.visible);
+      window.__dangerSmoke = { scenario: DANGER_SCENARIOS[Number(select.value)], lastCue, lastResult, clock: engine.snapshot().worldClock, activeEffects: presentation.activeEffectCount, bounds: meshes.map(mesh => new THREE.Box3().setFromObject(mesh).getSize(new THREE.Vector3()).toArray()), outputRms: presentation.audio.measureOutputRms(), audioEvidence, activeWebGL: !renderer.getContext().isContextLost(), bodyRigEvidence: null };
+      window.__dangerSmoke.lastBatch = lastBatch;
+      document.querySelector('#runtime-metadata').textContent = JSON.stringify(window.__dangerSmoke, null, 2);
+    }
+    function start(deferConsumption = false) {
+      presentation.onCampaignLoad();
+      const scenario = startDangerScenario(Number(select.value)); engine = scenario.engine; lastCue = scenario.anticipation;
+      lastBatch = [lastCue];
+      lastResult = { effects: 0, sounds: 0 };
+      const p = lastCue.position;
+      ground.position.set(p.x, p.y - 0.03, p.z);
+      camera.position.set(p.x + 1, p.y + 9, p.z + 10); camera.lookAt(p.x, p.y, p.z);
+      presentation.update(engine.snapshot().worldClock, { position: camera.position, forward: camera.getWorldDirection(new THREE.Vector3()), up: camera.up });
+      if (!deferConsumption) lastResult = presentation.consumeTick([lastCue]);
+      render();
+    }
+    function advanceTo(kind) {
+      engine.setTimePolicy('normal');
+      for (let i = 0; i < 200; i++) {
+        engine.fixedStep(); const cues = engine.drainPresentationCues();
+        lastBatch = cues;
+        lastResult = presentation.consumeTick(cues); presentation.update(engine.snapshot().worldClock);
+        const cue = cues.find(cue => cue.kind === kind && cue.attackId === DANGER_SCENARIOS[Number(select.value)].attackId);
+        if (cue) { lastCue = cue; render(); return; }
+      }
+      throw new Error('Real producer failed to emit ' + kind);
+    }
+    document.querySelector('#restart').onclick = () => start(); select.onchange = () => start();
+    document.querySelector('#reduced').onchange = event => { settings.reducedMotion = event.target.checked; presentation.setSettings(settings); render(); };
+    document.querySelector('#commit').onclick = () => advanceTo('commit');
+    document.querySelector('#hit').onclick = () => advanceTo('hit');
+    document.querySelector('#active').onclick = () => advanceTo('active');
+    document.querySelector('#miss').onclick = () => {
+      const state = engine.snapshotState(); const player = state.actors.find(actor => actor.id === 'aren');
+      player.position.x += 12; player.position.z += 12; engine = new CombatEngine(state);
+      advanceTo('active');
+      if (lastBatch.some(cue => cue.kind === 'hit') || presentation.activeEffectCount === 0) throw new Error('Missed hazard did not retain its actual active footprint.');
+    };
+    document.querySelector('#slow').onclick = () => {
+      const state = engine.snapshotState(); state.timePolicy = 'perfect-dodge-slow'; state.slowMotionRemainingTicks = 12; state.slowMotionElapsedTicks = 0; engine = new CombatEngine(state);
+      for (let i = 0; i < 12; i++) { engine.fixedStep(); presentation.consumeTick(engine.drainPresentationCues()); }
+      render();
+    };
+    document.querySelector('#pause').onclick = () => { engine.setTimePolicy('paused'); for (let i = 0; i < 12; i++) engine.fixedStep(); render(); };
+    document.querySelector('#interrupt').onclick = () => {
+      engine.setTimePolicy('normal'); const hazard = engine.snapshotState().hazards[0];
+      if (!engine.useAbility('root-tether', hazard.sourceId)) throw new Error('Actual interrupt ability was rejected.');
+      for (let i = 0; i < 20; i++) { engine.fixedStep(); const cues = engine.drainPresentationCues(); if (cues.length) { lastBatch = cues; lastCue = cues[cues.length - 1]; lastResult = presentation.consumeTick(cues); } }
+      render();
+    };
+    document.querySelector('#death').onclick = () => {
+      engine.setTimePolicy('normal'); const state = engine.snapshotState(); state.player.vitality = 1; engine = new CombatEngine(state);
+      for (let i = 0; i < 200; i++) {
+        engine.fixedStep(); lastBatch = engine.drainPresentationCues();
+        lastResult = presentation.consumeTick(lastBatch);
+        const terminal = lastBatch.find(cue => cue.kind === 'cancel' && cue.cancellationReason === 'death');
+        if (terminal) {
+          lastCue = terminal;
+          if (engine.snapshot().player.vitality !== 0 || presentation.activeEffectCount !== 0) throw new Error('Terminal death failed to clear the presentation.');
+          render(); return;
+        }
+      }
+      throw new Error('Real producer failed to emit terminal death cancellation.');
+    };
+    for (const [id, action] of [['unload', () => presentation.onRegionUnload()], ['skip', () => presentation.onCinematicSkip()]]) document.querySelector('#' + id).onclick = () => { action(); render(); };
+    document.querySelector('#load').onclick = () => { engine.restore(engine.serialize()); lastBatch = engine.drainPresentationCues(); lastResult = presentation.consumeTick(lastBatch); render(); };
+    document.querySelector('#unlock-audio').onclick = async () => {
+      if (!await presentation.unlockAudio()) throw new Error('Audio unlock denied.');
+      const measurements = [];
+      for (let i = 0; i < 5; i++) {
+        select.value = String(i); start(true);
+        // Settle the real graph and listener pose BEFORE consuming the one authentic voice.
+        await new Promise(resolve => setTimeout(resolve, 200));
+        lastResult = presentation.consumeTick([lastCue]); render();
+        const first = lastResult.sounds; const replay = presentation.consumeTick([lastCue]);
+        const samples = [];
+        const scheduledAt = presentation.audio.playbackMetadata.lastPlayed.at;
+        for (let sample = 0; sample < 40; sample++) {
+          await new Promise(resolve => setTimeout(resolve, 16));
+          const rms = presentation.audio.measureOutputRms();
+          samples.push(rms);
+        }
+        const rms = Math.max(...samples);
+        if (first !== 1 || replay.sounds !== 0 || rms < 0.0001) throw new Error('Missing/near-silent/replayed real family audio: ' + DANGER_SCENARIOS[i].family);
+        measurements.push({ family: DANGER_SCENARIOS[i].family, attackId: lastCue.attackId, instanceId: lastCue.instanceId, scheduledAt, rms, samples, replaySounds: replay.sounds });
+      }
+      const listener = new THREE.AudioListener();
+      const first = new StoryAudio({ listener }); const second = new StoryAudio({ listener });
+      await Promise.all([first.unlock(), second.unlock()]); first.dispose();
+      const reusable = await second.unlock(); const played = second.play(lastCue);
+      await new Promise(resolve => setTimeout(resolve, 120)); const sharedRms = second.measureOutputRms();
+      const sharedState = listener.context.state; second.dispose();
+      if (!reusable || !played || sharedState !== 'running' || sharedRms < 0.0001) throw new Error('Shared context lifetime or meaningful output failed.');
+      audioEvidence = { measurements, sharedContext: { reusable, played, state: sharedState, rms: sharedRms } }; render();
+    };
+    start();
+    // RAF renders only. The authoritative world clock changes exclusively in the controls above.
+    function frame() { renderer.render(scene, camera); requestAnimationFrame(frame); } frame();
+  </script>
+</body>
+</html>

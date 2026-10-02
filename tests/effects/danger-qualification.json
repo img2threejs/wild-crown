@@ -1,0 +1,537 @@
+{
+  "recordedInterval": {
+    "start": "2026-10-01T08:43:59.763Z",
+    "end": "2026-10-01T08:44:01.034Z"
+  },
+  "scope": "Exact M04 producer/prerequisites + R08 consumer, read-only cross-worktree qualification; not integrated-main acceptance",
+  "sourceHashes": {
+    "src/effects/StoryEffects.ts": "25f3172db9e12dff704c84ffb2744e50e7cbad94db4c6c0dbc437ca62f1fda97",
+    "src/effects/StoryPresentation.ts": "fdee94b91cdc33f667933c78e41898b1d0238b120f824a64842a7ef9444f3a97",
+    "src/effects/story-cues.ts": "aed3cf78783c06d3db624a3c7564ed8fcc1a54915013a675f49c14dbfba6b472",
+    "src/audio/StoryAudio.ts": "3450a6c3199c87081efbb1f28bd6b872bd5577a5a54bc88dda3eb357c7770e54",
+    "src/game/combat/content.ts": "442dde908f4add5209d1291ac9e985d8ca85892a26944bf4948336e1c39b25ff",
+    "/Users/nhonh/Documents/personal/wild-crown-worktrees/m04-contextual-traversal/src/game/combat/CombatEngine.ts": "86830347a393c49012544cd29fc16e871e1c74386ff391df12e8eba9243158c7",
+    "/Users/nhonh/Documents/personal/wild-crown-worktrees/m04-contextual-traversal/src/game/combat/geometry.ts": "2583de041b079bd86677ca252a372119ecfef62aff65db4dfa1e5624b7604384",
+    "/Users/nhonh/Documents/personal/wild-crown-worktrees/m04-contextual-traversal/src/game/contracts.ts": "7517f49099a6ee5feb711deff5f4e025f9cd356cb87d91e16402a9cf384b5158"
+  },
+  "verification": {
+    "compile": "strict scoped in-memory producer + geometry + contracts + consumer compilation passed, no emit",
+    "regressions": {
+      "passed": 25,
+      "failed": 0,
+      "files": 3
+    },
+    "audioInstrument": "synthetic schedule; corrected browser output pending parent"
+  },
+  "measurements": {
+    "source": "M04 producer + R08 consumer follow-up",
+    "rows": [
+      {
+        "family": "strike",
+        "attack": "asha-guarding-pounce",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 3,
+          "length": 3,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          3,
+          0,
+          3
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 67,
+            "duration": 9
+          },
+          {
+            "kind": "hit",
+            "worldTick": 67,
+            "duration": 9
+          }
+        ]
+      },
+      {
+        "family": "sweep",
+        "attack": "asha-claw-combination",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 4.6,
+          "length": 2.2,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          4.599999904632568,
+          0,
+          2.200000047683716
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 48
+          },
+          {
+            "kind": "commit",
+            "worldTick": 49,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 61,
+            "duration": 7
+          },
+          {
+            "kind": "hit",
+            "worldTick": 61,
+            "duration": 7
+          }
+        ]
+      },
+      {
+        "family": "wave",
+        "attack": "asha-ground-wave",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 7,
+          "length": 1.4,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          7,
+          0,
+          1.399999976158142
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 60
+          },
+          {
+            "kind": "commit",
+            "worldTick": 61,
+            "duration": 18
+          },
+          {
+            "kind": "active",
+            "worldTick": 79,
+            "duration": 12
+          },
+          {
+            "kind": "hit",
+            "worldTick": 79,
+            "duration": 12
+          }
+        ]
+      },
+      {
+        "family": "area",
+        "attack": "koro-fruit-burst",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 3.4,
+          "length": 3.4,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          3.4000000953674316,
+          0,
+          3.4000000953674316
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 67,
+            "duration": 18
+          },
+          {
+            "kind": "hit",
+            "worldTick": 67,
+            "duration": 18
+          }
+        ]
+      },
+      {
+        "family": "projectile",
+        "attack": "poacher-scout-net",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 1.3,
+          "length": 1.3,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          1.2999999523162842,
+          0,
+          1.2999999523162842
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 48
+          },
+          {
+            "kind": "commit",
+            "worldTick": 49,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 61,
+            "duration": 9
+          },
+          {
+            "kind": "hit",
+            "worldTick": 61,
+            "duration": 9
+          }
+        ]
+      },
+      {
+        "family": "area",
+        "attack": "asha-protective-roar",
+        "reducedEffects": false,
+        "footprint": {
+          "width": 7,
+          "length": 8,
+          "angleRadians": 0,
+          "sectorRadians": 1.2217304763960306
+        },
+        "dimensions": [
+          4.588611602783203,
+          0,
+          4
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 15
+          },
+          {
+            "kind": "active",
+            "worldTick": 70,
+            "duration": 12
+          },
+          {
+            "kind": "hit",
+            "worldTick": 70,
+            "duration": 12
+          }
+        ]
+      },
+      {
+        "family": "strike",
+        "attack": "asha-guarding-pounce",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 3,
+          "length": 3,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          3,
+          0,
+          3
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 67,
+            "duration": 9
+          },
+          {
+            "kind": "hit",
+            "worldTick": 67,
+            "duration": 9
+          }
+        ]
+      },
+      {
+        "family": "sweep",
+        "attack": "asha-claw-combination",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 4.6,
+          "length": 2.2,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          4.599999904632568,
+          0,
+          2.200000047683716
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 48
+          },
+          {
+            "kind": "commit",
+            "worldTick": 49,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 61,
+            "duration": 7
+          },
+          {
+            "kind": "hit",
+            "worldTick": 61,
+            "duration": 7
+          }
+        ]
+      },
+      {
+        "family": "wave",
+        "attack": "asha-ground-wave",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 7,
+          "length": 1.4,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          7,
+          0,
+          1.399999976158142
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 60
+          },
+          {
+            "kind": "commit",
+            "worldTick": 61,
+            "duration": 18
+          },
+          {
+            "kind": "active",
+            "worldTick": 79,
+            "duration": 12
+          },
+          {
+            "kind": "hit",
+            "worldTick": 79,
+            "duration": 12
+          }
+        ]
+      },
+      {
+        "family": "area",
+        "attack": "koro-fruit-burst",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 3.4,
+          "length": 3.4,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          3.4000000953674316,
+          0,
+          3.4000000953674316
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 67,
+            "duration": 18
+          },
+          {
+            "kind": "hit",
+            "worldTick": 67,
+            "duration": 18
+          }
+        ]
+      },
+      {
+        "family": "projectile",
+        "attack": "poacher-scout-net",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 1.3,
+          "length": 1.3,
+          "angleRadians": 0
+        },
+        "dimensions": [
+          1.2999999523162842,
+          0,
+          1.2999999523162842
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 48
+          },
+          {
+            "kind": "commit",
+            "worldTick": 49,
+            "duration": 12
+          },
+          {
+            "kind": "active",
+            "worldTick": 61,
+            "duration": 9
+          },
+          {
+            "kind": "hit",
+            "worldTick": 61,
+            "duration": 9
+          }
+        ]
+      },
+      {
+        "family": "area",
+        "attack": "asha-protective-roar",
+        "reducedEffects": true,
+        "footprint": {
+          "width": 7,
+          "length": 8,
+          "angleRadians": 0,
+          "sectorRadians": 1.2217304763960306
+        },
+        "dimensions": [
+          4.588611602783203,
+          0,
+          4
+        ],
+        "phases": [
+          {
+            "kind": "anticipation",
+            "worldTick": 1,
+            "duration": 54
+          },
+          {
+            "kind": "commit",
+            "worldTick": 55,
+            "duration": 15
+          },
+          {
+            "kind": "active",
+            "worldTick": 70,
+            "duration": 12
+          },
+          {
+            "kind": "hit",
+            "worldTick": 70,
+            "duration": 12
+          }
+        ]
+      }
+    ],
+    "misses": [
+      {
+        "attack": "asha-guarding-pounce",
+        "activeCues": 1,
+        "hitCues": 0
+      },
+      {
+        "attack": "asha-claw-combination",
+        "activeCues": 1,
+        "hitCues": 0
+      },
+      {
+        "attack": "asha-ground-wave",
+        "activeCues": 1,
+        "hitCues": 0
+      },
+      {
+        "attack": "koro-fruit-burst",
+        "activeCues": 1,
+        "hitCues": 0
+      },
+      {
+        "attack": "poacher-scout-net",
+        "activeCues": 1,
+        "hitCues": 0
+      },
+      {
+        "attack": "asha-protective-roar",
+        "activeCues": 1,
+        "hitCues": 0
+      }
+    ],
+    "terminalDeath": true,
+    "noPostDeathPresentationForTicks": 240,
+    "pendingHeavyCanceledBeforeImpact": true,
+    "persistedTerminalCompanionScenario": {
+      "realPossessionWarningBeforeLoad": true,
+      "noRearmTicks": 120,
+      "possessed": false,
+      "seed": "explicit actor-state fixture with authored Orun attack; not campaign-presence acceptance"
+    },
+    "scaledClock": {
+      "simulationSteps": 12,
+      "worldTicks": 3,
+      "pausedOpacity": 0.7933333333333333,
+      "nativeActionTime": 0.02439024390243903
+    },
+    "webGL": null,
+    "webAudio": null,
+    "bodyRigProof": null
+  },
+  "parentReportedInitialBrowser": {
+    "phasePresentations": 36,
+    "webGLAlive": true,
+    "slowPauseRestoreUnloadSkipInterrupt": true,
+    "deathControl": "failed awaiting suppressed hit; corrected control requires fresh run",
+    "strikeRms": 3.05e-13,
+    "meaningfulStrikeOutput": false,
+    "correctedBrowserResults": null
+  },
+  "usage": null
+}

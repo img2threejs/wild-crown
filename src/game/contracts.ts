@@ -321,6 +321,8 @@ export interface RegionRouteDefinition {
   destinationRegionId: RegionId;
   kind: "path" | "bridge" | "canopy" | "water" | "cavern" | "gate";
   traversalActionId: ActionId;
+  /** Contextual local capsule path; omitted on ordinary paths and interregion travel. */
+  traversal?: { kind: "vault" | "low-ledge" | "slide" | "swing"; durationTicks: number; startRadius: number; ledge?: { riseMeters: number; maxCrossingMeters: number; faceColliderId: string } };
   colliderIds: readonly string[];
   unlockFact?: string;
   traversalEvent: string;
