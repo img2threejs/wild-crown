@@ -139,11 +139,11 @@ test('native static bounds accept matching accessors and reject corrupted access
   };
   const valid = measureStaticGeometry(gltf, root, 'fixture-static');
   assert.equal(valid.status, 'measurement-complete-review-required');
-  const staticControl = valid.negativeControls.find(control => control.id === 'G10-static-nonfinite-position');
+  const staticControl = valid.negativeControls.find(control => control.id === 'G10-static-bounds-corruption:0');
   assert.equal(staticControl?.detectedFailure, true);
-  assert.equal(staticControl?.measurementBefore.status, 'measurement-complete-review-required');
-  assert.equal(staticControl?.measurementAfter.status, 'incomplete');
-  assert.ok(staticControl?.measurementAfter.nonFinitePositionCount > 0);
+  assert.equal(staticControl?.measurementBefore.finitePositionCount, 3);
+  assert.equal(staticControl?.measurementAfter.finitePositionCount, 2);
+  assert.equal(staticControl?.measurementAfter.nonFinitePositionCount, 1);
   const originalCachedBounds = geometry.boundingBox;
   const wrongCachedBounds = geometry.boundingBox.clone();
   wrongCachedBounds.min.x += 5; wrongCachedBounds.max.x += 5;
