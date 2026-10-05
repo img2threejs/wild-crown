@@ -29,6 +29,15 @@ class SelectedSlotRepository extends SaveRepository {
     return { slotId, label, runId: this.selected.runId, kind: "campaign", updatedAt: 1, chapter, regionId };
   }
 }
+
+class DeferredCheckpointRepository extends SelectedSlotRepository {
+  readonly pendingCheckpoints: { progress: Parameters<SaveRepository["saveCheckpoint"]>[8]; complete: () => void }[] = [];
+  override async saveCheckpoint(...args: Parameters<SaveRepository["saveCheckpoint"]>): Promise<SaveSlotSummary> {
+    const [slotId, label, , campaign, chapter, regionId, , , progress] = args;
+    await new Promise<void>(complete => { this.pendingCheckpoints.push({ progress, complete }); });
+    return { slotId, label, runId: campaign.runId, kind: "campaign", updatedAt: 1, chapter, regionId };
+  }
+}
 const sky: WorldEvent = { type: "fragment", eventId: "sky", idempotencyKey: "branch:sky", fragmentId: "heartroot-sky", sourceId: "vara" };
 const dominate = (leaderId: "koro" | "asha"): WorldEvent => ({ type: "encounter-resolved", eventId: `dominion:${leaderId}`, idempotencyKey: `dominion:${leaderId}`, encounterId: `encounter-${leaderId}`, resolution: "dominated", actorIds: [leaderId] });
 function saved(campaign: CampaignState, checkpoint?: CampaignSafeCheckpoint): GameSaveEnvelope {
@@ -326,3 +335,57 @@ test("a completed save cannot replace a newer journey's recovery checkpoint", as
   assert.deepEqual(director.snapshot(), before);
   assert.deepEqual(director.snapshot().fragments, ["heartroot-canopy"]);
 });
+
+for (const operation of ["save", "saveNewSlot"] as const) {
+  test(`pending ${operation} cannot replace a checkpoint captured after party selection at the same revision`, async () => {
+    const repository = new DeferredCheckpointRepository(saved(createNewRun(`pending-party-${operation}`)));
+    const director = new CampaignDirector({ saves: repository, runId: repository.selected.runId });
+    await director.processEvent({ ...sky, eventId: "unlock-koro", idempotencyKey: "unlock:koro", fragmentId: "heartroot-canopy", sourceId: "koro" });
+    await director.processEvent({ ...sky, eventId: "unlock-asha", idempotencyKey: "unlock:asha", fragmentId: "heartroot-fang", sourceId: "asha" });
+    director.selectParty("combat", "koro");
+    const checkpointA = await director.captureCheckpoint();
+    const campaignBefore = director.snapshot().campaign;
+    const writing = operation === "save"
+      ? director.save("selected", "Party A")
+      : director.saveNewSlot("Party A");
+    assert.equal(repository.pendingCheckpoints.length, 1);
+    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.combat, "koro");
+    director.selectParty("combat", "asha");
+    const checkpointB = await director.captureCheckpoint();
+    assert.equal(checkpointB.progress.revision, checkpointA.progress.revision);
+    assert.equal(checkpointB.checkpointId, checkpointA.checkpointId);
+    assert.deepEqual(director.snapshot().campaign, campaignBefore);
+    assert.equal(checkpointB.progress.party.combat, "asha");
+    const beforeCompletion = director.snapshot();
+    repository.pendingCheckpoints[0]!.complete();
+    await writing;
+    assert.deepEqual(director.snapshot(), beforeCompletion);
+    assert.deepEqual(director.snapshot().lastSafeCheckpoint, checkpointB);
+  });
+}
+
+for (const completionOrder of ["older-first", "newer-first"] as const) {
+  test(`newer party save retains recovery when writes complete ${completionOrder}`, async () => {
+    const repository = new DeferredCheckpointRepository(saved(createNewRun(`party-save-${completionOrder}`)));
+    const director = new CampaignDirector({ saves: repository, runId: repository.selected.runId });
+    await director.processEvent({ ...sky, eventId: "unlock-koro", idempotencyKey: "unlock:koro", fragmentId: "heartroot-canopy", sourceId: "koro" });
+    await director.processEvent({ ...sky, eventId: "unlock-asha", idempotencyKey: "unlock:asha", fragmentId: "heartroot-fang", sourceId: "asha" });
+    director.selectParty("combat", "koro");
+    await director.captureCheckpoint();
+    const older = director.save("selected", "Party A");
+    director.selectParty("combat", "asha");
+    const newer = director.save("selected", "Party B");
+    assert.equal(repository.pendingCheckpoints.length, 2);
+    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.combat, "koro");
+    assert.equal(repository.pendingCheckpoints[1]!.progress?.party.combat, "asha");
+    assert.equal(repository.pendingCheckpoints[0]!.progress?.revision, repository.pendingCheckpoints[1]!.progress?.revision);
+    const first = completionOrder === "older-first" ? 0 : 1;
+    repository.pendingCheckpoints[first]!.complete();
+    await (first === 0 ? older : newer);
+    const afterFirst = director.snapshot();
+    repository.pendingCheckpoints[1 - first]!.complete();
+    await (first === 0 ? newer : older);
+    assert.equal(director.snapshot().lastSafeCheckpoint?.progress.party.combat, "asha");
+    if (completionOrder === "newer-first") assert.deepEqual(director.snapshot(), afterFirst);
+  });
+}

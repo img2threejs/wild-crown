@@ -1101,6 +1101,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
     }
     const safe = this.createSafeCheckpoint();
     const campaign = this.campaign;
+    const party = this.party;
+    const recoveryCheckpoint = this.lastSafeCheckpoint;
     await this.saves.saveCheckpoint(
       slotId,
       label,
@@ -1112,8 +1114,15 @@ export class CampaignDirector implements CampaignDirectorAPI {
       "campaign",
       this.progressRecord(),
     );
-    // A failed or superseded write must not promote an unsaved/stale recovery point.
-    if (this.campaign === campaign && this.revision === safe.progress.revision && !this.replay) {
+    // Party selection and checkpoint capture can leave the campaign/revision unchanged.
+    // Compare owned object identities, not the revision-derived checkpoint ID.
+    if (
+      this.campaign === campaign &&
+      this.revision === safe.progress.revision &&
+      this.party === party &&
+      this.lastSafeCheckpoint === recoveryCheckpoint &&
+      !this.replay
+    ) {
       this.checkpoint = safe.worldCheckpoint;
       this.lastSafeCheckpoint = safe;
     }
