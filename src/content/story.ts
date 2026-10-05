@@ -382,7 +382,10 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
     ],
   },
 ];
-export const RETURN_BEATS = CHAPTERS[6]?.questIds.slice(0, 5) ?? [];
+export const RETURN_BEATS =
+  CHAPTERS.find((chapter) => chapter.number === 7)!.questIds.filter(
+    (questId) => questId !== "wild-march",
+  );
 const additional = (id: string, lead: string, reply: string): DialogueBeat => ({
   id,
   lines: [
