@@ -276,7 +276,8 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
   if (sourceEntries.length !== emittedEntries.length || sourceEntries.some((entry) => !emittedIds.has(entry.id))) fail(errors, 'Production asset manifest does not match canonical source asset IDs.');
   for (const entry of emittedEntries) {
     const source = sourceById.get(entry.id);
-    if (!source || source.sourceType !== entry.sourceType || source.kind !== entry.kind) fail(errors, 'Production asset ' + entry.id + ' changed canonical sourceType/kind.');
+    const expectedKind = source?.sourceType === 'composed-recipe' ? 'environment' : source?.kind;
+    if (!source || source.sourceType !== entry.sourceType || expectedKind !== entry.kind) fail(errors, 'Production asset ' + entry.id + ' changed canonical sourceType/kind.');
     if (source && entry.sourceType === 'native-glb') {
       for (const key of ['sourceHash', 'outputHash', 'sourceInputHash', 'nativeGlb', 'runtimeUrl', 'evidence', 'evidenceStatus', 'gates', 'requiredActionIds', 'actionToClipMapping']) if (JSON.stringify(source[key] ?? null) !== JSON.stringify(entry[key] ?? null)) fail(errors, 'Production asset ' + entry.id + ' changed canonical ' + key + '.');
     }
