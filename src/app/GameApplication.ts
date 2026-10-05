@@ -825,7 +825,10 @@ export class GameApplication {
             && this.region.id === this.campaign.regionId && !this.error && !this.loading.active && !this.sceneBlocked;
     }
     private setScreen(screen: Screen, returning = false): void {
-        if (WORLD_PANELS.includes(screen) && !this.canPlayWorld()) return;
+        if (WORLD_PANELS.includes(screen) && !this.canPlayWorld()) {
+            this.render();
+            return;
+        }
         if (screen === 'game' && !this.canPlayWorld()) screen = this.error || this.loading.active ? 'loading' : 'title';
         else if (screen === 'game' && this.suspended) screen = 'pause';
         if (!returning && screen !== this.screen) {
@@ -926,7 +929,7 @@ export class GameApplication {
     private render(): void {
         if (this.disposed) return;
         if (this.suspended && this.screen === 'game') {
-            this.setScreen('pause');
+            this.setScreen(this.canPlayWorld() ? 'pause' : 'game');
             return;
         }
         if (this.screen !== 'companions') this.disposeCompanionPreviews();
