@@ -45,6 +45,10 @@ import {
   type CampaignProgressRecord,
 } from "../storage/SaveRepository.js";
 
+import { BOSS_ENCOUNTERS, WILDLIFE_ENCOUNTERS } from "../combat/content.js";
+
+const ENCOUNTER_DEFINITIONS = [...Object.values(BOSS_ENCOUNTERS), ...Object.values(WILDLIFE_ENCOUNTERS)];
+
 export interface CampaignDirectorOptions {
   saves?: SaveRepository;
   runId?: string;
@@ -1119,18 +1123,36 @@ export class CampaignDirector implements CampaignDirectorAPI {
         "unavailable",
         "No SaveRepository was configured.",
       );
-    const safe = await this.captureCheckpoint();
+    if (this.replay) {
+      throw new SaveRepositoryError("replay-isolated", "Replay data cannot be saved as a campaign checkpoint.");
+    }
+    const safe = this.createSafeCheckpoint();
+    const campaign = this.campaign;
+    const party = this.party;
+    const recoveryCheckpoint = this.lastSafeCheckpoint;
     await this.saves.saveCheckpoint(
       slotId,
       label,
       safe.worldCheckpoint,
-      this.campaign,
-      this.chapter,
-      this.region,
-      [...this.eventKeys],
+      campaign,
+      safe.progress.chapter,
+      safe.progress.regionId,
+      safe.progress.eventKeys,
       "campaign",
       this.progressRecord(),
     );
+    // Party selection and checkpoint capture can leave the campaign/revision unchanged.
+    // Compare owned object identities, not the revision-derived checkpoint ID.
+    if (
+      this.campaign === campaign &&
+      this.revision === safe.progress.revision &&
+      this.party === party &&
+      this.lastSafeCheckpoint === recoveryCheckpoint &&
+      !this.replay
+    ) {
+      this.checkpoint = safe.worldCheckpoint;
+      this.lastSafeCheckpoint = safe;
+    }
   }
 
   async saveNewSlot(label: string): Promise<string> {
@@ -1163,7 +1185,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
         "unavailable",
         "No SaveRepository was configured.",
       );
-    const imported = await this.saves.importSave(input, this.campaign);
+    // A showcase identity may be caller-supplied; even an equal ID cannot make
+    // its transient history authoritative campaign history.
+    const current = this.replay ? createNewRun(this.runId) : this.campaign;
+    const imported = await this.saves.importSave(input, current);
     const progress = imported.envelope.progress;
     validateLoadedHistory(progress ?? null);
     await this.saves.commitImported(
@@ -1173,7 +1198,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       progress?.chapter ?? 0,
       progress?.regionId ?? "greenwake",
     );
-    const loaded = await this.saves.loadCampaign(slotId, this.campaign);
+    const loaded = await this.saves.loadCampaign(slotId, current);
     this.applyLoadedState(
       loaded.campaign,
       loaded.checkpoint,
@@ -1191,7 +1216,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
         "unavailable",
         "No SaveRepository was configured.",
       );
-    const loaded = await this.saves.loadCampaign(slotId, this.campaign);
+    const loaded = await this.saves.loadCampaign(
+      slotId,
+      this.replay ? createNewRun(this.runId) : this.campaign,
+    );
     this.applyLoadedState(
       loaded.campaign,
       loaded.checkpoint,
@@ -1212,6 +1240,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
     fallbackRegionId: string,
   ): void {
     validateLoadedHistory(progress);
+    // Validate legacy metadata and resolve an authored fallback before replacing
+    // any live state; a rejected load must leave the current journey intact.
+    const fallbackRegion = REGIONS.find((item) => item.id === fallbackRegionId);
+    if (!progress && (!fallbackRegion || !Number.isInteger(fallbackChapter) ||
+      fallbackChapter < 0 || fallbackChapter > 8)) {
+      throw new SaveRepositoryError("corrupt", "Legacy save location is invalid.");
+    }
+    const nextSafeSpawn = progress?.safeSpawn
+      ? structuredClone(progress.safeSpawn)
+      : this.safeSpawnFor(progress?.regionId ?? fallbackRegion!.id);
     this.campaign = campaign;
     this.checkpoint = checkpoint;
     this.eventKeys = new Set(eventKeys);
@@ -1224,7 +1262,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
         progress.completedObjectiveIds as ObjectiveId[];
       this.trackedObjectiveId =
         progress.trackedObjectiveId as ObjectiveId | null;
-      this.party = progress.party as typeof this.party;
+      this.party = { ...progress.party } as typeof this.party;
       this.choices = { ...progress.choices };
       this.facts = factsWithMovableObjectDefaults(progress.worldFacts);
       this.endingId = progress.ending;
@@ -1236,23 +1274,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
           (event) => (event as { idempotencyKey: string }).idempotencyKey,
         ),
       ]);
-      this.safeSpawn = progress.safeSpawn
-        ? structuredClone(progress.safeSpawn)
-        : this.safeSpawnFor(this.region);
-      this.revision = progress.revision ?? this.revision;
+      this.safeSpawn = nextSafeSpawn;
+      this.revision = progress.revision ?? 0;
     } else {
-      const region = REGIONS.find((item) => item.id === fallbackRegionId);
-      if (
-        !region ||
-        !Number.isInteger(fallbackChapter) ||
-        fallbackChapter < 0 ||
-        fallbackChapter > 8
-      ) {
-        throw new SaveRepositoryError(
-          "corrupt",
-          "Legacy save location is invalid.",
-        );
-      }
+      const region = fallbackRegion!;
       this.chapter = fallbackChapter;
       this.region = region.id;
       this.completedQuestIds = QUESTS.filter(
@@ -1282,7 +1307,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.eventLog = [];
       this.eventKeys.clear();
       this.revision = 0;
-      this.safeSpawn = this.safeSpawnFor(region.id);
+      this.safeSpawn = nextSafeSpawn;
+    }
+    this.runId = campaign.runId;
+    this.replay = false;
+    if (campaign.world.factions.crown.leaderStatus === "exiled") {
+      this.facts.solkarPresent = false;
+      this.facts["solkar-exiled"] = true;
+      this.facts.crownCouncilAvailable = true;
+      if (this.party.combat === "solkar") delete this.party.combat;
+      if (this.party.utility === "solkar") delete this.party.utility;
     }
     this.facts.refugeOpen = this.chapter >= 6;
     this.recoveryRequest = null;
@@ -1393,28 +1427,27 @@ export class CampaignDirector implements CampaignDirectorAPI {
   }
 
   private createSafeCheckpoint(): CampaignSafeCheckpoint {
-    const activeQuest = QUESTS.find((quest) =>
-      this.activeQuestIds.includes(quest.id),
-    );
-    const encounterObjective = activeQuest?.objectives.find(
-      (objective) =>
-        objective.mechanic === "encounter" &&
-        !this.completedObjectiveIds.includes(objective.id),
-    );
-    const encounterToken = encounterObjective?.requiredEvents
-      .flatMap((required) => required.split("|"))
-      .find((required) => required.startsWith("encounter:"));
-    const encounterId = encounterToken?.slice("encounter:".length) ?? null;
-    const actorByEncounter: Record<string, string[]> = {
-      "greenwake-boar": ["corrupted-boar"],
-      "camp-hunters": ["poacher-scout", "poacher-hunter"],
-      "encounter-koro": ["koro"],
-      "encounter-asha": ["asha"],
-      "encounter-ruun": ["ruun"],
-      "encounter-ghor": ["ghor"],
-      "encounter-solkar": ["solkar"],
-      "encounter-orun": ["orun"],
-    };
+    let encounter: (typeof ENCOUNTER_DEFINITIONS)[number] | undefined;
+    for (const questId of this.activeQuestIds) {
+      const quest = QUESTS.find((item) => item.id === questId);
+      for (const objective of quest?.objectives ?? []) {
+        if (objective.mechanic !== "encounter" || this.completedObjectiveIds.includes(objective.id)) continue;
+        encounter = ENCOUNTER_DEFINITIONS.find((definition) =>
+          definition.regionId === this.region &&
+          (objective.targetIds.includes(definition.bossId) ||
+            objective.requiredEvents.some((required) => required.split("|").includes("encounter:" + definition.id))) &&
+          !this.eventLog.some((event) =>
+            event.type === "encounter-resolved" && event.encounterId === definition.id,
+          ),
+        );
+        if (encounter) break;
+      }
+      if (encounter) break;
+    }
+    const region = REGIONS.find((item) => item.id === this.region)!;
+    const actorIds = encounter
+      ? region.encounterParticipants[encounter.id] ?? encounter.actorIds.filter((id) => id !== "aren")
+      : [];
     return {
       kind: "campaign-safe-checkpoint",
       schemaVersion: 1,
@@ -1425,10 +1458,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
       safeSpawn: structuredClone(this.safeSpawn),
       encounterReset: {
         policy: "restart-from-entry",
-        encounterId,
-        actorIds: encounterId
-          ? ((actorByEncounter[encounterId] ?? []) as never)
-          : [],
+        encounterId: encounter?.id ?? null,
+        actorIds: [...actorIds],
       },
     };
   }

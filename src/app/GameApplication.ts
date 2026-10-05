@@ -19,6 +19,9 @@ const COMMANDS = ['follow', 'stay', 'focus', 'defend', 'search', 'distract', 'sp
 type Screen = GameViewModel['screen'];
 type Manifest = readonly AssetManifestEntry[];
 type ActiveCompanionSlots = Partial<Pick<CampaignSnapshot['party'], 'combat' | 'utility' | 'scout'>>;
+const mountedApplications = new WeakMap<HTMLElement, GameApplication>();
+const OVERLAY_SCREENS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'settings', 'credits'];
+const WORLD_PANELS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'dialogue', 'choice', 'ending'];
 function endingViewModel(id: NonNullable<CampaignSnapshot['ending']>): NonNullable<GameViewModel['ending']> {
     const ending = ENDINGS[id];
     return { id: ending.id, title: ending.title, summary: ending.summary };
@@ -89,7 +92,8 @@ export class GameApplication {
     private region: RegionDefinition | null = null;
     private activeCompanionSlots: ActiveCompanionSlots = {};
     private screen: Screen = 'title';
-    private previousScreen: Screen = 'game';
+    private readonly screenHistory: Screen[] = [];
+    private worldReady = false;
     private loading: GameViewModel['loading'] = { active: false, label: '', progress: null };
     private error: GameViewModel['error'] = null;
     private dialogue: GameViewModel['dialogue'] = null;
@@ -119,6 +123,8 @@ export class GameApplication {
     private readonly onUserGesture = () => { void this.presentation?.unlockAudio(); };
     constructor(root: HTMLElement) {
         this.root = root;
+        mountedApplications.get(root)?.dispose();
+        mountedApplications.set(root, this);
         this.combat.setTimePolicy('paused');
         root.replaceChildren();
         root.classList.add('wc-app');
@@ -170,7 +176,7 @@ export class GameApplication {
         const generation = this.lifecycleGeneration;
         try {
             await this.saves.init();
-            if (!this.isLifecycleCurrent(generation)) return;
+            if (!this.isLifecycleCurrent(generation)) { this.saves.close(); return; }
             const data = await this.saves.loadSettings();
             if (!this.isLifecycleCurrent(generation)) return;
             if (data) {
@@ -211,6 +217,7 @@ export class GameApplication {
     private async prepareWorld(snapshot: CampaignSnapshot, showIntro = false, generation = this.beginWorldGeneration()): Promise<void> {
         const lifecycleGeneration = this.lifecycleGeneration;
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+        this.releaseWorld();
         this.pendingInteraction = null;
         this.pendingAbility = null;
         this.input.clear();
@@ -229,7 +236,11 @@ export class GameApplication {
         const recipe = ENVIRONMENT_RECIPES.find(item => item.id === region.environmentRecipeId);
         if (!recipe) throw new AssetGateError('No authored environment recipe for ' + region.id + '.');
         if (!this.renderer)
-            this.renderer = new GameRenderer({ canvas: this.canvas, onProgress: p => { this.loading = { ...this.loading, progress: p.ratio }; this.render(); } });
+            this.renderer = new GameRenderer({ canvas: this.canvas, onProgress: p => {
+                if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+                this.loading = { ...this.loading, progress: p.ratio };
+                this.render();
+            } });
         this.loading = { active: true, label: 'Loading ' + region.name, progress: null, operationId: 'region-load' };
         this.render();
         await this.renderer.loadRegion(region, manifest, recipe);
@@ -260,6 +271,9 @@ export class GameApplication {
         this.presentation.startBiomeAmbience(region.id);
         this.syncStoryState();
         this.loading = { active: false, label: '', progress: null };
+        this.sceneBlocked = false;
+        this.worldReady = true;
+        this.screenHistory.length = 0;
         this.screen = showIntro ? 'dialogue' : 'game';
         this.combat.setTimePolicy(showIntro ? 'paused' : 'normal');
         this.dialogue = showIntro ? DIALOGUE['prologue-vision'] ?? null : null;
@@ -420,6 +434,8 @@ export class GameApplication {
         if (supersedesWorld) {
             this.pendingInteraction = null;
             this.pendingAbility = null;
+            this.screenHistory.length = 0;
+            if (action.type !== 'retry-load' || action.operationId !== 'durable-event') this.worldReady = false;
         }
         try {
             switch (action.type) {
@@ -495,15 +511,19 @@ export class GameApplication {
                         } else {
                             await this.travel(destination.regionId, destination.entranceId, generation);
                         }
+                        if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                         this.sceneBlocked = false;
                         this.durableEvents = this.durableEvents.then(() => this.flushWorldEvents(generation, lifecycleGeneration));
                         await this.durableEvents;
+                        if (this.isWorldGenerationCurrent(generation, lifecycleGeneration)) this.render();
                     } else if (this.campaign && action.operationId === 'region-load') {
                         this.error = null;
                         await this.prepareWorld(this.campaign, false, generation);
+                        if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                         this.sceneBlocked = false;
                         this.durableEvents = this.durableEvents.then(() => this.flushWorldEvents(generation, lifecycleGeneration));
                         await this.durableEvents;
+                        if (this.isWorldGenerationCurrent(generation, lifecycleGeneration)) this.render();
                     } else if (action.operationId === 'new-game' && this.pendingNewRunId) {
                         await this.dispatch({ type: 'new-game', runId: this.pendingNewRunId });
                     } else if (action.operationId === 'continue' && this.pendingLoadSlotId) {
@@ -527,6 +547,7 @@ export class GameApplication {
                     break;
                 case 'return-title':
                     this.error = null;
+                    this.releaseWorld();
                     this.setScreen('title');
                     await this.durableEvents;
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -572,9 +593,12 @@ export class GameApplication {
                 case 'open-settings':
                     this.setScreen('settings');
                     break;
-                case 'close-screen':
-                    this.setScreen(this.previousScreen === 'title' ? 'title' : 'game');
+                case 'close-screen': {
+                    const previous = this.screenHistory.pop();
+                    if (previous !== undefined) this.setScreen(previous, true);
+                    else this.render();
                     break;
+                }
                 case 'create-save-slot':
                     if (this.campaign) {
                         await this.campaignDirector.saveNewSlot(action.label);
@@ -638,6 +662,7 @@ export class GameApplication {
                     if (!slot)
                         throw new Error('There is no saved journey to export.');
                     const payload = await this.campaignDirector.exportSave(slot);
+                    if (!this.isLifecycleCurrent(lifecycleGeneration)) return;
                     this.download(payload, 'wild-crown-' + slot + '.json');
                     break;
                 }
@@ -795,19 +820,38 @@ export class GameApplication {
         this.activeCompanionSlots = party;
     }
     private download(contents: string, fileName: string): void { const url = URL.createObjectURL(new Blob([contents], { type: 'application/json' })); const anchor = document.createElement('a'); anchor.href = url; anchor.download = fileName; anchor.click(); URL.revokeObjectURL(url); }
-    private setScreen(screen: Screen): void {
-        const overlayScreens: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'settings'];
-        if (!overlayScreens.includes(this.screen) && screen !== this.screen) {
-            this.previousScreen = this.screen;
+    private canPlayWorld(): boolean {
+        return this.worldReady && !!this.renderer && !!this.region && !!this.campaign
+            && this.region.id === this.campaign.regionId && !this.error && !this.loading.active && !this.sceneBlocked;
+    }
+    private setScreen(screen: Screen, returning = false): void {
+        if (WORLD_PANELS.includes(screen) && !this.canPlayWorld()) {
+            this.render();
+            return;
+        }
+        if (screen === 'game' && !this.canPlayWorld()) screen = this.error || this.loading.active ? 'loading' : 'title';
+        else if (screen === 'game' && this.suspended) screen = 'pause';
+        if (!returning && screen !== this.screen) {
+            if (OVERLAY_SCREENS.includes(screen)) this.screenHistory.push(this.screen);
+            else this.screenHistory.length = 0;
         }
         this.screen = screen;
         this.combat.setTimePolicy(screen === 'game' ? 'normal' : 'paused');
         this.pendingInteraction = null;
         this.pendingAbility = null;
         this.input.clear();
-        this.input.setEnabled(screen === 'game' && this.ready);
+        this.input.setEnabled(screen === 'game' && this.ready && this.canPlayWorld());
         this.accumulator = 0;
         this.render();
+    }
+    private releaseWorld(): void {
+        this.worldReady = false;
+        this.disposeCompanionPreviews();
+        this.presentation?.dispose();
+        this.presentation = null;
+        this.renderer?.dispose();
+        this.renderer = null;
+        this.region = null;
     }
     private applyBindings(): void {
         this.input.setBindings(this.bindings);
@@ -852,6 +896,7 @@ export class GameApplication {
         const abilities = companionState ? rosterAbilities : [];
         const view: GameViewModel = {
             screen: this.screen,
+            canOpenWorldPanels: this.canPlayWorld(),
             loading: this.loading,
             error: this.error,
             settings: this.settings,
@@ -883,9 +928,14 @@ export class GameApplication {
     }
     private render(): void {
         if (this.disposed) return;
+        if (this.suspended && this.screen === 'game') {
+            this.setScreen(this.canPlayWorld() ? 'pause' : 'game');
+            return;
+        }
         if (this.screen !== 'companions') this.disposeCompanionPreviews();
-        this.ui.render(this.model());
-        const active = this.ready && this.screen === 'game' && !this.error;
+        const model = this.model();
+        this.ui.render(model);
+        const active = this.ready && this.screen === 'game' && this.canPlayWorld();
         this.input.setEnabled(active);
         if (!active) this.input.clear();
     }
@@ -999,7 +1049,7 @@ export class GameApplication {
                 handle.update(delta);
             }
         }
-        if (this.screen !== 'game' || !this.renderer || !this.campaign || document.hidden) {
+        if (this.screen !== 'game' || !this.canPlayWorld() || !this.renderer || !this.campaign || document.hidden) {
             this.accumulator = 0;
             return;
         }
@@ -1183,45 +1233,50 @@ export class GameApplication {
         if (this.screen === 'game')
             this.setScreen('pause');
     } };
-    private onPageHide = (event: PageTransitionEvent) => { this.input.clear(); if (event.persisted) {
-        this.suspended = true;
-        if (this.screen === 'game')
-            this.setScreen('pause');
-        cancelAnimationFrame(this.raf);
-        this.raf = 0;
-    }
-    else
-        this.dispose(); };
-    private onPageShow = (event: PageTransitionEvent) => { if (event.persisted && !this.disposed) {
+    private onPageHide = (event: PageTransitionEvent) => {
+        if (this.disposed) return;
+        this.input.clear();
+        if (event.persisted) {
+            if (this.suspended) return;
+            this.suspended = true;
+            if (this.screen === 'game') this.setScreen('pause');
+            cancelAnimationFrame(this.raf);
+            this.raf = 0;
+        } else this.dispose();
+    };
+    private onPageShow = (event: PageTransitionEvent) => {
+        if (!event.persisted || this.disposed || !this.suspended) return;
         this.suspended = false;
         this.previousTime = 0;
         this.accumulator = 0;
         this.raf = requestAnimationFrame(this.frame);
-    } };
+    };
     dispose(): void {
         if (this.disposed)
             return;
         this.disposed = true;
         this.lifecycleGeneration++;
+        this.combat.setTimePolicy('paused');
         cancelAnimationFrame(this.raf);
         this.raf = 0;
         this.overlay.removeEventListener('pointerdown', this.onUserGesture);
         this.overlay.removeEventListener('keydown', this.onUserGesture);
         this.input.dispose();
-        this.disposeCompanionPreviews();
         this.ui.destroy();
         this.unsubscribe?.();
         this.unsubscribe = null;
-        this.presentation?.dispose();
-        this.presentation = null;
-        this.renderer?.dispose();
-        this.renderer = null;
+        this.releaseWorld();
         this.saves.close();
         window.removeEventListener('pagehide', this.onPageHide);
         window.removeEventListener('pageshow', this.onPageShow);
         window.removeEventListener('blur', this.onBlur);
         document.removeEventListener('visibilitychange', this.onVisibility);
-        this.root.replaceChildren();
+        this.world.remove();
+        this.overlay.remove();
+        if (mountedApplications.get(this.root) === this) {
+            mountedApplications.delete(this.root);
+            this.root.classList.remove('wc-app');
+        }
     }
 }
 export function mountGameApplication(root: HTMLElement): GameApplication { return new GameApplication(root); }

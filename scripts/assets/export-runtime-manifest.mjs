@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { readFile, mkdir, writeFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const sourcePath = path.join(projectRoot, "asset-source/manifest.json");
-const outputPath = path.join(projectRoot, "public/assets/manifest.json");
-const checkOnly = process.argv.includes("--check");
+async function readConfined(root, relative) {
+  if (typeof relative !== "string" || !relative || path.isAbsolute(relative) || relative.includes("\\")) throw new Error("Invalid confined file path");
+  const rootReal = await realpath(root), fileReal = await realpath(path.resolve(root, relative));
+  const fromRoot = path.relative(rootReal, fileReal);
+  if (!fromRoot || fromRoot === ".." || fromRoot.startsWith(".." + path.sep) || path.isAbsolute(fromRoot) || !(await stat(fileReal)).isFile()) throw new Error("File escapes evidence root");
+  return readFile(fileReal);
+}
+export async function exportRuntimeManifest({ projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../.."), sourcePath = path.join(projectRoot, "asset-source/manifest.json"), outputPath = path.join(projectRoot, "public/assets/manifest.json"), checkOnly = false } = {}) {
 const source = JSON.parse(await readFile(sourcePath, "utf8"));
 if (source.schemaVersion !== 2 || !Array.isArray(source.assets) || !Array.isArray(source.environmentRecipes)) throw new Error("Unsupported asset-source manifest schema");
 const ids = new Set(source.assets.map(entry => entry.id));
@@ -40,6 +44,7 @@ for (const sourceEntry of source.assets) {
     nativeGlb: sourceEntry.nativeGlb ?? null,
     runtimeUrl: sourceEntry.runtimeUrl ?? null,
     sourceInputHash: sourceEntry.sourceInputHash ?? null,
+    species: sourceEntry.species,
     sourceHash: sourceEntry.sourceHash ?? null,
     outputHash: sourceEntry.outputHash ?? null,
     lodIds: Array.isArray(sourceEntry.lodIds) ? sourceEntry.lodIds : [],
@@ -50,6 +55,8 @@ for (const sourceEntry of source.assets) {
     sockets: Array.isArray(sourceEntry.sockets) ? sourceEntry.sockets : [],
     collisionProxyId: sourceEntry.collisionProxyId ?? null,
     provenance: "asset-source/manifest.json#" + sourceEntry.id,
+    providerTaskId: sourceEntry.providerTaskId ?? null,
+    gates: sourceEntry.gates ?? null,
     evidenceStatus: sourceEntry.evidenceStatus,
     evidence: sourceEntry.evidence ?? null,
     actorId: sourceEntry.actorId,
@@ -67,23 +74,28 @@ for (const sourceEntry of source.assets) {
     const relativeGlb = "assets/" + entry.id + "/" + entry.outputHash + ".glb";
     const expectedUrl = "/" + relativeGlb;
     if (entry.nativeGlb !== relativeGlb || entry.runtimeUrl !== expectedUrl) throw new Error("Verified native asset must use immutable hash URL: " + entry.id);
-    const fileBytes = await readFile(path.join(projectRoot, "public", relativeGlb));
+    const fileBytes = await readConfined(path.join(projectRoot, "public"), relativeGlb);
     if (sha256(fileBytes) !== entry.outputHash) throw new Error("Native GLB SHA-256 mismatch: " + entry.id);
     const gltf = parseGlbJson(fileBytes);
     for (const resource of [...(gltf.buffers || []), ...(gltf.images || [])]) if (resource.uri && !resource.uri.startsWith("data:")) throw new Error("Native GLB has an external resource URI: " + entry.id);
     if (typeof entry.evidence !== "string" || !entry.evidence.startsWith("evidence/assets/") || entry.evidence.includes("..")) throw new Error("Verified asset requires evidence/assets/<id>.json: " + entry.id);
-    const evidence = JSON.parse(await readFile(path.join(projectRoot, entry.evidence), "utf8"));
+    const evidence = JSON.parse(await readConfined(projectRoot, entry.evidence));
     if (evidence.assetId !== entry.id || evidence.sourceHash !== entry.outputHash || evidence.outputHash !== entry.outputHash || evidence.schemaVersion !== 1) throw new Error("Evidence identity/hash mismatch: " + entry.id);
-    if (entry.sourceInputHash && evidence.sourceInputHash !== entry.sourceInputHash) throw new Error("Evidence sourceInputHash mismatch: " + entry.id);
-    const requiredGates = entry.kind === "character" ? ["G1", "G3", "G6", "G10", "G11", "G12"] : ["G6", "G10"];
-    for (const gate of requiredGates) if (evidence.gates?.[gate] !== "passed") throw new Error("Verified asset has unpassed " + gate + ": " + entry.id);
-    if (entry.kind === "prop") for (const gate of ["G1", "G3"]) if (evidence.gates?.[gate]?.status !== "not-applicable" || !evidence.gates[gate].reason) throw new Error("Static prop requires explicit " + gate + " non-applicability: " + entry.id);    if (!Array.isArray(evidence.pluginChecks) || !Array.isArray(evidence.expectedPluginCheckIds) || !evidence.expectedPluginCheckIds.length) throw new Error("Verified asset must report the complete applicable plugin check set: " + entry.id);
+    if (!validHash(entry.sourceInputHash) || entry.sourceInputHash !== sourceEntry.sourceReference?.sha256 || evidence.sourceInputHash !== entry.sourceInputHash) throw new Error("Evidence sourceInputHash mismatch: " + entry.id);
+    const hasRig = Boolean(gltf.skins?.length || gltf.animations?.length);
+    const requiredGates = entry.kind === "character" ? ["G1", "G3", "G6", "G10", "G11", "G12"] : hasRig ? ["G1", "G3", "G6", "G10", "G11", ...(gltf.skins?.length ? ["G12"] : [])] : ["G6", "G10", "G11"];
+    const gateStatus = gate => typeof evidence.gates?.[gate] === "object" ? evidence.gates[gate]?.status : evidence.gates?.[gate];
+    for (const gate of requiredGates) if (gateStatus(gate) !== "passed") throw new Error("Verified asset has unpassed " + gate + ": " + entry.id);
+    if (entry.kind === "prop" && !hasRig) for (const gate of ["G1", "G3", "G12"]) if (gateStatus(gate) !== "not-applicable" || !(evidence.notApplicableReasons?.[gate] || evidence.gates[gate]?.reason)) throw new Error("Static prop requires explicit " + gate + " non-applicability: " + entry.id);
+    const taskId = entry.providerTaskId ?? entry.provenance?.providerTaskId;
+    if (typeof taskId !== "string" || !taskId.trim() || ["G1", "G3", "G6", "G10", "G11", "G12"].some(gate => (typeof entry.gates?.[gate] === "object" ? entry.gates[gate]?.status : entry.gates?.[gate]) !== gateStatus(gate))) throw new Error("Verified asset lacks matching canonical gates/provider provenance: " + entry.id);
+    if (!Array.isArray(evidence.pluginChecks) || !Array.isArray(evidence.expectedPluginCheckIds) || !evidence.expectedPluginCheckIds.length) throw new Error("Verified asset must report the complete applicable plugin check set: " + entry.id);
     const reportedChecks = new Set(evidence.pluginChecks.map(check => check.id));
     if (reportedChecks.size !== evidence.expectedPluginCheckIds.length || evidence.pluginChecks.length !== evidence.expectedPluginCheckIds.length || evidence.expectedPluginCheckIds.some(id => !reportedChecks.has(id)) || evidence.pluginChecks.some(check => check.applicable !== false && check.status !== "passed" || check.applicable === false && !check.reason)) throw new Error("Verified asset has missing/unpassed plugin rows: " + entry.id);
-    if (!evidence.visualEvidence || evidence.visualEvidence.status !== "passed" || !Array.isArray(evidence.visualEvidence.files) || !evidence.visualEvidence.files.length) throw new Error("Verified asset requires reviewed visual evidence: " + entry.id);
+    if (!evidence.visualEvidence || evidence.visualEvidence.status !== "passed" || evidence.visualEvidence.outputHash !== entry.outputHash || !Array.isArray(evidence.visualEvidence.files) || !evidence.visualEvidence.files.length) throw new Error("Verified asset requires reviewed current-output visual evidence: " + entry.id);
     for (const image of evidence.visualEvidence.files) {
-      if (typeof image.path !== "string" || !image.path.startsWith("evidence/assets/") || image.path.includes("..") || !validHash(image.sha256)) throw new Error("Invalid visual evidence record: " + entry.id);
-      if (sha256(await readFile(path.join(projectRoot, image.path))) !== image.sha256) throw new Error("Visual evidence hash mismatch: " + entry.id);
+      if (image.status !== "passed" || image.outputHash !== entry.outputHash || typeof image.path !== "string" || !image.path.startsWith("evidence/assets/") || image.path.includes("..") || !validHash(image.sha256)) throw new Error("Invalid visual evidence record: " + entry.id);
+      if (sha256(await readConfined(projectRoot, image.path)) !== image.sha256) throw new Error("Visual evidence hash mismatch: " + entry.id);
     }
     if (entry.kind === "character" && (!evidence.speciesCoverage || evidence.speciesCoverage.status !== "passed" || !evidence.actionCoverage || evidence.actionCoverage.status !== "passed" || evidence.actionCoverage.missingActionIds?.length)) throw new Error("Verified character requires species and full ActionId coverage: " + entry.id);
     if (entry.kind === "character") {
@@ -118,7 +130,7 @@ for (const recipe of source.environmentRecipes) {
     evidenceStatus: recipe.evidenceStatus,
     runtimeUrl: null,
     nativeGlb: null,
-    evidence: null
+    evidence: recipe.evidence ?? null
   });
 }
 const runtimeIds = publicEntries.map(entry => entry.id);
@@ -133,3 +145,7 @@ if (checkOnly) {
   await writeFile(outputPath, output, { encoding: "utf8", mode: 0o644 });
   console.log("wrote /assets/manifest.json with " + publicEntries.length + " normalized entries");
 }
+return publicEntries;
+}
+
+if (process.argv[1] && await realpath(fileURLToPath(import.meta.url)) === await realpath(process.argv[1])) await exportRuntimeManifest({ checkOnly: process.argv.includes("--check") });

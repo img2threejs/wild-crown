@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>M01 native application lifecycle recovery smoke</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <style>
+      body { margin: 0; background: #171a16; color: #e7e1d1; font: 14px system-ui, sans-serif; }
+      header, pre { padding: 16px; }
+      #application-root { position: relative; height: 640px; }
+      pre { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <header><h1>M01 native application lifetime and recovery</h1><p>Real production module and native IndexedDB in an isolated database. Genuine asset gates remain enforced. Synthetic page transition events test idempotence only, not actual BFCache or initialized gameplay acceptance.</p></header>
+    <main id="application-root"></main>
+    <pre id="test-status">Running native application exercise…</pre>
+    <script type="module" src="./browser-smoke.ts"></script>
+  </body>
+</html>

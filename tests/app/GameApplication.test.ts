@@ -35,6 +35,12 @@ function headlessApp(): Record<string, any> {
   app.disposed = false;
   app.lifecycleGeneration = 0;
   app.worldGeneration = 0;
+  app.screenHistory = [];
+  app.worldReady = true;
+  app.renderer = { dispose: () => {} };
+  app.presentation = null;
+  app.companionPreviews = new Map();
+  app.region = REGIONS.find(item => item.id === "blood-bamboo-valley");
   app.campaign = snapshot(false);
   app.campaignDirector = {};
   app.timePolicies = [] as string[];
@@ -50,7 +56,6 @@ function headlessApp(): Record<string, any> {
   app.pendingAbility = null;
   app.render = () => {};
   app.input = { clear: () => {}, setEnabled: () => {} };
-  app.isWorldGenerationCurrent = () => true;
   app.syncStoryState = () => {};
   app.syncWorldFacts = () => {};
   app.startOrunEncounterIfReady = async () => {};
@@ -227,6 +232,12 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
   expect(app.renderer).toBeNull();
   expect(app.combat.loadRegionCalls).toBe(0);
 
+  for (const action of [{ type: "close-screen" }, { type: "open-settings" }, { type: "close-screen" }, { type: "close-screen" }] satisfies UIAction[]) {
+    await app.dispatch(action);
+    expect(app.screen).not.toBe("game");
+    expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
+  }
+  expect(app.screen).toBe("loading");
   await app.dispatch({ type: "return-title" });
   expect(app.screen).toBe("title");
   expect(app.campaign).toBeNull();
@@ -251,6 +262,9 @@ it("pauses the combat world for every blocking screen and restores normal time o
     app.setScreen(screen);
   }
   expect(policies).toEqual(Array(11).fill("paused"));
+  app.worldReady = true;
+  app.error = null;
+  app.screenHistory.length = 0;
   app.setScreen("game");
   expect(policies.at(-1)).toBe("normal");
 });
@@ -409,4 +423,178 @@ it("retains a speculative choice key and the durable retry path for a persistenc
   expect(app.pendingWorldEvents).toEqual([]);
   expect(app.campaign.ending).toBe("severance");
   expect(app.screen).toBe("ending");
+});
+it("keeps root title and error screens stable while closing nested menus to their exact opening screen", async () => {
+  const app = headlessApp();
+  app.screen = "title";
+  app.campaign = null;
+  app.region = null;
+  app.renderer = null;
+  app.worldReady = false;
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("title");
+  await app.dispatch({ type: "open-settings" });
+  for (const action of [{ type: "open-map" }, { type: "open-journal" }, { type: "open-companions" }, { type: "pause" }] satisfies UIAction[]) {
+    await app.dispatch(action);
+    expect(app.screen).toBe("settings");
+    expect(app.screenHistory).toEqual(["title"]);
+  }
+  for (const screen of ["dialogue", "choice", "ending"]) {
+    app.setScreen(screen);
+    expect(app.screen).toBe("settings");
+    expect(app.screenHistory).toEqual(["title"]);
+  }
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("title");
+  await app.dispatch({ type: "resume" });
+  expect(app.screen).toBe("title");
+
+  app.showWorldError(new NativeAssetError("greenwake-environment", "GLB request failed with HTTP 404"), "region-load");
+  const error = app.error;
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("loading");
+  await app.dispatch({ type: "open-settings" });
+  for (const action of [{ type: "open-map" }, { type: "open-journal" }, { type: "open-companions" }, { type: "pause" }] satisfies UIAction[]) {
+    await app.dispatch(action);
+    expect(app.screen).toBe("settings");
+    expect(app.screenHistory).toEqual(["loading"]);
+    expect(app.error).toBe(error);
+  }
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("loading");
+  expect(app.error).toBe(error);
+  await app.dispatch({ type: "resume" });
+  expect(app.screen).toBe("loading");
+  expect(app.error).toBe(error);
+});
+
+it("keeps world navigation available from Settings only while its initialized world remains usable", async () => {
+  const app = headlessApp();
+  await app.dispatch({ type: "open-settings" });
+  for (const [type, screen] of [["open-map", "map"], ["open-journal", "journal"], ["open-companions", "companions"]] as const) {
+    await app.dispatch({ type });
+    expect(app.screen).toBe(screen);
+    await app.dispatch({ type: "close-screen" });
+    expect(app.screen).toBe("settings");
+    expect(app.screenHistory).toEqual(["game"]);
+  }
+  app.error = { code: "asset-unavailable", message: "Required world asset is unavailable", recoverable: false };
+  await app.dispatch({ type: "open-map" });
+  expect(app.screen).toBe("settings");
+  expect(app.screenHistory).toEqual(["game"]);
+});
+
+it("returns Settings to Pause and only resumes a ready world, with no stale menu path after title recovery", async () => {
+  const app = headlessApp();
+  app.ready = true;
+  await app.dispatch({ type: "pause" });
+  await app.dispatch({ type: "open-settings" });
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("pause");
+  await app.dispatch({ type: "resume" });
+  expect(app.screen).toBe("game");
+  await app.dispatch({ type: "return-title" });
+  expect(app.worldReady).toBe(false);
+  expect(app.renderer).toBeNull();
+  expect(app.region).toBeNull();
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("title");
+});
+
+it("keeps resumed or asynchronously prepared gameplay paused until a suspended page is restored", async () => {
+  const app = headlessApp();
+  app.ready = true;
+  app.suspended = true;
+  app.screen = "pause";
+  await app.dispatch({ type: "resume" });
+  expect(app.screen).toBe("pause");
+  expect(app.timePolicies.at(-1)).toBe("paused");
+
+  const enabled: boolean[] = [];
+  app.input.setEnabled = (value: boolean) => enabled.push(value);
+  app.ui = { render: () => {} };
+  app.model = () => ({});
+  app.render = (GameApplication.prototype as unknown as Record<string, any>).render;
+  // Successful asynchronous world preparation writes the gameplay screen
+  // directly before rendering; suspension must still own the final policy.
+  app.screen = "game";
+  app.combat.setTimePolicy("normal");
+  app.render();
+  expect(app.screen).toBe("pause");
+  expect(app.timePolicies.at(-1)).toBe("paused");
+  expect(enabled.at(-1)).toBe(false);
+  app.suspended = false;
+  app.render();
+  expect(app.screen).toBe("pause");
+  expect(enabled.at(-1)).toBe(false);
+  await app.dispatch({ type: "resume" });
+  expect(app.screen).toBe("game");
+  expect(app.timePolicies.at(-1)).toBe("normal");
+  expect(enabled.at(-1)).toBe(true);
+});
+
+it("releases each initialized world owner once and disables gameplay readiness on repeated retirement", () => {
+  const app = headlessApp();
+  const disposed: string[] = [];
+  app.renderer = { dispose: () => disposed.push("renderer") };
+  app.presentation = { dispose: () => disposed.push("presentation") };
+  app.companionPreviews.set({ dispose: () => disposed.push("preview") }, {});
+  expect(app.canPlayWorld()).toBe(true);
+  app.releaseWorld();
+  app.releaseWorld();
+  expect(disposed).toEqual(["preview", "presentation", "renderer"]);
+  expect(app.worldReady).toBe(false);
+  expect(app.canPlayWorld()).toBe(false);
+  expect(app.companionPreviews.size).toBe(0);
+  expect(app.renderer).toBeNull();
+  expect(app.presentation).toBeNull();
+  expect(app.region).toBeNull();
+});
+
+it("does not commit an awaited manifest continuation into a replaced or disposed world", async () => {
+  for (const boundary of ["replacement", "disposal"]) {
+    const app = headlessApp();
+    let resolveManifest!: (assets: AssetManifestEntry[]) => void;
+    app.readManifest = () => new Promise<AssetManifestEntry[]>(resolve => { resolveManifest = resolve; });
+    const preparing = app.prepareWorld(app.campaign);
+    expect(app.screen).toBe("loading");
+    if (boundary === "replacement") app.beginWorldGeneration();
+    else { app.disposed = true; app.lifecycleGeneration++; }
+    resolveManifest([]);
+    await preparing;
+    expect(app.renderer).toBeNull();
+    expect(app.region).toBeNull();
+    expect(app.worldReady).toBe(false);
+    expect(app.error).toBeNull();
+  }
+});
+
+it("re-enables gameplay input after a successful blocked-scene retry even when no durable events remain", async () => {
+  for (const operationId of ["region-load", "travel"]) {
+    const app = headlessApp();
+    app.ready = true;
+    app.screen = "loading";
+    app.sceneBlocked = true;
+    app.error = { code: "application", message: "Scene load failed", recoverable: true };
+    app.pendingWorldEvents = [];
+    app.pendingTravel = operationId === "travel" ? { regionId: app.campaign.regionId, entranceId: "entry" } : null;
+    const enabled: boolean[] = [];
+    app.input.setEnabled = (value: boolean) => enabled.push(value);
+    app.ui = { render: () => {} };
+    app.model = () => ({});
+    // Exercise production rendering/input policy, not a duplicate of its condition.
+    const appPrototype = GameApplication.prototype as unknown as Record<string, any>;
+    app.render = appPrototype.render;
+    app.prepareWorld = async () => {
+      app.screen = "game";
+      app.loading = { active: false, label: "", progress: null };
+      app.worldReady = true;
+      app.render();
+    };
+    await app.dispatch({ type: "retry-load", operationId });
+    expect(enabled[0]).toBe(false);
+    expect(app.sceneBlocked).toBe(false);
+    expect(app.canPlayWorld()).toBe(true);
+    expect(enabled.at(-1)).toBe(true);
+  }
 });
