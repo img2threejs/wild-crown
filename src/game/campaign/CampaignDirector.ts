@@ -1788,7 +1788,9 @@ export class CampaignDirector implements CampaignDirectorAPI {
     if (
       choiceId === "final-ending" &&
       !this.eventLog.some(
-        (event) => eventMatches("encounter:encounter-orun", event),
+        (event) =>
+          event.type === "encounter-resolved" &&
+          eventMatches("encounter:encounter-orun", event),
       )
     ) {
       throw new CampaignChoiceRejectedError(choiceId, optionId, "Orun must be resolved before the final choice.");

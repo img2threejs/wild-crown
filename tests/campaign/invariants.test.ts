@@ -546,6 +546,42 @@ for (const order of ["refuse-first", "covenant-first"] as const) {
   });
 }
 
+for (const [encounterId, actorId] of [
+  ["encounter-ghor", "ghor"],
+  ["encounter-orun", "orun"],
+] as const) {
+  test(`a cleared encounter-phase with ${encounterId}/${actorId} cannot authorize the final Crown choice`, async () => {
+    const saves = new RecordingLedger(undefined);
+    const director = new CampaignDirector({ runId: "final-phase-authority-" + actorId, saves });
+    await atChapter(director, 8);
+    await director.processEvent({
+      type: "encounter-phase", eventId: "crafted-orun-phase", idempotencyKey: "crafted-orun-phase",
+      encounterId, actorId, phaseId: "encounter-orun", phaseIndex: 2,
+      state: "cleared", simulationTick: 1,
+    });
+    assert.equal(director.snapshot().worldFacts["orun-cleansed"], undefined);
+    assert.equal(director.snapshot().campaign.world.hollowReady, false);
+    const before = director.snapshot();
+    const persisted = structuredClone(saves.writes);
+    await assert.rejects(director.choose("final-ending", "severance"), /Orun must be resolved/);
+    await assert.rejects(
+      director.processEvent(choiceEvent("final-ending", "dominion", "phase-only-final-choice")),
+      CampaignChoiceRejectedError,
+    );
+    assert.deepEqual(director.snapshot(), before);
+    assert.deepEqual(saves.writes, persisted);
+    assert.equal(director.isEventCommitted("phase-only-final-choice"), false);
+    await director.processEvent({
+      type: "encounter-resolved", eventId: "authored-orun-cleanse", idempotencyKey: "authored-orun-cleanse",
+      encounterId: "encounter-orun", actorIds: ["orun"], resolution: "cleansed",
+    });
+    assert.equal(director.snapshot().worldFacts["orun-cleansed"], true);
+    await director.choose("final-ending", "severance");
+    assert.equal(director.snapshot().ending, "severance");
+    assert.equal(director.isEventCommitted("choice:final-ending:severance"), true);
+  });
+}
+
 test("possession and a mismatched Orun participant cannot authorize the final Crown choice", async () => {
   const director = new CampaignDirector({ runId: "final-possession-authority" });
   await atChapter(director, 8, (checkpoint) => {
