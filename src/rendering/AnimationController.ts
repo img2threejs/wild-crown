@@ -57,7 +57,8 @@ export class AnimationController {
     }
   }
 
-  play(actionId: ActionId | string, phase: string, normalizedTime?: number): void {
+  /** Idle loops sample actor-clock seconds modulo loaded duration; finite actions sample normalized snapshot progress. */
+  play(actionId: ActionId | string, phase: string, normalizedTime?: number, loopTimeSeconds?: number): void {
     if (this.disposed) throw new Error(`Animation controller for ${this.assetId} has been disposed.`);
     const id = String(actionId);
     const next = this.actions.get(id);
@@ -78,9 +79,12 @@ export class AnimationController {
     const loops = phase === 'idle';
     next.setLoop(loops ? LoopRepeat : LoopOnce, loops ? Infinity : 1);
     next.clampWhenFinished = !loops;
+    // Advance mixer fades, not authoritative action time; playPreview explicitly opts into local playback.
     next.paused = true;
-    if (normalizedTime !== undefined && Number.isFinite(normalizedTime)) {
-      const duration = next.getClip().duration;
+    const duration = next.getClip().duration;
+    if (loops && loopTimeSeconds !== undefined && Number.isFinite(loopTimeSeconds) && duration > 0) {
+      next.time = ((loopTimeSeconds % duration) + duration) % duration;
+    } else if (normalizedTime !== undefined && Number.isFinite(normalizedTime)) {
       const progress = loops ? ((normalizedTime % 1) + 1) % 1 : Math.max(0, Math.min(1, normalizedTime));
       if (duration > 0) next.time = duration * progress;
     }

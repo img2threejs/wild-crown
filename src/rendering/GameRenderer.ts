@@ -419,7 +419,12 @@ export class GameRenderer {
     instance.root.visible = actor.visible && (!visibleWhen || this.worldFacts[visibleWhen] === true);
     instance.root.position.set(actor.position.x, actor.position.y, actor.position.z);
     instance.root.rotation.y = Math.atan2(actor.facing.x, actor.facing.z);
-    instance.animation.play(actor.actionId, actor.phase, actor.normalizedTime);
+    const clock = this.currentCombat?.worldClock;
+    // Clock selection belongs to the actor snapshot, never to render delta or clip playback speed.
+    const loopTimeSeconds = clock
+      ? actor.allegiance === 'player' ? clock.simulationTick / 60 : clock.worldTimeSeconds
+      : undefined;
+    instance.animation.play(actor.actionId, actor.phase, actor.normalizedTime, loopTimeSeconds);
   }
 
   private resize(): void {

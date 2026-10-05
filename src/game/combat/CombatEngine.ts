@@ -43,6 +43,7 @@ export interface CameraBasis { forward: Vec3; right: Vec3 }
 export interface CombatInput extends InputFrame { dodgeDirection?: EvasionDirection; heavyHeldTicks?: number; targetCycle?: -1 | 1; tetherPressed?: boolean; cleansePressed?: boolean; ferocityPressed?: boolean; corruptionPressed?: boolean; interactTargetId?: ActorId; interactionId?:string; interactionTargetId?:string; choiceOptionId?:string; traversalId?: string }
 export interface CombatActor extends ActorSnapshot {
   radius: number; collisionHeight:number; maxVitality: number; large: boolean; aerial: boolean; command?: CompanionCommand; corruptionCoreIds?: readonly string[]; cleansedCoreIds?: string[];
+  /** Finite actions use simulation ticks for playerId, world ticks for every other actor; traversal owns its world-clock sample separately. */
   recoveringUntil: number; invulnerableUntil: number; staggerUntil: number; possessedUntil: number; weakPointUntil?:number; possessionInstanceId?:string; possessionSourceId?:ActorId; actionStartedTick: number; actionEndsTick: number;
 }
 export interface LiveHazard extends HazardDefinition {
@@ -62,7 +63,7 @@ export interface LiveMovableObject extends MovableObjectSnapshot {
   actorId?: ActorId;
 }
 export interface EngineState {
-  schemaVersion: 2; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; slowMotionElapsedTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
+  schemaVersion: 3; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; slowMotionElapsedTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
   actors: CombatActor[]; playerId: ActorId; player: PlayerResources; targetId?: ActorId; arena: CombatArena; hazards: LiveHazard[]; telegraphs: LiveTelegraph[];
   movableObjects: LiveMovableObject[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
@@ -71,7 +72,7 @@ export interface EngineState {
   eventSequence: number; rewardEmitted: boolean; checkpoint: EncounterCheckpoint | null; traversalGates: TraversalGate[]; pendingImpact?: PendingImpact; presentationCues: StoryCue[];
   traversal?: LiveTraversal;
 }
-export type EngineStateSeed = Partial<Omit<EngineState, 'schemaVersion'>> & { schemaVersion?: 1 | 2 };
+export type EngineStateSeed = Partial<Omit<EngineState, 'schemaVersion'>> & { schemaVersion?: 1 | 2 | 3 };
 export interface TraversalGate { id:string; routeId:string; from:Vec3; to:Vec3; anchors:readonly Vec3[]; fromRegion:RegionId; toRegion:RegionId; width:number; rise:number; unlocked:boolean; unlockFact?:string; traversalEvent:string; colliderIds:readonly string[]; traversalActionId:ActionId; traversal?:RegionRouteDefinition['traversal'] }
 interface LiveTraversal { gate:TraversalGate; points:Vec3[]; lengths:number[]; length:number; segment:number; segmentDistance:number; startedAtWorldTick:number; lastSafePose:Vec3; lastSafeFacing:Vec3; standingHeight:number; }
 export interface EncounterStart { encounterId:string; regionId:RegionId; runId:string; playerPosition?:Vec3; bossPosition?:Vec3; companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'}; actors?:readonly CombatActor[]; worldFacts?:Readonly<Record<string,boolean|number|string>>;}
@@ -463,7 +464,17 @@ export class CombatEngine {
     this.state.tick = checkpoint.tick;
     const worldOffset=this.state.worldTick-checkpoint.worldTick;
     this.state.actors = checkpoint.actors.map(cloneActor);
-    for(const actor of this.state.actors){actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);if(actor.id!==this.state.playerId)actor.invulnerableUntil=shiftDeadline(actor.invulnerableUntil,worldOffset);actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);if(actor.actionEndsTick>0){actor.actionStartedTick+=worldOffset;actor.actionEndsTick+=worldOffset;}}
+    for(const actor of this.state.actors){
+      actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);
+      if(actor.id!==this.state.playerId)actor.invulnerableUntil=shiftDeadline(actor.invulnerableUntil,worldOffset);
+      actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);
+      actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);
+      if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);
+      if(actor.id!==this.state.playerId&&actor.actionEndsTick>0){
+        actor.actionStartedTick+=worldOffset;
+        actor.actionEndsTick+=worldOffset;
+      }
+    }
     // Rebase the selector timestamp and its virtual-clock offset together.
     this.state.lastAttackTick=shiftDeadline(checkpoint.lastAttackTick,worldOffset);
     this.state.attackSelectionWorldOffset=(checkpoint.attackSelectionWorldOffset??0)+worldOffset;
@@ -504,12 +515,17 @@ export class CombatEngine {
       if(actor.downed)continue;
       if(actor.possessed&&actor.possessedUntil>0&&this.state.worldTick>=actor.possessedUntil)this.breakPossession(actor,true);
       const actionDuration=Math.max(1,actor.actionEndsTick-actor.actionStartedTick);
-      if(actor.actionEndsTick>0)actor.normalizedTime=Math.min(1,actor.normalizedTime+worldScale/actionDuration);
+      if(actor.actionEndsTick>0){
+        // Aren's persisted timestamps are authoritative, including the exact completion tick.
+        actor.normalizedTime=actor.id===this.state.playerId
+          ?Math.min(1,Math.max(0,(this.state.tick-actor.actionStartedTick)/actionDuration))
+          :Math.min(1,actor.normalizedTime+worldScale/actionDuration);
+      }
       if(actor.actionEndsTick>0&&actor.normalizedTime>=1){
         actor.phase='idle';
         actor.actionId=ACTION_CLIPS.idle!;
         actor.normalizedTime=0;
-        actor.actionStartedTick=this.state.worldTick;
+        actor.actionStartedTick=actor.id===this.state.playerId?this.state.tick:this.state.worldTick;
         actor.actionEndsTick=0;
       }
     }
@@ -563,8 +579,8 @@ export class CombatEngine {
       this.state.actionRecoveryUntil=this.state.actionUntil;
       this.state.actionCancelable=true;
       player.actionId='aren-charged-heavy-charge' as ActionId;
-      player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;
-      player.actionEndsTick=this.state.worldTick+(this.state.actionUntil-this.state.tick);
+      player.actionStartedTick=this.state.tick;player.normalizedTime=0;
+      player.actionEndsTick=this.state.actionUntil;
       player.phase='anticipation';
       this.emit('cue','Charged Heavy: release Heavy to strike; Dodge cancels the charge.',player.id,this.state.targetId,'charged_heavy');
       return;
@@ -602,7 +618,7 @@ export class CombatEngine {
       const moving=Math.hypot(dx,dz)>.05;
       if(moving){
         player.actionId=(target?'aren-strafe':'aren-walk') as ActionId;
-        player.phase='idle';player.actionStartedTick=this.state.worldTick;player.actionEndsTick=0;player.normalizedTime=0;
+        player.phase='idle';player.actionStartedTick=this.state.tick;player.actionEndsTick=0;player.normalizedTime=0;
       }else if(player.actionEndsTick===0||player.normalizedTime>=1){
         player.actionId=ACTION_CLIPS.idle!;player.phase='idle';
       }
@@ -631,7 +647,7 @@ export class CombatEngine {
     const attackId=('aren-'+action) as AttackId;
     const target=object.objectId as ActorId;
     this.state.targetId=target;this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;player.actionEndsTick=this.state.worldTick+duration+18;player.phase='anticipation';player.targetId=target;
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.tick+duration+18;player.phase='anticipation';player.targetId=target;
     const cue='Aren draws the staff back toward the loose snare.';
     const id=this.state.runId+':'+this.state.tick+':'+interaction.id+':'+action;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(object.position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -657,7 +673,7 @@ export class CombatEngine {
     const attackId=`aren-${action}` as AttackId;
     this.state.targetId=interaction.targetId as ActorId;
     this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;player.actionEndsTick=this.state.worldTick+duration+18;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.tick+duration+18;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
     const cue=action==='cleanse'?'Root light gathers around the world mechanism.':'Aren draws back the staff for a heavy strike.';
     const id=`${this.state.runId}:${this.state.tick}:${interaction.id}:${action}`;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -681,9 +697,9 @@ export class CombatEngine {
     this.state.bufferedAction=undefined;
     player.position=moved;
     player.velocity=scale(sub(moved,start),1/(profile.durationTicks*FIXED_STEP_SECONDS));
-    player.actionStartedTick=this.state.worldTick;
+    player.actionStartedTick=this.state.tick;
     player.normalizedTime=0;
-    player.actionEndsTick=this.state.worldTick+profile.durationTicks+profile.recoveryTicks;
+    player.actionEndsTick=this.state.tick+profile.durationTicks+profile.recoveryTicks;
     player.actionId=(ACTION_CLIPS[profile.id]??ACTION_CLIPS.stumble_recovery!) as ActionId;
     player.phase='start';
     player.invulnerableUntil=this.state.tick+profile.iframes;
@@ -762,8 +778,8 @@ export class CombatEngine {
     this.state.actionRecoveryUntil=this.state.actionUntil+18;
     this.state.actionCancelable=false;
     player.actionId=(ACTION_CLIPS[action]??`aren-${action}`) as ActionId;
-    player.actionStartedTick=this.state.worldTick;player.normalizedTime=0;
-    player.actionEndsTick=this.state.worldTick+duration+18;
+    player.actionStartedTick=this.state.tick;player.normalizedTime=0;
+    player.actionEndsTick=this.state.tick+duration+18;
     player.phase='anticipation';
     player.targetId=target.id;
     player.facing=facingFrom(sub(target.position,player.position));
@@ -1307,7 +1323,7 @@ export class CombatEngine {
 export function createEngineState():EngineState{
   const player=makeActor('aren','human','player',vec(0,0,0),false,false,100);
   return {
-    schemaVersion:2,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
+    schemaVersion:3,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
     actors:[player],playerId:'aren',player:{vitality:100,maxVitality:100,instinct:0,ferocity:100,corruption:0,dodgeCharges:2,maxDodgeCharges:2,nextDodgeRechargeTick:0},
     movableObjects:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,0,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
@@ -1319,14 +1335,54 @@ export function createEngineState():EngineState{
 export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   const base=createEngineState();const state={...base,...structuredClone(seed)} as EngineState;
   const legacy=seed.schemaVersion===1||seed.worldTick===undefined;
-  state.schemaVersion=2;
+  // Versionless states with an explicit world clock follow the v2 timestamp convention.
+  const legacyPlayerActionClock=seed.worldTick!==undefined&&(seed.schemaVersion===2||seed.schemaVersion===undefined);
+  state.schemaVersion=3;
   state.worldTick=legacy?seed.tick??base.tick:seed.worldTick??base.worldTick;
   state.timePolicy=legacy?'normal':seed.timePolicy??base.timePolicy;
   state.slowMotionRemainingTicks=legacy?0:seed.slowMotionRemainingTicks??base.slowMotionRemainingTicks;
-  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;state.attackSelectionWorldOffset=legacy?0:seed.attackSelectionWorldOffset??0;
+  state.slowMotionElapsedTicks=legacy?0:seed.slowMotionElapsedTicks??0;
+  state.attackSelectionWorldOffset=legacy?0:seed.attackSelectionWorldOffset??0;
   if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
   state.worldTimeScale=state.timePolicy==='paused'?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
-  state.actors=(seed.actors??base.actors).map(cloneActor);state.player={...base.player,...seed.player};state.arena={...base.arena,...seed.arena};state.hazards=seed.hazards??[];state.telegraphs=seed.telegraphs??[];state.events=seed.events??[];state.worldEvents=seed.worldEvents??[];state.worldFacts=seed.worldFacts??{};state.seenWorldKeys=seed.seenWorldKeys??[];state.perfectDodgeKeys=seed.perfectDodgeKeys??[];state.phaseActionFlags=seed.phaseActionFlags??[];state.presentationCues=(seed.presentationCues ?? []).map(cue => ({ ...cue, worldTick: cue.worldTick ?? (cue.worldTimeSeconds === undefined ? cue.tick : cue.worldTimeSeconds * 60), worldTimeSeconds: cue.worldTimeSeconds ?? cue.tick / 60 }));state.movableObjects=(seed.movableObjects??[]).map(object=>{const migrated={...object};if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;return migrated;});if(state.checkpoint){state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;}return state;
+  state.actors=(seed.actors??base.actors).map(cloneActor);
+  state.player={...base.player,...seed.player};
+  state.arena={...base.arena,...seed.arena};
+  state.hazards=seed.hazards??[];
+  state.telegraphs=seed.telegraphs??[];
+  state.events=seed.events??[];
+  state.worldEvents=seed.worldEvents??[];
+  state.worldFacts=seed.worldFacts??{};
+  state.seenWorldKeys=seed.seenWorldKeys??[];
+  state.perfectDodgeKeys=seed.perfectDodgeKeys??[];
+  state.phaseActionFlags=seed.phaseActionFlags??[];
+  state.presentationCues=(seed.presentationCues??[]).map(cue=>({...cue,worldTick:cue.worldTick??(cue.worldTimeSeconds===undefined?cue.tick:cue.worldTimeSeconds*60),worldTimeSeconds:cue.worldTimeSeconds??cue.tick/60}));
+  state.movableObjects=(seed.movableObjects??[]).map(object=>{
+    const migrated={...object};
+    if(migrated.startedAtWorldTick===undefined&&'startedAtTick' in migrated)migrated.startedAtWorldTick=(migrated as typeof migrated & {startedAtTick:number}).startedAtTick;
+    delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;
+    return migrated;
+  });
+  if(state.checkpoint){
+    state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;
+    state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;
+    state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;
+  }
+  if(legacyPlayerActionClock){
+    migrateLegacyPlayerActionClock(state.actors,state.playerId,state.tick);
+    if(state.checkpoint)migrateLegacyPlayerActionClock(state.checkpoint.actors,state.playerId,state.checkpoint.tick);
+  }
+  return state;
+}
+function migrateLegacyPlayerActionClock(actors:readonly CombatActor[],playerId:ActorId,simulationTick:number):void{
+  for(const actor of actors){
+    if(actor.id!==playerId||actor.actionEndsTick<=0)continue;
+    // Preserve the saved sample, not elapsed world time: v2 normalizedTime was accumulated independently.
+    const duration=Math.max(1,actor.actionEndsTick-actor.actionStartedTick);
+    const progress=Number.isFinite(actor.normalizedTime)?Math.min(1,Math.max(0,actor.normalizedTime)):0;
+    actor.actionStartedTick=simulationTick-progress*duration;
+    actor.actionEndsTick=actor.actionStartedTick+duration;
+  }
 }
 export function makeActor(id:ActorId,species:string,allegiance:CombatActor['allegiance'],position:Vec3,large:boolean,aerial:boolean,vitality:number,archetypeId:ActorId=id):CombatActor{
   const idle=ACTION_CLIPS[`${archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!;
