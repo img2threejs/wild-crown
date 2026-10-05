@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createCheckpoint, createNewRun } from "../../packages/campaign/src/index.js";
+import { createCheckpoint, createNewRun, recordLeaderDominion } from "../../packages/campaign/src/index.js";
+import { REGIONS } from "../../src/content/world.js";
 import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope } from "../../src/game/storage/SaveRepository.js";
 
 function envelope(): GameSaveEnvelope {
@@ -52,4 +53,131 @@ test("missing IndexedDB is explicit and repeated opens remain recoverable errors
   await assert.rejects(repository.init(), code("unavailable"));
   await assert.rejects(repository.init(), code("unavailable"));
   assert.deepEqual(await repository.recovery(), { slots: [], exportAvailable: false });
+});
+
+test("same-run older import preserves current Dominion while restoring the selected world", async () => {
+  const input = envelope();
+  const current = recordLeaderDominion(input.campaign!, "koro");
+  current.world.fragments.push("heartroot-sky");
+  const before = structuredClone(input);
+  const imported = await unavailable().importSave(input, current);
+  assert.deepEqual(imported.envelope.campaign!.dominionHistory.map(event => event.leaderId), ["koro"]);
+  assert.deepEqual(imported.envelope.campaign!.world.fragments, []);
+  assert.deepEqual(current.world.fragments, ["heartroot-sky"]);
+  // Validation must not mutate caller-owned export data.
+  assert.deepEqual(input, before);
+});
+
+test("cross-run import adopts incoming identity/history without unrelated current Dominion", async () => {
+  const input = envelope();
+  input.campaign = recordLeaderDominion(input.campaign!, "koro");
+  const unrelated = recordLeaderDominion(createNewRun("unrelated-journey"), "asha");
+  const imported = await unavailable().importSave(input, unrelated);
+  assert.equal(imported.envelope.runId, input.runId);
+  assert.deepEqual(imported.envelope.campaign!.dominionHistory.map(event => event.leaderId), ["koro"]);
+  assert.deepEqual(unrelated.dominionHistory.map(event => event.leaderId), ["asha"]);
+});
+
+test("replay exports are rejected without replacing campaign state", async () => {
+  const input = envelope();
+  Object.assign(input, { kind: "showcase-replay" });
+  const current = recordLeaderDominion(createNewRun(input.runId), "koro");
+  const before = structuredClone(current);
+  await assert.rejects(unavailable().importSave(input, current), code("replay-isolated"));
+  assert.deepEqual(current, before);
+});
+
+test("safe spawn must match the saved region, authored entry/node and camera", async () => {
+  const input = envelope();
+  const region = REGIONS.find(item => item.id === "greenwake")!;
+  const node = region.navigation.nodes[0]!;
+  input.progress = {
+    chapter: 0, regionId: "greenwake", activeQuestIds: ["prologue"],
+    completedQuestIds: [], completedObjectiveIds: [], trackedObjectiveId: null,
+    party: { scout: "vara" }, choices: {}, worldFacts: {}, ending: null, eventLog: [],
+    safeSpawn: { regionId: "greenwake", position: { ...node.position }, routeId: node.id, cameraAnchorId: region.cameraAnchors[0]!.id },
+  };
+  const repository = unavailable();
+  assert.deepEqual((await repository.importSave(input)).envelope.progress!.safeSpawn, input.progress.safeSpawn);
+  for (const mutate of [
+    (value: GameSaveEnvelope) => { value.progress!.safeSpawn!.regionId = "heartroot-hollow"; },
+    (value: GameSaveEnvelope) => { value.progress!.safeSpawn!.routeId = "unwritten-route"; },
+    (value: GameSaveEnvelope) => { value.progress!.safeSpawn!.cameraAnchorId = "unwritten-camera"; },
+    (value: GameSaveEnvelope) => { value.progress!.safeSpawn!.position.x += 1; },
+  ]) {
+    const invalid = structuredClone(input);
+    mutate(invalid);
+    await assert.rejects(repository.importSave(invalid), code("corrupt"));
+  }
+});
+
+function choiceEnvelope(): GameSaveEnvelope {
+  const input = envelope();
+  input.progress = {
+    chapter: 3, regionId: "moonpine-ridge", activeQuestIds: ["the-alpha-below"],
+    completedQuestIds: [], completedObjectiveIds: [], trackedObjectiveId: null,
+    party: { scout: "vara" }, choices: { "pack-leadership": "ruun" },
+    worldFacts: { chapter: 3 }, ending: null,
+    eventLog: [{ type: "choice", eventId: "historic-choice", idempotencyKey: "historic:choice", choiceId: "pack-leadership", optionId: "ruun", leaderId: "ruun", dominion: false }],
+  };
+  return input;
+}
+
+for (const field of ["eventId", "idempotencyKey", "choiceId", "optionId"] as const) {
+  for (const [name, invalid] of [["missing", undefined], ["null", null], ["number", 7], ["array", []], ["empty", ""], ["whitespace", "  "]] as const) {
+    test(`persisted choice ${field} ${name} rejects import and direct commit before touching storage`, async () => {
+      const input = choiceEnvelope();
+      const event = input.progress!.eventLog[0] as Record<string, unknown>;
+      if (invalid === undefined) delete event[field];
+      else event[field] = invalid;
+      const before = structuredClone(input);
+      const repository = unavailable();
+      await assert.rejects(repository.importSave(input), code("corrupt"));
+      await assert.rejects(repository.commitImported("existing-good-slot", "Must preserve", input, 3, "moonpine-ridge"), code("corrupt"));
+      assert.deepEqual(input, before);
+    });
+  }
+}
+
+test("valid historical choice retains optional metadata without granting history from it", async () => {
+  const input = choiceEnvelope();
+  const event = input.progress!.eventLog[0] as Record<string, unknown>;
+  event.leaderId = "solkar";
+  event.dominion = true;
+  const imported = await unavailable().importSave(input);
+  assert.deepEqual(imported.envelope.progress!.eventLog, input.progress!.eventLog);
+  assert.deepEqual(imported.envelope.campaign!.dominionHistory, []);
+  assert.deepEqual(imported.envelope.campaign!.world, input.campaign!.world);
+  delete event.leaderId;
+  delete event.dominion;
+  assert.deepEqual((await unavailable().importSave(input)).envelope.progress!.eventLog, input.progress!.eventLog);
+});
+
+for (const [field, invalidValues] of [
+  ["leaderId", [null, 7, [], false]],
+  ["dominion", [null, "true", [], 7]],
+] as const) {
+  test(`provided historical ${field} metadata must retain its actual contract type`, async () => {
+    for (const invalid of invalidValues) {
+      const input = choiceEnvelope();
+      (input.progress!.eventLog[0] as Record<string, unknown>)[field] = invalid;
+      await assert.rejects(unavailable().importSave(input), code("corrupt"));
+      await assert.rejects(unavailable().commitImported("existing-good-slot", "Must preserve", input, 3, "moonpine-ridge"), code("corrupt"));
+    }
+  });
+}
+
+test("checkpoint save rejects corrupt campaign state before opening storage", async () => {
+  const input = envelope();
+  Object.assign(input.campaign!, { world: {} });
+  await assert.rejects(unavailable().saveCheckpoint("existing", "Must preserve", input.checkpoint!, input.campaign!, 0, "greenwake", []), code("corrupt"));
+});
+
+test("slot writes reject invalid legacy or mismatched progress location before opening storage", async () => {
+  const input = envelope();
+  await assert.rejects(unavailable().saveCheckpoint("existing", "Must preserve", input.checkpoint!, input.campaign!, 99, "greenwake", []), code("corrupt"));
+  await assert.rejects(unavailable().commitImported("existing", "Must preserve", input, -1, "greenwake"), code("corrupt"));
+  const withProgress = choiceEnvelope();
+  await assert.rejects(unavailable().commitImported("existing", "Must preserve", withProgress, 0, "greenwake"), code("corrupt"));
+  await assert.rejects(unavailable().saveCheckpoint("existing", "Must preserve", withProgress.checkpoint!, withProgress.campaign!, 0, "greenwake", [], "campaign", withProgress.progress), code("corrupt"));
 });

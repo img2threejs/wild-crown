@@ -14,6 +14,7 @@ import {
   type GameSettings,
   type InputBindingMaps,
   type RegionId,
+  type WorldEvent,
 } from "../contracts.js";
 
 export const SAVE_DATABASE_NAME = "wild-crown-saves";
@@ -111,6 +112,18 @@ const isRegionId = (value: unknown): value is RegionId =>
   typeof value === "string" && REGIONS.some((region) => region.id === value);
 const isStringMap = (value: unknown): value is Record<string, string> =>
   isRecord(value) && Object.values(value).every((entry) => typeof entry === "string");
+
+/** Structural boundary for persisted choice events, not a new choice authority. */
+export function isValidChoiceEvent(value: unknown): value is Extract<WorldEvent, { type: "choice" }> {
+  return isRecord(value) &&
+    value.type === "choice" &&
+    typeof value.eventId === "string" && value.eventId.trim().length > 0 &&
+    typeof value.idempotencyKey === "string" && value.idempotencyKey.trim().length > 0 &&
+    typeof value.choiceId === "string" && value.choiceId.trim().length > 0 &&
+    typeof value.optionId === "string" && value.optionId.trim().length > 0 &&
+    (value.leaderId === undefined || typeof value.leaderId === "string") &&
+    (value.dominion === undefined || typeof value.dominion === "boolean");
+}
 
 function isInputBindingMaps(value: unknown): value is InputBindingMaps {
   return (
@@ -225,16 +238,26 @@ function validProgress(value: unknown): value is CampaignProgressRecord {
   const facts = value.worldFacts;
   const party = value.party;
   const safeSpawn = value.safeSpawn;
+  const region = REGIONS.find((item) => item.id === value.regionId);
+  const spawnRoute = isRecord(safeSpawn) && region
+    ? region.entrances.find((item) => item.id === safeSpawn.routeId)
+    : undefined;
+  const spawnNode = isRecord(safeSpawn) && region
+    ? region.navigation.nodes.find((item) => item.id === safeSpawn.routeId)
+    : undefined;
+  const authoredPosition = spawnRoute?.from ?? spawnNode?.position;
+  const spawnRequirement = spawnRoute?.unlockFact ?? spawnNode?.requirement;
   const validSafeSpawn =
     safeSpawn === undefined ||
     (isRecord(safeSpawn) &&
-      typeof safeSpawn.regionId === "string" &&
-      typeof safeSpawn.routeId === "string" &&
-      typeof safeSpawn.cameraAnchorId === "string" &&
+      safeSpawn.regionId === value.regionId &&
+      region?.cameraAnchors.some((anchor) => anchor.id === safeSpawn.cameraAnchorId) === true &&
       isRecord(safeSpawn.position) &&
-      [safeSpawn.position.x, safeSpawn.position.y, safeSpawn.position.z].every(
-        Number.isFinite,
-      ));
+      authoredPosition !== undefined &&
+      safeSpawn.position.x === authoredPosition.x &&
+      safeSpawn.position.y === authoredPosition.y &&
+      safeSpawn.position.z === authoredPosition.z &&
+      (!spawnRequirement || (isRecord(facts) && facts[spawnRequirement] === true)));
   return (
     typeof value.chapter === "number" &&
     Number.isInteger(value.chapter) &&
@@ -268,7 +291,8 @@ function validProgress(value: unknown): value is CampaignProgressRecord {
       (entry) =>
         isRecord(entry) &&
         typeof entry.type === "string" &&
-        typeof entry.idempotencyKey === "string",
+        typeof entry.idempotencyKey === "string" &&
+        (entry.type !== "choice" || isValidChoiceEvent(entry)),
     ) &&
     (value.eventKeys === undefined || stringArray(value.eventKeys)) &&
     (value.revision === undefined || Number.isInteger(value.revision)) &&
@@ -424,7 +448,6 @@ export class SaveRepository {
     kind: SaveKind = "campaign",
     progress: CampaignProgressRecord | null = null,
   ): Promise<SaveSlotSummary> {
-    await this.init();
     if (kind !== "campaign") {
       throw new SaveRepositoryError(
         "replay-isolated",
@@ -496,6 +519,15 @@ export class SaveRepository {
         "invalid-schema",
         "Slot ID must not be empty.",
       );
+    const validation = this.validateEnvelope(envelope);
+    if (validation.accepted === false) {
+      throw this.validationError(validation.reason, await this.recovery());
+    }
+    if (!Number.isInteger(chapter) || chapter < 0 || chapter > 8 || !isRegionId(regionId) ||
+      (envelope.progress && (envelope.progress.chapter !== chapter || envelope.progress.regionId !== regionId))) {
+      throw new SaveRepositoryError("corrupt", "Save slot location must match its campaign progress.");
+    }
+    await this.init();
     const updatedAt = Date.now();
     const summary: SaveSlotSummary = {
       slotId,
@@ -517,6 +549,9 @@ export class SaveRepository {
       const previous = (await requestValue(runs.get(envelope.runId))) as
         | RunLedgerRecord
         | undefined;
+      if (previous !== undefined && (!validLedger(previous) || previous.runId !== envelope.runId || previous.kind !== "campaign")) {
+        throw new SaveRepositoryError("corrupt", "The run ledger is malformed; no stored data was changed.");
+      }
       const ledger: RunLedgerRecord = {
         runId: envelope.runId,
         kind: "campaign",
@@ -554,6 +589,13 @@ export class SaveRepository {
     slotId: string,
     currentRunId?: string,
   ): Promise<GameSaveEnvelope> {
+    return (await this.loadRecord(slotId, currentRunId)).envelope;
+  }
+
+  protected async loadRecord(
+    slotId: string,
+    currentRunId?: string,
+  ): Promise<SaveSlotRecord> {
     await this.init();
     const transaction = this.database().transaction(
       ["slots", "runs"],
@@ -584,11 +626,20 @@ export class SaveRepository {
         "The selected slot belongs to a different journey.",
       );
     }
+    if (slot.slotId !== slotId || typeof slot.label !== "string" ||
+      typeof slot.runId !== "string" || !slot.runId.trim() ||
+      slot.kind !== "campaign" || !Number.isFinite(slot.updatedAt) ||
+      !Number.isInteger(slot.chapter) || slot.chapter < 0 || slot.chapter > 8 ||
+      !isRegionId(slot.regionId)) {
+      await done;
+      throw new SaveRepositoryError("corrupt", "Save slot metadata is malformed.", await this.recovery());
+    }
     const rawLedger = await requestValue(
       transaction.objectStore("runs").get(slot.runId),
     );
     await done;
-    if (rawLedger !== undefined && !validLedger(rawLedger)) {
+    if (rawLedger !== undefined &&
+      (!validLedger(rawLedger) || rawLedger.runId !== slot.runId || rawLedger.kind !== "campaign")) {
       throw new SaveRepositoryError(
         "corrupt",
         "The run ledger is malformed; no stored data was changed.",
@@ -598,6 +649,13 @@ export class SaveRepository {
     const validation = this.validateEnvelope(slot.envelope);
     if (validation.accepted === false) {
       throw this.validationError(validation.reason, await this.recovery());
+    }
+    if (slot.envelope.runId !== slot.runId) {
+      throw new SaveRepositoryError("run-mismatch", "The slot and envelope journey IDs must match.", await this.recovery());
+    }
+    if (slot.envelope.progress &&
+      (slot.envelope.progress.chapter !== slot.chapter || slot.envelope.progress.regionId !== slot.regionId)) {
+      throw new SaveRepositoryError("corrupt", "Save slot location does not match its campaign progress.", await this.recovery());
     }
     if (!slot.envelope.campaign) {
       throw new SaveRepositoryError(
@@ -612,7 +670,7 @@ export class SaveRepository {
       slot.envelope.campaign.dominionHistory,
     );
     // Objective/idempotency state is branch-local and stays with the selected checkpoint.
-    return clone(slot.envelope);
+    return clone(slot);
   }
   async loadCampaign(
     slotId: string,
@@ -625,11 +683,10 @@ export class SaveRepository {
     chapter: number;
     regionId: RegionId;
   }> {
-    const envelope = await this.loadSlot(slotId, current.runId);
-    const summary = (await this.listSlots()).find((slot) => slot.slotId === slotId);
-    if (!summary) {
-      throw new SaveRepositoryError("corrupt", "Save slot summary is missing.", await this.recovery());
-    }
+    // Ordinary slot selection adopts the saved journey. Run-scoped checkpoint
+    // restoration remains strict in importCheckpoint and loadSlot(currentRunId).
+    const slot = await this.loadRecord(slotId);
+    const envelope = slot.envelope;
     if (!envelope.checkpoint || !envelope.campaign) {
       throw new SaveRepositoryError(
         "corrupt",
@@ -637,11 +694,12 @@ export class SaveRepository {
         await this.recovery(),
       );
     }
+    const sameRun = current.runId === envelope.runId;
     const imported = importCheckpoint(
       {
-        ...current,
+        ...envelope.campaign,
         dominionHistory: mergeDominion(
-          current.dominionHistory,
+          sameRun ? current.dominionHistory : [],
           envelope.campaign.dominionHistory,
         ),
       },
@@ -663,8 +721,8 @@ export class SaveRepository {
       },
       eventKeys: [...envelope.eventKeys],
       progress: envelope.progress ? clone(envelope.progress) : null,
-      chapter: summary.chapter,
-      regionId: summary.regionId,
+      chapter: slot.chapter,
+      regionId: slot.regionId,
     };
   }
 
@@ -787,16 +845,19 @@ export class SaveRepository {
       checkpoint,
     );
     if (result.accepted === false) throw this.importError(result);
-    envelope.campaign = {
-      ...campaign,
-      world: result.state.world,
-      dominionHistory: mergeDominion(
-        current.dominionHistory,
-        campaign.dominionHistory,
-      ),
+    const importedEnvelope: GameSaveEnvelope = {
+      ...envelope,
+      campaign: {
+        ...campaign,
+        world: result.state.world,
+        dominionHistory: mergeDominion(
+          current.dominionHistory,
+          campaign.dominionHistory,
+        ),
+      },
+      eventKeys: [...new Set(envelope.eventKeys)],
     };
-    envelope.eventKeys = [...new Set(envelope.eventKeys)];
-    return { envelope: clone(envelope), result };
+    return { envelope: clone(importedEnvelope), result };
   }
 
   async commitImported(
@@ -807,7 +868,6 @@ export class SaveRepository {
     regionId: RegionId,
   ): Promise<SaveSlotSummary> {
     const validated = await this.importSave(envelope);
-    await this.init();
     return this.persist(slotId, label, validated.envelope, chapter, regionId);
   }
 
@@ -826,7 +886,8 @@ export class SaveRepository {
       const current = (await requestValue(store.get(runId))) as
         | RunLedgerRecord
         | undefined;
-      if (current && !validLedger(current))
+      if (current !== undefined &&
+        (!validLedger(current) || current.runId !== runId || current.kind !== "campaign"))
         throw new SaveRepositoryError(
           "corrupt",
           "The run ledger is malformed.",

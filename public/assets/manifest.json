@@ -6,6 +6,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": "6239212164ff7e2cc96e79e83d1a23f8ffa3eda393392fa584be4147704cc5f3",
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -82,6 +83,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-aren",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "aren"
@@ -93,6 +103,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -107,6 +118,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-yara",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "yara"
@@ -118,6 +138,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "hornbill",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -132,6 +153,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-vara",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "vara"
@@ -143,6 +173,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "macaque",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -163,6 +194,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-koro",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "koro"
@@ -174,6 +214,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": "eb65daea83c6d5a8a43e80005361928c324c7789b37eac698df40a12858e150e",
+    "species": "tiger",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -196,6 +237,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-asha",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "asha"
@@ -207,6 +257,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "tiger-cub",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -221,6 +272,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-tali",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "tali"
@@ -232,6 +292,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "wolf",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -252,6 +313,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-ruun",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "ruun"
@@ -263,6 +333,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "wolf",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -277,6 +348,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-luma",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "luma"
@@ -288,6 +368,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "wolf",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -302,6 +383,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-sable",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "sable"
@@ -313,6 +403,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "panther",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -327,6 +418,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-nyra",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "nyra"
@@ -338,6 +438,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "lion",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -358,6 +459,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-solkar",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "solkar"
@@ -369,6 +479,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "crocodile",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -389,6 +500,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-ghor",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "ghor"
@@ -400,6 +520,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -414,6 +535,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-marek",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "marek"
@@ -425,6 +555,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -443,6 +574,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-orun",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "orun",
@@ -457,6 +597,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -473,6 +614,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-poacher-scout",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "poacher-scout"
@@ -484,6 +634,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "human",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -500,6 +651,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-poacher-hunter",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "poacher-hunter"
@@ -511,6 +671,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "boar",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -525,6 +686,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-corrupted-boar",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "corrupted-boar"
@@ -536,6 +706,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "antelope",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -550,6 +721,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-council-envoy",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "council-envoy"
@@ -571,6 +751,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-greenwake-houses",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -591,6 +780,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-erya-edge-tree",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -611,6 +809,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-greenwake-rope-bridge",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -631,6 +838,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-root-arch",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -651,6 +867,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-hunter-cage",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -671,6 +896,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-heartroot-trunk",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -691,6 +925,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-grove-platform",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -711,6 +954,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-refuge-shelter",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -731,6 +983,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-training-post",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -751,6 +1012,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-water-basin",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -771,6 +1041,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-rainforest-canopy-tree",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -791,6 +1070,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-vine-bridge",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -811,6 +1099,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-ancient-canopy-shrine",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -831,6 +1128,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-heartroot-branch",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -851,6 +1157,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-monkey-rope-platform",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -871,6 +1186,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-bamboo-cluster",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -891,6 +1215,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-hunter-camp-structure",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -911,6 +1244,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-tiger-cage",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -931,6 +1273,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-broken-snare",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -951,6 +1302,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-bamboo-footbridge",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -971,6 +1331,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-moonpine-tree",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -991,6 +1360,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-buried-wolf-temple",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1011,6 +1389,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-temple-chain-anchor",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1031,6 +1418,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-snow-ridge-rock",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1051,6 +1447,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-moonpine-log-bridge",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1071,6 +1476,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-mistveil-reed-cluster",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1091,6 +1505,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-hunter-extraction-rig",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1111,6 +1534,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-mire-bank-rock",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1131,6 +1563,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-root-cavern-mouth",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1151,6 +1592,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-black-sap-filter-drum",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1171,6 +1621,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-sunmane-stone-terrace",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1191,6 +1650,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-migration-gate",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1211,6 +1679,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-water-allotment-gate",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1231,6 +1708,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-plains-stone-arch",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1251,6 +1737,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-savanna-acacia",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1271,6 +1766,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-map-table",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1291,6 +1795,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-heartroot-fragment-stone",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1311,6 +1824,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-heartroot-root-column",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1331,6 +1853,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-six-fragment-shrine",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1351,6 +1882,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-root-crown-altar",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1371,6 +1911,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-hollow-cavern-rock",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1391,6 +1940,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#prop-root-tether-anchor",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-applicable",
+      "G3": "not-applicable",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-applicable"
+    },
     "evidenceStatus": "blocked",
     "evidence": null
   },
@@ -1401,6 +1959,7 @@
     "nativeGlb": null,
     "runtimeUrl": null,
     "sourceInputHash": null,
+    "species": "crowned-beast-form",
     "sourceHash": null,
     "outputHash": null,
     "lodIds": [],
@@ -1429,6 +1988,15 @@
     "sockets": [],
     "collisionProxyId": null,
     "provenance": "asset-source/manifest.json#actor-orun-crowned-beast",
+    "providerTaskId": null,
+    "gates": {
+      "G1": "not-started",
+      "G3": "not-started",
+      "G6": "not-started",
+      "G10": "not-started",
+      "G11": "not-started",
+      "G12": "not-started"
+    },
     "evidenceStatus": "blocked",
     "evidence": null,
     "actorId": "orun",

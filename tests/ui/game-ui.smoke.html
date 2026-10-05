@@ -25,6 +25,7 @@
     const target = { id: 'hunter-melee-west', weakPointExposed: true };
     const viewModel = (exposed) => ({
       screen: 'game',
+      canOpenWorldPanels: true,
       loading: { active: false, label: '', progress: null },
       error: null,
       trackedObjectiveId: null,
