@@ -1,4 +1,4 @@
-import { createCheckpoint, createNewRun, recordLeaderDominion } from "../../packages/campaign/src/index.js";
+import { createCheckpoint, createNewRun, REGION_IDS, recordLeaderDominion } from "../../packages/campaign/src/index.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
 import { DEFAULT_GAME_SETTINGS, DEFAULT_GAMEPAD_BINDINGS, DEFAULT_KEYBOARD_BINDINGS } from "../../src/game/contracts.js";
 import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope } from "../../src/game/storage/SaveRepository.js";
@@ -384,6 +384,102 @@ async function run(): Promise<void> {
       await rejected(repository.appendRunLedger(badRun.runId, [], ["must-not-append"]), "corrupt");
       equal(await rawRecords(), before, "malformed ledger recovery changed stored data");
       equal(await repository.exportRawSlot("malformed-ledger-slot"), raw, "raw recovery changed old slot");
+    });
+
+    await check("noncanonical restoration state survives native save/close/reopen/load and stale canonical facts are normalized", async () => {
+      const slotId = "restoration-journey";
+      const runId = "restoration-run";
+      const director = new CampaignDirector({ saves: repository, runId });
+      await director.processEvent({
+        type: "restoration",
+        eventId: "greenwake-restored",
+        idempotencyKey: "restoration:greenwake:restored",
+        regionId: "greenwake",
+        state: "restored",
+        causeId: "greenwake-bond",
+      });
+      await director.processEvent({
+        type: "restoration",
+        eventId: "the-grove-partial",
+        idempotencyKey: "restoration:the-grove:partial",
+        regionId: "the-grove",
+        state: "partial",
+        causeId: "grove-partial",
+      });
+      const canonical = director.snapshot();
+      await director.save(slotId, "Restoration journey");
+      const expectedEnvelope = await repository.exportRawSlot(slotId);
+      repository.close();
+      const fresh = new CampaignDirector({ saves: repository, runId });
+      const loaded = await fresh.load(slotId);
+      assert(loaded.runId === runId, "restoration run id was not adopted");
+      equal(loaded.worldFacts["restoration:greenwake:state"], "restored",
+        "noncanonical restored state did not survive load");
+      equal(loaded.worldFacts["restoration:greenwake:restored"], true,
+        "noncanonical restored boolean did not survive load");
+      equal(loaded.worldFacts["restoration:the-grove:state"], "partial",
+        "noncanonical partial state did not survive load");
+      equal(loaded.worldFacts["restoration:the-grove:partial"], true,
+        "noncanonical partial boolean did not survive load");
+      for (const region of REGION_IDS) {
+        equal(loaded.worldFacts[`restoration:${region}:state`],
+          loaded.campaign.world.regions[region],
+          `${region} state was not derived from canonical world`);
+      }
+      const importedEnvelope = await repository.exportSlot(slotId);
+      const envelopeJson = JSON.parse(importedEnvelope);
+      // Stale canonical boolean differs from canonical state to exercise normalization.
+      envelopeJson.progress.worldFacts["restoration:whispering-canopy:restored"] = false;
+      envelopeJson.progress.worldFacts.canopy_restored = false;
+      envelopeJson.campaign.world.regions["whispering-canopy"] = "restored";
+      // The world checkpoint is the authoritative source for adoption; mutate
+      // it in lockstep so the import path sees the canonical truth in BOTH
+      // record halves.
+      envelopeJson.checkpoint.world.regions["whispering-canopy"] = "restored";
+      const reimported = await fresh.importSave(JSON.stringify(envelopeJson), "normalized-restoration-slot", "Normalized restoration journey");
+      equal(reimported.worldFacts["restoration:greenwake:state"], canonical.worldFacts["restoration:greenwake:state"],
+        "import preserved noncanonical greenwake state");
+      equal(reimported.worldFacts["restoration:the-grove:state"], canonical.worldFacts["restoration:the-grove:state"],
+        "import preserved noncanonical grove state");
+      equal(reimported.worldFacts["restoration:whispering-canopy:state"], "restored",
+        "import normalized stale canonical boolean");
+      equal(reimported.worldFacts["restoration:whispering-canopy:restored"], true,
+        "import normalized restored boolean");
+      equal(reimported.worldFacts.canopy_restored, true,
+        "import normalized canonical exposed key");
+      equal(await repository.exportRawSlot(slotId), expectedEnvelope,
+        "import to a different slot mutated the original raw export");
+
+      // Legacy envelope missing the new local state key defaults to unvisited for that region.
+      const legacyEnvelope = JSON.parse(importedEnvelope);
+      delete legacyEnvelope.progress.worldFacts["restoration:greenwake:state"];
+      delete legacyEnvelope.progress.worldFacts["restoration:greenwake:partial"];
+      delete legacyEnvelope.progress.worldFacts["restoration:greenwake:restored"];
+      const legacyLoaded = await fresh.importSave(JSON.stringify(legacyEnvelope), "legacy-restoration-slot", "Legacy restoration envelope");
+      equal(legacyLoaded.worldFacts["restoration:greenwake:state"], "unvisited",
+        "legacy envelope without local state defaults to unvisited");
+      equal(legacyLoaded.worldFacts["restoration:greenwake:restored"], false,
+        "legacy envelope without local state clears restored boolean");
+      equal(legacyLoaded.worldFacts["restoration:the-grove:state"], canonical.worldFacts["restoration:the-grove:state"],
+        "legacy envelope keeps other regions' local state");
+
+      // Legacy envelope carrying ONLY legacy noncanonical partial/restored booleans
+      // (no local state key) must migrate from the existing true booleans rather
+      // than reset to unvisited.
+      const booleanOnly = JSON.parse(importedEnvelope);
+      delete booleanOnly.progress.worldFacts["restoration:greenwake:state"];
+      delete booleanOnly.progress.worldFacts["restoration:the-grove:state"];
+      booleanOnly.progress.worldFacts["restoration:greenwake:restored"] = true;
+      booleanOnly.progress.worldFacts["restoration:the-grove:partial"] = true;
+      const booleanOnlyLoaded = await fresh.importSave(JSON.stringify(booleanOnly), "boolean-only-restoration-slot", "Boolean-only restoration envelope");
+      equal(booleanOnlyLoaded.worldFacts["restoration:greenwake:state"], "restored",
+        "legacy restored boolean migrated to local state");
+      equal(booleanOnlyLoaded.worldFacts["restoration:greenwake:restored"], true,
+        "Greenwake restored boolean stayed true after migration");
+      equal(booleanOnlyLoaded.worldFacts["restoration:the-grove:state"], "partial",
+        "legacy partial boolean migrated to local state");
+      equal(booleanOnlyLoaded.worldFacts["restoration:the-grove:partial"], true,
+        "Grove partial boolean stayed true after migration");
     });
 
     await check("synthetic QuotaExceededError after slot put aborts the real multi-store transaction", async () => {

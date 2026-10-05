@@ -131,6 +131,29 @@ async function run(): Promise<void> {
   const basisA = renderer.getInputBasis();
   const basisB = renderer.getInputBasis();
   assert(basisA.forward === basisB.forward && basisA.right === basisB.right, 'input basis reuses frame scratch vectors');
+
+  const groundMaterial = (walkway as Mesh & { material: { color: { clone: () => Color; equals: (other: Color) => boolean } } })?.material;
+  const originalColor = groundMaterial?.color.clone();
+  const baselineHex = originalColor ? originalColor.getHexString() : null;
+  renderer.syncWorldFacts({ 'restore:partial': true, 'restore:restored': false });
+  const partialWalkway = renderer.scene.getObjectByName('surface:raised-walkway') as Mesh | undefined;
+  const partialMaterial = (partialWalkway as Mesh & { material: { color: Color } })?.material;
+  assert(partialMaterial && partialMaterial.color.getHexString() !== baselineHex,
+    'partial restoration fact retints authored surface material');
+  const partialHex = partialMaterial?.color.getHexString();
+  renderer.syncWorldFacts({ 'restore:partial': false, 'restore:restored': true });
+  const restoredWalkway = renderer.scene.getObjectByName('surface:raised-walkway') as Mesh | undefined;
+  const restoredMaterial = (restoredWalkway as Mesh & { material: { color: Color } })?.material;
+  const restoredHex = restoredMaterial?.color.getHexString();
+  assert(restoredMaterial && restoredHex !== baselineHex,
+    'restored fact retints authored surface material');
+  assert(restoredHex !== partialHex,
+    'restored and partial tints use different authored tints');
+  renderer.syncWorldFacts({ 'restore:partial': false, 'restore:restored': false });
+  const neutralWalkway = renderer.scene.getObjectByName('surface:raised-walkway') as Mesh | undefined;
+  const neutralMaterial = (neutralWalkway as Mesh & { material: { color: Color } })?.material;
+  assert(neutralMaterial && neutralMaterial.color.getHexString() === baselineHex,
+    'cleared restoration facts restore authored surface color');
   const hunterManifest = { ...character, id: 'actor-poacher-hunter', actorId: 'poacher-hunter' } as AssetManifestEntry;
   const scoutManifest = { ...character, id: 'actor-poacher-scout', actorId: 'poacher-scout' } as AssetManifestEntry;
   const hunterPlacements: RegionEntityDefinition[] = [

@@ -33,10 +33,16 @@ import type {
 } from "../contracts.js";
 import {
   CAMPAIGN_CHOICES,
+  CANONICAL_RESTORATION_FACT_IDS,
   INTERACTIONS,
   QUESTS,
   REGIONS,
+  RESTORATION_PARTIAL_FACT_ID,
+  RESTORATION_RESTORED_FACT_ID,
+  RESTORATION_STATE_FACT_ID,
+  RESTORATION_RANK,
   emptyWorldFacts,
+  restorationStateFromFacts,
 } from "../../content/campaign.js";
 import { CHAPTERS } from "../../content/story.js";
 import {
@@ -350,6 +356,87 @@ function factsWithMovableObjectDefaults(
     }
   }
   return restored;
+}
+
+function factsWithRestorationDefaults(
+  facts: Readonly<Record<string, boolean | number | string>>,
+): Record<string, boolean | number | string> {
+  const restored = factsWithMovableObjectDefaults(facts);
+  for (const region of REGIONS) {
+    const stateId = RESTORATION_STATE_FACT_ID(region.id);
+    const partialId = RESTORATION_PARTIAL_FACT_ID(region.id);
+    const restoredId = RESTORATION_RESTORED_FACT_ID(region.id);
+    if (restored[stateId] === undefined) {
+      // Legacy local-state migration: when a noncanonical region lacks the
+      // explicit state fact, derive it from the persisted partial/restored
+      // booleans BEFORE defaulting to "unvisited". An explicit valid state
+      // fact already written by a newer envelope remains authoritative.
+      const isNoncanonical = !REGION_IDS.includes(region.id as CanonRegionId);
+      if (isNoncanonical && restored[restoredId] === true) {
+        restored[stateId] = "restored";
+      } else if (isNoncanonical && restored[partialId] === true) {
+        restored[stateId] = "partial";
+      } else {
+        restored[stateId] = "unvisited";
+      }
+    }
+    if (restored[partialId] === undefined) restored[partialId] = false;
+    if (restored[restoredId] === undefined) restored[restoredId] = false;
+  }
+  return restored;
+}
+
+/**
+ * Resolves the effective restoration state for any authored region. Canonical
+ * regions always come from `campaign.world.regions`; noncanonical regions read
+ * the persisted local fact (and fall back to booleans for legacy envelopes).
+ */
+function effectiveRestorationState(
+  campaign: CampaignState,
+  facts: Readonly<Record<string, boolean | number | string>>,
+  region: RegionId,
+): RestorationState {
+  if (REGION_IDS.includes(region as CanonRegionId)) {
+    return campaign.world.regions[region as CanonRegionId];
+  }
+  return restorationStateFromFacts(facts, region);
+}
+
+function applyRestorationBooleans(
+  facts: Record<string, boolean | number | string>,
+  region: RegionId,
+  state: RestorationState,
+): void {
+  facts[RESTORATION_STATE_FACT_ID(region)] = state;
+  facts[RESTORATION_PARTIAL_FACT_ID(region)] = state === "partial";
+  facts[RESTORATION_RESTORED_FACT_ID(region)] = state === "restored";
+}
+
+/**
+ * Reconciles canonical restoration facts and local-region booleans against
+ * `campaign.world.regions`. Canonical regions are authoritative; noncanonical
+ * regions keep the persisted state fact (or fall back to "unvisited" for
+ * legacy envelopes that only carry booleans). The supplied owned facts map
+ * is mutated in place; callers should already own it.
+ */
+function normalizeRestorationFacts(
+  campaign: CampaignState,
+  facts: Record<string, boolean | number | string>,
+): void {
+  for (const regionId of REGION_IDS) {
+    const canonical = campaign.world.regions[regionId];
+    facts[RESTORATION_STATE_FACT_ID(regionId)] = canonical;
+    facts[RESTORATION_PARTIAL_FACT_ID(regionId)] = canonical === "partial";
+    facts[RESTORATION_RESTORED_FACT_ID(regionId)] = canonical === "restored";
+    facts[CANONICAL_RESTORATION_FACT_IDS[regionId]] = canonical === "restored";
+  }
+  for (const region of REGIONS) {
+    if (REGION_IDS.includes(region.id as CanonRegionId)) continue;
+    const state = restorationStateFromFacts(facts, region.id);
+    facts[RESTORATION_STATE_FACT_ID(region.id)] = state;
+    facts[RESTORATION_PARTIAL_FACT_ID(region.id)] = state === "partial";
+    facts[RESTORATION_RESTORED_FACT_ID(region.id)] = state === "restored";
+  }
 }
 
 interface DirectorRollbackState {
@@ -697,43 +784,36 @@ export class CampaignDirector implements CampaignDirectorAPI {
           };
         }
         break;
-      case "restoration":
-        if (REGION_IDS.includes(event.regionId as CanonRegionId)) {
-          const domainRegion = event.regionId as CanonRegionId;
-          const rank: Record<RestorationState, number> = {
-            unvisited: 0,
-            corrupted: 1,
-            partial: 2,
-            restored: 3,
+      case "restoration": {
+        const eventRegion = event.regionId as RegionId;
+        const authoredRegion = REGIONS.some((region) => region.id === eventRegion);
+        if (!authoredRegion) break;
+        const prior = effectiveRestorationState(nextCampaign, nextFacts, eventRegion);
+        if (RESTORATION_RANK[event.state] < RESTORATION_RANK[prior]) break;
+        if (REGION_IDS.includes(eventRegion as CanonRegionId)) {
+          const domainCanon = eventRegion as CanonRegionId;
+          nextCampaign = {
+            ...nextCampaign,
+            world: {
+              ...nextCampaign.world,
+              regions: {
+                ...nextCampaign.world.regions,
+                [domainCanon]: event.state,
+              },
+            },
           };
-          const prior = nextCampaign.world.regions[domainRegion];
-          if (rank[event.state] >= rank[prior])
-            nextCampaign.world.regions[domainRegion] = event.state;
-          if (
-            event.regionId === "whispering-canopy" &&
-            event.state === "restored"
-          )
-            nextFacts.canopy_restored = true;
-          if (
-            event.regionId === "blood-bamboo-valley" &&
-            event.state === "restored"
-          )
-            nextFacts.bamboo_restored = true;
-          if (event.regionId === "moonpine-ridge" && event.state === "restored")
-            nextFacts.moonpine_restored = true;
-          if (event.regionId === "mistveil-basin" && event.state === "restored")
-            nextFacts.mistveil_restored = true;
-          if (
-            event.regionId === "sunmane-expanse" &&
-            event.state === "restored"
-          )
-            nextFacts.sunmane_restored = true;
-          nextFacts["restoration:" + event.regionId + ":partial"] =
-            event.state === "partial";
-          nextFacts["restoration:" + event.regionId + ":restored"] =
+        }
+        applyRestorationBooleans(nextFacts, eventRegion, event.state);
+        for (const region of REGIONS) {
+          const state = effectiveRestorationState(nextCampaign, nextFacts, region.id);
+          applyRestorationBooleans(nextFacts, region.id, state);
+        }
+        if (REGION_IDS.includes(eventRegion as CanonRegionId)) {
+          nextFacts[CANONICAL_RESTORATION_FACT_IDS[eventRegion as CanonRegionId]] =
             event.state === "restored";
         }
         break;
+      }
       case "fragment":
         nextCampaign = collectFragment(nextCampaign, event.fragmentId);
         break;
@@ -897,6 +977,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.updateQuestProgress();
     if (event.type === "chapter-transition")
       this.ensureChapterQuest(nextChapter);
+    normalizeRestorationFacts(this.campaign, this.facts);
     this.revision += 1;
     const checkpointEvent =
       event.type === "object-moved" ||
@@ -1264,7 +1345,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
         progress.trackedObjectiveId as ObjectiveId | null;
       this.party = { ...progress.party } as typeof this.party;
       this.choices = { ...progress.choices };
-      this.facts = factsWithMovableObjectDefaults(progress.worldFacts);
+      this.facts = factsWithRestorationDefaults(progress.worldFacts);
+      normalizeRestorationFacts(campaign, this.facts);
       this.endingId = progress.ending;
       this.eventLog = progress.eventLog as WorldEvent[];
       this.eventKeys = new Set([
@@ -1297,6 +1379,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.facts = emptyWorldFacts(campaign);
       this.facts.chapter = fallbackChapter;
       this.facts["visited:" + region.id] = true;
+      normalizeRestorationFacts(campaign, this.facts);
       if (campaign.world.regionalObligations.bamboo_tali_safe) {
         this.facts.taliSafe = true;
         this.facts.taliNeedsRescue = false;
@@ -1333,7 +1416,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.trackedObjectiveId = progress.trackedObjectiveId;
     this.party = structuredClone(progress.party);
     this.choices = { ...progress.choices };
-    this.facts = factsWithMovableObjectDefaults(progress.worldFacts);
+    this.facts = factsWithRestorationDefaults(progress.worldFacts);
+    normalizeRestorationFacts(this.campaign, this.facts);
     this.facts.refugeOpen = this.chapter >= 6;
     this.endingId = progress.ending;
     this.eventLog = progress.eventLog.map((event) => structuredClone(event));
@@ -1582,6 +1666,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
           },
         },
       };
+      applyRestorationBooleans(this.facts, "mistveil-basin", "restored");
+      this.facts.mistveil_restored = true;
     }
     if (questId === "orun-the-hollow-king") {
       this.campaign = {
