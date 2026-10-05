@@ -41,6 +41,7 @@ async function run(): Promise<void> {
   const sampledIdleTime = animation.activeTime!;
   animation.update(0.5);
   assert(animation.activeTime === sampledIdleTime, 'mixer delta advances fades without advancing snapshot-sampled action time');
+  assert(animation.activeDuration === 2 && Math.abs(firstMesh.skeleton.bones[0]!.position.y - 0.05) < 1e-6, 'loaded two-second idle clip keeps its normalized sample while mixer fades reach full weight');
   animation.play('attack', 'active', 0.7);
   const sampledAttackTime = animation.activeTime!;
   assert(close(firstMesh.skeleton.bones[0]!.position.x, 0), 'verified native root-motion curve is consumed; x=' + firstMesh.skeleton.bones[0]!.position.x + ', t=' + animation.activeTime);
@@ -119,7 +120,12 @@ async function run(): Promise<void> {
   const region = fixtureRegion();
   await renderer.loadRegion(region, [recipe], recipeDefinition);
   const actor = fixtureActor();
-  const combat: CombatSnapshot = { actors: [actor], movableObjects: [], player: { vitality: 1, maxVitality: 1, instinct: 0, dodgeCharges: 0, maxDodgeCharges: 0 }, telegraphs: [{ id: 'warning', attackId: 'test' as never, sourceId: 'aren', targetPosition: { x: 0, y: 0, z: -2 }, phase: 'anticipation', remainingTicks: 4 }], hazards: [], events: [] };
+  const combat: CombatSnapshot = {
+    actors: [actor], movableObjects: [], worldClock: { simulationTick: 30, worldTick: 7.5, worldTimeSeconds: 0.125, timeScale: 0.25, policy: 'perfect-dodge-slow' },
+    player: { vitality: 1, maxVitality: 1, instinct: 0, dodgeCharges: 0, maxDodgeCharges: 0 },
+    telegraphs: [{ id: 'warning', attackId: 'test' as never, sourceId: 'aren', targetPosition: { x: 0, y: 0, z: -2 }, phase: 'anticipation', remainingTicks: 4 }],
+    hazards: [], events: [],
+  };
   renderer.sync([actor], combat, 1 / 60);
   const evidence = renderer.capture();
   assert(evidence.regionId === 'greenwake', 'composed environment recipe commits with a region scene');
@@ -154,6 +160,49 @@ async function run(): Promise<void> {
   const neutralMaterial = (neutralWalkway as Mesh & { material: { color: Color } })?.material;
   assert(neutralMaterial && neutralMaterial.color.getHexString() === baselineHex,
     'cleared restoration facts restore authored surface color');
+  const clockCharacter = {
+    ...character,
+    requiredActionIds: [...character.requiredActionIds, 'clock-strike'],
+    actionToClipMapping: { ...character.actionToClipMapping, 'clock-strike': 'ClockStrike' },
+    rootMotion: { ...character.rootMotion, 'clock-strike': { mode: 'in-place', evidenceStatus: 'verified' } },
+  } as AssetManifestEntry;
+  const arenManifest = { ...clockCharacter, id: 'actor-aren', actorId: 'aren' } as AssetManifestEntry;
+  const arenPlacement: RegionEntityDefinition = { id: 'aren', actorId: 'aren', kind: 'actor', assetId: 'actor-aren', position: { x: 0, y: 0, z: 0 }, placement: 'ground' };
+  const clockHunterManifest = { ...clockCharacter, id: 'actor-clock-hunter', actorId: 'poacher-hunter' } as AssetManifestEntry;
+  const clockHunterPlacement: RegionEntityDefinition = { id: 'clock-hunter', actorId: 'poacher-hunter', kind: 'actor', assetId: clockHunterManifest.id, position: { x: 2, y: 0, z: 0 }, placement: 'ground' };
+  const clockHunter: ActorSnapshot = { ...actor, id: 'clock-hunter' as never, archetypeId: 'poacher-hunter' as never, allegiance: 'hostile', position: clockHunterPlacement.position };
+  const clockActors = [actor, clockHunter];
+  const clockCombat: CombatSnapshot = { ...combat, actors: clockActors, telegraphs: [] };
+  await renderer.loadRegion(fixtureRegion([], [], undefined, [arenPlacement, clockHunterPlacement]), [recipe, arenManifest, clockHunterManifest], recipeDefinition);
+  // Finish the 0.12s presentation fade with snapshot clocks held fixed before inspecting native bone samples.
+  renderer.sync(clockActors, clockCombat, 0.2);
+  const playerHips = renderer.resolveSocket('aren', 'hips');
+  const hostileHips = renderer.resolveSocket('clock-hunter', 'hips');
+  assert(playerHips && hostileHips, 'production renderer loads both synthetic native actor rigs for clock-domain sampling');
+  const playerLoopSample = playerHips.position.y;
+  const hostileLoopSample = hostileHips.position.y;
+  assert(Math.abs(playerLoopSample - 0.05) < 1e-6, 'player loop clip samples simulation time during world slow-motion');
+  assert(Math.abs(hostileLoopSample - 0.0125) < 1e-6 && Math.abs(playerLoopSample - hostileLoopSample * 4) < 1e-6, 'hostile and player native loop samples use distinct clock domains at world scale 0.25');
+  renderer.sync(clockActors, clockCombat, 0.9);
+  assert(playerHips.position.y === playerLoopSample && hostileHips.position.y === hostileLoopSample, 'unchanged authoritative clocks keep native loop samples fixed across different render deltas');
+  const wrappedCombat: CombatSnapshot = { ...clockCombat, worldClock: { ...combat.worldClock, simulationTick: 150, worldTick: 37.5, worldTimeSeconds: 0.625 } };
+  renderer.sync(clockActors, wrappedCombat, 1 / 60);
+  assert(Math.abs(playerHips.position.y - 0.05) < 1e-6 && Math.abs(hostileHips.position.y - 0.0625) < 1e-6, 'native loops wrap actor-clock seconds by their loaded two-second duration, not a one-second normalized period');
+  const clockStrikes: ActorSnapshot[] = clockActors.map((snapshot) => ({ ...snapshot, actionId: 'clock-strike' as never, phase: 'active', normalizedTime: 0.25 }));
+  const strikeCombat: CombatSnapshot = { ...wrappedCombat, actors: clockStrikes };
+  renderer.sync(clockStrikes, strikeCombat, 0.5);
+  assert(Math.abs(playerHips.position.y - 0.05) < 1e-6 && Math.abs(hostileHips.position.y - 0.05) < 1e-6, 'player and hostile one-shot clips use normalized snapshot progress instead of either loop clock');
+  const progressedStrikes: ActorSnapshot[] = clockStrikes.map((snapshot) => ({ ...snapshot, normalizedTime: snapshot.allegiance === 'player' ? 0.75 : 0.375 }));
+  const progressedCombat: CombatSnapshot = { ...strikeCombat, actors: progressedStrikes };
+  renderer.sync(progressedStrikes, progressedCombat, 1 / 60);
+  assert(Math.abs(playerHips.position.y - 0.15) < 1e-6 && Math.abs(hostileHips.position.y - 0.075) < 1e-6, 'native one-shot samples follow each actor normalized progress even when both clock values are unchanged');
+  const playerStrikeSample = playerHips.position.y;
+  const hostileStrikeSample = hostileHips.position.y;
+  renderer.sync(progressedStrikes, progressedCombat, 1);
+  assert(playerHips.position.y === playerStrikeSample && hostileHips.position.y === hostileStrikeSample, 'renderer delta cannot advance snapshot-sampled player or hostile one-shots');
+  const finishedStrikes: ActorSnapshot[] = clockStrikes.map((snapshot) => ({ ...snapshot, normalizedTime: 1 }));
+  renderer.sync(finishedStrikes, { ...strikeCombat, actors: finishedStrikes }, 1 / 60);
+  assert(Math.abs(playerHips.position.y - 0.2) < 1e-6 && Math.abs(hostileHips.position.y - 0.2) < 1e-6, 'finite native clips retain their normalized endpoint instead of wrapping like loops');
   const hunterManifest = { ...character, id: 'actor-poacher-hunter', actorId: 'poacher-hunter' } as AssetManifestEntry;
   const scoutManifest = { ...character, id: 'actor-poacher-scout', actorId: 'poacher-scout' } as AssetManifestEntry;
   const hunterPlacements: RegionEntityDefinition[] = [
@@ -167,7 +216,7 @@ async function run(): Promise<void> {
   const hunterRanged: ActorSnapshot = { ...hunterWest, id: 'hunter-ranged' as never, archetypeId: 'poacher-scout' as never, position: { x: 0, y: 0, z: -3 } };
   const hunters = [hunterWest, hunterEast, hunterRanged];
   const huntersCombat = { ...combat, actors: hunters, telegraphs: [] };
-  renderer.sync(hunters, huntersCombat, 1 / 60);
+  renderer.sync(hunters, huntersCombat, 0.2);
   const placedActors = new Map<string, Object3D>();
   renderer.scene.traverse((node) => { if (typeof node.userData.actorInstanceId === 'string') placedActors.set(node.userData.actorInstanceId, node); });
   const westRig = placedActors.get('hunter-melee-west');
@@ -175,6 +224,8 @@ async function run(): Promise<void> {
   const rangedRig = placedActors.get('hunter-ranged');
   assert(westRig && eastRig && rangedRig && westRig !== eastRig && findSkinnedMesh(westRig).skeleton !== findSkinnedMesh(eastRig).skeleton && findSkinnedMesh(eastRig).skeleton !== findSkinnedMesh(rangedRig).skeleton, 'two camp melee instances share actor-poacher-hunter while all three placed actors keep independent skeletons');
   assert(renderer.capture().actorCount === 3, 'renderer retains all camp runtime instance IDs without archetype-key overwrite');
+  const enemyLoopSample = findSkinnedMesh(westRig!).skeleton.bones[0]!.position.y;
+  assert(Math.abs(enemyLoopSample - 0.0125) < 1e-6, 'hostile loop clip remains sampled on scaled world time');
   const horizontalCollider: RegionColliderDefinition = { id: 'horizontal', kind: 'capsule', from: { x: 0, y: 0, z: 0 }, to: { x: 0, y: 0, z: 10 }, radius: 0.5, blocksMovement: true, blocksCamera: true };
   await renderer.loadRegion(fixtureRegion([], [horizontalCollider]), [recipe], recipeDefinition);
   let colliderMesh = renderer.scene.getObjectByName('camera-collider:horizontal') as Mesh;
@@ -396,10 +447,12 @@ async function createTestSkinnedGlb(color = 0x9fc887): Promise<{ url: string; ou
   mesh.bind(new Skeleton([hips]));
   const root = new Group();
   root.add(mesh);
-  const idle = new AnimationClip('Idle', 1, [new VectorKeyframeTrack('hips.position', [0, 1], [0, 0, 0, 0, 0.1, 0])]);
+  // Synthetic test motion only: a known two-second clip with linear y = 0.1 * sampleSeconds.
+  const idle = new AnimationClip('Idle', 2, [new VectorKeyframeTrack('hips.position', [0, 2], [0, 0, 0, 0, 0.2, 0])]);
   const strike = new AnimationClip('Strike', 1, [new VectorKeyframeTrack('hips.position', [0, 1], [0, 0, 0, 0.1, 0, 0])]);
+  const clockStrike = new AnimationClip('ClockStrike', 2, [new VectorKeyframeTrack('hips.position', [0, 2], [0, 0, 0, 0, 0.2, 0])]);
   const previewIdle = new AnimationClip('PreviewIdle', 1, [new VectorKeyframeTrack('hips.position', [0, 1], [0, 0, 0, 0, 0, 0.1])]);
-  const binary = await new GLTFExporter().parseAsync(root, { binary: true, animations: [idle, strike, previewIdle] }) as ArrayBuffer;
+  const binary = await new GLTFExporter().parseAsync(root, { binary: true, animations: [idle, strike, clockStrike, previewIdle] }) as ArrayBuffer;
   return { url: URL.createObjectURL(new Blob([binary], { type: 'model/gltf-binary' })), outputHash: await hash(binary) };
 }
 async function createTestStaticGlb(): Promise<{ url: string; outputHash: string }> {

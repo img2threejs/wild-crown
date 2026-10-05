@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { StoryEffects } from '../../src/effects/StoryEffects.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { CombatEngine, createEngineState, makeActor, type CombatInput, type EngineState, type EngineStateSeed, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
+import type { RegionRouteDefinition } from '../../src/game/contracts.js';
 import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
 import { vec, type CombatArena } from '../../src/game/combat/geometry.js';
 import { REGIONS } from '../../src/content/campaign.js';
@@ -56,13 +57,143 @@ function startClockEngine(duplicateHazard = false): CombatEngine {
 }
 
 describe('Perfect Dodge world-clock time dilation', () => {
-  it('slows hazard and actor animation progress while simulation input and counter damage remain live', () => {
+  for (const worldScale of [1, 0.25]) {
+    it(`advances Aren by simulation ticks and every other actor by world scale ${worldScale}`, () => {
+      const state = makeClockState();
+      state.tick = 20;
+      state.worldTick = 10;
+      state.hazards = [];
+      state.timePolicy = worldScale === 1 ? 'normal' : 'perfect-dodge-slow';
+      state.worldTimeScale = worldScale;
+      state.slowMotionRemainingTicks = worldScale === 1 ? 0 : 8;
+      state.actors.push(
+        makeActor('clock-ally', 'human', 'ally', vec(4, 0, 0), false, false, 100),
+        makeActor('clock-neutral', 'human', 'neutral', vec(5, 0, 0), false, false, 100),
+        makeActor('clock-wild', 'human', 'wild', vec(6, 0, 0), false, false, 100),
+      );
+      for (const actor of state.actors) {
+        actor.phase = 'active';
+        actor.actionStartedTick = actor.id === state.playerId ? 12 : 2;
+        actor.actionEndsTick = actor.actionStartedTick + 40;
+        actor.normalizedTime = 0.2;
+      }
+      const engine = new CombatEngine(state);
+      for (let step = 0; step < 4; step++) engine.fixedStep(idle);
+      const advanced = engine.snapshotState();
+      expect(advanced.tick).toBe(24);
+      expect(advanced.worldTick).toBe(10 + 4 * worldScale);
+      for (const actor of advanced.actors) {
+        const player = actor.id === advanced.playerId;
+        expect(actor.normalizedTime).toBeCloseTo(0.2 + 4 * (player ? 1 : worldScale) / 40);
+        expect(actor.actionStartedTick).toBe(player ? 12 : 2);
+        expect(actor.actionEndsTick).toBe(player ? 52 : 42);
+      }
+    });
+  }
+
+  it('starts a finite player action during slow motion on simulation time and completes on its exact deadline', () => {
+    const state = makeClockState();
+    state.tick = 60;
+    state.worldTick = 45.25;
+    state.hazards = [];
+    state.timePolicy = 'perfect-dodge-slow';
+    state.worldTimeScale = 0.25;
+    state.slowMotionRemainingTicks = 12;
+    const engine = new CombatEngine(state);
+    engine.fixedStep({ ...idle, heavyPressed: true });
+    const started = engine.snapshotState();
+    expect(started.tick).toBe(61);
+    expect(started.worldTick).toBe(45.5);
+    expect(started.actors.find(actor => actor.id === started.playerId)).toMatchObject({
+      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: 124, normalizedTime: 0,
+    });
+    engine.fixedStep(idle);
+    expect(engine.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo(1 / 63);
+    const restored = new CombatEngine();
+    restored.restore(engine.serialize());
+    expect(restored.snapshotState().actors).toEqual(engine.snapshotState().actors);
+    for (let step = 0; step < 61; step++) restored.fixedStep(idle);
+    expect(restored.snapshotState().tick).toBe(123);
+    expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)).toMatchObject({
+      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: 124,
+    });
+    expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo(62 / 63);
+    restored.fixedStep(idle);
+    expect(restored.snapshotState().tick).toBe(124);
+    expect(restored.snapshotState().actionId).toBe('idle');
+    expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)).toMatchObject({
+      actionId: 'aren-idle', actionStartedTick: 124, actionEndsTick: 0, normalizedTime: 0, phase: 'idle',
+    });
+  });
+
+  it('completes a finite Aren sample while a same-duration world actor remains slowed', () => {
+    const state = makeClockState();
+    state.tick = 20;
+    state.worldTick = 10;
+    state.hazards = [];
+    state.timePolicy = 'perfect-dodge-slow';
+    state.worldTimeScale = 0.25;
+    state.slowMotionRemainingTicks = 8;
+    for (const actor of state.actors) {
+      actor.phase = 'active';
+      actor.actionStartedTick = actor.id === state.playerId ? 18 : 8;
+      actor.actionEndsTick = actor.actionStartedTick + 4;
+      actor.normalizedTime = 0.5;
+    }
+    const engine = new CombatEngine(state);
+    engine.fixedStep(idle);
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBe(0.75);
+    engine.fixedStep(idle);
+    const completed = engine.snapshotState();
+    expect(completed.actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionId: 'aren-idle', actionStartedTick: 22, actionEndsTick: 0, normalizedTime: 0, phase: 'idle',
+    });
+    expect(completed.actors.find(actor => actor.id !== state.playerId)).toMatchObject({
+      actionStartedTick: 8, actionEndsTick: 12, normalizedTime: 0.625, phase: 'active',
+    });
+  });
+
+  it('keeps contextual traversal movement and sampling on world time during slow motion', () => {
+    const state = makeClockState();
+    state.tick = 60;
+    state.worldTick = 45.25;
+    state.hazards = [];
+    state.timePolicy = 'perfect-dodge-slow';
+    state.worldTimeScale = 0.25;
+    state.slowMotionRemainingTicks = 12;
+    const route: RegionRouteDefinition = {
+      id: 'clock-vault', from: vec(0, 0, 0), to: vec(4, 0, 0), anchors: [],
+      destinationRegionId: state.regionId, kind: 'path', traversalActionId: 'aren-staff-vault',
+      traversal: { kind: 'vault', durationTicks: 4, startRadius: 1 }, colliderIds: [], traversalEvent: 'clock-vaulted',
+    };
+    const engine = new CombatEngine(state);
+    engine.setTraversalGates([route]);
+    engine.fixedStep({ ...idle, interactPressed: true, traversalId: route.id });
+    expect(engine.isTraversing).toBe(true);
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionStartedTick: 45.5, actionEndsTick: 0, normalizedTime: 0,
+    });
+    for (let step = 0; step < 4; step++) engine.fixedStep(idle);
+    expect(engine.snapshotState()).toMatchObject({ tick: 65, worldTick: 46.5 });
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionStartedTick: 45.5, actionEndsTick: 0, normalizedTime: 0.25, position: vec(1, 0, 0),
+    });
+    expect(engine.isTraversing).toBe(true);
+    expect(engine.consumeEvents().filter(event => event.kind === 'traversal')).toHaveLength(0);
+  });
+
+  it('slows hazards and hostile animation while Aren sampling and simulation input remain live', () => {
     const normal = startClockEngine();
     normal.fixedStep(idle);
     normal.fixedStep(idle);
     expect(normal.snapshot().hazards[0]?.active).toBe(true);
 
-    const engine = startClockEngine();
+    const slowState = makeClockState();
+    const enemy = slowState.actors.find(actor => actor.id === 'hunter-melee-west')!;
+    enemy.phase = 'active';
+    enemy.actionStartedTick = 0;
+    enemy.actionEndsTick = 100;
+    const engine = new CombatEngine(slowState);
     engine.fixedStep({ ...idle, dodgePressed: true, dodgeDirection: 'left' });
     const afterDodge = engine.snapshotState();
     expect(engine.snapshot().worldClock).toMatchObject({ simulationTick: 1, worldTick: 1, timeScale: 0.25, policy: 'perfect-dodge-slow' });
@@ -72,7 +203,8 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(cue.worldTimeSeconds).toBe(engine.snapshot().worldClock.worldTimeSeconds);
     expect(afterDodge.actionRecoveryUntil - afterDodge.actionUntil).toBe(6);
     expect(afterDodge.companionState.slots.asha?.readyAt).toBe(32);
-    expect(afterDodge.actors.find(actor => actor.id === 'hunter-melee-west')?.weakPointUntil).toBeGreaterThan(afterDodge.worldTick);
+    const enemyAfterDodge = afterDodge.actors.find(actor => actor.id === 'hunter-melee-west')!;
+    expect(enemyAfterDodge.normalizedTime).toBeCloseTo(1 / 100);
     expect(engine.snapshot().actors.find(actor => actor.id === 'hunter-melee-west')).toMatchObject({ weakPointExposed: true });
     const restored = new CombatEngine();
     restored.restore(engine.serialize());
@@ -81,15 +213,19 @@ describe('Perfect Dodge world-clock time dilation', () => {
     engine.fixedStep(idle);
     const slowed = engine.snapshotState();
     const player = slowed.actors.find(actor => actor.id === 'aren')!;
-    expect(slowed.worldTick).toBe(1.25);
-    expect(engine.snapshot().hazards[0]?.active).toBe(false);
-    expect(engine.snapshot().worldClock.worldTimeSeconds).toBeCloseTo(1.25 / 60);
-    expect(player.normalizedTime).toBeCloseTo(0.25 / (player.actionEndsTick - player.actionStartedTick));
+    const enemyDuringSlowMotion = slowed.actors.find(actor => actor.id === 'hunter-melee-west')!;
+    expect(player.actionStartedTick).toBe(slowed.tick - 1);
+    expect(player.normalizedTime).toBeCloseTo(1 / (player.actionEndsTick - player.actionStartedTick));
+    expect(enemyDuringSlowMotion.normalizedTime - enemyAfterDodge.normalizedTime).toBeCloseTo(0.25 / 100);
 
     engine.fixedStep({ ...idle, lightPressed: true });
-    expect(engine.snapshotState().actionId).toBe('light_1');
-    expect(engine.snapshotState().pendingImpact?.counter).toBe(true);
-    expect(engine.snapshotState().actors.find(actor => actor.id === 'aren')?.actionId).toBe('aren-light-1');
+    const counterAction = engine.snapshotState();
+    const playerAction = counterAction.actors.find(actor => actor.id === 'aren')!;
+    expect(counterAction.actionId).toBe('light_1');
+    expect(counterAction.pendingImpact?.counter).toBe(true);
+    expect(playerAction.actionId).toBe('aren-light-1');
+    expect(playerAction.actionStartedTick).toBe(counterAction.tick);
+    expect(playerAction.actionEndsTick).toBe(counterAction.actionRecoveryUntil);
     for (let step = 0; step < 12; step++) engine.fixedStep(idle);
     expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.vitality).toBe(88);
     const recoveryUntil = engine.snapshotState().actionRecoveryUntil;
@@ -97,8 +233,9 @@ describe('Perfect Dodge world-clock time dilation', () => {
     const recovered = engine.snapshotState();
     const actorAfterRecovery = recovered.actors.find(actor => actor.id === 'aren')!;
     expect(recovered.tick).toBe(recoveryUntil + 1);
-    expect(actorAfterRecovery.actionId).toBe('aren-light-1');
-    expect(actorAfterRecovery.normalizedTime).toBeLessThan(1);
+    expect(actorAfterRecovery.actionId).toBe('aren-idle');
+    expect(actorAfterRecovery.normalizedTime).toBe(0);
+    expect(actorAfterRecovery.actionEndsTick).toBe(0);
   });
   it('keeps ordinary dodges at normal time when the threat is outside the perfect window', () => {
     const state = makeClockState();
@@ -361,6 +498,9 @@ describe('Perfect Dodge world-clock time dilation', () => {
     state.hazards[0]!.activeUntil = 63;
     state.hazards[0]!.damage = 10;
     state.actors.find(actor => actor.id === 'hunter-melee-west')!.recoveringUntil = 70;
+    Object.assign(state.actors.find(actor => actor.id === state.playerId)!, {
+      actionId: 'aren-light-1', phase: 'active', actionStartedTick: 44, actionEndsTick: 84, normalizedTime: 0.25,
+    });
     state.checkpoint = { tick: 54, worldTick: 54, lastAttackTick: state.lastAttackTick, counterUntil: state.counterUntil, actors: structuredClone(state.actors), player: structuredClone(state.player), phaseIndex: 0, phaseLatch: 0, phaseActionFlags: [], rewardEmitted: false, companions: structuredClone(state.companionState) };
     const legacy = JSON.parse(JSON.stringify(state)) as Record<string, unknown>;
     legacy.schemaVersion = 1;
@@ -375,14 +515,28 @@ describe('Perfect Dodge world-clock time dilation', () => {
 
     const engine = new CombatEngine();
     engine.restore(JSON.stringify(legacy));
-    expect(engine.snapshotState()).toMatchObject({ schemaVersion: 2, tick: 54, worldTick: 54, timePolicy: 'normal' });
+    expect(engine.snapshotState()).toMatchObject({ schemaVersion: 3, tick: 54, worldTick: 54, timePolicy: 'normal' });
     expect(engine.snapshotState().checkpoint?.lastAttackTick).toBe(54);
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionStartedTick: 44, actionEndsTick: 84, normalizedTime: 0.25,
+    });
+    expect(engine.snapshotState().checkpoint?.actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionStartedTick: 44, actionEndsTick: 84, normalizedTime: 0.25,
+    });
     engine.fixedStep(idle);
     expect(engine.snapshotState().worldTick).toBe(55);
     expect(engine.snapshot().hazards[0]?.active).toBe(true);
     expect(engine.snapshotState().player.vitality).toBe(90);
     expect(engine.snapshotState().checkpoint?.worldTick).toBe(54);
     expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.recoveringUntil).toBe(70);
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBeCloseTo(0.275);
+    engine.resetToCheckpoint();
+    expect(engine.snapshotState()).toMatchObject({ tick: 54, worldTick: 55 });
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+      actionStartedTick: 44, actionEndsTick: 84, normalizedTime: 0.25,
+    });
+    engine.fixedStep(idle);
+    expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBeCloseTo(0.275);
 
     const fractional = new CombatEngine();
     const fractionalState = createEngineState();
@@ -391,8 +545,132 @@ describe('Perfect Dodge world-clock time dilation', () => {
     const fractionalSource = new CombatEngine(fractionalState);
     fractional.restore(fractionalSource.serialize());
     expect(fractional.snapshot().worldClock.worldTick).toBe(7.25);
-    expect(fractional.snapshotState().schemaVersion).toBe(2);
+    expect(fractional.snapshotState().schemaVersion).toBe(3);
   });
+
+  for (const schemaVersion of [2, undefined] as const) {
+    it(`migrates ${schemaVersion === 2 ? 'v2' : 'unversioned world-clock'} player samples without changing live or checkpoint progress`, () => {
+      const state = makeClockState();
+      state.tick = 60;
+      state.worldTick = 45.25;
+      state.hazards = [];
+      state.timePolicy = 'perfect-dodge-slow';
+      state.worldTimeScale = 0.25;
+      state.slowMotionRemainingTicks = 6;
+      state.actionId = 'light_1';
+      state.actionUntil = 65;
+      state.actionRecoveryUntil = 83;
+      const player = state.actors.find(actor => actor.id === state.playerId)!;
+      Object.assign(player, {
+        actionId: 'aren-light-1', phase: 'active', actionStartedTick: 34.25, actionEndsTick: 74.25, normalizedTime: 0.25,
+      });
+      const enemy = state.actors.find(actor => actor.id !== state.playerId)!;
+      Object.assign(enemy, {
+        phase: 'active', actionStartedTick: 37.25, actionEndsTick: 77.25, normalizedTime: 0.2, recoveringUntil: 77.25,
+      });
+      const checkpointActors = structuredClone(state.actors);
+      Object.assign(checkpointActors.find(actor => actor.id === state.playerId)!, {
+        actionStartedTick: 32.25, actionEndsTick: 72.25, normalizedTime: 0.1,
+      });
+      Object.assign(checkpointActors.find(actor => actor.id !== state.playerId)!, {
+        actionStartedTick: 27.25, actionEndsTick: 67.25, recoveringUntil: 67.25,
+      });
+      state.checkpoint = {
+        tick: 50, worldTick: 35.25, lastAttackTick: 0, counterUntil: 0, actors: checkpointActors,
+        player: structuredClone(state.player), phaseIndex: 0, phaseLatch: 0, phaseActionFlags: [],
+        rewardEmitted: false, companions: structuredClone(state.companionState),
+      };
+      const legacy = JSON.parse(JSON.stringify(state)) as EngineStateSeed;
+      if (schemaVersion === undefined) delete legacy.schemaVersion;
+      else legacy.schemaVersion = schemaVersion;
+      const engine = new CombatEngine();
+      engine.restore(JSON.stringify(legacy));
+      const migrated = engine.snapshotState();
+      expect(migrated.schemaVersion).toBe(3);
+      expect(migrated.actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionStartedTick: 50, actionEndsTick: 90, normalizedTime: 0.25,
+      });
+      expect(migrated.checkpoint!.actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionStartedTick: 46, actionEndsTick: 86, normalizedTime: 0.1,
+      });
+      expect(migrated.actors.find(actor => actor.id === enemy.id)).toEqual(enemy);
+      expect(migrated.checkpoint!.actors.find(actor => actor.id === enemy.id)).toEqual(checkpointActors.find(actor => actor.id === enemy.id));
+      expect(migrated.actionUntil).toBe(state.actionUntil);
+      expect(migrated.actionRecoveryUntil).toBe(state.actionRecoveryUntil);
+      const roundTrip = new CombatEngine(JSON.parse(engine.serialize()) as EngineStateSeed);
+      expect(roundTrip.snapshotState().actors).toEqual(migrated.actors);
+      expect(roundTrip.snapshotState().checkpoint).toEqual(migrated.checkpoint);
+      roundTrip.fixedStep(idle);
+      expect(roundTrip.snapshotState()).toMatchObject({ tick: 61, worldTick: 45.5 });
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBeCloseTo(0.275);
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === enemy.id)?.normalizedTime).toBeCloseTo(0.20625);
+      roundTrip.resetToCheckpoint();
+      expect(roundTrip.snapshotState()).toMatchObject({ tick: 50, worldTick: 45.5, timePolicy: 'normal' });
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionStartedTick: 46, actionEndsTick: 86, normalizedTime: 0.1,
+      });
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === enemy.id)).toMatchObject({
+        actionStartedTick: 37.5, actionEndsTick: 77.5, normalizedTime: 0.2, recoveringUntil: 77.5,
+      });
+      roundTrip.fixedStep(idle);
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBeCloseTo(0.125);
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === enemy.id)?.normalizedTime).toBeCloseTo(0.225);
+      roundTrip.resetToCheckpoint();
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionStartedTick: 46, actionEndsTick: 86, normalizedTime: 0.1,
+      });
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === enemy.id)).toMatchObject({
+        actionStartedTick: 38.5, actionEndsTick: 78.5, normalizedTime: 0.2,
+      });
+      expect(roundTrip.snapshotState().checkpoint).toEqual(migrated.checkpoint);
+      for (let step = 0; step < 36; step++) roundTrip.fixedStep(idle);
+      expect(roundTrip.snapshotState().tick).toBe(86);
+      expect(roundTrip.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionId: 'aren-idle', actionStartedTick: 86, actionEndsTick: 0, normalizedTime: 0,
+      });
+    });
+  }
+
+  it('retains v3 player action timestamps through restore and repeated monotonic-world checkpoint resets', () => {
+    const state = makeClockState();
+    state.tick = 60;
+    state.worldTick = 45.25;
+    state.hazards = [];
+    Object.assign(state.actors.find(actor => actor.id === state.playerId)!, {
+      actionId: 'aren-light-1', phase: 'active', actionStartedTick: 50, actionEndsTick: 90, normalizedTime: 0.25,
+    });
+    const checkpointActors = structuredClone(state.actors);
+    Object.assign(checkpointActors.find(actor => actor.id === state.playerId)!, {
+      actionStartedTick: 46, actionEndsTick: 86, normalizedTime: 0.1,
+    });
+    Object.assign(checkpointActors.find(actor => actor.id !== state.playerId)!, {
+      phase: 'active', actionStartedTick: 27.25, actionEndsTick: 67.25, normalizedTime: 0.2, recoveringUntil: 67.25,
+    });
+    state.checkpoint = {
+      tick: 50, worldTick: 35.25, lastAttackTick: 0, counterUntil: 0, actors: checkpointActors,
+      player: structuredClone(state.player), phaseIndex: 0, phaseLatch: 0, phaseActionFlags: [],
+      rewardEmitted: false, companions: structuredClone(state.companionState),
+    };
+    const engine = new CombatEngine();
+    engine.restore(JSON.stringify(state));
+    expect(engine.snapshotState().actors).toEqual(state.actors);
+    expect(engine.snapshotState().checkpoint).toEqual(state.checkpoint);
+    for (let retry = 0; retry < 2; retry++) {
+      engine.resetToCheckpoint();
+      expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)).toMatchObject({
+        actionStartedTick: 46, actionEndsTick: 86, normalizedTime: 0.1,
+      });
+      const retryWorldTick = engine.snapshotState().worldTick;
+      expect(engine.snapshotState().actors.find(actor => actor.id !== state.playerId)).toMatchObject({
+        actionStartedTick: retryWorldTick - 8, actionEndsTick: retryWorldTick + 32, normalizedTime: 0.2,
+      });
+      engine.fixedStep(idle);
+      expect(engine.snapshotState().actors.find(actor => actor.id === state.playerId)?.normalizedTime).toBeCloseTo(0.125);
+      expect(engine.snapshotState().actors.find(actor => actor.id !== state.playerId)?.normalizedTime).toBeCloseTo(0.225);
+    }
+    expect(engine.snapshotState().checkpoint).toEqual(state.checkpoint);
+  });
+
 
   it('hydrates legacy queued StoryCue timestamps and ages the hydrated cue through StoryEffects', () => {
     const source = new CombatEngine(makeClockState());
