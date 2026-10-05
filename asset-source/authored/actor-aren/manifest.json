@@ -1,0 +1,106 @@
+{
+  "actor": "actor-aren",
+  "issue": 23,
+  "scope": "R09 authored native Idle + LateralDodge canaries",
+  "status": "canary-only, parent visual review pending",
+  "productionAccepted": false,
+  "source": {
+    "bytes": 96501240,
+    "sha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151"
+  },
+  "derivative": {
+    "path": "asset-source/authored/actor-aren/aren-idle-lateral-dodge.glb",
+    "bytes": 96589512,
+    "sha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152"
+  },
+  "preservation": {
+    "originalBinBytes": 96494136,
+    "originalBinSha256": "06aa3f7cfb0a4bd1b7d4c383f198709d06ad8b9f2dab1847d0e81478ab3b3b8e",
+    "byteIdentical": true,
+    "primitiveUVMaterialJointOrderInverseBindWeightsPreserved": true,
+    "jointOrder": [
+      17,
+      8,
+      7,
+      1,
+      0,
+      3,
+      2,
+      6,
+      5,
+      4,
+      12,
+      11,
+      10,
+      9,
+      16,
+      15,
+      14,
+      13
+    ]
+  },
+  "normalization": {
+    "measuredSourceHeight": 0.9792109417373049,
+    "gameHeightMeters": 1.7,
+    "scaleOnce": 1.7360917117448456,
+    "authority": "parent game normalization, not provider real-world size"
+  },
+  "nativeClipNames": [
+    "Idle",
+    "LateralDodge"
+  ],
+  "rootMode": "in-place-authoritative-capsule",
+  "motionAuthority": "capsule simulation only; reference trajectory MUST NOT double-drive movement",
+  "gameplayProfile": {
+    "id": "quick_step_left",
+    "distanceMeters": 1.45,
+    "actionTicks": 15,
+    "recoveryTicks": 12,
+    "ticksPerSecond": 60
+  },
+  "measuredClips": [
+    {
+      "name": "Idle",
+      "channels": 11,
+      "durationSeconds": 3,
+      "skinDisplacementMeters": 0.012577530543918022,
+      "loopClosureMeters": 0,
+      "maximumPlantedFootSlipMeters": 0.0016323222704771622,
+      "staffSpanChangeMeters": 0.0025636774728671897,
+      "staffBaseRigidSocketErrorMeters": 0.04768425123470532
+    },
+    {
+      "name": "LateralDodge",
+      "channels": 11,
+      "durationSeconds": 0.44999998807907104,
+      "skinDisplacementMeters": 0.1310987298824942,
+      "loopClosureMeters": 0,
+      "maximumPlantedFootSlipMeters": 0.008742761505669563,
+      "staffSpanChangeMeters": 0.025325088359431067,
+      "staffBaseRigidSocketErrorMeters": 0.12187109115113393
+    }
+  ],
+  "contactSlipBudgetMeters": 0.025,
+  "files": {
+    "anatomy": "anatomy.json",
+    "preKeyframePolicy": "anatomy-policy.json",
+    "authoring": "authoring.json",
+    "measurements": "measurements.json",
+    "authorScript": "author-clips.mjs",
+    "verifier": "verify-authored.mjs"
+  },
+  "gates": {
+    "cpuNativeLoader": "measured",
+    "originalBytesPreserved": "measured",
+    "visualReview": "pending-parent",
+    "continuousCapsuleContact": "R04 open",
+    "production": "not-qualified"
+  },
+  "anatomicalConstraints": [
+    "Lower staff surface vertex554945 is51.2% node4 staff and48.8% node13 right toe. Immutable source skin prevents independently rigid staff-base bone attachment. Use actual skinned-surface mapping or source-skin repair subject to approval; never relabel node4 as hand."
+  ],
+  "providerCalls": 0,
+  "providerSpend": 0,
+  "unknownUsage": null,
+  "browserLaunched": false
+}

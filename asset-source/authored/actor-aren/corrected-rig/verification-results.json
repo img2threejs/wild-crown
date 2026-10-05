@@ -1,0 +1,66 @@
+{
+  "finishedAt": "2026-10-01T08:26:29.138Z",
+  "source": {
+    "path": "asset-source/rig-derivatives/actor-aren/aren-rigid-staff.glb",
+    "bytes": 96501240,
+    "sha256": "86348eb084aa42f6c7e6ecfb7416255dac062a499f6349a369a1e7da49f62ac3",
+    "rigRevision": "aren-rigid-staff-component-r1"
+  },
+  "derivative": {
+    "path": "asset-source/authored/actor-aren/corrected-rig/aren-idle-lateral-dodge.glb",
+    "bytes": 96589988,
+    "sha256": "974faafdc1ab2d6716931e26f6f6181bc19d39dc432fb0521008fd3eb8e28d3a"
+  },
+  "checks": [
+    {
+      "command": "node asset-source/authored/actor-aren/corrected-rig/verify-authored.mjs --counterexample-static=Idle",
+      "exitCode": 1,
+      "expectedRejection": true,
+      "inertnessFailures": 1
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/corrected-rig/verify-authored.mjs --counterexample-static=LateralDodge",
+      "exitCode": 1,
+      "expectedRejection": true,
+      "inertnessFailures": 1
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/corrected-rig/author-clips.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node asset-source/authored/actor-aren/corrected-rig/verify-authored.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node asset-source/rigged/actor-aren/verify-native.mjs asset-source/authored/actor-aren/corrected-rig/aren-idle-lateral-dodge.glb",
+      "exitCode": 0
+    }
+  ],
+  "deterministicReexport": true,
+  "deterministicRepeatedMixerContactSocketStaffAndGapMeasurements": true,
+  "originalCanaryUnchangedSha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152",
+  "preservedCorrectedSourceBinBytes": 96494136,
+  "sourceHeight": 0.9792109417373049,
+  "scaleOnce": 1.7360917117448456,
+  "rigidStaffComponentVertices": 75684,
+  "rigidStaffSamplePhases": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "gripContact": {
+    "measuredRestBodyMaxZ": 0.15529903649485666,
+    "measuredRestStaffMinZ": 0.17594946954276008,
+    "separatingAxisGapNative": 0.020650433047903427,
+    "separatingAxisGapMeters": 0.03585104565840699,
+    "touching": false,
+    "blocking": true,
+    "anatomyPrerequisite": "Authorized anatomical hand/staff contact geometry or rest alignment; never a weight, guessed transform, or animation qualification waiver"
+  },
+  "providerCalls": 0,
+  "browserLaunched": false,
+  "productionAccepted": false
+}

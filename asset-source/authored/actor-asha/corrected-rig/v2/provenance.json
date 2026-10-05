@@ -1,0 +1,91 @@
+{
+  "sourcePath": "asset-source/rig-derivatives/actor-asha/v2/model.glb",
+  "sourceRevision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "94bd738c8348e1713309d2023a4307eabdfb826bea4d23e203e571c3bddd41d6",
+  "sourceBytes": 99519480,
+  "originalTripoSourceSHA256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "derivativeSHA256": "769b67ef5c82b34f631a12799b12c48d8bffc9eb50e0809be53e6143a6ec7254",
+  "derivativeBytes": 99679580,
+  "github100MiBHeadroom": 5178020,
+  "repairedSourceNativeBinaryAndContractsPreserved": true,
+  "repairedJointOrder": [
+    20,
+    19,
+    2,
+    1,
+    0,
+    12,
+    11,
+    10,
+    5,
+    4,
+    3,
+    9,
+    8,
+    7,
+    6,
+    16,
+    15,
+    14,
+    13,
+    18,
+    17,
+    23,
+    24,
+    25
+  ],
+  "pinnedSoleOwnerNodes": [
+    17,
+    14,
+    5,
+    13,
+    4,
+    8,
+    25,
+    7,
+    6
+  ],
+  "clips": [
+    {
+      "name": "Idle",
+      "channels": 9,
+      "keysPerChannel": 385,
+      "durationSeconds": 3.200000047683716
+    },
+    {
+      "name": "Pounce",
+      "channels": 33,
+      "keysPerChannel": 221,
+      "durationSeconds": 1.7999999523162842
+    }
+  ],
+  "phases": {
+    "anticipation": [
+      0,
+      0.4
+    ],
+    "takeoff": [
+      0.4,
+      0.55
+    ],
+    "flight": [
+      0.55,
+      1.08
+    ],
+    "landing": [
+      1.08,
+      1.16
+    ],
+    "recovery": [
+      1.16,
+      1.8
+    ]
+  },
+  "rootPolicy": "in-place horizontal; visual root Y retained",
+  "authorSHA256": "717da21aa2877dfb8e1580a1acb8db87fdc82d43bada0998be598d55c9d5bc79",
+  "contactsSHA256": "65381d7f05756c3c133827fb2c30b161f16b0ab54c433a8471e5e009a031898f",
+  "usage": null,
+  "providerSpend": 0,
+  "renderAcceptance": null,
+  "releaseVerified": false
+}

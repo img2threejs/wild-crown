@@ -1,0 +1,285 @@
+{
+  "completeLocalHandTriangles": 36635,
+  "uniqueEdges": 55908,
+  "newIntersectingEdges": 1080,
+  "examples": [
+    {
+      "edge": [
+        680378,
+        675151
+      ],
+      "intersectedTriangles": [
+        [
+          674646,
+          682553,
+          676404
+        ],
+        [
+          667286,
+          676404,
+          680035
+        ]
+      ]
+    },
+    {
+      "edge": [
+        680065,
+        675151
+      ],
+      "intersectedTriangles": [
+        [
+          674646,
+          682553,
+          676404
+        ],
+        [
+          667286,
+          676404,
+          680035
+        ]
+      ]
+    },
+    {
+      "edge": [
+        680065,
+        674574
+      ],
+      "intersectedTriangles": [
+        [
+          674646,
+          682553,
+          676404
+        ],
+        [
+          674226,
+          680035,
+          680489
+        ]
+      ]
+    },
+    {
+      "edge": [
+        680065,
+        680420
+      ],
+      "intersectedTriangles": [
+        [
+          681885,
+          682553,
+          677660
+        ]
+      ]
+    },
+    {
+      "edge": [
+        680420,
+        674574
+      ],
+      "intersectedTriangles": [
+        [
+          674226,
+          680035,
+          680489
+        ]
+      ]
+    },
+    {
+      "edge": [
+        686261,
+        680420
+      ],
+      "intersectedTriangles": [
+        [
+          681885,
+          682553,
+          677660
+        ]
+      ]
+    },
+    {
+      "edge": [
+        582735,
+        582754
+      ],
+      "intersectedTriangles": [
+        [
+          579659,
+          580246,
+          582494
+        ]
+      ]
+    },
+    {
+      "edge": [
+        584068,
+        582735
+      ],
+      "intersectedTriangles": [
+        [
+          579659,
+          580246,
+          582494
+        ]
+      ]
+    },
+    {
+      "edge": [
+        584529,
+        582735
+      ],
+      "intersectedTriangles": [
+        [
+          579659,
+          580246,
+          582494
+        ]
+      ]
+    },
+    {
+      "edge": [
+        589947,
+        588540
+      ],
+      "intersectedTriangles": [
+        [
+          578220,
+          579659,
+          581809
+        ]
+      ]
+    },
+    {
+      "edge": [
+        588540,
+        587620
+      ],
+      "intersectedTriangles": [
+        [
+          578220,
+          579659,
+          581809
+        ]
+      ]
+    },
+    {
+      "edge": [
+        586576,
+        587620
+      ],
+      "intersectedTriangles": [
+        [
+          579659,
+          582949,
+          581809
+        ]
+      ]
+    },
+    {
+      "edge": [
+        586576,
+        584529
+      ],
+      "intersectedTriangles": [
+        [
+          579659,
+          580246,
+          582494
+        ]
+      ]
+    },
+    {
+      "edge": [
+        592469,
+        589769
+      ],
+      "intersectedTriangles": [
+        [
+          577418,
+          581809,
+          581715
+        ]
+      ]
+    },
+    {
+      "edge": [
+        589769,
+        591237
+      ],
+      "intersectedTriangles": [
+        [
+          577418,
+          581809,
+          581715
+        ]
+      ]
+    },
+    {
+      "edge": [
+        592469,
+        591207
+      ],
+      "intersectedTriangles": [
+        [
+          577418,
+          581809,
+          581715
+        ]
+      ]
+    },
+    {
+      "edge": [
+        592469,
+        593853
+      ],
+      "intersectedTriangles": [
+        [
+          578483,
+          581715,
+          581794
+        ]
+      ]
+    },
+    {
+      "edge": [
+        588540,
+        591237
+      ],
+      "intersectedTriangles": [
+        [
+          578220,
+          579659,
+          581809
+        ]
+      ]
+    },
+    {
+      "edge": [
+        593853,
+        596153
+      ],
+      "intersectedTriangles": [
+        [
+          578483,
+          581715,
+          581794
+        ]
+      ]
+    },
+    {
+      "edge": [
+        596153,
+        594624
+      ],
+      "intersectedTriangles": [
+        [
+          580124,
+          581794,
+          583538
+        ]
+      ]
+    }
+  ],
+  "maxEdgeStretchRatio": 25.452321947624004,
+  "acceptedForExport": false,
+  "productionAccepted": false
+}

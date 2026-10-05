@@ -1,0 +1,20 @@
+{
+  "sourceRevision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "94bd738c8348e1713309d2023a4307eabdfb826bea4d23e203e571c3bddd41d6",
+  "derivativeSHA256": "769b67ef5c82b34f631a12799b12c48d8bffc9eb50e0809be53e6143a6ec7254",
+  "clip": "Idle",
+  "nativeSamplerControl": "Every Idle output accessor serialized constant to its first sample in a throwaway in-memory GLB, then real GLTFLoader/AnimationMixer/CPU skin measured at0/.8.",
+  "positive": {
+    "vertices": 989606,
+    "maximum": 0.003950371825220103
+  },
+  "inert": {
+    "vertices": 989606,
+    "maximum": 0
+  },
+  "independentlyMeasuredAllowance": 0.0000011400342353013416,
+  "positiveDetected": true,
+  "inertRejected": true,
+  "renderAcceptance": null,
+  "releaseVerified": false
+}

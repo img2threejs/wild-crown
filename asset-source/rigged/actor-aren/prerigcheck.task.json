@@ -1,0 +1,13 @@
+{
+  "type": "animate_prerigcheck",
+  "status": "success",
+  "progress": 100,
+  "input": { "original_model_id": "0a4c2f1e-0398-45ca-ad2b-dd7f9aa6a861" },
+  "output": { "riggable": true, "rig_type": "biped" },
+  "task_id": "4b7abdab-e36e-489f-aa75-5eff1ebe6dab",
+  "created_at": "2026-10-01T07:02:18.770751Z",
+  "completed_at": "2026-10-01T07:02:19.485709Z",
+  "credits_consumed": 0,
+  "retrievalCommand": "tripo --no-open task get 4b7abdab-e36e-489f-aa75-5eff1ebe6dab",
+  "note": "Retrieved existing check; did not rerun. The CLI downloaded task.json output_fields list was empty, but task get exposes the genuine riggable boolean and biped recommendation."
+}

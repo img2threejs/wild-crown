@@ -1,0 +1,23 @@
+{
+  "sha256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "bytes": 99518156,
+  "gltfVersion": "2.0",
+  "skins": [{
+    "name": "Armature",
+    "jointCount": 21,
+    "jointNames": ["tripo::Root", "tripo::Spine_0", "tripo::1_Left_Limb_0", "tripo::1_Left_Limb_1", "tripo::1_Left_Limb_2", "tripo::Spine_1", "tripo::0_Right_Limb_0", "tripo::0_Right_Limb_1", "tripo::Head_0", "bone_9", "bone_10", "tripo::0_Right_Limb_2", "tripo::0_Right_Limb_3", "tripo::0_Right_Limb_4", "tripo::0_Right_Limb_5", "tripo::1_Right_Limb_0", "tripo::1_Right_Limb_1", "tripo::1_Right_Limb_2", "tripo::1_Right_Limb_3", "tripo::0_Left_Limb_0", "tripo::0_Left_Limb_1"],
+    "inverseBindMatrices": {"count": 21, "finite": true}
+  }],
+  "primitives": [{
+    "vertices": 989606,
+    "attributes": ["POSITION", "NORMAL", "TEXCOORD_0", "JOINTS_0", "WEIGHTS_0"],
+    "minWeightSum": 0.9999998511484591,
+    "maxWeightSum": 1.0000001341104507,
+    "maxJointIndex": 20,
+    "nonzeroInfluences": 3697912
+  }],
+  "animations": [],
+  "binarySkinChecksPassed": true,
+  "visualQuality": "not-measured",
+  "gameReady": false
+}

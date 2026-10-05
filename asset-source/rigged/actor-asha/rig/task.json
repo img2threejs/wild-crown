@@ -1,0 +1,23 @@
+{
+  "task_id": "15fc35a2-5113-4d6c-8207-13eaf0d18ef1",
+  "type": "animate_rig",
+  "status": "success",
+  "input": {
+    "spec": "tripo",
+    "topology": "quadruped",
+    "out_format": "glb",
+    "original_model_id": "05baf3f0-a4e0-4cdf-bb60-ba484e1da612"
+  },
+  "output_fields": [
+    "model_url",
+    "rendered_image_url"
+  ],
+  "credits_consumed": 25,
+  "created_at": "2026-10-01T07:14:34.035810Z",
+  "completed_at": "2026-10-01T07:15:55.389139Z",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ]
+}

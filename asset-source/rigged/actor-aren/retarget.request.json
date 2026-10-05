@@ -1,0 +1,22 @@
+{
+  "cliVersion": "0.5.1",
+  "documentation": "tripo --no-open docs --topic commands/process",
+  "rigTaskId": "1fc43928-8af8-4cf2-a97d-2c2a5b4ee658",
+  "requested": {
+    "animations": ["preset:idle", "preset:walk"],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "bake_animation": true,
+    "export_with_geometry": true
+  },
+  "requestCommand": "tripo --no-open anim retarget 1fc43928-8af8-4cf2-a97d-2c2a5b4ee658 --animation preset:idle preset:walk --out-format glb --animate-in-place --out asset-source/rigged/actor-aren/clips --json --yes --timeout 1800",
+  "dryRun": {
+    "supportedByAnimRetarget": false,
+    "makeAttempts": [
+      {"result": "unknown step preset", "reason": "make --then parser splits commas within the animations JSON array"},
+      {"valid": false, "errors": ["retarget: retarget requires animation (single) or animations (list)"], "reason": "make --param animations is not propagated into chain step payload"}
+    ],
+    "productionPlan": "Use documented anim retarget --animation multi-value option. Both attempts were dry-run only; no retarget submitted by them."
+  },
+  "presets": "rig v2.0/v2.5 preset:idle and preset:walk, not v1 biped presets; walk is not dodge"
+}

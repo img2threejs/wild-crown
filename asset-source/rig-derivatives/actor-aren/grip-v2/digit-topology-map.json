@@ -1,0 +1,68 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "rule": "Five actual native digit-tip/thumbnail-lobe seeds; shortest paths on exact POSITION-welded native hand triangle edges. Not whole-arm weights, Euclidean nearest body, or generic bone labels.",
+  "handVertices": 19012,
+  "uniqueNativePositions": 18184,
+  "seeds": [
+    {
+      "name": "digit-farthest-from-thumb",
+      "vertex": 804375,
+      "position": [
+        -0.07217391580343246,
+        0.41356006264686584,
+        0.11608380079269409
+      ]
+    },
+    {
+      "name": "digit-next-farthest",
+      "vertex": 750230,
+      "position": [
+        -0.06270044296979904,
+        0.40491628646850586,
+        0.10589249432086945
+      ]
+    },
+    {
+      "name": "digit-next-to-thumb-side",
+      "vertex": 664192,
+      "position": [
+        -0.04931959882378578,
+        0.3982430398464203,
+        0.11031845957040787
+      ]
+    },
+    {
+      "name": "digit-nearest-thumb",
+      "vertex": 583841,
+      "position": [
+        -0.03699908033013344,
+        0.39937320351600647,
+        0.12039460986852646
+      ]
+    },
+    {
+      "name": "actual-thumb-lobe",
+      "vertex": 507870,
+      "position": [
+        -0.026637213304638863,
+        0.42477989196777344,
+        0.11694483458995819
+      ]
+    }
+  ],
+  "dominantVoronoiRegionCounts": [
+    8709,
+    580,
+    1310,
+    3130,
+    5283
+  ],
+  "distanceBinary": {
+    "path": "digit-geodesic-distances.bin",
+    "sha256": "6f5b85fdffd12d71f621043513a06d9e7c14a5a01079ee551ac633f55ffe8097",
+    "recordBytes": 24,
+    "format": "uint32 nativeVertex + five float32 native geodesic distances"
+  },
+  "weightBlendPolicy": "Smooth two nearest morphology-region distances within0.003native; independent hand joint depths retain continuous palm/web transition.",
+  "productionAccepted": false
+}

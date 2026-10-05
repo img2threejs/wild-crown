@@ -1,0 +1,495 @@
+{
+  "status": "FOUR_PAW_NUMERIC_CANARY_EVIDENCE",
+  "startedAt": "2026-10-01T09:17:32.465Z",
+  "finishedAt": "2026-10-01T09:22:32.596Z",
+  "sourceRevision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "94bd738c8348e1713309d2023a4307eabdfb826bea4d23e203e571c3bddd41d6",
+  "derivativeSHA256": "769b67ef5c82b34f631a12799b12c48d8bffc9eb50e0809be53e6143a6ec7254",
+  "derivativeBytes": 99679580,
+  "loader": "three@0.169.0 genuine GLTFLoader.parseAsync + AnimationMixer + CPU SkinnedMesh.applyBoneTransform",
+  "allVertices": 989606,
+  "triangles": 1934187,
+  "repairedSourcePreserved": true,
+  "contactSurfaceVertices": 49814,
+  "calibration": {
+    "policy": "2 * (independently measured all-vertex corrected-source native bind residual + independently measured all-vertex stationary Float32 TRS serialization residual) + 8 * measured native-world Float32 coordinate rounding residual; fixed before motion measurement",
+    "bindResidual": 4.0514206454064235e-7,
+    "stationaryFloat32AnimationResidual": 3.0675952686433006e-8,
+    "worldFloat32RoundingResidual": 3.354977510589886e-8,
+    "calibratedContactAllowance": 0.0000011400342353013416,
+    "stationaryPaws": [
+      {
+        "paw": "front-negative-X",
+        "vertices": 13960,
+        "maxHorizontalSlip": 2.115985563601657e-8,
+        "maxVerticalOffset": 2.4479519411535478e-8,
+        "minY": 0.00024528337864732075,
+        "maxY": 0.014996716494302287,
+        "worstHorizontalVertex": 870066,
+        "worstVerticalVertex": 654031
+      },
+      {
+        "paw": "front-positive-X",
+        "vertices": 14241,
+        "maxHorizontalSlip": 0,
+        "maxVerticalOffset": 0,
+        "minY": 4.977167750164213e-8,
+        "maxY": 0.014999796297405277,
+        "worstHorizontalVertex": null,
+        "worstVerticalVertex": null
+      },
+      {
+        "paw": "rear-negative-X",
+        "vertices": 10826,
+        "maxHorizontalSlip": 0,
+        "maxVerticalOffset": 0,
+        "minY": 0.0005236756716187063,
+        "maxY": 0.01499760768548064,
+        "worstHorizontalVertex": null,
+        "worstVerticalVertex": null
+      },
+      {
+        "paw": "rear-positive-X",
+        "vertices": 10787,
+        "maxHorizontalSlip": 0,
+        "maxVerticalOffset": 0,
+        "minY": 0.0002302235924169782,
+        "maxY": 0.014999257604229876,
+        "worstHorizontalVertex": null,
+        "worstVerticalVertex": null
+      }
+    ],
+    "selectedFromMotion": false
+  },
+  "clips": [
+    {
+      "name": "Idle",
+      "durationSeconds": 3.200000047683716,
+      "channels": 9,
+      "sampledTimes": 1145,
+      "allVerticesEverySample": 989606,
+      "finiteVertexSamples": 1133098870,
+      "soleVerticesEverySample": 49814,
+      "rootHorizontalExcursion": 0,
+      "rootVerticalRange": [
+        0.029661983251571655,
+        0.029661983251571655
+      ],
+      "maximumAllVertexDeformation": 0.003950379505081352,
+      "maximumNonRigidDeformation": 0.003950379505081352,
+      "loopOrRecoveryClosureAllVertices": 0,
+      "contactWindows": [
+        {
+          "start": 0,
+          "end": 3.200000047683716,
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "vertices": 13960,
+              "sampledTimes": 1145,
+              "maxHorizontalSlip": 4.5031735491921355e-9,
+              "maxVerticalOffset": 1.7834361210056215e-8,
+              "worstHorizontal": {
+                "time": 1.9416667222976685,
+                "vertex": 559023
+              },
+              "worstVertical": {
+                "time": 0.9750000238418579,
+                "vertex": 559329
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "front-positive-X",
+              "vertices": 14241,
+              "sampledTimes": 1145,
+              "maxHorizontalSlip": 5.012909866219391e-9,
+              "maxVerticalOffset": 1.7818495456900507e-8,
+              "worstHorizontal": {
+                "time": 1.2583333253860474,
+                "vertex": 152977
+              },
+              "worstVertical": {
+                "time": 2.6666667461395264,
+                "vertex": 106979
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-negative-X",
+              "vertices": 10826,
+              "sampledTimes": 1145,
+              "maxHorizontalSlip": 5.271326216119191e-9,
+              "maxVerticalOffset": 1.8088736064569844e-8,
+              "worstHorizontal": {
+                "time": 2.5916666984558105,
+                "vertex": 987126
+              },
+              "worstVertical": {
+                "time": 2.9166667461395264,
+                "vertex": 732019
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-positive-X",
+              "vertices": 10787,
+              "sampledTimes": 1145,
+              "maxHorizontalSlip": 1.5738665287875022e-9,
+              "maxVerticalOffset": 2.0194686589647404e-8,
+              "worstHorizontal": {
+                "time": 2.241666555404663,
+                "vertex": 4493
+              },
+              "worstVertical": {
+                "time": 1.4500000476837158,
+                "vertex": 213
+              },
+              "withinIndependentNumericAllowance": true
+            }
+          ]
+        }
+      ],
+      "rootStripControl": null
+    },
+    {
+      "name": "Pounce",
+      "durationSeconds": 1.7999999523162842,
+      "channels": 33,
+      "sampledTimes": 656,
+      "allVerticesEverySample": 989606,
+      "finiteVertexSamples": 649181536,
+      "soleVerticesEverySample": 49814,
+      "rootHorizontalExcursion": 5.421010862427522e-20,
+      "rootVerticalRange": [
+        0.029661983251571628,
+        0.20966198295354843
+      ],
+      "maximumAllVertexDeformation": 0.19368544161222329,
+      "maximumNonRigidDeformation": 0.04343966316451977,
+      "loopOrRecoveryClosureAllVertices": 0,
+      "contactWindows": [
+        {
+          "start": 0,
+          "end": 0.4,
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "vertices": 13960,
+              "sampledTimes": 146,
+              "maxHorizontalSlip": 3.728893187315223e-8,
+              "maxVerticalOffset": 3.835876288826867e-8,
+              "worstHorizontal": {
+                "time": 0.4,
+                "vertex": 861718
+              },
+              "worstVertical": {
+                "time": 0.03333333507180214,
+                "vertex": 654031
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "front-positive-X",
+              "vertices": 14241,
+              "sampledTimes": 146,
+              "maxHorizontalSlip": 2.30538506855458e-8,
+              "maxVerticalOffset": 2.6804265584878806e-8,
+              "worstHorizontal": {
+                "time": 0.4,
+                "vertex": 169369
+              },
+              "worstVertical": {
+                "time": 0.4,
+                "vertex": 372807
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-negative-X",
+              "vertices": 10826,
+              "sampledTimes": 146,
+              "maxHorizontalSlip": 1.0785961031098225e-8,
+              "maxVerticalOffset": 1.9125723504931358e-8,
+              "worstHorizontal": {
+                "time": 0.4,
+                "vertex": 952493
+              },
+              "worstVertical": {
+                "time": 0.4,
+                "vertex": 989605
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-positive-X",
+              "vertices": 10787,
+              "sampledTimes": 146,
+              "maxHorizontalSlip": 8.507117816515079e-9,
+              "maxVerticalOffset": 1.899697454899041e-8,
+              "worstHorizontal": {
+                "time": 0.15000000596046448,
+                "vertex": 206752
+              },
+              "worstVertical": {
+                "time": 0.0833333358168602,
+                "vertex": 115
+              },
+              "withinIndependentNumericAllowance": true
+            }
+          ]
+        },
+        {
+          "start": 1.16,
+          "end": 1.7999999523162842,
+          "paws": [
+            {
+              "paw": "front-negative-X",
+              "vertices": 13960,
+              "sampledTimes": 233,
+              "maxHorizontalSlip": 4.1327163393216284e-8,
+              "maxVerticalOffset": 4.848031720516843e-8,
+              "worstHorizontal": {
+                "time": 1.16,
+                "vertex": 861718
+              },
+              "worstVertical": {
+                "time": 1.16,
+                "vertex": 561723
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "front-positive-X",
+              "vertices": 14241,
+              "sampledTimes": 233,
+              "maxHorizontalSlip": 2.612641451485205e-8,
+              "maxVerticalOffset": 4.848286566661031e-8,
+              "worstHorizontal": {
+                "time": 1.16,
+                "vertex": 169369
+              },
+              "worstVertical": {
+                "time": 1.16,
+                "vertex": 372807
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-negative-X",
+              "vertices": 10826,
+              "sampledTimes": 233,
+              "maxHorizontalSlip": 1.9515823821526867e-8,
+              "maxVerticalOffset": 2.331418047507583e-8,
+              "worstHorizontal": {
+                "time": 1.16,
+                "vertex": 989414
+              },
+              "worstVertical": {
+                "time": 1.5583332777023315,
+                "vertex": 987126
+              },
+              "withinIndependentNumericAllowance": true
+            },
+            {
+              "paw": "rear-positive-X",
+              "vertices": 10787,
+              "sampledTimes": 233,
+              "maxHorizontalSlip": 9.62122189665496e-9,
+              "maxVerticalOffset": 1.8965403691950655e-8,
+              "worstHorizontal": {
+                "time": 1.5333333015441895,
+                "vertex": 206668
+              },
+              "worstVertical": {
+                "time": 1.2666666507720947,
+                "vertex": 115
+              },
+              "withinIndependentNumericAllowance": true
+            }
+          ]
+        }
+      ],
+      "rootStripControl": {
+        "time": 0.8,
+        "nativeRoot": [
+          -7.451490091625601e-9,
+          0.20966198241737416,
+          -2.977321855723858e-8
+        ],
+        "strippedRoot": [
+          -7.451490091625601e-9,
+          0.029661983251571655,
+          -2.977321855723858e-8
+        ],
+        "lostLift": 0.1799999991658025,
+        "nativeAllVertexMinY": 0.16978663800691055,
+        "strippedAllVertexMinY": -0.010213362227584621,
+        "flightDetectorRejects": true
+      }
+    }
+  ],
+  "controls": {
+    "stationaryPositive": true,
+    "injectedSlide": {
+      "injectedX": 0.025,
+      "paws": [
+        {
+          "paw": "front-negative-X",
+          "vertices": 13960,
+          "maxHorizontalSlip": 0.02500000000000003,
+          "maxVerticalOffset": 0,
+          "minY": 0.0002453030268647072,
+          "maxY": 0.01499673640039878,
+          "worstHorizontalVertex": 578300,
+          "worstVerticalVertex": null
+        },
+        {
+          "paw": "front-positive-X",
+          "vertices": 14241,
+          "maxHorizontalSlip": 0.02500000109212122,
+          "maxVerticalOffset": 0,
+          "minY": 4.977167750164213e-8,
+          "maxY": 0.014999796297405277,
+          "worstHorizontalVertex": 235365,
+          "worstVerticalVertex": null
+        },
+        {
+          "paw": "rear-negative-X",
+          "vertices": 10826,
+          "maxHorizontalSlip": 0.02500000109866965,
+          "maxVerticalOffset": 0,
+          "minY": 0.0005236756716187063,
+          "maxY": 0.01499760768548064,
+          "worstHorizontalVertex": 988422,
+          "worstVerticalVertex": null
+        },
+        {
+          "paw": "rear-positive-X",
+          "vertices": 10787,
+          "maxHorizontalSlip": 0.02500000000000001,
+          "maxVerticalOffset": 0,
+          "minY": 0.0002302235924169782,
+          "maxY": 0.014999257604229876,
+          "worstHorizontalVertex": 102931,
+          "worstVerticalVertex": null
+        }
+      ],
+      "rejected": true
+    },
+    "noOp": {
+      "start": 3.0463030170132724e-8,
+      "peak": 3.0463030170132724e-8,
+      "nonRigidPeak": 3.0463030170132724e-8,
+      "motionDetectorRejects": true
+    },
+    "contactCorrectionInert": {
+      "time": 0.32,
+      "paws": [
+        {
+          "paw": "front-negative-X",
+          "vertices": 13960,
+          "maxHorizontalSlip": 0.010000020880088565,
+          "maxVerticalOffset": 0.028000013380727662,
+          "minY": -0.02775470552256093,
+          "maxY": -0.013003272406905964,
+          "worstHorizontalVertex": 877964,
+          "worstVerticalVertex": 654031
+        },
+        {
+          "paw": "front-positive-X",
+          "vertices": 14241,
+          "maxHorizontalSlip": 0.004999994971907232,
+          "maxVerticalOffset": 0.04799999770364166,
+          "minY": -0.047998493653546914,
+          "maxY": -0.03300008244862196,
+          "worstHorizontalVertex": 235365,
+          "worstVerticalVertex": 235365
+        },
+        {
+          "paw": "rear-negative-X",
+          "vertices": 10826,
+          "maxHorizontalSlip": 0.0059967244114825765,
+          "maxVerticalOffset": 0.02026671559323112,
+          "minY": -0.0195974301215604,
+          "maxY": -0.005006305154914015,
+          "worstHorizontalVertex": 987126,
+          "worstVerticalVertex": 732019
+        },
+        {
+          "paw": "rear-positive-X",
+          "vertices": 10787,
+          "maxHorizontalSlip": 1.040317288704496e-9,
+          "maxVerticalOffset": 0.023999995409219155,
+          "minY": -0.02376977181680212,
+          "maxY": -0.009000737804989223,
+          "worstHorizontalVertex": 3262,
+          "worstVerticalVertex": 3634
+        }
+      ],
+      "rejectedPaws": [
+        "front-negative-X",
+        "front-positive-X",
+        "rear-negative-X",
+        "rear-positive-X"
+      ]
+    },
+    "authoredMotionPositive": [
+      {
+        "clip": "Idle",
+        "allVertexMotion": 0.003950379505081352,
+        "nonRigidMotion": 0.003950379505081352,
+        "detected": true
+      },
+      {
+        "clip": "Pounce",
+        "allVertexMotion": 0.19368544161222329,
+        "nonRigidMotion": 0.04343966316451977,
+        "detected": true
+      }
+    ]
+  },
+  "temporal": [
+    {
+      "clip": "Idle",
+      "mode": "LoopRepeat",
+      "phase": 0.10000000000000009,
+      "allVertexRecurrenceError": 0
+    },
+    {
+      "clip": "Pounce",
+      "mode": "LoopOnce",
+      "time": 1.7999999523162842,
+      "clamped": true,
+      "allVertexRecoveryError": 3.0463030170132724e-8
+    }
+  ],
+  "phaseMotion": {
+    "breathingTorsoPositiveAndNegative": true,
+    "subtleHeadSurfaceMotion": true,
+    "anticipationBodyCompression": true,
+    "landingBodyCompression": true,
+    "bodyRecovery": true,
+    "fourIndependentChains": true
+  },
+  "allFourPlantedNumerically": true,
+  "measurementControlsSensitive": true,
+  "timelineNumericallyValid": true,
+  "inPlaceHorizontalMeasured": true,
+  "sourceSkinLimitations": "Complete negative-X fore sole must be exclusively owned by new foreleg joints21–23; source guard enforces this. Other original three paws retain native mixed influences, whose actual world transforms are preserved during plant. Numerical contact is NOT anatomical/visual qualification.",
+  "sourceLOD": {
+    "sourceMeshCount": 1,
+    "lodCount": 1,
+    "lowerLODs": null,
+    "productionMemoryAndFrameTime": null
+  },
+  "rootPolicy": "in-place horizontal; visual native root Y retained; authoritative external actor pose (identity CPU scenario)",
+  "texturesDecoded": false,
+  "browserRenderMeasured": false,
+  "gameplayIntegrationMeasured": false,
+  "continuousMotionAndColliderAcceptance": null,
+  "AstraReview": null,
+  "parentRenderAcceptance": null,
+  "releaseVerified": false,
+  "usage": null
+}

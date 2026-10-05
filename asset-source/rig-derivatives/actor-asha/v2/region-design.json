@@ -1,0 +1,47 @@
+{
+  "revision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "081579ba678e764a53a6f7ad5ab707d8fd31463bf4527eb316c787a623ab8ba0",
+  "previousDerivativeSHA256": "c93dcd4f8ef93de40093e2c5b89a5296e7afaa5b47f0ecab495c380f08578712",
+  "candidateCount": 98507,
+  "connectedVertexCount": 98507,
+  "previousConnectedCount": 95483,
+  "additionalConnectedVertices": 3024,
+  "bounds": {
+    "min": [
+      -0.21788795004816555,
+      0.00024509042757975275,
+      0.29000251328393634
+    ],
+    "max": [
+      -0.05433052845727732,
+      0.2999917385412215,
+      0.4889779023111143
+    ]
+  },
+  "selection": {
+    "xMinimum": -0.24,
+    "xMaximum": "-.05 - .015 * clamp((y - .08) / .06, 0, 1)",
+    "y": [
+      0,
+      0.3
+    ],
+    "zMinimum": 0.29,
+    "zMaximum": ".49 - .13 * clamp((y - .16) / .14, 0, 1)",
+    "shoulderBlend": "unchanged V1 abovey.14"
+  },
+  "soleSeed": 791041,
+  "all13960ActualForeSoleCovered": true,
+  "newNodes": [
+    23,
+    24,
+    25
+  ],
+  "newSkinJoints": [
+    21,
+    22,
+    23
+  ],
+  "parentNode": 10,
+  "parentSkinJoint": 7,
+  "rigRestTransformsAndAll24IBMsInheritedUnchangedFromV1": true
+}

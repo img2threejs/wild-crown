@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "cliVersion": "0.5.1",
+  "requestedRigModel": "v2.5-20260210",
+  "providerResolvedRigModel": null,
+  "requestEndpoint": "/v3/animations/retarget",
+  "officialDocumentation": [
+    {
+      "url": "https://developers.tripo3d.ai/en/docs/animations-retarget",
+      "retrieval": "Direct HTTP GET; HTML text extracted without browser",
+      "excerpts": [
+        "Single preset animation identifier.**Mutually exclusive with `animations` — provide only one.**",
+        "Rig v2.5-20260210 — All rig types",
+        "- Biped: `preset:idle`, `preset:walk`, `preset:run`, `preset:dive`, `preset:climb`, `preset:jump`, `preset:slash`, `preset:shoot`, `preset:hurt`, `preset:fall`, `preset:turn`",
+        "- Quadruped: `preset:quadruped:walk`"
+      ]
+    },
+    {
+      "url": "https://docs.tripo3d.ai/animation/retarget.html",
+      "retrieval": "Direct HTTP GET; HTML text extracted without browser",
+      "scope": "Legacy v2 reference corroborates body-specific whitelist; not used as an alternative request endpoint",
+      "excerpts": [
+        "Rig v2.5 (v2.5-20260210): fixed whitelist, 27 presets.",
+        "For the biped locomotion and combat names below, both preset:<name> and preset:biped:<name> are supported",
+        "preset:idle / preset:biped:idle",
+        "preset:walk / preset:biped:walk",
+        "preset:quadruped:walk"
+      ]
+    }
+  ],
+  "cliSourceEvidence": {
+    "process-groups.js": "One --animation value maps to animation; multiple values map to animations[] (lines 137-145).",
+    "bundledCommandsProcess": "Generic presets were listed under 'Presets for rig v2.0 / v2.5 (all rig types)', unlike the current official body-specific table."
+  },
+  "failedRequestDiagnosis": {
+    "taskId": "1cebacef-b0a8-4758-b6ad-6b49dd4033ed",
+    "observedErrorCode": 1004,
+    "observedErrorMessage": "Invalid input parameter",
+    "supportedWalk": "preset:quadruped:walk",
+    "quadrupedIdle": null,
+    "genericIdleSupportedBody": "biped",
+    "genericWalkSupportedBody": "biped",
+    "inference": "The failed request mixed a documented biped idle preset with a quadruped walk preset; provider error does not identify the exact rejected field."
+  },
+  "dryRun": {
+    "rig": {
+      "command": "tripo --no-open make 05baf3f0-a4e0-4cdf-bb60-ba484e1da612 --then rig:model=rig-v2.0,rig_type=quadruped,spec=tripo,out_format=glb --dry-run --json",
+      "valid": true,
+      "payload": {"input": "<upstream>", "model": "v2.5-20260210", "rig_type": "quadruped", "spec": "tripo", "out_format": "glb"},
+      "warning": "chain legality unverified: upstream task type unknown (no local history for 05baf3f0-a4e0-4cdf-bb60-ba484e1da612); the real run checks it via the API"
+    },
+    "twoClipMakeAttempt": {"valid": false, "error": "unknown step preset", "networkCalls": 0},
+    "animRetarget": {"dryRunFlagSupported": false}
+  },
+  "additionalPaidRequests": 1,
+  "additionalRequest": {"authorization": "Parent explicitly authorized one supported quadruped-walk partial step, retaining idle as missing", "taskId": "f9fb3a0f-5223-4728-961c-7bf399d4f8da", "animation": "preset:quadruped:walk", "status": "success", "creditsConsumed": 10},
+  "missingPrerequisite": "Officially supported quadruped idle preset/endpoint, or explicit approval for separately authored/imported idle outside this Tripo-only brief. Current official docs do not establish a quadruped idle/walk pair.",
+  "context7Lookup": "npx --no-install ctx7 unavailable (package not installed); no packages installed. Official provider docs were retrieved directly instead.",
+  "browserLaunched": false
+}

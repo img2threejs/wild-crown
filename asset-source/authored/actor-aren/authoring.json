@@ -1,0 +1,1179 @@
+{
+  "sourceSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "derivativeSha256": "3881e0a37d49861659ed550b37e05659e5008233a295cd17bdeb83eef81ed152",
+  "derivativeBytes": 96589512,
+  "measuredSourceHeight": 0.9792109417373049,
+  "metersPerNativeUnit": 1.7360917117448456,
+  "gamePlayableHeightMeters": 1.7,
+  "normalizationAuthority": "parent 1.70m game baseline; runtime parent applies scale exactly once; no native geometry/rest modification",
+  "forward": [
+    0.9061831721503601,
+    0,
+    0.42288539642734263
+  ],
+  "lateral": [
+    0.42288539642734263,
+    0,
+    -0.9061831721503601
+  ],
+  "up": [
+    0,
+    1,
+    0
+  ],
+  "rootMode": "in-place-authoritative-capsule",
+  "referenceCurveIsNotMovementDriver": true,
+  "simulationAppliesDisplacementImmediately": true,
+  "continuousCapsuleContactIntegration": "R04 open",
+  "rootReference": [
+    {
+      "time": 0,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.004166666666666667,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.014592201188381077
+    },
+    {
+      "time": 0.008333333333333333,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.01848528137423857
+    },
+    {
+      "time": 0.0125,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.02108655439013544
+    },
+    {
+      "time": 0.016666666666666666,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.022
+    },
+    {
+      "time": 0.020833333333333332,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.02108655439013544
+    },
+    {
+      "time": 0.025,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.01848528137423857
+    },
+    {
+      "time": 0.029166666666666667,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.014592201188381079
+    },
+    {
+      "time": 0.03333333333333333,
+      "referenceDisplacementNative": [
+        0,
+        0,
+        0
+      ],
+      "referenceDistanceMeters": 0,
+      "verticalPresentationNative": -0.010000000000000002
+    },
+    {
+      "time": 0.0375,
+      "referenceDisplacementNative": [
+        0.0004535056045936812,
+        0,
+        -0.0009717979169547352
+      ],
+      "referenceDistanceMeters": 0.0018617983217592581,
+      "verticalPresentationNative": -0.00934596870769857
+    },
+    {
+      "time": 0.041666666666666664,
+      "referenceDisplacementNative": [
+        0.00178847280684832,
+        0,
+        -0.0038324424893989555
+      ],
+      "referenceDistanceMeters": 0.007342303240740736,
+      "verticalPresentationNative": -0.008694738077799484
+    },
+    {
+      "time": 0.04583333333333334,
+      "referenceDisplacementNative": [
+        0.003966577189474314,
+        0,
+        -0.008499809949702692
+      ],
+      "referenceDistanceMeters": 0.016284179687500004,
+      "verticalPresentationNative": -0.008049096779838717
+    },
+    {
+      "time": 0.05,
+      "referenceDisplacementNative": [
+        0.00694949433518205,
+        0,
+        -0.014891776530235953
+      ],
+      "referenceDistanceMeters": 0.0285300925925926,
+      "verticalPresentationNative": -0.007411809548974793
+    },
+    {
+      "time": 0.05416666666666667,
+      "referenceDisplacementNative": [
+        0.01069889982668192,
+        0,
+        -0.02292621846336876
+      ],
+      "referenceDistanceMeters": 0.04392270688657407,
+      "verticalPresentationNative": -0.006785605346968385
+    },
+    {
+      "time": 0.058333333333333334,
+      "referenceDisplacementNative": [
+        0.015176469246684324,
+        0,
+        -0.03252101198147115
+      ],
+      "referenceDistanceMeters": 0.06230468749999999,
+      "verticalPresentationNative": -0.006173165676349102
+    },
+    {
+      "time": 0.0625,
+      "referenceDisplacementNative": [
+        0.020343878177899646,
+        0,
+        -0.043594033316913125
+      ],
+      "referenceDistanceMeters": 0.08351869936342589,
+      "verticalPresentationNative": -0.005577113097809988
+    },
+    {
+      "time": 0.06666666666666667,
+      "referenceDisplacementNative": [
+        0.026162802203038297,
+        0,
+        -0.05606315870206475
+      ],
+      "referenceDistanceMeters": 0.1074074074074074,
+      "verticalPresentationNative": -0.005000000000000001
+    },
+    {
+      "time": 0.07083333333333333,
+      "referenceDisplacementNative": [
+        0.03259491690481065,
+        0,
+        -0.06984626436929599
+      ],
+      "referenceDistanceMeters": 0.13381347656249998,
+      "verticalPresentationNative": -0.0044442976698039795
+    },
+    {
+      "time": 0.075,
+      "referenceDisplacementNative": [
+        0.039601897865927105,
+        0,
+        -0.0848612265509769
+      ],
+      "referenceDistanceMeters": 0.16257957175925922,
+      "verticalPresentationNative": -0.003912385709912794
+    },
+    {
+      "time": 0.07916666666666668,
+      "referenceDisplacementNative": [
+        0.04714542066909809,
+        0,
+        -0.10102592147947756
+      ],
+      "referenceDistanceMeters": 0.19354835792824082,
+      "verticalPresentationNative": -0.003406541848999311
+    },
+    {
+      "time": 0.08333333333333333,
+      "referenceDisplacementNative": [
+        0.0551871608970339,
+        0,
+        -0.1182582253871678
+      ],
+      "referenceDistanceMeters": 0.22656249999999992,
+      "verticalPresentationNative": -0.0029289321881345257
+    },
+    {
+      "time": 0.08750000000000001,
+      "referenceDisplacementNative": [
+        0.06368879413244505,
+        0,
+        -0.13647601450641791
+      ],
+      "referenceDistanceMeters": 0.2614646629050926,
+      "verticalPresentationNative": -0.0024816019252102252
+    },
+    {
+      "time": 0.09166666666666667,
+      "referenceDisplacementNative": [
+        0.07261199595804185,
+        0,
+        -0.1555971650695977
+      ],
+      "referenceDistanceMeters": 0.2980975115740741,
+      "verticalPresentationNative": -0.002066466597087648
+    },
+    {
+      "time": 0.09583333333333333,
+      "referenceDisplacementNative": [
+        0.08191844195653468,
+        0,
+        -0.1755395533090772
+      ],
+      "referenceDistanceMeters": 0.3363037109374999,
+      "verticalPresentationNative": -0.0016853038769745494
+    },
+    {
+      "time": 0.1,
+      "referenceDisplacementNative": [
+        0.09156980771063405,
+        0,
+        -0.19622105545722665
+      ],
+      "referenceDistanceMeters": 0.37592592592592594,
+      "verticalPresentationNative": -0.0013397459621556137
+    },
+    {
+      "time": 0.10416666666666667,
+      "referenceDisplacementNative": [
+        0.10152776880305023,
+        0,
+        -0.2175595477464158
+      ],
+      "referenceDistanceMeters": 0.41680682146990733,
+      "verticalPresentationNative": -0.001031272584673117
+    },
+    {
+      "time": 0.10833333333333334,
+      "referenceDisplacementNative": [
+        0.11175400081649371,
+        0,
+        -0.23947290640901497
+      ],
+      "referenceDistanceMeters": 0.4587890625000002,
+      "verticalPresentationNative": -0.000761204674887132
+    },
+    {
+      "time": 0.1125,
+      "referenceDisplacementNative": [
+        0.12221017933367474,
+        0,
+        -0.26187900767739375
+      ],
+      "referenceDistanceMeters": 0.5017153139467592,
+      "verticalPresentationNative": -0.0005306987050489442
+    },
+    {
+      "time": 0.11666666666666667,
+      "referenceDisplacementNative": [
+        0.13285797993730386,
+        0,
+        -0.2846957277839226
+      ],
+      "referenceDistanceMeters": 0.5454282407407407,
+      "verticalPresentationNative": -0.0003407417371093166
+    },
+    {
+      "time": 0.12083333333333333,
+      "referenceDisplacementNative": [
+        0.14365907821009136,
+        0,
+        -0.3078409429609712
+      ],
+      "referenceDistanceMeters": 0.5897705078124998,
+      "verticalPresentationNative": -0.00019214719596769535
+    },
+    {
+      "time": 0.125,
+      "referenceDisplacementNative": [
+        0.15457514973474776,
+        0,
+        -0.3312325294409099
+      ],
+      "referenceDistanceMeters": 0.6345847800925926,
+      "verticalPresentationNative": -0.00008555138626189542
+    },
+    {
+      "time": 0.12916666666666668,
+      "referenceDisplacementNative": [
+        0.16556787009398335,
+        0,
+        -0.35478836345610854
+      ],
+      "referenceDistanceMeters": 0.6797137225115741,
+      "verticalPresentationNative": -0.00002141076761396493
+    },
+    {
+      "time": 0.13333333333333333,
+      "referenceDisplacementNative": [
+        0.17659891487050852,
+        0,
+        -0.37842632123893705
+      ],
+      "referenceDistanceMeters": 0.725,
+      "verticalPresentationNative": 0
+    },
+    {
+      "time": 0.13749999999999998,
+      "referenceDisplacementNative": [
+        0.18762995964703366,
+        0,
+        -0.40206427902176556
+      ],
+      "referenceDistanceMeters": 0.7702862774884257,
+      "verticalPresentationNative": -0.00002141076761396493
+    },
+    {
+      "time": 0.14166666666666666,
+      "referenceDisplacementNative": [
+        0.19862268000626923,
+        0,
+        -0.4256201130369641
+      ],
+      "referenceDistanceMeters": 0.8154152199074072,
+      "verticalPresentationNative": -0.00008555138626189542
+    },
+    {
+      "time": 0.14583333333333334,
+      "referenceDisplacementNative": [
+        0.20953875153092563,
+        0,
+        -0.4490116995169029
+      ],
+      "referenceDistanceMeters": 0.8602294921874999,
+      "verticalPresentationNative": -0.00019214719596769535
+    },
+    {
+      "time": 0.15,
+      "referenceDisplacementNative": [
+        0.22033984980371313,
+        0,
+        -0.4721569146939515
+      ],
+      "referenceDistanceMeters": 0.904571759259259,
+      "verticalPresentationNative": -0.0003407417371093166
+    },
+    {
+      "time": 0.15416666666666667,
+      "referenceDisplacementNative": [
+        0.23098765040734232,
+        0,
+        -0.4949736348004804
+      ],
+      "referenceDistanceMeters": 0.9482846860532408,
+      "verticalPresentationNative": -0.0005306987050489442
+    },
+    {
+      "time": 0.15833333333333335,
+      "referenceDisplacementNative": [
+        0.24144382892452346,
+        0,
+        -0.5173797360688595
+      ],
+      "referenceDistanceMeters": 0.9912109375000003,
+      "verticalPresentationNative": -0.0007612046748871337
+    },
+    {
+      "time": 0.1625,
+      "referenceDisplacementNative": [
+        0.2516700609379668,
+        0,
+        -0.5392930947314583
+      ],
+      "referenceDistanceMeters": 1.0331931785300925,
+      "verticalPresentationNative": -0.001031272584673117
+    },
+    {
+      "time": 0.16666666666666666,
+      "referenceDisplacementNative": [
+        0.261628022030383,
+        0,
+        -0.5606315870206475
+      ],
+      "referenceDistanceMeters": 1.074074074074074,
+      "verticalPresentationNative": -0.0013397459621556137
+    },
+    {
+      "time": 0.17083333333333334,
+      "referenceDisplacementNative": [
+        0.2712793877844823,
+        0,
+        -0.5813130891687969
+      ],
+      "referenceDistanceMeters": 1.1136962890625,
+      "verticalPresentationNative": -0.001685303876974546
+    },
+    {
+      "time": 0.17500000000000002,
+      "referenceDisplacementNative": [
+        0.2805858337829752,
+        0,
+        -0.6012554774082765
+      ],
+      "referenceDistanceMeters": 1.151902488425926,
+      "verticalPresentationNative": -0.002066466597087648
+    },
+    {
+      "time": 0.17916666666666667,
+      "referenceDisplacementNative": [
+        0.28950903560857194,
+        0,
+        -0.6203766279714562
+      ],
+      "referenceDistanceMeters": 1.1885353370949072,
+      "verticalPresentationNative": -0.002481601925210226
+    },
+    {
+      "time": 0.18333333333333335,
+      "referenceDisplacementNative": [
+        0.2980106688439832,
+        0,
+        -0.6385944170907065
+      ],
+      "referenceDistanceMeters": 1.2234375000000002,
+      "verticalPresentationNative": -0.0029289321881345275
+    },
+    {
+      "time": 0.1875,
+      "referenceDisplacementNative": [
+        0.30605240907191894,
+        0,
+        -0.6558267209983967
+      ],
+      "referenceDistanceMeters": 1.256451642071759,
+      "verticalPresentationNative": -0.003406541848999311
+    },
+    {
+      "time": 0.19166666666666665,
+      "referenceDisplacementNative": [
+        0.3135959318750899,
+        0,
+        -0.6719914159268972
+      ],
+      "referenceDistanceMeters": 1.2874204282407407,
+      "verticalPresentationNative": -0.003912385709912791
+    },
+    {
+      "time": 0.19583333333333336,
+      "referenceDisplacementNative": [
+        0.3206029128362064,
+        0,
+        -0.6870063781085782
+      ],
+      "referenceDistanceMeters": 1.3161865234375,
+      "verticalPresentationNative": -0.004444297669803979
+    },
+    {
+      "time": 0.2,
+      "referenceDisplacementNative": [
+        0.32703502753797875,
+        0,
+        -0.7007894837758095
+      ],
+      "referenceDistanceMeters": 1.3425925925925926,
+      "verticalPresentationNative": -0.005000000000000001
+    },
+    {
+      "time": 0.20416666666666666,
+      "referenceDisplacementNative": [
+        0.33285395156311737,
+        0,
+        -0.7132586091609611
+      ],
+      "referenceDistanceMeters": 1.366481300636574,
+      "verticalPresentationNative": -0.005577113097809987
+    },
+    {
+      "time": 0.20833333333333334,
+      "referenceDisplacementNative": [
+        0.3380213604943327,
+        0,
+        -0.7243316304964029
+      ],
+      "referenceDistanceMeters": 1.3876953124999998,
+      "verticalPresentationNative": -0.006173165676349101
+    },
+    {
+      "time": 0.2125,
+      "referenceDisplacementNative": [
+        0.3424989299143351,
+        0,
+        -0.7339264240145054
+      ],
+      "referenceDistanceMeters": 1.4060772931134258,
+      "verticalPresentationNative": -0.006785605346968383
+    },
+    {
+      "time": 0.21666666666666667,
+      "referenceDisplacementNative": [
+        0.34624833540583494,
+        0,
+        -0.7419608659476381
+      ],
+      "referenceDistanceMeters": 1.4214699074074073,
+      "verticalPresentationNative": -0.0074118095489747945
+    },
+    {
+      "time": 0.22083333333333335,
+      "referenceDisplacementNative": [
+        0.3492312525515427,
+        0,
+        -0.7483528325281714
+      ],
+      "referenceDistanceMeters": 1.4337158203124998,
+      "verticalPresentationNative": -0.008049096779838718
+    },
+    {
+      "time": 0.225,
+      "referenceDisplacementNative": [
+        0.35140935693416875,
+        0,
+        -0.7530201999884752
+      ],
+      "referenceDistanceMeters": 1.4426576967592593,
+      "verticalPresentationNative": -0.008694738077799484
+    },
+    {
+      "time": 0.22916666666666666,
+      "referenceDisplacementNative": [
+        0.3527443241364233,
+        0,
+        -0.7558808445609194
+      ],
+      "referenceDistanceMeters": 1.4481382016782405,
+      "verticalPresentationNative": -0.00934596870769857
+    },
+    {
+      "time": 0.23333333333333334,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.009999999999999998
+    },
+    {
+      "time": 0.23750000000000002,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.011343573713239697
+    },
+    {
+      "time": 0.24166666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01267025120747577
+    },
+    {
+      "time": 0.24583333333333335,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.013963348743462008
+    },
+    {
+      "time": 0.25,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.015206604869410695
+    },
+    {
+      "time": 0.25416666666666665,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01638438491818403
+    },
+    {
+      "time": 0.25833333333333336,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.017481877622304805
+    },
+    {
+      "time": 0.2625,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01848528137423857
+    },
+    {
+      "time": 0.26666666666666666,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.019381977789616353
+    },
+    {
+      "time": 0.2708333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.020160690390739405
+    },
+    {
+      "time": 0.27499999999999997,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02081162641482902
+    },
+    {
+      "time": 0.2791666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02132659996370041
+    },
+    {
+      "time": 0.2833333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02169913494618188
+    },
+    {
+      "time": 0.28750000000000003,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02192454651871891
+    },
+    {
+      "time": 0.2916666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.022
+    },
+    {
+      "time": 0.29583333333333334,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02192454651871891
+    },
+    {
+      "time": 0.3,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.021699134946181885
+    },
+    {
+      "time": 0.3041666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.021326599963700406
+    },
+    {
+      "time": 0.30833333333333335,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02081162641482903
+    },
+    {
+      "time": 0.3125,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.02016069039073941
+    },
+    {
+      "time": 0.3166666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01938197778961635
+    },
+    {
+      "time": 0.3208333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.018485281374238577
+    },
+    {
+      "time": 0.325,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.017481877622304798
+    },
+    {
+      "time": 0.3291666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.016384384918184024
+    },
+    {
+      "time": 0.3333333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.015206604869410702
+    },
+    {
+      "time": 0.3375,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.013963348743462
+    },
+    {
+      "time": 0.3416666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.012670251207475773
+    },
+    {
+      "time": 0.3458333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.011343573713239699
+    },
+    {
+      "time": 0.35000000000000003,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3541666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.35833333333333334,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3625,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3666666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.37083333333333335,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.375,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3791666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3833333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3875,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3916666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.3958333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4041666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4083333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.41250000000000003,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4166666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.42083333333333334,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.425,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4291666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.43333333333333335,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4375,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4416666666666667,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.4458333333333333,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    },
+    {
+      "time": 0.45,
+      "referenceDisplacementNative": [
+        0.35319782974101704,
+        0,
+        -0.7568526424778741
+      ],
+      "referenceDistanceMeters": 1.45,
+      "verticalPresentationNative": -0.01
+    }
+  ],
+  "clips": [
+    {
+      "name": "Idle",
+      "duration": 3,
+      "frames": 360,
+      "loop": true
+    },
+    {
+      "name": "LateralDodge",
+      "duration": 0.45,
+      "frames": 108,
+      "loop": false
+    }
+  ],
+  "contactWindows": {
+    "Idle": [
+      {
+        "foot": "left",
+        "start": 0,
+        "end": 3
+      },
+      {
+        "foot": "right",
+        "start": 0,
+        "end": 3
+      }
+    ],
+    "LateralDodge": [
+      {
+        "foot": "left",
+        "start": 0,
+        "end": 0.03333333333333333
+      },
+      {
+        "foot": "right",
+        "start": 0,
+        "end": 0.03333333333333333
+      },
+      {
+        "foot": "left",
+        "start": 0.23333333333333334,
+        "end": 0.2833333333333333
+      },
+      {
+        "foot": "right",
+        "start": 0.25,
+        "end": 0.45
+      },
+      {
+        "foot": "left",
+        "start": 0.35,
+        "end": 0.45
+      }
+    ]
+  },
+  "contactSlipBudgetMeters": 0.025,
+  "productionAccepted": false,
+  "providerSpend": 0,
+  "unknownUsage": null
+}

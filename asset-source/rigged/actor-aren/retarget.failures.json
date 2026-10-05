@@ -1,0 +1,17 @@
+{
+  "taskGetCommand": "tripo --no-open task get <task-id> --step",
+  "tasks": [
+    {"type":"animate_retarget","status":"failed","progress":100,"input":{"animations":["preset:idle","preset:walk"],"out_format":"glb","animate_in_place":true,"original_model_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658"},"output":{},"task_id":"209976c2-1460-4e30-a5a2-ca36f7f8ed9b","created_at":"2026-10-01T07:17:08.274482Z","completed_at":"2026-10-01T07:17:31.214433Z","error_code":1004,"error_message":"Invalid input parameter","credits_consumed":null},
+    {"type":"animate_retarget","status":"failed","progress":100,"input":{"animation":"preset:idle","out_format":"glb","animate_in_place":true,"original_model_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658"},"output":{},"task_id":"f98d1301-bbae-4b6d-8728-d88854bbc24a","created_at":"2026-10-01T07:20:34.107660Z","completed_at":"2026-10-01T07:21:03.535943Z","error_code":1004,"error_message":"Invalid input parameter","credits_consumed":null},
+    {"type":"animate_retarget","status":"failed","progress":100,"input":{"animation":"preset:walk","out_format":"glb","animate_in_place":true,"original_model_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658"},"output":{},"task_id":"48749f45-d585-4010-8101-22e40efa7d81","created_at":"2026-10-01T07:20:33.745438Z","completed_at":"2026-10-01T07:20:57.039720Z","error_code":1004,"error_message":"Invalid input parameter","credits_consumed":null}
+  ],
+  "cliExitCodeAll": 6,
+  "cliRefundStatementAll": "frozen credits have been refunded automatically",
+  "independentlyMeasuredRefundAmount": null,
+  "commandWallSeconds": {"plural":33.26979012499994,"idle":48.10120541699999,"walk":31.81010379199998},
+  "idleAndWalkSubmittedConcurrently": true,
+  "nativeClipArtifacts": [],
+  "additionalRigRequests": 0,
+  "generationOrUploadRequests": 0,
+  "furtherSpending": "stopped; no additional authorization or evidence-supported alternative mapping"
+}

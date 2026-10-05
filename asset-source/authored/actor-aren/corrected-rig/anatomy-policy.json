@@ -1,0 +1,45 @@
+{
+  "recordedBeforeKeyframing": true,
+  "sourcePath": "asset-source/rig-derivatives/actor-aren/aren-rigid-staff.glb",
+  "sourceSha256": "86348eb084aa42f6c7e6ecfb7416255dac062a499f6349a369a1e7da49f62ac3",
+  "sourceBytes": 96501240,
+  "rigRevision": "aren-rigid-staff-component-r1",
+  "geometryLineageSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+  "map": {
+    "0": "head",
+    "1": "neck",
+    "2": "free-side elbow/forearm/hand",
+    "3": "free-side shoulder",
+    "4": "original lower staff joint retained, no hand gesture assigned; no longer source of isolated staff component weights",
+    "5": "staff-side elbow/forearm/hand AND repaired isolated rigid staff,skin8",
+    "6": "staff-side shoulder",
+    "7": "chest",
+    "8": "lumbar/abdomen",
+    "9": "provider-left toe",
+    "10": "provider-left ankle",
+    "11": "provider-left knee",
+    "12": "provider-left hip",
+    "13": "provider-right toe",
+    "14": "provider-right ankle",
+    "15": "provider-right knee",
+    "16": "provider-right hip",
+    "17": "ground-origin root/pelvis influences"
+  },
+  "coordinatePolicy": {
+    "up": [
+      0,
+      1,
+      0
+    ],
+    "forward": "measured horizontal mean ankle-to-toe vectors",
+    "lateral": "up cross measured forward; provider-left direction pending parent anatomical-side review",
+    "normalization": "Parent game baseline1.70m; measure corrected-source height and apply scale exactly once at runtime parent; never bake geometry or rest scaling",
+    "rootMode": "in-place-authoritative-capsule, measured reference curve never drives actor a second time",
+    "contact": "Idle both soles planted; dodge anticipation0–2ticks, flight2–14/15, leadplant14–17,trailingplant15–27,lead recovery step17–21,leadplant21–27; actual CPU-skinned sole positions and25mm slip budget remeasured",
+    "staff": "Same authored anatomical shoulder articulation, no invented staff contact transform, no hand/body contact alignment, node5→4 local articulation unchanged"
+  },
+  "blockingAnatomyPrerequisite": "Original detached staff/body geometry has at least35.851mm rest gap at1.70m normalization. Skin repair or reexport cannot create literal grip. Authorized anatomical contact geometry/rest alignment is required; G6/G10/R09/R04 final gates remain open.",
+  "originalCanaryUntouched": true,
+  "productionAccepted": false,
+  "browserLaunched": false
+}

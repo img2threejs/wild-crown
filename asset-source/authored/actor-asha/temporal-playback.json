@@ -1,0 +1,19 @@
+{
+  "temporalPlayback": [
+    {
+      "clip": "Idle",
+      "mode": "LoopRepeat",
+      "afterOneAdditionalCycleSeconds": 0.10000000000000009,
+      "recurrenceError": 3.7037057157525473e-16
+    },
+    {
+      "clip": "Pounce",
+      "mode": "LoopOnce",
+      "endTime": 1.7999999523162842,
+      "clamped": true,
+      "recoveryError": 0
+    }
+  ],
+  "status": "BLOCKED_MISSING_INDEPENDENT_FORELEG",
+  "releaseVerified": false
+}

@@ -1,0 +1,14 @@
+{
+  "dry_run": true,
+  "valid": true,
+  "input": "15fc35a2-5113-4d6c-8207-13eaf0d18ef1",
+  "source_task_id": "15fc35a2-5113-4d6c-8207-13eaf0d18ef1",
+  "steps": [{"name": "retarget", "endpoint": "/v3/animations/retarget", "task_type": "animate_retarget", "payload": {"input": "<upstream>", "animation": "preset:quadruped:walk", "out_format": "glb", "animate_in_place": true}}],
+  "pending_uploads": [],
+  "deliverables": [],
+  "candidates": 1,
+  "warnings": ["chain legality unverified: upstream task type unknown (no local history for 15fc35a2-5113-4d6c-8207-13eaf0d18ef1); the real run checks it via the API"],
+  "errors": [],
+  "cost_notes": ["retarget 1 animation(s): billed per animation"],
+  "command": "tripo --no-open make 15fc35a2-5113-4d6c-8207-13eaf0d18ef1 --then retarget:animation=preset:quadruped:walk,out_format=glb,animate_in_place=true --dry-run --json"
+}

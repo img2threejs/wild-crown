@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "rigRevision": "aren-rigid-staff-component-r1",
+  "source": {
+    "path": "asset-source/rigged/actor-aren/rig/tripo-out/rig-3-1fc43928/model.glb",
+    "sha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+    "bytes": 96501240
+  },
+  "derivative": {
+    "path": "asset-source/rig-derivatives/actor-aren/aren-rigid-staff.glb",
+    "sha256": "86348eb084aa42f6c7e6ecfb7416255dac062a499f6349a369a1e7da49f62ac3",
+    "bytes": 96501240
+  },
+  "policy": {
+    "region": "Exact POSITION-welded triangle component containing native vertices554945 and651930, excluding hand685164. Not all node4 or node5 weighted vertices.",
+    "componentSeed": 483173,
+    "vertexCount": 75684,
+    "regionVertexIdsSha256": "0a00bf78ca9c011954406aa04a998e9c05c348e6a59391e1a23d6465b62b6748",
+    "attachment": {
+      "node": 5,
+      "skinIndex": 8,
+      "existingInverseBind": true,
+      "newNodes": 0
+    },
+    "jointOrder": [
+      17,
+      8,
+      7,
+      1,
+      0,
+      3,
+      2,
+      6,
+      5,
+      4,
+      12,
+      11,
+      10,
+      9,
+      16,
+      15,
+      14,
+      13
+    ],
+    "sockets": {
+      "staffBase": {
+        "surfaceVertex": 554945,
+        "node": 5,
+        "skinIndex": 8,
+        "boneLocalOffset": [
+          -0.17959172456923989,
+          0.7201564797697182,
+          -0.05904025916285276
+        ]
+      },
+      "staffTop": {
+        "surfaceVertex": 651930,
+        "node": 5,
+        "skinIndex": 8,
+        "boneLocalOffset": [
+          0.08242594462965325,
+          0.09198631311838001,
+          0.06852002383270268
+        ]
+      }
+    },
+    "handSurfaceVertex": 685164,
+    "handWeightsUnchanged": true
+  },
+  "preservation": {
+    "documentUnchanged": true,
+    "positionNormalUVIndicesMaterialsTexturesOriginalBytes": true,
+    "originalNodesTRSJointOrderInverseBindBytes": true,
+    "onlyStaffJointsWeightsChanged": true,
+    "originalContainerJsonMaterialBytes": true
+  },
+  "neutralPreExport": {
+    "vertices": 1011304,
+    "float32Epsilon": 1.1920928955078125e-7,
+    "maxHierarchyDepth": 7,
+    "sceneScale": 1,
+    "toleranceNative": 0.00005340576171875,
+    "sourceNeutralErrorNative": 2.291590317703732e-7,
+    "derivativeNeutralErrorNative": 2.491232234909614e-7,
+    "neutralChangeNative": 1.331772180159483e-7
+  },
+  "invalidates": [
+    "All source-bound authored deformation/socket/staff measurements must be rebuilt against this derivative hash and rigRevision. Original authored clips are not verification of the repaired rig."
+  ],
+  "prerequisites": {
+    "node": "Node with repository three dependency available; exporter uses no image decoding dependency",
+    "verification": "Native GLTFLoader smoke imports authored inspect-anatomy.mjs; existing external sharp0.34.5 is required and NOT supplied by npm ci."
+  },
+  "limitations": [
+    "Numerical rig repair only; no animation-ready, final rig, G6/G10 or production approval.",
+    "Original disconnected body/staff geometry has at least0.020650446native rest z gap (~35.85mm normalized). Rigid binding cannot create missing anatomical grip contact without changing prohibited geometry or rest alignment."
+  ],
+  "productionAccepted": false,
+  "browserLaunched": false,
+  "providerSpend": 0,
+  "reproduction": {
+    "workingDirectory": "Repository root (all paths resolved relative to module URLs)",
+    "commands": [
+      "node asset-source/rig-derivatives/actor-aren/inspect-region.mjs",
+      "node asset-source/rig-derivatives/actor-aren/author-rig.mjs",
+      "node asset-source/rig-derivatives/actor-aren/verify-rig.mjs"
+    ],
+    "readonlyAuthoredInputs": [
+      "inspect-anatomy.mjs",
+      "aren-idle-lateral-dodge.glb",
+      "authoring.json",
+      "measurements.json"
+    ],
+    "verificationOutput": "asset-source/rig-derivatives/actor-aren/verification-results.json",
+    "clips": "Existing native channels exercised on repaired skin in memory only; original canary is not replaced."
+  },
+  "missingAnatomyPrerequisite": "Authorized anatomically grounded hand/staff contact geometry or rest alignment change; immutable-source skin repair alone cannot close the measured original gap. No random relabeling or hand/body/foot weight edits permitted."
+}

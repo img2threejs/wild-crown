@@ -1,0 +1,74 @@
+{
+  "sourceRevision": "asha-negativeX-foreleg-v2",
+  "sourceSHA256": "94bd738c8348e1713309d2023a4307eabdfb826bea4d23e203e571c3bddd41d6",
+  "derivativeSHA256": "769b67ef5c82b34f631a12799b12c48d8bffc9eb50e0809be53e6143a6ec7254",
+  "artifacts": [
+    {
+      "path": "runtime.mjs",
+      "sha256": "0e0cc5b885db30f27dfd67b4e52bdbed7df75216e29de1a374f4e5a32cdcbe4b"
+    },
+    {
+      "path": "inspect.mjs",
+      "sha256": "1ffd88373606e5c81acbddbcbe1309692a2bb2af52caea5e82d2fa9d9fbbc229"
+    },
+    {
+      "path": "author.mjs",
+      "sha256": "717da21aa2877dfb8e1580a1acb8db87fdc82d43bada0998be598d55c9d5bc79"
+    },
+    {
+      "path": "measure.mjs",
+      "sha256": "df26a9804189da876f8d81197e56f6943d840d84191fa149ca03a06ebd4267cd"
+    },
+    {
+      "path": "measure-chain-controls.mjs",
+      "sha256": "0f14ba5b4ec55c813be2ca954b67df437e3bad7256348a82cd99450e5637078c"
+    },
+    {
+      "path": "measure-body-phases.mjs",
+      "sha256": "f3d65152effaa366720e70d6ed1eb5285254cd8eb4909d5ba0005432223f55c4"
+    },
+    {
+      "path": "anatomy.json",
+      "sha256": "e82b4998267ecabba24dbd2fec5abdfd69f85961d6817ba8660e3d4050f6dfa6"
+    },
+    {
+      "path": "contacts.json",
+      "sha256": "65381d7f05756c3c133827fb2c30b161f16b0ab54c433a8471e5e009a031898f"
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "2bf9cad55d3f59c572ea15a062940743c2e766b8879d859b079771166c2cc06c"
+    },
+    {
+      "path": "idle-samples.json",
+      "sha256": "0cef9938a6edd6f393744e7d918a8d3e4bbc9641d4556f1a28cca7c6899f1257"
+    },
+    {
+      "path": "pounce-samples.json",
+      "sha256": "96ba0160500599b2797a357318f63ffe3248b275de689611858052813fcc85c8"
+    },
+    {
+      "path": "chain-articulation-controls.json",
+      "sha256": "2e2fd8152444eb6cb0d1867e5809db742f29a233af5ad25ab1592001d3338f91"
+    },
+    {
+      "path": "body-phase-measurements.json",
+      "sha256": "d036cee752ec01d35b9bba3724009bf30e0210ffc101d4fedcf7d719cefd9b4f"
+    },
+    {
+      "path": "canary-packet.json",
+      "sha256": "b390694716a59604e8d7a7d92eddc06dce4f9b8b9f1b0394abf003a5123120a4"
+    },
+    {
+      "path": "measure-idle-inertness.mjs",
+      "sha256": "4e8a2b6806bf6e48261cd3bfabfcf5f41b0ddb9e8e4b4af051a7bc8dcefb13e5"
+    },
+    {
+      "path": "idle-inertness-control.json",
+      "sha256": "9d630658338d09979f8f462462ba8f7721b9cb2384d084d5347e04f3fcd46fd1"
+    }
+  ],
+  "AstraReview": null,
+  "parentRenderAcceptance": null,
+  "releaseVerified": false
+}

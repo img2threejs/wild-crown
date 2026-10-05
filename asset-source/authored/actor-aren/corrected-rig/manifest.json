@@ -1,0 +1,127 @@
+{
+  "actor": "actor-aren",
+  "issue": 23,
+  "scope": "R09 corrected-rig native Idle + LateralDodge canaries",
+  "status": "canary-only, parent visual review pending",
+  "productionAccepted": false,
+  "source": {
+    "path": "asset-source/rig-derivatives/actor-aren/aren-rigid-staff.glb",
+    "bytes": 96501240,
+    "sha256": "86348eb084aa42f6c7e6ecfb7416255dac062a499f6349a369a1e7da49f62ac3",
+    "rigRevision": "aren-rigid-staff-component-r1"
+  },
+  "derivative": {
+    "path": "asset-source/authored/actor-aren/corrected-rig/aren-idle-lateral-dodge.glb",
+    "bytes": 96589988,
+    "sha256": "974faafdc1ab2d6716931e26f6f6181bc19d39dc432fb0521008fd3eb8e28d3a"
+  },
+  "preservation": {
+    "correctedSourceBinBytes": 96494136,
+    "correctedSourceBinSha256": "a0c81d4b1a64762868911483365947427ceaddac729994f075a9ee5ff6bc9452",
+    "byteIdentical": true,
+    "primitiveUVMaterialJointOrderInverseBindCorrectedWeightsPreserved": true,
+    "jointOrder": [
+      17,
+      8,
+      7,
+      1,
+      0,
+      3,
+      2,
+      6,
+      5,
+      4,
+      12,
+      11,
+      10,
+      9,
+      16,
+      15,
+      14,
+      13
+    ]
+  },
+  "normalization": {
+    "measuredSourceHeight": 0.9792109417373049,
+    "gameHeightMeters": 1.7,
+    "scaleOnce": 1.7360917117448456,
+    "authority": "parent game normalization, not provider real-world size"
+  },
+  "geometryLineage": {
+    "originalSha256": "7e759a4607f530137dfe58d0dcffecefd697030bcce6fbc2134625051b068151",
+    "originalCanaryUntouched": true
+  },
+  "derivativeStages": [
+    "Tripo immutable geometry/rig",
+    "isolated staff skin correction",
+    "offline authored native animation"
+  ],
+  "nativeClipNames": [
+    "Idle",
+    "LateralDodge"
+  ],
+  "rootMode": "in-place-authoritative-capsule",
+  "motionAuthority": "capsule simulation only; reference trajectory MUST NOT double-drive movement",
+  "gameplayProfile": {
+    "id": "quick_step_left",
+    "distanceMeters": 1.45,
+    "actionTicks": 15,
+    "recoveryTicks": 12,
+    "ticksPerSecond": 60
+  },
+  "measuredClips": [
+    {
+      "name": "Idle",
+      "channels": 11,
+      "durationSeconds": 3,
+      "skinDisplacementMeters": 0.012577530543918022,
+      "loopClosureMeters": 0,
+      "maximumPlantedFootSlipMeters": 0.0016323222704771622,
+      "staffSpanChangeMeters": 1.7765289353346023e-7,
+      "staffBaseRigidSocketErrorMeters": 4.915526364645585e-16
+    },
+    {
+      "name": "LateralDodge",
+      "channels": 11,
+      "durationSeconds": 0.44999998807907104,
+      "skinDisplacementMeters": 0.1310987298824942,
+      "loopClosureMeters": 0,
+      "maximumPlantedFootSlipMeters": 0.008742761505669563,
+      "staffSpanChangeMeters": 3.77124193546123e-7,
+      "staffBaseRigidSocketErrorMeters": 4.85612205127348e-16
+    }
+  ],
+  "contactSlipBudgetMeters": 0.025,
+  "files": {
+    "anatomy": "anatomy.json",
+    "preKeyframePolicy": "anatomy-policy.json",
+    "authoring": "authoring.json",
+    "measurements": "measurements.json",
+    "authorScript": "author-clips.mjs",
+    "verifier": "verify-authored.mjs"
+  },
+  "gates": {
+    "cpuNativeLoader": "measured",
+    "correctedSourceBytesPreserved": "measured",
+    "visualReview": "pending-parent",
+    "anatomicalGrip": "blocked-rest-gap",
+    "continuousCapsuleContact": "R04 open",
+    "production": "not-qualified"
+  },
+  "gripContact": {
+    "measuredRestBodyMaxZ": 0.15529903649485666,
+    "measuredRestStaffMinZ": 0.17594946954276008,
+    "separatingAxisGapNative": 0.020650433047903427,
+    "separatingAxisGapMeters": 0.03585104565840699,
+    "touching": false,
+    "blocking": true,
+    "anatomyPrerequisite": "Authorized anatomical hand/staff contact geometry or rest alignment; never a weight, guessed transform, or animation qualification waiver"
+  },
+  "anatomicalConstraints": [
+    "Repaired isolated staff is rigid node5skin8, but unchanged detached source geometry has at least35.851mm physical rest gap. Literal anatomical grip, G6/G10/R09/R04 final gates remain open."
+  ],
+  "providerCalls": 0,
+  "providerSpend": 0,
+  "unknownUsage": null,
+  "browserLaunched": false
+}

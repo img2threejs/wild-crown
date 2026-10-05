@@ -1,0 +1,24 @@
+{
+  "authorization": "Parent Main expanded R09 brief after original list failure: up to two additional single-clip retarget tasks after verifying current provider/CLI endpoint, rig model and presets; never re-rig or regenerate.",
+  "verifiedAtDate": "2026-10-01",
+  "cliVersion": "0.5.1",
+  "officialCurrentDocs": "https://developers.tripo3d.ai/en/docs/animations-retarget",
+  "officialRigDocs": "https://docs.tripo3d.ai/animation/rig-v2-5-20260210.html",
+  "legacyReference": "https://docs.tripo3d.ai/animation/retarget.html",
+  "observedContract": {
+    "baseUrl": "https://openapi.tripo3d.ai/v3",
+    "endpoint": "POST /animations/retarget",
+    "animation": "string; single preset identifier; mutually exclusive with animations",
+    "upstreamRigVersion": "v2.5-20260210 requested on successful rig",
+    "resolvedRigVersion": null,
+    "versionLimitation": "Task API input does not expose rig model version. CLI production buildStepRequest confirms requested wire model; native exporter only identifies Tripo.",
+    "bipedPresetsExplicitlyDocumented": ["preset:idle", "preset:walk"],
+    "bake_animationDefault": true,
+    "export_with_geometryDefault": true
+  },
+  "dryRuns": [
+    {"dry_run":true,"valid":true,"input":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","source_task_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","steps":[{"name":"retarget","endpoint":"/v3/animations/retarget","task_type":"animate_retarget","payload":{"input":"<upstream>","animation":"preset:idle","out_format":"glb","animate_in_place":true}}],"pending_uploads":[],"deliverables":[],"candidates":1,"warnings":["chain legality unverified: upstream task type unknown (no local history for 1fc43928-8af8-4cf2-a97d-2c2a5b4ee658); the real run checks it via the API"],"errors":[],"cost_notes":["retarget 1 animation(s): billed per animation"]},
+    {"dry_run":true,"valid":true,"input":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","source_task_id":"1fc43928-8af8-4cf2-a97d-2c2a5b4ee658","steps":[{"name":"retarget","endpoint":"/v3/animations/retarget","task_type":"animate_retarget","payload":{"input":"<upstream>","animation":"preset:walk","out_format":"glb","animate_in_place":true}}],"pending_uploads":[],"deliverables":[],"candidates":1,"warnings":["chain legality unverified: upstream task type unknown (no local history for 1fc43928-8af8-4cf2-a97d-2c2a5b4ee658); the real run checks it via the API"],"errors":[],"cost_notes":["retarget 1 animation(s): billed per animation"]}
+  ],
+  "diagnosticHypothesis": "Singular animation bypasses the failed plural animations contract. Documentation supports this exact v2.5 biped mapping; provider acceptance is not assumed."
+}
