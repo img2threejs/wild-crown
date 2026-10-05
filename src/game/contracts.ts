@@ -786,6 +786,7 @@ export interface CampaignSnapshot {
 }
 export interface GameViewModel {
   trackedObjectiveId: ObjectiveId | null;
+  canOpenWorldPanels: boolean;
   screen:
     | "title"
     | "loading"

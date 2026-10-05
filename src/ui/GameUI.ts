@@ -135,7 +135,7 @@ function reconcileFocusedControl(current: HTMLElement, next: HTMLElement): void 
 function gameUiSignature(viewModel: GameViewModel): string {
   const { hud, campaign, map } = viewModel;
   return JSON.stringify([
-    viewModel.screen, viewModel.loading, viewModel.error,
+    viewModel.screen, viewModel.canOpenWorldPanels, viewModel.loading, viewModel.error,
     [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction],
     viewModel.trackedObjectiveId,
     campaign && [campaign.runId, campaign.revision, campaign.chapter, campaign.chapterId, campaign.regionId, campaign.activeQuestIds, campaign.completedQuestIds, campaign.activeObjectiveIds, campaign.completedObjectiveIds, campaign.fragments, campaign.ending],
@@ -192,11 +192,11 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   };
   const toolbar = (active: Screen, pause = false) => `
     <nav class="wc-tabs" aria-label="Game menu">
-      ${button('Map', 'map', `aria-current="${active === 'map' ? 'page' : 'false'}"`)}
-      ${button('Journal', 'journal', `aria-current="${active === 'journal' ? 'page' : 'false'}"`)}
-      ${button('Companions', 'companions', `aria-current="${active === 'companions' ? 'page' : 'false'}"`)}
+      ${vm?.canOpenWorldPanels ? button('Map', 'map', `aria-current="${active === 'map' ? 'page' : 'false'}"`) : ''}
+      ${vm?.canOpenWorldPanels ? button('Journal', 'journal', `aria-current="${active === 'journal' ? 'page' : 'false'}"`) : ''}
+      ${vm?.canOpenWorldPanels ? button('Companions', 'companions', `aria-current="${active === 'companions' ? 'page' : 'false'}"`) : ''}
       ${button('Settings', 'settings', `aria-current="${active === 'settings' ? 'page' : 'false'}"`)}
-      ${pause ? button('Resume', 'resume', '', 'wc-action--quiet') : ''}
+      ${pause && vm?.canOpenWorldPanels ? button('Resume', 'resume', '', 'wc-action--quiet') : ''}
     </nav>`;
   const wordmark = (screen: Screen, pause = false) => `<header class="wc-menu__bar"><div class="wc-wordmark">${esc(playerCopy.title.name)}</div>${toolbar(screen, pause)}</header>`;
   const backButton = () => button('Esc&nbsp;&nbsp; Back', 'close', 'aria-label="Back"', 'wc-action--quiet');
@@ -595,7 +595,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const isNativeValueControl = event.target instanceof HTMLSelectElement || event.target instanceof HTMLInputElement && event.target.type === 'range';
     if (isNativeValueControl && (event.key.startsWith('Arrow') || event.key === 'Home' || event.key === 'End')) return;
     const pauseBinding = vm?.bindings.keyboard.pause?.toLowerCase();
-    if (vm && (vm.screen === 'game' || vm.screen === 'pause') && pauseBinding && pauseBinding === event.key.toLowerCase()) {
+    if (vm && vm.canOpenWorldPanels && (vm.screen === 'game' || vm.screen === 'pause') && pauseBinding && pauseBinding === event.key.toLowerCase()) {
       dispatch({ type: vm.screen === 'game' ? 'pause' : 'resume' });
       event.preventDefault();
       return;
@@ -618,6 +618,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       }
     }
     if (vm?.screen === 'game') {
+      if (!vm.canOpenWorldPanels) return;
       const shortcut = event.key.toLowerCase();
       const binding = Object.entries(vm.bindings.keyboard).find(([id, value]) => ['map', 'journal', 'companions'].some(name => id.toLowerCase().includes(name)) && value.toLowerCase() === shortcut);
       if (!binding) return;
@@ -665,10 +666,12 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const active = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const activeIndex = active ? controls.indexOf(active) : -1;
     if (vm?.screen === 'game') {
-      if (gamepadActionJustPressed(vm.bindings, 'pause', pressed, lastGamepadButtons)) dispatch({ type: 'pause' });
-      else if (gamepadActionJustPressed(vm.bindings, 'map', pressed, lastGamepadButtons)) dispatch({ type: 'open-map' });
-      else if (gamepadActionJustPressed(vm.bindings, 'journal', pressed, lastGamepadButtons)) dispatch({ type: 'open-journal' });
-      else if (gamepadActionJustPressed(vm.bindings, 'companions', pressed, lastGamepadButtons)) dispatch({ type: 'open-companions' });
+      if (vm.canOpenWorldPanels) {
+        if (gamepadActionJustPressed(vm.bindings, 'pause', pressed, lastGamepadButtons)) dispatch({ type: 'pause' });
+        else if (gamepadActionJustPressed(vm.bindings, 'map', pressed, lastGamepadButtons)) dispatch({ type: 'open-map' });
+        else if (gamepadActionJustPressed(vm.bindings, 'journal', pressed, lastGamepadButtons)) dispatch({ type: 'open-journal' });
+        else if (gamepadActionJustPressed(vm.bindings, 'companions', pressed, lastGamepadButtons)) dispatch({ type: 'open-companions' });
+      }
     } else if (newButton >= 0 && active instanceof HTMLInputElement && active.dataset.remap && active.dataset.remapDevice === 'gamepad') {
       const binding = 'Gamepad Button ' + (newButton + 1);
       active.value = binding;
