@@ -2,7 +2,7 @@ import test from 'node:test';
 import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, mkdir, readFile, rm, writeFile, symlink } from 'node:fs/promises';
+import { copyFile, mkdtemp, mkdir, readFile, rm, writeFile, symlink } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { inspectAssets, verifyPreview, positionResourceBudget, nativePositions } from '../../scripts/release/validate.mjs';
@@ -128,11 +128,11 @@ async function fixture(glb = minimalTriangleGlb()) {
   };
   await writeFile(path.join(root, evidenceFile), JSON.stringify(propEvidence));
   const asset = { id: 'prop-fixture', kind: 'prop', sourceType: 'native-glb', nativeGlb: assetPath, runtimeUrl: '/' + assetPath, sourceInputHash, sourceReference: { sha256: sourceInputHash }, outputHash: sourceHash, sourceHash, providerTaskId: 'fixture-task-1', provenance: { status: 'fixture-only', providerTaskId: 'fixture-task-1' }, evidenceStatus: 'verified', evidence: evidenceFile, gates, requiredActionIds: [], actionToClipMapping: {} };
-  const recipe = { id: 'environment-fixture', proceduralRecipeId: 'environment-fixture', kind: 'environment', sourceType: 'composed-recipe', nativeGlb: null, runtimeUrl: null, componentAssetIds: ['prop-fixture'], evidenceStatus: 'verified', evidence: environmentEvidenceFile };
+  const recipe = { id: 'environment-fixture', proceduralRecipeId: 'environment-fixture', sourceType: 'composed-recipe', nativeGlb: null, runtimeUrl: null, componentAssetIds: ['prop-fixture'], evidenceStatus: 'verified', evidence: environmentEvidenceFile };
   const manifest = { schemaVersion: 2, manifestVersion: 'test-fixture', assets: [asset], environmentRecipes: [recipe], sourceWorkItems: [{ workId: 'prop-fixture', runtimeAssetId: 'prop-fixture', state: 'complete' }] };
   const manifestPath = path.join(root, 'manifest.json');
   await writeFile(manifestPath, JSON.stringify(manifest));
-  await writeFile(path.join(dist, 'assets/manifest.json'), JSON.stringify([asset, recipe]));
+  await writeFile(path.join(dist, 'assets/manifest.json'), JSON.stringify([asset, { ...recipe, kind: 'environment' }]));
   const entries = [];
   for (const [file, contentType] of [[assetPath, 'model/gltf-binary'], ['assets/manifest.json', 'application/json'], ['entry.js', 'text/javascript'], ['index.html', 'text/html'], ['release-compatibility.json', 'application/json']]) {
     const bytes = await readFile(path.join(dist, file));
@@ -192,6 +192,38 @@ test('rejects byte-copy-only fixture while retaining actual Vite preview and CLI
   const cli = spawnSync(process.execPath, ['scripts/release/validate.mjs', '--repo', f.root, '--vite-root', process.cwd(), '--dist', f.dist, '--manifest', f.manifestPath, '--benchmarks', f.benchmarkPath, '--config', f.configFile, '--port', String(port)], { cwd: process.cwd(), encoding: 'utf8' });
   assert.equal(cli.status, 1, cli.stderr);
   assert.equal(JSON.parse(cli.stdout).accepted, false);
+});
+
+test('validates exporter-derived environment kind without a canonical recipe kind and rejects runtime tampering', async (t) => {
+  const f = await fixture(); t.after(() => rm(f.root, { recursive: true, force: true }));
+  f.manifest.assets = [{ id: 'prop-fixture', kind: 'prop', sourceType: 'native-glb', nativeGlb: null, runtimeUrl: null, evidenceStatus: 'blocked', evidence: null, requiredActionIds: [], actionToClipMapping: {} }];
+  Object.assign(f.manifest.environmentRecipes[0], { evidenceStatus: 'blocked', evidence: null });
+  assert.equal(Object.hasOwn(f.manifest.environmentRecipes[0], 'kind'), false);
+  await writeFile(f.manifestPath, JSON.stringify(f.manifest));
+  const sourcePath = path.join(f.root, 'asset-source/manifest.json');
+  const exporterPath = path.join(f.root, 'scripts/assets/export-runtime-manifest.mjs');
+  await mkdir(path.dirname(sourcePath), { recursive: true });
+  await mkdir(path.dirname(exporterPath), { recursive: true });
+  await copyFile(f.manifestPath, sourcePath);
+  await copyFile(path.resolve(process.cwd(), 'scripts/assets/export-runtime-manifest.mjs'), exporterPath);
+  const exported = spawnSync(process.execPath, [exporterPath], { cwd: f.root, encoding: 'utf8' });
+  assert.equal(exported.status, 0, exported.stderr);
+  const runtimeManifestPath = path.join(f.root, 'public/assets/manifest.json');
+  const runtime = JSON.parse(await readFile(runtimeManifestPath, 'utf8'));
+  const recipe = runtime.find((entry) => entry.id === 'environment-fixture');
+  assert.equal(recipe.sourceType, 'composed-recipe');
+  assert.equal(recipe.kind, 'environment');
+  const result = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, runtimeManifestPath, repoRoot: f.root });
+  assert.equal(result.errors.some((error) => error.includes('changed canonical sourceType/kind')), false, result.errors.join('\n'));
+  assert.equal(result.errors.includes('Environment recipe environment-fixture must retain canonical environment/composed-recipe kind.'), false);
+  assert(result.errors.includes('Native asset prop-fixture has no emitted GLB path/runtime URL.'));
+  assert(result.errors.includes('Environment recipe environment-fixture has no verified scene qualification evidence.'));
+
+  recipe.kind = 'prop';
+  await writeFile(runtimeManifestPath, JSON.stringify(runtime));
+  const tampered = await inspectAssets({ dist: f.dist, manifestPath: f.manifestPath, runtimeManifestPath, repoRoot: f.root });
+  assert(tampered.errors.includes('Production asset environment-fixture changed canonical sourceType/kind.'));
+  assert(tampered.errors.includes('Environment recipe environment-fixture must retain canonical environment/composed-recipe kind.'));
 });
 
 test('rejects missing native GLB instead of accepting manifest declaration', async (t) => {
