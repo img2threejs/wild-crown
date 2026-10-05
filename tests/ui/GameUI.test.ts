@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'bun:test';
 import { mountGameUI } from '../../src/ui/GameUI.js';
-import type { ActorSnapshot, GameViewModel } from '../../src/game/contracts.js';
+import { DEFAULT_GAME_SETTINGS, type ActorSnapshot, type GameViewModel } from '../../src/game/contracts.js';
 
 class TestElement {
   readonly attributes: Array<{ name: string; value: string }> = [];
@@ -44,6 +44,7 @@ function gameModel(exposed: boolean): GameViewModel {
   const target = { id: 'hunter-melee-west', weakPointExposed: exposed } as ActorSnapshot;
   return {
     screen: 'game', loading: { active: false, label: '', progress: null }, error: null, trackedObjectiveId: null,
+    canOpenWorldPanels: true,
     hud: { vitality: 100, maxVitality: 100, dodgeCharges: 2, maxDodgeCharges: 2, instinct: 20, boss: undefined, targetId: target.id, target },
     campaign: null, journal: { quests: [], region: null }, map: { currentRegion: null, regions: [] }, party: null, abilities: [], relationships: null,
     settings: { reducedMotion: false, controlGlyphs: 'keyboard' } as GameViewModel['settings'],
@@ -68,6 +69,25 @@ describe('GameUI HUD render cache', () => {
     expect(ui.element.innerHTML).not.toContain('WEAK POINT EXPOSED');
     expect(ui.element.innerHTML).toContain('AREN');
     expect(ui.element.innerHTML).toContain('Vitality 100%');
+    ui.destroy();
+  });
+
+  it('updates world toolbar availability when only the required capability changes', () => {
+    const doc = {
+      activeElement: null as TestHTMLElement | null,
+      createElement: (_tag: string) => new TestHTMLElement(),
+      addEventListener: (_type: string, _listener: EventListenerOrEventListenerObject, _options?: boolean | AddEventListenerOptions) => {},
+      removeEventListener: (_type: string, _listener: EventListenerOrEventListenerObject, _options?: boolean | EventListenerOptions) => {},
+    };
+    Object.assign(globalThis, { document: doc, Element: TestElement, HTMLElement: TestHTMLElement, HTMLInputElement: TestHTMLInputElement, HTMLSelectElement: TestHTMLSelectElement, HTMLButtonElement: TestHTMLButtonElement, requestAnimationFrame: () => 1, cancelAnimationFrame: () => {} });
+    const model = { ...gameModel(false), screen: 'settings', settings: { ...DEFAULT_GAME_SETTINGS }, canOpenWorldPanels: false } satisfies GameViewModel;
+    const ui = mountGameUI(new TestHTMLElement() as unknown as HTMLElement, { onAction: () => {}, initialViewModel: model });
+    for (const action of ['map', 'journal', 'companions']) expect(ui.element.innerHTML).not.toContain(`data-ui-action="${action}"`);
+    ui.render({ ...model, canOpenWorldPanels: true });
+    for (const action of ['map', 'journal', 'companions']) expect(ui.element.innerHTML).toContain(`data-ui-action="${action}"`);
+    ui.render(model);
+    for (const action of ['map', 'journal', 'companions']) expect(ui.element.innerHTML).not.toContain(`data-ui-action="${action}"`);
+    expect(ui.element.innerHTML).toContain('data-ui-action="settings"');
     ui.destroy();
   });
 });
