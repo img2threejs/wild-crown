@@ -33,7 +33,7 @@ function parseGlbJson(bytes) {
     const embeddedLength = (uri) => {
       if (typeof uri !== 'string') return null;
       const match = /^data:[^,]*;base64,([A-Za-z0-9+/]*={0,2})$/i.exec(uri);
-      return match ? Buffer.from(match[1], 'base64').byteLength : null;
+      return match ? Math.floor(match[1].length / 4 * 3) - (match[1].endsWith('==') ? 2 : match[1].endsWith('=') ? 1 : 0) : null;
     };
     if (buffers.some((buffer) => !buffer || !Number.isInteger(buffer.byteLength) || buffer.byteLength < 0 || (buffer.uri === undefined && (!trailingBytes || buffer.byteLength > binaryChunkLength)) || (buffer.uri !== undefined && embeddedLength(buffer.uri) !== buffer.byteLength))) return null;
     if (trailingBytes && (binaryChunkLength % 4 !== 0 || buffers.filter((buffer) => buffer.uri === undefined).length !== 1)) return null;
@@ -106,7 +106,7 @@ function gltfNodeMatrix(node) {
 }
 const POSITION_STORAGE_LIMIT = 256 * 1024 * 1024;
 const POSITION_VERTEX_LIMIT = 8_000_000;
-function positionResourceBudget(gltf) {
+export function positionResourceBudget(gltf) {
   const widths = new Map([[5120, 1], [5121, 1], [5122, 2], [5123, 2], [5125, 4], [5126, 4]]);
   const seenAccessors = new Set(), seenViews = new Set(), renderedMeshes = new Set();
   let decodedStorageBytes = 0, positionVertexOccurrences = 0;
@@ -147,7 +147,7 @@ function positionResourceBudget(gltf) {
   return { decodedStorageBytes, positionVertexOccurrences };
 }
 
-function nativePositions(gltf, bytes) {
+export function nativePositions(gltf, bytes) {
   positionResourceBudget(gltf); // Refuse before any count-sized decoding allocation.
   const result = new Map();
   const memories = new Map(), viewBuffers = new Map();
@@ -208,7 +208,8 @@ function nativePositions(gltf, bytes) {
 }
 function positionBounds(values) {
   const box = new THREE.Box3();
-  for (let index = 0; index < values.length; index += 3) box.expandByPoint(new THREE.Vector3(values[index], values[index + 1], values[index + 2]));
+  const point = new THREE.Vector3();
+  for (let index = 0; index < values.length; index += 3) box.expandByPoint(point.set(values[index], values[index + 1], values[index + 2]));
   return box;
 }
 function nativePositionFault(primitives, memories) {
@@ -219,7 +220,7 @@ function nativePositionFault(primitives, memories) {
     const memory = Buffer.from(source.memory.subarray(base, base + source.count * source.stride));
     return { ...source, memory, offset: source.offset - base };
   });
-  const originals = new Map(), bounds = new THREE.Box3();
+  const originals = new Map(), bounds = new THREE.Box3(), point = new THREE.Vector3();
   let finitePositionCount = 0, nonFinitePositionCount = 0;
   try {
     for (const target of targets) {
@@ -232,8 +233,8 @@ function nativePositionFault(primitives, memories) {
     // can hit any component of a later vertex in another overlapping view.
     for (const target of targets) for (let vertex = 0; vertex < target.count; vertex++) {
       const x = target.read(vertex, 0), y = target.read(vertex, 1), z = target.read(vertex, 2);
-      if (![x, y, z].every(Number.isFinite)) { nonFinitePositionCount++; continue; }
-      finitePositionCount++; bounds.expandByPoint(new THREE.Vector3(x, y, z));
+      if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) { nonFinitePositionCount++; continue; }
+      finitePositionCount++; bounds.expandByPoint(point.set(x, y, z));
     }
     return { bounds, finitePositionCount, nonFinitePositionCount };
   } finally {
@@ -242,7 +243,7 @@ function nativePositionFault(primitives, memories) {
 }
 
 function staticWorldBounds(gltf, positions) {
-  const sceneBox = new THREE.Box3(), meshNodes = new Map();
+  const sceneBox = new THREE.Box3(), meshNodes = new Map(), point = new THREE.Vector3();
   const visit = (nodeIndex, parentMatrix) => {
     const node = gltf.nodes[nodeIndex], local = gltfNodeMatrix(node);
     if (!local) return false;
@@ -251,7 +252,7 @@ function staticWorldBounds(gltf, positions) {
       const box = new THREE.Box3();
       for (const primitive of gltf.meshes[node.mesh].primitives) {
         const values = positions.get(primitive.attributes.POSITION);
-        for (let index = 0; index < values.length; index += 3) box.expandByPoint(new THREE.Vector3(values[index], values[index + 1], values[index + 2]).applyMatrix4(world));
+        for (let index = 0; index < values.length; index += 3) box.expandByPoint(point.set(values[index], values[index + 1], values[index + 2]).applyMatrix4(world));
       }
       sceneBox.union(box);
       meshNodes.set(nodeIndex, { min: box.min.toArray(), max: box.max.toArray(), matrixWorld: world });
@@ -312,6 +313,7 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
   const g6 = evidence.measurements?.G6;
   const inventory = g6?.meshInventory;
   const coverage = g6?.renderedCoverage;
+  const coverageViewIds = ['front', 'back', 'right', 'left', 'front-right', 'front-left', 'back-right', 'back-left'];
   const visualViews = new Set((evidence.visualEvidence?.files ?? []).flatMap((file) => file.viewSet ?? []));
   const policy = gltf.asset?.extras?.wildCrownStaticVisibilityPolicy;
   const requiredRows = Array.isArray(policy?.requiredMeshNodes) ? policy.requiredMeshNodes : [];
@@ -323,7 +325,7 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
   const excludedMeasurements = g6?.excludedNodeMeasurements;
   if (!Array.isArray(excludedMeasurements) || excludedMeasurements.length !== excludedRows.length || excludedRows.some((row) => !excludedMeasurements.some((measurement) => measurement.nodeIndex === row.nodeIndex && measurement.reason === row.reason))) fail(errors, 'Static prop ' + assetId + ' lacks explicit G6 evidence for excluded mesh nodes.');
   if (!Array.isArray(inventory) || inventory.length !== meshNodes.length) fail(errors, 'Static prop ' + assetId + ' lacks one G6 inventory row per renderable mesh node.');
-  if (!Array.isArray(coverage) || !coverage.length || coverage.some((view) => !view.viewId || !Number.isFinite(view.pixelCount) || view.pixelCount <= 0 || !visualViews.has(view.viewId))) fail(errors, 'Static prop ' + assetId + ' lacks current-output reviewed framebuffer coverage for every view.');
+  if (!Array.isArray(coverage) || coverage.length !== coverageViewIds.length || !coverage.some(view => view?.pixelCount > 0) || coverage.some((view, index) => view?.viewId !== coverageViewIds[index] || !Number.isInteger(view.pixelCount) || view.pixelCount < 0 || !visualViews.has(view.viewId))) fail(errors, 'Static prop ' + assetId + ' lacks current-output reviewed framebuffer coverage for every view.');
   const geometryMeasurement = evidence.measurements?.G10;
   if (!geometryMeasurement || !['measurement-complete-review-required', 'passed'].includes(geometryMeasurement.status)) fail(errors, 'Static prop ' + assetId + ' lacks complete G10 geometry measurements.');
   const geometry = geometryMeasurement?.staticGeometry;
@@ -376,8 +378,8 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
     if (requiredPolicy) {
       const control = controls.find((entry) => entry.id === 'G6-hidden-static-mesh:' + nodeIndex);
       const before = control?.measurementBefore, after = control?.measurementAfter;
-      const viewCountsMatch = Array.isArray(before?.visiblePixelsByView) && Array.isArray(after?.visiblePixelsByView) && before.visiblePixelsByView.length > 0 && after.visiblePixelsByView.length === before.visiblePixelsByView.length && before.visiblePixelsByView.every(Number.isFinite);
-      const visibleViews = before?.visiblePixelsByView?.filter((pixels) => pixels >= requiredPolicy.minimumVisiblePixels).length ?? 0;
+      const viewCountsMatch = Array.isArray(before?.visiblePixelsByView) && Array.isArray(after?.visiblePixelsByView) && before.visiblePixelsByView.length === coverageViewIds.length && after.visiblePixelsByView.length === coverageViewIds.length && before.visiblePixelsByView.every(pixels => Number.isInteger(pixels) && pixels >= 0) && after.visiblePixelsByView.every(pixels => Number.isInteger(pixels) && pixels >= 0);
+      const visibleViews = viewCountsMatch ? before.visiblePixelsByView.filter((pixels) => pixels >= requiredPolicy.minimumVisiblePixels).length : 0;
       if (!control || before?.nodeIndex !== nodeIndex || after?.nodeIndex !== nodeIndex || before?.nodeName !== nodeName || after?.nodeName !== nodeName || before?.meshIndex !== meshIndex || after?.meshIndex !== meshIndex || before?.minimumVisiblePixels !== requiredPolicy.minimumVisiblePixels || after?.minimumVisiblePixels !== requiredPolicy.minimumVisiblePixels || before?.minimumVisibleViews !== requiredPolicy.minimumVisibleViews || after?.minimumVisibleViews !== requiredPolicy.minimumVisibleViews || !viewCountsMatch || visibleViews !== before.visibleViews || visibleViews < requiredPolicy.minimumVisibleViews || !after.visiblePixelsByView.every((pixels) => pixels === 0) || after.visibleViews !== 0) fail(errors, 'Static prop ' + assetId + ' lacks policy-matched rerendered G6 hide-mesh evidence for node ' + nodeIndex + '.');
     }
     const expectedWorld = world.meshNodes.get(nodeIndex);
@@ -394,12 +396,15 @@ function validateStaticPropEvidence(gltf, evidence, assetId, controls, bytes) {
     if (!control || control.restoredAfterTest !== true || before?.nodeIndex !== nodeIndex || before?.nodeName !== nodeName || before?.meshIndex !== meshIndex || before?.status !== 'measurement-complete-review-required' || before?.nonFinitePositionCount !== 0 || before?.finitePositionCount !== vertexCount || !exactBounds(before?.bounds, min, max) || after?.nodeIndex !== nodeIndex || after?.nodeName !== nodeName || after?.meshIndex !== meshIndex || after?.status !== 'incomplete' || after?.accepted !== false || after?.injectedFault !== 'non-finite-position' || fault.nonFinitePositionCount === 0 || after?.finitePositionCount !== fault.finitePositionCount || after?.nonFinitePositionCount !== fault.nonFinitePositionCount || !afterBoundsMatch) fail(errors, 'Static prop ' + assetId + ' lacks a detected non-finite-position G10 control for node ' + nodeIndex + '.');
     const cullingControl = controls.find((entry) => entry.id === cullingControlId);
     const cullingBefore = cullingControl?.measurementBefore, cullingAfter = cullingControl?.measurementAfter;
-    const nativeCulling = primitives.every((primitive, primitiveIndex) => {
+    const nativeCulling = Array.isArray(cullingBefore?.primitives) && Array.isArray(cullingAfter?.primitives) && primitives.every((primitive, primitiveIndex) => {
       const before = cullingBefore?.primitives?.[primitiveIndex], after = cullingAfter?.primitives?.[primitiveIndex];
       const values = positions.get(primitive.attributes.POSITION), box = positionBounds(values);
       const center = box.getCenter(new THREE.Vector3());
       let radiusSq = 0;
-      for (let index = 0; index < values.length; index += 3) radiusSq = Math.max(radiusSq, center.distanceToSquared(new THREE.Vector3(values[index], values[index + 1], values[index + 2])));
+      for (let index = 0; index < values.length; index += 3) {
+        const x = values[index] - center.x, y = values[index + 1] - center.y, z = values[index + 2] - center.z;
+        radiusSq = Math.max(radiusSq, x * x + y * y + z * z);
+      }
       const sphere = new THREE.Sphere(center, Math.sqrt(radiusSq));
       const worldSphere = sphere.clone().applyMatrix4(expectedWorld.matrixWorld), radius = Math.max(worldSphere.radius, 0.5);
       const camera = new THREE.PerspectiveCamera(60, 1, 0.01, Math.max(100, radius * 20 + 10));
@@ -448,7 +453,7 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
     const source = sourceById.get(entry.id);
     if (!source || source.sourceType !== entry.sourceType || source.kind !== entry.kind) fail(errors, 'Production asset ' + entry.id + ' changed canonical sourceType/kind.');
     if (source && entry.sourceType === 'native-glb') {
-      for (const key of ['sourceHash', 'outputHash', 'sourceInputHash', 'nativeGlb', 'runtimeUrl', 'evidence', 'evidenceStatus', 'gates', 'requiredActionIds', 'actionToClipMapping']) if (JSON.stringify(source[key] ?? null) !== JSON.stringify(entry[key] ?? null)) fail(errors, 'Production asset ' + entry.id + ' changed canonical ' + key + '.');
+      for (const key of ['sourceHash', 'outputHash', 'sourceInputHash', 'nativeGlb', 'runtimeUrl', 'evidence', 'evidenceStatus', 'gates', 'providerTaskId', 'requiredActionIds', 'actionToClipMapping']) if (JSON.stringify(source[key] ?? null) !== JSON.stringify(entry[key] ?? null)) fail(errors, 'Production asset ' + entry.id + ' changed canonical ' + key + '.');
     }
     if (source && entry.sourceType === 'composed-recipe') {
       for (const key of ['componentAssetIds', 'nativeGlb', 'runtimeUrl', 'evidence', 'evidenceStatus']) if (JSON.stringify(source[key] ?? null) !== JSON.stringify(entry[key] ?? null)) fail(errors, 'Production recipe ' + entry.id + ' changed canonical ' + key + '.');
@@ -530,16 +535,34 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
           const controls = Array.isArray(evidence.negativeControls) ? evidence.negativeControls : [];
           const staticMeshNodes = isStaticProp ? sceneMeshNodes(gltf) : [];
           const requiredControls = isStaticProp
-            ? staticMeshNodes.flatMap(({ nodeIndex }) => ['G6-hidden-static-mesh:' + nodeIndex, 'G10-static-bounds-corruption:' + nodeIndex, 'G10-wrong-culling-bounds:' + nodeIndex])
+            ? [...(gltf.asset?.extras?.wildCrownStaticVisibilityPolicy?.requiredMeshNodes ?? []).map(({ nodeIndex }) => 'G6-hidden-static-mesh:' + nodeIndex), ...staticMeshNodes.flatMap(({ nodeIndex }) => ['G10-static-bounds-corruption:' + nodeIndex, 'G10-wrong-culling-bounds:' + nodeIndex])]
             : ['G1-disconnected-native-track', 'G3-unrestored-active-action', 'G6-hidden-required-body-part:', ...(skinned ? ['G10-corrupt-native-skin-weight'] : []), ...(gltf.animations?.length ? ['G10-missing-contact-window:'] : [])];
           for (const id of requiredControls) if (!controls.some((control) => id.endsWith(':') ? control.id?.startsWith(id) : control.id === id)) fail(errors, 'Native asset ' + asset.id + ' lacks negative control ' + id + '.');
           for (const control of controls) {
-            const expectedGate = control.id?.startsWith('G1-') ? 'G1' : control.id?.startsWith('G3-') ? 'G3' : control.id?.startsWith('G6-') ? 'G6' : control.id?.startsWith('G10-') ? 'G10' : null;
-            if (control.assetId !== asset.id || control.sourceHash !== digest || control.gate !== expectedGate || control.expectedFailure !== true || control.detectedFailure !== true || control.measurementBefore == null || control.measurementAfter == null || JSON.stringify(control.measurementBefore) === JSON.stringify(control.measurementAfter)) fail(errors, 'Native asset ' + asset.id + ' has incomplete/unassociated negative control ' + (control.id ?? 'unknown') + '.');
+            const expectedGate = /^(G1|G3|G6|G10|G11|G12)-/.exec(control.id ?? '')?.[1] ?? null;
+            const applicable = expectedGates[expectedGate] === 'passed';
+            if (!expectedGate || control.assetId !== asset.id || control.sourceHash !== digest || control.gate !== expectedGate || (applicable && (control.expectedFailure !== true || control.detectedFailure !== true || control.measurementBefore == null || control.measurementAfter == null || JSON.stringify(control.measurementBefore) === JSON.stringify(control.measurementAfter)))) fail(errors, 'Native asset ' + asset.id + ' has incomplete/unassociated negative control ' + (control.id ?? 'unknown') + '.');
           }
           const g11 = evidence.measurements?.G11;
           const g11AfterHashes = JSON.stringify(g11?.negativeControl?.measurementAfter ?? null).match(/[a-f0-9]{64}/gi) ?? [];
-          if (evidence.gates?.G11 !== 'passed' || !g11 || !['measurement-complete-review-required', 'passed'].includes(g11.status) || g11.derivativeHash !== digest || g11.frozenHash !== digest || g11.parity !== true || !g11.negativeControl?.id?.startsWith('G11-') || g11.negativeControl?.expectedFailure !== true || g11.negativeControl?.detectedFailure !== true || !JSON.stringify(g11.negativeControl?.measurementBefore).toLowerCase().includes(digest) || !g11AfterHashes.some((hash) => hash.toLowerCase() !== digest)) fail(errors, 'Native asset ' + asset.id + ' lacks exact G11 derivative freeze parity and byte-flip negative control for emitted bytes.');
+          if ((typeof evidence.gates?.G11 === 'object' ? evidence.gates.G11.status : evidence.gates?.G11) !== 'passed' || !g11 || !['measurement-complete-review-required', 'passed'].includes(g11.status) || g11.derivativeHash !== digest || g11.frozenHash !== digest || g11.parity !== true || !g11.negativeControl?.id?.startsWith('G11-') || g11.negativeControl?.expectedFailure !== true || g11.negativeControl?.detectedFailure !== true || !JSON.stringify(g11.negativeControl?.measurementBefore ?? null).toLowerCase().includes(digest) || !g11AfterHashes.some((hash) => hash.toLowerCase() !== digest)) fail(errors, 'Native asset ' + asset.id + ' lacks exact G11 derivative freeze parity and byte-flip negative control for emitted bytes.');
+          // The lab currently produces byte-copy parity only. Never reinterpret that
+          // diagnostic as runtime/UV/material/frozen-live-scene acceptance.
+          const parity = g11?.runtimeParity;
+          const parityKinds = ['geometry', 'uv', 'material', 'frozenLiveScene'];
+          const parityHash = value => typeof value === 'string' && value.length === 64 && /^[a-f0-9]{64}$/.test(value);
+          if (!Array.isArray(g11?.missingAcceptanceControls) || g11.missingAcceptanceControls.length || parity?.schemaVersion !== 1 || parity.outputHash !== digest || parityKinds.some(kind => {
+            const row = parity.measurements?.[kind];
+            const control = parity.negativeControls?.find(item => item.id === 'G11-' + kind + '-mismatch');
+            const before = control?.measurementBefore, after = control?.measurementAfter;
+            return row?.status !== 'measured' || row.matches !== true || !parityHash(row.liveHash) || !parityHash(row.frozenHash) || row.liveHash !== row.frozenHash || !control || control.expectedFailure !== true || control.detectedFailure !== true || control.assetId !== asset.id || control.sourceHash !== digest || before?.matches !== true || after?.matches !== false || !parityHash(before?.liveHash) || !parityHash(before?.frozenHash) || !parityHash(after?.liveHash) || !parityHash(after?.frozenHash) || before.liveHash !== row.liveHash || before.frozenHash !== row.frozenHash || after.liveHash === after.frozenHash || !controls.some(item => JSON.stringify(item) === JSON.stringify(control));
+          })) fail(errors, 'Native asset ' + asset.id + ' lacks measured G11 runtime geometry/UV/material/frozen-live-scene parity and required mismatch controls; byte-copy parity is insufficient.');
+          const visual = evidence.visualEvidence;
+          if (visual?.status !== 'passed' || visual.outputHash !== digest || !Array.isArray(visual.files) || !visual.files.length) fail(errors, 'Native asset ' + asset.id + ' lacks independently passed current-output visual evidence.');
+          for (const image of Array.isArray(visual?.files) ? visual.files : []) {
+            const imageFile = await confinedFile(repoRoot, image.path);
+            if (image.status !== 'passed' || image.outputHash !== digest || !HASH.test(image.sha256 ?? '') || !Array.isArray(image.viewSet) || !image.viewSet.length || !imageFile || sha256(await fs.readFile(imageFile)) !== image.sha256) fail(errors, 'Native asset ' + asset.id + ' visual evidence file is missing, stale, unreviewed, tampered, or escapes the repository.');
+          }
 
           if (isCharacter) {
             const required = Array.isArray(asset.requiredActionIds) ? asset.requiredActionIds : [];
@@ -552,6 +575,7 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
             const g1 = measurements.G1, g3 = measurements.G3, g6 = measurements.G6, g10 = measurements.G10;
             const complete = (row) => row && ['measurement-complete-review-required', 'passed'].includes(row.status);
             const g1ClipNames = new Set((g1?.clips ?? []).map((clip) => clip.clip));
+            const g10ClipNames = new Set((g10?.clips ?? []).map((clip) => clip.clip));
             if (!complete(g1) || requiredClipNames.some((name) => !g1ClipNames.has(name)) || g1.clips.some((clip) => clip.sampleCount < 5 || clip.transitionBoundaryCount < 1 || !Array.isArray(clip.tracks) || !clip.tracks.length || clip.tracks.some((track) => !track.targetFound || track.sampleCount < 5 || !track.allSamplesMatch))) fail(errors, 'Character ' + asset.id + ' lacks G1 per-clip binding/sample and transition-boundary producer measurements.');
             const g3ClipNames = new Set((g3?.clipRestores ?? []).map((clip) => clip.clip));
             if (!complete(g3) || g3.boneCount < 1 || requiredClipNames.some((name) => !g3ClipNames.has(name)) || g3.clipRestores.some((clip) => !clip.stop?.localRestored || !clip.stop?.worldRestored || !clip.reset?.localRestored || !clip.reset?.worldRestored)) fail(errors, 'Character ' + asset.id + ' lacks G3 stop/reset pose-restore producer measurements.');
@@ -562,7 +586,7 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
               return control?.expectedFailure === true && control.detectedFailure === true && Array.isArray(control.measurementBefore) && control.measurementBefore.some((pixels) => pixels > 0) && Array.isArray(control.measurementAfter) && control.measurementAfter.every((pixels) => pixels === 0);
             }));
             if (!complete(g6) || !Array.isArray(g6.meshInventory) || !g6.meshInventory.length || !Array.isArray(g6.parts) || !g6.parts.length || !g6.parts.every((part) => part.visible === true && part.visibleViews >= part.minimumVisibleViews) || !g6.policyValid || !g6.annotationsComplete || !g6.visibleComplete || !g6ControlsComplete || !species || species.status !== g6.status || species.measurement?.species !== asset.species || JSON.stringify(species.measurement) !== JSON.stringify(g6Measurement)) fail(errors, 'Character ' + asset.id + ' lacks measured G6 visibility and species-specific applicability evidence.');
-            if (!complete(g10) || !g10.measuredRootMotion || requiredClipNames.some((name) => !g10ClipNames.has(name)) || g10.clips.some((clip) => clip.sampleCount < 5 || !clip.deformedBoundsComplete || (clip.contactWindowCount > 0 && (!clip.contactCoverage || clip.coveredContactWindowCount !== clip.contactWindowCount)))) fail(errors, 'Character ' + asset.id + ' lacks G10 per-action deformed-bounds/root-motion/contact producer measurements.');
+            if (!complete(g10) || !g10.measuredRootMotion || !Array.isArray(g10.clips) || g10.clips.length !== animationNames.size || g10ClipNames.size !== g10.clips.length || [...g10ClipNames].some(name => !animationNames.has(name)) || requiredClipNames.some((name) => !g10ClipNames.has(name)) || g10.clips.some((clip) => clip.sampleCount < 5 || !clip.deformedBoundsComplete || (clip.contactWindowCount > 0 && (!clip.contactCoverage || clip.coveredContactWindowCount !== clip.contactWindowCount)))) fail(errors, 'Character ' + asset.id + ' lacks G10 per-action deformed-bounds/root-motion/contact producer measurements.');
           }
           if (asset.kind === 'prop' && !isStaticProp) {
             const measurements = evidence.measurements ?? {};
@@ -597,7 +621,7 @@ export async function inspectAssets({ dist, manifestPath, runtimeManifestPath, b
             errors.push(...validateStaticPropEvidence(gltf, evidence, asset.id, controls, bytes));
           }
           if (containsSensitive(evidence)) fail(errors, 'Native asset ' + asset.id + ' evidence contains credentials or signed URLs.');
-        } catch { fail(errors, 'Native asset ' + asset.id + ' evidence file is missing or invalid JSON.'); }
+        } catch (error) { fail(errors, 'Native asset ' + asset.id + ' evidence could not be inspected: ' + error.message); }
       }
     }
     for (const [gate, expected] of Object.entries(expectedGates)) {

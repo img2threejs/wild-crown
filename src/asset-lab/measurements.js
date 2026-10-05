@@ -185,15 +185,22 @@ export function measureG3(root, clips) {
   const clipsValid = clipRestores.length >= 2 && clipRestores.every(entry => entry.stop.localRestored && entry.stop.worldRestored && entry.reset.localRestored && entry.reset.worldRestored);  const status = skin.status === "valid" && bones.length > 0 && clipsValid && switchesValid && brokenControl.detectedFailure ? "measurement-complete-review-required" : "incomplete";
   return { status, boneCount: bones.length, skinIntegrity: skin, clipRestores, switchTransitions: switches, negativeControl: brokenControl, rule: "Empty skeletons, missing native skin/inverse binds, or a non-detecting pose perturbation never pass." };}
 export function measureStaticPropVisibility(gltf, root, renderer, scene, camera, assetId) {  const json = gltf.parser.json;
-  const meshes = [];  const associations = gltf.parser.associations;
-  root.traverse(mesh => {    if (!mesh.isMesh) return;
-    const nodeIndex = associations?.get(mesh)?.nodes;    const meshIndex = associations?.get(mesh)?.meshes;
-    meshes.push({ mesh, nodeIndex: Number.isInteger(nodeIndex) ? nodeIndex : null, nodeName: Number.isInteger(nodeIndex) ? json.nodes?.[nodeIndex]?.name || null : null, meshIndex: Number.isInteger(meshIndex) ? meshIndex : null, visible: effectivelyVisible(mesh, root), alphaVisible: hasVisibleSourceMaterial(mesh), primitiveCount: mesh.geometry.groups.length || 1, vertexCount: mesh.geometry.getAttribute("position")?.count || 0, indexCount: mesh.geometry.index?.count || mesh.geometry.getAttribute("position")?.count || 0, materialCount: sourceMaterials(mesh).length });  });
-  const policy = json.asset?.extras?.wildCrownStaticVisibilityPolicy || null;  if (!policy || policy.version !== 1 || policy.assetId !== assetId || !Array.isArray(policy.requiredMeshNodes) || !Array.isArray(policy.excludedMeshNodes)) return { status: "incomplete", policyStatus: "missing-or-mismatched", policyAssetId: policy?.assetId || null, meshInventory: meshes.map(({mesh,...row}) => row), parts: [], negativeControls: [], reason: "Requires GLTF asset.extras.wildCrownStaticVisibilityPolicy v1 scoped to this exact prop ID." };
+  const meshes = [], nodeIndices = staticNodeIndices(gltf, root);
+  root.traverse(mesh => {
+    if (!mesh.isMesh) return;
+    const nodeIndex = nodeIndices.get(mesh);
+    meshes.push({ mesh, nodeIndex, nodeName: json.nodes?.[nodeIndex]?.name || '(unnamed)', meshIndex: json.nodes?.[nodeIndex]?.mesh, visible: effectivelyVisible(mesh, root), alphaVisible: hasVisibleSourceMaterial(mesh) });
+  });
+  const geometryRows = measureStaticGeometryCore(gltf, root, assetId, nodeIndices).staticGeometry.meshNodes;
+  const meshInventory = geometryRows.map(row => {
+    const parts = meshes.filter(part => part.nodeIndex === row.nodeIndex);
+    return { nodeIndex: row.nodeIndex, nodeName: row.meshNodeName, meshIndex: row.meshIndex, visible: parts.every(part => part.visible), alphaVisible: parts.every(part => part.alphaVisible), primitiveCount: row.primitiveCount, vertexCount: row.vertexCount, indexCount: row.indexCount, materialCount: row.materialCount };
+  });
+  const policy = json.asset?.extras?.wildCrownStaticVisibilityPolicy || null;  if (!policy || policy.version !== 1 || policy.assetId !== assetId || !Array.isArray(policy.requiredMeshNodes) || !Array.isArray(policy.excludedMeshNodes)) return { status: "incomplete", policyStatus: "missing-or-mismatched", policyAssetId: policy?.assetId || null, meshInventory, renderedCoverage: [], parts: [], negativeControls: [], reason: "Requires GLTF asset.extras.wildCrownStaticVisibilityPolicy v1 scoped to this exact prop ID." };
   const required = policy.requiredMeshNodes;  const excluded = policy.excludedMeshNodes;
   const requiredIds = required.map(row => row.nodeIndex);  const excludedIds = excluded.map(row => row.nodeIndex);
-  const allPolicyIds = [...requiredIds, ...excludedIds];  const renderableIds = [...new Set(meshes.map(row => row.nodeIndex).filter(Number.isInteger))];
-  const exactInventory = renderableIds.length === meshes.length && new Set(allPolicyIds).size === allPolicyIds.length && renderableIds.length === allPolicyIds.length && renderableIds.every(id => allPolicyIds.includes(id));  const thresholdsValid = required.every(row => Number.isInteger(row.nodeIndex) && Number.isFinite(row.minimumVisiblePixels) && row.minimumVisiblePixels > 0 && Number.isInteger(row.minimumVisibleViews) && row.minimumVisibleViews > 0 && row.minimumVisibleViews <= 8) && excluded.every(row => Number.isInteger(row.nodeIndex) && typeof row.reason === "string" && row.reason.length > 0);
+  const allPolicyIds = [...requiredIds, ...excludedIds];  const renderableIds = meshInventory.map(row => row.nodeIndex);
+  const exactInventory = renderableIds.every(Number.isInteger) && new Set(allPolicyIds).size === allPolicyIds.length && renderableIds.length === allPolicyIds.length && renderableIds.every(id => allPolicyIds.includes(id));  const thresholdsValid = required.every(row => Number.isInteger(row.nodeIndex) && Number.isInteger(row.minimumVisiblePixels) && row.minimumVisiblePixels > 0 && Number.isInteger(row.minimumVisibleViews) && row.minimumVisibleViews > 0 && row.minimumVisibleViews <= 8) && excluded.every(row => Number.isInteger(row.nodeIndex) && typeof row.reason === "string" && row.reason.trim().length > 0);
   const originalMaterials = new Map(meshes.map(row => [row.mesh, row.mesh.material]));  const originalVisibility = new Map(meshes.map(row => [row.mesh, row.mesh.visible]));
   const savedCamera = { position: camera.position.clone(), quaternion: camera.quaternion.clone(), up: camera.up.clone(), near: camera.near, far: camera.far, aspect: camera.aspect };  const oldRenderTarget = renderer.getRenderTarget(), oldClearColor = renderer.getClearColor(new THREE.Color()).clone(), oldClearAlpha = renderer.getClearAlpha(), oldBackground = scene.background;
   const siblingVisibility = scene.children.filter(child => child !== root && !child.isLight).map(child => [child, child.visible]);  let target = null, currentMaskMaterials = [];
@@ -222,13 +229,14 @@ export function measureStaticPropVisibility(gltf, root, renderer, scene, camera,
     };
     for(const spec of required){
       const nodeRows=meshes.filter(row=>row.nodeIndex===spec.nodeIndex);
+      const identity = { nodeIndex: spec.nodeIndex, nodeName: json.nodes?.[spec.nodeIndex]?.name || '(unnamed)', meshIndex: json.nodes?.[spec.nodeIndex]?.mesh };
       const before=renderNode(spec.nodeIndex,"red");
       for(const row of nodeRows)row.mesh.visible=false;
       const after=renderNode(spec.nodeIndex,"green");
       for(const row of nodeRows)row.mesh.visible=originalVisibility.get(row.mesh);
       const visibleViews=before.filter(value=>value>=spec.minimumVisiblePixels).length;
       const detectedFailure=before.some(value=>value>0)&&after.every(value=>value===0);
-      controls.push({id:"G6-hidden-static-mesh:"+spec.nodeIndex,gate:"G6",expectedFailure:true,measurementBefore:{nodeIndex:spec.nodeIndex,minimumVisiblePixels:spec.minimumVisiblePixels,minimumVisibleViews:spec.minimumVisibleViews,visibleViews:before.filter(value=>value>=spec.minimumVisiblePixels).length,visiblePixelsByView:before},measurementAfter:{nodeIndex:spec.nodeIndex,minimumVisiblePixels:spec.minimumVisiblePixels,minimumVisibleViews:spec.minimumVisibleViews,visibleViews:after.filter(value=>value>=spec.minimumVisiblePixels).length,visiblePixelsByView:after},detectedFailure,assetId,sourceHash:null});
+      controls.push({id:"G6-hidden-static-mesh:"+spec.nodeIndex,gate:"G6",expectedFailure:true,measurementBefore:{...identity,minimumVisiblePixels:spec.minimumVisiblePixels,minimumVisibleViews:spec.minimumVisibleViews,visibleViews:before.filter(value=>value>=spec.minimumVisiblePixels).length,visiblePixelsByView:before},measurementAfter:{...identity,minimumVisiblePixels:spec.minimumVisiblePixels,minimumVisibleViews:spec.minimumVisibleViews,visibleViews:after.filter(value=>value>=spec.minimumVisiblePixels).length,visiblePixelsByView:after},detectedFailure,assetId,sourceHash:null});
       measurements.push({nodeIndex:spec.nodeIndex,minimumVisiblePixels:spec.minimumVisiblePixels,minimumVisibleViews:spec.minimumVisibleViews,visiblePixelsByView:before,visibleViews,visible:nodeRows.length>0&&visibleViews>=spec.minimumVisibleViews,sourceMeshCount:nodeRows.length});
       if(!nodeRows.length)setupFailures.push({nodeIndex:spec.nodeIndex,reason:"required node has no loaded mesh"});
     }
@@ -237,8 +245,10 @@ export function measureStaticPropVisibility(gltf, root, renderer, scene, camera,
     const policyComplete=exactInventory&&thresholdsValid&&setupFailures.length===0;
     const visibleComplete=measurements.every(row=>row.visible);
     const status=policyComplete&&visibleComplete&&controlsValid?"measurement-complete-review-required":"incomplete";
-    return{status,policyStatus:policyComplete?"complete":"incomplete",policyId:policy.policyId||null,policyVersion:policy.version,policyAssetId:policy.assetId,assetId,views:views.length,resolution:[256,256],requiredMeshNodes:structuredClone(policy.requiredMeshNodes),excludedMeshNodes:structuredClone(policy.excludedMeshNodes),excludedNodeMeasurements:excludedRows,meshInventory:meshes.map(({mesh,...row})=>row),parts:measurements,negativeControls:controls,setupFailures,stalePolicyIds:allPolicyIds.filter(id=>!renderableIds.includes(id))};
-  }catch(error){return{status:"incomplete",policyStatus:"error",assetId,error:error?.message||String(error),meshInventory:meshes.map(({mesh,...row})=>row),parts:measurements,negativeControls:controls,setupFailures};}
+    const viewIds = ['front', 'back', 'right', 'left', 'front-right', 'front-left', 'back-right', 'back-left'];
+    const renderedCoverage = viewIds.map((viewId, index) => ({ viewId, pixelCount: measurements.reduce((sum, row) => sum + row.visiblePixelsByView[index], 0) }));
+    return{status,policyStatus:policyComplete?"complete":"incomplete",policyId:policy.policyId||null,policyVersion:policy.version,policyAssetId:policy.assetId,assetId,views:views.length,resolution:[256,256],requiredMeshNodes:structuredClone(policy.requiredMeshNodes),excludedMeshNodes:structuredClone(policy.excludedMeshNodes),excludedNodeMeasurements:excludedRows,meshInventory,renderedCoverage,parts:measurements,negativeControls:controls,setupFailures,stalePolicyIds:allPolicyIds.filter(id=>!renderableIds.includes(id))};
+  }catch(error){return{status:"incomplete",policyStatus:"error",assetId,error:error?.message||String(error),meshInventory,renderedCoverage:[],parts:measurements,negativeControls:controls,setupFailures};}
   finally{
     for(const [mesh,material] of originalMaterials)mesh.material=material;
     for(const [mesh,visible] of originalVisibility)mesh.visible=visible;
@@ -459,6 +469,7 @@ function measureStaticGeometryCore(gltf, root, assetId, nodeIndices = staticNode
     const actualLocal = new THREE.Box3();
     const actualWorld = new THREE.Box3();
     const point = new THREE.Vector3();
+    const worldPoint = new THREE.Vector3();
     if (position) {
       for (let vertex = 0; vertex < position.count; vertex++) {
         point.fromBufferAttribute(position, vertex);
@@ -468,7 +479,7 @@ function measureStaticGeometryCore(gltf, root, assetId, nodeIndices = staticNode
         }
         finitePositionCount++;
         actualLocal.expandByPoint(point);
-        actualWorld.expandByPoint(point.clone().applyMatrix4(mesh.matrixWorld));
+        actualWorld.expandByPoint(worldPoint.copy(point).applyMatrix4(mesh.matrixWorld));
       }
     }
     if (index && position) {

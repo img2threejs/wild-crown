@@ -95,6 +95,34 @@ test('a native POSITION corruption remains rejected rather than repaired by its 
   } finally { position.data.array[position.offset] = original; }
 });
 
+test('a throwing native geometry predicate restores every POSITION mutation before culling runs', async () => {
+  const { gltf, meshes, sourceHash } = await loaded({ aliasAccessors: true });
+  const snapshots = meshes.map(mesh => {
+    const position = mesh.geometry.getAttribute('position'), array = position.array || position.data.array;
+    return { position, bytes: Uint8Array.from(new Uint8Array(array.buffer)), buffer: array.buffer, getY: position.getY, version: position.data?.version ?? position.version };
+  });
+  try {
+    for (const { position, getY } of snapshots) position.getY = function (vertex) {
+      if (Number.isNaN(this.getX(vertex))) throw new Error('native POSITION predicate rejected injected NaN');
+      return getY.call(this, vertex);
+    };
+    const measured = measureStaticGeometry(gltf, gltf.scene, 'native-static-probe', sourceHash);
+    assert.equal(measured.status, 'incomplete');
+    for (const control of measured.negativeControls.filter(row => row.id.startsWith('G10-static-bounds-corruption:'))) {
+      assert.equal(control.detectedFailure, false, 'an exception is not an observed predicate rejection result');
+      assert.equal(control.restoredAfterTest, true);
+      assert.match(control.reason, /predicate rejected injected NaN/);
+    }
+    assert.ok(measured.negativeControls.filter(row => row.id.startsWith('G10-wrong-culling-bounds:')).every(control => control.detectedFailure));
+    for (const snapshot of snapshots) {
+      assert.deepEqual(new Uint8Array(snapshot.buffer), snapshot.bytes);
+      assert.equal(snapshot.position.data?.version ?? snapshot.position.version, snapshot.version);
+    }
+  } finally {
+    for (const { position, getY } of snapshots) position.getY = getY;
+  }
+});
+
 test('normalized integer POSITION cannot falsely report detection when NaN becomes unchanged zero', async () => {
   const { gltf, meshes, sourceHash } = await loaded();
   gltf.parser.json.accessors[0].min = [0, 0, 0];
