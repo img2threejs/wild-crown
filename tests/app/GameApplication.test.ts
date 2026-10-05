@@ -1,4 +1,5 @@
 import { expect, it } from "bun:test";
+import { Vector3 } from "three";
 import { ENVIRONMENT_RECIPES, REGIONS } from "../../src/content/campaign.js";
 import { GameApplication } from "../../src/app/GameApplication.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
@@ -256,6 +257,8 @@ it("pauses the combat world for every blocking screen and restores normal time o
 
 async function finalChoiceApp(eligible: boolean, saves?: SaveRepository): Promise<Record<string, any>> {
   const app = headlessApp();
+  const inputBasis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
+  app.renderer = { dispose: () => {}, getInputBasis: () => inputBasis };
   const director = new CampaignDirector({ runId: "app-final-choice", saves });
   const checkpoint = await director.captureCheckpoint();
   const region = REGIONS.find(item => item.id === "heartroot-hollow")!;

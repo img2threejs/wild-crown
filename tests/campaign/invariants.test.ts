@@ -18,7 +18,7 @@ class RecordingLedger extends SaveRepository {
   }
 }
 
-// Keep the real import/load reducers; replace only IndexedDB slot I/O.
+// Keep real Director adoption and import reducers; replace only the persisted slot seam.
 class CampaignSlotLedger extends RecordingLedger {
   envelope: GameSaveEnvelope | null = null;
   imports = 0;
@@ -26,8 +26,17 @@ class CampaignSlotLedger extends RecordingLedger {
     return { slotId, label, runId: this.envelope!.runId, kind: "campaign", updatedAt: 123,
       chapter: this.envelope!.progress!.chapter, regionId: this.envelope!.progress!.regionId };
   }
-  override async loadSlot(): Promise<GameSaveEnvelope> {
-    return structuredClone(this.envelope!);
+  override async loadCampaign(slotId: string) {
+    const envelope = structuredClone(this.envelope!);
+    const summary = this.summary(slotId);
+    return {
+      campaign: envelope.campaign!,
+      checkpoint: envelope.checkpoint!,
+      eventKeys: envelope.eventKeys,
+      progress: envelope.progress ?? null,
+      chapter: summary.chapter,
+      regionId: summary.regionId,
+    };
   }
   override async listSlots(): Promise<SaveSlotSummary[]> {
     return [this.summary()];
