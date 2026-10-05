@@ -5,7 +5,7 @@ import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
 import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
 import { CHAPTERS, RETURN_BEATS } from "../../src/content/story.js";
 import { QUESTS, REGIONS } from "../../src/content/campaign.js";
-import { FACTION_IDS, FRAGMENT_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
+import { FACTION_IDS, FRAGMENT_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
 import type { CampaignSafeCheckpoint, WorldEvent } from "../../src/game/contracts.js";
 
 // Observe the Director's durable event boundary without requiring browser IndexedDB.
@@ -691,4 +691,595 @@ test("producer choice metadata cannot change the authored Dominion identity or c
   assert.equal(await director.restoreCheckpoint(checkpoint), true);
   assert.deepEqual((await director.captureCheckpoint()).progress.eventLog, rawBefore);
   assert.deepEqual(director.snapshot().campaign.dominionHistory, [{ sequence: 1, leaderId: "luma" }]);
+});
+
+test("a fresh Director run starts with every canonical exposed alias false and every canonical state unvisited", async () => {
+  // emptyWorldFacts must initialize the historical exposed aliases
+  // (canopy_restored, bamboo_restored, moonpine_restored, mistveil_restored,
+  // sunmane_restored) consistently with the canonical world. Constructors
+  // and startNewRun/startShowcase assign it directly without normalization, so
+  // an inconsistent emptyWorldFacts would leave the aliases undefined.
+  const scenarios: Array<{ runId: string; reenter: (director: CampaignDirector) => void }> = [
+    { runId: "alias-ctor", reenter: () => undefined },
+    { runId: "alias-startNewRun", reenter: (director) => director.startNewRun("alias-newrun") },
+    { runId: "alias-startShowcase", reenter: (director) => director.startShowcase("alias-showcase") },
+  ];
+  for (const { runId, reenter } of scenarios) {
+    const director = new CampaignDirector({ runId });
+    reenter(director);
+    const facts = director.snapshot().worldFacts;
+    for (const region of REGION_IDS) {
+      assert.equal(facts[`restoration:${region}:state`], "unvisited",
+        `${region} state starts unvisited (${runId})`);
+      assert.equal(facts[`restoration:${region}:restored`], false,
+        `${region} restored boolean starts false (${runId})`);
+      assert.equal(facts[`restoration:${region}:partial`], false,
+        `${region} partial boolean starts false (${runId})`);
+    }
+    assert.equal(facts.canopy_restored, false, `canopy_restored starts false (${runId})`);
+    assert.equal(facts.bamboo_restored, false, `bamboo_restored starts false (${runId})`);
+    assert.equal(facts.moonpine_restored, false, `moonpine_restored starts false (${runId})`);
+    assert.equal(facts.mistveil_restored, false, `mistveil_restored starts false (${runId})`);
+    assert.equal(facts.sunmane_restored, false, `sunmane_restored starts false (${runId})`);
+  }
+});
+
+test("restoration initializes authored regions and unlocks gated travel after a noncanonical restore", async () => {
+  const director = new CampaignDirector({ runId: "restoration-facts" });
+  const initial = director.snapshot();
+  for (const region of REGIONS) {
+    assert.equal(initial.worldFacts[`restoration:${region.id}:state`], "unvisited",
+      `${region.id} starts unvisited`);
+    assert.equal(initial.worldFacts[`restoration:${region.id}:partial`], false,
+      `${region.id} partial fact starts false`);
+    assert.equal(initial.worldFacts[`restoration:${region.id}:restored`], false,
+      `${region.id} restored fact starts false`);
+  }
+  await atChapter(director, 0);
+  await assert.rejects(
+    director.travel("the-grove", "greenwake-grove-in"),
+    /not been discovered/,
+    "Grove entrance is locked before greenwake restoration",
+  );
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-restored",
+    idempotencyKey: "restoration:greenwake:restored",
+    regionId: "greenwake",
+    state: "restored",
+    causeId: "greenwake-bond",
+  });
+  const unlocked = director.snapshot();
+  assert.equal(unlocked.worldFacts["restoration:greenwake:state"], "restored",
+    "noncanonical local state committed");
+  assert.equal(unlocked.worldFacts["restoration:greenwake:restored"], true,
+    "noncanonical restored boolean committed");
+  assert.equal(unlocked.worldFacts["restoration:greenwake:partial"], false,
+    "noncanonical partial boolean cleared");
+  assert.equal(unlocked.campaign.world.regions["greenwake"] as string | undefined, undefined,
+    "noncanonical region did not pollute canonical regions");
+  const grove = await director.travel("the-grove", "greenwake-grove-in");
+  assert.equal(grove.regionId, "the-grove", "Grove entrance unlocks after greenwake restoration");
+  // Collision-safe arrival: the safe spawn joins the authored route id, a
+  // real position equal to the reciprocal entrance's authored "from" endpoint,
+  // and an authored camera anchor. Walk-surface and collider geometry remain
+  // the static authored arrays on greenwake/the-grove (no restoration-
+  // conditioned colliders); the successful arrival itself exercises
+  // hasSafeWalkSurface against that static geometry.
+  const groveRegion = REGIONS.find((region) => region.id === "the-grove")!;
+  const entrance = groveRegion.entrances.find((entry) => entry.id === "greenwake-grove-in");
+  assert.ok(entrance, "Grove entrance was reciprocally authored");
+  assert.ok(grove.lastSafeCheckpoint, "adopted safe checkpoint exists");
+  const safeSpawn = grove.lastSafeCheckpoint?.safeSpawn;
+  assert.equal(safeSpawn?.routeId, "greenwake-grove-in",
+    "safe spawn route id matches authored entrance id");
+  assert.equal(safeSpawn?.regionId, "the-grove",
+    "safe spawn belongs to the-grove");
+  assert.equal(safeSpawn?.position.x, entrance.from.x,
+    "safe spawn x equals reciprocal entrance.from.x");
+  assert.equal(safeSpawn?.position.y, entrance.from.y,
+    "safe spawn y equals reciprocal entrance.from.y");
+  assert.equal(safeSpawn?.position.z, entrance.from.z,
+    "safe spawn z equals reciprocal entrance.from.z");
+  const cameraAnchor = groveRegion.cameraAnchors.find((anchor) => anchor.id === safeSpawn?.cameraAnchorId);
+  assert.ok(cameraAnchor, "safe spawn uses an authored camera anchor id");
+});
+
+test("restoration events are monotonic across unvisited/corrupted/partial/restored", async () => {
+  const director = new CampaignDirector({ runId: "restoration-monotonic" });
+  await atChapter(director, 1);
+  await director.processEvent({
+    type: "restoration",
+    eventId: "canopy-corruption",
+    idempotencyKey: "restoration:whispering-canopy:corrupted",
+    regionId: "whispering-canopy",
+    state: "corrupted",
+    causeId: "canopy-test",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "canopy-partial",
+    idempotencyKey: "restoration:whispering-canopy:partial",
+    regionId: "whispering-canopy",
+    state: "partial",
+    causeId: "canopy-test",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "canopy-restored",
+    idempotencyKey: "restoration:whispering-canopy:restored",
+    regionId: "whispering-canopy",
+    state: "restored",
+    causeId: "canopy-test",
+  });
+  const after = director.snapshot();
+  assert.equal(after.campaign.world.regions["whispering-canopy"], "restored",
+    "monotonic climb to restored commits canonical state");
+  assert.equal(after.worldFacts["restoration:whispering-canopy:state"], "restored");
+  assert.equal(after.worldFacts["restoration:whispering-canopy:restored"], true);
+  assert.equal(after.worldFacts["restoration:whispering-canopy:partial"], false);
+  assert.equal(after.worldFacts.canopy_restored, true,
+    "monotonic restored events still set the historical exposed key");
+
+  const before = director.snapshot();
+  await director.processEvent({
+    type: "restoration",
+    eventId: "canopy-downgrade",
+    idempotencyKey: "restoration:whispering-canopy:stale-partial",
+    regionId: "whispering-canopy",
+    state: "partial",
+    causeId: "canopy-test",
+  });
+  assert.deepEqual(director.snapshot().worldFacts, before.worldFacts,
+    "downgrade attempts on state=do not mutate any fact");
+  assert.equal(director.snapshot().campaign.world.regions["whispering-canopy"], "restored",
+    "downgrade attempts on state=do not regress canonical state");
+});
+
+test("local noncanonical state survives a fresh-key downgrade event after restoration", async () => {
+  const director = new CampaignDirector({ runId: "noncanonical-monotonic" });
+  await atChapter(director, 0);
+  // Climb Greenwake to restored through the canonical four-state ladder.
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-corrupted",
+    idempotencyKey: "restoration:greenwake:corrupted",
+    regionId: "greenwake",
+    state: "corrupted",
+    causeId: "greenwake-bond",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-partial",
+    idempotencyKey: "restoration:greenwake:partial",
+    regionId: "greenwake",
+    state: "partial",
+    causeId: "greenwake-bond",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-restored",
+    idempotencyKey: "restoration:greenwake:restored",
+    regionId: "greenwake",
+    state: "restored",
+    causeId: "greenwake-bond",
+  });
+  const climbed = director.snapshot();
+  assert.equal(climbed.worldFacts["restoration:greenwake:state"], "restored",
+    "Greenwake reached restored through monotonic climb");
+  assert.equal(climbed.worldFacts["restoration:greenwake:restored"], true);
+  assert.equal(climbed.worldFacts["restoration:greenwake:partial"], false);
+  // Fresh-key downgrade attempt must not mutate any local fact or boolean.
+  const before = director.snapshot();
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-freshkey-partial",
+    idempotencyKey: "restoration:greenwake:freshkey-partial",
+    regionId: "greenwake",
+    state: "partial",
+    causeId: "greenwake-bond",
+  });
+  const after = director.snapshot();
+  assert.equal(after.worldFacts["restoration:greenwake:state"], "restored",
+    "local state stays restored after downgrade attempt");
+  assert.equal(after.worldFacts["restoration:greenwake:restored"], true,
+    "local restored boolean stays true after downgrade attempt");
+  assert.equal(after.worldFacts["restoration:greenwake:partial"], false,
+    "local partial boolean stays false after downgrade attempt");
+  assert.deepEqual(after.worldFacts, before.worldFacts,
+    "downgrade attempt leaves every Greenwake fact untouched");
+});
+
+test("mistveil canonical restored state survives a stale partial event and quest consequence", async () => {
+  const director = new CampaignDirector({ runId: "mistveil-restoration" });
+  await atChapter(director, 4);
+  await director.processEvent({
+    type: "restoration",
+    eventId: "mistveil-restored",
+    idempotencyKey: "restoration:mistveil-basin:restored",
+    regionId: "mistveil-basin",
+    state: "restored",
+    causeId: "river-source",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "mistveil-stale-partial",
+    idempotencyKey: "restoration:mistveil-basin:stale-partial",
+    regionId: "mistveil-basin",
+    state: "partial",
+    causeId: "river-source",
+  });
+  const afterStale = director.snapshot();
+  assert.equal(afterStale.campaign.world.regions["mistveil-basin"], "restored",
+    "stale partial cannot regress canonical restored state");
+  assert.equal(afterStale.worldFacts["restoration:mistveil-basin:restored"], true,
+    "stale partial cannot regress restored boolean");
+  assert.equal(afterStale.worldFacts["restoration:mistveil-basin:partial"], false,
+    "stale partial cannot resurrect partial boolean");
+  assert.equal(afterStale.worldFacts["restoration:mistveil-basin:state"], "restored");
+  assert.equal(afterStale.worldFacts.mistveil_restored, true,
+    "historical exposed key remained true");
+});
+
+test("canonical facts and local region state survive checkpoint restore and load adoption", async () => {
+  const sourceSaves = new CampaignSlotLedger(undefined);
+  const director = new CampaignDirector({ runId: "restoration-checkpoint", saves: sourceSaves });
+  await atChapter(director, 1);
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-restored",
+    idempotencyKey: "restoration:greenwake:restored",
+    regionId: "greenwake",
+    state: "restored",
+    causeId: "greenwake-bond",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "the-grove-partial",
+    idempotencyKey: "restoration:the-grove:partial",
+    regionId: "the-grove",
+    state: "partial",
+    causeId: "grove-partial",
+  });
+  const expected = director.snapshot();
+  const capturedCheckpoint = await director.captureCheckpoint();
+  sourceSaves.envelope = {
+    format: "wild-crown-save",
+    schemaVersion: 1,
+    kind: "campaign",
+    runId: expected.runId,
+    campaign: structuredClone(expected.campaign),
+    checkpoint: structuredClone(capturedCheckpoint.worldCheckpoint),
+    progress: structuredClone(capturedCheckpoint.progress),
+    eventKeys: [...(capturedCheckpoint.progress.eventKeys ?? [])],
+    savedAt: 0,
+  };
+  const freshSaves = new CampaignSlotLedger(undefined);
+  freshSaves.envelope = sourceSaves.envelope;
+  const fresh = new CampaignDirector({ runId: "restoration-checkpoint", saves: freshSaves });
+  await fresh.load("restoration-slot");
+  const loaded = fresh.snapshot();
+  assert.equal(loaded.worldFacts["restoration:greenwake:state"], "restored",
+    "noncanonical restored state survives load");
+  assert.equal(loaded.worldFacts["restoration:greenwake:restored"], true);
+  assert.equal(loaded.worldFacts["restoration:the-grove:state"], "partial",
+    "noncanonical partial state survives load");
+  assert.equal(loaded.worldFacts["restoration:the-grove:partial"], true);
+  assert.equal(loaded.worldFacts["restoration:the-grove:restored"], false);
+  for (const region of REGION_IDS) {
+    assert.equal(loaded.worldFacts[`restoration:${region}:state`],
+      loaded.campaign.world.regions[region],
+      `${region} state fact derives from canonical world`);
+  }
+  const checkpoint = await director.captureCheckpoint();
+  assert.equal(await director.restoreCheckpoint(checkpoint), true);
+  const restored = director.snapshot();
+  assert.equal(restored.worldFacts["restoration:greenwake:state"], expected.worldFacts["restoration:greenwake:state"],
+    "checkpoint restore preserves noncanonical state");
+  assert.equal(restored.worldFacts["restoration:the-grove:state"], expected.worldFacts["restoration:the-grove:state"],
+    "checkpoint restore preserves noncanonical partial state");
+  // Captured checkpoints preserve noncanonical local-region state so an older
+  // checkpoint cannot regress a freshly-promoted canonical state.
+  const worldCheckpoint = await director.captureCheckpoint();
+  assert.equal(worldCheckpoint.progress.worldFacts["restoration:greenwake:state"], "restored",
+    "checkpoint preserves noncanonical restored state");
+  assert.equal(worldCheckpoint.progress.worldFacts["restoration:the-grove:state"], "partial",
+    "checkpoint preserves noncanonical partial state");
+});
+
+test("restoreCheckpoint normalizes stale canonical facts against authoritative world and preserves local state", async () => {
+  // Seed Greenwake/the-grove local state and a canonical Whispering Canopy
+  // restoration, then capture the resulting pristine checkpoint.
+  const director = new CampaignDirector({ runId: "stale-checkpoint" });
+  await atChapter(director, 1);
+  await director.processEvent({
+    type: "restoration",
+    eventId: "greenwake-restored",
+    idempotencyKey: "restoration:greenwake:restored",
+    regionId: "greenwake",
+    state: "restored",
+    causeId: "greenwake-bond",
+  });
+  await director.processEvent({
+    type: "restoration",
+    eventId: "the-grove-partial",
+    idempotencyKey: "restoration:the-grove:partial",
+    regionId: "the-grove",
+    state: "partial",
+    causeId: "grove-partial",
+  });
+  const pristine = await director.captureCheckpoint();
+  const expectedNoncanonical = {
+    greenwake: pristine.progress.worldFacts["restoration:greenwake:state"],
+    grove: pristine.progress.worldFacts["restoration:the-grove:state"],
+  };
+  // Promote the canonical Whispering Canopy region to "restored" in the live
+  // campaign state so the next checkpoint's authoritative world carries the
+  // canonical truth (campaign.world.regions["whispering-canopy"] = "restored").
+  // The progress worldFacts will then be intentionally desynced in this test
+  // to prove normalizeRestorationFacts derives canonical facts from the world
+  // rather than the stale progress payload.
+  await director.processEvent({
+    type: "restoration",
+    eventId: "canopy-restored",
+    idempotencyKey: "restoration:whispering-canopy:restored",
+    regionId: "whispering-canopy",
+    state: "restored",
+    causeId: "canopy-test",
+  });
+  // Recapture after the promotion so the checkpoint is genuinely authoritative
+  // for canonical regions; then mutate only the progress worldFacts to install
+  // stale canonical facts that disagree with that world.
+  const liveCheckpoint = await director.captureCheckpoint();
+  assert.equal(liveCheckpoint.progress.worldFacts["restoration:whispering-canopy:state"], "restored",
+    "live checkpoint reflects canonical restored state");
+  liveCheckpoint.progress.worldFacts["restoration:whispering-canopy:restored"] = false;
+  liveCheckpoint.progress.worldFacts["restoration:whispering-canopy:partial"] = false;
+  liveCheckpoint.progress.worldFacts["restoration:whispering-canopy:state"] = "unvisited";
+  liveCheckpoint.progress.worldFacts["canopy_restored"] = false;
+  assert.equal(liveCheckpoint.progress.worldFacts["restoration:whispering-canopy:restored"], false,
+    "checkpoint carries stale canonical restored boolean");
+  assert.equal(await director.restoreCheckpoint(liveCheckpoint), true,
+    "stale canonical facts do not block checkpoint restore");
+  const restored = director.snapshot();
+  assert.equal(restored.campaign.world.regions["whispering-canopy"], "restored",
+    "authoritative world retains canonical restored state");
+  assert.equal(restored.worldFacts["restoration:whispering-canopy:state"], "restored",
+    "stale canonical state is normalized against authoritative world");
+  assert.equal(restored.worldFacts["restoration:whispering-canopy:restored"], true,
+    "stale canonical restored boolean is normalized");
+  assert.equal(restored.worldFacts["restoration:whispering-canopy:partial"], false,
+    "stale canonical partial boolean is cleared");
+  assert.equal(restored.worldFacts.canopy_restored, true,
+    "stale canonical exposed alias is normalized");
+  // Local noncanonical state survives the upgrade intact.
+  assert.equal(restored.worldFacts["restoration:greenwake:state"], expectedNoncanonical.greenwake,
+    "noncanonical Greenwake state survives checkpoint upgrade");
+  assert.equal(restored.worldFacts["restoration:greenwake:restored"], true,
+    "noncanonical Greenwake restored boolean survives checkpoint upgrade");
+  assert.equal(restored.worldFacts["restoration:the-grove:state"], expectedNoncanonical.grove,
+    "noncanonical Grove state survives checkpoint upgrade");
+  assert.equal(restored.worldFacts["restoration:the-grove:partial"], true,
+    "noncanonical Grove partial boolean survives checkpoint upgrade");
+});
+
+test("importing a legacy envelope with only booleans normalizes against canonical state", async () => {
+  const saves = new CampaignSlotLedger(undefined);
+  const legacyCanonicalWorld = {
+    fragments: [],
+    factions: {
+      sky: { leaderId: null, leaderStatus: "leaderless", bondTier: 0, representative: { id: "vara", source: "envoy", willing: false, present: true } },
+      canopy: { leaderId: "koro", leaderStatus: "active", bondTier: 0, representative: { id: "koro", source: "leader", willing: false, present: true } },
+      fang: { leaderId: "asha", leaderStatus: "active", bondTier: 0, representative: { id: "asha", source: "leader", willing: false, present: true } },
+      pack: { leaderId: "ruun", leaderStatus: "active", bondTier: 0, representative: { id: "ruun", source: "leader", willing: false, present: true } },
+      shadow: { leaderId: "nyra", leaderStatus: "active", bondTier: 0, representative: { id: "nyra", source: "leader", willing: false, present: true } },
+      crown: { leaderId: "solkar", leaderStatus: "active", bondTier: 0, representative: { id: "solkar", source: "leader", willing: false, present: true } },
+    },
+    // Authoritative world state lives in BOTH campaign.world and checkpoint.world.
+    regions: { "whispering-canopy": "restored", "blood-bamboo-valley": "partial", "moonpine-ridge": "unvisited", "mistveil-basin": "unvisited", "sunmane-expanse": "unvisited" },
+    hollowReady: false,
+    regionalObligations: { canopy_water_seed_accord: false, bamboo_tali_safe: false, bamboo_snare_source: false, mistveil_river_source: false, mistveil_nyra_truth: false, moonpine_settlement: false, sunmane_tribute_ended: false, sunmane_voluntary_governance: false } as never,
+    renewedCommitments: { sky: false, canopy: false, fang: false, pack: false, shadow: false, crown: false },
+    marekPresent: true,
+  };
+  saves.envelope = {
+    format: "wild-crown-save",
+    schemaVersion: 1,
+    kind: "campaign",
+    runId: "legacy-restoration",
+    campaign: { schemaVersion: 1, runId: "legacy-restoration", world: structuredClone(legacyCanonicalWorld), dominionHistory: [] },
+    checkpoint: { kind: "campaign-checkpoint", schemaVersion: 1, runId: "legacy-restoration", world: structuredClone(legacyCanonicalWorld) },
+    progress: {
+      chapter: 1, regionId: "whispering-canopy", safeSpawn: undefined as never,
+      activeQuestIds: [], completedQuestIds: [], completedObjectiveIds: [],
+      trackedObjectiveId: null, party: { scout: "vara" }, choices: {}, worldFacts: {
+        // Stale canonical boolean differs from authoritative world to prove
+        // normalization derives facts from the campaign state, not from the legacy
+        // boolean. Greenwake has no boolean at all: its absence must default
+        // to unvisited (no local-state persistence yet).
+        "restoration:whispering-canopy:restored": false,
+        "restoration:blood-bamboo-valley:restored": false,
+        "restoration:blood-bamboo-valley:partial": false,
+        "restoration:moonpine-ridge:restored": false,
+        "restoration:mistveil-basin:restored": false,
+        "restoration:sunmane-expanse:restored": false,
+        "canopy_restored": false,
+        "bamboo_restored": false,
+        "moonpine_restored": false,
+        "mistveil_restored": false,
+        "sunmane_restored": false,
+        chapter: 1,
+      } as never,
+      eventLog: [], eventKeys: [], ending: null, revision: 0,
+    },
+    eventKeys: [],
+    savedAt: 0,
+  };
+  const director = new CampaignDirector({ runId: "legacy-restoration", saves });
+  await director.load("history-slot");
+  const loaded = director.snapshot();
+  assert.equal(loaded.worldFacts["restoration:whispering-canopy:state"], "restored",
+    "legacy canonical boolean normalized to authoritative restored state");
+  assert.equal(loaded.worldFacts["restoration:whispering-canopy:restored"], true);
+  assert.equal(loaded.worldFacts["restoration:blood-bamboo-valley:state"], "partial",
+    "legacy canonical state derives from authoritative world");
+  assert.equal(loaded.worldFacts["restoration:blood-bamboo-valley:partial"], true);
+  assert.equal(loaded.worldFacts["restoration:blood-bamboo-valley:restored"], false);
+  assert.equal(loaded.worldFacts["restoration:greenwake:state"], "unvisited",
+    "missing local state key defaults to unvisited for legacy envelopes");
+  assert.equal(loaded.worldFacts.canopy_restored, true,
+    "canonical exposed key restored from authoritative world");
+  assert.equal(loaded.worldFacts.bamboo_restored, false,
+    "canonical exposed key cleared when authoritative state is not restored");
+});
+
+test("legacy boolean-only noncanonical state migrates from existing partial/restored booleans", async () => {
+  const saves = new CampaignSlotLedger(undefined);
+  const canonicalWorld = {
+    fragments: [],
+    factions: {
+      sky: { leaderId: null, leaderStatus: "leaderless", bondTier: 0, representative: { id: "vara", source: "envoy", willing: false, present: true } },
+      canopy: { leaderId: "koro", leaderStatus: "active", bondTier: 0, representative: { id: "koro", source: "leader", willing: false, present: true } },
+      fang: { leaderId: "asha", leaderStatus: "active", bondTier: 0, representative: { id: "asha", source: "leader", willing: false, present: true } },
+      pack: { leaderId: "ruun", leaderStatus: "active", bondTier: 0, representative: { id: "ruun", source: "leader", willing: false, present: true } },
+      shadow: { leaderId: "nyra", leaderStatus: "active", bondTier: 0, representative: { id: "nyra", source: "leader", willing: false, present: true } },
+      crown: { leaderId: "solkar", leaderStatus: "active", bondTier: 0, representative: { id: "solkar", source: "leader", willing: false, present: true } },
+    },
+    regions: { "whispering-canopy": "unvisited", "blood-bamboo-valley": "unvisited", "moonpine-ridge": "unvisited", "mistveil-basin": "unvisited", "sunmane-expanse": "unvisited" },
+    hollowReady: false,
+    regionalObligations: { canopy_water_seed_accord: false, bamboo_tali_safe: false, bamboo_snare_source: false, mistveil_river_source: false, mistveil_nyra_truth: false, moonpine_settlement: false, sunmane_tribute_ended: false, sunmane_voluntary_governance: false } as never,
+    renewedCommitments: { sky: false, canopy: false, fang: false, pack: false, shadow: false, crown: false },
+    marekPresent: true,
+  };
+  saves.envelope = {
+    format: "wild-crown-save",
+    schemaVersion: 1,
+    kind: "campaign",
+    runId: "legacy-boolean-migration",
+    campaign: { schemaVersion: 1, runId: "legacy-boolean-migration", world: structuredClone(canonicalWorld), dominionHistory: [] },
+    checkpoint: { kind: "campaign-checkpoint", schemaVersion: 1, runId: "legacy-boolean-migration", world: structuredClone(canonicalWorld) },
+    progress: {
+      chapter: 1, regionId: "greenwake", safeSpawn: undefined as never,
+      activeQuestIds: [], completedQuestIds: [], completedObjectiveIds: [],
+      trackedObjectiveId: null, party: { scout: "vara" }, choices: {}, worldFacts: {
+        // Legacy envelope has only booleans for greenwake (restored) and
+        // the-grove (partial). No state key. Migration should derive
+        // local state from these existing true booleans rather than
+        // resetting them to unvisited.
+        "restoration:greenwake:restored": true,
+        "restoration:the-grove:partial": true,
+        chapter: 1,
+      } as never,
+      eventLog: [], eventKeys: [], ending: null, revision: 0,
+    },
+    eventKeys: [],
+    savedAt: 0,
+  };
+  const director = new CampaignDirector({ runId: "legacy-boolean-migration", saves });
+  await director.load("history-slot");
+  const loaded = director.snapshot();
+  assert.equal(loaded.worldFacts["restoration:greenwake:state"], "restored",
+    "legacy restored boolean migrated to local state");
+  assert.equal(loaded.worldFacts["restoration:greenwake:restored"], true);
+  assert.equal(loaded.worldFacts["restoration:the-grove:state"], "partial",
+    "legacy partial boolean migrated to local state");
+  assert.equal(loaded.worldFacts["restoration:the-grove:partial"], true);
+  assert.equal(loaded.worldFacts["restoration:the-grove:restored"], false);
+  for (const region of REGION_IDS) {
+    assert.equal(loaded.worldFacts[`restoration:${region}:state`],
+      loaded.campaign.world.regions[region],
+      `${region} state derives from canonical campaign`);
+  }
+});
+
+test("quest consequence promotes canonical state when a non-restoration ecology event completes the quest", async () => {
+  // The river-source interaction placement is the authoritative authored
+  // source-node location in mistveil-basin. Resolve it from the region record
+  // so the test stays coupled to authored source-of-truth.
+  const mistveilRegion = REGIONS.find((region) => region.id === "mistveil-basin");
+  assert.ok(mistveilRegion, "mistveil-basin region is authored");
+  const riverSourceEntity = mistveilRegion.entities.find(
+    (entity) => entity.id === "river-source" && entity.kind === "interaction",
+  );
+  assert.ok(riverSourceEntity, "river-source interaction placement is authored");
+  assert.equal(riverSourceEntity.interactionId, "river-source",
+    "river-source entity uses the canonical interaction id");
+  const riverSourcePosition = riverSourceEntity.position;
+  const riverSourceInteractionId = riverSourceEntity.interactionId;
+
+  // Seed every objective except the final ecology:river-source as already
+  // complete, including the restore-river follow-up, so the canonical state
+  // and the `restoration:` facts must remain unvisited until the source event
+  // triggers the quest consequence. This test completes via the authored
+  // semantic ecology interaction, isolating the consequence path from any
+  // direct restoration event that production interaction normally emits.
+  const director = new CampaignDirector({ runId: "mire-maw-consequence" });
+  await atChapter(director, 4, (checkpoint) => {
+    checkpoint.progress.activeQuestIds = ["the-mire-maw"];
+    checkpoint.progress.completedObjectiveIds = [
+      "the-mire-maw:polluted-source",
+      "the-mire-maw:ghor-encounter",
+      "the-mire-maw:restore-river",
+    ];
+  });
+  const beforeSnapshot = director.snapshot();
+  assert.equal(beforeSnapshot.campaign.world.regions["mistveil-basin"], "unvisited",
+    "canonical world.regions[mistveil-basin] is unvisited before the ecology event");
+  assert.equal(beforeSnapshot.worldFacts["restoration:mistveil-basin:state"], "unvisited",
+    "restoration:mistveil-basin:state derives from unvisited canonical world");
+  assert.equal(beforeSnapshot.worldFacts["restoration:mistveil-basin:restored"], false,
+    "restoration:mistveil-basin:restored is false before the consequence fires");
+  assert.equal(beforeSnapshot.worldFacts.mistveil_restored, false,
+    "canonical exposed key mistveil_restored is false before the consequence fires");
+
+  // Authored semantic ecology event that matches the source objective. The
+  // kind/target are validated by `eventMatches`; the actor/position/interactionId
+  // come straight from the authored river-source entity placement.
+  await director.processEvent({
+    type: "semantic-interaction",
+    eventId: "river-source-restored",
+    idempotencyKey: "river-source:restored",
+    actorId: "aren",
+    interactionId: riverSourceInteractionId,
+    kind: "restore",
+    targetId: "river-source",
+    position: { ...riverSourcePosition },
+  });
+  // The source ecology event satisfies the source objective; only the quest
+  // consequence (not this ecology event itself) promotes canonical state.
+  assert.ok(director.snapshot().completedObjectiveIds.includes("the-mire-maw:source"),
+    "ecology event satisfied the mire-maw source objective");
+  assert.ok(director.snapshot().completedQuestIds.includes("the-mire-maw"),
+    "the-mire-maw main quest completed through quest consequence");
+  const after = director.snapshot();
+  assert.equal(after.campaign.world.regions["mistveil-basin"], "restored",
+    "quest consequence promotes canonical world.regions to restored");
+  assert.equal(after.worldFacts["restoration:mistveil-basin:state"], "restored",
+    "quest consequence propagates canonical state to local facts");
+  assert.equal(after.worldFacts["restoration:mistveil-basin:restored"], true,
+    "quest consequence sets the restored boolean");
+  assert.equal(after.worldFacts["restoration:mistveil-basin:partial"], false,
+    "quest consequence clears the partial boolean");
+  assert.equal(after.worldFacts.mistveil_restored, true,
+    "quest consequence sets the canonical exposed alias");
+
+  // Stale partial event still cannot regress the canonical restored state.
+  const beforeStale = director.snapshot();
+  await director.processEvent({
+    type: "restoration",
+    eventId: "stale-partial",
+    idempotencyKey: "restoration:mistveil-basin:stale-partial",
+    regionId: "mistveil-basin",
+    state: "partial",
+    causeId: "river-source",
+  });
+  const finalSnap = director.snapshot();
+  assert.equal(finalSnap.campaign.world.regions["mistveil-basin"], "restored",
+    "canonical state survives stale partial after consequence");
+  assert.equal(finalSnap.worldFacts["restoration:mistveil-basin:restored"], true,
+    "restored boolean survives stale partial after consequence");
+  assert.equal(finalSnap.worldFacts["restoration:mistveil-basin:partial"], false,
+    "partial boolean stays cleared after stale partial post-consequence");
+  assert.deepEqual(finalSnap.worldFacts, beforeStale.worldFacts,
+    "stale partial leaves every canonical fact untouched");
 });
