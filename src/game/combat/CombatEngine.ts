@@ -337,8 +337,9 @@ export class CombatEngine {
     }
     if(success.type==='choice'){
       if(!choiceOptionId||!success.optionIds.includes(choiceOptionId))return false;
-      const eventId=this.interactionEventId(interaction);
-      return this.emitWorldEvent({type:'choice',eventId,idempotencyKey:eventId,choiceId:success.choiceId,optionId:choiceOptionId,leaderId:choiceOptionId.startsWith('dominion-')?choiceOptionId.slice('dominion-'.length):choiceOptionId,dominion:choiceOptionId.startsWith('dominion-')||choiceOptionId==='dominion'});
+      const factionScoped=success.choiceId==='faction-covenant'||success.choiceId==='chapter-seven-commitment';
+      const eventId=this.interactionEventId(interaction)+(factionScoped?':'+choiceOptionId.replace(/^decline-/,''):'');
+      return this.emitWorldEvent({type:'choice',eventId,idempotencyKey:eventId,choiceId:success.choiceId,optionId:choiceOptionId});
     }
     if(success.type==='traversal')return this.traverse(success.routeId);
     if(success.type==='checkpoint'){this.state.checkpoint=this.captureEncounterCheckpoint();return true;}
@@ -437,6 +438,11 @@ export class CombatEngine {
   restore(serialized: string): void { this.cancelTraversal(); this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); this.cancelTraversal(); this.state.presentationCues=[]; for(const hazard of this.state.hazards)hazard.activePresentationEmitted=false; this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); }
   consumeEvents(): CombatEvent[] { const events = structuredClone(this.state.events); this.state.events.length=0; return events; }
   consumeWorldEvents(): WorldEvent[] { const events = structuredClone(this.state.worldEvents); this.state.worldEvents.length=0; return events; }
+  /** Release only an uncommitted choice emission after the Director permanently rejects it. */
+  discardRejectedChoice(event:Extract<WorldEvent,{type:'choice'}>,committed:boolean):void{
+    if(committed)return;
+    this.state.seenWorldKeys=this.state.seenWorldKeys.filter(key=>key!==event.idempotencyKey);
+  }
   drainPresentationCues(): readonly StoryCue[] { const cues=structuredClone(this.state.presentationCues);this.state.presentationCues.length=0;return cues; }
   queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTick'|'worldTimeSeconds'>):StoryCue{
     const normalized=structuredClone(cue);
@@ -1233,6 +1239,7 @@ export class CombatEngine {
     if(interaction.actionId==='contextual-interact'){
       if(interaction.kind==='inspect')return true;
       const success=interaction.success;
+      if(interaction.kind==='choose'&&success.type==='choice')return true;
       if(success.type==='rescue'){
         if(success.targetId==='tali')return target?.archetypeId==='tali'&&this.isTaliSafe(target.position);
         const rescueTarget=this.actorForId(success.targetId as ActorId);

@@ -1,6 +1,11 @@
 import { expect, it } from "bun:test";
+import { Vector3 } from "three";
 import { ENVIRONMENT_RECIPES, REGIONS } from "../../src/content/campaign.js";
 import { GameApplication } from "../../src/app/GameApplication.js";
+import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
+import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
+import { SaveRepository } from "../../src/game/storage/SaveRepository.js";
+import { FACTION_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
 import { NativeAssetError } from "../../src/rendering/NativeAssetLoader.js";
 import type { AssetManifestEntry, CampaignSnapshot, UIAction, WorldEvent } from "../../src/game/contracts.js";
 
@@ -264,6 +269,161 @@ it("pauses the combat world for every blocking screen and restores normal time o
   expect(policies.at(-1)).toBe("normal");
 });
 
+async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunResolved = true): Promise<Record<string, any>> {
+  const app = headlessApp();
+  const inputBasis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
+  app.renderer = { dispose: () => {}, getInputBasis: () => inputBasis };
+  const director = new CampaignDirector({ runId: "app-final-choice", saves });
+  const checkpoint = await director.captureCheckpoint();
+  const region = REGIONS.find(item => item.id === "heartroot-hollow")!;
+  const position = region.entities.find(entity => entity.interactionId === "hollow-crown-choice")!.position;
+  checkpoint.progress.chapter = 8;
+  checkpoint.progress.regionId = region.id;
+  checkpoint.progress.worldFacts = { ...checkpoint.progress.worldFacts, chapter: 8 };
+  checkpoint.safeSpawn = { regionId: region.id, position, routeId: region.navigation.nodes[0]!.id,
+    cameraAnchorId: region.cameraAnchors[0]!.id };
+  if (eligible) {
+    const world = checkpoint.worldCheckpoint.world;
+    for (const faction of FACTION_IDS) {
+      world.factions[faction].bondTier = 3;
+      world.factions[faction].representative.present = true;
+      world.factions[faction].representative.willing = true;
+      world.renewedCommitments[faction] = true;
+    }
+    for (const id of REGION_IDS) world.regions[id] = "restored";
+    for (const id of REGIONAL_OBLIGATION_IDS) world.regionalObligations[id] = true;
+    world.hollowReady = true;
+  }
+  expect(await director.restoreCheckpoint(checkpoint)).toBe(true);
+  if (orunResolved) await director.processEvent({
+    type: "encounter-resolved", eventId: "app-orun-cleansed", idempotencyKey: "app-orun-cleansed",
+    encounterId: "encounter-orun", actorIds: ["orun"], resolution: "cleansed",
+  });
+  app.campaignDirector = director;
+  app.campaign = director.snapshot();
+  app.region = region;
+  app.pendingWorldEvents = [];
+  app.combat = new CombatEngine();
+  app.combat.loadRegion({ regionId: region.id, runId: app.campaign.runId,
+    presentActorIds: [], playerPosition: position, worldFacts: app.campaign.worldFacts });
+  app.ready = true;
+  app.activeCompanionSlots = {};
+  app.wheel = { hidden: true };
+  app.input.sample = () => ({
+    moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false,
+    heavyHeld: false, heavyReleased: false, interactPressed: true, abilityPressed: false,
+    commandWheelPressed: false, commandWheelHeld: false, mapPressed: false, journalPressed: false,
+    companionsPressed: false, pausePressed: false, commandIndex: null,
+  });
+  return app;
+}
+
+it("keeps the Crown memory actionable before Orun is cleansed without opening the ending choice", async () => {
+  const app = await finalChoiceApp(false, undefined, false);
+  const memory = app.region.entities.find((entity: { interactionId?: string }) => entity.interactionId === "hollow-memory-crown")!;
+  app.combat.loadRegion({ regionId: app.region.id, runId: app.campaign.runId,
+    presentActorIds: [], playerPosition: memory.position, worldFacts: app.campaign.worldFacts });
+  expect(app.campaign.worldFacts["orun-cleansed"]).not.toBe(true);
+  expect(app.combat.resolveInteraction("hollow-crown-choice", "hollow-crown-choice", "severance")).toBe(false);
+  expect(app.combat.consumeWorldEvents()).toEqual([]);
+
+  app.simulateTick();
+  await app.durableEvents;
+  expect(app.screen).toBe("game");
+  expect(app.choice).toBeUndefined();
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-memory-crown", targetId: "hollow-memory-crown" });
+  expect(app.campaign.worldFacts["interaction:hollow-memory-crown"]).toBe(true);
+  expect(app.campaign.lastEvent).toMatchObject({
+    type: "semantic-interaction", interactionId: "hollow-memory-crown", kind: "inspect", targetId: "hollow-memory-crown",
+  });
+  expect(app.campaign.ending).toBeNull();
+});
+
+it("filters an ineligible Living Pact and consumes a stale rejection without wedging the actual app or engine", async () => {
+  const app = await finalChoiceApp(false);
+  const before = app.campaignDirector.snapshot();
+  expect(app.campaign.worldFacts["orun-cleansed"]).toBe(true);
+  app.simulateTick();
+  expect(app.screen).toBe("choice");
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-crown-choice", targetId: "hollow-crown-choice" });
+  expect(app.choice.options.map((option: { id: string }) => option.id)).toEqual(["dominion", "severance"]);
+
+  // A stale/selectable payload still reaches the real contextual producer and consumer.
+  await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "living_pact" });
+  await app.durableEvents;
+  expect(app.campaignDirector.snapshot()).toEqual(before);
+  expect(app.campaign).toEqual(before);
+  expect(app.failedWorldEvent).toBeNull();
+  expect(app.pendingWorldEvents).toEqual([]);
+  expect(app.error).toBeNull();
+  expect(app.loading.active).toBe(false);
+  expect(app.loading.operationId).not.toBe("durable-event");
+  expect(app.screen).toBe("game");
+  expect(app.combat.snapshot().worldClock.policy).toBe("normal");
+
+  // The same engine's speculative key is released, not a region-reload escape hatch.
+  app.simulateTick();
+  await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "severance" });
+  await app.durableEvents;
+  expect(app.campaign.ending).toBe("severance");
+  expect(app.screen).toBe("ending");
+  expect(app.failedWorldEvent).toBeNull();
+  const accepted = app.campaign.lastEvent as Extract<WorldEvent, { type: "choice" }>;
+  expect(app.campaignDirector.isEventCommitted(accepted.idempotencyKey)).toBe(true);
+
+  // A conflicting queued payload sharing a committed key must not release that key.
+  app.pendingWorldEvents = [{ ...accepted, optionId: "living_pact" }];
+  await app.flushWorldEvents();
+  expect(app.pendingWorldEvents).toEqual([]);
+  expect(app.failedWorldEvent).toBeNull();
+  expect(app.campaign.ending).toBe("severance");
+  expect(app.combat.resolveInteraction("hollow-crown-choice", "hollow-crown-choice", "dominion")).toBe(false);
+});
+
+it("advertises and commits eligible Living Pact through the actual choice UI and event consumer", async () => {
+  const app = await finalChoiceApp(true);
+  expect(app.campaignDirector.ending().available).toBe(true);
+  expect(app.campaign.worldFacts["orun-cleansed"]).toBe(true);
+  app.simulateTick();
+  expect(app.screen).toBe("choice");
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-crown-choice", targetId: "hollow-crown-choice" });
+  expect(app.choice.options.map((option: { id: string }) => option.id)).toEqual(["dominion", "severance", "living_pact"]);
+  await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "living_pact" });
+  await app.durableEvents;
+  expect(app.campaign.ending).toBe("living_pact");
+  expect(app.campaign.worldFacts.circleOfTheWild).toBe(true);
+  expect(app.screen).toBe("ending");
+  expect(app.ending.id).toBe("living_pact");
+  expect(app.failedWorldEvent).toBeNull();
+  expect(app.pendingWorldEvents).toEqual([]);
+});
+
+class RefusingChoiceLedger extends SaveRepository {
+  fail = false;
+  override async appendRunLedger(): Promise<void> {
+    if (this.fail) throw new Error("injected choice persistence failure");
+  }
+}
+
+it("retains a speculative choice key and the durable retry path for a persistence failure", async () => {
+  const saves = new RefusingChoiceLedger(undefined);
+  const app = await finalChoiceApp(false, saves);
+  saves.fail = true;
+  await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "severance" });
+  await app.durableEvents;
+  expect(app.failedWorldEvent?.type).toBe("choice");
+  expect(app.loading.operationId).toBe("durable-event");
+  expect(app.screen).toBe("loading");
+  expect(app.combat.snapshot().worldClock.policy).toBe("paused");
+  expect(app.campaignDirector.isEventCommitted(app.failedWorldEvent.idempotencyKey)).toBe(false);
+  expect(app.combat.resolveInteraction("hollow-crown-choice", "hollow-crown-choice", "dominion")).toBe(false);
+  saves.fail = false;
+  await app.dispatch({ type: "retry-load", operationId: "durable-event" });
+  expect(app.failedWorldEvent).toBeNull();
+  expect(app.pendingWorldEvents).toEqual([]);
+  expect(app.campaign.ending).toBe("severance");
+  expect(app.screen).toBe("ending");
+});
 it("keeps root title and error screens stable while closing nested menus to their exact opening screen", async () => {
   const app = headlessApp();
   app.screen = "title";
@@ -438,4 +598,3 @@ it("re-enables gameplay input after a successful blocked-scene retry even when n
     expect(enabled.at(-1)).toBe(true);
   }
 });
-

@@ -54,6 +54,18 @@ export interface CampaignDirectorOptions {
   runId?: string;
 }
 
+/** An authored choice is permanently invalid, not a failed durable write to retry. */
+export class CampaignChoiceRejectedError extends Error {
+  constructor(
+    readonly choiceId: string,
+    readonly optionId: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = "CampaignChoiceRejectedError";
+  }
+}
+
 const REGION_CHAPTER: Partial<Record<RegionId, number>> = {
   greenwake: 0,
   "whispering-canopy": 1,
@@ -77,6 +89,32 @@ const LEADER_IDS: readonly LeaderId[] = [
 const createId = (): string =>
   globalThis.crypto?.randomUUID?.() ??
   "run-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+
+function isCampaignEventHistory(value: unknown): boolean {
+  return Array.isArray(value) && value.every((event) => {
+    if (typeof event !== "object" || event === null || Array.isArray(event))
+      return false;
+    const entry = event as Record<string, unknown>;
+    if (
+      typeof entry.type !== "string" ||
+      typeof entry.idempotencyKey !== "string"
+    ) return false;
+    if (entry.type !== "choice") return true;
+    return (
+      ["eventId", "idempotencyKey", "choiceId", "optionId"].every(
+        (field) => typeof entry[field] === "string" &&
+          (entry[field] as string).trim().length > 0,
+      ) &&
+      (entry.leaderId === undefined || typeof entry.leaderId === "string") &&
+      (entry.dominion === undefined || typeof entry.dominion === "boolean")
+    );
+  });
+}
+
+function validateLoadedHistory(progress: CampaignProgressRecord | null): void {
+  if (progress && !isCampaignEventHistory(progress.eventLog))
+    throw new SaveRepositoryError("corrupt", "Campaign choice history is malformed.");
+}
 
 function isCampaignSafeCheckpoint(
   value: unknown,
@@ -105,14 +143,7 @@ function isCampaignSafeCheckpoint(
     progress.completedQuestIds.every((id) => typeof id === "string") &&
     Array.isArray(progress.completedObjectiveIds) &&
     progress.completedObjectiveIds.every((id) => typeof id === "string") &&
-    Array.isArray(progress.eventLog) &&
-    progress.eventLog.every(
-      (event) =>
-        typeof event === "object" &&
-        event !== null &&
-        typeof (event as { idempotencyKey?: unknown }).idempotencyKey ===
-          "string",
-    ) &&
+    isCampaignEventHistory(progress.eventLog) &&
     Array.isArray(progress.eventKeys) &&
     progress.eventKeys.every((key) => typeof key === "string") &&
     Number.isInteger(progress.revision) &&
@@ -484,9 +515,18 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return operation;
   }
 
+  /** Query the current accepted event ledger without copying checkpoint metadata. */
+  isEventCommitted(idempotencyKey: string): boolean {
+    return this.eventKeys.has(idempotencyKey);
+  }
+
   private async applyWorldEvent(event: WorldEvent): Promise<CampaignSnapshot> {
     if (!event.idempotencyKey.trim())
       throw new Error("World event requires a non-empty idempotencyKey.");
+    if (
+      event.type === "choice" &&
+      this.validateChoice(event.choiceId, event.optionId, this.campaign)
+    ) return this.snapshot();
     if (this.eventKeys.has(event.idempotencyKey)) return this.snapshot();
     const rollback = this.rollbackState();
     let nextCampaign = structuredClone(this.campaign);
@@ -495,6 +535,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     let nextRegion = this.region;
     let nextChapter = this.chapter;
     let nextEnding = this.endingId;
+    const nextParty = { ...this.party };
     let nextSafeSpawn = this.safeSpawn;
     let nextRecoveryRequest = this.recoveryRequest;
     switch (event.type) {
@@ -622,9 +663,14 @@ export class CampaignDirector implements CampaignDirectorAPI {
           }
         }
         if (event.resolution === "cleansed") {
-          nextFacts[event.encounterId + "-cleansed"] = true;
-          if (event.encounterId === "encounter-orun")
-            nextCampaign.world.hollowReady = true;
+          if (event.encounterId === "encounter-orun") {
+            if (eventMatches("encounter:encounter-orun", event)) {
+              nextFacts["orun-cleansed"] = true;
+              nextCampaign.world.hollowReady = true;
+            }
+          } else {
+            nextFacts[event.encounterId + "-cleansed"] = true;
+          }
         }
         break;
       case "rescue":
@@ -691,44 +737,34 @@ export class CampaignDirector implements CampaignDirectorAPI {
       case "fragment":
         nextCampaign = collectFragment(nextCampaign, event.fragmentId);
         break;
-      case "choice":
-        this.validateChoice(event.choiceId, event.optionId, nextCampaign);
+      case "choice": {
         nextChoices[event.choiceId] = event.optionId;
-        if (
-          (event.dominion === true || event.optionId.includes("dominion")) &&
-          event.leaderId &&
-          LEADER_IDS.includes(event.leaderId as LeaderId)
-        ) {
-          nextCampaign = recordLeaderDominion(
-            nextCampaign,
-            event.leaderId as LeaderId,
-          );
-          nextFacts["dominion:" + event.leaderId] = true;
+        // Authored choice and domain identity own history, never producer labels.
+        const leaderId = event.choiceId === "sunmane-resolution"
+          ? nextCampaign.world.factions.crown.leaderId ?? undefined
+          : event.choiceId === "pack-leadership"
+            ? event.optionId.endsWith("luma") ? "luma" : "ruun"
+            : undefined;
+        if (event.optionId.includes("dominion") && leaderId) {
+          nextCampaign = recordLeaderDominion(nextCampaign, leaderId);
+          nextFacts["dominion:" + leaderId] = true;
         }
         nextCampaign = this.applyChoice(
           nextCampaign,
           event.choiceId,
           event.optionId,
-          event.leaderId,
+          leaderId,
           nextFacts,
         );
+        if (nextCampaign.world.factions.crown.leaderStatus === "exiled") {
+          nextFacts.solkarPresent = false;
+          nextFacts["solkar-exiled"] = true;
+          nextFacts.crownCouncilAvailable = true;
+          if (nextParty.combat === "solkar") delete nextParty.combat;
+          if (nextParty.utility === "solkar") delete nextParty.utility;
+        }
         if (event.choiceId === "final-ending") {
-          const orunResolved = this.eventLog.some(
-            (prior) =>
-              prior.type === "encounter-resolved" &&
-              prior.encounterId === "encounter-orun" &&
-              prior.resolution === "cleansed",
-          );
-          if (!orunResolved)
-            throw new Error("Orun must be resolved before the final choice.");
-          if (
-            event.optionId === "living_pact" &&
-            !evaluateEnding(nextCampaign).available
-          ) {
-            throw new Error(
-              "Living Pact requirements are not met for this run.",
-            );
-          }
+          // validateChoice already checked the encounter and package predicate.
           if (
             event.optionId === "dominion" ||
             event.optionId === "severance" ||
@@ -738,6 +774,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
           }
         }
         break;
+      }
       case "traversal": {
         const targetRegion = REGIONS.find(
           (region) => region.id === event.toRegion,
@@ -852,6 +889,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.chapter = nextChapter;
     this.completedObjectiveIds = completedObjectives;
     this.endingId = nextEnding;
+    this.party = nextParty;
     this.eventKeys = nextKeys;
     this.eventLog = nextEventLog;
     this.recoveryRequest = nextRecoveryRequest;
@@ -893,23 +931,12 @@ export class CampaignDirector implements CampaignDirectorAPI {
   }
 
   choose(choiceId: string, optionId: string): Promise<CampaignSnapshot> {
-    const leaderByChoice: Record<string, LeaderId | undefined> = {
-      "pack-leadership": optionId.endsWith("luma")
-        ? "luma"
-        : optionId.endsWith("ruun")
-          ? "ruun"
-          : undefined,
-      "sunmane-resolution":
-        this.campaign.world.factions.crown.leaderId ?? undefined,
-    };
     return this.processEvent({
       type: "choice",
       eventId: createId(),
       idempotencyKey: "choice:" + choiceId + ":" + optionId,
       choiceId,
       optionId,
-      leaderId: leaderByChoice[choiceId],
-      dominion: optionId.includes("dominion"),
     });
   }
 
@@ -1163,6 +1190,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     const current = this.replay ? createNewRun(this.runId) : this.campaign;
     const imported = await this.saves.importSave(input, current);
     const progress = imported.envelope.progress;
+    validateLoadedHistory(progress ?? null);
     await this.saves.commitImported(
       slotId,
       label,
@@ -1211,6 +1239,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     fallbackChapter: number,
     fallbackRegionId: string,
   ): void {
+    validateLoadedHistory(progress);
     // Validate legacy metadata and resolve an authored fallback before replacing
     // any live state; a rejected load must leave the current journey intact.
     const fallbackRegion = REGIONS.find((item) => item.id === fallbackRegionId);
@@ -1678,15 +1707,12 @@ export class CampaignDirector implements CampaignDirectorAPI {
           campaign.world.fragments.includes("heartroot-crown"),
       };
       if (!eligible[faction])
-        throw new Error(
+        throw new CampaignChoiceRejectedError(
+          choice, option,
           "This faction covenant is not available until its story commitments are fulfilled.",
         );
-      if (
-        faction === "crown" &&
-        campaign.world.factions.crown.leaderStatus === "exiled"
-      ) {
-        campaign = setCrownCouncilRepresentation(campaign, true);
-      }
+      // A covenant records willingness, not a return of an absent representative.
+      // In particular, it must not overturn the council's committed refusal.
       const current = campaign.world.factions[faction];
       campaign = {
         ...campaign,
@@ -1699,8 +1725,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
               bondTier: 3,
               representative: {
                 ...current.representative,
-                present: true,
-                willing: true,
+                willing: current.representative.present &&
+                  !(faction === "crown" && this.choices["crown-council"] === "decline"),
               },
             },
           },
@@ -1732,8 +1758,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
       };
       facts.marekPresent = option === "cleanse";
     }
-    if (choice === "crown-council" && option === "willing")
-      campaign = setCrownCouncilRepresentation(campaign, true);
+    if (choice === "crown-council")
+      campaign = setCrownCouncilRepresentation(campaign, option === "willing");
     if (choice === "chapter-six-response") {
       facts.askSignal = true;
       facts.wardenResponse = option;
@@ -1747,33 +1773,58 @@ export class CampaignDirector implements CampaignDirectorAPI {
     choiceId: string,
     optionId: string,
     campaign: CampaignState,
-  ): void {
+  ): boolean {
     const options = CAMPAIGN_CHOICES[choiceId];
     if (!options || !options.some((option) => option.id === optionId))
-      throw new Error("Unknown campaign choice or option.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Unknown campaign choice or option.");
+    // Most choices settle one outcome. These two are authored once per faction.
+    const factionScoped =
+      choiceId === "faction-covenant" ||
+      choiceId === "chapter-seven-commitment";
+    const faction = optionId.replace(/^decline-/, "");
+    const prior = this.eventLog.find(
+      (event) =>
+        event.type === "choice" &&
+        event.choiceId === choiceId &&
+        (!factionScoped || event.optionId.replace(/^decline-/, "") === faction),
+    );
+    const committed = prior?.type === "choice"
+      ? prior.optionId
+      : factionScoped ? undefined : this.choices[choiceId];
+    if (committed !== undefined) {
+      if (committed !== optionId)
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "This campaign choice already has a committed resolution.");
+      return true;
+    }
+    if (
+      choiceId === "sunmane-resolution" &&
+      campaign.world.factions.crown.leaderStatus === "exiled" &&
+      optionId !== "exile"
+    ) {
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Exiled Solkar cannot return through a new resolution.");
+    }
      if (choiceId === "chapter-six-response") {
        if (this.chapter !== 6)
-         throw new Error("Ask or Signal is only available in Chapter 6.");
+         throw new CampaignChoiceRejectedError(choiceId, optionId, "Ask or Signal is only available in Chapter 6.");
        if (this.facts.wardenCall !== true)
-         throw new Error("The Warden Call must happen before Ask or Signal.");
+         throw new CampaignChoiceRejectedError(choiceId, optionId, "The Warden Call must happen before Ask or Signal.");
      }
     if (
       choiceId === "final-ending" &&
       optionId === "living_pact" &&
       !evaluateEnding(campaign).available
     ) {
-      throw new Error("Living Pact requirements are not met for this run.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Living Pact requirements are not met for this run.");
     }
     if (
       choiceId === "final-ending" &&
       !this.eventLog.some(
         (event) =>
           event.type === "encounter-resolved" &&
-          event.encounterId === "encounter-orun" &&
-          event.resolution === "cleansed",
+          eventMatches("encounter:encounter-orun", event),
       )
     ) {
-      throw new Error("Orun must be resolved before the final choice.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Orun must be resolved before the final choice.");
     }
     if (
       choiceId === "wild-march-formation" &&
@@ -1781,22 +1832,25 @@ export class CampaignDirector implements CampaignDirectorAPI {
         "wild-march:commitments" as ObjectiveId,
       )
     ) {
-      throw new Error(
+      throw new CampaignChoiceRejectedError(
+        choiceId, optionId,
         "Each faction must receive a Chapter 7 choice before the coalition route is formed.",
       );
     }
     if (choiceId === "faction-covenant" && this.chapter < 1)
-      throw new Error(
+      throw new CampaignChoiceRejectedError(
+        choiceId, optionId,
         "Faction covenants are not available before regional commitments.",
       );
     if (choiceId === "sunmane-resolution" && this.chapter !== 5)
-      throw new Error("Sunmane governance is only decided in Chapter 5.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Sunmane governance is only decided in Chapter 5.");
     if (choiceId === "pack-leadership" && this.chapter !== 3)
-      throw new Error("Pack leadership is only decided in Chapter 3.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Pack leadership is only decided in Chapter 3.");
     if (choiceId === "marek-fate" && this.chapter !== 4)
-      throw new Error("Marek’s fate is only decided in Chapter 4.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Marek’s fate is only decided in Chapter 4.");
     if (choiceId === "chapter-seven-commitment" && this.chapter !== 7)
-      throw new Error("Faction recommitments are only available in Chapter 7.");
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "Faction recommitments are only available in Chapter 7.");
+    return false;
   }
 
   private markWilling(

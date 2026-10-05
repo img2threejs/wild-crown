@@ -1,5 +1,5 @@
 import { AudioListener } from 'three';
-import { CampaignDirector, SaveRepository, SaveRepositoryError, REGIONS, QUESTS, DIALOGUE, CAMPAIGN_CHOICES, INTERACTIONS, ENVIRONMENT_RECIPES } from '../game/campaign/index.js';
+import { CampaignDirector, CampaignChoiceRejectedError, SaveRepository, SaveRepositoryError, REGIONS, QUESTS, DIALOGUE, CAMPAIGN_CHOICES, INTERACTIONS, ENVIRONMENT_RECIPES } from '../game/campaign/index.js';
 import type { SaveSlotSummary } from '../game/campaign/index.js';
 import type { AssetManifestEntry, CampaignSnapshot, CombatSnapshot, GameSettings, GameViewModel, InputBindingMaps, RegionDefinition, RegionId, UIAction, WorldEvent, ActorSnapshot } from '../game/contracts.js';
 import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS } from '../game/contracts.js';
@@ -965,6 +965,13 @@ export class GameApplication {
             }
             catch (error) {
                 if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+                if (error instanceof CampaignChoiceRejectedError && event.type === 'choice') {
+                    this.combat.discardRejectedChoice(event, this.campaignDirector.isEventCommitted(event.idempotencyKey));
+                    this.pendingWorldEvents.shift();
+                    this.campaign = this.campaignDirector.snapshot();
+                    this.render();
+                    continue;
+                }
                 this.failedWorldEvent = event;
                 this.campaign = this.campaignDirector.snapshot();
                 this.error = { code: error instanceof SaveRepositoryError ? error.code : 'durable-event', message: 'Story event was not committed: ' + errorText(error), recoverable: true };
@@ -1111,7 +1118,8 @@ export class GameApplication {
         const requestedDefinition = requested ? INTERACTIONS.find(item => item.id === requested.interactionId) : undefined;
         if (requestedDefinition?.success.type === 'choice') {
             const choiceId = requestedDefinition.success.choiceId;
-            const options = (CAMPAIGN_CHOICES[choiceId] ?? []).filter(option => requestedDefinition.success.type === 'choice' && requestedDefinition.success.optionIds.includes(option.id));
+            const options = (CAMPAIGN_CHOICES[choiceId] ?? []).filter(option => requestedDefinition.success.type === 'choice' && requestedDefinition.success.optionIds.includes(option.id)
+                && (choiceId !== 'final-ending' || option.id !== 'living_pact' || this.campaignDirector.ending().available));
             if (!options.length)
                 throw new Error('The authored choice has no available options.');
             this.choice = { id: choiceId, title: requestedDefinition.promptLabel, options };
