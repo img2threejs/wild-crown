@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { CampaignDirector, CampaignChoiceRejectedError } from "../../src/game/campaign/CampaignDirector.js";
 import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
-import { SaveRepository, SaveRepositoryError } from "../../src/game/storage/SaveRepository.js";
+import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
 import { CHAPTERS, RETURN_BEATS } from "../../src/content/story.js";
 import { QUESTS, REGIONS } from "../../src/content/campaign.js";
 import { FACTION_IDS, FRAGMENT_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
@@ -15,6 +15,27 @@ class RecordingLedger extends SaveRepository {
   override async appendRunLedger(...args: Parameters<SaveRepository["appendRunLedger"]>): Promise<void> {
     if (this.fail) throw new Error("ledger refused the transaction");
     this.writes.push(structuredClone(args));
+  }
+}
+
+// Keep the real import/load reducers; replace only IndexedDB slot I/O.
+class CampaignSlotLedger extends RecordingLedger {
+  envelope: GameSaveEnvelope | null = null;
+  imports = 0;
+  private summary(slotId = "history-slot", label = "History"): SaveSlotSummary {
+    return { slotId, label, runId: this.envelope!.runId, kind: "campaign", updatedAt: 123,
+      chapter: this.envelope!.progress!.chapter, regionId: this.envelope!.progress!.regionId };
+  }
+  override async loadSlot(): Promise<GameSaveEnvelope> {
+    return structuredClone(this.envelope!);
+  }
+  override async listSlots(): Promise<SaveSlotSummary[]> {
+    return [this.summary()];
+  }
+  override async commitImported(slotId: string, label: string, envelope: GameSaveEnvelope): Promise<SaveSlotSummary> {
+    this.imports++;
+    this.envelope = structuredClone(envelope);
+    return this.summary(slotId, label);
   }
 }
 
@@ -393,6 +414,60 @@ test("checkpoint restore rejects malformed historical choice fields before mutat
   await director.choose("chapter-seven-commitment", "fang");
   assert.equal(director.snapshot().campaign.world.renewedCommitments.fang, true);
   assert.equal(director.isEventCommitted("choice:chapter-seven-commitment:fang"), true);
+});
+
+test("Director load and import reject malformed persisted choices before adopting history or committing an import", async () => {
+  const saves = new CampaignSlotLedger(undefined);
+  const director = new CampaignDirector({ runId: "persisted-choice-history", saves });
+  await atChapter(director, 7);
+  await director.choose("chapter-seven-commitment", "sky");
+  const historical = await director.captureCheckpoint();
+  const envelope: GameSaveEnvelope = {
+    format: "wild-crown-save", schemaVersion: 1, kind: "campaign", runId: historical.runId,
+    campaign: director.snapshot().campaign, checkpoint: historical.worldCheckpoint,
+    progress: { ...historical.progress, safeSpawn: historical.safeSpawn,
+      activeQuestIds: [...historical.progress.activeQuestIds],
+      completedQuestIds: [...historical.progress.completedQuestIds],
+      completedObjectiveIds: [...historical.progress.completedObjectiveIds],
+      eventLog: [...historical.progress.eventLog], eventKeys: [...historical.progress.eventKeys] },
+    eventKeys: [...historical.progress.eventKeys], savedAt: 123,
+  };
+  await director.choose("chapter-seven-commitment", "canopy");
+  const before = director.snapshot();
+  const recordsBefore = structuredClone(saves.writes);
+  for (const field of ["choiceId", "optionId", "eventId", "idempotencyKey"] as const) {
+    for (const value of [undefined, null, [], 42, {}, "", "   "]) {
+      const corrupted = structuredClone(envelope);
+      const event = corrupted.progress!.eventLog.find((entry) =>
+        (entry as WorldEvent).type === "choice") as Record<string, unknown>;
+      if (value === undefined) delete event[field];
+      else event[field] = value;
+      saves.envelope = corrupted;
+      const serialized = JSON.stringify(corrupted);
+      const corrupt = (error: unknown) => error instanceof SaveRepositoryError && error.code === "corrupt";
+      await assert.rejects(director.load("history-slot"), corrupt, `${field}: ${JSON.stringify(value)}`);
+      assert.deepEqual(director.snapshot(), before);
+      await assert.rejects(director.importSave(serialized, "history-slot", "History"), corrupt);
+      assert.deepEqual(director.snapshot(), before);
+      assert.deepEqual(saves.writes, recordsBefore);
+      assert.equal(saves.imports, 0);
+      assert.equal(JSON.stringify(saves.envelope), serialized);
+    }
+  }
+  // Accepted history still reaches the same replay guard through each adoption path.
+  saves.envelope = structuredClone(envelope);
+  for (const adopt of [
+    () => director.load("history-slot"),
+    () => director.importSave(JSON.stringify(envelope), "history-slot", "History"),
+  ]) {
+    await adopt();
+    const restored = director.snapshot();
+    await director.choose("chapter-seven-commitment", "sky");
+    assert.deepEqual(director.snapshot(), restored);
+    await director.choose("chapter-seven-commitment", "fang");
+    assert.equal(director.snapshot().campaign.world.renewedCommitments.fang, true);
+  }
+  assert.equal(saves.imports, 1);
 });
 
 test("return beat consumers resolve exactly the five authored Chapter 7 quests, not the fall or the Wild March", () => {

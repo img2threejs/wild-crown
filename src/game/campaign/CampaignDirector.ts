@@ -86,6 +86,32 @@ const createId = (): string =>
   globalThis.crypto?.randomUUID?.() ??
   "run-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
 
+function isCampaignEventHistory(value: unknown): boolean {
+  return Array.isArray(value) && value.every((event) => {
+    if (typeof event !== "object" || event === null || Array.isArray(event))
+      return false;
+    const entry = event as Record<string, unknown>;
+    if (
+      typeof entry.type !== "string" ||
+      typeof entry.idempotencyKey !== "string"
+    ) return false;
+    if (entry.type !== "choice") return true;
+    return (
+      ["eventId", "idempotencyKey", "choiceId", "optionId"].every(
+        (field) => typeof entry[field] === "string" &&
+          (entry[field] as string).trim().length > 0,
+      ) &&
+      (entry.leaderId === undefined || typeof entry.leaderId === "string") &&
+      (entry.dominion === undefined || typeof entry.dominion === "boolean")
+    );
+  });
+}
+
+function validateLoadedHistory(progress: CampaignProgressRecord | null): void {
+  if (progress && !isCampaignEventHistory(progress.eventLog))
+    throw new SaveRepositoryError("corrupt", "Campaign choice history is malformed.");
+}
+
 function isCampaignSafeCheckpoint(
   value: unknown,
 ): value is CampaignSafeCheckpoint {
@@ -113,25 +139,7 @@ function isCampaignSafeCheckpoint(
     progress.completedQuestIds.every((id) => typeof id === "string") &&
     Array.isArray(progress.completedObjectiveIds) &&
     progress.completedObjectiveIds.every((id) => typeof id === "string") &&
-    Array.isArray(progress.eventLog) &&
-    progress.eventLog.every((event) => {
-      if (typeof event !== "object" || event === null || Array.isArray(event))
-        return false;
-      const entry = event as Record<string, unknown>;
-      if (
-        typeof entry.type !== "string" ||
-        typeof entry.idempotencyKey !== "string"
-      ) return false;
-      if (entry.type !== "choice") return true;
-      return (
-        ["eventId", "idempotencyKey", "choiceId", "optionId"].every(
-          (field) => typeof entry[field] === "string" &&
-            (entry[field] as string).trim().length > 0,
-        ) &&
-        (entry.leaderId === undefined || typeof entry.leaderId === "string") &&
-        (entry.dominion === undefined || typeof entry.dominion === "boolean")
-      );
-    }) &&
+    isCampaignEventHistory(progress.eventLog) &&
     Array.isArray(progress.eventKeys) &&
     progress.eventKeys.every((key) => typeof key === "string") &&
     Number.isInteger(progress.revision) &&
@@ -1157,6 +1165,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       );
     const imported = await this.saves.importSave(input, this.campaign);
     const progress = imported.envelope.progress;
+    validateLoadedHistory(progress ?? null);
     await this.saves.commitImported(
       slotId,
       label,
@@ -1202,6 +1211,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     fallbackChapter: number,
     fallbackRegionId: string,
   ): void {
+    validateLoadedHistory(progress);
     this.campaign = campaign;
     this.checkpoint = checkpoint;
     this.eventKeys = new Set(eventKeys);

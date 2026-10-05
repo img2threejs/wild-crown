@@ -1,4 +1,4 @@
-export { CampaignDirector } from "./CampaignDirector.js";
+export { CampaignDirector, CampaignChoiceRejectedError } from "./CampaignDirector.js";
 export type { CampaignDirectorOptions } from "./CampaignDirector.js";
 export {
   SaveRepository,
