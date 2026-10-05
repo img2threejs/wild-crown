@@ -255,7 +255,7 @@ it("pauses the combat world for every blocking screen and restores normal time o
   expect(policies.at(-1)).toBe("normal");
 });
 
-async function finalChoiceApp(eligible: boolean, saves?: SaveRepository): Promise<Record<string, any>> {
+async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunResolved = true): Promise<Record<string, any>> {
   const app = headlessApp();
   const inputBasis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
   app.renderer = { dispose: () => {}, getInputBasis: () => inputBasis };
@@ -281,7 +281,7 @@ async function finalChoiceApp(eligible: boolean, saves?: SaveRepository): Promis
     world.hollowReady = true;
   }
   expect(await director.restoreCheckpoint(checkpoint)).toBe(true);
-  await director.processEvent({
+  if (orunResolved) await director.processEvent({
     type: "encounter-resolved", eventId: "app-orun-cleansed", idempotencyKey: "app-orun-cleansed",
     encounterId: "encounter-orun", actorIds: ["orun"], resolution: "cleansed",
   });
@@ -295,16 +295,43 @@ async function finalChoiceApp(eligible: boolean, saves?: SaveRepository): Promis
   app.ready = true;
   app.activeCompanionSlots = {};
   app.wheel = { hidden: true };
-  app.input.sample = () => ({ interactPressed: true, commandIndex: null });
-  app.nearestRoute = () => undefined;
+  app.input.sample = () => ({
+    moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false,
+    heavyHeld: false, heavyReleased: false, interactPressed: true, abilityPressed: false,
+    commandWheelPressed: false, commandWheelHeld: false, mapPressed: false, journalPressed: false,
+    companionsPressed: false, pausePressed: false, commandIndex: null,
+  });
   return app;
 }
+
+it("keeps the Crown memory actionable before Orun is cleansed without opening the ending choice", async () => {
+  const app = await finalChoiceApp(false, undefined, false);
+  const memory = app.region.entities.find((entity: { interactionId?: string }) => entity.interactionId === "hollow-memory-crown")!;
+  app.combat.loadRegion({ regionId: app.region.id, runId: app.campaign.runId,
+    presentActorIds: [], playerPosition: memory.position, worldFacts: app.campaign.worldFacts });
+  expect(app.campaign.worldFacts["orun-cleansed"]).not.toBe(true);
+  expect(app.combat.resolveInteraction("hollow-crown-choice", "hollow-crown-choice", "severance")).toBe(false);
+  expect(app.combat.consumeWorldEvents()).toEqual([]);
+
+  app.simulateTick();
+  await app.durableEvents;
+  expect(app.screen).toBe("game");
+  expect(app.choice).toBeUndefined();
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-memory-crown", targetId: "hollow-memory-crown" });
+  expect(app.campaign.worldFacts["interaction:hollow-memory-crown"]).toBe(true);
+  expect(app.campaign.lastEvent).toMatchObject({
+    type: "semantic-interaction", interactionId: "hollow-memory-crown", kind: "inspect", targetId: "hollow-memory-crown",
+  });
+  expect(app.campaign.ending).toBeNull();
+});
 
 it("filters an ineligible Living Pact and consumes a stale rejection without wedging the actual app or engine", async () => {
   const app = await finalChoiceApp(false);
   const before = app.campaignDirector.snapshot();
+  expect(app.campaign.worldFacts["orun-cleansed"]).toBe(true);
   app.simulateTick();
   expect(app.screen).toBe("choice");
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-crown-choice", targetId: "hollow-crown-choice" });
   expect(app.choice.options.map((option: { id: string }) => option.id)).toEqual(["dominion", "severance"]);
 
   // A stale/selectable payload still reaches the real contextual producer and consumer.
@@ -342,7 +369,10 @@ it("filters an ineligible Living Pact and consumes a stale rejection without wed
 it("advertises and commits eligible Living Pact through the actual choice UI and event consumer", async () => {
   const app = await finalChoiceApp(true);
   expect(app.campaignDirector.ending().available).toBe(true);
+  expect(app.campaign.worldFacts["orun-cleansed"]).toBe(true);
   app.simulateTick();
+  expect(app.screen).toBe("choice");
+  expect(app.interaction).toMatchObject({ interactionId: "hollow-crown-choice", targetId: "hollow-crown-choice" });
   expect(app.choice.options.map((option: { id: string }) => option.id)).toEqual(["dominion", "severance", "living_pact"]);
   await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "living_pact" });
   await app.durableEvents;
