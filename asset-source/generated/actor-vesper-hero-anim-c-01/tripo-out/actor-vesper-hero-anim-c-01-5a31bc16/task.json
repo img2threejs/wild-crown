@@ -1,0 +1,26 @@
+{
+  "task_id": "5a31bc16-ffe9-4f26-abc2-1a02cd3d4851",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animations": [
+      "preset:biped:flee_02",
+      "preset:biped:golf",
+      "preset:biped:volleyball",
+      "preset:biped:front_kick_01",
+      "preset:biped:box_01"
+    ],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "97eb3992-de84-4925-abba-6f54b8cf8fc1"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 50,
+  "created_at": "2026-10-11T23:59:54.183432Z",
+  "completed_at": "2026-10-12T00:00:24.251785Z",
+  "files": [
+    "model.glb"
+  ]
+}

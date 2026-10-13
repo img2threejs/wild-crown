@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-canopy-fern-cluster",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "366c868c-4d47-469b-816e-569b1829fb9e",
+    "decimate": "8641e2c7-dd29-4857-9a1e-efa494bb90bf"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.11,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-canopy-fern-cluster-decimate-01/tripo-out/prop-canopy-fern-cluster-decimat-8641e2c7/model.glb",
+      "sha256": "93bcb969976ff6d20761489fafee9505fae7544e85377119ab3c43b59adf826f"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-canopy-fern-cluster-runtime-01/prop-canopy-fern-cluster.glb",
+    "sha256": "e3296cb5527aab25c353b391f86b8a6f24b4daeb455b0591deafa558c7bb2a62",
+    "bytes": 2155208,
+    "vertices": 2471,
+    "triangles": 1753,
+    "boundsMin": [
+      -0.35796,
+      -0.26767,
+      -0.49029
+    ],
+    "boundsMax": [
+      0.35588,
+      0.26196,
+      0.46149
+    ],
+    "worldBoundsMin": [
+      -0.35796,
+      -0.26767,
+      -0.49029
+    ],
+    "worldBoundsMax": [
+      0.35588,
+      0.26196,
+      0.46149
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 5786668,
+      "toBytes": 670353
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5942273,
+      "toBytes": 641973
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 21160621,
+      "toBytes": 740706
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 15980,
+      "trianglesAfter": 1753,
+      "relativeError": 0.018683237954974174
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 15988,
+      "trianglesAfter": 15980,
+      "removed": 8,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [],
+  "compaction": [
+    {
+      "verticesBefore": 26069,
+      "verticesAfter": 2471
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

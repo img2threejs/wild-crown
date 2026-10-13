@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-root-arch",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "AI-candidate visual review only: the native GLB preserves the open walk-through arch and two grounded root bases when loaded in the project asset lab. Retained for optimization and further review, not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-root-arch-concept-01/tripo-out/prop-root-arch-concept-01-6ce5aafe/generated_image.png",
+    "sha256": "6dcce1c2c22fc05b73c715909cce2a4e484df15def700f749b8566ea3fed1edc"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-root-arch-multiview-01/tripo-out/prop-root-arch-multiview-01-7a24b275/generate_multiview_image.front_view.jpeg",
+      "sha256": "8a54fe771f3a6544c03c6c176f402f619eaac9636fd3c4d0b6cbf1e914b764a1"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-root-arch-multiview-01/tripo-out/prop-root-arch-multiview-01-7a24b275/generate_multiview_image.left_view.jpeg",
+      "sha256": "d4729c61263ebe53c780397a42fc75bd5a67bea809b994720c7364cb633d5916"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-root-arch-multiview-01/tripo-out/prop-root-arch-multiview-01-7a24b275/generate_multiview_image.back_view.jpeg",
+      "sha256": "b2d091c75b422126580605a07d5845176981d7ee5ecc813e35273bd914230d44"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-root-arch-multiview-01/tripo-out/prop-root-arch-multiview-01-7a24b275/generate_multiview_image.right_view.jpeg",
+      "sha256": "dac06efef43c49f8004246b96355fdd85d9d9272f5a1f5e89277964eaef51153"
+    }
+  ],
+  "taskId": "a05b0f03-f9e6-4a24-8333-af1ecc567151",
+  "generationTasks": [
+    {
+      "taskId": "6ce5aafe-c513-43df-915d-33e85f74e6bc",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5
+    },
+    {
+      "taskId": "7a24b275-4716-4925-be67-4bd41c0cd88a",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four views were inspected and used."
+    },
+    {
+      "taskId": "a05b0f03-f9e6-4a24-8333-af1ecc567151",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 75,
+  "output": {
+    "path": "model.glb",
+    "sha256": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d",
+    "bytes": 67641796,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 1028866,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The source contains 1,028,866 measured vertices and 67,641,796 bytes; it is not qualified for a real-time budget without optimization.",
+      "No collision proxy, authorial scale, placement, or environment/runtime parity has been tested.",
+      "GLTFLoader success and a visually open arch do not establish production acceptance."
+    ]
+  }
+}

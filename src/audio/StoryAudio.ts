@@ -1,6 +1,15 @@
 import type { AudioListener } from 'three';
 import type { GameSettings, Vec3 } from '../game/contracts.js';
-import { dangerFamily, type CueCancellationReason, type StoryCue } from '../effects/story-cues.js';
+import type { AttackElement } from '../game/combat/content.js';
+import { dangerFamily, type CueCancellationReason, type CuePhase, type StoryCue } from '../effects/story-cues.js';
+import { CANOPY_MAX_VOICES, canopyLayers } from './CanopySounds.js';
+import { groveLayers } from './GroveSounds.js';
+import { mistveilLayers } from './MistveilSounds.js';
+import { moonpineLayers } from './MoonpineSounds.js';
+import { WARDEN_MAX_LAYERS, isWardenCue, wardenLayers, type SoundLayer, type WardenNoise } from './WardenSounds.js';
+import { heartrootLayers } from './HeartrootSounds.js';
+import { umbralLayers } from './UmbralSounds.js';
+import { emberLayers } from './EmberSounds.js';
 
 export type AudioBusName = 'master' | 'music' | 'effects' | 'ambience' | 'dialogue';
 export interface StoryAudioOptions {
@@ -14,7 +23,9 @@ export interface StoryPlaybackMetadata {
   readonly outputRms: number;
 }
 export interface AudioListenerPose { readonly position: Vec3; readonly forward: Vec3; readonly up: Vec3 }
-interface ActiveVoice { readonly id: string; readonly sources: readonly AudioScheduledSourceNode[]; readonly scopeId?: string; readonly cleanup: readonly AudioNode[] }
+interface ActiveVoice { readonly id: string; readonly sources: readonly AudioScheduledSourceNode[]; readonly scopeId?: string; readonly cleanup: readonly AudioNode[]; readonly warden?: true; readonly canopy?: true }
+/** Warden voices alive at once; a new cast steals the oldest beyond this so five-mark detonations and combos never pile up. */
+const MAX_WARDEN_VOICES = 10;
 
 const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
   cancel: [],
@@ -26,6 +37,8 @@ const SEMITONES: Readonly<Record<StoryCue['kind'], readonly number[]>> = {
   'restoration-water': [0, 7, 12], 'restoration-roots': [0, 4, 7], 'restoration-seeds': [0, 5, 9], 'restoration-animals': [0, 5, 9, 12],
   'sap-vein': [-12], footprint: [-7], pounce: [-5, 0], 'roar-cone': [-12, -5], 'low-wave': [-12, -7],
   grovebreak: [-12, -5, 0], march: [-7, 0], reunion: [0, 5, 9], heartbeat: [0],
+  sigil: [], projectile: [], 'projectile-impact': [], slash: [], lightning: [], judgement: [], 'judgement-mark': [],
+  'root-eruption': [-12, 0, 7], beam: [0, 7, 12], bloom: [0, 4, 7, 12], blink: [7, 12],
 };
 const KIND_BUS: Readonly<Record<StoryCue['kind'], AudioBusName>> = {
   cancel: 'effects',
@@ -36,11 +49,52 @@ const KIND_BUS: Readonly<Record<StoryCue['kind'], AudioBusName>> = {
   'restoration-water': 'ambience', 'restoration-roots': 'effects', 'restoration-seeds': 'music', 'restoration-animals': 'ambience', 'sap-vein': 'effects', footprint: 'effects',
   pounce: 'effects', 'roar-cone': 'effects', 'low-wave': 'effects', grovebreak: 'music', march: 'effects',
   reunion: 'music', heartbeat: 'ambience',
+  sigil: 'effects', projectile: 'effects', 'projectile-impact': 'effects', slash: 'effects', lightning: 'effects', judgement: 'effects', 'judgement-mark': 'effects',
+  'root-eruption': 'effects', beam: 'effects', bloom: 'effects', blink: 'effects',
 };
 const MIDI_C4 = 60;
 const A4 = 440;
 const DANGER_NOTES = { strike: [0], sweep: [0, 3, 7], wave: [-12, -7], area: [0, 4, 7, 12], projectile: [12, 19] } as const;
 const DANGER_WAVEFORMS = { strike: 'triangle', sweep: 'sawtooth', wave: 'sine', area: 'triangle', projectile: 'square' } as const;
+/**
+ * Recognisable procedural timbres for each elemental attack. Each element keeps its own rooted triad so the
+ * four families are distinguishable in overlapping combat while reusing the same waveform/voice budget.
+ * Phase modulations stay bounded so the existing pause/cancel/unlock contracts do not change.
+ */
+interface ElementTimbre {
+  readonly root: readonly number[]; // semitones from MIDI_C4 for anticipation / commit / active / hit
+  readonly waveform: OscillatorType;
+  readonly noiseColor: 'wind' | 'embers' | 'shards' | 'fog' | 'crackle';
+  readonly levelScale: number;
+}
+const ELEMENT_TIMBRE: Readonly<Record<AttackElement, ElementTimbre>> = {
+  fire:  { root: [-5, -7, -10, -15], waveform: 'sine',     noiseColor: 'embers', levelScale: 0.95 },
+  ice:   { root: [12, 7, 4, 0],    waveform: 'triangle', noiseColor: 'shards',  levelScale: 0.9 },
+  wind:  { root: [-12, -7, -5, -2], waveform: 'sawtooth', noiseColor: 'wind',    levelScale: 0.88 },
+  poison: { root: [-8, -5, -3, 0],  waveform: 'square',   noiseColor: 'fog',     levelScale: 0.78 },
+  arcane: { root: [0, 4, 7, 12],    waveform: 'triangle', noiseColor: 'shards',  levelScale: 0.92 },
+  lightning: { root: [-12, -5, 0, 7], waveform: 'sawtooth', noiseColor: 'crackle', levelScale: 0.95 },
+  heartroot: { root: [0, 4, 7, 12], waveform: 'sine', noiseColor: 'shards', levelScale: 0.8 },
+  umbral: { root: [-7, -12, -5, -14], waveform: 'sawtooth', noiseColor: 'fog', levelScale: 0.85 },
+  ember: { root: [-10, -7, -12, -17], waveform: 'sine', noiseColor: 'embers', levelScale: 0.95 },
+};
+type NoiseColor = ElementTimbre['noiseColor'] | WardenNoise;
+function fillNoiseBuffer(buffer: AudioBuffer, color: NoiseColor): void {
+  const channels = buffer.numberOfChannels;
+  for (let channel = 0; channel < channels; channel++) {
+    const data = buffer.getChannelData(channel);
+    let prev = 0;
+    for (let i = 0; i < data.length; i++) {
+      let sample = Math.random() * 2 - 1;
+      if (color === 'wind') sample = (Math.random() * 2 - 1) * 0.6 + prev * 0.4;
+      else if (color === 'shards') sample = (Math.random() < 0.985 ? 0 : (Math.random() * 2 - 1)) * 0.85;
+      else if (color === 'fog') sample = (Math.random() * 2 - 1) * 0.45 + prev * 0.55;
+      else if (color === 'crackle') sample = Math.random() < 0.3 ? Math.random() * 2 - 1 : prev * 0.2;
+      data[i] = sample;
+      prev = sample;
+    }
+  }
+}
 
 /** Browser-unlocked, procedurally authored score and SFX. No recorded voice assets are implied. */
 export class StoryAudio {
@@ -53,6 +107,8 @@ export class StoryAudio {
   private readonly voices: ActiveVoice[] = [];
   private readonly seen = new Set<string>();
   private readonly seenOrder: string[] = [];
+  /** Lazily-built shared loop buffers keyed by elemental noise color so elemental cues never allocate per fire. */
+  private readonly noiseBuffers: Partial<Record<NoiseColor, AudioBuffer>> = {};
   private readonly listener?: AudioListener;
   private readonly onPlayback?: StoryAudioOptions['onPlayback'];
   private ambience: ActiveVoice | undefined;
@@ -120,11 +176,30 @@ export class StoryAudio {
     if (cue.kind === 'grovebreak') this.restoration = Math.max(0, this.restoration - 0.12);
     if (cue.kind === 'heartroot' || cue.kind === 'bond' || cue.kind === 'heartbeat') this.bond = Math.min(1, this.bond + 0.2);
     if (cue.kind === 'dominion' || cue.kind === 'ending-dominion') this.dominion = Math.min(1, this.dominion + 0.2);
+    const position = sourcePosition ?? cue.position ?? cue.from;
+    const heroLayers = cue.element === 'heartroot' ? heartrootLayers : cue.element === 'umbral' ? umbralLayers : cue.element === 'ember' ? emberLayers : undefined;
+    // Vesper/Sakda cues without a recipe (a generic `active` cue of the element) keep the generic element timbre; a silent Warden-style phase stays silent.
+    const layers = heroLayers ? heroLayers(cue) : isWardenCue(cue) ? wardenLayers(cue) : undefined;
+    if (layers) {
+      const warden = this.playLayered(cue, layers, position, 'warden');
+      if (warden) this.voices.push(warden);
+      return true;
+    }
+    if (isWardenCue(cue)) return false;
+    // Trial-map monsters (Canopy and the story maps after it) share the bounded wildlife voice pool.
+    const canopyLayered = canopyLayers(cue) ?? groveLayers(cue) ?? moonpineLayers(cue) ?? mistveilLayers(cue);
+    if (canopyLayered) {
+      const canopy = this.playLayered(cue, canopyLayered, position, 'canopy');
+      if (canopy) this.voices.push(canopy);
+      return true;
+    }
+    const element = cue.element;
     const family = dangerFamily(cue);
     const phasePitch = cue.phase === 'commit' ? -5 : cue.phase === 'active' ? -7 : cue.phase === 'hit' ? -12 : 0;
-    const notes = family ? DANGER_NOTES[family].map(step => MIDI_C4 + step + phasePitch) : this.arrangement(cue.kind);
-    const position = sourcePosition ?? cue.position ?? cue.from;
-    const voice = this.schedule(cue, notes, KIND_BUS[cue.kind], position);
+    const notes = element
+      ? this.elementNotes(element, cue.phase, phasePitch)
+      : family ? DANGER_NOTES[family].map(step => MIDI_C4 + step + phasePitch) : this.arrangement(cue.kind);
+    const voice = this.schedule(cue, notes, KIND_BUS[cue.kind], position, element);
     this.voices.push(voice);
     return true;
   }
@@ -221,6 +296,7 @@ export class StoryAudio {
     this.analyser = undefined;
     this.seen.clear();
     this.seenOrder.length = 0;
+    for (const color of ['wind', 'embers', 'shards', 'fog', 'crackle', 'white'] as const) this.noiseBuffers[color] = undefined;
   }
 
   private createGraph(context: AudioContext): void {
@@ -240,7 +316,7 @@ export class StoryAudio {
     if (this.settings) this.setSettings(this.settings);
   }
 
-  private schedule(cue: StoryCue, notes: readonly number[], busName: AudioBusName, position?: Vec3): ActiveVoice {
+  private schedule(cue: StoryCue, notes: readonly number[], busName: AudioBusName, position: Vec3 | undefined, element?: AttackElement): ActiveVoice {
     const context = this.context!;
     const bus = this.buses[busName]!;
     const at = context.currentTime + 0.012;
@@ -262,13 +338,41 @@ export class StoryAudio {
       output = panner;
     }
     let voice: ActiveVoice | undefined;
-    let remaining = notes.length;
     const family = dangerFamily(cue);
+    const timbre = element ? ELEMENT_TIMBRE[element] : undefined;
+    let noiseSource: AudioBufferSourceNode | undefined;
+    let noiseGain: GainNode | undefined;
+    let noiseFilter: BiquadFilterNode | undefined;
+    if (timbre && (cue.phase === 'anticipation' || cue.phase === 'active' || cue.phase === 'commit')) {
+      const buffer = this.getNoiseBuffer(timbre.noiseColor);
+      if (buffer) {
+        noiseSource = context.createBufferSource();
+        noiseSource.buffer = buffer;
+        noiseSource.loop = true;
+        const filter = context.createBiquadFilter();
+        filter.type = timbre.noiseColor === 'fog' || timbre.noiseColor === 'wind' ? 'lowpass' : 'highpass';
+        filter.frequency.value = timbre.noiseColor === 'shards' ? 2800 : timbre.noiseColor === 'fog' ? 480 : 720;
+        const gain = context.createGain();
+        const length = this.duration(cue.kind, cue.durationTicks);
+        const noiseLevel = Math.min(0.025, this.level(cue.kind, 0, cue.intensity ?? 1) * 0.45 * timbre.levelScale);
+        gain.gain.setValueAtTime(0.0001, at);
+        gain.gain.linearRampToValueAtTime(noiseLevel, at + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, at + length);
+        noiseSource.connect(filter).connect(gain).connect(output);
+        noiseSource.start(at);
+        noiseSource.stop(at + length + 0.05);
+        cleanup.push(filter, gain);
+        sources.push(noiseSource);
+        noiseGain = gain;
+        noiseFilter = filter;
+      }
+    }
+    let remaining = notes.length + (noiseSource ? 1 : 0);
     for (let i = 0; i < notes.length; i++) {
       const oscillator = context.createOscillator();
-      const gain = context.createGain();
+      const gain = this.context!.createGain();
       const frequency = this.frequency(notes[i]!, cue.kind);
-      oscillator.type = family ? DANGER_WAVEFORMS[family] : this.waveform(cue.kind, i);
+      oscillator.type = timbre ? timbre.waveform : family ? DANGER_WAVEFORMS[family] : this.waveform(cue.kind, i);
       oscillator.frequency.setValueAtTime(frequency, at);
       if (cue.kind === 'anticipation' || cue.kind === 'phase' || cue.kind === 'ending') {
         oscillator.frequency.exponentialRampToValueAtTime(Math.max(55, frequency * (cue.phase === 'anticipation' ? 0.82 : 1.04)), at + 0.24);
@@ -288,6 +392,15 @@ export class StoryAudio {
       oscillator.stop(at + length + 0.03);
       sources.push(oscillator);
     }
+    if (noiseSource) {
+      noiseSource.onended = () => {
+        noiseSource.disconnect();
+        noiseGain?.disconnect();
+        noiseFilter?.disconnect();
+        remaining--;
+        if (remaining === 0 && voice) this.finishVoice(voice);
+      };
+    }
     voice = { id: cue.instanceId, sources, scopeId: cue.scopeId, cleanup };
     this.lastPlayed = { instanceId: cue.instanceId, kind: cue.kind, at, bus: busName };
     if (this.onPlayback) this.onPlayback({ ...this.playbackMetadata, lastPlayed: this.lastPlayed });
@@ -299,6 +412,93 @@ export class StoryAudio {
     if (index >= 0) this.voices.splice(index, 1);
     for (const node of voice.cleanup) node.disconnect();
     if (this.ambience === voice) this.ambience = undefined;
+  }
+
+  /**
+   * Voices a Warden or Whispering Canopy cue from its procedural layers: oscillator glides and filtered looped-noise bursts with
+   * attack/decay envelopes. At most MAX_WARDEN_VOICES / CANOPY_MAX_VOICES stay alive per pool (the oldest is stolen); every node
+   * is released when its source ends or the scope is cancelled, exactly like the generic voices.
+   */
+  private playLayered(cue: StoryCue, layers: readonly SoundLayer[], position: Vec3 | undefined, pool: 'warden' | 'canopy'): ActiveVoice | undefined {
+    const context = this.context!, busName = KIND_BUS[cue.kind], bus = this.buses[busName]!, at = context.currentTime + 0.012;
+    const sources: AudioScheduledSourceNode[] = [], cleanup: AudioNode[] = [];
+    let output: AudioNode = bus;
+    if (position) {
+      const panner = context.createPanner();
+      panner.panningModel = 'HRTF';
+      panner.distanceModel = 'inverse';
+      panner.refDistance = 2;
+      panner.maxDistance = 42;
+      panner.rolloffFactor = 1;
+      panner.positionX.setValueAtTime(position.x, at);
+      panner.positionY.setValueAtTime(position.y, at);
+      panner.positionZ.setValueAtTime(position.z, at);
+      panner.connect(bus);
+      cleanup.push(panner);
+      output = panner;
+    }
+    for (;;) {
+      let alive = 0, oldest = -1;
+      for (let i = 0; i < this.voices.length; i++) if (pool === 'warden' ? this.voices[i]!.warden : this.voices[i]!.canopy) { alive++; if (oldest < 0) oldest = i; }
+      if (alive < (pool === 'warden' ? MAX_WARDEN_VOICES : CANOPY_MAX_VOICES) || oldest < 0) break;
+      this.stopVoiceAt(oldest);
+    }
+    let remaining = 0;
+    let voice: ActiveVoice | undefined;
+    for (const layer of layers.slice(0, WARDEN_MAX_LAYERS)) {
+      const start = at + layer.delay, end = start + layer.length;
+      const gain = context.createGain();
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.linearRampToValueAtTime(layer.level, start + Math.max(0.001, Math.min(layer.attack, layer.length * 0.9)));
+      gain.gain.exponentialRampToValueAtTime(0.0001, end);
+      let source: AudioScheduledSourceNode;
+      if (layer.source === 'tone') {
+        const oscillator = context.createOscillator();
+        oscillator.type = layer.wave ?? 'sine';
+        oscillator.frequency.setValueAtTime(layer.from ?? 440, start);
+        if (layer.to !== undefined && layer.to !== layer.from) oscillator.frequency.exponentialRampToValueAtTime(Math.max(20, layer.to), end);
+        oscillator.start(start);
+        source = oscillator;
+      } else {
+        const buffer = this.getNoiseBuffer(layer.noise ?? 'white');
+        if (!buffer) { gain.disconnect(); continue; }
+        const noise = context.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+        noise.start(start, Math.random() * 0.2);
+        source = noise;
+      }
+      let filter: BiquadFilterNode | undefined;
+      if (layer.filter && layer.filterFrom) {
+        filter = context.createBiquadFilter();
+        filter.type = layer.filter;
+        filter.frequency.setValueAtTime(layer.filterFrom, start);
+        if (layer.filterTo !== undefined && layer.filterTo !== layer.filterFrom) filter.frequency.exponentialRampToValueAtTime(Math.max(20, layer.filterTo), end);
+        if (layer.q) filter.Q.value = layer.q;
+        source.connect(filter).connect(gain);
+        cleanup.push(filter);
+      } else source.connect(gain);
+      gain.connect(output);
+      cleanup.push(gain);
+      source.stop(end + 0.03);
+      const owned = filter;
+      source.onended = () => {
+        source.disconnect();
+        gain.disconnect();
+        owned?.disconnect();
+        remaining--;
+        if (remaining === 0 && voice) this.finishVoice(voice);
+      };
+      sources.push(source);
+      remaining++;
+    }
+    if (sources.length === 0) { for (const node of cleanup) node.disconnect(); return undefined; }
+    voice = pool === 'warden'
+      ? { id: cue.instanceId, sources, scopeId: cue.scopeId, cleanup, warden: true }
+      : { id: cue.instanceId, sources, scopeId: cue.scopeId, cleanup, canopy: true };
+    this.lastPlayed = { instanceId: cue.instanceId, kind: cue.kind, at, bus: busName };
+    if (this.onPlayback) this.onPlayback({ ...this.playbackMetadata, lastPlayed: this.lastPlayed });
+    return voice;
   }
 
   private arrangement(kind: StoryCue['kind']): readonly number[] {
@@ -328,10 +528,33 @@ export class StoryAudio {
     return index === 0 ? 'sine' : 'triangle';
   }
 
+  /**
+   * Build a recognisable voiced root/chord for an elemental cue. Phase picks which root pitch to anchor; sustained
+   * phases retread the same interval so cancel/pause paths stay tonally stable.
+   */
+  private elementNotes(element: AttackElement, phase: CuePhase, phasePitch: number): readonly number[] {
+    const root = ELEMENT_TIMBRE[element].root;
+    const phaseIndex = phase === 'anticipation' ? 0 : phase === 'commit' ? 1 : phase === 'active' ? 2 : phase === 'hit' ? 3 : 0;
+    const anchor = root[phaseIndex]! + MIDI_C4;
+    const triadOffset = element === 'ice' ? [0, 7, 12] : element === 'poison' ? [0, -2, 3] : element === 'wind' ? [0, -5, 4] : element === 'arcane' ? [0, 5, 12] : element === 'lightning' ? [0, -1, 6] : [0, 3, 7];
+    return triadOffset.map(step => anchor + step + phasePitch);
+  }
+
+  /** Lazily build (and memoize) a procedural noise buffer tuned for an elemental color. */
+  private getNoiseBuffer(color: NoiseColor): AudioBuffer | undefined {
+    if (!this.context) return undefined;
+    const cached = this.noiseBuffers[color];
+    if (cached) return cached;
+    const buffer = this.context.createBuffer(1, Math.floor(0.5 * this.context.sampleRate), this.context.sampleRate);
+    fillNoiseBuffer(buffer, color);
+    this.noiseBuffers[color] = buffer;
+    return buffer;
+  }
+
   private regionTones(regionId: string): readonly number[] {
     if (regionId.includes('hollow') || regionId.includes('grove')) return [110, 164.81, 220];
     if (regionId.includes('canopy') || regionId.includes('forest')) return [98, 146.83, 196];
-    if (regionId.includes('marsh') || regionId.includes('wetland')) return [82.41, 123.47, 164.81];
+    if (regionId.includes('marsh') || regionId.includes('wetland') || regionId.includes('mist')) return [82.41, 123.47, 164.81];
     return [92.5, 138.59, 185];
   }
 

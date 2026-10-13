@@ -1,0 +1,16 @@
+{
+  "task_id": "26c69d5e-29c4-4390-aede-40526f4c886a",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-rainforest-canopy-tree-decimate-01/tripo-out/prop-rainforest-canopy-tree-deci-26c69d5e",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-rainforest-canopy-tree-decimate-01/tripo-out/prop-rainforest-canopy-tree-deci-26c69d5e/model.glb",
+  "preview": "asset-source/generated/prop-rainforest-canopy-tree-decimate-01/tripo-out/prop-rainforest-canopy-tree-deci-26c69d5e/preview.png",
+  "started": "2026-10-11T03:38:24.973Z",
+  "finished": "2026-10-11T03:47:52.367Z"
+}

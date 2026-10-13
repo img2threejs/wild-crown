@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-howl-scout",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "ebb7cb4c-512c-42d5-9590-b2ed4059744f",
+    "decimate": "9ded115a-7a43-42a3-880f-d9908844e707",
+    "rig": "2586c7ef-ee3d-44f0-a94c-bdd97c01b0ff",
+    "animA": "29536c52-eeb9-4f71-9907-a3cc8e3ece74"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-howl-scout-anim-a-01/tripo-out/actor-howl-scout-anim-a-01-29536c52/model.glb",
+      "sha256": "7733e597d21579a75715b2e474c0be00f1ce87f6a099b4a10a78b3a03d50035e"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout.glb",
+    "sha256": "75e6ac900fa39d7cf92e2691c5d0391c80b1376659bb30438adbb9cfeb0d3d87",
+    "bytes": 6637668,
+    "vertices": 31806,
+    "triangles": 28128,
+    "boundsMin": [
+      -0.47306,
+      0,
+      -0.48937
+    ],
+    "boundsMax": [
+      0.47305,
+      0.87318,
+      0.48937
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 18
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3321861,
+      "toBytes": 1355972
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3659545,
+      "toBytes": 1315828
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19654558,
+      "toBytes": 2103260
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

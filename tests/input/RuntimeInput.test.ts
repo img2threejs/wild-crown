@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import { DEFAULT_INPUT_BINDINGS, type InputBindingMaps } from '../../src/game/contracts.js';
+import { DEFAULT_INPUT_BINDINGS, normalizeInputBindings, type InputBindingMaps } from '../../src/game/contracts.js';
 import { RuntimeInput } from '../../src/input/RuntimeInput.js';
 
 type KeyboardHandler = (event: KeyboardEvent) => void;
@@ -129,6 +129,27 @@ const harness = (): TestEnvironment => {
 };
 
 describe('RuntimeInput sampled edge and binding semantics', () => {
+  it('keeps arrows alongside remapped movement and clears them across menus', () => {
+    const test = harness(), bindings = makeBindings();
+    bindings.keyboard.moveForward = 'i';
+    test.input.setBindings(bindings);
+    test.input.setEnabled(true);
+    expect(test.keyDown('ArrowUp').defaultPrevented).toBe(true);
+    test.keyDown('ArrowRight');
+    const diagonal = test.input.sample();
+    expect(diagonal.moveX).toBeCloseTo(Math.SQRT1_2);
+    expect(diagonal.moveZ).toBeCloseTo(Math.SQRT1_2);
+    test.keyDown('i');
+    test.keyUp('ArrowUp');
+    expect(test.input.sample().moveZ).toBeCloseTo(Math.SQRT1_2);
+    test.keyUp('ArrowRight');
+    test.keyDown('ArrowDown');
+    expect(test.input.sample()).toMatchObject({ moveX: 0, moveZ: 0 });
+    test.input.setEnabled(false);
+    test.input.setEnabled(true);
+    expect(test.input.sample()).toMatchObject({ moveX: 0, moveZ: 0 });
+  });
+
   it('delivers a complete key tap between fixed samples exactly once', () => {
     const test = harness();
     test.keyDown('j');
@@ -217,6 +238,58 @@ describe('RuntimeInput sampled edge and binding semantics', () => {
     expect(test.input.sample().dodgePressed).toBe(true);
   });
 
+  it('routes Space to Jump and the default keyboard key to Dive, with Shift still selecting run', () => {
+    const test = harness();
+    test.keyDown('space');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: true });
+    test.keyUp('space');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: false });
+
+    test.keyDown('f');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: true, jumpPressed: false });
+    test.keyUp('f');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: false });
+
+    test.keyDown('shift');
+    test.keyDown('w');
+    expect(test.input.sample()).toMatchObject({ moveZ: 1, sprintHeld: true, jumpPressed: false });
+    test.keyDown('space');
+    test.keyUp('space');
+    test.keyUp('w');
+    test.keyUp('shift');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: true, sprintHeld: false });
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: false });
+
+    test.setGamepadConnected(true);
+    test.buttons[0]!.pressed = true;
+    test.keyDown('shift');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: true, jumpPressed: false, sprintHeld: true });
+  });
+
+  it('reserves Space for Jump and migrates legacy Dodge bindings without discarding custom keys', () => {
+    const test = harness();
+    test.keyDown('space');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: false, jumpPressed: true });
+    test.keyUp('space');
+
+    test.keyDown('f');
+    expect(test.input.sample()).toMatchObject({ dodgePressed: true, jumpPressed: false });
+    test.keyUp('f');
+
+    const legacy = normalizeInputBindings({
+      keyboard: { dodge: 'space', light: 'j' },
+      gamepad: { ...DEFAULT_INPUT_BINDINGS.gamepad },
+    });
+    expect(legacy.keyboard.jump).toBe('space');
+    expect(legacy.keyboard.dodge).toBe('f');
+    expect(legacy.keyboard.light).toBe('j');
+
+    const custom = normalizeInputBindings({
+      keyboard: { ...DEFAULT_INPUT_BINDINGS.keyboard, dodge: 'g' },
+      gamepad: { ...DEFAULT_INPUT_BINDINGS.gamepad },
+    });
+    expect(custom.keyboard.dodge).toBe('g');
+  });
   it('normalizes diagonal keyboard movement and applies the analog deadzone continuously', () => {
     const test = harness();
     test.keyDown('w');
@@ -251,5 +324,57 @@ describe('RuntimeInput sampled edge and binding semantics', () => {
     test.keyUp('k');
     test.keyDown('k');
     expect(test.input.sample()).toMatchObject({ heavyPressed: true, heavyHeld: true });
+  });
+
+  it('binds Sigil (L) and Judgement (U) with Heavy-style tap, hold and release edges', () => {
+    const test = harness();
+    expect(DEFAULT_INPUT_BINDINGS.keyboard).toMatchObject({ ranged: 'l', ultimate: 'u' });
+    test.keyDown('l');
+    test.keyUp('l');
+    const tap = test.input.sample();
+    expect(tap).toMatchObject({ rangedPressed: true, rangedHeld: false, rangedReleased: true, ultimatePressed: false });
+    expect(test.input.sample()).toMatchObject({ rangedPressed: false, rangedReleased: false });
+
+    test.keyDown('l');
+    expect(test.input.sample()).toMatchObject({ rangedPressed: true, rangedHeld: true, rangedReleased: false });
+    expect(test.input.sample()).toMatchObject({ rangedPressed: false, rangedHeld: true, rangedReleased: false });
+    test.keyUp('l');
+    expect(test.input.sample()).toMatchObject({ rangedHeld: false, rangedReleased: true });
+    expect(test.input.sample().rangedReleased).toBe(false);
+
+    test.keyDown('u');
+    expect(test.input.sample()).toMatchObject({ ultimatePressed: true, rangedPressed: false });
+    expect(test.input.sample().ultimatePressed).toBe(false);
+  });
+
+  it('reads the default gamepad buttons for Sigil and Judgement and releases on disconnect', () => {
+    const test = harness();
+    expect(DEFAULT_INPUT_BINDINGS.gamepad).toMatchObject({ ranged: 'Gamepad Button 12', ultimate: 'Gamepad Button 11' });
+    const used = Object.entries(DEFAULT_INPUT_BINDINGS.gamepad).filter(([action]) => action !== 'ranged' && action !== 'ultimate').map(([, binding]) => binding);
+    expect(used).not.toContain('Gamepad Button 12');
+    expect(used).not.toContain('Gamepad Button 11');
+    test.setGamepadConnected(true);
+    test.buttons[11]!.pressed = true;
+    expect(test.input.sample()).toMatchObject({ rangedPressed: true, rangedHeld: true, heavyPressed: false });
+    test.buttons[10]!.pressed = true;
+    expect(test.input.sample()).toMatchObject({ ultimatePressed: true, rangedPressed: false, rangedHeld: true });
+    test.setGamepadConnected(false);
+    expect(test.input.sample()).toMatchObject({ rangedHeld: false, rangedReleased: true });
+  });
+
+  it('keeps remaps of the new actions and normalisation of reserved keys working', () => {
+    const test = harness();
+    const bindings = makeBindings();
+    bindings.keyboard.ranged = 'g';
+    test.input.setBindings(bindings);
+    test.input.setEnabled(true);
+    test.keyDown('l');
+    expect(test.input.sample().rangedPressed).toBe(false);
+    test.keyUp('l');
+    test.keyDown('g');
+    expect(test.input.sample()).toMatchObject({ rangedPressed: true, rangedHeld: true });
+
+    const normalized = normalizeInputBindings({ keyboard: { ranged: 'space', ultimate: 'f' }, gamepad: { ...DEFAULT_INPUT_BINDINGS.gamepad } });
+    expect(normalized.keyboard).toMatchObject({ ranged: 'l', ultimate: 'u', jump: 'space', dodge: 'f' });
   });
 });

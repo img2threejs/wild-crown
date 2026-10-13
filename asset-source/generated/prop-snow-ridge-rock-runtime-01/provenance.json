@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-snow-ridge-rock",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "e16f109b-9ba1-4207-a9de-cc4d389eb93f",
+    "decimate": "5c5f91b6-61d4-4104-b6b2-a41930e0eabf"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.24,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-snow-ridge-rock-decimate-01/tripo-out/prop-snow-ridge-rock-decimate-01-5c5f91b6/model.glb",
+      "sha256": "634b6d66b550753f1f7d924fdf23009aa13490848d9eb281f4115c8e1e82acd5"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-snow-ridge-rock-runtime-01/prop-snow-ridge-rock.glb",
+    "sha256": "95db97be2a4d1b616262938e7eaf14b8d70fc35231bcee50aa8f38d6ccf64776",
+    "bytes": 1722136,
+    "vertices": 3563,
+    "triangles": 2485,
+    "boundsMin": [
+      -0.38561,
+      -0.32651,
+      -0.48895
+    ],
+    "boundsMax": [
+      0.38365,
+      0.3241,
+      0.48888
+    ],
+    "worldBoundsMin": [
+      -0.38561,
+      -0.32651,
+      -0.48895
+    ],
+    "worldBoundsMax": [
+      0.38365,
+      0.3241,
+      0.48888
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3291931,
+      "toBytes": 457735
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4781327,
+      "toBytes": 551637
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 10880582,
+      "toBytes": 566861
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 10389,
+      "trianglesAfter": 2491,
+      "relativeError": 0.007170602213591337
+    }
+  ],
+  "floatingCull": [],
+  "slivers": [
+    {
+      "trianglesBefore": 10400,
+      "trianglesAfter": 10389,
+      "removed": 11
+    },
+    {
+      "trianglesBefore": 2491,
+      "trianglesAfter": 2485,
+      "removed": 6
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 13044,
+      "verticesAfter": 3563
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "29536c52-eeb9-4f71-9907-a3cc8e3ece74",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-howl-scout-anim-a-01/tripo-out/actor-howl-scout-anim-a-01-29536c52",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-howl-scout-anim-a-01/tripo-out/actor-howl-scout-anim-a-01-29536c52/model.glb",
+  "started": "2026-10-11T09:25:04.865Z",
+  "finished": "2026-10-11T09:25:16.132Z"
+}

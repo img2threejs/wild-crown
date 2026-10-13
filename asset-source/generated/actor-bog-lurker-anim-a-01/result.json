@@ -1,0 +1,13 @@
+{
+  "task_id": "e18520f9-c276-43e1-884d-92a70d5b0353",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-bog-lurker-anim-a-01/tripo-out/actor-bog-lurker-anim-a-01-e18520f9",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-bog-lurker-anim-a-01/tripo-out/actor-bog-lurker-anim-a-01-e18520f9/model.glb",
+  "started": "2026-10-11T09:21:11.875Z",
+  "finished": "2026-10-11T09:21:35.216Z"
+}

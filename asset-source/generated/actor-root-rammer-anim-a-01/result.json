@@ -1,0 +1,13 @@
+{
+  "task_id": "ac925914-eec0-4c9d-9a06-012ca16e4350",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-root-rammer-anim-a-01/tripo-out/actor-root-rammer-anim-a-01-ac925914",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-root-rammer-anim-a-01/tripo-out/actor-root-rammer-anim-a-01-ac925914/model.glb",
+  "started": "2026-10-10T11:57:11.115Z",
+  "finished": "2026-10-10T11:57:35.495Z"
+}

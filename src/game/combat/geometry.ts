@@ -67,6 +67,23 @@ export function groundHeightAt(arena: CombatArena, x: number, z: number, nearY: 
   return null;
 }
 
+/** Prefer an accessible ramp over an overlapping flat floor; never change floor layers through a gap. */
+function groundedSurfaceHeightAt(arena: CombatArena, x: number, z: number, previousY: number): number | null {
+  let bestY: number | null = null;
+  for (const surface of arena.surfaces) {
+    if (!surface.walkable || !pointInPolygon(surface.points, x, z)) continue;
+    const height = surfaceHeight(surface, x, z);
+    if (height === null) continue;
+    if (Math.abs(height - previousY) > MAX_WALK_STEP) continue;
+    if (bestY === null || height > bestY) bestY = height;
+  }
+  if (bestY !== null) return bestY;
+  if (arena.surfaces.length === 0 && insideBounds(arena.bounds, x, z)) {
+    return Math.abs(arena.groundY - previousY) <= MAX_WALK_STEP ? arena.groundY : null;
+  }
+  return null;
+}
+
 /** Move a grounded circle with a bounded sweep and an explicit body height. */
 export function moveCircle(arena: CombatArena, start: Vec3, delta: Vec3, radius: number, height = 1.7): Vec3 {
   const minX = arena.bounds.min.x + radius, maxX = arena.bounds.max.x - radius;
@@ -76,21 +93,21 @@ export function moveCircle(arena: CombatArena, start: Vec3, delta: Vec3, radius:
   const stepSize = Math.max(0.005, Math.min(MAX_SWEEP_STEP, radius * 0.1));
   const steps = Math.max(1, Math.ceil(length / stepSize));
   const stepX = delta.x / steps, stepZ = delta.z / steps;
-  let x = start.x, z = start.z, y = groundHeightAt(arena, x, z, start.y) ?? start.y;
+  let x = start.x, z = start.z, y = groundedSurfaceHeightAt(arena, x, z, start.y) ?? start.y;
   for (let i = 0; i < steps; i++) {
     const nx = clamp(x + stepX, minX, maxX), nz = clamp(z + stepZ, minZ, maxZ);
-    const diagonalFloor = groundHeightAt(arena, nx, nz, y);
-    if (diagonalFloor !== null && Math.abs(diagonalFloor - y) <= MAX_WALK_STEP && !blocked(arena, { x: nx, y: diagonalFloor, z: nz }, radius, y, height)) {
+    const diagonalFloor = groundedSurfaceHeightAt(arena, nx, nz, y);
+    if (diagonalFloor !== null && Math.abs(diagonalFloor - y) <= MAX_WALK_STEP && !blocked(arena, { x: nx, y: diagonalFloor, z: nz }, radius, y, height, true)) {
       x = nx; z = nz; y = diagonalFloor;
       continue;
     }
     if (nx !== x) {
-      const floor = groundHeightAt(arena, nx, z, y);
-      if (floor !== null && Math.abs(floor - y) <= MAX_WALK_STEP && !blocked(arena, { x: nx, y: floor, z }, radius, y, height)) { x = nx; y = floor; }
+      const floor = groundedSurfaceHeightAt(arena, nx, z, y);
+      if (floor !== null && Math.abs(floor - y) <= MAX_WALK_STEP && !blocked(arena, { x: nx, y: floor, z }, radius, y, height, true)) { x = nx; y = floor; }
     }
     if (nz !== z) {
-      const floor = groundHeightAt(arena, x, nz, y);
-      if (floor !== null && Math.abs(floor - y) <= MAX_WALK_STEP && !blocked(arena, { x, y: floor, z: nz }, radius, y, height)) { z = nz; y = floor; }
+      const floor = groundedSurfaceHeightAt(arena, x, nz, y);
+      if (floor !== null && Math.abs(floor - y) <= MAX_WALK_STEP && !blocked(arena, { x, y: floor, z: nz }, radius, y, height, true)) { z = nz; y = floor; }
     }
   }
   return { x, y: y + delta.y, z };
@@ -148,14 +165,14 @@ export function isCirclePathClear(arena: CombatArena, start: Vec3, end: Vec3, ra
   const distance = distance2(start, end);
   const stepSize = Math.max(0.005, Math.min(MAX_SWEEP_STEP, radius * 0.1));
   const steps = Math.max(1, Math.ceil(distance / stepSize));
-  let previousY = start.y;
+  let previousY = groundedSurfaceHeightAt(arena, start.x, start.z, start.y) ?? start.y;
   for (let step = 1; step <= steps; step++) {
     const ratio = step / steps;
     const x = start.x + (end.x - start.x) * ratio;
     const z = start.z + (end.z - start.z) * ratio;
     if (x < arena.bounds.min.x + radius || x > arena.bounds.max.x - radius || z < arena.bounds.min.z + radius || z > arena.bounds.max.z - radius) return false;
-    const y = groundHeightAt(arena, x, z, previousY);
-    if (y === null || Math.abs(y - previousY) > MAX_WALK_STEP || blocked(arena, { x, y, z }, radius, previousY, height)) return false;
+    const y = groundedSurfaceHeightAt(arena, x, z, previousY);
+    if (y === null || Math.abs(y - previousY) > MAX_WALK_STEP || blocked(arena, { x, y, z }, radius, previousY, height, true)) return false;
     previousY = y;
   }
   return true;
@@ -175,10 +192,15 @@ export function traversalRouteAt(arena: CombatArena, point: Vec3, radius = 0.75)
   return best;
 }
 
-function blocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number): boolean {
+function blocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number, stepping = false): boolean {
   if (arena.obstacles.some(rectangle => circleHits({ center: point, radius }, rectangle))) return true;
   for (const collider of arena.colliders) {
     if (!collider.blocksMovement || !verticalOverlap(point.y, previousY, collider, actorHeight)) continue;
+    // A grounded capsule can step onto a reachable authored platform lip.
+    // Airborne sweeps still collide with the platform's complete solid volume.
+    if (stepping && collider.walkSurfaceId && collider.kind === 'box' && collider.halfExtents
+      && collider.from.y + collider.halfExtents.y <= Math.min(point.y, previousY) + MAX_WALK_STEP
+      && arena.surfaces.some(surface => surface.id === collider.walkSurfaceId && surface.walkable)) continue;
     if (collider.kind === 'box' && collider.halfExtents) {
       const nearestX = clamp(point.x, collider.from.x - collider.halfExtents.x, collider.from.x + collider.halfExtents.x);
       const nearestZ = clamp(point.z, collider.from.z - collider.halfExtents.z, collider.from.z + collider.halfExtents.z);

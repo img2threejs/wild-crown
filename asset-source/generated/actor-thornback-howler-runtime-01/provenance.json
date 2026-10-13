@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-thornback-howler",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "7fdedf2f-d9bd-45df-bd4c-dca0085e2c9d",
+    "decimate": "ee450b39-b98b-47ee-9d6e-14d5687228e9",
+    "rig": "39e6d691-ca03-4017-9f2d-3d972eca2404",
+    "animA": "7adc33ab-7a4d-4a1b-bcce-18ce107a5227",
+    "animB": "f82c90eb-c78d-45f9-a4fb-b878908a1e85"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": 0.8,
+    "maxError": 0.01,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-thornback-howler-anim-a-01/tripo-out/actor-thornback-howler-anim-a-01-7adc33ab/model.glb",
+      "sha256": "9ca429a66b73d0e0483d30697715af9f57e42a9adef491a7937b1726fc879188"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler.glb",
+    "sha256": "db136e2aafd2f2b5b3cc1a9a4eca675a20cbb90764437fde39e23f694febca23",
+    "bytes": 7963020,
+    "vertices": 31986,
+    "triangles": 23087,
+    "boundsMin": [
+      -0.41051,
+      0,
+      -0.48629
+    ],
+    "boundsMax": [
+      0.41051,
+      0.93229,
+      0.48629
+    ]
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 123
+    },
+    {
+      "name": "pitch_baseball",
+      "durationSeconds": 3.8,
+      "channels": 123
+    },
+    {
+      "name": "run",
+      "durationSeconds": 1.2666666666666666,
+      "channels": 123
+    },
+    {
+      "name": "slash",
+      "durationSeconds": 6.6,
+      "channels": 123
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 123
+    },
+    {
+      "name": "dive",
+      "durationSeconds": 2.7333333333333334,
+      "channels": 123
+    },
+    {
+      "name": "hurt",
+      "durationSeconds": 13.866666666666667,
+      "channels": 123
+    },
+    {
+      "name": "jump",
+      "durationSeconds": 2.2333333333333334,
+      "channels": 123
+    },
+    {
+      "name": "turn",
+      "durationSeconds": 3.8666666666666667,
+      "channels": 123
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3899336,
+      "toBytes": 1558472
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3489561,
+      "toBytes": 1255626
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20066733,
+      "toBytes": 2354394
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 28861,
+      "trianglesAfter": 23087,
+      "relativeError": 0.0015526271890848875
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 35914,
+      "verticesAfter": 31986
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

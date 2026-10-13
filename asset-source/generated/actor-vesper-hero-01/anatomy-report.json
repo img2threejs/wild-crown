@@ -1,0 +1,1398 @@
+{
+  "schemaVersion": 1,
+  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "grip": {
+    "katanaGrip": {
+      "length": 1.25,
+      "gripFromPommel": 0.2,
+      "bladeLength": 0.76,
+      "diagonalRadians": 2.45,
+      "edgeRadians": 1.18
+    },
+    "bladeDiagonalDegrees": 140.3746598070517,
+    "bladeToMiddleFingerDegrees": 22.907574682065906,
+    "bladeToPrincipalAxisDegrees": 50.37465980705168,
+    "middleFingerHand": [
+      -0.291841,
+      0.955943,
+      -0.031654
+    ],
+    "bladeAxisHand": [
+      -0.091475,
+      0.923309,
+      -0.373005
+    ],
+    "palmHand": [
+      -0.055898,
+      0.034703,
+      0.002205
+    ],
+    "shaftRadiusRig": 0.016384,
+    "metacarpalHand": [
+      -0.140246,
+      0.868738,
+      0.475001
+    ],
+    "thumbSideHand": [
+      0.002636,
+      -0.479413,
+      0.877585
+    ],
+    "palmNormalHand": [
+      -0.990113,
+      -0.12433,
+      -0.064946
+    ],
+    "edgeAxisHand": [
+      0.278835,
+      0.38334,
+      0.880512
+    ],
+    "rigidFist": {
+      "bendHand": [
+        -0.106341,
+        0.363376,
+        0.925554
+      ],
+      "hingeRig": 0.020595280001362796,
+      "planeRig": 0.014674176909812892,
+      "radiusRig": 0.03621293645779568
+    }
+  },
+  "deformationCeiling": {
+    "clips": [
+      "aren-idle",
+      "aren-walk",
+      "aren-run",
+      "aren-jump",
+      "aren-hit",
+      "aren-cheer",
+      "aren-defeat",
+      "vesper-mist-blink"
+    ],
+    "p999": 1.71719,
+    "gaitCeilingP999": 1.45892
+  },
+  "clips": {
+    "aren-idle": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 36,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 49.2,
+      "peakTwist": 51.9,
+      "corrections": {
+        "mixamorig:LeftUpLeg": 0,
+        "mixamorig:LeftLeg": 0.06
+      },
+      "midFrameBladeDegrees": {
+        "max": 0,
+        "frame": 52
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.24649064381407007,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 57,
+        "floorMetres": 0.3140250095647942,
+        "floorFrame": 11,
+        "intersections": [],
+        "minRigUnits": 0.030226556446261786,
+        "minMetres": 0.05138514595864504,
+        "frame": 11,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.65382,
+        "p999": 1.45892,
+        "max": 2.15303,
+        "worstBone": "RightUpLeg"
+      }
+    },
+    "aren-walk": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/run-with-sword.fbx"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 43.3,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 116.3,
+      "peakTwist": 31,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.1,
+        "frame": 1
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03542795000355436,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 8,
+        "floorMetres": 0.4810382732683381,
+        "floorFrame": 13,
+        "intersections": [],
+        "minRigUnits": 0.020839970590326093,
+        "minMetres": 0.03542795000355436,
+        "frame": 8,
+        "bone": "RightUpLeg"
+      },
+      "soleGroundShiftMetres": 0.0022,
+      "deformation": {
+        "p99": 0.6668,
+        "p999": 1.40383,
+        "max": 2.40268,
+        "worstBone": "RightArm"
+      }
+    },
+    "aren-run": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/run-with-sword.fbx",
+          "mirrored": true
+        }
+      ],
+      "wristMaxCorrectionDegrees": 45,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 117.6,
+      "peakTwist": 35.5,
+      "corrections": {
+        "mixamorig:RightLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.7,
+        "frame": 8
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.05501800067974665,
+        "bodyBone": "Spine1",
+        "bodyFrame": 2,
+        "floorMetres": 0.6618628248885078,
+        "floorFrame": 4,
+        "intersections": [],
+        "minRigUnits": 0.0302027722557282,
+        "minMetres": 0.05134471283473794,
+        "frame": 10,
+        "bone": "RightForeArm"
+      },
+      "soleGroundShiftMetres": 0.01495,
+      "deformation": {
+        "p99": 0.66157,
+        "p999": 1.37314,
+        "max": 2.82715,
+        "worstBone": "RightLeg"
+      }
+    },
+    "aren-jump": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:jump"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 44.3,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 99.2,
+      "peakTwist": 78.8,
+      "corrections": {
+        "mixamorig:LeftFoot": 0.01,
+        "mixamorig:RightFoot": 1.03
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.9,
+        "frame": 8
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.04969267063024303,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 21,
+        "floorMetres": 0.1483664715534035,
+        "floorFrame": 21,
+        "intersections": [],
+        "minRigUnits": 0.02666051045796123,
+        "minMetres": 0.04532286777853409,
+        "frame": 13,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.447,
+        "p999": 0.86792,
+        "max": 2.501,
+        "worstBone": "Spine1"
+      }
+    },
+    "aren-hit": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:hit_to_body_01"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 0,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 127.1,
+      "peakTwist": 83.2,
+      "corrections": {
+        "mixamorig:LeftFoot": 1.33,
+        "mixamorig:RightFoot": 0.81
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.3,
+        "frame": 1
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.09153022607463304,
+        "bodyBone": "Head",
+        "bodyFrame": 0,
+        "floorMetres": 1.0096399578641808,
+        "floorFrame": 11.25,
+        "intersections": [],
+        "minRigUnits": 0.02727629735344588,
+        "minMetres": 0.046369705500858,
+        "frame": 9,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.76028,
+        "p999": 1.44772,
+        "max": 2.94735,
+        "worstBone": "LeftArm"
+      }
+    },
+    "aren-cheer": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:cheer"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 14.2,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 81.9,
+      "peakTwist": 114.7,
+      "corrections": {},
+      "midFrameBladeDegrees": {
+        "max": 1.2,
+        "frame": 101
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06495888221319548,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 142,
+        "floorMetres": 0.04011359188302938,
+        "floorFrame": 109,
+        "intersections": [],
+        "minRigUnits": 0.025060184849638546,
+        "minMetres": 0.04260231424438553,
+        "frame": 28,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.92576,
+        "p999": 1.71719,
+        "max": 2.83447,
+        "worstBone": "Spine1"
+      }
+    },
+    "aren-defeat": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:defeat_02"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 28.1,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 107.9,
+      "peakTwist": 57.6,
+      "corrections": {},
+      "midFrameBladeDegrees": {
+        "max": 0.7,
+        "frame": 47
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.008217565144187122,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 57.125,
+        "floorMetres": 0.04260108163279591,
+        "floorFrame": 71,
+        "intersections": [],
+        "minRigUnits": 0.004833861849521837,
+        "minMetres": 0.008217565144187122,
+        "frame": 57.125,
+        "bone": "RightUpLeg"
+      },
+      "deformation": {
+        "p99": 0.35337,
+        "p999": 0.71069,
+        "max": 3.0017,
+        "worstBone": "RightArm"
+      }
+    },
+    "vesper-iai-1": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/draw-sword-1.fbx"
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 82.9,
+      "peakTwist": 62.9,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.24
+      },
+      "midFrameBladeDegrees": {
+        "max": 9.7,
+        "frame": 0
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.1073759551823442,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.18033667482873963,
+        "floorFrame": 0,
+        "intersections": [],
+        "minRigUnits": 0.020245602012155403,
+        "minMetres": 0.03441752342066418,
+        "frame": 4,
+        "bone": "RightArm"
+      },
+      "edgeLead": {
+        "6": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 14.11433696163062,
+          "edgeAcrossAngle": 6.094908391674257,
+          "bladeToTravelAngle": 102.75471510143683,
+          "tipMetresPerSecond": 34.59484163532953,
+          "travelPitchDegrees": 2.1013873869283364
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0917
+      },
+      "deformation": {
+        "p99": 0.70467,
+        "p999": 1.38049,
+        "max": 2.27179,
+        "worstBone": "RightShoulder"
+      }
+    },
+    "vesper-iai-2": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1,
+            "postRate": 0.5
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 109.9,
+      "peakTwist": 45.9,
+      "corrections": {
+        "mixamorig:RightHand": 0
+      },
+      "midFrameBladeDegrees": {
+        "max": 2.6,
+        "frame": 2
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06944332123062603,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 9,
+        "floorMetres": 0.30155771697080536,
+        "floorFrame": 9,
+        "intersections": [],
+        "minRigUnits": 0.025272507823909073,
+        "minMetres": 0.04296326330064542,
+        "frame": 2.875,
+        "bone": "RightForeArm"
+      },
+      "edgeLead": {
+        "6": {
+          "frontalDegrees": 50.498811036593814,
+          "edgeAngle": 3.177706613796339,
+          "edgeAcrossAngle": 2.55191292331256,
+          "bladeToTravelAngle": 91.89417609736518,
+          "tipMetresPerSecond": 24.968473856162028,
+          "travelPitchDegrees": -22.34090258469042
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0292
+      },
+      "deformation": {
+        "p99": 0.81402,
+        "p999": 1.47443,
+        "max": 3.08459,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "vesper-iai-3": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-outward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 0.8666666666666667,
+            "donorTipMetresPerSecond": 34.14080759966591,
+            "donorContactAngle": 28.459642007009727,
+            "contactWithinMax": true,
+            "preRate": 0.6,
+            "postRate": 0.3
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 76.9,
+      "peakTwist": 87.8,
+      "corrections": {
+        "mixamorig:Spine": 0.24,
+        "mixamorig:Spine1": 0.07,
+        "mixamorig:Spine2": 0.17,
+        "mixamorig:RightHand": 4.07
+      },
+      "midFrameBladeDegrees": {
+        "max": 3.3,
+        "frame": 2
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.17851129854688183,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 11,
+        "floorMetres": 0.7550379578174572,
+        "floorFrame": 11,
+        "intersections": [],
+        "minRigUnits": 0.014692065933420304,
+        "minMetres": 0.024976512086814517,
+        "frame": 4,
+        "bone": "RightArm"
+      },
+      "edgeLead": {
+        "8": {
+          "frontalDegrees": 68.08543064907032,
+          "edgeAngle": 2.6242323737696274,
+          "edgeAcrossAngle": 2.3574585952204288,
+          "bladeToTravelAngle": 91.15313222404279,
+          "tipMetresPerSecond": 20.1756051820605,
+          "travelPitchDegrees": -10.955954312898772
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0261
+      },
+      "deformation": {
+        "p99": 0.77743,
+        "p999": 1.43676,
+        "max": 2.29567,
+        "worstBone": "LeftArm"
+      }
+    },
+    "vesper-iai-4": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 89,
+      "peakTwist": 62.8,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.4
+      },
+      "midFrameBladeDegrees": {
+        "max": 1.8,
+        "frame": 5
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.08452342305255141,
+        "bodyBone": "Spine1",
+        "bodyFrame": 1,
+        "floorMetres": 0.31854730463075065,
+        "floorFrame": 13.75,
+        "intersections": [],
+        "minRigUnits": 0.008002413548002282,
+        "minMetres": 0.01360410303160388,
+        "frame": 1,
+        "bone": "LeftArm"
+      },
+      "edgeLead": {
+        "10": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0532
+      },
+      "deformation": {
+        "p99": 0.75364,
+        "p999": 1.46704,
+        "max": 2.31934,
+        "worstBone": "RightShoulder"
+      }
+    },
+    "vesper-thousand-cuts": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 111.2,
+      "peakTwist": 62.9,
+      "corrections": {
+        "mixamorig:RightHand": 0.28,
+        "mixamorig:LeftLeg": 0
+      },
+      "midFrameBladeDegrees": {
+        "max": 10.2,
+        "frame": 11
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06165938390824391,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 36,
+        "floorMetres": 0.11543379106824679,
+        "floorFrame": 36,
+        "intersections": [],
+        "minRigUnits": 0.019914072275262804,
+        "minMetres": 0.033853922867946765,
+        "frame": 1,
+        "bone": "LeftArm"
+      },
+      "edgeLead": {
+        "8": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        },
+        "18": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.643466148381687,
+          "edgeAcrossAngle": 0.26896428027657876,
+          "bladeToTravelAngle": 109.64171423744197,
+          "tipMetresPerSecond": 24.769677356458793,
+          "travelPitchDegrees": -38.72934313921298
+        },
+        "28": {
+          "frontalDegrees": 31.873402986936366,
+          "edgeAngle": 4.014602477073513,
+          "edgeAcrossAngle": 2.2764535932076386,
+          "bladeToTravelAngle": 93.307641593437,
+          "tipMetresPerSecond": 40.72071766993592,
+          "travelPitchDegrees": -22.895582802819412
+        },
+        "38": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 11.119976403163843,
+          "edgeAcrossAngle": 3.5565857149993074,
+          "bladeToTravelAngle": 100.54266449228923,
+          "tipMetresPerSecond": 37.673019973477885,
+          "travelPitchDegrees": 4.412226806642328
+        },
+        "48": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.749554205894952,
+          "edgeAcrossAngle": 0.3677776882961418,
+          "bladeToTravelAngle": 109.74628303832793,
+          "tipMetresPerSecond": 24.710141141761145,
+          "travelPitchDegrees": -38.64516151805511
+        },
+        "58": {
+          "frontalDegrees": 34.55649584636774,
+          "edgeAngle": 91.15530096470955,
+          "edgeAcrossAngle": 100.49573773738072,
+          "bladeToTravelAngle": 6.354713040562852,
+          "tipMetresPerSecond": 3.123544452398484,
+          "travelPitchDegrees": 25.835980867230877
+        },
+        "66": {
+          "frontalDegrees": 31.873408799884277,
+          "edgeAngle": 4.655262078097246,
+          "edgeAcrossAngle": 1.9235553493587583,
+          "bladeToTravelAngle": 94.24005748392918,
+          "tipMetresPerSecond": 37.3477410642165,
+          "travelPitchDegrees": -23.874621494787984
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1168
+      },
+      "deformation": {
+        "p99": 0.76083,
+        "p999": 1.5243,
+        "max": 3.12077,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "vesper-requiem": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 0.15
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 112.7,
+      "peakTwist": 75.1,
+      "corrections": {},
+      "midFrameBladeDegrees": {
+        "max": 10.6,
+        "frame": 14
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.07907241677325333,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 60,
+        "floorMetres": 0.06749048962082359,
+        "floorFrame": 33,
+        "intersections": [],
+        "minRigUnits": 0.008002413548002282,
+        "minMetres": 0.01360410303160388,
+        "frame": 2,
+        "bone": "LeftArm"
+      },
+      "edgeLead": {
+        "12": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        },
+        "24": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.62338697603991,
+          "edgeAcrossAngle": 0.25232147393736154,
+          "bladeToTravelAngle": 109.62184546850183,
+          "tipMetresPerSecond": 24.780973277344103,
+          "travelPitchDegrees": -38.74333086422323
+        },
+        "36": {
+          "frontalDegrees": 31.87340437995968,
+          "edgeAngle": 3.832178287987918,
+          "edgeAcrossAngle": 2.213364996321305,
+          "bladeToTravelAngle": 93.12912497136128,
+          "tipMetresPerSecond": 40.3523349508674,
+          "travelPitchDegrees": -22.761068973538794
+        },
+        "48": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 12.06222342960008,
+          "edgeAcrossAngle": 3.807232814897991,
+          "bladeToTravelAngle": 101.45408100886135,
+          "tipMetresPerSecond": 37.056145057180856,
+          "travelPitchDegrees": 4.662432640946131
+        },
+        "60": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.65779868885882,
+          "edgeAcrossAngle": 0.2812380964352164,
+          "bladeToTravelAngle": 109.6558831836859,
+          "tipMetresPerSecond": 24.761619241790722,
+          "travelPitchDegrees": -38.71898627612333
+        },
+        "72": {
+          "frontalDegrees": 7.797774685823597,
+          "edgeAngle": 82.95408927200131,
+          "edgeAcrossAngle": 59.106235317699294,
+          "bladeToTravelAngle": 13.821858410582264,
+          "tipMetresPerSecond": 3.2727603243741297,
+          "travelPitchDegrees": 1.8239530836774809
+        },
+        "84": {
+          "frontalDegrees": 62.072647345479574,
+          "edgeAngle": 7.335180281324046,
+          "edgeAcrossAngle": 3.843219758375923,
+          "bladeToTravelAngle": 83.74753631446634,
+          "tipMetresPerSecond": 27.045947954445616,
+          "travelPitchDegrees": -16.60173939347835
+        },
+        "110": {
+          "frontalDegrees": 6.846773459744174,
+          "edgeAngle": 13.17162424358172,
+          "edgeAcrossAngle": 12.727312333971415,
+          "bladeToTravelAngle": 93.42057779978178,
+          "tipMetresPerSecond": 4.73401808820871,
+          "travelPitchDegrees": -44.73283853503321
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1237
+      },
+      "deformation": {
+        "p99": 0.78569,
+        "p999": 1.51468,
+        "max": 3.12077,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "vesper-severing-shadow": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.25
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 30,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 109.9,
+      "peakTwist": 69.6,
+      "corrections": {},
+      "midFrameBladeDegrees": {
+        "max": 0.3,
+        "frame": 4
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03781533394703179,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 18,
+        "floorMetres": 0.2860389077381147,
+        "floorFrame": 18,
+        "intersections": [],
+        "minRigUnits": 0.02224431408648929,
+        "minMetres": 0.03781533394703179,
+        "frame": 18,
+        "bone": "LeftUpLeg"
+      },
+      "edgeLead": {
+        "12": {
+          "frontalDegrees": 58.519487611450295,
+          "edgeAngle": 7.367362719035723,
+          "edgeAcrossAngle": 0.05875877778666415,
+          "bladeToTravelAngle": 97.36711958753509,
+          "tipMetresPerSecond": 9.265918238895743,
+          "travelPitchDegrees": -25.694605668080904
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0147
+      },
+      "deformation": {
+        "p99": 0.82152,
+        "p999": 1.47877,
+        "max": 3.37454,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "vesper-shadow-step": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        }
+      ],
+      "wristMaxCorrectionDegrees": 16,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 107.8,
+      "peakTwist": 87,
+      "corrections": {
+        "mixamorig:RightHand": 2.25
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.4,
+        "frame": 4
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06722991267316494,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.4035935765506996,
+        "floorFrame": 0,
+        "intersections": [],
+        "minRigUnits": 0.025592702840465407,
+        "minMetres": 0.04350759482879119,
+        "frame": 13,
+        "bone": "RightForeArm"
+      },
+      "edgeLead": {
+        "8": {
+          "frontalDegrees": 7.189107821839596,
+          "edgeAngle": 81.61588209355175,
+          "edgeAcrossAngle": 61.441698084908495,
+          "bladeToTravelAngle": 17.75851605062447,
+          "tipMetresPerSecond": 3.3618260484896143,
+          "travelPitchDegrees": 3.8964509285041307
+        }
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0706
+      },
+      "deformation": {
+        "p99": 0.83799,
+        "p999": 1.65878,
+        "max": 2.26642,
+        "worstBone": "Spine1"
+      }
+    },
+    "vesper-cleanse": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:cast_a_spell"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 20.7,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 109.6,
+      "peakTwist": 119.5,
+      "corrections": {
+        "mixamorig:Head": 1.62,
+        "mixamorig:LeftHand": 0.28,
+        "mixamorig:RightHand": 1.35,
+        "mixamorig:RightLeg": 0.09,
+        "mixamorig:LeftFoot": 0.99,
+        "mixamorig:RightFoot": 1.06
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.6,
+        "frame": 7
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.012414672389360297,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 7.375,
+        "floorMetres": 0.7196000378489739,
+        "floorFrame": 0,
+        "intersections": [],
+        "minRigUnits": 0.0073027484643295865,
+        "minMetres": 0.012414672389360297,
+        "frame": 7.375,
+        "bone": "RightUpLeg"
+      },
+      "deformation": {
+        "p99": 0.82022,
+        "p999": 1.53684,
+        "max": 3.18068,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "vesper-cuts-charge": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 0,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 47.5,
+      "peakTwist": 51.9,
+      "corrections": {
+        "mixamorig:LeftUpLeg": 0,
+        "mixamorig:LeftLeg": 0.06
+      },
+      "midFrameBladeDegrees": {
+        "max": 0,
+        "frame": 5
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.28441154760465026,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.7451049329434297,
+        "floorFrame": 0,
+        "intersections": [],
+        "minRigUnits": 0.030288621582752952,
+        "minMetres": 0.051490656690680016,
+        "frame": 20.125,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.62948,
+        "p999": 1.45156,
+        "max": 2.15303,
+        "worstBone": "RightUpLeg"
+      }
+    },
+    "vesper-shade-charge": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 0,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 49.2,
+      "peakTwist": 51.9,
+      "corrections": {
+        "mixamorig:LeftUpLeg": 0,
+        "mixamorig:LeftLeg": 0.03
+      },
+      "midFrameBladeDegrees": {
+        "max": 0,
+        "frame": 3
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.244765517660685,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.6888295070516598,
+        "floorFrame": 10,
+        "intersections": [],
+        "minRigUnits": 0.030288622417837203,
+        "minMetres": 0.051490658110323245,
+        "frame": 2.125,
+        "bone": "RightForeArm"
+      },
+      "deformation": {
+        "p99": 0.66345,
+        "p999": 1.45892,
+        "max": 2.13113,
+        "worstBone": "RightUpLeg"
+      }
+    },
+    "vesper-kunai-fan": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:pitch_baseball",
+          "mirrored": true
+        }
+      ],
+      "wristMaxCorrectionDegrees": 12,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 119,
+      "peakTwist": 116.7,
+      "corrections": {
+        "mixamorig:RightLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 1.2,
+        "frame": 2
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03070169539180975,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 4.25,
+        "floorMetres": 0.6010990993927459,
+        "floorFrame": 12,
+        "intersections": [],
+        "minRigUnits": 0.018059820818711617,
+        "minMetres": 0.03070169539180975,
+        "frame": 4.25,
+        "bone": "RightUpLeg"
+      },
+      "deformation": {
+        "p99": 0.86296,
+        "p999": 1.61928,
+        "max": 3.27375,
+        "worstBone": "Spine1"
+      }
+    },
+    "vesper-shade-swap": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:pitch_baseball",
+          "mirrored": true
+        }
+      ],
+      "wristMaxCorrectionDegrees": 12,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 122.3,
+      "peakTwist": 123.3,
+      "corrections": {
+        "mixamorig:RightLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 1.2,
+        "frame": 2
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.02578965591203899,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 4,
+        "floorMetres": 0.5985792369800836,
+        "floorFrame": 18,
+        "intersections": [],
+        "minRigUnits": 0.015170385830611172,
+        "minMetres": 0.02578965591203899,
+        "frame": 4,
+        "bone": "RightUpLeg"
+      },
+      "deformation": {
+        "p99": 0.89367,
+        "p999": 1.65513,
+        "max": 3.31301,
+        "worstBone": "Spine1"
+      }
+    },
+    "vesper-mist-blink": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/idle-to-sprint.fbx"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 44.9,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 115.5,
+      "peakTwist": 31.8,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.43,
+        "mixamorig:RightLeg": 0.42
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.3,
+        "frame": 8
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.04207979097683817,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 11,
+        "floorMetres": 0.026731799238934716,
+        "floorFrame": 11.375,
+        "intersections": [],
+        "minRigUnits": 0.024752818221669512,
+        "minMetres": 0.04207979097683817,
+        "frame": 11,
+        "bone": "RightUpLeg"
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0488
+      },
+      "deformation": {
+        "p99": 0.70884,
+        "p999": 1.29878,
+        "max": 2.52885,
+        "worstBone": "LeftArm"
+      }
+    },
+    "aren-air-step": {
+      "origin": "tripo",
+      "source": [
+        {
+          "donor": "tripo:run_upstairs"
+        },
+        {
+          "donor": "tripo:flip"
+        },
+        {
+          "donor": "tripo:jump"
+        }
+      ],
+      "wristMaxCorrectionDegrees": 44.7,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 113.3,
+      "peakTwist": 84.4,
+      "corrections": {
+        "mixamorig:Spine": 0,
+        "mixamorig:LeftHand": 0.01,
+        "mixamorig:RightHand": 0.4,
+        "mixamorig:RightFoot": 1.27
+      },
+      "midFrameBladeDegrees": {
+        "max": 3.4,
+        "frame": 16
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.05857328932274161,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 26,
+        "floorMetres": -0.7365705063137039,
+        "floorFrame": 16.875,
+        "intersections": [],
+        "minRigUnits": 0.016395457765552332,
+        "minMetres": 0.027872278201438963,
+        "frame": 20,
+        "bone": "RightArm"
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.136
+      },
+      "deformation": {
+        "p99": 0.83803,
+        "p999": 1.6463,
+        "max": 2.91067,
+        "worstBone": "RightArm"
+      }
+    }
+  }
+}

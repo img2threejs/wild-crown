@@ -1,5 +1,5 @@
 import type { ActionId, AttackId, Vec3 } from '../game/contracts.js';
-import { ATTACKS } from '../game/combat/content.js';
+import { ATTACKS, type AttackElement } from '../game/combat/content.js';
 
 export type StoryCueKind =
   | 'cancel'
@@ -8,7 +8,10 @@ export type StoryCueKind =
   | 'restoration-water' | 'restoration-roots' | 'restoration-seeds' | 'restoration-animals'
   | 'possession' | 'phase' | 'ending' | 'ending-living-pact' | 'ending-dominion' | 'ending-severance'
   | 'sap-vein' | 'footprint' | 'pounce' | 'roar-cone' | 'low-wave'
-  | 'grovebreak' | 'march' | 'reunion' | 'heartbeat';
+  | 'grovebreak' | 'march' | 'reunion' | 'heartbeat'
+  | 'sigil' | 'projectile' | 'projectile-impact' | 'slash' | 'lightning' | 'judgement' | 'judgement-mark'
+  // Yara (Heartroot Mage): root eruptions (lane/disk footprint), the Sap Lance beam, Heartroot Bloom phases and Petal Step blinks.
+  | 'root-eruption' | 'beam' | 'bloom' | 'blink';
 export type CuePhase = 'anticipation' | 'commit' | 'active' | 'hit' | 'landing' | 'sustain' | 'resolve';
 export type CuePriority = 'essential' | 'story' | 'cosmetic';
 export type CueShape = 'ring' | 'arc' | 'sector' | 'beam' | 'trail' | 'pulse' | 'footprint' | 'wave' | 'vein' | 'burst';
@@ -23,6 +26,8 @@ export interface StoryCue {
   readonly worldTimeSeconds: number;
   readonly kind: StoryCueKind;
   readonly phase: CuePhase;
+  /** Original phase start; restored cues retain progress while durationTicks is the remaining lifetime. */
+  readonly phaseStartedAtWorldTick?: number;
   readonly actorId?: string;
   readonly targetId?: string;
   readonly scopeId?: string;
@@ -39,6 +44,12 @@ export interface StoryCue {
   readonly intensity?: number;
   readonly priority?: CuePriority;
   readonly shape?: CueShape;
+  /**
+   * Elemental identity. For monster attacks it mirrors `AttackDefinition.element` (`ATTACKS[cue.attackId].element`);
+   * Aren's own cues carry 'arcane' (blade, sigil) or 'lightning' (Thunder Cleave); Yara's carry 'heartroot'. Player cues have no ATTACKS entry.
+   * Cues without an elemental source omit this field rather than carry a placeholder.
+   */
+  readonly element?: AttackElement;
 }
 
 export interface StoryCueSource {

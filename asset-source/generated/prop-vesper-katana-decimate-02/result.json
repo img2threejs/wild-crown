@@ -1,0 +1,14 @@
+{
+  "task_id": "5674dcee-968a-4920-a8b9-428e53394b52",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-vesper-katana-decimate-02/tripo-out/prop-vesper-katana-decimate-02-5674dcee",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-vesper-katana-decimate-02/tripo-out/prop-vesper-katana-decimate-02-5674dcee/model.glb",
+  "preview": "asset-source/generated/prop-vesper-katana-decimate-02/tripo-out/prop-vesper-katana-decimate-02-5674dcee/preview.png"
+}

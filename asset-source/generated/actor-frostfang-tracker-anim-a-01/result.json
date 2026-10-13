@@ -1,0 +1,13 @@
+{
+  "task_id": "d8c5e04b-1f44-4b6a-9e57-bc5e5813973a",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-frostfang-tracker-anim-a-01/tripo-out/actor-frostfang-tracker-anim-a-0-d8c5e04b",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-frostfang-tracker-anim-a-01/tripo-out/actor-frostfang-tracker-anim-a-0-d8c5e04b/model.glb",
+  "started": "2026-10-11T09:42:30.896Z",
+  "finished": "2026-10-11T09:42:47.269Z"
+}

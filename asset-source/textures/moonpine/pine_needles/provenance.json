@@ -1,0 +1,46 @@
+{
+  "assetId": "pine_needles",
+  "name": "Forest Ground 04",
+  "sourceUrl": "https://polyhaven.com/a/forest_ground_04",
+  "apiUrl": "https://api.polyhaven.com/files/forest_ground_04",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Rob Tuytel, Rico Cilliers",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 3.15,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_diff_1k.jpg",
+      "sourceSha256": "50a4dda30875020c64385261aa7e00e2155b592302fa6794165f58fae73cbd2c",
+      "sourceBytes": 1113899,
+      "sha256": "50a4dda30875020c64385261aa7e00e2155b592302fa6794165f58fae73cbd2c",
+      "md5": "6ad9df4d731a238299806f739a26af83",
+      "bytes": 1113899
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_nor_gl_1k.jpg",
+      "sourceSha256": "9c3a0200e02ce40edffbbf9f5f623ef08ea9b1b7812b556182ec978f88887151",
+      "sourceBytes": 1326812,
+      "sha256": "9c3a0200e02ce40edffbbf9f5f623ef08ea9b1b7812b556182ec978f88887151",
+      "md5": "a010a0802c2d9a930c6f00d3b1f196d2",
+      "bytes": 1326812
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_ground_04/forest_ground_04_arm_1k.jpg",
+      "sourceSha256": "1dea651a5626530a08544804a616847bfb47b97bb93ecb8c84f13c4f1d498d83",
+      "sourceBytes": 882694,
+      "sha256": "1dea651a5626530a08544804a616847bfb47b97bb93ecb8c84f13c4f1d498d83",
+      "md5": "3fbb079d961f59b8fac7ec4f6dab9f20",
+      "bytes": 882694
+    }
+  }
+}

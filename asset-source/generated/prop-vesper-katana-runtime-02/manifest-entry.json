@@ -1,0 +1,14 @@
+{
+  "id": "prop-vesper-katana",
+  "sourceType": "native-glb",
+  "kind": "prop",
+  "tripoSourceTask": "5674dcee-968a-4920-a8b9-428e53394b52",
+  "runtimeUrl": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+  "outputHash": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753",
+  "lodIds": [],
+  "requiredActionIds": [],
+  "actionToClipMapping": {},
+  "sockets": [],
+  "provenance": "asset-source/generated/prop-vesper-katana-runtime-02/provenance.json",
+  "evidenceStatus": "blocked"
+}

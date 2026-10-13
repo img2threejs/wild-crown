@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-houses",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "AI-candidate visual review only: two distinct hut masses and connecting walkway read clearly; retained for optimization and full production review, not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-greenwake-houses-concept-03/tripo-out/prop-greenwake-houses-concept-03-a20197a3/generated_image.png",
+    "sha256": "9d055cc60ae35f057d0bba1b0522e4e95a719ea5a775a9a6eef4e6877f8dde87"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-greenwake-houses-concept-03/tripo-out/prop-greenwake-houses-concept-03-a20197a3/generated_image.png",
+      "sha256": "9d055cc60ae35f057d0bba1b0522e4e95a719ea5a775a9a6eef4e6877f8dde87"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-greenwake-houses-multiview-01/tripo-out/prop-greenwake-houses-multiview-01-5b69f986/generate_multiview_image.left_view.jpeg",
+      "sha256": "34d966a69a05a3d1ed159d688da32b34f69d97c40b9c7c9e11ceab79efd875ca"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-greenwake-houses-multiview-01/tripo-out/prop-greenwake-houses-multiview-01-5b69f986/generate_multiview_image.back_view.jpeg",
+      "sha256": "c52fdc26b598ee3c62bee3acda4860d570c1473bc0f3f3331bcd5bbf7bafbeec"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-greenwake-houses-multiview-01/tripo-out/prop-greenwake-houses-multiview-01-5b69f986/generate_multiview_image.right_view.jpeg",
+      "sha256": "f699fd8a5876ded93861318f69230af7634573aa97def53fd260287749de22f4"
+    }
+  ],
+  "taskId": "3597ec6b-aa5e-429d-aecb-afe86c8e1299",
+  "generationTasks": [
+    {
+      "taskId": "1f6fcfec-dc1f-437a-99ce-40edb116b8b8",
+      "type": "text_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Rejected: too close/cropped and reads as one massive house."
+    },
+    {
+      "taskId": "548b5e5d-e42e-4cdd-a943-e710c3a48094",
+      "type": "text_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Not used as a final model reference: huts remained too close/cropped."
+    },
+    {
+      "taskId": "a20197a3-9e55-4762-a43b-1876a831779c",
+      "type": "image_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Selected concept revision; some supports remain near the image edge."
+    },
+    {
+      "taskId": "5b69f986-3a2c-4608-8615-f1a95c9403de",
+      "type": "generate_multiview_image",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "The generated front view was blank and was omitted. Selected concept image plus left/back/right outputs form the model input set."
+    },
+    {
+      "taskId": "3597ec6b-aa5e-429d-aecb-afe86c8e1299",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 80,
+  "allCreativeAttemptsCredits": 85,
+  "output": {
+    "path": "model.glb",
+    "sha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48",
+    "bytes": 68558524,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 1030014,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-applicable-static-prop",
+    "animationQuality": "not-applicable-static-prop",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "1,030,014 measured vertices are far beyond a real-time prop budget; no optimized LOD was produced.",
+      "Full hidden-side topology, collisions, in-world scale, placement, lighting, and environment parity remain unqualified.",
+      "The native asset lab load proves GLTFLoader compatibility for this file only; it does not establish production acceptance or game runtime integration."
+    ]
+  }
+}

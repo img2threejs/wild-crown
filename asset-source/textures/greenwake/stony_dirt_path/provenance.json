@@ -1,0 +1,40 @@
+{
+  "assetId": "stony_dirt_path",
+  "name": "Stony Dirt Path",
+  "sourceUrl": "https://polyhaven.com/a/stony_dirt_path",
+  "apiUrl": "https://api.polyhaven.com/files/stony_dirt_path",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "eye-candy.xyz",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 2.17,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/stony_dirt_path/stony_dirt_path_diff_1k.jpg",
+      "sha256": "a662000ff3f7f64e23c25d2b8cd5947b9c8fd893510c5ed49c0daa2847004758",
+      "md5": "8fd2cfd0f6498288510429bd5a0bf0a1",
+      "bytes": 1234067
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/stony_dirt_path/stony_dirt_path_nor_gl_1k.jpg",
+      "sha256": "2866303f71066f42bd218410bf6d38d9a21cda34c6e3543a8ac92900b7a09c75",
+      "md5": "4a7c5fc32e1a057bd54507212554114b",
+      "bytes": 1416394
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/stony_dirt_path/stony_dirt_path_arm_1k.jpg",
+      "sha256": "e38820894100350df10c2490dbe8a1b4c31dc523266a84c6c7a1a829d2792502",
+      "md5": "aa4afa93d80b336bd8ca2c8aaaf54110",
+      "bytes": 848546
+    }
+  }
+}

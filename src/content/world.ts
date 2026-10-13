@@ -16,6 +16,9 @@ import {
   LATER_ACT_REGION_AUTHORING_STATUS,
   LATER_ACT_REGIONS,
 } from "./levels/later-acts.js";
+import { GROVE_ACTORS } from "../game/combat/GroveContent.js";
+import { MISTVEIL_ACTORS } from "../game/combat/MistveilContent.js";
+import { MOONPINE_ACTORS } from "../game/combat/MoonpineContent.js";
 
 export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
   aren: {
@@ -163,6 +166,31 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     combatRole: "hostile",
     assetId: "actor-corrupted-boar",
   },
+  // Whispering Canopy playtest monsters (hostile wildlife corrupted by Black Sap); placed only by the canopy trial region variant.
+  "canopy-howler": {
+    id: "canopy-howler",
+    species: "howler-monkey",
+    role: "wild",
+    allegiance: "wild",
+    combatRole: "hostile",
+    assetId: "actor-thornback-howler",
+  },
+  "canopy-hornbill": {
+    id: "canopy-hornbill",
+    species: "storm-hornbill",
+    role: "wild",
+    allegiance: "wild",
+    combatRole: "hostile",
+    assetId: "actor-storm-hornbill",
+  },
+  "canopy-mire-viper": {
+    id: "canopy-mire-viper",
+    species: "viper",
+    role: "wild",
+    allegiance: "wild",
+    combatRole: "hostile",
+    assetId: "actor-mire-viper",
+  },
   "council-envoy": {
     id: "council-envoy",
     species: "antelope",
@@ -171,6 +199,9 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     combatRole: "political-only",
     assetId: "actor-council-envoy",
   },
+  ...GROVE_ACTORS,
+  ...MOONPINE_ACTORS,
+  ...MISTVEIL_ACTORS,
 };
 
 const sourceRegions: readonly RegionDefinition[] = [

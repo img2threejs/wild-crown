@@ -1,0 +1,282 @@
+{
+  "note": "Measured on the delivered Yara clips (raw Tripo cast_a_spell/shoot retarget, no limits, original wrist hack) before this upgrade; same metrics as anatomy-report.json.",
+  "clips": {
+    "aren-idle": {
+      "peakSwing": 33.7,
+      "peakTwist": 15.3,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 0.35261,
+        "p999": 0.53294,
+        "max": 0.79388,
+        "worstBone": "RightArm"
+      }
+    },
+    "aren-walk": {
+      "peakSwing": 71.2,
+      "peakTwist": 45.8,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 0.61082,
+        "p999": 1.42489,
+        "max": 5.41438,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-run": {
+      "peakSwing": 114.5,
+      "peakTwist": 55.1,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 1.23778,
+        "p999": 2.09327,
+        "max": 4.72307,
+        "worstBone": "RightUpLeg"
+      }
+    },
+    "aren-jump": {
+      "peakSwing": 133.4,
+      "peakTwist": 87.7,
+      "jointsOverJointLimits": [
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.6804,
+        "p999": 1.28138,
+        "max": 3.6981,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-forward-left-dive-roll": {
+      "peakSwing": 134.1,
+      "peakTwist": 88.4,
+      "jointsOverJointLimits": [
+        "LeftFoot"
+      ],
+      "deformation": {
+        "p99": 1.35451,
+        "p999": 2.23807,
+        "max": 4.35512,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-hit": {
+      "peakSwing": 129.9,
+      "peakTwist": 88.4,
+      "jointsOverJointLimits": [
+        "LeftUpLeg",
+        "RightUpLeg"
+      ],
+      "deformation": {
+        "p99": 1.37336,
+        "p999": 2.14451,
+        "max": 3.67131,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-cheer": {
+      "peakSwing": 92.4,
+      "peakTwist": 116,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 0.85027,
+        "p999": 1.47917,
+        "max": 3.71407,
+        "worstBone": "Spine1"
+      }
+    },
+    "aren-defeat": {
+      "peakSwing": 110.1,
+      "peakTwist": 56.7,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 0.5874,
+        "p999": 0.98164,
+        "max": 5.35968,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-thornshot-1": {
+      "peakSwing": 112.1,
+      "peakTwist": 122.2,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 0.83578,
+        "p999": 1.68898,
+        "max": 4.20098,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-thornshot-2": {
+      "peakSwing": 84.2,
+      "peakTwist": 100.6,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftForeArm",
+        "LeftHand",
+        "RightHand",
+        "LeftLeg",
+        "RightLeg",
+        "LeftFoot"
+      ],
+      "deformation": {
+        "p99": 0.64324,
+        "p999": 1.1194,
+        "max": 2.46864,
+        "worstBone": "Spine1"
+      }
+    },
+    "yara-thornshot-3": {
+      "peakSwing": 81.7,
+      "peakTwist": 98.1,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "LeftFoot"
+      ],
+      "deformation": {
+        "p99": 1.08759,
+        "p999": 1.85999,
+        "max": 3.7854,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-root-spike": {
+      "peakSwing": 92.7,
+      "peakTwist": 98.1,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "LeftLeg",
+        "LeftFoot"
+      ],
+      "deformation": {
+        "p99": 1.04687,
+        "p999": 1.75898,
+        "max": 3.7854,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-root-eruption": {
+      "peakSwing": 114.8,
+      "peakTwist": 121.8,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "RightHand",
+        "LeftFoot",
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.98591,
+        "p999": 1.75328,
+        "max": 4.33376,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-root-charge": {
+      "peakSwing": 115.3,
+      "peakTwist": 123.4,
+      "jointsOverJointLimits": [],
+      "deformation": {
+        "p99": 1.14332,
+        "p999": 2.00122,
+        "max": 4.44499,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-seed-charge": {
+      "peakSwing": 105.3,
+      "peakTwist": 98.5,
+      "jointsOverJointLimits": [
+        "RightHand",
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.7708,
+        "p999": 1.22994,
+        "max": 2.01979,
+        "worstBone": "Spine1"
+      }
+    },
+    "yara-sap-lance": {
+      "peakSwing": 154,
+      "peakTwist": 136.3,
+      "jointsOverJointLimits": [
+        "LeftHand",
+        "RightLeg"
+      ],
+      "deformation": {
+        "p99": 1.3143,
+        "p999": 2.08347,
+        "max": 3.92941,
+        "worstBone": "RightUpLeg"
+      }
+    },
+    "yara-seed-storm": {
+      "peakSwing": 109.1,
+      "peakTwist": 122.5,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "RightHand",
+        "LeftFoot",
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.95136,
+        "p999": 1.6845,
+        "max": 4.20098,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-binding-vines": {
+      "peakSwing": 114.4,
+      "peakTwist": 122.7,
+      "jointsOverJointLimits": [
+        "RightHand"
+      ],
+      "deformation": {
+        "p99": 0.79946,
+        "p999": 1.54088,
+        "max": 4.20098,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-cleanse": {
+      "peakSwing": 111.3,
+      "peakTwist": 123.3,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "RightHand",
+        "LeftFoot",
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.98765,
+        "p999": 1.77189,
+        "max": 4.27663,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "yara-heartroot-bloom": {
+      "peakSwing": 111.5,
+      "peakTwist": 122.5,
+      "jointsOverJointLimits": [
+        "Head",
+        "LeftHand",
+        "RightHand",
+        "LeftLeg",
+        "LeftFoot",
+        "RightFoot"
+      ],
+      "deformation": {
+        "p99": 0.97945,
+        "p999": 1.73989,
+        "max": 3.90447,
+        "worstBone": "LeftUpLeg"
+      }
+    }
+  }
+}

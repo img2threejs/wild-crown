@@ -1,0 +1,16 @@
+{
+  "task_id": "25375459-8147-46e2-bdd3-6a2022b1f29d",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-hunter-extraction-rig-decimate-01/tripo-out/prop-hunter-extraction-rig-decim-25375459",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-hunter-extraction-rig-decimate-01/tripo-out/prop-hunter-extraction-rig-decim-25375459/model.glb",
+  "preview": "asset-source/generated/prop-hunter-extraction-rig-decimate-01/tripo-out/prop-hunter-extraction-rig-decim-25375459/preview.png",
+  "started": "2026-10-11T08:52:28.372Z",
+  "finished": "2026-10-11T08:59:21.051Z"
+}

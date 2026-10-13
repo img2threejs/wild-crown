@@ -1,0 +1,13 @@
+{
+  "task_id": "d20ceb8e-57cc-4a88-9462-2fcf857683e3",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-mire-viper-anim-a-01/tripo-out/actor-mire-viper-anim-a-01-d20ceb8e",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-mire-viper-anim-a-01/tripo-out/actor-mire-viper-anim-a-01-d20ceb8e/model.glb",
+  "started": "2026-10-11T03:55:49.819Z",
+  "finished": "2026-10-11T03:56:01.160Z"
+}

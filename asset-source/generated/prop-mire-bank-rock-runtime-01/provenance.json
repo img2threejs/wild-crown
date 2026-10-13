@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-mire-bank-rock",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "91897a7c-823e-4880-9f2e-4d4560c9bc6f",
+    "decimate": "4a450b7f-daa0-4a07-9a09-cc1d5e2d5060"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.3,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-mire-bank-rock-decimate-01/tripo-out/prop-mire-bank-rock-decimate-01-4a450b7f/model.glb",
+      "sha256": "50780f90a534f33bdb6391a9c91f914faec31427faa39deec363ec01a5aeca19"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+    "sha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b",
+    "bytes": 1454092,
+    "vertices": 3545,
+    "triangles": 2483,
+    "boundsMin": [
+      -0.32285,
+      -0.23441,
+      -0.4895
+    ],
+    "boundsMax": [
+      0.31911,
+      0.23508,
+      0.48972
+    ],
+    "worldBoundsMin": [
+      -0.32285,
+      -0.23441,
+      -0.4895
+    ],
+    "worldBoundsMax": [
+      0.31911,
+      0.23508,
+      0.48972
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 2833757,
+      "toBytes": 369545
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6263864,
+      "toBytes": 485693
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18887794,
+      "toBytes": 453552
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 8336,
+      "trianglesAfter": 2500,
+      "relativeError": 0.004809408448636532
+    }
+  ],
+  "floatingCull": [],
+  "slivers": [
+    {
+      "trianglesBefore": 8350,
+      "trianglesAfter": 8336,
+      "removed": 14
+    },
+    {
+      "trianglesBefore": 2500,
+      "trianglesAfter": 2483,
+      "removed": 17
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 11258,
+      "verticesAfter": 3545
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

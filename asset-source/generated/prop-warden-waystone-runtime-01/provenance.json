@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-warden-waystone",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "2f84ac06-988a-43a6-83ac-50c333906b54",
+    "decimate": "b665e071-0cd0-4b56-a4e9-4d910218fdc7"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-warden-waystone-decimate-01/tripo-out/prop-warden-waystone-decimate-01-b665e071/model.glb",
+      "sha256": "1ccd8f0ffa35b0a2f0dcc2376b903427060242fb44f794e9c1a916d87a932889"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+    "sha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba",
+    "bytes": 5682636,
+    "vertices": 20281,
+    "triangles": 16546,
+    "boundsMin": [
+      -0.27836,
+      -0.48874,
+      -0.27843
+    ],
+    "boundsMax": [
+      0.27837,
+      0.48887,
+      0.27638
+    ],
+    "worldBoundsMin": [
+      -0.27836,
+      -0.48874,
+      -0.27843
+    ],
+    "worldBoundsMax": [
+      0.27837,
+      0.48887,
+      0.27638
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3731469,
+      "toBytes": 1586648
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5379715,
+      "toBytes": 1754980
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16498724,
+      "toBytes": 1590720
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,13 +1,19 @@
 import { DEFAULT_INPUT_BINDINGS, type InputBindingMaps } from '../game/contracts.js';
-export type GameAction = 'moveForward' | 'moveBack' | 'moveLeft' | 'moveRight' | 'dodge' | 'light' | 'heavy' | 'interact' | 'ability' | 'map' | 'journal' | 'companions' | 'pause' | 'commandWheel';
+export type GameAction = 'moveForward' | 'moveBack' | 'moveLeft' | 'moveRight' | 'dodge' | 'jump' | 'light' | 'heavy' | 'ranged' | 'ultimate' | 'interact' | 'ability' | 'map' | 'journal' | 'companions' | 'pause' | 'commandWheel';
 export interface ActionFrame {
   moveX: number;
   moveZ: number;
   dodgePressed: boolean;
+  jumpPressed: boolean;
+  sprintHeld: boolean;
   lightPressed: boolean;
   heavyPressed: boolean;
   heavyHeld: boolean;
   heavyReleased: boolean;
+  rangedPressed: boolean;
+  rangedHeld: boolean;
+  rangedReleased: boolean;
+  ultimatePressed: boolean;
   interactPressed: boolean;
   abilityPressed: boolean;
   commandWheelPressed: boolean;
@@ -18,9 +24,12 @@ export interface ActionFrame {
   pausePressed: boolean;
   commandIndex: number | null;
 }
-const GAME_ACTIONS: readonly GameAction[] = ['moveForward', 'moveBack', 'moveLeft', 'moveRight', 'dodge', 'light', 'heavy', 'interact', 'ability', 'map', 'journal', 'companions', 'pause', 'commandWheel'];
+const GAME_ACTIONS: readonly GameAction[] = ['moveForward', 'moveBack', 'moveLeft', 'moveRight', 'dodge', 'jump', 'light', 'heavy', 'ranged', 'ultimate', 'interact', 'ability', 'map', 'journal', 'companions', 'pause', 'commandWheel'];
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const norm = (key: string) => key.toLowerCase() === 'space' ? ' ' : key.toLowerCase();
+const MOVEMENT_ARROWS: Partial<Record<GameAction, string>> = {
+    moveForward: 'arrowup', moveBack: 'arrowdown', moveLeft: 'arrowleft', moveRight: 'arrowright',
+};
 export class RuntimeInput {
     private keys = new Set<string>();
     private previous = new Set<GameAction>();
@@ -48,7 +57,7 @@ export class RuntimeInput {
             if (binding && norm(binding) === key)
                 this.pressedEdges.add(action);
         }
-        if (Object.values(this.bindingMaps.keyboard).some(binding => norm(binding) === key))
+        if (Object.values(MOVEMENT_ARROWS).includes(key) || Object.values(this.bindingMaps.keyboard).some(binding => typeof binding === 'string' && norm(binding) === key))
             event.preventDefault();
     };
     private readonly up = (event: KeyboardEvent) => {
@@ -102,7 +111,7 @@ export class RuntimeInput {
         const pad = [...(navigator.getGamepads?.() ?? [])].find(item => item?.connected) ?? null;
         for (const action of GAME_ACTIONS) {
             const keyboardBinding = this.bindingMaps.keyboard[action];
-            if (keyboardBinding && this.keys.has(norm(keyboardBinding)))
+            if ((keyboardBinding && this.keys.has(norm(keyboardBinding))) || this.keys.has(MOVEMENT_ARROWS[action] ?? ''))
                 this.current.add(action);
             const gamepadBinding = this.bindingMaps.gamepad[action];
             const match = gamepadBinding ? /^Gamepad Button (\d+)$/i.exec(gamepadBinding) : null;
@@ -132,6 +141,7 @@ export class RuntimeInput {
             this.pressedEdges.delete(action);
             return edge;
         };
+        const jumpPressed = pressed('jump');
         let commandIndex: number | null = null;
         const wheelDown = this.current.has('commandWheel');
         if (wheelDown && !this.wheel) {
@@ -161,6 +171,8 @@ export class RuntimeInput {
         }
         const heavyReleased = this.releasedEdges.has('heavy') || this.previous.has('heavy') && !this.current.has('heavy');
         this.releasedEdges.delete('heavy');
+        const rangedReleased = this.releasedEdges.has('ranged') || this.previous.has('ranged') && !this.current.has('ranged');
+        this.releasedEdges.delete('ranged');
         this.pressedEdges.delete('moveForward');
         this.pressedEdges.delete('moveBack');
         this.pressedEdges.delete('moveLeft');
@@ -169,10 +181,16 @@ export class RuntimeInput {
         return {
             moveX, moveZ,
             dodgePressed: pressed('dodge'),
+            jumpPressed,
             lightPressed: pressed('light'),
             heavyPressed: pressed('heavy'),
             heavyHeld: this.current.has('heavy'),
+            sprintHeld: this.keys.has('shift'),
             heavyReleased,
+            rangedPressed: pressed('ranged'),
+            rangedHeld: this.current.has('ranged'),
+            rangedReleased,
+            ultimatePressed: pressed('ultimate'),
             interactPressed: pressed('interact'),
             abilityPressed: pressed('ability'),
             commandWheelPressed: pressed('commandWheel'),
@@ -187,7 +205,7 @@ export class RuntimeInput {
     private empty(): ActionFrame {
         this.pressedEdges.clear();
         this.releasedEdges.clear();
-        return { moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false, abilityPressed: false, commandWheelPressed: false, commandWheelHeld: false, mapPressed: false, journalPressed: false, companionsPressed: false, pausePressed: false, commandIndex: null };
+        return { moveX: 0, moveZ: 0, dodgePressed: false, jumpPressed: false, sprintHeld: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, rangedPressed: false, rangedHeld: false, rangedReleased: false, ultimatePressed: false, interactPressed: false, abilityPressed: false, commandWheelPressed: false, commandWheelHeld: false, mapPressed: false, journalPressed: false, companionsPressed: false, pausePressed: false, commandIndex: null };
     }
     dispose(): void {
         if (this.disposed)

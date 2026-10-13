@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-aren",
+  "sourceModel": {
+    "filename": "aren.glb",
+    "source": "user-supplied Tripo Studio export",
+    "generator": "Tripo 2.0",
+    "sha256": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
+    "bytes": 16790640
+  },
+  "output": {
+    "path": "aren.glb",
+    "sha256": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
+    "bytes": 16790640,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 67,
+    "meshes": 1,
+    "joints": 65,
+    "skins": 1,
+    "animations": [
+      { "name": "One long jump.001", "durationSeconds": 3, "channels": 195 },
+      { "name": "warm_up.001", "durationSeconds": 18.3333339691, "channels": 195 },
+      { "name": "1 High and long jump with a cross-kick..001", "durationSeconds": 3, "channels": 195 },
+      { "name": "dive.001", "durationSeconds": 2.75, "channels": 195 },
+      { "name": "defeat_03.001", "durationSeconds": 5.5833334923, "channels": 195 },
+      { "name": "run.001", "durationSeconds": 1.2916666269, "channels": 195 },
+      { "name": "walk.001", "durationSeconds": 2.375, "channels": 195 }
+    ]
+  },
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "rigQuality": "not-reviewed-in-gameplay",
+    "animationQuality": "not-reviewed-in-gameplay",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "limitations": [
+      "This exact user-supplied GLB is enabled only through the local Greenwake development playtest manifest; canonical and public production manifests remain unchanged.",
+      "Embedded skin and native clip structure were inspected, but deformation quality, contact fidelity, combat-action coverage, release visual review, and production gates remain incomplete.",
+      "Only matching idle, walk/strafe, run, jump, and forward-dive/perfect-dodge actions are bound; unrelated authored actions remain unbound rather than mapped to misleading clips."
+    ]
+  }
+}

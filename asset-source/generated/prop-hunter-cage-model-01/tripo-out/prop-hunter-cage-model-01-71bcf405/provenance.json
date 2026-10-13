@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-hunter-cage",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "AI-candidate visual review only: the empty cage interior and open hinged door read clearly in the actual loaded GLB. Surface treatment is more realistic than the target game style and needs art review; not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-hunter-cage-concept-01/tripo-out/prop-hunter-cage-concept-01-a09f6ce8/generated_image.png",
+    "sha256": "7fdedd745d6763d19c6b66a6f278528e443ef6a93cd362c6b2597f3a5f4e844d"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-hunter-cage-multiview-01/tripo-out/prop-hunter-cage-multiview-01-1c31df02/generate_multiview_image.front_view.jpeg",
+      "sha256": "c7a09f319c4f95e5d28af10c07ea133ef3b560571413c60085a0cfb37f70fcb5"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-hunter-cage-multiview-01/tripo-out/prop-hunter-cage-multiview-01-1c31df02/generate_multiview_image.left_view.jpeg",
+      "sha256": "25aa03f48e3da072e5388835d6fb701623a8ea70ec2f3e3c185103dcdafa6412"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-hunter-cage-multiview-01/tripo-out/prop-hunter-cage-multiview-01-1c31df02/generate_multiview_image.back_view.jpeg",
+      "sha256": "76d5b225888e1f78d9c39e8a1d91dd80d1aeb074c6cd56f1f461b016ac753980"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-hunter-cage-multiview-01/tripo-out/prop-hunter-cage-multiview-01-1c31df02/generate_multiview_image.right_view.jpeg",
+      "sha256": "3f15c419bcd9e6f1a792980980d20ff09a82971478585ba2203ef6ad31bf8941"
+    }
+  ],
+  "taskId": "71bcf405-6681-4f30-b518-b5dfff21f14d",
+  "generationTasks": [
+    {
+      "taskId": "a09f6ce8-ef29-4e55-9612-c2f1716bc1e6",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v4",
+      "creditsConsumed": 5
+    },
+    {
+      "taskId": "1c31df02-63f6-450b-b928-3a762ec62224",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four views were inspected and used."
+    },
+    {
+      "taskId": "71bcf405-6681-4f30-b518-b5dfff21f14d",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 75,
+  "output": {
+    "path": "model.glb",
+    "sha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963",
+    "bytes": 65300800,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 1029424,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-applicable-static-prop",
+    "animationQuality": "not-applicable-static-prop",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The original model has 1,029,424 measured vertices and 65,300,800 bytes; it is not qualified for the target real-time budget.",
+      "The material treatment is visibly more realistic than the game bible's stylized moderate-detail direction.",
+      "No collision proxy, authorial scale, placement, or environment/runtime parity evidence is present."
+    ]
+  }
+}

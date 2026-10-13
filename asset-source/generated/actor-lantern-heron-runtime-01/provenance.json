@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-lantern-heron",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "67206bb5-3e69-454c-92de-e465dd69515e",
+    "decimate": "a6a59f00-8b56-458b-88d1-bcd6a375afd4",
+    "rig": "6ef4431e-4f6a-4649-9475-ab3df19b8227"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 avian (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-lantern-heron-rig-01/tripo-out/actor-lantern-heron-rig-01-6ef4431e/model.glb",
+      "sha256": "f943c3dd65c27733604137226d3a31201c139c0066594143e2c10c23f0191632"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron.glb",
+    "sha256": "7368f33e902c7bf85a8d6d43c6c8a9c0e3cb8dcba1c9efba799802798b6323fc",
+    "bytes": 6997292,
+    "vertices": 32043,
+    "triangles": 26771,
+    "boundsMin": [
+      -0.20676,
+      0,
+      -0.49142
+    ],
+    "boundsMax": [
+      0.20676,
+      0.59817,
+      0.49142
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3741403,
+      "toBytes": 1498983
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5131860,
+      "toBytes": 1733368
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19135774,
+      "toBytes": 1918982
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

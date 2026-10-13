@@ -13,23 +13,47 @@ import type {
 import { settingsMarkup, settingPatch, toggleSetting } from './settings';
 import { saveMarkup } from './save';
 import { loadingErrorActions, recoveryImportAllowed } from './loading-error-actions';
+import { HEROES, heroById, isHeroId, type HeroDefinition, type HeroId } from '../game/heroes';
+import { PLAYER_SKILLS, SIGIL } from '../game/combat/PlayerSkills';
 import './game-ui.css';
 
 const mapArt = '/ui/world-map-game.webp';
 const PORTRAIT_ASSETS: Partial<Record<CompanionId, string>> = { vara: '/ui/portrait-vara.webp', koro: '/ui/portrait-koro.webp', asha: '/ui/portrait-asha.webp', sable: '/ui/portrait-sable.webp', nyra: '/ui/portrait-nyra.webp', solkar: '/ui/portrait-solkar.webp' };
 const journalArt = '/ui/map-journal-illustration.webp';
 
+/** Live hero preview mounted by the application on the hero-select stage host. */
+export interface HeroPreviewController {
+  show(heroId: HeroId): void;
+  showcase(actionIds: readonly string[]): void;
+  dispose(): void;
+}
+
 export interface GameUIOptions {
   onAction: (action: UIAction) => void;
   initialViewModel?: GameViewModel;
   /** Renderer integrations attach the real, animated character renderer here. */
   onPreviewHost?: (host: HTMLElement, companionId: CompanionId | null) => void | (() => void);
+  /** Renderer integration for the hero-select stage; null when no 3D preview can be offered. */
+  onHeroPreviewHost?: (host: HTMLElement) => HeroPreviewController | null;
 }
+
+type HeroTab = 'role' | 'stats' | 'skills' | 'story';
+const HERO_TABS: readonly { readonly id: HeroTab; readonly label: string }[] = [
+  { id: 'role', label: 'Role & Power' }, { id: 'stats', label: 'Stats' }, { id: 'skills', label: 'Skills' }, { id: 'story', label: 'Story' },
+];
+const isHeroTab = (value: unknown): value is HeroTab => HERO_TABS.some(tab => tab.id === value);
+const heroCrest = (hero: HeroDefinition, className: string) =>
+  `<span class="${className}" style="background-image:url('${esc(hero.portraitUrl)}');background-position:${esc(hero.portraitCrop)}" aria-hidden="true"></span>`;
 
 export interface GameUIInstance {
   render(viewModel: GameViewModel): void;
   updateGamepad(gamepad: Gamepad | null): void;
   destroy(): void;
+  /**
+   * Called every frame by the application: true while Aren stands within 1.5 m of a closed trial gate.
+   * The notice names the monster that must be defeated to unseal the current gate.
+   */
+  setGateContact(active: boolean): void;
   readonly element: HTMLElement;
 }
 
@@ -68,13 +92,23 @@ function controlBindingLabel(viewModel: GameViewModel, actionId: string): string
   const device = viewModel.settings.controlGlyphs === 'gamepad' ? 'gamepad' : 'keyboard';
   const binding = viewModel.bindings[device][actionId];
   if (!binding) return '';
-  return device === 'gamepad' ? binding.replace(/^Gamepad /, '') : binding === 'space' ? 'SPACE' : binding.toUpperCase();
+  if (device === 'gamepad') return binding.replace(/^Gamepad /, '');
+  const normalized = binding.toLowerCase();
+  if (normalized === 'space' || normalized === ' ') return 'SPACE';
+  if (normalized === 'escape' || normalized === 'esc') return 'ESC';
+  if (normalized === 'tab') return 'TAB';
+  return binding.toUpperCase();
 }
 function controlHints(viewModel: GameViewModel): string {
-  const move = ['moveForward', 'moveLeft', 'moveBack', 'moveRight'].map(id => controlBindingLabel(viewModel, id)).filter(Boolean).join(' ');
+  const keyboardControls = viewModel.settings.controlGlyphs !== 'gamepad';
+  const move = keyboardControls ? ['moveForward', 'moveLeft', 'moveBack', 'moveRight'].map(id => controlBindingLabel(viewModel, id)).filter(Boolean).join(' ') + ' / ARROWS' : 'LEFT STICK';
   const dodge = controlBindingLabel(viewModel, 'dodge');
+  const jump = controlBindingLabel(viewModel, 'jump');
+  const run = keyboardControls ? 'SHIFT RUN' : '';
+  const dive = dodge ? `${dodge} ${heroById(viewModel.hud.heroId ?? 'aren').dodgeLabel}` : '';
+  const jumpHint = jump ? `${jump} ×2 DOUBLE JUMP` : '';
   const pause = controlBindingLabel(viewModel, 'pause');
-  return [move && move + ' MOVE', dodge && dodge + ' DODGE', pause && 'PAUSE ' + pause].filter((hint): hint is string => Boolean(hint)).join(' · ');
+  return [move && move + ' MOVE', run, dive, jumpHint, pause && 'PAUSE ' + pause].filter((hint): hint is string => Boolean(hint)).join(' · ');
 }
 function interactionPrompt(viewModel: GameViewModel): string {
   const interaction = viewModel.hud.interaction;
@@ -96,6 +130,19 @@ const meter = (label: string, value: number, max: number, style: string, descrip
   const percent = max > 0 ? Math.round(clamp(value / max) * 100) : 0;
   return `<div class="wc-meter wc-meter--${style}" aria-label="${esc(label)} ${percent}%" ${description ? `title="${esc(description)}"` : ''}><span>${esc(label)}</span><span class="wc-meter__track" aria-hidden="true"><i class="wc-meter__fill" style="width:${percent}%"></i></span></div>`;
 };
+const monsterHealth = (name: string, value: number | undefined, max: number | undefined, boss = false): string => {
+  if (typeof value !== 'number' || typeof max !== 'number' || !Number.isFinite(value) || !Number.isFinite(max) || max <= 0) return '';
+  const health = Math.max(0, Math.min(max, value));
+  return `<div class="wc-enemy-vitality" data-boss="${boss}"><progress value="${health}" max="${max}" aria-label="${esc(name)} vitality"></progress><span>${Math.ceil(health)} / ${Math.ceil(max)}</span></div>`;
+};
+const BOSS_CHIP = '<span class="wc-boss-chip">Boss</span>';
+/** Mana or Instinct price printed on a skill card, from the shared skill constants every hero uses (tap price, then the hold price after the slash). */
+function skillCardCost(skill: GameViewModel['hud']['skills'][number]): string {
+  if (skill.id === 'judgement') return 'INSTINCT';
+  if (skill.id === 'heavy') return `${PLAYER_SKILLS.heavy.manaCost} / ${PLAYER_SKILLS.charged_heavy.manaCost} MP`;
+  if (skill.id === 'sigil_bolt' || skill.id === 'sigil_barrage') return `${SIGIL.boltMana} / ${SIGIL.barrageMana} MP`;
+  return skill.manaCost ? `${skill.manaCost} MP` : 'FREE';
+}
 const activeObjectives = (quest: QuestDefinition | null, snapshot: CampaignSnapshot | null): ObjectiveDefinition[] => {
   if (!quest || !snapshot) return [];
   const active = new Set(snapshot.activeObjectiveIds);
@@ -135,16 +182,24 @@ function reconcileFocusedControl(current: HTMLElement, next: HTMLElement): void 
 function gameUiSignature(viewModel: GameViewModel): string {
   const { hud, campaign, map } = viewModel;
   return JSON.stringify([
-    viewModel.screen, viewModel.canOpenWorldPanels, viewModel.loading, viewModel.error,
-    [hud.vitality, hud.maxVitality, hud.dodgeCharges, hud.maxDodgeCharges, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction],
+    viewModel.screen, viewModel.canOpenWorldPanels, viewModel.loading, viewModel.error, viewModel.playtestStage, viewModel.playtestSelection, hud.heroId,
+    [hud.vitality, hud.maxVitality, Math.floor(hud.mana), hud.maxMana, hud.skills, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction, hud.destination,
+      hud.encounterStatus && [hud.encounterStatus.title, hud.encounterStatus.monsters, hud.encounterStatus.trial]],
     viewModel.trackedObjectiveId,
     campaign && [campaign.runId, campaign.revision, campaign.chapter, campaign.chapterId, campaign.regionId, campaign.activeQuestIds, campaign.completedQuestIds, campaign.activeObjectiveIds, campaign.completedObjectiveIds, campaign.fragments, campaign.ending],
     viewModel.journal.region, viewModel.journal.quests.map(quest => [quest.id, quest.title, quest.description, quest.objectives.map(objective => [objective.id, objective.title, objective.description, objective.optional])]),
     [map.currentRegion, map.regions.map(region => [region.id, region.name, region.unlocked, region.restoration, region.entrances])],
     viewModel.party, viewModel.abilities, viewModel.relationships, viewModel.settings, viewModel.bindings,
-    viewModel.dialogue, viewModel.choice, viewModel.ending,
+    viewModel.dialogue, viewModel.dialogueLineIndex, viewModel.choice, viewModel.ending,
     [viewModel.saves.continueSlotId, viewModel.saves.slots.map(slot => [slot.slotId, slot.label, slot.exists, slot.updatedAt, slot.chapter, slot.regionId])],
   ]);
+}
+/** What still keeps the active trial gate sealed, from the existing encounter status; null outside a running trial. */
+function gateContactMessage(hud: GameViewModel['hud']): string | null {
+  const trial = hud.encounterStatus?.trial;
+  if (!trial || trial.complete) return null;
+  const monster = hud.encounterStatus!.monsters.find(candidate => candidate.active)?.name ?? 'the monster';
+  return `Sealed by ${monster} — defeat the monster to open the gate`;
 }
 /** DOM-only game UI. Renders shared GameViewModel data and emits typed runtime actions. */
 export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIInstance {
@@ -152,6 +207,21 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   container.className = 'wc-ui';
   container.setAttribute('aria-label', 'Wild Crown game interface');
   root.append(container);
+  // Gate feedback lives in its own overlay so HUD re-renders never tear it down mid-pulse.
+  const feedback = document.createElement('div');
+  feedback.className = 'wc-ui wc-ui--feedback';
+  const gateNotice = document.createElement('p');
+  gateNotice.className = 'wc-panel wc-gate-contact';
+  gateNotice.setAttribute('role', 'status');
+  gateNotice.hidden = true;
+  feedback.append(gateNotice);
+  root.append(feedback);
+  let gateContact = false;
+  function syncGateNotice(): void {
+    const message = gateContact && vm?.screen === 'game' ? gateContactMessage(vm.hud) : null;
+    gateNotice.hidden = message === null;
+    if (message !== null && gateNotice.textContent !== message) gateNotice.textContent = message;
+  }
   let vm: GameViewModel | null = null;
   let lastRenderSignature = '';
   let destroyed = false;
@@ -160,6 +230,11 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   let lastGamepadButtons = new Set<number>();
   let selectedCompanion: CompanionId | null = null;
   let previewCleanup: (() => void) | null = null;
+  // Hero-select stage: UI-local browsing state; only the final choice is dispatched.
+  let heroFocus: HeroId = HEROES[0]!.id;
+  let heroTab: HeroTab = 'role';
+  let heroSkillIndex: number | null = null;
+  let heroPreview: HeroPreviewController | null = null;
   let pointerControl: HTMLElement | null = null;
   let releasedPointerControl: HTMLElement | null = null;
   let deferredViewModel: GameViewModel | null = null;
@@ -215,22 +290,33 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const objective = currentObjective();
     const quest = firstActiveQuest(vm.journal.quests, campaign);
     const boss = hud.boss;
+    const encounter = hud.encounterStatus;
+    const trial = encounter?.trial;
+    const activeMonster = encounter?.monsters.find(monster => monster.active);
     const controlsHint = controlHints(vm);
     const companions = [party?.combat, party?.utility, party?.scout].filter(Boolean) as CompanionId[];
     const portraitClass = (id: CompanionId) => COMPANIONS.find(x => x.id === id)?.portrait ?? id;
-    return containerScreen('wc-screen--game', `<div class="wc-hud" aria-label="Exploration and combat HUD">
-      <section class="wc-panel wc-vitals" aria-label="Aren's resources">
-        <div class="wc-vitals__name">AREN</div>
+    const hero = heroById(hud.heroId ?? 'aren');
+    return containerScreen('wc-screen--game', `<div class="wc-hud" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}" aria-label="Exploration and combat HUD">
+      <section class="wc-panel wc-vitals" aria-label="${esc(hero.name)}'s resources">
+        <div class="wc-vitals__identity">${heroCrest(hero, 'wc-hero-crest')}<div><div class="wc-vitals__name">${esc(hero.name.toUpperCase())}</div><div class="wc-vitals__title">${esc(hero.title)}</div></div></div>
         ${meter(playerCopy.hud.vitality, hud.vitality, hud.maxVitality, 'vitality', playerCopy.hud.vitality_description)}
-        <div class="wc-meter" title="${esc(playerCopy.hud.dodge_description)}"><span>${esc(playerCopy.hud.dodge)}</span><span class="wc-dodges" aria-label="${hud.dodgeCharges} of ${hud.maxDodgeCharges} ${esc(playerCopy.hud.dodge)} charges">${Array.from({ length: Math.max(0, hud.maxDodgeCharges) }, (_, i) => `<i class="wc-dodge ${i < hud.dodgeCharges ? '' : 'wc-dodge--empty'}" aria-hidden="true"></i>`).join('')}<span>${hud.dodgeCharges} / ${hud.maxDodgeCharges}</span></span></div>
+        ${meter(playerCopy.hud.mana, hud.mana, hud.maxMana, 'mana', playerCopy.hud.mana_description)}
+        <p class="wc-mana-value">${Math.floor(hud.mana)} / ${hud.maxMana} <span>${esc(playerCopy.hud.mana_empty)}</span></p>
         ${meter(playerCopy.hud.instinct, hud.instinct, 100, 'instinct', playerCopy.hud.instinct_description)}
       </section>
-      ${boss ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
+      ${boss && !trial ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
+      ${encounter ? `<aside class="wc-panel wc-encounter" aria-label="Combat stage"><h2>${esc(encounter.title)}</h2>
+        ${trial ? `<div class="wc-trial-progress" data-trial-status="${trial.status}"><strong>${trial.complete ? 'All gates open' : `Stage ${trial.stage} / ${trial.totalStages} · Defeat the monster`}</strong>
+          ${trial.complete ? `<p>Reach the ${esc(vm.playtestStage?.exitName ?? 'exit')} waystone.</p>` : ''}</div>` : ''}
+        ${activeMonster ? `<div class="wc-encounter__monster"><strong>${esc(activeMonster.name)}</strong>${activeMonster.boss || trial?.boss ? BOSS_CHIP : ''}${monsterHealth(activeMonster.name, activeMonster.vitality, activeMonster.maxVitality, Boolean(activeMonster.boss || trial?.boss))}<p title="${esc(activeMonster.skills.join(' · '))}">${esc(activeMonster.skills.join(' · '))}</p></div>` : ''}</aside>` : ''}
       ${vm.hud.target?.weakPointExposed ? `<aside class="wc-panel wc-target-exposure" role="status"><strong>${esc(vm.hud.target.id.toString().replaceAll('-', ' ').toUpperCase())}</strong><span>WEAK POINT EXPOSED</span></aside>` : ''}
-      ${objective && !boss ? `<aside class="wc-panel wc-objective"><strong>${esc(quest?.title ?? 'Current Objective')}</strong><p>${esc(objective.title)}</p></aside>` : ''}
-      ${boss ? `<div class="wc-brand-mark">${esc(playerCopy.title.name)}</div>` : ''}
+      ${objective && !boss && !encounter ? `<aside class="wc-panel wc-objective"><strong>${esc(quest?.title ?? 'Current Objective')}</strong><p>${esc(objective.title)}</p></aside>` : ''}
+      ${boss && !encounter ? `<div class="wc-brand-mark">${esc(playerCopy.title.name)}</div>` : ''}
       ${interactionPrompt(vm)}
+      ${hud.destination ? `<aside class="wc-panel wc-destination" aria-label="Stage destination"><svg viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${hud.destination.bearingDegrees}deg)"><path d="M12 2 21 21 12 16 3 21Z" fill="currentColor"/></svg><div><strong>${esc(hud.destination.label)}</strong><p>Follow the trail · ${Math.ceil(hud.destination.distanceMeters)} m</p></div></aside>` : ''}
       <div class="wc-party-hud" aria-label="Traveling companions">${companions.map(id => `<div class="wc-party-hud__item"><span class="wc-portrait wc-portrait--${portraitClass(id)}" ${PORTRAIT_ASSETS[id] ? `style="background-image:url('${PORTRAIT_ASSETS[id]}')"` : ''} role="img" aria-label="${esc(COMPANIONS.find(x => x.id === id)?.name ?? id)} portrait"></span><span>${esc(COMPANIONS.find(x => x.id === id)?.name ?? id)}</span></div>`).join('')}</div>
+      <section class="wc-skill-bar" aria-label="Player skills">${hud.skills.map(skill => `<div class="wc-skill" data-skill="${esc(skill.id)}" data-ready="${skill.available}" aria-disabled="${!skill.available}" title="${esc(skill.label)} — ${esc(skill.reason)} — ${skill.id === 'judgement' ? 'full Instinct' : skill.manaCost + ' mana'}"><div><kbd>${esc(controlBindingLabel(vm!, skill.binding))}</kbd><span>${skillCardCost(skill)}</span></div><strong>${esc(skill.label)}</strong><small>${esc(skill.reason)}</small></div>`).join('')}</section>
       ${controlsHint ? `<span class="wc-controls-hint">${esc(controlsHint)}</span>` : ''}
     </div>`);
   }
@@ -238,11 +324,77 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   function titleState(): string {
     return containerScreen('wc-state', `<section class="wc-panel wc-state__card"><p class="wc-kicker">THE BROKEN PACT</p><h1 class="wc-state__title">WILD<br>CROWN</h1><p class="wc-state__copy">Walk with the living world of Erya. Every bond is freely chosen, and every path leaves a mark.</p>${vm?.error ? `<p class="wc-error" role="alert">${esc(vm.error.message)}</p>` : ''}<div class="wc-stack">
       ${button(playerCopy.title.new_game, 'new-game', '', 'wc-action--primary')}
-      ${button(playerCopy.title.continue, 'continue', vm?.saves.continueSlotId ? '' : 'disabled')}
-      ${button(playerCopy.title.load_game, 'load-screen')}
+      ${!vm?.playtestSelection ? `${button(playerCopy.title.continue, 'continue', vm?.saves.continueSlotId ? '' : 'disabled')}${button(playerCopy.title.load_game, 'load-screen')}` : ''}
       ${button(playerCopy.title.settings, 'settings')}
       ${button(playerCopy.title.credits, 'credits')}
     </div><p class="wc-label">Single-player story adventure · English</p></section>`);
+  }
+
+  function mapSelectState(): string {
+    const selection = vm?.playtestSelection;
+    if (!selection) return '';
+    const playable = selection.maps.filter(map => !map.comingSoon);
+    const card = (map: (typeof selection.maps)[number]): string => {
+      if (map.comingSoon) {
+        return `<article class="wc-map-choice" data-coming-soon="true" aria-label="${esc(map.label)}, ${esc(map.name)}: coming soon">
+          <div class="wc-map-choice__art" style="--wc-art-size:${esc(map.mapArt?.size ?? 'cover')};--wc-art-position:${esc(map.mapArt?.position ?? '50% 50%')}" role="img" aria-label="${esc(map.name)} on the map of Erya"><span class="wc-map-choice__soon">Coming Soon</span></div>
+          <div class="wc-map-choice__body"><h2 class="wc-map-choice__name">${esc(map.name)}</h2><p class="wc-map-choice__meta">${esc(map.label)} · In development</p><p class="wc-map-choice__setting">${esc(map.setting)}</p></div>
+        </article>`;
+      }
+      const previous = playable[playable.indexOf(map) - 1];
+      const status = map.cleared ? 'Cleared' : map.unlocked ? 'Open' : 'Locked';
+      return `<article class="wc-map-choice" data-locked="${!map.unlocked}" data-cleared="${map.cleared}" data-selected="${selection.selectedMapId === map.id}">
+        <img src="${esc(map.thumbnailUrl ?? '')}" alt="${esc(map.name)}" width="960" height="540">
+        <div class="wc-map-choice__body"><h2 class="wc-map-choice__name">${esc(map.name)}</h2><p class="wc-map-choice__meta">${esc(map.label)} · ${status}</p><p class="wc-map-choice__setting">${esc(map.setting)}</p>
+        ${map.monsters.length ? `<p class="wc-map-choice__monsters">${esc(map.monsters.join(' · '))}</p>` : ''}
+        ${button(map.unlocked ? 'Enter ' + map.name : 'Clear ' + (previous?.name ?? 'the previous map') + ' first', 'select-map', `data-map="${esc(map.id)}" ${map.unlocked ? '' : 'disabled'}`, 'wc-action--primary')}</div>
+      </article>`;
+    };
+    return containerScreen('wc-state wc-selection', `<section class="wc-selection__content">
+      <h1 class="wc-state__title">Choose your path</h1>
+      <p class="wc-state__copy">Follow the journey through Erya. Clear each map to open the next; chapters marked Coming Soon are still in development.</p>
+      ${selection.progressWarning ? `<p role="status">${esc(selection.progressWarning)}</p>` : ''}
+      <div class="wc-map-choices">${selection.maps.map(card).join('')}</div>
+      <div class="wc-actions">${button('Return to Title', 'return-title')}</div>
+    </section>`);
+  }
+
+  function heroPanel(hero: HeroDefinition): string {
+    if (heroTab === 'stats') return `<ul class="wc-hero-ratings" aria-label="Playstyle ratings">${hero.ratings.map(rating => `<li><span>${esc(rating.label)}</span><span class="wc-rating" role="img" aria-label="${esc(rating.label)}: ${rating.value} of 5">${[1, 2, 3, 4, 5].map(level => `<i data-on="${level <= rating.value}"></i>`).join('')}</span></li>`).join('')}</ul>
+      <p class="wc-hero-note">Ratings compare all heroes. The table lists live combat values.</p>
+      <table class="wc-hero-stats"><tbody>${hero.stats.map(stat => `<tr><th scope="row">${esc(stat.label)}</th><td>${esc(stat.value)}</td></tr>`).join('')}</tbody></table>`;
+    if (heroTab === 'skills') return `<p class="wc-hero-note">Choose a skill to watch ${esc(hero.name)} perform it.</p><ol class="wc-hero-skill-list">${hero.skills.map((skill, index) => `<li><button type="button" class="wc-hero-skill" data-ui-action="hero-skill" data-skill="${index}" data-focus-key="hero-skill-${hero.id}-${index}" aria-pressed="${heroSkillIndex === index}">
+        <kbd>${esc(vm ? controlBindingLabel(vm, skill.action) || skill.action : skill.action)}</kbd><span class="wc-hero-skill__name">${esc(skill.name)}</span><span class="wc-hero-skill__cost">${esc(skill.cost)}</span>
+        <span class="wc-hero-skill__desc">${esc(skill.description)}</span><span class="wc-hero-skill__detail">${esc(skill.detail)}</span></button></li>`).join('')}</ol>`;
+    if (heroTab === 'story') return `${hero.biography.map(paragraph => `<p class="wc-hero-prose">${esc(paragraph)}</p>`).join('')}<figure class="wc-hero-quote"><blockquote>${esc(hero.quote.text)}</blockquote><figcaption>${esc(hero.quote.speaker)}</figcaption></figure>`;
+    return `<dl class="wc-hero-facts">${[['Role', hero.role], ['Power', hero.power], ['Reach', hero.reach], ['Difficulty', hero.difficulty]].map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+      <p class="wc-hero-prose">${esc(hero.playstyle)}</p>
+      <div class="wc-hero-traits"><section><h3>Strengths</h3><ul>${hero.strengths.map(item => `<li>${esc(item)}</li>`).join('')}</ul></section><section data-trait="caution"><h3>Watch for</h3><ul>${hero.cautions.map(item => `<li>${esc(item)}</li>`).join('')}</ul></section></div>`;
+  }
+
+  function heroSelectState(): string {
+    const selection = vm?.playtestSelection;
+    if (!selection) return '';
+    const map = selection.maps.find(item => item.id === selection.selectedMapId);
+    const hero = heroById(heroFocus);
+    const skill = heroSkillIndex === null ? undefined : hero.skills[heroSkillIndex];
+    return containerScreen('wc-hero-select', `<div class="wc-hero-select__frame" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}">
+      <header class="wc-hero-select__head"><h1 class="wc-hero-select__title">Choose your hero</h1><p>${esc(map?.name ?? '')} · Your hero stays with you until this run ends.</p></header>
+      <nav class="wc-hero-roster" aria-label="Heroes">${HEROES.map(candidate => `<button type="button" class="wc-hero-pick" data-ui-action="hero-focus" data-hero="${candidate.id}" data-focus-key="hero-focus-${candidate.id}" aria-pressed="${candidate.id === hero.id}" style="--wc-hero-accent:${esc(candidate.accent)}">
+        ${heroCrest(candidate, 'wc-hero-pick__portrait')}<span class="wc-hero-pick__text"><strong>${esc(candidate.name)}</strong><span>${esc(candidate.title)}</span><span>${esc(candidate.role)}</span></span></button>`).join('')}</nav>
+      <div class="wc-hero-stage" role="group" aria-label="Live 3D preview of ${esc(hero.name)}">
+        <div class="wc-preview-host wc-hero-stage__view" data-preview-host data-hero-preview="true"><div class="wc-preview-empty" data-preview-placeholder>Bringing ${esc(hero.name)} forward…</div></div>
+        <p class="wc-hero-stage__caption"><span aria-live="polite">${esc(skill ? 'Showing ' + skill.name : hero.name + ' at rest')}</span><span>Drag to turn</span></p>
+      </div>
+      <article class="wc-hero-dossier" aria-labelledby="wc-hero-name">
+        <h2 id="wc-hero-name" class="wc-hero-dossier__name">${esc(hero.name)}</h2>
+        <p class="wc-hero-dossier__title">${esc(hero.title)}</p>
+        <p class="wc-hero-dossier__summary">${esc(hero.summary)}</p>
+        <div class="wc-hero-tabs" role="tablist" aria-label="${esc(hero.name)} details">${HERO_TABS.map(tab => `<button type="button" role="tab" id="wc-hero-tab-${tab.id}" class="wc-hero-tab" data-ui-action="hero-tab" data-tab="${tab.id}" data-focus-key="hero-tab-${tab.id}" aria-selected="${tab.id === heroTab}" aria-controls="wc-hero-panel">${esc(tab.label)}</button>`).join('')}</div>
+        <div id="wc-hero-panel" class="wc-hero-panel" role="tabpanel" aria-labelledby="wc-hero-tab-${heroTab}" tabindex="0">${heroPanel(hero)}</div>
+      </article>
+      <footer class="wc-hero-select__foot">${button('Back to Maps', 'map-select')}<p>Arrow keys browse · Enter chooses · Esc returns to maps</p>${button(`Begin ${map?.name ?? 'the map'} as ${hero.name}`, 'select-hero', `data-hero="${hero.id}"`, 'wc-action--primary')}</footer>
+    </div>`);
   }
 
   function loadingState(): string {
@@ -255,12 +407,23 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       if (action.type === 'open-settings') return button('Settings', 'open-settings');
       return button('Return to Title', 'return-title', '', 'wc-action--quiet');
     }).join('');
-    return containerScreen('wc-state', `<section class="wc-panel wc-state__card" role="status" aria-live="polite"><p class="wc-kicker">WILD CROWN</p><h1 class="wc-heading">${esc(loading?.label || 'Loading Wild Crown...')}</h1><p class="wc-state__copy">Preparing the forest...</p>${loading?.progress === null || loading?.progress === undefined ? '' : `<div class="wc-progress" aria-label="Loading progress"><i style="width:${Math.round(clamp(loading.progress) * 100)}%"></i></div>`}${error ? `<p class="wc-error" role="alert">${esc(error.message)}</p><div class="wc-actions">${actionMarkup}</div>` : ''}</section>`);
+    const stageMessage = loading?.detail?.message ?? 'Preparing the forest...';
+    const stageHeading = loading?.detail?.stage === 'checking-assets' ? 'Checking required native assets' : (loading?.detail?.stage === 'loading-scene-assets' ? 'Loading scene assets' : null);
+    const hasProgress = typeof loading?.progress === 'number';
+    const ratio = hasProgress ? clamp(loading!.progress!) : 0;
+    const percent = Math.round(ratio * 100);
+    const progressBlock = hasProgress
+      ? `<div class="wc-progress" role="progressbar" aria-label="Loading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" aria-valuetext="${percent} percent loaded"><i style="--wc-progress:${ratio}"></i></div><p class="wc-progress__value" aria-hidden="true"><strong>${percent}%</strong><span class="wc-progress__stage">${esc(stageMessage)}</span></p>`
+      : `<p class="wc-progress__value wc-progress__value--indeterminate" aria-hidden="true"><strong>Preparing</strong><span class="wc-progress__stage">${esc(stageMessage)}</span></p>`;
+    return containerScreen('wc-state', `<section class="wc-panel wc-state__card" role="status" aria-live="polite"><p class="wc-kicker">WILD CROWN</p><h1 class="wc-heading">${esc(loading?.label || 'Loading Wild Crown...')}</h1>${stageHeading ? `<p class="wc-state__copy wc-state__stage">${esc(stageHeading)}</p>` : `<p class="wc-state__copy">Preparing the forest...</p>`}${progressBlock}${error ? `<p class="wc-error" role="alert">${esc(error.message)}</p><div class="wc-actions">${actionMarkup}</div>` : ''}</section>`);
   }
 
   function pauseState(): string {
-    const card = `<section class="wc-panel wc-state__card"><p class="wc-kicker">WILD CROWN</p><h1 class="wc-heading">Paused</h1><p class="wc-state__copy">The game is paused. Resume when you are ready.</p><div class="wc-actions">${button('Resume', 'resume', '', 'wc-action--primary')}${button('Save Game', 'save-screen')}${button('Load Game', 'load-screen')}${button('Return to Title', 'title-screen')}</div></section>`;
-    return containerScreen('wc-state', card);
+    const hero = vm ? heroById(vm.hud.heroId ?? 'aren') : null;
+    const map = vm?.playtestSelection?.maps.find(item => item.id === vm?.playtestSelection?.selectedMapId);
+    const context = hero ? `<p class="wc-pause__context">${heroCrest(hero, 'wc-hero-crest')}<span>${esc([map?.name, `${hero.name}, ${hero.title}`].filter(Boolean).join(' · '))}</span></p>` : '';
+    const card = `<section class="wc-panel wc-state__card"><p class="wc-kicker">WILD CROWN</p><h1 class="wc-heading">Paused</h1>${context}<p class="wc-state__copy">The game is paused. Resume when you are ready.</p><div class="wc-actions">${button('Resume', 'resume', '', 'wc-action--primary')}${button('Save Game', 'save-screen')}${button('Load Game', 'load-screen')}${button('Return to Title', 'title-screen')}</div></section>`;
+    return containerScreen('wc-state wc-pause', card);
   }
 
   function mapState(): string {
@@ -324,7 +487,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   }
   function dialogueState(): string {
     const beat = vm?.dialogue ? { ...vm.dialogue, choices: vm.choice?.options ?? [] } : undefined;
-    const line = beat?.lines[0];
+    const line = beat ? beat.lines[Math.max(0, Math.min(vm!.dialogueLineIndex, beat.lines.length - 1))] : undefined;
     return containerScreen('wc-state', `<section class="wc-panel wc-state__card"><p class="wc-kicker">${esc(line ? speakerName[line.speaker] ?? line.speaker : 'STORY')}</p><h1 class="wc-heading">Dialogue</h1><p class="wc-dialogue-text">${esc(line?.text ?? '')}</p>${beat?.choices?.length ? `<div class="wc-choice">${beat.choices.map(choice => button(`<strong>${esc(choice.title)}</strong><small>${esc(choice.description)}</small>`, 'choose', `data-choice="${esc(choice.id)}" data-option="${esc(choice.id)}"`)).join('')}</div>` : ''}<div class="wc-actions">${button('Continue', 'dialogue-next', `data-beat="${esc(beat?.next ?? '')}"`, 'wc-action--primary')}${button('Skip Cinematic', 'skip-cinematic')}</div></section>`);
   }
 
@@ -338,6 +501,19 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     return containerScreen('wc-state wc-ending', `<section class="wc-panel wc-state__card"><p class="wc-kicker">THE FOREST YOU LEAVE BEHIND</p><h1 class="wc-state__title">${esc(ending?.title ?? 'Epilogue')}</h1><p class="wc-dialogue-text">${esc(ending?.summary ?? '')}</p><hr class="wc-rule"><h2 class="wc-heading">Epilogue</h2><p class="wc-state__copy">The living world remembers what was chosen.</p><div class="wc-actions">${button('View Credits', 'credits', '', 'wc-action--primary')}${button('Return to Title', 'title-screen')}</div></section>`);
   }
 
+  function stageCompleteState(): string {
+    const stage = vm?.playtestStage;
+    const selection = vm?.playtestSelection;
+    const hero = vm ? heroById(vm.hud.heroId ?? 'aren') : null;
+    const next = selection?.nextMapId ? selection.maps.find(item => item.id === selection.nextMapId) : undefined;
+    const outcome = `${hero ? `<p class="wc-outcome__hero">${heroCrest(hero, 'wc-hero-crest')}<span>Cleared as ${esc(hero.name)}, ${esc(hero.title)}</span></p>` : ''}${next ? `<p class="wc-outcome__unlock" role="status">New path open: <strong>${esc(next.name)}</strong></p>` : ''}`;
+    return containerScreen('wc-state wc-outcome wc-stage-complete', `<section class="wc-panel wc-state__card" aria-labelledby="stage-complete-title"${hero ? ` style="--wc-hero-accent:${esc(hero.accent)}"` : ''}><h1 id="stage-complete-title" class="wc-state__title">Stage Complete</h1><p class="wc-outcome__resolution">${esc(stage?.completeKicker ?? 'STAGE CLEARED')}</p><p class="wc-state__copy">${esc(stage?.completeCopy ?? 'You reached the stage exit.')}</p>${outcome}${selection?.progressWarning ? `<p role="status">${esc(selection.progressWarning)}</p>` : ''}<div class="wc-actions">${next ? button('Next Map', 'select-map', `data-map="${esc(next.id)}"`, 'wc-action--primary') : ''}${button('Play Again', 'new-game')}${selection ? button('Map Select', 'map-select') : ''}${button('Return to Title', 'return-title')}</div></section>`);
+  }
+
+  function defeatState(): string {
+    return containerScreen('wc-state wc-outcome wc-defeat', `<section class="wc-panel wc-state__card" aria-labelledby="defeat-title"><p class="wc-kicker">THE FOREST STILL WAITS</p><h1 id="defeat-title" class="wc-state__title">Defeat</h1><p class="wc-state__copy">Take a breath. Find another way through.</p><div class="wc-actions">${button('Try Again', 'new-game', '', 'wc-action--primary')}${button('Return to Title', 'return-title')}</div></section>`);
+  }
+
   function saveState(load: boolean): string { return vm ? saveMarkup(vm, load) : ''; }
 
   function creditsState(): string {
@@ -347,8 +523,12 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   function renderMarkup(): string {
     if (!vm) return '';
     if (vm.screen === 'title') return titleState();
+    if (vm.screen === 'map-select') return mapSelectState();
+    if (vm.screen === 'hero-select') return heroSelectState();
     if (vm.loading.active || vm.screen === 'loading') return loadingState();
     if (vm.screen === 'game') return playerHud();
+    if (vm.screen === 'stage-complete') return stageCompleteState();
+    if (vm.screen === 'defeat') return defeatState();
     if (vm.screen === 'pause') return pauseState();
     if (vm.screen === 'map') return mapState();
     if (vm.screen === 'journal') return journalState();
@@ -365,6 +545,9 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const action = buttonElement.dataset.uiAction;
     switch (action) {
       case 'new-game': return { type: 'new-game', runId: crypto.randomUUID() };
+      case 'map-select': return { type: 'map-select' };
+      case 'select-map': return buttonElement.dataset.map ? { type: 'select-map', mapId: buttonElement.dataset.map } : null;
+      case 'select-hero': return isHeroId(buttonElement.dataset.hero) ? { type: 'select-hero', heroId: buttonElement.dataset.hero, runId: crypto.randomUUID() } : null;
       case 'continue': return vm.saves.continueSlotId ? { type: 'continue', slotId: vm.saves.continueSlotId } : null;
       case 'pause': return { type: 'pause' };
       case 'interact': {
@@ -444,6 +627,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
         render(pending);
       }
     }
+    if (item.dataset.uiAction === 'hero-focus' || item.dataset.uiAction === 'hero-tab' || item.dataset.uiAction === 'hero-skill') { browseHero(item); return; }
     if (item.dataset.uiAction === 'title-screen') { dispatch({ type: 'return-title' }); return; }
     if (item.dataset.uiAction === 'credits') { dispatch({ type: 'view-credits', endingId }); return; }
     if (item.dataset.uiAction === 'save-screen') { renderLocal(saveState(false)); return; }
@@ -459,6 +643,34 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     if (item.dataset.uiAction === 'import-file') { container.querySelector<HTMLInputElement>('.wc-file-input')?.click(); return; }
     const resolvedAction = actionResolved ? action : actionFor(item);
     if (resolvedAction) dispatch(resolvedAction);
+  }
+
+  /** Hero-select browsing is UI-local: it re-renders the dossier and drives the live preview, never the run. */
+  function browseHero(item: HTMLElement): void {
+    if (!vm || vm.screen !== 'hero-select') return;
+    const action = item.dataset.uiAction;
+    if (action === 'hero-focus') {
+      const heroId = item.dataset.hero;
+      if (!isHeroId(heroId) || heroId === heroFocus) return;
+      heroFocus = heroId;
+      heroSkillIndex = null;
+    } else if (action === 'hero-tab') {
+      const tab = item.dataset.tab;
+      if (!isHeroTab(tab) || tab === heroTab) return;
+      heroTab = tab;
+    } else {
+      const index = Number(item.dataset.skill);
+      const skill = heroById(heroFocus).skills[index];
+      if (!skill) return;
+      heroSkillIndex = index;
+      heroPreview?.showcase(skill.previewActionIds);
+    }
+    // Choosing a skill keeps the list where the player left it; switching hero or tab starts the panel at the top.
+    const scrollTop = action === 'hero-skill' ? container.querySelector('.wc-hero-panel')?.scrollTop ?? 0 : 0;
+    lastRenderSignature = '';
+    render(vm);
+    const panel = container.querySelector<HTMLElement>('.wc-hero-panel');
+    if (panel) panel.scrollTop = scrollTop;
   }
 
   function renderLocal(markup: string) {
@@ -505,6 +717,15 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   function bindPreview() {
     const host = container.querySelector<HTMLElement>('[data-preview-host]');
     if (!host) return;
+    if (host.dataset.heroPreview === 'true') {
+      const controller = options.onHeroPreviewHost?.(host) ?? null;
+      heroPreview = controller;
+      previewCleanup = controller ? () => {
+        controller.dispose();
+        if (heroPreview === controller) heroPreview = null;
+      } : null;
+      return;
+    }
     const companion = (host.dataset.companion || null) as CompanionId | null;
     const cleanup = options.onPreviewHost?.(host, companion);
     previewCleanup = typeof cleanup === 'function' ? cleanup : null;
@@ -528,7 +749,10 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const previousScreen = vm?.screen;
     const existingPreview = container.querySelector<HTMLElement>('[data-preview-host]');
     vm = next;
-    const keepPreview = Boolean(existingPreview && next.screen === 'companions' && existingPreview.dataset.companion === selectedCompanionId());
+    if (next.screen === 'hero-select' && previousScreen !== 'hero-select') { heroTab = 'role'; heroSkillIndex = null; }
+    const keepPreview = Boolean(existingPreview && (
+      next.screen === 'companions' && existingPreview.dataset.companion === selectedCompanionId()
+      || next.screen === 'hero-select' && existingPreview.dataset.heroPreview === 'true'));
     if (!keepPreview) {
       previewCleanup?.();
       previewCleanup = null;
@@ -564,6 +788,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
 
     container.classList.toggle('wc-reduced-motion', next.settings.reducedMotion);
     if (!keepPreview) bindPreview();
+    if (next.screen === 'hero-select') heroPreview?.show(heroFocus);
     const controls = [...container.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex="0"]')].filter(control => control.getClientRects().length > 0);
     const restored = activeControl && container.contains(activeControl)
       ? activeControl
@@ -572,6 +797,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     focusTarget?.focus({ preventScroll: true });
     const index = focusTarget ? controls.indexOf(focusTarget) : -1;
     if (index >= 0) focusedIndex = index;
+    syncGateNotice();
   }
 
   const escKey = (event: KeyboardEvent) => {
@@ -630,7 +856,9 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       return;
     }
     if (event.key === 'Escape' || event.key === 'Backspace') {
-      if (vm?.screen === 'pause') dispatch({ type: 'resume' });
+      if (vm?.screen === 'hero-select') dispatch({ type: 'map-select' });
+      else if (vm?.screen === 'map-select') dispatch({ type: 'return-title' });
+      else if (vm?.screen === 'pause') dispatch({ type: 'resume' });
       else dispatch({ type: 'close-screen' });
       event.preventDefault();
       return;
@@ -706,6 +934,11 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   return {
     get element() { return container; },
     render,
+    setGateContact(active: boolean) {
+      if (destroyed || gateContact === active) return;
+      gateContact = active;
+      syncGateNotice();
+    },
     updateGamepad,
     destroy() {
       if (destroyed) return;
@@ -727,6 +960,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       if (keyListener) document.removeEventListener('keydown', keyListener, true);
       container.replaceChildren();
       container.remove();
+      feedback.remove();
       vm = null;
     },
   };

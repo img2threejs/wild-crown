@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-ancient-canopy-shrine",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "2f8149b4-c4f2-400d-8e28-d175d7349ef6",
+    "decimate": "45631bef-25c0-4101-8ac6-3c4a038471da"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.5,
+    "maxError": 0.02,
+    "maxTexture": 1536,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-ancient-canopy-shrine-decimate-01/tripo-out/prop-ancient-canopy-shrine-decim-45631bef/model.glb",
+      "sha256": "84dedcf1cd5c498cb2b30b315e23e43a9104dbd267bc99371356959dce0b8825"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-ancient-canopy-shrine-runtime-01/prop-ancient-canopy-shrine.glb",
+    "sha256": "af21b7f718795cbda9289a071f3c2ad5c58acdce02bbcc672342a6d430201987",
+    "bytes": 4153492,
+    "vertices": 21853,
+    "triangles": 12643,
+    "boundsMin": [
+      -0.47413,
+      -0.37192,
+      -0.47977
+    ],
+    "boundsMax": [
+      0.47408,
+      0.37132,
+      0.48952
+    ],
+    "worldBoundsMin": [
+      -0.47413,
+      -0.37192,
+      -0.47977
+    ],
+    "worldBoundsMax": [
+      0.47408,
+      0.37132,
+      0.48952
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4721455,
+      "toBytes": 1103552
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5032533,
+      "toBytes": 938061
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17727613,
+      "toBytes": 1258794
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 25588,
+      "trianglesAfter": 12793,
+      "relativeError": 0.015558767132461071
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 26690,
+      "trianglesAfter": 25631,
+      "removed": 1059,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 25631,
+      "trianglesAfter": 25588,
+      "removed": 43
+    },
+    {
+      "trianglesBefore": 12793,
+      "trianglesAfter": 12643,
+      "removed": 150
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 34728,
+      "verticesAfter": 21853
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

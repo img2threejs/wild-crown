@@ -1,0 +1,923 @@
+{
+  "schemaVersion": 1,
+  "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+  "scale": 1.84,
+  "kickLimits": {
+    "raisedFrom": "JOINT_LIMITS",
+    "table": {
+      "mixamorig:Spine": {
+        "swing": 42,
+        "twist": 25
+      },
+      "mixamorig:Spine1": {
+        "swing": 42,
+        "twist": 25
+      },
+      "mixamorig:Spine2": {
+        "swing": 42,
+        "twist": 25
+      },
+      "mixamorig:LeftUpLeg": {
+        "swing": 150,
+        "twist": 60
+      },
+      "mixamorig:RightUpLeg": {
+        "swing": 150,
+        "twist": 60
+      },
+      "mixamorig:LeftFoot": {
+        "swing": 62,
+        "twist": 52
+      },
+      "mixamorig:RightFoot": {
+        "swing": 62,
+        "twist": 52
+      }
+    }
+  },
+  "deformationCeiling": {
+    "clips": [
+      "aren-idle",
+      "aren-walk",
+      "aren-run",
+      "aren-jump",
+      "sakda-guard-dash"
+    ],
+    "reference": {
+      "clip": "native dive preset (not shipped)",
+      "p999": 1.68062
+    },
+    "p999": 1.68062
+  },
+  "movingLocomotion": {
+    "aren-walk-moving-4.4mps": {
+      "speedMetresPerSecond": 4.4,
+      "runtimePlaybackRate": 1,
+      "seconds": 1.2666666666666666,
+      "clipLoops": 2,
+      "stepsPerLoop": 2,
+      "stepsPerSecond": 3.1578947368421053,
+      "ankleForeAftExcursionMetres": [
+        0.9187897845518816,
+        0.9139555442887448
+      ],
+      "plantedVertexRuns": 7172,
+      "plantedVertexTravelP95Metres": 0.054623369892560295,
+      "plantedVertexTravelMaxMetres": 0.06714600580713864
+    },
+    "aren-run-moving-6.6mps": {
+      "speedMetresPerSecond": 6.6,
+      "runtimePlaybackRate": 1,
+      "seconds": 0.8,
+      "clipLoops": 2,
+      "stepsPerLoop": 2,
+      "stepsPerSecond": 5,
+      "ankleForeAftExcursionMetres": [
+        0.911056885558514,
+        0.9098952940427141
+      ],
+      "plantedVertexRuns": 6732,
+      "plantedVertexTravelP95Metres": 0.04005061054681425,
+      "plantedVertexTravelMaxMetres": 0.045333862260558945
+    }
+  },
+  "clips": {
+    "aren-idle": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 109.3,
+      "peakTwist": 43,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 145,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.085115,
+        "minimumWristAboveJaw": -0.113009,
+        "minimumGroundedStanceWidthMetres": 0.395872,
+        "seamRotationRadians": 0.000672,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 1.37936
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0224
+      },
+      "deformation": {
+        "p99": 0.60838,
+        "p999": 1.1975,
+        "max": 1.53071,
+        "worstBone": "LeftArm"
+      }
+    },
+    "aren-walk": {
+      "origin": "tripo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 123,
+      "peakTwist": 52.4,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 39,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.128863,
+        "minimumWristAboveJaw": -0.315938,
+        "minimumGroundedStanceWidthMetres": null,
+        "seamRotationRadians": 0.000668,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 12.83239
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0638
+      },
+      "deformation": {
+        "p99": 0.7635,
+        "p999": 1.26318,
+        "max": 1.94147,
+        "worstBone": "Spine1"
+      }
+    },
+    "aren-run": {
+      "origin": "tripo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 122.9,
+      "peakTwist": 51.7,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 25,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.129576,
+        "minimumWristAboveJaw": -0.316029,
+        "minimumGroundedStanceWidthMetres": null,
+        "seamRotationRadians": 0.000668,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 19.911819
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0622
+      },
+      "deformation": {
+        "p99": 0.75791,
+        "p999": 1.26406,
+        "max": 1.95903,
+        "worstBone": "Spine2"
+      }
+    },
+    "aren-jump": {
+      "origin": "tripo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 118.9,
+      "peakTwist": 86.4,
+      "corrections": {
+        "mixamorig:RightHand": 1.53,
+        "mixamorig:RightLeg": 0.29,
+        "mixamorig:LeftFoot": 0
+      },
+      "motionQuality": {
+        "sampledFrames": 22,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.164935,
+        "minimumWristAboveJaw": -0.310361,
+        "minimumGroundedStanceWidthMetres": 0.206912,
+        "seamRotationRadians": 0.268355,
+        "seamPositionMetres": 0.036064,
+        "maximumJointStepDegreesPerTick": 41.6426
+      },
+      "deformation": {
+        "p99": 0.43978,
+        "p999": 0.94495,
+        "max": 1.93133,
+        "worstBone": "LeftShoulder"
+      }
+    },
+    "aren-hit": {
+      "origin": "tripo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 104.2,
+      "peakTwist": 73.7,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.16,
+        "mixamorig:LeftFoot": 24.06,
+        "mixamorig:RightLeg": 0,
+        "mixamorig:RightFoot": 0.08
+      },
+      "motionQuality": {
+        "sampledFrames": 61,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.035761,
+        "minimumWristAboveJaw": -0.215895,
+        "minimumGroundedStanceWidthMetres": 0.384684,
+        "seamRotationRadians": 0.445741,
+        "seamPositionMetres": 0.005892,
+        "maximumJointStepDegreesPerTick": 14.549706
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1222
+      },
+      "deformation": {
+        "p99": 0.77624,
+        "p999": 1.33924,
+        "max": 2.45388,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-cheer": {
+      "origin": "tripo",
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 91.1,
+      "peakTwist": 78.1,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftArm": 1.9,
+        "mixamorig:RightArm": 1.91,
+        "mixamorig:LeftHand": 0.83,
+        "mixamorig:RightHand": 0.83
+      },
+      "motionQuality": {
+        "sampledFrames": 151,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": 0.234747,
+        "minimumWristAboveJaw": -0.288207,
+        "minimumGroundedStanceWidthMetres": 0.31478,
+        "seamRotationRadians": 1.773532,
+        "seamPositionMetres": 0.003044,
+        "maximumJointStepDegreesPerTick": 15.529372
+      },
+      "deformation": {
+        "p99": 0.97181,
+        "p999": 1.65214,
+        "max": 1.85887,
+        "worstBone": "Spine2"
+      }
+    },
+    "aren-defeat": {
+      "origin": "tripo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 109.2,
+      "peakTwist": 58.5,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 181,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.077948,
+        "minimumWristAboveJaw": -0.358061,
+        "minimumGroundedStanceWidthMetres": 0.419433,
+        "seamRotationRadians": 0.001513,
+        "seamPositionMetres": 0.000013,
+        "maximumJointStepDegreesPerTick": 10.893534
+      },
+      "deformation": {
+        "p99": 0.39274,
+        "p999": 0.86241,
+        "max": 2.23546,
+        "worstBone": "LeftArm"
+      }
+    },
+    "aren-air-step": {
+      "origin": "tripo",
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 111.8,
+      "peakTwist": 76,
+      "corrections": {
+        "mixamorig:Spine": 0,
+        "mixamorig:LeftShoulder": 0.71,
+        "mixamorig:LeftArm": 0.38,
+        "mixamorig:LeftHand": 1.73,
+        "mixamorig:RightHand": 1.78,
+        "mixamorig:RightLeg": 0.36,
+        "mixamorig:LeftFoot": 0.2,
+        "mixamorig:RightFoot": 0.59,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "motionQuality": {
+        "sampledFrames": 31,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.06184,
+        "minimumWristAboveJaw": -0.379731,
+        "minimumGroundedStanceWidthMetres": null,
+        "seamRotationRadians": 1.393404,
+        "seamPositionMetres": 0.015176,
+        "maximumJointStepDegreesPerTick": 64.806954
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1472
+      },
+      "deformation": {
+        "p99": 0.79228,
+        "p999": 1.47912,
+        "max": 2.2648,
+        "worstBone": "LeftArm"
+      }
+    },
+    "sakda-limb-1": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 99,
+      "peakTwist": 58.1,
+      "corrections": {
+        "mixamorig:Spine": 0.28,
+        "mixamorig:LeftLeg": 0,
+        "mixamorig:RightLeg": 0.09
+      },
+      "motionQuality": {
+        "sampledFrames": 21,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.065902,
+        "minimumWristAboveJaw": -0.111323,
+        "minimumGroundedStanceWidthMetres": 0.42583,
+        "seamRotationRadians": 1.029628,
+        "seamPositionMetres": 0.034182,
+        "maximumJointStepDegreesPerTick": 33.556398
+      },
+      "strikes": [
+        {
+          "tick": 7,
+          "joints": [
+            "LeftHand"
+          ],
+          "contactTick": 7,
+          "forwardMetres": 0.68
+        },
+        {
+          "tick": 14,
+          "joints": [
+            "RightHand"
+          ],
+          "contactTick": 14,
+          "forwardMetres": 0.679
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0679
+      },
+      "deformation": {
+        "p99": 0.80067,
+        "p999": 1.30432,
+        "max": 2.69862,
+        "worstBone": "LeftArm"
+      }
+    },
+    "sakda-limb-2": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 120.3,
+      "peakTwist": 84.7,
+      "corrections": {
+        "mixamorig:Spine": 5.71,
+        "mixamorig:RightShoulder": 36.21
+      },
+      "motionQuality": {
+        "sampledFrames": 23,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.00604,
+        "minimumWristAboveJaw": -0.069142,
+        "minimumGroundedStanceWidthMetres": 0.408549,
+        "seamRotationRadians": 0.498876,
+        "seamPositionMetres": 0.006124,
+        "maximumJointStepDegreesPerTick": 32.95995
+      },
+      "strikes": [
+        {
+          "tick": 8,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 8,
+          "forwardMetres": 0.441
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0189
+      },
+      "deformation": {
+        "p99": 0.74804,
+        "p999": 1.37645,
+        "max": 2.27997,
+        "worstBone": "RightShoulder"
+      }
+    },
+    "sakda-limb-3": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 134.1,
+      "peakTwist": 45.8,
+      "corrections": {
+        "mixamorig:Spine": 19.16,
+        "mixamorig:Spine1": 5.57,
+        "mixamorig:RightLeg": 23.39
+      },
+      "motionQuality": {
+        "sampledFrames": 27,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.08532,
+        "minimumWristAboveJaw": -0.154984,
+        "minimumGroundedStanceWidthMetres": 0.351754,
+        "seamRotationRadians": 1.111904,
+        "seamPositionMetres": 0.028319,
+        "maximumJointStepDegreesPerTick": 15.332143
+      },
+      "strikes": [
+        {
+          "tick": 10,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 10,
+          "forwardMetres": 0.466
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0819
+      },
+      "deformation": {
+        "p99": 0.68551,
+        "p999": 1.23779,
+        "max": 1.58568,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-limb-4": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 97.7,
+      "peakTwist": 52.1,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 33,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.100955,
+        "minimumWristAboveJaw": -0.280498,
+        "minimumGroundedStanceWidthMetres": 0.399223,
+        "seamRotationRadians": 0.521883,
+        "seamPositionMetres": 0.056996,
+        "maximumJointStepDegreesPerTick": 28.516116
+      },
+      "strikes": [
+        {
+          "tick": 13,
+          "joints": [
+            "RightLeg",
+            "RightFoot"
+          ],
+          "contactTick": 13,
+          "forwardMetres": 0.714
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1345
+      },
+      "deformation": {
+        "p99": 0.71093,
+        "p999": 1.29402,
+        "max": 1.85671,
+        "worstBone": "RightArm"
+      }
+    },
+    "sakda-echo-wave": {
+      "origin": "tripo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 100.9,
+      "peakTwist": 43.4,
+      "corrections": {
+        "mixamorig:LeftLeg": 0.13
+      },
+      "motionQuality": {
+        "sampledFrames": 25,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.11409,
+        "minimumWristAboveJaw": -0.179722,
+        "minimumGroundedStanceWidthMetres": 0.648815,
+        "seamRotationRadians": 0.00067,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 23.172953
+      },
+      "strikes": [
+        {
+          "tick": 9,
+          "joints": [
+            "RightHand"
+          ],
+          "contactTick": 9,
+          "forwardMetres": 0.72
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0317
+      },
+      "deformation": {
+        "p99": 0.59313,
+        "p999": 1.27721,
+        "max": 1.91159,
+        "worstBone": "Spine1"
+      }
+    },
+    "sakda-resonating-strike": {
+      "origin": "tripo+mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 143.6,
+      "peakTwist": 50.7,
+      "corrections": {
+        "mixamorig:LeftShoulder": 2.72,
+        "mixamorig:RightLeg": 1.19
+      },
+      "motionQuality": {
+        "sampledFrames": 31,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.085055,
+        "minimumWristAboveJaw": -0.321909,
+        "minimumGroundedStanceWidthMetres": null,
+        "seamRotationRadians": 1.405316,
+        "seamPositionMetres": 0.046728,
+        "maximumJointStepDegreesPerTick": 45.162514
+      },
+      "strikes": [
+        {
+          "tick": 18,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 18,
+          "forwardMetres": 0.509
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.5141
+      },
+      "deformation": {
+        "p99": 0.7329,
+        "p999": 1.27651,
+        "max": 1.93991,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-elbow-charge": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 108.3,
+      "peakTwist": 41,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 49,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.085115,
+        "minimumWristAboveJaw": -0.112343,
+        "minimumGroundedStanceWidthMetres": 0.395967,
+        "seamRotationRadians": 0.000665,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 1.331028
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0215
+      },
+      "deformation": {
+        "p99": 0.61172,
+        "p999": 1.19613,
+        "max": 1.5145,
+        "worstBone": "LeftArm"
+      }
+    },
+    "sakda-hundred-elbows": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 119.5,
+      "peakTwist": 84.5,
+      "corrections": {
+        "mixamorig:Spine": 5.61,
+        "mixamorig:RightShoulder": 35.77
+      },
+      "motionQuality": {
+        "sampledFrames": 61,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.004616,
+        "minimumWristAboveJaw": -0.118668,
+        "minimumGroundedStanceWidthMetres": 0.365432,
+        "seamRotationRadians": 0.298697,
+        "seamPositionMetres": 0.023514,
+        "maximumJointStepDegreesPerTick": 45.859746
+      },
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 12,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 18,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 18,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 24,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 24,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 30,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 30,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 36,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 36,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 42,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 42,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 52,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 52,
+          "forwardMetres": 0.441
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0955
+      },
+      "deformation": {
+        "p99": 0.79255,
+        "p999": 1.39969,
+        "max": 2.79348,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-tempest": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 132.3,
+      "peakTwist": 30.1,
+      "corrections": {
+        "mixamorig:Neck": 8.22,
+        "mixamorig:LeftLeg": 1.05,
+        "mixamorig:RightLeg": 1.59
+      },
+      "motionQuality": {
+        "sampledFrames": 29,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.06717,
+        "minimumWristAboveJaw": -0.320294,
+        "minimumGroundedStanceWidthMetres": 0.004685,
+        "seamRotationRadians": 1.354101,
+        "seamPositionMetres": 0.06774,
+        "maximumJointStepDegreesPerTick": 31.420672
+      },
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightFoot"
+          ],
+          "contactTick": 12,
+          "floorMetres": 0.036
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1507
+      },
+      "deformation": {
+        "p99": 0.74291,
+        "p999": 1.37697,
+        "max": 2.65972,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-knee-charge": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 104.5,
+      "peakTwist": 41.3,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 49,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.104616,
+        "minimumWristAboveJaw": -0.111198,
+        "minimumGroundedStanceWidthMetres": 0.396298,
+        "seamRotationRadians": 0.000666,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 1.245706
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0177
+      },
+      "deformation": {
+        "p99": 0.60419,
+        "p999": 1.1974,
+        "max": 1.44077,
+        "worstBone": "LeftArm"
+      }
+    },
+    "sakda-flying-knee": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 143.6,
+      "peakTwist": 51.5,
+      "corrections": {
+        "mixamorig:LeftShoulder": 18.41,
+        "mixamorig:RightShoulder": 0.03,
+        "mixamorig:RightLeg": 1.19
+      },
+      "motionQuality": {
+        "sampledFrames": 41,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.005541,
+        "minimumWristAboveJaw": -0.359023,
+        "minimumGroundedStanceWidthMetres": null,
+        "seamRotationRadians": 1.692449,
+        "seamPositionMetres": 0.051987,
+        "maximumJointStepDegreesPerTick": 35.102896
+      },
+      "strikes": [
+        {
+          "tick": 30,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 30,
+          "forwardMetres": 0.509
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.4882
+      },
+      "deformation": {
+        "p99": 0.71965,
+        "p999": 1.31827,
+        "max": 2.32029,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-iron-clinch": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 134,
+      "peakTwist": 45.8,
+      "corrections": {
+        "mixamorig:Spine": 19.15,
+        "mixamorig:Spine1": 5.54,
+        "mixamorig:RightLeg": 23.32
+      },
+      "motionQuality": {
+        "sampledFrames": 37,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.07154,
+        "minimumWristAboveJaw": -0.15486,
+        "minimumGroundedStanceWidthMetres": 0.349317,
+        "seamRotationRadians": 1.006481,
+        "seamPositionMetres": 0.033907,
+        "maximumJointStepDegreesPerTick": 13.480571
+      },
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 12,
+          "forwardMetres": 0.466
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0826
+      },
+      "deformation": {
+        "p99": 0.70053,
+        "p999": 1.24142,
+        "max": 1.58524,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-guard-dash": {
+      "origin": "mixamo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 93.8,
+      "peakTwist": 37.6,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 33,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.049823,
+        "minimumWristAboveJaw": -0.118986,
+        "minimumGroundedStanceWidthMetres": 0.350182,
+        "seamRotationRadians": 0.003199,
+        "seamPositionMetres": 0,
+        "maximumJointStepDegreesPerTick": 50.134369
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1657
+      },
+      "deformation": {
+        "p99": 0.78059,
+        "p999": 1.22304,
+        "max": 2.72008,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "sakda-cleanse": {
+      "origin": "tripo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 70.2,
+      "peakTwist": 28.8,
+      "corrections": {},
+      "motionQuality": {
+        "sampledFrames": 91,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.226233,
+        "minimumWristAboveJaw": -0.35604,
+        "minimumGroundedStanceWidthMetres": 0.183653,
+        "seamRotationRadians": 0.357607,
+        "seamPositionMetres": 0.003085,
+        "maximumJointStepDegreesPerTick": 3.548681
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0162
+      },
+      "deformation": {
+        "p99": 0.42612,
+        "p999": 0.87025,
+        "max": 1.66716,
+        "worstBone": "LeftArm"
+      }
+    },
+    "sakda-tigers-wrath": {
+      "origin": "tripo",
+      "limits": "KICK_LIMITS",
+      "peakSwing": 97.2,
+      "peakTwist": 60,
+      "corrections": {
+        "mixamorig:LeftUpLeg": 29.13,
+        "mixamorig:LeftLeg": 10.8
+      },
+      "motionQuality": {
+        "sampledFrames": 61,
+        "lowestSole": 0.000041,
+        "bothWristsAboveHead": -0.027388,
+        "minimumWristAboveJaw": -0.356965,
+        "minimumGroundedStanceWidthMetres": 0.180972,
+        "seamRotationRadians": 0.360402,
+        "seamPositionMetres": 0.024446,
+        "maximumJointStepDegreesPerTick": 15.663189
+      },
+      "strikes": [
+        {
+          "tick": 24,
+          "joints": [
+            "RightFoot"
+          ],
+          "contactTick": 24,
+          "forwardMetres": 0.858
+        }
+      ],
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1558
+      },
+      "deformation": {
+        "p99": 0.69279,
+        "p999": 1.46151,
+        "max": 2.59107,
+        "worstBone": "LeftArm"
+      }
+    }
+  }
+}

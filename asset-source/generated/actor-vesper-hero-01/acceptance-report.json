@@ -1,0 +1,903 @@
+{
+  "schemaVersion": 1,
+  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "evidenceStatus": "blocked",
+  "approvedNativeP999": 1.75485,
+  "clips": {
+    "aren-idle": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.24649064381407007,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 57,
+        "floorMetres": 0.3140250095647942,
+        "floorFrame": 11,
+        "minRigUnits": 0.030226556446261786,
+        "minMetres": 0.05138514595864504,
+        "frame": 11,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 36,
+      "failures": []
+    },
+    "aren-walk": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/run-with-sword.fbx"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03542795000355436,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 8,
+        "floorMetres": 0.4810382732683381,
+        "floorFrame": 13,
+        "minRigUnits": 0.020839970590326093,
+        "minMetres": 0.03542795000355436,
+        "frame": 8,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 43.3,
+      "failures": []
+    },
+    "aren-run": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/run-with-sword.fbx",
+          "mirrored": true
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.05501800067974665,
+        "bodyBone": "Spine1",
+        "bodyFrame": 2,
+        "floorMetres": 0.6618628248885078,
+        "floorFrame": 4,
+        "minRigUnits": 0.0302027722557282,
+        "minMetres": 0.05134471283473794,
+        "frame": 10,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 45,
+      "failures": []
+    },
+    "aren-jump": {
+      "source": [
+        {
+          "donor": "tripo:jump"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.04969267063024303,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 21,
+        "floorMetres": 0.1483664715534035,
+        "floorFrame": 21,
+        "minRigUnits": 0.02666051045796123,
+        "minMetres": 0.04532286777853409,
+        "frame": 13,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 44.3,
+      "failures": []
+    },
+    "aren-hit": {
+      "source": [
+        {
+          "donor": "tripo:hit_to_body_01"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.09153022607463304,
+        "bodyBone": "Head",
+        "bodyFrame": 0,
+        "floorMetres": 1.0096399578641808,
+        "floorFrame": 11.25,
+        "minRigUnits": 0.02727629735344588,
+        "minMetres": 0.046369705500858,
+        "frame": 9,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 0,
+      "failures": []
+    },
+    "aren-cheer": {
+      "source": [
+        {
+          "donor": "tripo:cheer"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06495888221319548,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 142,
+        "floorMetres": 0.04011359188302938,
+        "floorFrame": 109,
+        "minRigUnits": 0.025060184849638546,
+        "minMetres": 0.04260231424438553,
+        "frame": 28,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 14.2,
+      "failures": []
+    },
+    "aren-defeat": {
+      "source": [
+        {
+          "donor": "tripo:defeat_02"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.008217565144187122,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 57.125,
+        "floorMetres": 0.04260108163279591,
+        "floorFrame": 71,
+        "minRigUnits": 0.004833861849521837,
+        "minMetres": 0.008217565144187122,
+        "frame": 57.125,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 28.1,
+      "failures": []
+    },
+    "vesper-iai-1": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/draw-sword-1.fbx"
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        }
+      ],
+      "contact": {
+        "6": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 14.11433696163062,
+          "edgeAcrossAngle": 6.094908391674257,
+          "bladeToTravelAngle": 102.75471510143683,
+          "tipMetresPerSecond": 34.59484163532953,
+          "travelPitchDegrees": 2.1013873869283364
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.1073759551823442,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.18033667482873963,
+        "floorFrame": 0,
+        "minRigUnits": 0.020245602012155403,
+        "minMetres": 0.03441752342066418,
+        "frame": 4,
+        "bone": "RightArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-iai-2": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1,
+            "postRate": 0.5
+          }
+        }
+      ],
+      "contact": {
+        "6": {
+          "frontalDegrees": 50.498811036593814,
+          "edgeAngle": 3.177706613796339,
+          "edgeAcrossAngle": 2.55191292331256,
+          "bladeToTravelAngle": 91.89417609736518,
+          "tipMetresPerSecond": 24.968473856162028,
+          "travelPitchDegrees": -22.34090258469042
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06944332123062603,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 9,
+        "floorMetres": 0.30155771697080536,
+        "floorFrame": 9,
+        "minRigUnits": 0.025272507823909073,
+        "minMetres": 0.04296326330064542,
+        "frame": 2.875,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-iai-3": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-outward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 0.8666666666666667,
+            "donorTipMetresPerSecond": 34.14080759966591,
+            "donorContactAngle": 28.459642007009727,
+            "contactWithinMax": true,
+            "preRate": 0.6,
+            "postRate": 0.3
+          }
+        }
+      ],
+      "contact": {
+        "8": {
+          "frontalDegrees": 68.08543064907032,
+          "edgeAngle": 2.6242323737696274,
+          "edgeAcrossAngle": 2.3574585952204288,
+          "bladeToTravelAngle": 91.15313222404279,
+          "tipMetresPerSecond": 20.1756051820605,
+          "travelPitchDegrees": -10.955954312898772
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.17851129854688183,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 11,
+        "floorMetres": 0.7550379578174572,
+        "floorFrame": 11,
+        "minRigUnits": 0.014692065933420304,
+        "minMetres": 0.024976512086814517,
+        "frame": 4,
+        "bone": "RightArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-iai-4": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        }
+      ],
+      "contact": {
+        "10": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.08452342305255141,
+        "bodyBone": "Spine1",
+        "bodyFrame": 1,
+        "floorMetres": 0.31854730463075065,
+        "floorFrame": 13.75,
+        "minRigUnits": 0.008002413548002282,
+        "minMetres": 0.01360410303160388,
+        "frame": 1,
+        "bone": "LeftArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-thousand-cuts": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        }
+      ],
+      "contact": {
+        "8": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        },
+        "18": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.643466148381687,
+          "edgeAcrossAngle": 0.26896428027657876,
+          "bladeToTravelAngle": 109.64171423744197,
+          "tipMetresPerSecond": 24.769677356458793,
+          "travelPitchDegrees": -38.72934313921298
+        },
+        "28": {
+          "frontalDegrees": 31.873402986936366,
+          "edgeAngle": 4.014602477073513,
+          "edgeAcrossAngle": 2.2764535932076386,
+          "bladeToTravelAngle": 93.307641593437,
+          "tipMetresPerSecond": 40.72071766993592,
+          "travelPitchDegrees": -22.895582802819412
+        },
+        "38": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 11.119976403163843,
+          "edgeAcrossAngle": 3.5565857149993074,
+          "bladeToTravelAngle": 100.54266449228923,
+          "tipMetresPerSecond": 37.673019973477885,
+          "travelPitchDegrees": 4.412226806642328
+        },
+        "48": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.749554205894952,
+          "edgeAcrossAngle": 0.3677776882961418,
+          "bladeToTravelAngle": 109.74628303832793,
+          "tipMetresPerSecond": 24.710141141761145,
+          "travelPitchDegrees": -38.64516151805511
+        },
+        "58": {
+          "frontalDegrees": 34.55649584636774,
+          "edgeAngle": 91.15530096470955,
+          "edgeAcrossAngle": 100.49573773738072,
+          "bladeToTravelAngle": 6.354713040562852,
+          "tipMetresPerSecond": 3.123544452398484,
+          "travelPitchDegrees": 25.835980867230877
+        },
+        "66": {
+          "frontalDegrees": 31.873408799884277,
+          "edgeAngle": 4.655262078097246,
+          "edgeAcrossAngle": 1.9235553493587583,
+          "bladeToTravelAngle": 94.24005748392918,
+          "tipMetresPerSecond": 37.3477410642165,
+          "travelPitchDegrees": -23.874621494787984
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06165938390824391,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 36,
+        "floorMetres": 0.11543379106824679,
+        "floorFrame": 36,
+        "minRigUnits": 0.019914072275262804,
+        "minMetres": 0.033853922867946765,
+        "frame": 1,
+        "bone": "LeftArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-requiem": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.8
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/sword-inward-slash.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 1.1666666666666667,
+            "donorTipMetresPerSecond": 27.42276429832554,
+            "donorContactAngle": 21.238803348331494,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2,
+            "donorTipMetresPerSecond": 20.548626369707556,
+            "donorContactAngle": 29.595707893867853,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 1.1
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        },
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 1.5,
+            "postRate": 0.15
+          }
+        }
+      ],
+      "contact": {
+        "12": {
+          "frontalDegrees": 69.00043865455856,
+          "edgeAngle": 18.1376564111214,
+          "edgeAcrossAngle": 0.5714826936374836,
+          "bladeToTravelAngle": 108.12895689853687,
+          "tipMetresPerSecond": 17.14631056961804,
+          "travelPitchDegrees": 9.103686022116046
+        },
+        "24": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.62338697603991,
+          "edgeAcrossAngle": 0.25232147393736154,
+          "bladeToTravelAngle": 109.62184546850183,
+          "tipMetresPerSecond": 24.780973277344103,
+          "travelPitchDegrees": -38.74333086422323
+        },
+        "36": {
+          "frontalDegrees": 31.87340437995968,
+          "edgeAngle": 3.832178287987918,
+          "edgeAcrossAngle": 2.213364996321305,
+          "bladeToTravelAngle": 93.12912497136128,
+          "tipMetresPerSecond": 40.3523349508674,
+          "travelPitchDegrees": -22.761068973538794
+        },
+        "48": {
+          "frontalDegrees": 60.70783232696936,
+          "edgeAngle": 12.06222342960008,
+          "edgeAcrossAngle": 3.807232814897991,
+          "bladeToTravelAngle": 101.45408100886135,
+          "tipMetresPerSecond": 37.056145057180856,
+          "travelPitchDegrees": 4.662432640946131
+        },
+        "60": {
+          "frontalDegrees": 27.062368803653893,
+          "edgeAngle": 19.65779868885882,
+          "edgeAcrossAngle": 0.2812380964352164,
+          "bladeToTravelAngle": 109.6558831836859,
+          "tipMetresPerSecond": 24.761619241790722,
+          "travelPitchDegrees": -38.71898627612333
+        },
+        "72": {
+          "frontalDegrees": 7.797774685823597,
+          "edgeAngle": 82.95408927200131,
+          "edgeAcrossAngle": 59.106235317699294,
+          "bladeToTravelAngle": 13.821858410582264,
+          "tipMetresPerSecond": 3.2727603243741297,
+          "travelPitchDegrees": 1.8239530836774809
+        },
+        "84": {
+          "frontalDegrees": 62.072647345479574,
+          "edgeAngle": 7.335180281324046,
+          "edgeAcrossAngle": 3.843219758375923,
+          "bladeToTravelAngle": 83.74753631446634,
+          "tipMetresPerSecond": 27.045947954445616,
+          "travelPitchDegrees": -16.60173939347835
+        },
+        "110": {
+          "frontalDegrees": 6.846773459744174,
+          "edgeAngle": 13.17162424358172,
+          "edgeAcrossAngle": 12.727312333971415,
+          "bladeToTravelAngle": 93.42057779978178,
+          "tipMetresPerSecond": 4.73401808820871,
+          "travelPitchDegrees": -44.73283853503321
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.07907241677325333,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 60,
+        "floorMetres": 0.06749048962082359,
+        "floorFrame": 33,
+        "minRigUnits": 0.008002413548002282,
+        "minMetres": 0.01360410303160388,
+        "frame": 2,
+        "bone": "LeftArm"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-severing-shadow": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/one-hand-sword-combo.fbx",
+          "strike": {
+            "kind": "cut",
+            "reversed": false,
+            "sourceSeconds": 2.966666666666667,
+            "donorTipMetresPerSecond": 29.33595700817657,
+            "donorContactAngle": 18.881926600527905,
+            "contactWithinMax": true,
+            "preRate": 0.3,
+            "postRate": 0.25
+          }
+        }
+      ],
+      "contact": {
+        "12": {
+          "frontalDegrees": 58.519487611450295,
+          "edgeAngle": 7.367362719035723,
+          "edgeAcrossAngle": 0.05875877778666415,
+          "bladeToTravelAngle": 97.36711958753509,
+          "tipMetresPerSecond": 9.265918238895743,
+          "travelPitchDegrees": -25.694605668080904
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03781533394703179,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 18,
+        "floorMetres": 0.2860389077381147,
+        "floorFrame": 18,
+        "minRigUnits": 0.02224431408648929,
+        "minMetres": 0.03781533394703179,
+        "frame": 18,
+        "bone": "LeftUpLeg"
+      },
+      "wristDegrees": 30,
+      "failures": []
+    },
+    "vesper-shadow-step": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/thrust-slash.fbx",
+          "strike": {
+            "kind": "thrust",
+            "reversed": false,
+            "sourceSeconds": 0.7333333333333333,
+            "donorTipMetresPerSecond": 9.670429509560144,
+            "donorContactAngle": 19.261958335611943,
+            "contactWithinMax": true,
+            "preRate": 0.45,
+            "postRate": 0.45
+          }
+        }
+      ],
+      "contact": {
+        "8": {
+          "frontalDegrees": 7.189107821839596,
+          "edgeAngle": 81.61588209355175,
+          "edgeAcrossAngle": 61.441698084908495,
+          "bladeToTravelAngle": 17.75851605062447,
+          "tipMetresPerSecond": 3.3618260484896143,
+          "travelPitchDegrees": 3.8964509285041307
+        }
+      },
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.06722991267316494,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.4035935765506996,
+        "floorFrame": 0,
+        "minRigUnits": 0.025592702840465407,
+        "minMetres": 0.04350759482879119,
+        "frame": 13,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 16,
+      "failures": []
+    },
+    "vesper-cleanse": {
+      "source": [
+        {
+          "donor": "tripo:cast_a_spell"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.012414672389360297,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 7.375,
+        "floorMetres": 0.7196000378489739,
+        "floorFrame": 0,
+        "minRigUnits": 0.0073027484643295865,
+        "minMetres": 0.012414672389360297,
+        "frame": 7.375,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 20.7,
+      "failures": []
+    },
+    "vesper-cuts-charge": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.28441154760465026,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.7451049329434297,
+        "floorFrame": 0,
+        "minRigUnits": 0.030288621582752952,
+        "minMetres": 0.051490656690680016,
+        "frame": 20.125,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 0,
+      "failures": []
+    },
+    "vesper-shade-charge": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.244765517660685,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.6888295070516598,
+        "floorFrame": 10,
+        "minRigUnits": 0.030288622417837203,
+        "minMetres": 0.051490658110323245,
+        "frame": 2.125,
+        "bone": "RightForeArm"
+      },
+      "wristDegrees": 0,
+      "failures": []
+    },
+    "vesper-kunai-fan": {
+      "source": [
+        {
+          "donor": "tripo:pitch_baseball",
+          "mirrored": true
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.03070169539180975,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 4.25,
+        "floorMetres": 0.6010990993927459,
+        "floorFrame": 12,
+        "minRigUnits": 0.018059820818711617,
+        "minMetres": 0.03070169539180975,
+        "frame": 4.25,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 12,
+      "failures": []
+    },
+    "vesper-shade-swap": {
+      "source": [
+        {
+          "donor": "tripo:pitch_baseball",
+          "mirrored": true
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.02578965591203899,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 4,
+        "floorMetres": 0.5985792369800836,
+        "floorFrame": 18,
+        "minRigUnits": 0.015170385830611172,
+        "minMetres": 0.02578965591203899,
+        "frame": 4,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 12,
+      "failures": []
+    },
+    "vesper-mist-blink": {
+      "source": [
+        {
+          "donor": "asset-source/mixamo/vesper/idle-to-sprint.fbx"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.04207979097683817,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 11,
+        "floorMetres": 0.026731799238934716,
+        "floorFrame": 11.375,
+        "minRigUnits": 0.024752818221669512,
+        "minMetres": 0.04207979097683817,
+        "frame": 11,
+        "bone": "RightUpLeg"
+      },
+      "wristDegrees": 44.9,
+      "failures": []
+    },
+    "aren-air-step": {
+      "source": [
+        {
+          "donor": "tripo:run_upstairs"
+        },
+        {
+          "donor": "tripo:flip"
+        },
+        {
+          "donor": "tripo:jump"
+        }
+      ],
+      "clearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.05857328932274161,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 26,
+        "floorMetres": -0.7365705063137039,
+        "floorFrame": 16.875,
+        "minRigUnits": 0.016395457765552332,
+        "minMetres": 0.027872278201438963,
+        "frame": 20,
+        "bone": "RightArm"
+      },
+      "wristDegrees": 44.7,
+      "failures": []
+    }
+  },
+  "method": "Actual delivered 30fps keys and eight joint-slerp subdivisions per interval; exact finite shaft-to-body-capsule distance. Capsules are a fitted proxy, not a triangle-mesh intersection proof; floor is shaft endpoints. Final acceptance requires main runtime review."
+}

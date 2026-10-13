@@ -1,0 +1,606 @@
+{
+  "hero": "sakda",
+  "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+  "method": "Actual GameApplication fixed-step fixtures, keyboard actions and native AnimationController clip assertions; outcomes through presentation API, not story progression.",
+  "cases": [
+    {
+      "label": "sakda-verified-idle",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-idle",
+      "clip": "aren-idle",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 4,
+      "additive": 4,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-idle"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-jab",
+      "boarHp": 990,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-limb-1",
+      "phase": "active",
+      "binding": "sakda-limb-1",
+      "clip": "sakda-limb-1",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 36,
+      "additive": 36,
+      "alpha": 0,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-limb-1"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-combo",
+      "boarHp": 939,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-limb-4",
+      "phase": "active",
+      "binding": "sakda-limb-4",
+      "clip": "sakda-limb-4",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 211,
+      "additive": 155,
+      "alpha": 56,
+      "activeKits": 5,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-limb-1",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-2",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-3",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-4"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-stomp",
+      "boarHp": 980,
+      "marks": [
+        {
+          "kind": "cripple",
+          "remainingTicks": 120
+        }
+      ],
+      "ghosts": 0,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-tempest",
+      "phase": "active",
+      "binding": "sakda-tempest",
+      "clip": "sakda-tempest",
+      "position": {
+        "x": 4,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 88,
+      "particles": 127,
+      "additive": 95,
+      "alpha": 32,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-tempest"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-flying-knee",
+      "boarHp": 962,
+      "ghosts": 8,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-flying-knee",
+      "phase": "active",
+      "binding": "sakda-flying-knee",
+      "clip": "sakda-flying-knee",
+      "position": {
+        "x": 4.05,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 80,
+      "particles": 223,
+      "additive": 155,
+      "alpha": 68,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-flying-knee"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-hundred-elbows",
+      "boarHp": 993,
+      "ghosts": 4,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-hundred-elbows",
+      "phase": "active",
+      "binding": "sakda-hundred-elbows",
+      "clip": "sakda-hundred-elbows",
+      "position": {
+        "x": 4.049999999999999,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 65,
+      "particles": 136,
+      "additive": 120,
+      "alpha": 16,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-hundred-elbows"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-echo",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-echo-wave",
+      "phase": "recovery",
+      "binding": "sakda-echo-wave",
+      "clip": "sakda-echo-wave",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 85,
+      "particles": 53,
+      "additive": 47,
+      "alpha": 6,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-echo-wave"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-tiger",
+      "boarHp": 940,
+      "ghosts": 5,
+      "untargetable": true,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-tigers-wrath",
+      "phase": "active",
+      "binding": "sakda-tigers-wrath",
+      "clip": "sakda-tigers-wrath",
+      "position": {
+        "x": 4.049999999999997,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 272,
+      "additive": 225,
+      "alpha": 47,
+      "activeKits": 3,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-tigers-wrath"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-recast",
+      "boarHp": 965,
+      "ghosts": 8,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-resonating-strike",
+      "phase": "active",
+      "binding": "sakda-resonating-strike",
+      "clip": "sakda-resonating-strike",
+      "position": {
+        "x": 4.050000000000001,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 85,
+      "particles": 225,
+      "additive": 213,
+      "alpha": 12,
+      "activeKits": 4,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-echo-wave",
+          "aren-idle"
+        ],
+        [
+          "sakda-resonating-strike"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-cleanse",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-cleanse",
+      "phase": "active",
+      "binding": "sakda-cleanse",
+      "clip": "sakda-cleanse",
+      "position": {
+        "x": 4,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 70,
+      "particles": 41,
+      "additive": 34,
+      "alpha": 7,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-cleanse"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-clinch",
+      "boarHp": 992,
+      "ghosts": 0,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "sakda-iron-clinch",
+      "phase": "active",
+      "binding": "sakda-iron-clinch",
+      "clip": "sakda-iron-clinch",
+      "position": {
+        "x": 4.05,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 80,
+      "particles": 116,
+      "additive": 109,
+      "alpha": 7,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-iron-clinch"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-guard-dash",
+      "boarHp": 1000,
+      "ghosts": 3,
+      "shield": 25,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "aren-forward-right-dive-roll",
+      "phase": "recovery",
+      "binding": "aren-forward-right-dive-roll",
+      "clip": "sakda-guard-dash",
+      "position": {
+        "x": 5.206447187928675,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 75,
+      "particles": 86,
+      "additive": 65,
+      "alpha": 21,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-forward-right-dive-roll"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-knee-charge",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-knee-charge",
+      "phase": "anticipation",
+      "binding": "sakda-knee-charge",
+      "clip": "sakda-knee-charge",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 12,
+      "additive": 10,
+      "alpha": 2,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "sakda-verified-elbow-charge",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-elbow-charge",
+      "phase": "anticipation",
+      "binding": "sakda-elbow-charge",
+      "clip": "sakda-elbow-charge",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 25,
+      "additive": 17,
+      "alpha": 8,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "sakda-verified-jump",
+      "boarHp": 1000,
+      "ghosts": 2,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "aren-jump",
+      "phase": "active",
+      "binding": "aren-jump",
+      "clip": "aren-jump",
+      "position": {
+        "x": 2,
+        "y": 0.6944444444444444,
+        "z": -3
+      },
+      "mana": 92,
+      "particles": 32,
+      "additive": 17,
+      "alpha": 15,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-jump"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-air-step",
+      "boarHp": 1000,
+      "ghosts": 5,
+      "flurry": 2,
+      "hero": "sakda",
+      "action": "aren-jump",
+      "phase": "active",
+      "binding": "aren-air-step",
+      "clip": "aren-air-step",
+      "position": {
+        "x": 2,
+        "y": 2.1417638483965007,
+        "z": -3
+      },
+      "mana": 84,
+      "particles": 108,
+      "additive": 74,
+      "alpha": 34,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-jump"
+        ],
+        [
+          "aren-jump"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-walk",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "aren-walk",
+      "phase": "idle",
+      "binding": "aren-walk",
+      "clip": "aren-walk",
+      "position": {
+        "x": 1.0561798854370856,
+        "y": 0,
+        "z": -4.321348160388083
+      },
+      "mana": 100,
+      "particles": 16,
+      "additive": 11,
+      "alpha": 5,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "run",
+      "hero": "sakda",
+      "action": "aren-run",
+      "phase": "idle",
+      "binding": "aren-run",
+      "clip": "aren-run",
+      "position": {
+        "x": 0.6573397725088876,
+        "y": 0,
+        "z": -4.879724318487562
+      },
+      "mana": 100,
+      "particles": 16,
+      "additive": 11,
+      "alpha": 5,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "hit",
+      "overlay": "aren-hit"
+    },
+    {
+      "label": "victory",
+      "hero": "sakda",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-cheer",
+      "clip": "aren-cheer",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 0,
+      "additive": 0,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "defeat",
+      "hero": "sakda",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-defeat",
+      "clip": "aren-defeat",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 0,
+      "additive": 0,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "sakda-verified-limb2",
+      "boarHp": 979,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-limb-2",
+      "phase": "active",
+      "binding": "sakda-limb-2",
+      "clip": "sakda-limb-2",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 69,
+      "additive": 62,
+      "alpha": 7,
+      "activeKits": 3,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-limb-1",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-2"
+        ]
+      ]
+    },
+    {
+      "label": "sakda-verified-limb3",
+      "boarHp": 965,
+      "ghosts": 0,
+      "hero": "sakda",
+      "action": "sakda-limb-3",
+      "phase": "active",
+      "binding": "sakda-limb-3",
+      "clip": "sakda-limb-3",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 106,
+      "additive": 82,
+      "alpha": 24,
+      "activeKits": 3,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "sakda-limb-1",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-2",
+          "aren-idle"
+        ],
+        [
+          "sakda-limb-3"
+        ]
+      ]
+    }
+  ]
+}

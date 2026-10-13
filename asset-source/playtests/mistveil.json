@@ -1,0 +1,5709 @@
+[
+  {
+    "id": "mistveil-basin-environment",
+    "sourceType": "composed-recipe",
+    "kind": "environment",
+    "proceduralRecipeId": "mistveil-basin-environment",
+    "componentAssetIds": [
+      "prop-black-sap-filter-drum",
+      "prop-hunter-extraction-rig",
+      "prop-mire-bank-rock",
+      "prop-mistveil-reed-cluster",
+      "prop-mistveil-root-tree",
+      "prop-root-cavern-mouth"
+    ],
+    "runtimeUrl": null,
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/manifest.json#mistveil-basin-environment",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-aren",
+    "actorId": "aren",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "biped",
+    "sourceHash": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
+    "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+    "outputHash": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1.7
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {
+      "aren-idle": "idle.001",
+      "aren-cheer": "cheer.001",
+      "aren-defeat": "defeat_03.001",
+      "aren-walk": "walk.001",
+      "aren-strafe": "walk.001",
+      "aren-run": "run.001",
+      "aren-jump": "One long jump.001",
+      "aren-forward-left-dive-roll": "dive.001",
+      "aren-forward-right-dive-roll": "dive.001",
+      "aren-perfect-dodge-left": "dive.001",
+      "aren-perfect-dodge-right": "dive.001",
+      "aren-light-1": "aren-light-1",
+      "aren-light-2": "aren-light-2",
+      "aren-light-3": "aren-light-3",
+      "aren-heavy": "aren-heavy",
+      "aren-charged-heavy": "aren-charged-heavy",
+      "aren-charged-heavy-charge": "aren-charged-heavy-charge",
+      "aren-root-tether": "aren-root-tether",
+      "aren-cleanse": "aren-cleanse",
+      "aren-hit": "aren-hit",
+      "aren-stagger": "aren-stagger",
+      "aren-back-handspring": "aren-back-handspring",
+      "aren-light-4": "aren-light-4",
+      "aren-sigil-bolt": "aren-sigil-bolt",
+      "aren-sigil-barrage": "aren-sigil-barrage",
+      "aren-sigil-charge": "aren-sigil-charge",
+      "aren-judgement": "aren-judgement",
+      "aren-air-step": "aren-air-step"
+    },
+    "rootMotion": {
+      "aren-cheer": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679084301,
+            "position": {
+              "x": 0.00251505128107965,
+              "y": 0.5432308912277222,
+              "z": -0.010567361488938332
+            }
+          },
+          {
+            "time": 6.083333492279053,
+            "position": {
+              "x": 0.05230865627527237,
+              "y": 0.5435519218444824,
+              "z": -0.03354179114103317
+            }
+          },
+          {
+            "time": 12.125,
+            "position": {
+              "x": 0.004079883452504873,
+              "y": 0.5336994528770447,
+              "z": -0.018239818513393402
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-defeat": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679084301,
+            "position": {
+              "x": 0.0019521877402439713,
+              "y": 0.5765112042427063,
+              "z": -0.009760811924934387
+            }
+          },
+          {
+            "time": 2.7916667461395264,
+            "position": {
+              "x": -0.09597373753786087,
+              "y": 0.2896636426448822,
+              "z": -0.2765192985534668
+            }
+          },
+          {
+            "time": 5.583333492279053,
+            "position": {
+              "x": -0.18829037249088287,
+              "y": 0.08222855627536774,
+              "z": 0.0003911207022611052
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-idle": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679084301,
+            "position": {
+              "x": 0.0019521858775988221,
+              "y": 0.5503907799720764,
+              "z": -0.00976080447435379
+            }
+          },
+          {
+            "time": 7.708333492279053,
+            "position": {
+              "x": -0.13298241794109344,
+              "y": 0.5481448769569397,
+              "z": -0.011536921374499798
+            }
+          },
+          {
+            "time": 15.375,
+            "position": {
+              "x": 0.0019484610529616475,
+              "y": 0.5503931641578674,
+              "z": -0.009762820787727833
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-walk": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.0019522392,
+              "y": 0.5446404219,
+              "z": -0.0097608892
+            }
+          },
+          {
+            "time": 1.2083333731,
+            "position": {
+              "x": -0.0052533192,
+              "y": 0.5448820591,
+              "z": 0.7778931856
+            }
+          },
+          {
+            "time": 2.375,
+            "position": {
+              "x": 0.0019464049,
+              "y": 0.5446459055,
+              "z": 1.5583947897
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-strafe": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.0019522392,
+              "y": 0.5446404219,
+              "z": -0.0097608892
+            }
+          },
+          {
+            "time": 1.2083333731,
+            "position": {
+              "x": -0.0052533192,
+              "y": 0.5448820591,
+              "z": 0.7778931856
+            }
+          },
+          {
+            "time": 2.375,
+            "position": {
+              "x": 0.0019464049,
+              "y": 0.5446459055,
+              "z": 1.5583947897
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-run": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": -0.0295546278,
+              "y": 0.4669073522,
+              "z": 0.54466784
+            }
+          },
+          {
+            "time": 0.6666666865,
+            "position": {
+              "x": -0.0399421155,
+              "y": 0.4718569815,
+              "z": 2.0447649956
+            }
+          },
+          {
+            "time": 1.2916666269,
+            "position": {
+              "x": -0.0280408617,
+              "y": 0.4742871821,
+              "z": 3.6063320637
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-jump": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": -0.0050472007,
+              "y": 0.5477312207,
+              "z": 0.0230338816
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -0.0079202885,
+              "y": 0.3798260689,
+              "z": 0.8412400484
+            }
+          },
+          {
+            "time": 3,
+            "position": {
+              "x": 0.0092722727,
+              "y": 0.5472902055,
+              "z": 1.1019406319
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-left-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.001681697,
+              "y": 0.5092770457,
+              "z": -0.0106244069
+            }
+          },
+          {
+            "time": 1.375,
+            "position": {
+              "x": 0.0231663734,
+              "y": 0.6529003382,
+              "z": 1.5754032135
+            }
+          },
+          {
+            "time": 2.75,
+            "position": {
+              "x": -0.2065812349,
+              "y": 0.5089577436,
+              "z": 1.7378730774
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-right-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.001681697,
+              "y": 0.5092770457,
+              "z": -0.0106244069
+            }
+          },
+          {
+            "time": 1.375,
+            "position": {
+              "x": 0.0231663734,
+              "y": 0.6529003382,
+              "z": 1.5754032135
+            }
+          },
+          {
+            "time": 2.75,
+            "position": {
+              "x": -0.2065812349,
+              "y": 0.5089577436,
+              "z": 1.7378730774
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.001681697,
+              "y": 0.5092770457,
+              "z": -0.0106244069
+            }
+          },
+          {
+            "time": 1.375,
+            "position": {
+              "x": 0.0231663734,
+              "y": 0.6529003382,
+              "z": 1.5754032135
+            }
+          },
+          {
+            "time": 2.75,
+            "position": {
+              "x": -0.2065812349,
+              "y": 0.5089577436,
+              "z": 1.7378730774
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0.0416666679,
+            "position": {
+              "x": 0.001681697,
+              "y": 0.5092770457,
+              "z": -0.0106244069
+            }
+          },
+          {
+            "time": 1.375,
+            "position": {
+              "x": 0.0231663734,
+              "y": 0.6529003382,
+              "z": 1.5754032135
+            }
+          },
+          {
+            "time": 2.75,
+            "position": {
+              "x": -0.2065812349,
+              "y": 0.5089577436,
+              "z": 1.7378730774
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-light-1": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.51244,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.2,
+            "position": {
+              "x": 0.001322,
+              "y": 0.52532,
+              "z": -0.0099
+            }
+          },
+          {
+            "time": 0.433333,
+            "position": {
+              "x": 0.000892,
+              "y": 0.528494,
+              "z": -0.009996
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-light-2": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.504317,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.233333,
+            "position": {
+              "x": 0.047959,
+              "y": 0.541409,
+              "z": -0.011859
+            }
+          },
+          {
+            "time": 0.466667,
+            "position": {
+              "x": 0.061625,
+              "y": 0.518523,
+              "z": -0.006039
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-light-3": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.414128,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.266667,
+            "position": {
+              "x": 0.002651,
+              "y": 0.454702,
+              "z": -0.009916
+            }
+          },
+          {
+            "time": 0.566667,
+            "position": {
+              "x": 0.002637,
+              "y": 0.442329,
+              "z": -0.009913
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-heavy": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.515411,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.533333,
+            "position": {
+              "x": 0.059597,
+              "y": 0.498775,
+              "z": -0.012644
+            }
+          },
+          {
+            "time": 1.066667,
+            "position": {
+              "x": 0.062246,
+              "y": 0.505053,
+              "z": -0.011606
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-charged-heavy": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.469883,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.633333,
+            "position": {
+              "x": -1.115659,
+              "y": 0.447643,
+              "z": 0.566891
+            }
+          },
+          {
+            "time": 1.266667,
+            "position": {
+              "x": -1.21886,
+              "y": 0.437764,
+              "z": 1.046211
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-charged-heavy-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.048576,
+              "y": 0.52713,
+              "z": -0.00625
+            }
+          },
+          {
+            "time": 0.4,
+            "position": {
+              "x": 0.009046,
+              "y": 0.5192,
+              "z": -0.009342
+            }
+          },
+          {
+            "time": 0.8,
+            "position": {
+              "x": 0.048576,
+              "y": 0.52713,
+              "z": -0.00625
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-root-tether": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.576398,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.433333,
+            "position": {
+              "x": -0.644083,
+              "y": 0.431474,
+              "z": 0.302154
+            }
+          },
+          {
+            "time": 0.9,
+            "position": {
+              "x": 0.106919,
+              "y": 0.514341,
+              "z": -0.005092
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-cleanse": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.249942,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.9,
+            "position": {
+              "x": 0.001907,
+              "y": 0.209825,
+              "z": -0.00977
+            }
+          },
+          {
+            "time": 1.8,
+            "position": {
+              "x": 0.112755,
+              "y": 0.518263,
+              "z": -0.004905
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hit": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "aren-stagger": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.459892,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.333333,
+            "position": {
+              "x": 0.001358,
+              "y": 0.478145,
+              "z": -0.009893
+            }
+          },
+          {
+            "time": 0.7,
+            "position": {
+              "x": 0.001347,
+              "y": 0.478183,
+              "z": -0.009895
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-handspring": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.518509,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.4,
+            "position": {
+              "x": 0.001092,
+              "y": 0.541486,
+              "z": -0.009952
+            }
+          },
+          {
+            "time": 0.8,
+            "position": {
+              "x": 0.000923,
+              "y": 0.546003,
+              "z": -0.009989
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-light-4": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.52114,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.333333,
+            "position": {
+              "x": -1.560017,
+              "y": 0.433133,
+              "z": 0.418542
+            }
+          },
+          {
+            "time": 0.666667,
+            "position": {
+              "x": -1.647183,
+              "y": 0.428728,
+              "z": 0.777246
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-sigil-bolt": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.437825,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.233333,
+            "position": {
+              "x": 0.001346,
+              "y": 0.440674,
+              "z": -0.009627
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": 0.000554,
+              "y": 0.421005,
+              "z": -0.009451
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-sigil-barrage": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.424266,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.333333,
+            "position": {
+              "x": 0.001963,
+              "y": 0.419875,
+              "z": -0.009763
+            }
+          },
+          {
+            "time": 0.666667,
+            "position": {
+              "x": 0.002785,
+              "y": 0.463071,
+              "z": -0.009945
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-sigil-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.527853,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.6,
+            "position": {
+              "x": 0.00193,
+              "y": 0.529136,
+              "z": -0.009766
+            }
+          },
+          {
+            "time": 1.2,
+            "position": {
+              "x": 0.001952,
+              "y": 0.527853,
+              "z": -0.009761
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-judgement": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.025296,
+              "y": 0.479302,
+              "z": -0.015362
+            }
+          },
+          {
+            "time": 0.433333,
+            "position": {
+              "x": -0.002988,
+              "y": 0.409858,
+              "z": -0.006032
+            }
+          },
+          {
+            "time": 0.866667,
+            "position": {
+              "x": 0.06204,
+              "y": 0.55771,
+              "z": -0.061476
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-air-step": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-aren-user-supplied-01/retarget-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-greenwake-root-gate",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "b66c5e89-c8ca-42da-8238-883d0d4b641a",
+    "runtimeUrl": "/asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+    "outputHash": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-greenwake-root-gate-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-warden-glaive",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "308cff7b-dff1-482f-b0ce-f2896a047ffb",
+    "runtimeUrl": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+    "outputHash": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-warden-glaive-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-warden-waystone",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "2f84ac06-988a-43a6-83ac-50c333906b54",
+    "runtimeUrl": "/asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+    "outputHash": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 4.603,
+      "originOffset": {
+        "x": 0,
+        "y": 2.24967,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-warden-waystone-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-bog-lurker",
+    "actorId": "mistveil-lurker",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_0",
+    "tripoSourceTask": "ca2a89d9-30d3-4a72-9175-6eb67d849af2",
+    "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
+    "outputHash": "ce1f64ae0352350db64fa6758d32f578b22ec06af0b319298e617f834ca28b4e",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 2.245
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-lantern-heron",
+    "actorId": "mistveil-heron",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "avian",
+    "castSocketBone": "tripo::Head_5",
+    "tripoSourceTask": "6ef4431e-4f6a-4649-9475-ab3df19b8227",
+    "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
+    "outputHash": "2f6ac41e2ca9049a79e544c1d08af44b52747ac6bd67a47863ce9c24567c1c44",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 3.834
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-tail": "monster-tail"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-ghor-mire-maw",
+    "actorId": "mistveil-ghor",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_1",
+    "tripoSourceTask": "ab27cb96-5c43-42ff-9215-39bd63f3eae9",
+    "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
+    "outputHash": "bb5caa257ee1ece8eb6512113595740bd0143aa217d5c0d36603b77e5488573e",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -0.9249,
+        "y": 0,
+        "z": 0.3801
+      },
+      "scale": 7.174
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-tail": "monster-tail"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-mistveil-root-tree",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "bc4f6d42-8ab1-419b-ae7b-487292b00045",
+    "runtimeUrl": "/asset-source/generated/prop-mistveil-root-tree-runtime-01/prop-mistveil-root-tree.glb",
+    "outputHash": "9571b6523579882e32beb6deb0b24166acf5e1d9962d5df62014ca1452949cdd",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 17.233,
+      "originOffset": {
+        "x": 0,
+        "y": 6.97661,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-mistveil-root-tree-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-mistveil-reed-cluster",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "1c025cbf-aece-43c7-b97f-75325149b152",
+    "runtimeUrl": "/asset-source/generated/prop-mistveil-reed-cluster-runtime-01/prop-mistveil-reed-cluster.glb",
+    "outputHash": "94240be1243221e21165df097be567595304658342438395bb1243db82ca302a",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.573,
+      "originOffset": {
+        "x": 0,
+        "y": 1.26504,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-mistveil-reed-cluster-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-mire-bank-rock",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "91897a7c-823e-4880-9f2e-4d4560c9bc6f",
+    "runtimeUrl": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+    "outputHash": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 4.085,
+      "originOffset": {
+        "x": 0,
+        "y": 0.95756,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-mire-bank-rock-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-hunter-extraction-rig",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "08c8d41a-02c4-4dfe-bf2a-559560df07f0",
+    "runtimeUrl": "/asset-source/generated/prop-hunter-extraction-rig-runtime-01/prop-hunter-extraction-rig.glb",
+    "outputHash": "3e7edc383ad9dccf08feea93efcfcfe75cfcdfc0f63bb6f048fe230806c67b15",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 6.195,
+      "originOffset": {
+        "x": 0,
+        "y": 3.00011,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-hunter-extraction-rig-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-black-sap-filter-drum",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "87f6085b-64e2-41f4-bc17-46e5830d21a5",
+    "runtimeUrl": "/asset-source/generated/prop-black-sap-filter-drum-runtime-01/prop-black-sap-filter-drum.glb",
+    "outputHash": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.048,
+      "originOffset": {
+        "x": 0,
+        "y": 1.00248,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-black-sap-filter-drum-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-root-cavern-mouth",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "493fd439-8e83-417b-bd73-a85c7a3a7125",
+    "runtimeUrl": "/asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb",
+    "outputHash": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 8.157,
+      "originOffset": {
+        "x": 0,
+        "y": 3.04419,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-root-cavern-mouth-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-yara-hero",
+    "actorId": "aren",
+    "variantOf": "actor-aren",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "biped",
+    "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
+    "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
+    "outputHash": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
+    "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1.7
+    },
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {
+      "aren-idle": "aren-idle",
+      "aren-walk": "aren-walk",
+      "aren-run": "aren-run",
+      "aren-jump": "aren-jump",
+      "aren-forward-left-dive-roll": "aren-forward-left-dive-roll",
+      "aren-hit": "aren-hit",
+      "aren-cheer": "aren-cheer",
+      "aren-defeat": "aren-defeat",
+      "yara-thornshot-1": "yara-thornshot-1",
+      "yara-thornshot-2": "yara-thornshot-2",
+      "yara-thornshot-3": "yara-thornshot-3",
+      "yara-root-spike": "yara-root-spike",
+      "yara-root-charge": "yara-root-charge",
+      "yara-root-eruption": "yara-root-eruption",
+      "yara-seed-charge": "yara-seed-charge",
+      "yara-sap-lance": "yara-sap-lance",
+      "yara-seed-storm": "yara-seed-storm",
+      "yara-binding-vines": "yara-binding-vines",
+      "yara-cleanse": "yara-cleanse",
+      "yara-heartroot-bloom": "yara-heartroot-bloom",
+      "aren-air-step": "aren-air-step",
+      "aren-strafe": "aren-walk",
+      "aren-stagger": "aren-hit",
+      "aren-stumble-recovery": "aren-hit",
+      "aren-hard-landing": "aren-hit",
+      "aren-forward-right-dive-roll": "aren-forward-left-dive-roll",
+      "aren-perfect-dodge-left": "aren-forward-left-dive-roll",
+      "aren-perfect-dodge-right": "aren-forward-left-dive-roll",
+      "aren-quick-step-left": "aren-forward-left-dive-roll",
+      "aren-quick-step-right": "aren-forward-left-dive-roll",
+      "aren-forward-shoulder-roll": "aren-forward-left-dive-roll",
+      "aren-back-handspring": "aren-forward-left-dive-roll",
+      "aren-left-cartwheel": "aren-forward-left-dive-roll",
+      "aren-right-cartwheel": "aren-forward-left-dive-roll",
+      "aren-back-left-pivot-roll": "aren-forward-left-dive-roll",
+      "aren-back-right-pivot-roll": "aren-forward-left-dive-roll",
+      "aren-low-slide": "aren-forward-left-dive-roll",
+      "aren-dodge-recovery": "aren-forward-left-dive-roll",
+      "aren-staff-vault": "aren-jump",
+      "aren-low-ledge": "aren-jump",
+      "aren-swing": "aren-jump"
+    },
+    "rootMotion": {
+      "aren-idle": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
+            }
+          },
+          {
+            "time": 2,
+            "position": {
+              "x": -0.000013003426829527598,
+              "y": -0.0015447483165189624,
+              "z": 0.4982157349586487
+            }
+          },
+          {
+            "time": 4,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-walk": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.00040388735942542553,
+              "y": -0.05625049024820328,
+              "z": 0.5447662472724915
+            }
+          },
+          {
+            "time": 1.1666666269302368,
+            "position": {
+              "x": 0.00016330262587871403,
+              "y": -0.026479583233594894,
+              "z": 0.516940712928772
+            }
+          },
+          {
+            "time": 2.366666555404663,
+            "position": {
+              "x": 0.00040388735942542553,
+              "y": -0.05625049024820328,
+              "z": 0.5447662472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-run": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0010903944494202733,
+              "y": -0.16239775717258453,
+              "z": 0.548322319984436
+            }
+          },
+          {
+            "time": 0.6333333253860474,
+            "position": {
+              "x": 0.0006073663826100528,
+              "y": -0.07149400562047958,
+              "z": 0.49040472507476807
+            }
+          },
+          {
+            "time": 1.2666666507720947,
+            "position": {
+              "x": 0.0010903944494202733,
+              "y": -0.16239775717258453,
+              "z": 0.548322319984436
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-jump": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": false,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8291477605080217e-8,
+              "y": 2.8518629235918525e-8,
+              "z": 0.4662838280200958
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0008478594245389104,
+              "y": 0.005551435984671116,
+              "z": 0.4888899326324463
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00026231285301037133,
+              "y": 0.00044790885294787586,
+              "z": 0.48518601059913635
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-left-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hit": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 9.393985589412068e-10,
+              "y": 7.222384357241651e-10,
+              "z": 0.06049716845154762
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -0.015320738777518272,
+              "y": 0.023725057020783424,
+              "z": 0.06278379261493683
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -0.015505862422287464,
+              "y": 0.024028968065977097,
+              "z": 0.06169288605451584
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-cheer": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.001988018862903118,
+              "z": 0.4893229305744171
+            }
+          },
+          {
+            "time": 2.5,
+            "position": {
+              "x": -0.000005432151283457642,
+              "y": 0.000025364339307998307,
+              "z": 0.4886716306209564
+            }
+          },
+          {
+            "time": 5,
+            "position": {
+              "x": -0.000014575876775779761,
+              "y": 0.00006807473982917145,
+              "z": 0.48757505416870117
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-defeat": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.023397577926516533,
+              "z": 0.5
+            }
+          },
+          {
+            "time": 3,
+            "position": {
+              "x": -0.00003743425986613147,
+              "y": -0.023777132853865623,
+              "z": 0.4955114424228668
+            }
+          },
+          {
+            "time": 6,
+            "position": {
+              "x": -3.9793249584363366e-8,
+              "y": -0.023396823555231094,
+              "z": 0.4999948740005493
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-thornshot-1": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.07734350115060806,
+              "z": 0.5613521933555603
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -0.0004496107576414943,
+              "y": -0.06605695933103561,
+              "z": 0.5074383020401001
+            }
+          },
+          {
+            "time": 0.4333333373069763,
+            "position": {
+              "x": -0.0006879705470055342,
+              "y": -0.06515903770923615,
+              "z": 0.47885581851005554
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-thornshot-2": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.08361588418483734,
+              "z": 0.5613521933555603
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": -0.0006239826907403767,
+              "y": -0.08849125355482101,
+              "z": 0.48653101921081543
+            }
+          },
+          {
+            "time": 0.46666666865348816,
+            "position": {
+              "x": -0.0006539213936775923,
+              "y": -0.08779843151569366,
+              "z": 0.48293787240982056
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-thornshot-3": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 3.909240930966007e-8,
+              "y": -0.02051372639834881,
+              "z": 0.44898319244384766
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -0.004447067156434059,
+              "y": -0.07444466650485992,
+              "z": 0.5423376560211182
+            }
+          },
+          {
+            "time": 0.5666666626930237,
+            "position": {
+              "x": 0.005962226074188948,
+              "y": -0.03533719852566719,
+              "z": 0.5298789739608765
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-root-spike": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.02494216337800026,
+              "z": 0.4994905889034271
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": 0.000007582193120470038,
+              "y": -0.017177551984786987,
+              "z": 0.5003997087478638
+            }
+          },
+          {
+            "time": 1.0666667222976685,
+            "position": {
+              "x": 0.00003858402851619758,
+              "y": -0.02969842404127121,
+              "z": 0.5041155219078064
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-root-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.00006298920197878033,
+              "y": 0.0004401881305966526,
+              "z": 0.4950466752052307
+            }
+          },
+          {
+            "time": 0.7333333492279053,
+            "position": {
+              "x": 0.0000872965611051768,
+              "y": 0.0008433962939307094,
+              "z": 0.49717530608177185
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": 0.00006298920197878033,
+              "y": 0.0004401881305966526,
+              "z": 0.4950466752052307
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-root-eruption": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.7597193863471148e-8,
+              "y": -3.1912733788885816e-8,
+              "z": 0.4896388053894043
+            }
+          },
+          {
+            "time": 0.6333333253860474,
+            "position": {
+              "x": -0.00022671477927360684,
+              "y": -0.02029220573604107,
+              "z": 0.24031834304332733
+            }
+          },
+          {
+            "time": 1.2666666507720947,
+            "position": {
+              "x": 0.0000861917797010392,
+              "y": 0.0010071342112496495,
+              "z": 0.49710550904273987
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-seed-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -2.8938765694874746e-7,
+              "y": -0.012217303737998009,
+              "z": 0.49994343519210815
+            }
+          },
+          {
+            "time": 0.7333333492279053,
+            "position": {
+              "x": 0.0000029892823931731982,
+              "y": -0.011022056452929974,
+              "z": 0.5003365278244019
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -2.8938765694874746e-7,
+              "y": -0.012217303737998009,
+              "z": 0.49994343519210815
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-sap-lance": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1849464742752502e-9,
+              "y": -0.0853157788515091,
+              "z": 0.551487386226654
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": -0.0001377003500238061,
+              "y": -0.08920425921678543,
+              "z": 0.5349740386009216
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -0.0005703408387489617,
+              "y": -0.08779386430978775,
+              "z": 0.4831017255783081
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-seed-storm": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -2.0923609511669383e-8,
+              "y": -3.1038201342425964e-8,
+              "z": 0.45550400018692017
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": 0.03230109065771103,
+              "y": 0.06460392475128174,
+              "z": 0.4740181267261505
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": 0.018657851964235306,
+              "y": 0.04919020086526871,
+              "z": 0.48378393054008484
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-binding-vines": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -6.84177834386901e-8,
+              "y": -0.04805852472782135,
+              "z": 0.5109941959381104
+            }
+          },
+          {
+            "time": 0.4333333373069763,
+            "position": {
+              "x": -0.037633880972862244,
+              "y": -0.5895106792449951,
+              "z": 0.4212305247783661
+            }
+          },
+          {
+            "time": 0.8999999761581421,
+            "position": {
+              "x": -0.039227914065122604,
+              "y": -0.5914251804351807,
+              "z": 0.41865020990371704
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-cleanse": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.7597193863471148e-8,
+              "y": -3.1912733788885816e-8,
+              "z": 0.4896388053894043
+            }
+          },
+          {
+            "time": 0.8999999761581421,
+            "position": {
+              "x": -0.0016054903389886022,
+              "y": -0.016533292829990387,
+              "z": 0.23891612887382507
+            }
+          },
+          {
+            "time": 1.7999999523162842,
+            "position": {
+              "x": 0.0000861917797010392,
+              "y": 0.0010071342112496495,
+              "z": 0.49710550904273987
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "yara-heartroot-bloom": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.7597193863471148e-8,
+              "y": -3.1912733788885816e-8,
+              "z": 0.4896388053894043
+            }
+          },
+          {
+            "time": 1.2999999523162842,
+            "position": {
+              "x": 0.0005148881464265287,
+              "y": -0.02270418219268322,
+              "z": 0.5010393261909485
+            }
+          },
+          {
+            "time": 2.5999999046325684,
+            "position": {
+              "x": 0.0004931104485876858,
+              "y": -0.023979632183909416,
+              "z": 0.4984279274940491
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-air-step": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "aren-strafe": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.00040388735942542553,
+              "y": -0.05625049024820328,
+              "z": 0.5447662472724915
+            }
+          },
+          {
+            "time": 1.1666666269302368,
+            "position": {
+              "x": 0.00016330262587871403,
+              "y": -0.026479583233594894,
+              "z": 0.516940712928772
+            }
+          },
+          {
+            "time": 2.366666555404663,
+            "position": {
+              "x": 0.00040388735942542553,
+              "y": -0.05625049024820328,
+              "z": 0.5447662472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stagger": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 9.393985589412068e-10,
+              "y": 7.222384357241651e-10,
+              "z": 0.06049716845154762
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -0.015320738777518272,
+              "y": 0.023725057020783424,
+              "z": 0.06278379261493683
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -0.015505862422287464,
+              "y": 0.024028968065977097,
+              "z": 0.06169288605451584
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stumble-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 9.393985589412068e-10,
+              "y": 7.222384357241651e-10,
+              "z": 0.06049716845154762
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -0.015320738777518272,
+              "y": 0.023725057020783424,
+              "z": 0.06278379261493683
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -0.015505862422287464,
+              "y": 0.024028968065977097,
+              "z": 0.06169288605451584
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hard-landing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 9.393985589412068e-10,
+              "y": 7.222384357241651e-10,
+              "z": 0.06049716845154762
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -0.015320738777518272,
+              "y": 0.023725057020783424,
+              "z": 0.06278379261493683
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -0.015505862422287464,
+              "y": 0.024028968065977097,
+              "z": 0.06169288605451584
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-right-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-shoulder-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-handspring": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-left-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-right-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-left-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-right-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-slide": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-dodge-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 1.1832403945533088e-9,
+              "y": 6.37380148660327e-11,
+              "z": 0.4491051435470581
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.017740104347467422,
+              "y": 0.10786201059818268,
+              "z": 0.6393287181854248
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00030541038722731173,
+              "y": 0.003272684058174491,
+              "z": 0.5305009484291077
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-staff-vault": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8291477605080217e-8,
+              "y": 2.8518629235918525e-8,
+              "z": 0.4662838280200958
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0008478594245389104,
+              "y": 0.005551435984671116,
+              "z": 0.4888899326324463
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00026231285301037133,
+              "y": 0.00044790885294787586,
+              "z": 0.48518601059913635
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-ledge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8291477605080217e-8,
+              "y": 2.8518629235918525e-8,
+              "z": 0.4662838280200958
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0008478594245389104,
+              "y": 0.005551435984671116,
+              "z": 0.4888899326324463
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00026231285301037133,
+              "y": 0.00044790885294787586,
+              "z": 0.48518601059913635
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-swing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8291477605080217e-8,
+              "y": 2.8518629235918525e-8,
+              "z": 0.4662838280200958
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0008478594245389104,
+              "y": 0.005551435984671116,
+              "z": 0.4888899326324463
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00026231285301037133,
+              "y": 0.00044790885294787586,
+              "z": 0.48518601059913635
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-yara-hero-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-heartroot-focus-staff",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "db7ced9a-59c7-413b-a8f0-e5fe80cbef60",
+    "runtimeUrl": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
+    "outputHash": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-heartroot-focus-staff-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-vesper-hero",
+    "actorId": "aren",
+    "variantOf": "actor-aren",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "biped",
+    "tripoSourceTask": "97eb3992-de84-4925-abba-6f54b8cf8fc1",
+    "sourceHash": "2effad481f9c78ec2f2ebd5f7a9de47437a887022d986f385a480a4ab40775a4",
+    "skinWeightRepair": {
+      "repair": "vesper-coat-flap-weights",
+      "params": {
+        "rigScale": 1.7,
+        "armFade": {
+          "top": 1.2,
+          "bottom": 1.02
+        },
+        "armClear": {
+          "keep": 0.1,
+          "remove": 0.16
+        },
+        "torsoGate": {
+          "from": 0.05,
+          "to": 0.2
+        },
+        "thighFade": {
+          "bottom": 0.92,
+          "top": 1.06
+        },
+        "thighClear": 0.12,
+        "smoothing": {
+          "iterations": 3,
+          "lambda": 0.5
+        }
+      },
+      "input": {
+        "binSha256": "0f32921e5ffdaeb387fec251bed2b88c4e646934c9471a792b3dbac4dc8347f2",
+        "skinSha256": "5ee4d0cbb54dfc3ef0284553d2bf152518818ffe5604b2abcb36c2d6acfc836f",
+        "vertices": 975606,
+        "joints": 23
+      },
+      "output": {
+        "binSha256": "85daec2087ef932515e9c3af61723e0ff1427caac23cd9a12dd6a4e8b76f4941",
+        "skinSha256": "85d77a5ba41ef9fce53f00c9ef1b831938ba37d3549583f1810c1254790b0ba2"
+      },
+      "selection": {
+        "maskVertices": 104402,
+        "armRule": {
+          "Right": 45001,
+          "Left": 39806
+        },
+        "thighRule": {
+          "Right": 23660,
+          "Left": 18932
+        },
+        "maxArmWeightMoved": 0.44171,
+        "maxThighWeightMoved": 0.15948,
+        "boundsMetres": {
+          "min": [
+            -0.04649,
+            0.71523,
+            -0.22542
+          ],
+          "max": [
+            0.24404,
+            1.19981,
+            0.22623
+          ]
+        }
+      },
+      "editedVertices": 104402,
+      "maxWeightDelta": 0.48447,
+      "maxInfluencesBeforeTruncation": 7,
+      "normalization": "top-4 by weight, non-negative, renormalised to sum 1 (float32)",
+      "repairedBaseHash": "efc52ac237896a5505d40ec70a7f0ff959ae3c81f08e7504b1613dad2b7bfee7"
+    },
+    "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+    "runtimeUrl": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1.7
+    },
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {
+      "aren-idle": "aren-idle",
+      "aren-walk": "aren-walk",
+      "aren-run": "aren-run",
+      "aren-jump": "aren-jump",
+      "aren-hit": "aren-hit",
+      "aren-cheer": "aren-cheer",
+      "aren-defeat": "aren-defeat",
+      "vesper-iai-1": "vesper-iai-1",
+      "vesper-iai-2": "vesper-iai-2",
+      "vesper-iai-3": "vesper-iai-3",
+      "vesper-iai-4": "vesper-iai-4",
+      "vesper-thousand-cuts": "vesper-thousand-cuts",
+      "vesper-requiem": "vesper-requiem",
+      "vesper-severing-shadow": "vesper-severing-shadow",
+      "vesper-shadow-step": "vesper-shadow-step",
+      "vesper-cleanse": "vesper-cleanse",
+      "vesper-cuts-charge": "vesper-cuts-charge",
+      "vesper-shade-charge": "vesper-shade-charge",
+      "vesper-kunai-fan": "vesper-kunai-fan",
+      "vesper-shade-swap": "vesper-shade-swap",
+      "vesper-mist-blink": "vesper-mist-blink",
+      "aren-air-step": "aren-air-step",
+      "aren-strafe": "aren-walk",
+      "aren-stagger": "aren-hit",
+      "aren-stumble-recovery": "aren-hit",
+      "aren-hard-landing": "aren-hit",
+      "aren-forward-left-dive-roll": "vesper-mist-blink",
+      "aren-forward-right-dive-roll": "vesper-mist-blink",
+      "aren-perfect-dodge-left": "vesper-mist-blink",
+      "aren-perfect-dodge-right": "vesper-mist-blink",
+      "aren-quick-step-left": "vesper-mist-blink",
+      "aren-quick-step-right": "vesper-mist-blink",
+      "aren-forward-shoulder-roll": "vesper-mist-blink",
+      "aren-back-handspring": "vesper-mist-blink",
+      "aren-left-cartwheel": "vesper-mist-blink",
+      "aren-right-cartwheel": "vesper-mist-blink",
+      "aren-back-left-pivot-roll": "vesper-mist-blink",
+      "aren-back-right-pivot-roll": "vesper-mist-blink",
+      "aren-low-slide": "vesper-mist-blink",
+      "aren-dodge-recovery": "vesper-mist-blink",
+      "aren-staff-vault": "aren-jump",
+      "aren-low-ledge": "aren-jump",
+      "aren-swing": "aren-jump"
+    },
+    "rootMotion": {
+      "aren-idle": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.2585643638374222e-8,
+              "y": -0.007042494136840105,
+              "z": 0.42518168687820435
+            }
+          },
+          {
+            "time": 2,
+            "position": {
+              "x": -1.2585643638374222e-8,
+              "y": -0.007042494136840105,
+              "z": 0.42518168687820435
+            }
+          },
+          {
+            "time": 4,
+            "position": {
+              "x": -1.2585643638374222e-8,
+              "y": -0.007042494136840105,
+              "z": 0.42518168687820435
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-walk": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.00884411670267582,
+              "z": 0.4567185938358307
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": 0.0020092842169106007,
+              "y": 0.003897448070347309,
+              "z": 0.45577719807624817
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -2.872786808438832e-8,
+              "y": -0.008844157680869102,
+              "z": 0.4567186236381531
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-run": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.00042763163219206035,
+              "z": 0.4642195701599121
+            }
+          },
+          {
+            "time": 0.1666666716337204,
+            "position": {
+              "x": -0.002488213824108243,
+              "y": -0.003934276290237904,
+              "z": 0.45920079946517944
+            }
+          },
+          {
+            "time": 0.36666667461395264,
+            "position": {
+              "x": 2.560266310069892e-8,
+              "y": -0.00042758541530929506,
+              "z": 0.4642195999622345
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-jump": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": false,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.5470844988717545e-8,
+              "y": 2.8359345094486343e-8,
+              "z": 0.4659084975719452
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0006408243789337575,
+              "y": -0.008356872014701366,
+              "z": 0.6580286622047424
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.0008246190845966339,
+              "y": 0.007934116758406162,
+              "z": 0.4464600384235382
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hit": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.08200559765100479,
+              "z": 0.5034692883491516
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.000020433837562450208,
+              "y": -0.08278688043355942,
+              "z": 0.5204541683197021
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.000021491818188223988,
+              "y": -0.08278902620077133,
+              "z": 0.5213287472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-cheer": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4892319440841675
+            }
+          },
+          {
+            "time": 2.5,
+            "position": {
+              "x": -8.509834401593253e-7,
+              "y": 0.0000298856775771128,
+              "z": 0.48852428793907166
+            }
+          },
+          {
+            "time": 5,
+            "position": {
+              "x": -0.0000011043032372981543,
+              "y": 0.00003865763210342266,
+              "z": 0.4883163869380951
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-defeat": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.021523969247937202,
+              "z": 0.4993096590042114
+            }
+          },
+          {
+            "time": 3,
+            "position": {
+              "x": -0.000005105265245219925,
+              "y": -0.023175746202468872,
+              "z": 0.49506676197052
+            }
+          },
+          {
+            "time": 6,
+            "position": {
+              "x": -5.342477571446125e-9,
+              "y": -0.021525872871279716,
+              "z": 0.4993055462837219
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-iai-1": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.48971283435821533
+            }
+          },
+          {
+            "time": 0.13333334028720856,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.46025025844573975
+            }
+          },
+          {
+            "time": 0.30000001192092896,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.44526389241218567
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-iai-2": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.008047735318541527,
+              "z": 0.45919355750083923
+            }
+          },
+          {
+            "time": 0.13333334028720856,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.008047735318541527,
+              "z": 0.4427742660045624
+            }
+          },
+          {
+            "time": 0.30000001192092896,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.008047735318541527,
+              "z": 0.4422115087509155
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-iai-3": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006415068171918392,
+              "z": 0.4282054007053375
+            }
+          },
+          {
+            "time": 0.1666666716337204,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006415068171918392,
+              "z": 0.4430277645587921
+            }
+          },
+          {
+            "time": 0.36666667461395264,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006415068171918392,
+              "z": 0.4375703036785126
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-iai-4": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006164125166833401,
+              "z": 0.431077778339386
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006164125166833401,
+              "z": 0.46166372299194336
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006164125166833401,
+              "z": 0.4375978708267212
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-thousand-cuts": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.005756813567131758,
+              "z": 0.4367249608039856
+            }
+          },
+          {
+            "time": 0.6000000238418579,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.005756813567131758,
+              "z": 0.431077778339386
+            }
+          },
+          {
+            "time": 1.2000000476837158,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.005756813567131758,
+              "z": 0.44215044379234314
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-requiem": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.007422497496008873,
+              "z": 0.42543062567710876
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.007422497496008873,
+              "z": 0.47860583662986755
+            }
+          },
+          {
+            "time": 2,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.007422497496008873,
+              "z": 0.44215092062950134
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-severing-shadow": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.009368790313601494,
+              "z": 0.4506511986255646
+            }
+          },
+          {
+            "time": 0.30000001192092896,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.009368790313601494,
+              "z": 0.4424978792667389
+            }
+          },
+          {
+            "time": 0.6000000238418579,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.009368790313601494,
+              "z": 0.4422115087509155
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-shadow-step": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006338621024042368,
+              "z": 0.44253477454185486
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006338621024042368,
+              "z": 0.4261508882045746
+            }
+          },
+          {
+            "time": 0.4333333373069763,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.006338621024042368,
+              "z": 0.4010299742221832
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-cleanse": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.08111410588026047,
+              "z": 0.4994192123413086
+            }
+          },
+          {
+            "time": 0.8999999761581421,
+            "position": {
+              "x": 0.00007862436905270442,
+              "y": -0.08398602902889252,
+              "z": 0.5647827386856079
+            }
+          },
+          {
+            "time": 1.7999999523162842,
+            "position": {
+              "x": -0.000024409684556303546,
+              "y": -0.09006964415311813,
+              "z": 0.4791399836540222
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-cuts-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -0.00209441059269011,
+              "y": 0.0003039167495444417,
+              "z": 0.4286820888519287
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -0.0007380700553767383,
+              "y": -0.0029782122001051903,
+              "z": 0.44165176153182983
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -0.00209441059269011,
+              "y": 0.0003039167495444417,
+              "z": 0.4286820888519287
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-shade-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0016742062289267778,
+              "y": -0.006026199087500572,
+              "z": 0.42518168687820435
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": 0.0016742062289267778,
+              "y": -0.006026199087500572,
+              "z": 0.42518168687820435
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": 0.0016742062289267778,
+              "y": -0.006026199087500572,
+              "z": 0.42518168687820435
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-kunai-fan": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 6.951030684376747e-8,
+              "y": -1.1618718076533696e-7,
+              "z": 0.44440409541130066
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.21684932708740234,
+              "y": 0.3179687261581421,
+              "z": 0.4254568815231323
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.20026759803295135,
+              "y": 0.3740155100822449,
+              "z": 0.4163671135902405
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-shade-swap": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 5.138181080610593e-8,
+              "y": -0.002567612798884511,
+              "z": 0.44587910175323486
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.2098913937807083,
+              "y": 0.346811443567276,
+              "z": 0.4162730574607849
+            }
+          },
+          {
+            "time": 0.6666666865348816,
+            "position": {
+              "x": 0.21554268896579742,
+              "y": 0.3268257975578308,
+              "z": 0.41839292645454407
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "vesper-mist-blink": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-air-step": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "aren-strafe": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.00884411670267582,
+              "z": 0.4567185938358307
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": 0.0020092842169106007,
+              "y": 0.003897448070347309,
+              "z": 0.45577719807624817
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -2.872786808438832e-8,
+              "y": -0.008844157680869102,
+              "z": 0.4567186236381531
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stagger": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.08200559765100479,
+              "z": 0.5034692883491516
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.000020433837562450208,
+              "y": -0.08278688043355942,
+              "z": 0.5204541683197021
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.000021491818188223988,
+              "y": -0.08278902620077133,
+              "z": 0.5213287472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stumble-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.08200559765100479,
+              "z": 0.5034692883491516
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.000020433837562450208,
+              "y": -0.08278688043355942,
+              "z": 0.5204541683197021
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.000021491818188223988,
+              "y": -0.08278902620077133,
+              "z": 0.5213287472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hard-landing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": -0.08200559765100479,
+              "z": 0.5034692883491516
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.000020433837562450208,
+              "y": -0.08278688043355942,
+              "z": 0.5204541683197021
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.000021491818188223988,
+              "y": -0.08278902620077133,
+              "z": 0.5213287472724915
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-left-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-right-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-shoulder-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-handspring": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-left-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-right-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-left-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-right-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-slide": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-dodge-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42560938000679016
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.3972260653972626
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4014040529727936
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-staff-vault": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.5470844988717545e-8,
+              "y": 2.8359345094486343e-8,
+              "z": 0.4659084975719452
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0006408243789337575,
+              "y": -0.008356872014701366,
+              "z": 0.6580286622047424
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.0008246190845966339,
+              "y": 0.007934116758406162,
+              "z": 0.4464600384235382
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-ledge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.5470844988717545e-8,
+              "y": 2.8359345094486343e-8,
+              "z": 0.4659084975719452
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0006408243789337575,
+              "y": -0.008356872014701366,
+              "z": 0.6580286622047424
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.0008246190845966339,
+              "y": 0.007934116758406162,
+              "z": 0.4464600384235382
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-swing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.5470844988717545e-8,
+              "y": 2.8359345094486343e-8,
+              "z": 0.4659084975719452
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0006408243789337575,
+              "y": -0.008356872014701366,
+              "z": 0.6580286622047424
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.0008246190845966339,
+              "y": 0.007934116758406162,
+              "z": 0.4464600384235382
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-vesper-hero-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-vesper-katana",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "5674dcee-968a-4920-a8b9-428e53394b52",
+    "runtimeUrl": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+    "outputHash": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-vesper-katana-runtime-02/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-sakda-hero",
+    "actorId": "aren",
+    "variantOf": "actor-aren",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "biped",
+    "tripoSourceTask": "f646d7e4-8001-47d5-823f-df5d96a5b509",
+    "sourceHash": "2a272c69d06fc415c525fc7f03c901951408bf75159188d2b4cf48a273b9eda6",
+    "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+    "runtimeUrl": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1.84
+    },
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {
+      "aren-idle": "aren-idle",
+      "aren-walk": "aren-walk",
+      "aren-run": "aren-run",
+      "aren-jump": "aren-jump",
+      "aren-hit": "aren-hit",
+      "aren-cheer": "aren-cheer",
+      "aren-defeat": "aren-defeat",
+      "aren-air-step": "aren-air-step",
+      "sakda-limb-1": "sakda-limb-1",
+      "sakda-limb-2": "sakda-limb-2",
+      "sakda-limb-3": "sakda-limb-3",
+      "sakda-limb-4": "sakda-limb-4",
+      "sakda-echo-wave": "sakda-echo-wave",
+      "sakda-resonating-strike": "sakda-resonating-strike",
+      "sakda-elbow-charge": "sakda-elbow-charge",
+      "sakda-hundred-elbows": "sakda-hundred-elbows",
+      "sakda-tempest": "sakda-tempest",
+      "sakda-knee-charge": "sakda-knee-charge",
+      "sakda-flying-knee": "sakda-flying-knee",
+      "sakda-iron-clinch": "sakda-iron-clinch",
+      "sakda-guard-dash": "sakda-guard-dash",
+      "sakda-cleanse": "sakda-cleanse",
+      "sakda-tigers-wrath": "sakda-tigers-wrath",
+      "aren-strafe": "aren-walk",
+      "aren-stagger": "aren-hit",
+      "aren-stumble-recovery": "aren-hit",
+      "aren-hard-landing": "aren-hit",
+      "aren-forward-left-dive-roll": "sakda-guard-dash",
+      "aren-forward-right-dive-roll": "sakda-guard-dash",
+      "aren-perfect-dodge-left": "sakda-guard-dash",
+      "aren-perfect-dodge-right": "sakda-guard-dash",
+      "aren-quick-step-left": "sakda-guard-dash",
+      "aren-quick-step-right": "sakda-guard-dash",
+      "aren-forward-shoulder-roll": "sakda-guard-dash",
+      "aren-back-handspring": "sakda-guard-dash",
+      "aren-left-cartwheel": "sakda-guard-dash",
+      "aren-right-cartwheel": "sakda-guard-dash",
+      "aren-back-left-pivot-roll": "sakda-guard-dash",
+      "aren-back-right-pivot-roll": "sakda-guard-dash",
+      "aren-low-slide": "sakda-guard-dash",
+      "aren-dodge-recovery": "sakda-guard-dash",
+      "aren-staff-vault": "aren-jump",
+      "aren-low-ledge": "aren-jump",
+      "aren-swing": "aren-jump"
+    },
+    "rootMotion": {
+      "aren-idle": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.007630732376128435,
+              "y": -0.010035917162895203,
+              "z": 0.47516781091690063
+            }
+          },
+          {
+            "time": 1.2000000476837158,
+            "position": {
+              "x": 0.007630732376128435,
+              "y": -0.010035917162895203,
+              "z": 0.47510430216789246
+            }
+          },
+          {
+            "time": 2.4000000953674316,
+            "position": {
+              "x": 0.007630732376128435,
+              "y": -0.010035917162895203,
+              "z": 0.47516781091690063
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-walk": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.48022764921188354
+            }
+          },
+          {
+            "time": 0.3166666626930237,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.47138160467147827
+            }
+          },
+          {
+            "time": 0.6333333253860474,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.48022764921188354
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-run": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.4793628752231598
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.4705168306827545
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.4793628752231598
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-jump": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": false,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8135902496728704e-8,
+              "y": 2.954924305242912e-8,
+              "z": 0.4972448945045471
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0007996291387826204,
+              "y": 0.006174363195896149,
+              "z": 0.5193376541137695
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00018466920300852507,
+              "y": 0.0007077190093696117,
+              "z": 0.5168313980102539
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hit": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4682370722293854
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4574403464794159
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.47143909335136414
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-cheer": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5218935012817383
+            }
+          },
+          {
+            "time": 2.5,
+            "position": {
+              "x": -0.000002337628302484518,
+              "y": 0.000015526717106695287,
+              "z": 0.5213281512260437
+            }
+          },
+          {
+            "time": 5,
+            "position": {
+              "x": -0.000006837778528279159,
+              "y": 0.000045370656152954325,
+              "z": 0.5202398896217346
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-defeat": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": -0.02156645990908146,
+              "z": 0.5136817693710327
+            }
+          },
+          {
+            "time": 3,
+            "position": {
+              "x": -0.00002149493229808286,
+              "y": -0.022239267826080322,
+              "z": 0.5084804892539978
+            }
+          },
+          {
+            "time": 6,
+            "position": {
+              "x": -2.2360746143590404e-8,
+              "y": -0.021565061062574387,
+              "z": 0.5136747360229492
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-air-step": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "sakda-limb-1": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4204346239566803
+            }
+          },
+          {
+            "time": 0.1666666716337204,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4058464467525482
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4390115737915039
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-limb-2": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.41962897777557373
+            }
+          },
+          {
+            "time": 0.18333333730697632,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.42875537276268005
+            }
+          },
+          {
+            "time": 0.36666667461395264,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.42295733094215393
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-limb-3": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.498445600271225
+            }
+          },
+          {
+            "time": 0.21666666865348816,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5155354738235474
+            }
+          },
+          {
+            "time": 0.4333333373069763,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4830548167228699
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-limb-4": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4748457074165344
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5271837711334229
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5058220028877258
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-echo-wave": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.462993860244751
+            }
+          },
+          {
+            "time": 0.20000000298023224,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4609614610671997
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.462993860244751
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-resonating-strike": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5108656883239746
+            }
+          },
+          {
+            "time": 0.25,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.7692431807518005
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5362613201141357
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-elbow-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0015081980964168906,
+              "y": -0.002486298093572259,
+              "z": 0.4664851725101471
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.0015081980964168906,
+              "y": -0.002486298093572259,
+              "z": 0.4683889150619507
+            }
+          },
+          {
+            "time": 0.800000011920929,
+            "position": {
+              "x": 0.0015081980964168906,
+              "y": -0.002486298093572259,
+              "z": 0.4664851725101471
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-hundred-elbows": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4708724319934845
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4595170319080353
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4580933153629303
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-tempest": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4893403649330139
+            }
+          },
+          {
+            "time": 0.23333333432674408,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.41526100039482117
+            }
+          },
+          {
+            "time": 0.46666666865348816,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4525252878665924
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-knee-charge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0018796430667862296,
+              "y": 0.0009338654344901443,
+              "z": 0.4675939381122589
+            }
+          },
+          {
+            "time": 0.4000000059604645,
+            "position": {
+              "x": 0.0018796430667862296,
+              "y": 0.0009338654344901443,
+              "z": 0.46673691272735596
+            }
+          },
+          {
+            "time": 0.800000011920929,
+            "position": {
+              "x": 0.0018796430667862296,
+              "y": 0.0009338654344901443,
+              "z": 0.4675939381122589
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-flying-knee": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5860353112220764
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.6943584084510803
+            }
+          },
+          {
+            "time": 0.6666666865348816,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5577813982963562
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-iron-clinch": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4985455870628357
+            }
+          },
+          {
+            "time": 0.30000001192092896,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.509882926940918
+            }
+          },
+          {
+            "time": 0.6000000238418579,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4801179766654968
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-guard-dash": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-cleanse": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5365432500839233
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5284827351570129
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5348666906356812
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "sakda-tigers-wrath": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.51780104637146
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5672415494918823
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.5310866832733154
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-strafe": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.48022764921188354
+            }
+          },
+          {
+            "time": 0.3166666626930237,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.47138160467147827
+            }
+          },
+          {
+            "time": 0.6333333253860474,
+            "position": {
+              "x": 0.0001750401861499995,
+              "y": -0.0011619327124208212,
+              "z": 0.48022764921188354
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stagger": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4682370722293854
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4574403464794159
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.47143909335136414
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-stumble-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4682370722293854
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4574403464794159
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.47143909335136414
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-hard-landing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4682370722293854
+            }
+          },
+          {
+            "time": 0.5,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4574403464794159
+            }
+          },
+          {
+            "time": 1,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.47143909335136414
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-left-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-right-dive-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-perfect-dodge-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-left": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-quick-step-right": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-forward-shoulder-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-handspring": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-left-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-right-cartwheel": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-left-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-back-right-pivot-roll": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-slide": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-dodge-recovery": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          },
+          {
+            "time": 0.2666666805744171,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.38115668296813965
+            }
+          },
+          {
+            "time": 0.5333333611488342,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.4481804072856903
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-staff-vault": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8135902496728704e-8,
+              "y": 2.954924305242912e-8,
+              "z": 0.4972448945045471
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0007996291387826204,
+              "y": 0.006174363195896149,
+              "z": 0.5193376541137695
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00018466920300852507,
+              "y": 0.0007077190093696117,
+              "z": 0.5168313980102539
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-low-ledge": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8135902496728704e-8,
+              "y": 2.954924305242912e-8,
+              "z": 0.4972448945045471
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0007996291387826204,
+              "y": 0.006174363195896149,
+              "z": 0.5193376541137695
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00018466920300852507,
+              "y": 0.0007077190093696117,
+              "z": 0.5168313980102539
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-swing": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 2.8135902496728704e-8,
+              "y": 2.954924305242912e-8,
+              "z": 0.4972448945045471
+            }
+          },
+          {
+            "time": 0.3333333432674408,
+            "position": {
+              "x": 0.0007996291387826204,
+              "y": 0.006174363195896149,
+              "z": 0.5193376541137695
+            }
+          },
+          {
+            "time": 0.699999988079071,
+            "position": {
+              "x": 0.00018466920300852507,
+              "y": 0.0007077190093696117,
+              "z": 0.5168313980102539
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-sakda-hero-01/provenance.json",
+    "evidenceStatus": "blocked"
+  }
+]

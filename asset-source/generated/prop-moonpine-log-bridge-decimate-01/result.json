@@ -1,0 +1,16 @@
+{
+  "task_id": "37ef22ab-6d67-4207-a7ee-b77afb66bd7b",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-moonpine-log-bridge-decimate-01/tripo-out/prop-moonpine-log-bridge-decimat-37ef22ab",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-moonpine-log-bridge-decimate-01/tripo-out/prop-moonpine-log-bridge-decimat-37ef22ab/model.glb",
+  "preview": "asset-source/generated/prop-moonpine-log-bridge-decimate-01/tripo-out/prop-moonpine-log-bridge-decimat-37ef22ab/preview.png",
+  "started": "2026-10-11T09:09:31.919Z",
+  "finished": "2026-10-11T09:14:51.769Z"
+}

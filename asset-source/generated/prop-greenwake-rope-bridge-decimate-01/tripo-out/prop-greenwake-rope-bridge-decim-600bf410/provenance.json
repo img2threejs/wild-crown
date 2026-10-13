@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-rope-bridge",
+  "candidateNumber": 3,
+  "candidateCount": 3,
+  "selection": "Retained as an optimized AI candidate for manual and production review: actual GLTFLoader render preserves the long narrow span, four end posts, plank walkway and rope rails with no obvious decimation defect. Not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-greenwake-rope-bridge-model-02/tripo-out/prop-greenwake-rope-bridge-model-2-a623069b/model.glb",
+    "sha256": "54947d9442a1b4a1b908e8c9b7fe5e1eccc0626be5175523a57afcc520151c11"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.front_view.jpeg",
+      "sha256": "50d59009bab26e46c5d63daf7776029be0db2c77c51ca685bf78ce01d9e55085"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.left_view.jpeg",
+      "sha256": "a5d3b1c8b357e74669606e5cf93626f698a8174cabcee741a5ced06fe523dd1c"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.back_view.jpeg",
+      "sha256": "005ccfe57b386c4c01fe2252d45b268a5751f5f9a64e4e85993cbe28d9cd4ed9"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.right_view.jpeg",
+      "sha256": "7469fb94079d15a718ae018a1696758f82c5abcd74056fd64cbecef5923aa60e"
+    }
+  ],
+  "taskId": "600bf410-ffab-487d-9234-ee5b294ece88",
+  "generationTasks": [
+    {
+      "taskId": "1dbe048c-adc4-4947-9138-d78900f96aca",
+      "type": "text_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Selected complete narrow-span concept."
+    },
+    {
+      "taskId": "873f1a55-6d28-4b6e-b5a4-8b03fd590f46",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10
+    },
+    {
+      "taskId": "a623069b-b3e7-49a4-9c3e-670b9e3f5ad7",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    },
+    {
+      "taskId": "600bf410-ffab-487d-9234-ee5b294ece88",
+      "type": "highpoly_to_lowpoly",
+      "status": "success",
+      "requestedFaceLimit": 20000,
+      "textureBake": true,
+      "creditsConsumed": 30
+    }
+  ],
+  "selectedChainCredits": 105,
+  "allCreativeAttemptsCredits": 160,
+  "processingCredits": 30,
+  "totalTaskCredits": 190,
+  "output": {
+    "path": "model.glb",
+    "sha256": "1a2b2d9730501274b6854b4a0d61eb55eec212622f6b272bdcfdc518fc58f1d5",
+    "bytes": 9464844,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 30770,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The mesh inventory measures 30,770 vertices; the requested 20,000-triangle limit was not independently measured as an actual face count.",
+      "No collision proxy, authored world scale, connection to terrain, traversal behavior, or environment parity was measured.",
+      "No human art review or full production evidence exists; the candidate remains outside the runtime catalog."
+    ]
+  }
+}

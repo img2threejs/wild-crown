@@ -1,0 +1,16 @@
+{
+  "task_id": "b687a3d1-75c2-4ca6-bb86-b720420017b5",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-moonpine-tree-decimate-01/tripo-out/prop-moonpine-tree-decimate-01-b687a3d1",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-moonpine-tree-decimate-01/tripo-out/prop-moonpine-tree-decimate-01-b687a3d1/model.glb",
+  "preview": "asset-source/generated/prop-moonpine-tree-decimate-01/tripo-out/prop-moonpine-tree-decimate-01-b687a3d1/preview.png",
+  "started": "2026-10-11T09:10:32.899Z",
+  "finished": "2026-10-11T09:17:55.429Z"
+}

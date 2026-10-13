@@ -1,0 +1,46 @@
+{
+  "assetId": "cold_rock",
+  "name": "Rock Face 03",
+  "sourceUrl": "https://polyhaven.com/a/rock_face_03",
+  "apiUrl": "https://api.polyhaven.com/files/rock_face_03",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Dario Barresi, Rico Cilliers",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 2.7,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_diff_1k.jpg",
+      "sourceSha256": "ea48e0e47ad42c8bd312476178b1248ec66f0eb19156a26a1c222f2a40caaf2d",
+      "sourceBytes": 927082,
+      "sha256": "ea48e0e47ad42c8bd312476178b1248ec66f0eb19156a26a1c222f2a40caaf2d",
+      "md5": "e4c34abb1aad5befe12754fad507147a",
+      "bytes": 927082
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
+      "sourceSha256": "c6423169583f31715cf0636954bad524e806848a5f2861fcea6794275f726ff0",
+      "sourceBytes": 1146788,
+      "sha256": "c6423169583f31715cf0636954bad524e806848a5f2861fcea6794275f726ff0",
+      "md5": "cbd30858439ece391480c5e67e09de89",
+      "bytes": 1146788
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_arm_1k.jpg",
+      "sourceSha256": "a1f8e60eaf4f119071840e36e165d3a9185be62bd3ac7068ab6d886aa639d29f",
+      "sourceBytes": 793241,
+      "sha256": "a1f8e60eaf4f119071840e36e165d3a9185be62bd3ac7068ab6d886aa639d29f",
+      "md5": "351c58daba868568fb5a191194aa5302",
+      "bytes": 793241
+    }
+  }
+}

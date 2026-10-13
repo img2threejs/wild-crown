@@ -1,0 +1,285 @@
+{
+  "scope": "Local candidate smoke; qualification and combat positioning are controlled fixtures, not full hand-played routes.",
+  "waystones": [
+    {
+      "map": "canopy",
+      "nativeBefore": true,
+      "initialOpen": false,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.2673000000000023
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    },
+    {
+      "map": "greenwake",
+      "nativeBefore": true,
+      "initialOpen": false,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.27919999999999945
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    },
+    {
+      "map": "grove",
+      "nativeBefore": true,
+      "initialOpen": true,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.29439999999999955
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    },
+    {
+      "map": "moonpine",
+      "nativeBefore": true,
+      "initialOpen": false,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.2934000000000001
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    },
+    {
+      "map": "mistveil",
+      "nativeBefore": true,
+      "initialOpen": false,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.2926000000000002
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    },
+    {
+      "map": "mistveil",
+      "nativeBefore": true,
+      "initialOpen": false,
+      "open": true,
+      "transition": {
+        "screen": "game",
+        "outcome": "victory",
+        "elapsed": 0.26670000000000194
+      },
+      "screen": "stage-complete",
+      "frozen": true,
+      "campaignUnchanged": true,
+      "actorHidden": true,
+      "cleared": true
+    }
+  ],
+  "reducedMotion": {
+    "elapsedFrozen": true,
+    "motesHidden": true,
+    "waveHidden": true
+  },
+  "attacks": [
+    {
+      "map": "grove",
+      "monster": "grove-sprig",
+      "expected": [
+        "sprig-seed-toss",
+        "sprig-ground-ripple",
+        "sprig-petal-sweep"
+      ],
+      "observed": [
+        "sprig-seed-toss",
+        "sprig-ground-ripple",
+        "sprig-petal-sweep"
+      ],
+      "visibleEffects": 2,
+      "active": "sprig-petal-sweep",
+      "glError": 0
+    },
+    {
+      "map": "moonpine",
+      "monster": "moonpine-frostfang",
+      "expected": [
+        "frostfang-pack-rush",
+        "frostfang-ice-bite",
+        "frostfang-frost-breath"
+      ],
+      "observed": [
+        "frostfang-pack-rush",
+        "frostfang-ice-bite",
+        "frostfang-frost-breath"
+      ],
+      "visibleEffects": 1,
+      "active": "frostfang-frost-breath",
+      "glError": 0
+    },
+    {
+      "map": "moonpine",
+      "monster": "moonpine-scout",
+      "expected": [
+        "howl-scout-flank-pounce",
+        "howl-scout-claw-rake",
+        "howl-scout-low-howl"
+      ],
+      "observed": [
+        "howl-scout-flank-pounce",
+        "howl-scout-claw-rake",
+        "howl-scout-low-howl"
+      ],
+      "visibleEffects": 1,
+      "active": "howl-scout-low-howl",
+      "glError": 0
+    },
+    {
+      "map": "moonpine",
+      "monster": "moonpine-ruun",
+      "expected": [
+        "chained-ruun-chain-pounce",
+        "chained-ruun-howl-shockwave",
+        "chained-ruun-breaking-ice"
+      ],
+      "observed": [
+        "chained-ruun-chain-pounce",
+        "chained-ruun-howl-shockwave",
+        "chained-ruun-breaking-ice"
+      ],
+      "visibleEffects": 1,
+      "active": "chained-ruun-breaking-ice",
+      "glError": 0
+    },
+    {
+      "map": "mistveil",
+      "monster": "mistveil-lurker",
+      "expected": [
+        "bog-lurker-tongue-lash",
+        "bog-lurker-bubble-pool",
+        "bog-lurker-mud-hop"
+      ],
+      "observed": [
+        "bog-lurker-tongue-lash",
+        "bog-lurker-bubble-pool",
+        "bog-lurker-mud-hop"
+      ],
+      "visibleEffects": 2,
+      "active": "bog-lurker-mud-hop",
+      "glError": 0
+    },
+    {
+      "map": "mistveil",
+      "monster": "mistveil-heron",
+      "expected": [
+        "lantern-heron-spear-dive",
+        "lantern-heron-mist-gust",
+        "lantern-heron-flare-burst"
+      ],
+      "observed": [
+        "lantern-heron-spear-dive",
+        "lantern-heron-mist-gust",
+        "lantern-heron-flare-burst"
+      ],
+      "visibleEffects": 3,
+      "active": "lantern-heron-flare-burst",
+      "glError": 0
+    },
+    {
+      "map": "mistveil",
+      "monster": "mistveil-ghor",
+      "expected": [
+        "mire-maw-tail-sweep",
+        "mire-maw-bite-lunge",
+        "mire-maw-black-river-wave"
+      ],
+      "observed": [
+        "mire-maw-tail-sweep",
+        "mire-maw-bite-lunge",
+        "mire-maw-black-river-wave"
+      ],
+      "visibleEffects": 1,
+      "active": "mire-maw-black-river-wave",
+      "glError": 0
+    }
+  ],
+  "thumbnails": [
+    {
+      "map": "mistveil",
+      "eye": [
+        -35,
+        12,
+        0
+      ],
+      "target": [
+        -13,
+        2,
+        -22
+      ],
+      "glError": 0,
+      "file": "mistveil-basin.jpg"
+    },
+    {
+      "map": "grove",
+      "eye": [
+        15,
+        14,
+        15
+      ],
+      "target": [
+        -2,
+        3,
+        -13
+      ],
+      "glError": 0,
+      "file": "the-grove.jpg"
+    },
+    {
+      "map": "moonpine",
+      "eye": [
+        64,
+        19,
+        -13
+      ],
+      "target": [
+        47,
+        7,
+        -41
+      ],
+      "glError": 0,
+      "file": "moonpine-ridge.jpg"
+    }
+  ],
+  "gates": {
+    "bun": {
+      "passed": 1597,
+      "failed": 0
+    },
+    "nativeAssets": {
+      "passed": 107,
+      "failed": 0
+    },
+    "build": "passed; large-chunk warning retained"
+  }
+}

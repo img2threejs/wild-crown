@@ -403,9 +403,13 @@ describe("camp-loose-snare movable-object contract", () => {
     const telegraph = state.telegraphs.find((item) => item.sourceId === "hunter-ranged")!;
     const hazard = state.hazards.find((item) => item.id === telegraph.id)!;
     telegraph.phase = "commit";
+    const recoveryTicks = hazard.recoveryUntil! - hazard.castUntil!;
     hazard.startTick = state.tick - 100;
     hazard.activeFrom = state.tick + 100;
     hazard.activeUntil = state.tick + 110;
+    hazard.windupUntil = state.worldTick - 1;
+    hazard.castUntil = hazard.activeUntil;
+    hazard.recoveryUntil = hazard.castUntil + recoveryTicks;
     engine.restore(JSON.stringify(state));
     const before = engine.snapshotState();
     expect(engine.commandCompanion("koro", "special", movable.id)).toBe(true);

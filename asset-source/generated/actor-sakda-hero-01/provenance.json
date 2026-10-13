@@ -1,0 +1,2164 @@
+{
+  "schemaVersion": 1,
+  "originalModelTask": "e43e454e-0f8e-4fd9-b284-f838ca4ed685",
+  "tasks": {
+    "concept": "11d45f4c-6085-4b96-92da-eba90451eb68",
+    "model": "e43e454e-0f8e-4fd9-b284-f838ca4ed685",
+    "rig": "f646d7e4-8001-47d5-823f-df5d96a5b509",
+    "a": "3127d082-8a72-4816-964d-e4f30c075f9d",
+    "b": "af7f38b5-5da3-45d7-a2b6-84cebb96f881",
+    "c": "743269a9-bb7f-4e64-94bd-71ff496944f2",
+    "d": "1238e5c9-da53-42ff-9fb4-36e6ca606811",
+    "e": "f9166626-20c8-4e01-acee-6028fae0b05d",
+    "f": "b4d07cc5-6aba-4cb5-9a32-403dd7e90c53"
+  },
+  "sources": {
+    "a": "asset-source/generated/actor-sakda-hero-anim-a-01/tripo-out/actor-sakda-hero-anim-a-01-2-3127d082/model.glb",
+    "b": "asset-source/generated/actor-sakda-hero-anim-b-01/tripo-out/actor-sakda-hero-anim-b-01-af7f38b5/model.glb",
+    "c": "asset-source/generated/actor-sakda-hero-anim-c-01/tripo-out/actor-sakda-hero-anim-c-01-743269a9/model.glb",
+    "d": "asset-source/generated/actor-sakda-hero-anim-d-01/tripo-out/actor-sakda-hero-anim-d-01-1238e5c9/model.glb",
+    "e": "asset-source/generated/actor-sakda-hero-anim-e-01/tripo-out/actor-sakda-hero-anim-e-01-f9166626/model.glb",
+    "f": "asset-source/generated/actor-sakda-hero-anim-f-01/tripo-out/actor-sakda-hero-anim-f-01-b4d07cc5/model.glb"
+  },
+  "presets": {
+    "a": [
+      "idle",
+      "walk",
+      "run",
+      "box_01",
+      "box_02"
+    ],
+    "b": [
+      "jump",
+      "dive",
+      "hurt",
+      "cheer",
+      "defeat_02"
+    ],
+    "c": [
+      "box_03",
+      "front_kick_01",
+      "front_kick_02",
+      "hit_to_body_01",
+      "hit_to_stomach"
+    ],
+    "d": [
+      "flip",
+      "volleyball",
+      "flee_02",
+      "run_upstairs",
+      "lift_heavy"
+    ],
+    "e": [
+      "golf",
+      "pitch_baseball",
+      "standing_relax",
+      "chop",
+      "slash"
+    ],
+    "f": [
+      "warm_up",
+      "jump_down",
+      "hit_to_head",
+      "hit_to_side",
+      "bow"
+    ]
+  },
+  "mixamo": {
+    "fight-idle-guard-up": {
+      "file": "asset-source/mixamo/sakda/fight-idle-guard-up.fbx",
+      "sha256": "ff802e87a5c8f7f4fd1095df13b523aaba88d5c31f0dd5d85bc7bc01df2eaeaa",
+      "durationSeconds": 2.9667,
+      "frames": 90,
+      "facingDegrees": 90.75
+    },
+    "jab-cross-medium": {
+      "file": "asset-source/mixamo/sakda/jab-cross-medium.fbx",
+      "sha256": "b170c93375f3497f5c9c8400b355a6083ab21e87acef7f27d639f1fa93fefefb",
+      "durationSeconds": 2.1333,
+      "frames": 65,
+      "facingDegrees": 90.75
+    },
+    "elbow-uppercut": {
+      "file": "asset-source/mixamo/sakda/elbow-uppercut.fbx",
+      "sha256": "d88caa93c54e8bafba55d64909575e84c5dddefa9603179fc5939a1f4ba4b427",
+      "durationSeconds": 2.0333,
+      "frames": 62,
+      "facingDegrees": 90.75
+    },
+    "elbow-cross": {
+      "file": "asset-source/mixamo/sakda/elbow-cross.fbx",
+      "sha256": "cda3ef5c69585ae7daae1d10cc66e242bf4399f81653745ed69feadba1d79505",
+      "durationSeconds": 2.0333,
+      "frames": 62,
+      "facingDegrees": 90.75
+    },
+    "muay-thai-knee": {
+      "file": "asset-source/mixamo/sakda/muay-thai-knee.fbx",
+      "sha256": "cdb5f277b928855ed1fc1019fe83f51197aa58635d8fba28751377b5c97880e9",
+      "durationSeconds": 2.2667,
+      "frames": 69,
+      "facingDegrees": 90.75
+    },
+    "roundhouse-rear": {
+      "file": "asset-source/mixamo/sakda/roundhouse-rear.fbx",
+      "sha256": "5db4501604c2f680d8734fe533be30991eda0c0f6567f5bf5fde14990cdd1699",
+      "durationSeconds": 1.5,
+      "frames": 46,
+      "facingDegrees": 90.75
+    },
+    "flying-knee-punch": {
+      "file": "asset-source/mixamo/sakda/flying-knee-punch.fbx",
+      "sha256": "f4d18e88c05aff6ce5d3d0e757129211ab1e5248b1b362bc397806d2b7ea48ea",
+      "durationSeconds": 2.6667,
+      "frames": 81,
+      "facingDegrees": 90.75
+    },
+    "stomp-hard": {
+      "file": "asset-source/mixamo/sakda/stomp-hard.fbx",
+      "sha256": "63d5db84ced19273ed2be500b43f0db70595184c8ac33f7f0644797ddff5cb04",
+      "durationSeconds": 1.8667,
+      "frames": 57,
+      "facingDegrees": 90.75
+    },
+    "boxing-step-forward-long": {
+      "file": "asset-source/mixamo/sakda/boxing-step-forward-long.fbx",
+      "sha256": "b2d1aeabface8c743bcbf629d0a4d4e3dcba9027ae079ba63013d9eeb12a1242",
+      "durationSeconds": 1,
+      "frames": 31,
+      "facingDegrees": 90.75
+    }
+  },
+  "sourceHash": "2a272c69d06fc415c525fc7f03c901951408bf75159188d2b4cf48a273b9eda6",
+  "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+  "operation": "Captured whole-body motion on the native Sakda rig: Tripo presets and Mixamo FBX (Without Skin, 30 fps; heading/rest alignment by scripts/assets/mixamo-import.mjs). Edits: source windows/time warps, facing, in-place pinning, constant ground shift, lowered leap apex, measured gait-loop vertical root drift removal, loop seams, cross-fades between captured whole-body segments, whole-body mirror for alternating elbows, and the shared soft joint guard (KICK_LIMITS). Walk uses the stable native captured jog window 0.267–0.900 s at normal cadence for 4.4 m/s; run is its timing-only faster variant for 6.6 m/s. No IK, synthetic stance widening, partial-body replacement or hand-keyed poses. Native mesh retained; barehanded. Only manifest-entry.json is emitted; playtest manifests remain coordinator-owned.",
+  "credits": {
+    "concept": 15,
+    "model": 70,
+    "rig": 25,
+    "a": 50,
+    "b": 50,
+    "c": 50,
+    "d": 50,
+    "e": 50,
+    "f": 50
+  },
+  "discarded": {
+    "rigV25": {
+      "task": "03c68e55-d7c1-4c34-bb8b-4593671c4744",
+      "credits": 25
+    },
+    "animA": {
+      "task": "48e96a33-323f-4a89-a9f4-15fe7ab524f0",
+      "credits": 50
+    }
+  },
+  "tooling": {
+    "mixamoImportFbxProof": {
+      "task": "e9c57a60-591f-4317-9d91-76775470d1f2",
+      "credits": 10,
+      "presets": [
+        "front_kick_01"
+      ],
+      "outFormat": "fbx"
+    }
+  },
+  "creditTotal": 495,
+  "evidenceStatus": "blocked",
+  "clips": [
+    {
+      "clip": "aren-idle",
+      "motion": true,
+      "sim": {
+        "totalTicks": 144
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:fight-idle-guard-up",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/fight-idle-guard-up.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.1
+            ],
+            [
+              144,
+              2.5
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.1
+            ],
+            [
+              144,
+              2.5
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "loop": {
+        "overlapTicks": 24
+      },
+      "groundShift": 0.0003
+    },
+    {
+      "clip": "aren-walk",
+      "motion": true,
+      "sim": {
+        "totalTicks": 38
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "a",
+            "animation": "run"
+          },
+          "keys": [
+            [
+              0,
+              0.26666667
+            ],
+            [
+              38,
+              0.9
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.26666667
+            ],
+            [
+              38,
+              0.9
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "JOINT_LIMITS",
+      "origin": "tripo",
+      "loop": {
+        "overlapTicks": 6,
+        "verticalDetrend": true
+      },
+      "verticalDriftRemovedRigUnits": 0.04235309362411499,
+      "groundShift": -0.0026
+    },
+    {
+      "clip": "aren-run",
+      "motion": true,
+      "sim": {
+        "totalTicks": 24
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "a",
+            "animation": "run"
+          },
+          "keys": [
+            [
+              0,
+              0.26666667
+            ],
+            [
+              24,
+              0.9
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.26666667
+            ],
+            [
+              24,
+              0.9
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "JOINT_LIMITS",
+      "origin": "tripo",
+      "loop": {
+        "overlapTicks": 4,
+        "verticalDetrend": true
+      },
+      "verticalDriftRemovedRigUnits": 0.04235309362411499,
+      "groundShift": -0.0035
+    },
+    {
+      "clip": "aren-jump",
+      "source": {
+        "donor": "b",
+        "animation": "jump"
+      },
+      "sim": {
+        "totalTicks": 42
+      },
+      "window": [
+        0,
+        2.23333335
+      ],
+      "origin": "tripo",
+      "airborne": true,
+      "limits": "JOINT_LIMITS",
+      "groundShift": 0.0131
+    },
+    {
+      "clip": "aren-hit",
+      "motion": true,
+      "sim": {
+        "totalTicks": 60
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "f",
+            "animation": "hit_to_head"
+          },
+          "keys": [
+            [
+              0,
+              0.05
+            ],
+            [
+              60,
+              1.45
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.05
+            ],
+            [
+              60,
+              1.45
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "tripo",
+      "groundShift": -0.0514
+    },
+    {
+      "clip": "aren-cheer",
+      "source": {
+        "donor": "b",
+        "animation": "cheer"
+      },
+      "sim": {
+        "totalTicks": 300
+      },
+      "window": [
+        0,
+        5
+      ],
+      "origin": "tripo",
+      "groundShift": 0.0135,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "aren-defeat",
+      "source": {
+        "donor": "b",
+        "animation": "defeat_02"
+      },
+      "sim": {
+        "totalTicks": 360
+      },
+      "window": [
+        0,
+        8.46666622
+      ],
+      "origin": "tripo",
+      "limits": "JOINT_LIMITS",
+      "groundShift": -0.006
+    },
+    {
+      "clip": "aren-air-step",
+      "sim": {
+        "totalTicks": 60
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "d",
+            "animation": "run_upstairs"
+          },
+          "window": [
+            0,
+            0.8
+          ],
+          "ticks": [
+            0,
+            60
+          ]
+        },
+        {
+          "source": {
+            "donor": "d",
+            "animation": "flip"
+          },
+          "keys": [
+            [
+              0,
+              0.9
+            ],
+            [
+              26,
+              1.2
+            ],
+            [
+              38,
+              2.2
+            ],
+            [
+              60,
+              3.4
+            ]
+          ],
+          "ticks": [
+            14,
+            60
+          ]
+        },
+        {
+          "source": {
+            "donor": "b",
+            "animation": "jump"
+          },
+          "window": [
+            1.2,
+            2.2
+          ],
+          "ticks": [
+            40,
+            60
+          ]
+        }
+      ],
+      "origin": "tripo",
+      "airborne": true,
+      "crossfadeTicks": 4,
+      "pin": {
+        "maxVertical": 0.08
+      },
+      "groundShift": 0.0431,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "sakda-limb-1",
+      "motion": true,
+      "sim": {
+        "totalTicks": 20,
+        "activeTick": 7
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:jab-cross-medium",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/jab-cross-medium.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.24
+            ],
+            [
+              7,
+              {
+                "metric": "forward",
+                "joints": [
+                  "LeftHand"
+                ],
+                "search": [
+                  0.36,
+                  0.56
+                ]
+              }
+            ],
+            [
+              14,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightHand"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              20,
+              0.92
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.24
+            ],
+            [
+              7,
+              0.435
+            ],
+            [
+              14,
+              0.7
+            ],
+            [
+              20,
+              0.92
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 7,
+          "joints": [
+            "LeftHand"
+          ]
+        },
+        {
+          "tick": 14,
+          "joints": [
+            "RightHand"
+          ]
+        }
+      ],
+      "groundShift": 0.0011,
+      "strikeReport": [
+        {
+          "tick": 7,
+          "joints": [
+            "LeftHand"
+          ],
+          "contactTick": 7,
+          "forwardMetres": 0.68
+        },
+        {
+          "tick": 14,
+          "joints": [
+            "RightHand"
+          ],
+          "contactTick": 14,
+          "forwardMetres": 0.679
+        }
+      ]
+    },
+    {
+      "clip": "sakda-limb-2",
+      "motion": true,
+      "sim": {
+        "totalTicks": 22,
+        "activeTick": 8
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:elbow-uppercut",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-uppercut.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.45
+            ],
+            [
+              8,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              22,
+              1.15
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.45
+            ],
+            [
+              8,
+              0.7708
+            ],
+            [
+              22,
+              1.15
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 8,
+          "joints": [
+            "RightForeArm"
+          ]
+        }
+      ],
+      "groundShift": -0.0053,
+      "strikeReport": [
+        {
+          "tick": 8,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 8,
+          "forwardMetres": 0.441
+        }
+      ]
+    },
+    {
+      "clip": "sakda-limb-3",
+      "motion": true,
+      "sim": {
+        "totalTicks": 26,
+        "activeTick": 10
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:muay-thai-knee",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/muay-thai-knee.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.5
+            ],
+            [
+              10,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightLeg"
+                ],
+                "search": [
+                  0.7,
+                  1
+                ]
+              }
+            ],
+            [
+              26,
+              1.45
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.5
+            ],
+            [
+              10,
+              0.9083
+            ],
+            [
+              26,
+              1.45
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 10,
+          "joints": [
+            "RightLeg"
+          ]
+        }
+      ],
+      "groundShift": 0.018,
+      "strikeReport": [
+        {
+          "tick": 10,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 10,
+          "forwardMetres": 0.466
+        }
+      ]
+    },
+    {
+      "clip": "sakda-limb-4",
+      "motion": true,
+      "sim": {
+        "totalTicks": 32,
+        "activeTick": 13
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:roundhouse-rear",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/roundhouse-rear.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.27
+            ],
+            [
+              13,
+              {
+                "metric": "shin",
+                "joints": [
+                  "RightLeg",
+                  "RightFoot"
+                ],
+                "search": [
+                  0.55,
+                  0.8
+                ]
+              }
+            ],
+            [
+              32,
+              1.3
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.27
+            ],
+            [
+              13,
+              0.6583
+            ],
+            [
+              32,
+              1.3
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 13,
+          "joints": [
+            "RightLeg",
+            "RightFoot"
+          ],
+          "metric": "shin"
+        }
+      ],
+      "groundShift": 0.0165,
+      "strikeReport": [
+        {
+          "tick": 13,
+          "joints": [
+            "RightLeg",
+            "RightFoot"
+          ],
+          "contactTick": 13,
+          "forwardMetres": 0.714
+        }
+      ]
+    },
+    {
+      "clip": "sakda-echo-wave",
+      "motion": true,
+      "sim": {
+        "totalTicks": 24,
+        "activeTick": 9
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "a",
+            "animation": "box_02"
+          },
+          "keys": [
+            [
+              0,
+              2.08
+            ],
+            [
+              9,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightHand"
+                ],
+                "search": [
+                  2.2,
+                  2.3
+                ]
+              }
+            ],
+            [
+              24,
+              2.08
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              2.08
+            ],
+            [
+              9,
+              2.3
+            ],
+            [
+              24,
+              2.08
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "tripo",
+      "strikes": [
+        {
+          "tick": 9,
+          "joints": [
+            "RightHand"
+          ]
+        }
+      ],
+      "groundShift": 0.0084,
+      "strikeReport": [
+        {
+          "tick": 9,
+          "joints": [
+            "RightHand"
+          ],
+          "contactTick": 9,
+          "forwardMetres": 0.72
+        }
+      ]
+    },
+    {
+      "clip": "sakda-resonating-strike",
+      "motion": true,
+      "sim": {
+        "totalTicks": 30,
+        "activeTick": 18
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "a",
+            "animation": "run"
+          },
+          "keys": [
+            [
+              0,
+              0
+            ],
+            [
+              12,
+              0.3
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0
+            ],
+            [
+              12,
+              0.3
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:flying-knee-punch",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/flying-knee-punch.fbx"
+          },
+          "keys": [
+            [
+              10,
+              0.56
+            ],
+            [
+              18,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightLeg"
+                ],
+                "search": [
+                  0.8,
+                  1
+                ]
+              }
+            ],
+            [
+              22,
+              0.98
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            11
+          ],
+          "resolvedKeys": [
+            [
+              10,
+              0.56
+            ],
+            [
+              18,
+              0.9417
+            ],
+            [
+              22,
+              0.98
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:muay-thai-knee",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/muay-thai-knee.fbx"
+          },
+          "keys": [
+            [
+              22,
+              0.97
+            ],
+            [
+              30,
+              1.3
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            22
+          ],
+          "resolvedKeys": [
+            [
+              22,
+              0.97
+            ],
+            [
+              30,
+              1.3
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "tripo+mixamo",
+      "strikes": [
+        {
+          "tick": 18,
+          "joints": [
+            "RightLeg"
+          ]
+        }
+      ],
+      "lift": [
+        [
+          0,
+          0
+        ],
+        [
+          10,
+          0
+        ],
+        [
+          16,
+          -0.3
+        ],
+        [
+          18,
+          -0.36
+        ],
+        [
+          22,
+          -0.24
+        ],
+        [
+          25,
+          0
+        ]
+      ],
+      "groundShift": 0.0781,
+      "strikeReport": [
+        {
+          "tick": 18,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 18,
+          "forwardMetres": 0.509
+        }
+      ]
+    },
+    {
+      "clip": "sakda-elbow-charge",
+      "motion": true,
+      "sim": {
+        "totalTicks": 48
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:fight-idle-guard-up",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/fight-idle-guard-up.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.3
+            ],
+            [
+              48,
+              1.1
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.3
+            ],
+            [
+              48,
+              1.1
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "loop": {
+        "overlapTicks": 12
+      },
+      "groundShift": 0.0003
+    },
+    {
+      "clip": "sakda-hundred-elbows",
+      "motion": true,
+      "sim": {
+        "totalTicks": 60,
+        "activeTick": 12
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:boxing-step-forward-long",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/boxing-step-forward-long.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0
+            ],
+            [
+              8,
+              0.5
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0
+            ],
+            [
+              8,
+              0.5
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              9,
+              0.5
+            ],
+            [
+              12,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              15,
+              0.8
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            9
+          ],
+          "resolvedKeys": [
+            [
+              9,
+              0.5
+            ],
+            [
+              12,
+              0.775
+            ],
+            [
+              15,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              15,
+              0.5
+            ],
+            [
+              18,
+              {
+                "metric": "forward",
+                "joints": [
+                  "LeftForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              21,
+              0.8
+            ]
+          ],
+          "retarget": {
+            "mirror": true
+          },
+          "ticks": [
+            15
+          ],
+          "resolvedKeys": [
+            [
+              15,
+              0.5
+            ],
+            [
+              18,
+              0.7667
+            ],
+            [
+              21,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              21,
+              0.5
+            ],
+            [
+              24,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              27,
+              0.8
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            21
+          ],
+          "resolvedKeys": [
+            [
+              21,
+              0.5
+            ],
+            [
+              24,
+              0.775
+            ],
+            [
+              27,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              27,
+              0.5
+            ],
+            [
+              30,
+              {
+                "metric": "forward",
+                "joints": [
+                  "LeftForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              33,
+              0.8
+            ]
+          ],
+          "retarget": {
+            "mirror": true
+          },
+          "ticks": [
+            27
+          ],
+          "resolvedKeys": [
+            [
+              27,
+              0.5
+            ],
+            [
+              30,
+              0.7667
+            ],
+            [
+              33,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              33,
+              0.5
+            ],
+            [
+              36,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              39,
+              0.8
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            33
+          ],
+          "resolvedKeys": [
+            [
+              33,
+              0.5
+            ],
+            [
+              36,
+              0.775
+            ],
+            [
+              39,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-cross",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-cross.fbx"
+          },
+          "keys": [
+            [
+              39,
+              0.5
+            ],
+            [
+              42,
+              {
+                "metric": "forward",
+                "joints": [
+                  "LeftForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              45,
+              0.8
+            ]
+          ],
+          "retarget": {
+            "mirror": true
+          },
+          "ticks": [
+            39
+          ],
+          "resolvedKeys": [
+            [
+              39,
+              0.5
+            ],
+            [
+              42,
+              0.7667
+            ],
+            [
+              45,
+              0.8
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:elbow-uppercut",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/elbow-uppercut.fbx"
+          },
+          "keys": [
+            [
+              46,
+              0.42
+            ],
+            [
+              52,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightForeArm"
+                ],
+                "search": [
+                  0.6,
+                  0.8
+                ]
+              }
+            ],
+            [
+              60,
+              1.2
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            46
+          ],
+          "resolvedKeys": [
+            [
+              46,
+              0.42
+            ],
+            [
+              52,
+              0.7708
+            ],
+            [
+              60,
+              1.2
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "crossfadeTicks": 2,
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightForeArm"
+          ]
+        },
+        {
+          "tick": 18,
+          "joints": [
+            "LeftForeArm"
+          ]
+        },
+        {
+          "tick": 24,
+          "joints": [
+            "RightForeArm"
+          ]
+        },
+        {
+          "tick": 30,
+          "joints": [
+            "LeftForeArm"
+          ]
+        },
+        {
+          "tick": 36,
+          "joints": [
+            "RightForeArm"
+          ]
+        },
+        {
+          "tick": 42,
+          "joints": [
+            "LeftForeArm"
+          ]
+        },
+        {
+          "tick": 52,
+          "joints": [
+            "RightForeArm"
+          ]
+        }
+      ],
+      "groundShift": 0.0271,
+      "strikeReport": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 12,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 18,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 18,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 24,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 24,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 30,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 30,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 36,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 36,
+          "forwardMetres": 0.436
+        },
+        {
+          "tick": 42,
+          "joints": [
+            "LeftForeArm"
+          ],
+          "contactTick": 42,
+          "forwardMetres": 0.439
+        },
+        {
+          "tick": 52,
+          "joints": [
+            "RightForeArm"
+          ],
+          "contactTick": 52,
+          "forwardMetres": 0.441
+        }
+      ]
+    },
+    {
+      "clip": "sakda-tempest",
+      "motion": true,
+      "sim": {
+        "totalTicks": 28,
+        "activeTick": 12
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:stomp-hard",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/stomp-hard.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.33
+            ],
+            [
+              12,
+              {
+                "metric": "floor",
+                "joints": [
+                  "RightFoot"
+                ],
+                "search": [
+                  0.6,
+                  0.85
+                ]
+              }
+            ],
+            [
+              28,
+              1
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.33
+            ],
+            [
+              12,
+              0.7333
+            ],
+            [
+              28,
+              1
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightFoot"
+          ],
+          "metric": "floor"
+        }
+      ],
+      "groundShift": 0.0017,
+      "strikeReport": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightFoot"
+          ],
+          "contactTick": 12,
+          "floorMetres": 0.036
+        }
+      ]
+    },
+    {
+      "clip": "sakda-knee-charge",
+      "motion": true,
+      "sim": {
+        "totalTicks": 48
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:fight-idle-guard-up",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/fight-idle-guard-up.fbx"
+          },
+          "keys": [
+            [
+              0,
+              1.5
+            ],
+            [
+              48,
+              2.3
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              1.5
+            ],
+            [
+              48,
+              2.3
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "loop": {
+        "overlapTicks": 12
+      },
+      "groundShift": -0.0003
+    },
+    {
+      "clip": "sakda-flying-knee",
+      "motion": true,
+      "sim": {
+        "totalTicks": 40,
+        "activeTick": 30
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:flying-knee-punch",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/flying-knee-punch.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.4
+            ],
+            [
+              4,
+              0.5
+            ],
+            [
+              30,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightLeg"
+                ],
+                "search": [
+                  0.8,
+                  1
+                ]
+              }
+            ],
+            [
+              33,
+              0.98
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.4
+            ],
+            [
+              4,
+              0.5
+            ],
+            [
+              30,
+              0.9417
+            ],
+            [
+              33,
+              0.98
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:muay-thai-knee",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/muay-thai-knee.fbx"
+          },
+          "keys": [
+            [
+              33,
+              0.97
+            ],
+            [
+              40,
+              1.3
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            33
+          ],
+          "resolvedKeys": [
+            [
+              33,
+              0.97
+            ],
+            [
+              40,
+              1.3
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 30,
+          "joints": [
+            "RightLeg"
+          ]
+        }
+      ],
+      "lift": [
+        [
+          0,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          18,
+          -0.3
+        ],
+        [
+          30,
+          -0.36
+        ],
+        [
+          33,
+          -0.24
+        ],
+        [
+          36,
+          0
+        ]
+      ],
+      "groundShift": 0.0996,
+      "strikeReport": [
+        {
+          "tick": 30,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 30,
+          "forwardMetres": 0.509
+        }
+      ]
+    },
+    {
+      "clip": "sakda-iron-clinch",
+      "motion": true,
+      "sim": {
+        "totalTicks": 36,
+        "activeTick": 12
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:muay-thai-knee",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/muay-thai-knee.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.5
+            ],
+            [
+              12,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightLeg"
+                ],
+                "search": [
+                  0.7,
+                  1
+                ]
+              }
+            ],
+            [
+              36,
+              1.7
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.5
+            ],
+            [
+              12,
+              0.9083
+            ],
+            [
+              36,
+              1.7
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "strikes": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightLeg"
+          ]
+        }
+      ],
+      "groundShift": 0.0181,
+      "strikeReport": [
+        {
+          "tick": 12,
+          "joints": [
+            "RightLeg"
+          ],
+          "contactTick": 12,
+          "forwardMetres": 0.466
+        }
+      ]
+    },
+    {
+      "clip": "sakda-guard-dash",
+      "motion": true,
+      "sim": {
+        "totalTicks": 32
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:boxing-step-forward-long",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/sakda/boxing-step-forward-long.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0
+            ],
+            [
+              18,
+              0.6
+            ],
+            [
+              32,
+              1
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0
+            ],
+            [
+              18,
+              0.6
+            ],
+            [
+              32,
+              1
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "mixamo",
+      "groundShift": 0.0044
+    },
+    {
+      "clip": "sakda-cleanse",
+      "motion": true,
+      "sim": {
+        "totalTicks": 90,
+        "activeTick": 35
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "f",
+            "animation": "bow"
+          },
+          "keys": [
+            [
+              0,
+              1.7
+            ],
+            [
+              35,
+              2.5
+            ],
+            [
+              62,
+              3.4
+            ],
+            [
+              90,
+              4.1
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              1.7
+            ],
+            [
+              35,
+              2.5
+            ],
+            [
+              62,
+              3.4
+            ],
+            [
+              90,
+              4.1
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "tripo",
+      "groundShift": 0.0236
+    },
+    {
+      "clip": "sakda-tigers-wrath",
+      "motion": true,
+      "sim": {
+        "totalTicks": 60,
+        "activeTick": 24
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "c",
+            "animation": "front_kick_02"
+          },
+          "keys": [
+            [
+              0,
+              0.05
+            ],
+            [
+              24,
+              {
+                "metric": "forward",
+                "joints": [
+                  "RightFoot"
+                ],
+                "search": [
+                  0.7,
+                  0.95
+                ]
+              }
+            ],
+            [
+              60,
+              1.4
+            ]
+          ],
+          "retarget": {
+            "yaw": -83
+          },
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.05
+            ],
+            [
+              24,
+              0.825
+            ],
+            [
+              60,
+              1.4
+            ]
+          ]
+        }
+      ],
+      "pin": true,
+      "limits": "KICK_LIMITS",
+      "origin": "tripo",
+      "strikes": [
+        {
+          "tick": 24,
+          "joints": [
+            "RightFoot"
+          ]
+        }
+      ],
+      "groundShift": 0.0255,
+      "strikeReport": [
+        {
+          "tick": 24,
+          "joints": [
+            "RightFoot"
+          ],
+          "contactTick": 24,
+          "forwardMetres": 0.858
+        }
+      ]
+    }
+  ]
+}

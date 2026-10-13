@@ -1,8 +1,10 @@
-import { AnimationClip, Group, InstancedBufferAttribute, InstancedMesh, LoadingManager, Matrix4, Object3D, Quaternion, SkinnedMesh, Texture, Vector3, type Camera, type Material } from 'three';
+import { AnimationClip, BufferAttribute, BufferGeometry, Group, InstancedBufferAttribute, InstancedMesh, InterleavedBuffer, InterleavedBufferAttribute, LoadingManager, Matrix4, Object3D, PropertyBinding, Quaternion, SkinnedMesh, Texture, Vector3, type Camera, type Material } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import type { AssetManifestEntry, WorldAssetPlacement } from '../game/contracts';
 import { AnimationController } from './AnimationController';
+import { simplifyCandidateGeometry } from './CandidateGeometrySimplifier';
+import { createPlaytestAnimationSet } from './PlaytestAnimationFactory';
 
 export interface AssetLoadProgress { assetId: string; url: string; loaded: number; total: number; ratio: number | null }
 export interface NativeAssetInstance { readonly assetId: string; readonly root: Object3D; readonly animation: AnimationController; readonly sockets: Readonly<Record<string, Object3D>>; dispose(): void }
@@ -13,7 +15,7 @@ export interface NativeStaticBatch {
 export class NativeAssetError extends Error {
   constructor(readonly assetId: string, message: string) { super(`Asset ${assetId}: ${message}`); this.name = 'NativeAssetError'; }
 }
-interface Template { key: string; root: Object3D; clips: AnimationClip[]; manifest: AssetManifestEntry; leases: number; lastUsed: number; evictWhenFree: boolean }
+interface Template { key: string; root: Object3D; clips: AnimationClip[]; manifest: AssetManifestEntry; playtestActionToClipMapping?: Record<string, string>; playtestRootMotion?: Record<string, NonNullable<AssetManifestEntry['rootMotion']>[string]>; leases: number; lastUsed: number; evictWhenFree: boolean }
 interface FadingInstances { values: Float32Array; attribute: InstancedBufferAttribute; position: Vector3[]; matrices: Matrix4[] }
 
 /** Loads only manifest-backed native GLBs. Templates share resources; skeleton clones and static instance batches are isolated. */
@@ -26,23 +28,42 @@ export class NativeAssetLoader {
   private disposed = false;
 
 
-  constructor(private readonly options: { maxCachedAssets?: number; onProgress?: (progress: AssetLoadProgress) => void } = {}) { this.loader = new GLTFLoader(this.manager); }
+  constructor(private readonly options: { maxCachedAssets?: number; onProgress?: (progress: AssetLoadProgress) => void; allowMissingActionClips?: boolean; simplifyBlockedCandidates?: boolean } = {}) { this.loader = new GLTFLoader(this.manager); }
 
   async load(manifest: AssetManifestEntry): Promise<NativeAssetInstance> {
     const template = await this.acquireTemplate(manifest);
-    const root = cloneSkinned(template.root);
-    root.traverse((node) => {
+    const model = cloneSkinned(template.root);
+    // Characters: the manifest correction (scale, corrective heading, origin offset) lives on this inner node so the instance root
+    // carries only the simulation transform; the renderer writes root position/yaw every frame without erasing the correction.
+    // `forward` is the manifest's encoded corrective heading: rotation.y = atan2(forward.x, forward.z) maps the native head onto +Z.
+    const root: Object3D = manifest.kind === 'character' && manifest.coordinateTransform ? new Group() : model;
+    if (root !== model) { root.name = 'wc:actor-root:' + manifest.id; root.add(model); }
+    model.traverse((node) => {
       if (node instanceof SkinnedMesh) node.skeleton.boneInverses = node.skeleton.boneInverses.map((matrix) => matrix.clone());
     });
     if (manifest.coordinateTransform) {
-      root.scale.setScalar(manifest.coordinateTransform.scale);
-      root.rotation.y = Math.atan2(manifest.coordinateTransform.forward.x, manifest.coordinateTransform.forward.z);
+      model.scale.setScalar(manifest.coordinateTransform.scale);
+      model.rotation.y = Math.atan2(manifest.coordinateTransform.forward.x, manifest.coordinateTransform.forward.z);
+      if (manifest.coordinateTransform.originOffset) {
+        const offset = manifest.coordinateTransform.originOffset;
+        model.position.set(offset.x, offset.y, offset.z);
+      }
     }
-    const animation = new AnimationController(root, template.clips, manifest);
+    const animationManifest = template.playtestActionToClipMapping
+      ? { ...manifest, actionToClipMapping: { ...manifest.actionToClipMapping, ...template.playtestActionToClipMapping }, rootMotion: { ...manifest.rootMotion, ...template.playtestRootMotion } }
+      : manifest;
+    const animation = new AnimationController(model, template.clips, animationManifest, this.options.allowMissingActionClips === true);
     const sockets: Record<string, Object3D> = {};
     for (const name of manifest.sockets) {
-      const socket = root.getObjectByName(name);
+      const socket = model.getObjectByName(name);
       if (socket) sockets[name] = socket;
+    }
+    const castBone = manifest.kind !== 'character' ? undefined
+      : manifest.castSocketBone ?? (manifest.evidenceStatus === 'blocked' ? manifest.playtestAnimation?.headBoneName : undefined);
+    if (!sockets.cast && castBone) {
+      // GLTFLoader sanitizes native node names for animation track binding.
+      const head = model.getObjectByName(castBone) ?? model.getObjectByName(PropertyBinding.sanitizeNodeName(castBone));
+      if (head && 'isBone' in head && head.isBone === true) sockets.cast = head;
     }
     return this.createInstance(manifest.id, root, animation, sockets, template);
   }
@@ -60,7 +81,11 @@ export class NativeAssetLoader {
         if ('isSkinnedMesh' in node && node.isSkinnedMesh) throw new NativeAssetError(manifest.id, 'a skinned prop cannot be converted to an instanced static batch');
         if (!('isMesh' in node && node.isMesh)) return;
         const mesh = node as InstancedMesh;
-        const geometry = mesh.geometry.clone();
+        // Shallow-clone the geometry: the source's typed arrays (vertex/index data) are already
+        // compacted for blocked static candidates and immutable to us, so reuse them directly.
+        // Only the per-batch instanceOpacity attribute is owned by the batch, ensuring independent
+        // occlusion-fade bookkeeping per static-batch load.
+        const geometry = shallowCloneGeometry(mesh.geometry);
         const alphas = new Float32Array(placements.length).fill(1);
         const attribute = new InstancedBufferAttribute(alphas, 1);
         geometry.setAttribute('instanceOpacity', attribute);
@@ -215,6 +240,15 @@ export class NativeAssetLoader {
         }
         let hasSkinnedMesh = false;
         root.traverse((node) => { if ('isSkinnedMesh' in node && node.isSkinnedMesh) hasSkinnedMesh = true; });
+        let playtestAnimation: ReturnType<typeof createPlaytestAnimationSet>;
+        if (this.options.allowMissingActionClips === true && hasSkinnedMesh && gltf.animations.length === 0 && manifest.sourceType === 'native-glb' && manifest.kind === 'character' && manifest.evidenceStatus === 'blocked' && manifest.playtestAnimation) {
+          try { playtestAnimation = createPlaytestAnimationSet(root, manifest, gltf.animations); }
+          catch (error) {
+            disposeObject(root);
+            reject(new NativeAssetError(manifest.id, error instanceof Error ? error.message : String(error)));
+            return;
+          }
+        }
         if (manifest.kind === 'character') {
           if (!hasSkinnedMesh) {
             disposeObject(root);
@@ -230,7 +264,19 @@ export class NativeAssetLoader {
             }
           }
         }
-        resolve({ key: '', root, clips: gltf.animations, manifest, leases: 0, lastUsed: ++this.clock, evictWhenFree: false });
+        const clips = playtestAnimation ? [...gltf.animations, ...playtestAnimation.clips] : gltf.animations;
+        const finish = () => resolve({
+          key: '', root, clips, manifest,
+          playtestActionToClipMapping: playtestAnimation?.actionToClipMapping,
+          playtestRootMotion: playtestAnimation?.rootMotion,
+          leases: 0, lastUsed: ++this.clock, evictWhenFree: false,
+        });
+        if (this.options.simplifyBlockedCandidates && manifest.evidenceStatus === 'blocked') {
+          void simplifyCandidateGeometry(root).then(finish, (error: unknown) => {
+            disposeObject(root);
+            reject(new NativeAssetError(manifest.id, 'candidate geometry simplification failed: ' + (error instanceof Error ? error.message : String(error))));
+          });
+        } else finish();
       }, (error) => reject(new NativeAssetError(manifest.id, error instanceof Error ? error.message : 'GLB parse failed')));
     });
   }
@@ -254,7 +300,7 @@ export class NativeAssetLoader {
 }
 
 function assetRevisionKey(manifest: AssetManifestEntry): string {
-  return manifest.id + '\0' + manifest.outputHash!.toLowerCase();
+  return manifest.id + '\0' + manifest.outputHash!.toLowerCase() + '\0' + JSON.stringify(manifest.playtestAnimation ?? null);
 }
 function assertSelfContainedGlb(assetId: string, bytes: ArrayBuffer): void {
   const view = new DataView(bytes);
@@ -320,4 +366,41 @@ function disposeObject(root: Object3D): void {
   for (const geometry of geometries) geometry.dispose();
   for (const material of materials) material.dispose();
   for (const texture of textures) texture.dispose();
+}
+
+/** Separate GPU attribute identities and per-batch opacity; immutable CPU arrays stay shared. */
+function shallowCloneGeometry(source: BufferGeometry): BufferGeometry {
+  const target = new BufferGeometry();
+  target.name = source.name;
+  target.userData = { ...source.userData };
+  if (source.index) {
+    target.setIndex(new BufferAttribute(source.index.array as BufferAttribute['array'], 1));
+  }
+  const groupedInterleaved = new Map<InterleavedBuffer, InterleavedBuffer>();
+  for (const attributeName of Object.keys(source.attributes)) {
+    const attribute = source.getAttribute(attributeName);
+    if (attribute instanceof InterleavedBufferAttribute) {
+      const interleaved = attribute.data;
+      let shared = groupedInterleaved.get(interleaved);
+      if (!shared) {
+        shared = new InterleavedBuffer(interleaved.array, interleaved.stride);
+        shared.setUsage(interleaved.usage);
+        groupedInterleaved.set(interleaved, shared);
+      }
+      const next = new InterleavedBufferAttribute(shared, attribute.itemSize, attribute.offset, attribute.normalized);
+      next.name = attribute.name;
+      target.setAttribute(attributeName, next);
+    } else {
+      const next = new BufferAttribute(attribute.array, attribute.itemSize, attribute.normalized);
+      next.name = attribute.name;
+      next.gpuType = attribute.gpuType;
+      next.setUsage(attribute.usage);
+      target.setAttribute(attributeName, next);
+    }
+  }
+  for (const group of source.groups) target.addGroup(group.start, group.count, group.materialIndex);
+  target.setDrawRange(source.drawRange.start, source.drawRange.count);
+  if (source.boundingBox !== null) target.boundingBox = source.boundingBox.clone();
+  if (source.boundingSphere !== null) target.boundingSphere = source.boundingSphere.clone();
+  return target;
 }

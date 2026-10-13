@@ -1,13 +1,18 @@
 import * as THREE from 'three';
 import type { AudioListener } from 'three';
-import type { GameSettings, WorldClockSnapshot } from '../game/contracts.js';
+import type { ActorSnapshot, CombatSnapshot, GameSettings, WorldClockSnapshot } from '../game/contracts.js';
 import { StoryAudio, type AudioListenerPose, type StoryAudioOptions } from '../audio/StoryAudio.js';
 import type { CueCancellationReason, StoryCue } from './story-cues.js';
 import { StoryEffects, type StoryEffectsOptions } from './StoryEffects.js';
+import { ActorVfx } from './vfx/ActorVfx.js';
+import type { ImpactSink } from './vfx/ElementKits.js';
 
 export interface StoryPresentationOptions {
   readonly scene: THREE.Scene;
   readonly resolveSocket?: StoryEffectsOptions['resolveSocket'];
+  /** Rendered actor root (skeleton owner) for bone-following effects such as the staff trail. */
+  readonly resolveActorRoot?: (actorId: string) => THREE.Object3D | undefined;
+  readonly impact?: ImpactSink;
   readonly audioListener?: AudioListener;
   readonly reducedEffects?: boolean;
   readonly capacity?: number;
@@ -17,6 +22,7 @@ export interface StoryPresentationOptions {
 /** Combines presentation consumers without granting them simulation or campaign authority. */
 export class StoryPresentation {
   readonly effects: StoryEffects;
+  readonly actors: ActorVfx;
   readonly audio: StoryAudio;
   private readonly resolveSocket?: StoryPresentationOptions['resolveSocket'];
   private readonly audioAnchor = new THREE.Vector3();
@@ -24,7 +30,8 @@ export class StoryPresentation {
 
   constructor(options: StoryPresentationOptions) {
     this.resolveSocket = options.resolveSocket;
-    this.effects = new StoryEffects({ scene: options.scene, resolveSocket: options.resolveSocket, reducedEffects: options.reducedEffects, capacity: options.capacity });
+    this.effects = new StoryEffects({ scene: options.scene, resolveSocket: options.resolveSocket, resolveActorRoot: options.resolveActorRoot, reducedEffects: options.reducedEffects, capacity: options.capacity, impact: options.impact });
+    this.actors = new ActorVfx(this.effects.vfx, options.resolveSocket, options.resolveActorRoot, actorId => this.effects.isCharging(actorId), options.impact);
     this.audio = new StoryAudio({ listener: options.audioListener, onPlayback: options.onPlayback });
   }
 
@@ -53,9 +60,32 @@ export class StoryPresentation {
   /** Pass the authoritative scaled world clock; never derive VFX time from renderer delta. */
   update(worldClock: WorldClockSnapshot, listenerPose?: AudioListenerPose): void {
     if (this.disposed) return;
-    this.effects.update(worldClock);
+    this.effects.update(worldClock, listenerPose?.position);
     if (listenerPose) this.audio.setListenerPose(listenerPose);
   }
+
+  /** Snapshot-driven actor effects (staff trail, slam, tether, dive/landing dust, monster auras). */
+  updateActors(actors: readonly ActorSnapshot[]): void {
+    if (this.disposed) return;
+    let player: ActorSnapshot | undefined;
+    for (const actor of actors) if (actor.id === 'aren' || (!player && actor.allegiance === 'player')) player = actor;
+    this.effects.setFocus(player?.position);
+    this.actors.update(actors);
+  }
+
+  /**
+   * Snapshot-driven Warden Arsenal pass: blade trail and weapon-edge glow, rune sigils, projectiles (interpolated by `alpha`
+   * between sim ticks), Judgement marks, Thunder Cleave, electric arcs, the cleansed finish and ambient motes. Call every
+   * rendered frame after `update` and `updateActors`; hit-stop needs no special handling because everything ages on the
+   * (frozen) world clock.
+   */
+  updateCombat(snapshot: CombatSnapshot, alpha: number): void {
+    if (this.disposed) return;
+    this.actors.setHero(snapshot.player?.heroId ?? 'aren');
+    this.effects.warden.updateCombat(snapshot, alpha);
+  }
+
+  setImpactSink(impact: ImpactSink | undefined): void { this.effects.setImpactSink(impact); this.actors.setImpactSink(impact); }
 
   setSettings(settings: GameSettings): void {
     this.effects.setReducedEffects(settings.reducedMotion);
@@ -72,6 +102,7 @@ export class StoryPresentation {
 
   cancelAll(reason: CueCancellationReason): void {
     this.effects.cancelAll(reason);
+    this.actors.clear();
     this.audio.cancelAll(reason);
   }
 
@@ -84,6 +115,7 @@ export class StoryPresentation {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.actors.dispose();
     this.effects.dispose();
     this.audio.dispose();
   }

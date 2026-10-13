@@ -1,0 +1,636 @@
+{
+  "hero": "vesper",
+  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "method": "Actual GameApplication fixed-step fixtures and keyboard actions; native clip assertions. Hit overlay from vitality loss; outcomes through presentation API, not story progression.",
+  "cases": [
+    {
+      "label": "vesper-verified-idle",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-idle",
+      "clip": "aren-idle",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 4,
+      "additive": 4,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-idle"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-shadow-step",
+      "boarHp": 961,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 179
+        }
+      ],
+      "ghosts": 2,
+      "hero": "vesper",
+      "action": "vesper-shadow-step",
+      "phase": "active",
+      "binding": "vesper-shadow-step",
+      "clip": "vesper-shadow-step",
+      "position": {
+        "x": 6.4656684000697595,
+        "y": 0,
+        "z": -1.1373263997209628
+      },
+      "mana": 88,
+      "particles": 172,
+      "additive": 140,
+      "alpha": 32,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-shadow-step"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-thousand-cuts",
+      "boarHp": 968,
+      "marks": [
+        {
+          "kind": "death-mark",
+          "remainingTicks": 238
+        }
+      ],
+      "ghosts": 3,
+      "untargetable": true,
+      "hero": "vesper",
+      "action": "vesper-thousand-cuts",
+      "phase": "active",
+      "binding": "vesper-thousand-cuts",
+      "clip": "vesper-thousand-cuts",
+      "position": {
+        "x": 4.087351524416428,
+        "y": 0,
+        "z": -2.832143487323735
+      },
+      "mana": 80,
+      "particles": 180,
+      "additive": 141,
+      "alpha": 39,
+      "activeKits": 5,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-thousand-cuts"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-kunai",
+      "boarHp": 1000,
+      "ghosts": 1,
+      "hero": "vesper",
+      "action": "vesper-kunai-fan",
+      "phase": "recovery",
+      "binding": "vesper-kunai-fan",
+      "clip": "vesper-kunai-fan",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 85,
+      "particles": 74,
+      "additive": 72,
+      "alpha": 2,
+      "activeKits": 3,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-kunai-fan"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-shade-swap",
+      "boarHp": 976,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 176
+        }
+      ],
+      "ghosts": 1,
+      "hero": "vesper",
+      "action": "vesper-shade-swap",
+      "phase": "active",
+      "binding": "vesper-shade-swap",
+      "clip": "vesper-shade-swap",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 65,
+      "particles": 124,
+      "additive": 85,
+      "alpha": 39,
+      "activeKits": 4,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-shade-swap"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-requiem",
+      "boarHp": 980,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 2,
+          "remainingTicks": 180
+        },
+        {
+          "kind": "requiem-mark",
+          "remainingTicks": 90
+        }
+      ],
+      "ghosts": 3,
+      "untargetable": true,
+      "hero": "vesper",
+      "action": "vesper-requiem",
+      "phase": "active",
+      "binding": "vesper-requiem",
+      "clip": "vesper-requiem",
+      "position": {
+        "x": 7.296941690220029,
+        "y": 0,
+        "z": -4.415747947965744
+      },
+      "mana": 100,
+      "particles": 186,
+      "additive": 151,
+      "alpha": 35,
+      "activeKits": 4,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-requiem"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-cleanse",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-cleanse",
+      "phase": "active",
+      "binding": "vesper-cleanse",
+      "clip": "vesper-cleanse",
+      "position": {
+        "x": 4,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 70,
+      "particles": 27,
+      "additive": 20,
+      "alpha": 7,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-cleanse"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-severing",
+      "boarHp": 985,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 180
+        }
+      ],
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-severing-shadow",
+      "phase": "active",
+      "binding": "vesper-severing-shadow",
+      "clip": "vesper-severing-shadow",
+      "position": {
+        "x": 6.4656684000697595,
+        "y": 0,
+        "z": -1.1373263997209628
+      },
+      "mana": 80,
+      "particles": 211,
+      "additive": 181,
+      "alpha": 30,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-severing-shadow"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-mist-blink",
+      "boarHp": 1000,
+      "ghosts": 5,
+      "untargetable": true,
+      "hero": "vesper",
+      "action": "aren-forward-right-dive-roll",
+      "phase": "active",
+      "binding": "aren-forward-right-dive-roll",
+      "clip": "vesper-mist-blink",
+      "position": {
+        "x": 8.018518518518496,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 75,
+      "particles": 111,
+      "additive": 51,
+      "alpha": 60,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-forward-right-dive-roll"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-cuts-charge",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-cuts-charge",
+      "phase": "anticipation",
+      "binding": "vesper-cuts-charge",
+      "clip": "vesper-cuts-charge",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 8,
+      "additive": 6,
+      "alpha": 2,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "vesper-verified-shade-charge",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-shade-charge",
+      "phase": "anticipation",
+      "binding": "vesper-shade-charge",
+      "clip": "vesper-shade-charge",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 34,
+      "additive": 22,
+      "alpha": 12,
+      "activeKits": 1,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "vesper-verified-jump",
+      "boarHp": 1000,
+      "ghosts": 3,
+      "hero": "vesper",
+      "action": "aren-jump",
+      "phase": "active",
+      "binding": "aren-jump",
+      "clip": "aren-jump",
+      "position": {
+        "x": 2,
+        "y": 0.6944444444444444,
+        "z": -3
+      },
+      "mana": 92,
+      "particles": 29,
+      "additive": 10,
+      "alpha": 19,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-jump"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-air-step",
+      "boarHp": 1000,
+      "ghosts": 6,
+      "hero": "vesper",
+      "action": "aren-jump",
+      "phase": "active",
+      "binding": "aren-air-step",
+      "clip": "aren-air-step",
+      "position": {
+        "x": 2,
+        "y": 2.1417638483965007,
+        "z": -3
+      },
+      "mana": 84,
+      "particles": 95,
+      "additive": 43,
+      "alpha": 52,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "aren-jump"
+        ],
+        [
+          "aren-jump"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-walk",
+      "boarHp": 1000,
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "aren-walk",
+      "phase": "idle",
+      "binding": "aren-walk",
+      "clip": "aren-walk",
+      "position": {
+        "x": 0.946851748999447,
+        "y": 0,
+        "z": -4.474407551400769
+      },
+      "mana": 100,
+      "particles": 16,
+      "additive": 11,
+      "alpha": 5,
+      "activeKits": 0,
+      "shaderFailures": 0,
+      "trace": [
+        []
+      ]
+    },
+    {
+      "label": "vesper-verified-iai1",
+      "boarHp": 988,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 180
+        }
+      ],
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-iai-1",
+      "phase": "active",
+      "binding": "vesper-iai-1",
+      "clip": "vesper-iai-1",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 48,
+      "additive": 44,
+      "alpha": 4,
+      "activeKits": 2,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-iai-1"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-iai2",
+      "boarHp": 976,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 2,
+          "remainingTicks": 180
+        }
+      ],
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-iai-2",
+      "phase": "active",
+      "binding": "vesper-iai-2",
+      "clip": "vesper-iai-2",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 101,
+      "additive": 88,
+      "alpha": 13,
+      "activeKits": 3,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-iai-1"
+        ],
+        [
+          "vesper-iai-2"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-iai3",
+      "boarHp": 961,
+      "marks": [
+        {
+          "kind": "death-mark",
+          "remainingTicks": 240
+        }
+      ],
+      "ghosts": 0,
+      "hero": "vesper",
+      "action": "vesper-iai-3",
+      "phase": "active",
+      "binding": "vesper-iai-3",
+      "clip": "vesper-iai-3",
+      "position": {
+        "x": 4.5,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 102,
+      "additive": 86,
+      "alpha": 16,
+      "activeKits": 4,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-iai-1"
+        ],
+        [
+          "vesper-iai-2"
+        ],
+        [
+          "vesper-iai-3"
+        ]
+      ]
+    },
+    {
+      "label": "vesper-verified-iai4",
+      "boarHp": 914,
+      "marks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 180
+        }
+      ],
+      "ghosts": 2,
+      "untargetable": true,
+      "hero": "vesper",
+      "action": "vesper-iai-4",
+      "phase": "anticipation",
+      "binding": "vesper-iai-4",
+      "clip": "vesper-iai-4",
+      "position": {
+        "x": 4.693359375000002,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 292,
+      "additive": 263,
+      "alpha": 29,
+      "activeKits": 5,
+      "shaderFailures": 0,
+      "trace": [
+        [
+          "vesper-iai-1"
+        ],
+        [
+          "vesper-iai-2"
+        ],
+        [
+          "vesper-iai-3"
+        ],
+        [
+          "vesper-iai-4"
+        ]
+      ]
+    },
+    {
+      "label": "run",
+      "hero": "vesper",
+      "action": "aren-run",
+      "phase": "idle",
+      "binding": "aren-run",
+      "clip": "aren-run",
+      "position": {
+        "x": 0.47424974148737253,
+        "y": 0,
+        "z": -5.136050361917689
+      },
+      "mana": 100,
+      "particles": 16,
+      "additive": 11,
+      "alpha": 5,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "hit",
+      "overlay": "aren-hit",
+      "hero": "vesper",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-idle",
+      "clip": "aren-idle",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 1,
+      "additive": 1,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "victory",
+      "hero": "vesper",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-cheer",
+      "clip": "aren-cheer",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 0,
+      "additive": 0,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0
+    },
+    {
+      "label": "defeat",
+      "hero": "vesper",
+      "action": "aren-idle",
+      "phase": "idle",
+      "binding": "aren-defeat",
+      "clip": "aren-defeat",
+      "position": {
+        "x": 2,
+        "y": 0,
+        "z": -3
+      },
+      "mana": 100,
+      "particles": 0,
+      "additive": 0,
+      "alpha": 0,
+      "activeKits": 0,
+      "shaderFailures": 0
+    }
+  ]
+}

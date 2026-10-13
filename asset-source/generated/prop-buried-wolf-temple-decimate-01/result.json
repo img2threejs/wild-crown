@@ -1,0 +1,16 @@
+{
+  "task_id": "fd793910-7d4e-409b-bf64-da53ef341b18",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-buried-wolf-temple-decimate-01/tripo-out/prop-buried-wolf-temple-decimate-fd793910",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-buried-wolf-temple-decimate-01/tripo-out/prop-buried-wolf-temple-decimate-fd793910/model.glb",
+  "preview": "asset-source/generated/prop-buried-wolf-temple-decimate-01/tripo-out/prop-buried-wolf-temple-decimate-fd793910/preview.png",
+  "started": "2026-10-11T09:15:14.364Z",
+  "finished": "2026-10-11T09:24:40.270Z"
+}

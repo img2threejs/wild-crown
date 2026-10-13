@@ -99,6 +99,8 @@ describe('Perfect Dodge world-clock time dilation', () => {
     state.timePolicy = 'perfect-dodge-slow';
     state.worldTimeScale = 0.25;
     state.slowMotionRemainingTicks = 12;
+    // Out of reach: a connecting hit would add a hit-stop shift, which warden-arsenal.test.ts covers separately.
+    state.actors.find(actor => actor.id !== state.playerId)!.position = vec(0, 0, -6);
     const engine = new CombatEngine(state);
     engine.fixedStep({ ...idle, heavyPressed: true });
     const started = engine.snapshotState();
@@ -222,12 +224,13 @@ describe('Perfect Dodge world-clock time dilation', () => {
     const counterAction = engine.snapshotState();
     const playerAction = counterAction.actors.find(actor => actor.id === 'aren')!;
     expect(counterAction.actionId).toBe('light_1');
-    expect(counterAction.pendingImpact?.counter).toBe(true);
+    expect(counterAction.swing?.counter).toBe(true);
     expect(playerAction.actionId).toBe('aren-light-1');
     expect(playerAction.actionStartedTick).toBe(counterAction.tick);
     expect(playerAction.actionEndsTick).toBe(counterAction.actionRecoveryUntil);
     for (let step = 0; step < 12; step++) engine.fixedStep(idle);
-    expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.vitality).toBe(88);
+    // light_1 base 9 against the exposed attacker: ceil(9 × 1.5) = 14.
+    expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.vitality).toBe(86);
     const recoveryUntil = engine.snapshotState().actionRecoveryUntil;
     while (engine.snapshotState().tick <= recoveryUntil) engine.fixedStep(idle);
     const recovered = engine.snapshotState();
@@ -695,7 +698,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(effects.emit(migratedCue)).toBe(true);
     effects.update(restored.snapshot().worldClock);
     expect(effects.activeCount).toBe(1);
-    const activeMaterials = scene.getObjectByName('story-effects')!.children.map(child => (child as THREE.Mesh).material as THREE.MeshBasicMaterial);
+    const activeMaterials = scene.getObjectByName('story-effects')!.children.filter((child): child is THREE.Mesh => child instanceof THREE.Mesh).map(child => child.material as THREE.MeshBasicMaterial);
     expect(activeMaterials.some(material => Number.isFinite(material.opacity) && material.opacity > 0)).toBe(true);
     for (let tick = 0; tick < 6; tick++) restored.fixedStep(idle);
     effects.update(restored.snapshot().worldClock);

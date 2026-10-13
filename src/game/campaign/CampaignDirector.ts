@@ -83,6 +83,15 @@ const REGION_CHAPTER: Partial<Record<RegionId, number>> = {
   refuge: 7,
   "heartroot-hollow": 8,
 };
+/** Regions a replay-isolated showcase (local playtest map) can start in directly, with the story state that region expects. */
+export type ShowcaseRegionId = "whispering-canopy" | "the-grove" | "moonpine-ridge" | "mistveil-basin";
+const SHOWCASE_STARTS: Readonly<Record<ShowcaseRegionId, { readonly chapter: number; readonly questIds: readonly string[]; readonly provisionalKoro: boolean }>> = {
+  "whispering-canopy": { chapter: 1, questIds: ["fallen-scout", "thief-in-the-branches"], provisionalKoro: true },
+  // The early sanctuary opens once the Canopy accord is struck (Vara and Koro have arrived), before Blood Bamboo Valley.
+  "the-grove": { chapter: 1, questIds: [], provisionalKoro: false },
+  "moonpine-ridge": { chapter: 3, questIds: ["the-third-howl", "two-packs"], provisionalKoro: false },
+  "mistveil-basin": { chapter: 4, questIds: ["eyes-in-the-mist", "the-black-river"], provisionalKoro: false },
+};
 const LEADER_IDS: readonly LeaderId[] = [
   "koro",
   "asha",
@@ -526,17 +535,18 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return this.publish();
   }
 
-  startShowcase(runId = "showcase-" + createId()): CampaignSnapshot {
+  startShowcase(runId = "showcase-" + createId(), regionId: ShowcaseRegionId = "whispering-canopy"): CampaignSnapshot {
+    const showcase = SHOWCASE_STARTS[regionId];
     const replayState = createShowcaseReplay();
     this.runId = runId;
     this.campaign = { ...createNewRun(runId), world: replayState.world };
-    this.region = "whispering-canopy";
-    this.chapter = 1;
+    this.region = regionId;
+    this.chapter = showcase.chapter;
     this.replay = true;
     this.revision = 0;
     this.facts = emptyWorldFacts(this.campaign);
-    this.facts.provisionalKoro = true;
-    this.activeQuestIds = ["fallen-scout", "thief-in-the-branches"];
+    if (showcase.provisionalKoro) this.facts.provisionalKoro = true;
+    this.activeQuestIds = [...showcase.questIds];
     this.completedQuestIds = [];
     this.completedObjectiveIds = [];
     this.trackedObjectiveId = null;
@@ -546,7 +556,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.eventKeys.clear();
     this.eventLog = [];
     this.checkpoint = createCheckpoint(this.campaign);
-    this.safeSpawn = this.safeSpawnFor("whispering-canopy");
+    this.safeSpawn = this.safeSpawnFor(regionId);
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
     return this.publish();
   }

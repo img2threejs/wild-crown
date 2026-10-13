@@ -1,0 +1,46 @@
+{
+  "assetId": "mud_forest",
+  "name": "Mud Forest",
+  "sourceUrl": "https://polyhaven.com/a/mud_forest",
+  "apiUrl": "https://api.polyhaven.com/files/mud_forest",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "eye-candy.xyz",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 2.35,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mud_forest/mud_forest_diff_1k.jpg",
+      "sourceSha256": "6b874ef298dd06671624032311e0dd1456251a92e396883852bf5ec75cd099eb",
+      "sourceBytes": 952076,
+      "sha256": "6b874ef298dd06671624032311e0dd1456251a92e396883852bf5ec75cd099eb",
+      "md5": "d3ea8fc962bbf54d66fc5723cd0096c1",
+      "bytes": 952076
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mud_forest/mud_forest_nor_gl_1k.jpg",
+      "sourceSha256": "7ccce706a05d804ecf961c4c6be2ab5f496e717e05b13bd87fa086c9e082c3cf",
+      "sourceBytes": 1480930,
+      "sha256": "7ccce706a05d804ecf961c4c6be2ab5f496e717e05b13bd87fa086c9e082c3cf",
+      "md5": "6e2f0d15fdf402ca5221f63d0bfbeb60",
+      "bytes": 1480930
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mud_forest/mud_forest_arm_1k.jpg",
+      "sourceSha256": "5c2e4a8ab7146f98350d11de3c6a3032741509a7ac8aaf5c34b8277fb23d568b",
+      "sourceBytes": 829634,
+      "sha256": "5c2e4a8ab7146f98350d11de3c6a3032741509a7ac8aaf5c34b8277fb23d568b",
+      "md5": "344cbb172e258e528586ff959e84d825",
+      "bytes": 829634
+    }
+  }
+}

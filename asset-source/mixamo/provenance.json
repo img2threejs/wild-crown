@@ -1,0 +1,338 @@
+{
+  "source": "Adobe Mixamo (https://www.mixamo.com), official web UI, downloaded by the main session in the user's signed-in account",
+  "downloadedAt": "2026-10-12T07:11:45.215Z",
+  "character": "Y Bot",
+  "exportSettings": {
+    "format": "FBX Binary (fbx7_2019)",
+    "skin": "Without Skin",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "mirror": false,
+    "trim": "default (full clip)",
+    "sliders": "Mixamo defaults (not changed)"
+  },
+  "inPlaceNote": "The Mixamo In Place option was requested for run-with-sword and all six additional gait/sprint sources (per-file downloadedAt timestamps). Measured on the delivered FBX files (Hips translation, first key to last key): run-with-sword, ninja-run, sword-shield-run, sword-shield-walk, ninja-sneak-walk and fast-run have 0.000 m of horizontal Hips travel; sprint.fbx does not (see its entry). The other original clips offered no In Place option.",
+  "matching": "Each tile was matched by display name AND description from the 2026-09-04 catalogue snapshot; catalogId comes from that snapshot (the UI does not show it).",
+  "frameCountNote": "Durations must be read from the FBX; the UI frame counter was not reliable during automation.",
+  "licence": "Mixamo animations may be used royalty-free in projects, but the raw FBX files must not be redistributed on their own. This repository is private; keep these source files out of any public release or asset bundle.",
+  "files": [
+    {
+      "file": "sakda/muay-thai-knee.fbx",
+      "hero": "sakda",
+      "displayName": "Illegal Knee",
+      "description": "Muay Thai Illegal Knee",
+      "catalogId": "110430903",
+      "sha256": "cdb5f277b928855ed1fc1019fe83f51197aa58635d8fba28751377b5c97880e9",
+      "bytes": 444736,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/roundhouse-rear.fbx",
+      "hero": "sakda",
+      "displayName": "Kicking",
+      "description": "Roundhouse Kick With The Rear Foot",
+      "catalogId": "90018",
+      "sha256": "5db4501604c2f680d8734fe533be30991eda0c0f6567f5bf5fde14990cdd1699",
+      "bytes": 382640,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/elbow-uppercut.fbx",
+      "hero": "sakda",
+      "displayName": "Illegal Elbow Punch",
+      "description": "Illegal Elbow Uppercut",
+      "catalogId": "110410903",
+      "sha256": "d88caa93c54e8bafba55d64909575e84c5dddefa9603179fc5939a1f4ba4b427",
+      "bytes": 425840,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/elbow-cross.fbx",
+      "hero": "sakda",
+      "displayName": "Illegal Elbow Punch",
+      "description": "Illegal Cross Elbow",
+      "catalogId": "110410904",
+      "sha256": "cda3ef5c69585ae7daae1d10cc66e242bf4399f81653745ed69feadba1d79505",
+      "bytes": 425840,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/mma-high-kick.fbx",
+      "hero": "sakda",
+      "displayName": "Mma Kick",
+      "description": "Mma High Kick",
+      "catalogId": "124070905",
+      "sha256": "22eb450a64033b4c6beadcdf9d3d5c244854c3406cb33a2605caf3eca9c19e0e",
+      "bytes": 485776,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/flying-knee-punch.fbx",
+      "hero": "sakda",
+      "displayName": "Flying Knee Punch Combo",
+      "description": "Jumping Knee Followed By A Punch",
+      "catalogId": "119800901",
+      "sha256": "f4d18e88c05aff6ce5d3d0e757129211ab1e5248b1b362bc397806d2b7ea48ea",
+      "bytes": 565072,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/stomp-hard.fbx",
+      "hero": "sakda",
+      "displayName": "Stomp",
+      "description": "Hard Floor Stomp",
+      "catalogId": "123300901",
+      "sha256": "63d5db84ced19273ed2be500b43f0db70595184c8ac33f7f0644797ddff5cb04",
+      "bytes": 452656,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/fight-idle-guard-up.fbx",
+      "hero": "sakda",
+      "displayName": "Bouncing Fight Idle",
+      "description": "Bouncing Fight Idle With Guard Up",
+      "catalogId": "119720902",
+      "sha256": "ff802e87a5c8f7f4fd1095df13b523aaba88d5c31f0dd5d85bc7bc01df2eaeaa",
+      "bytes": 501440,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/draw-sword-1.fbx",
+      "hero": "vesper",
+      "displayName": "Draw Sword 1",
+      "description": "Transition From Standing To Drawing Sword",
+      "catalogId": "123260901",
+      "sha256": "d8771b9efb6eb81591ead17b9e297355bcffa2be83cb9672f32446cdfe333397",
+      "bytes": 431232,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/thrust-slash.fbx",
+      "hero": "vesper",
+      "displayName": "Thrust Slash",
+      "description": "Thrust And Slash With Blade",
+      "catalogId": "115180901",
+      "sha256": "1547691b2256033fe607d720e20c60a497fc4f099576f2ef935851bb8b64a21b",
+      "bytes": 555168,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/melee-360-high.fbx",
+      "hero": "vesper",
+      "displayName": "Standing Melee Attack 360 High",
+      "description": "Left To Right Spin Attack With Axe",
+      "catalogId": "128650914",
+      "sha256": "01c752723791cf88be0d3a35ccd4f3ec27051d0671a1067a5166380c41662a23",
+      "bytes": 570112,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/melee-downward.fbx",
+      "hero": "vesper",
+      "displayName": "Standing Melee Attack Downward",
+      "description": "Downward Attack With Axe",
+      "catalogId": "128650912",
+      "sha256": "818c333b950c64334b26356276de209f36668732419dba0c98e5ffb0d5bdccde",
+      "bytes": 482832,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/sheath-sword-1.fbx",
+      "hero": "vesper",
+      "displayName": "Sheath Sword 1",
+      "description": "Combat To Sheathing Sword",
+      "catalogId": "123270901",
+      "sha256": "230182fcdb245d17d9a95ee5dac3f62809151399af61e6a8aa204f55641bb453",
+      "bytes": 388368,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/run-with-sword.fbx",
+      "hero": "vesper",
+      "displayName": "Run With Sword",
+      "description": "Running With A Sword In The Right Hand",
+      "catalogId": "116470901",
+      "sha256": "8ef6d60c97d0023a79986aa5407a6b8ab5e2a65577d041284c83259fae5919cf",
+      "bytes": 325936,
+      "inPlace": true
+    },
+    {
+      "file": "sakda/mma-spinning-back-kick.fbx",
+      "hero": "sakda",
+      "displayName": "Mma Kick",
+      "description": "Mma Spinning Back Kick",
+      "catalogId": "124070902",
+      "sha256": "bfc7cdaab4756c98275a6d2e9d83016b05b510b521290f37977e6990cfec0444",
+      "bytes": 492608,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/hadouken.fbx",
+      "hero": "sakda",
+      "displayName": "Fireball",
+      "description": "Street Fighter Hadouken",
+      "catalogId": "103010901",
+      "sha256": "3273358747b26d202bc4d18857e92c0e62d17ef80af1e474dc952257104debf4",
+      "bytes": 644448,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/boxing-step-forward-long.fbx",
+      "hero": "sakda",
+      "displayName": "Long Step Forward",
+      "description": "Long Boxing Step Forward",
+      "catalogId": "110520905",
+      "sha256": "b2d1aeabface8c743bcbf629d0a4d4e3dcba9027ae079ba63013d9eeb12a1242",
+      "bytes": 342144,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/melee-backhand-up.fbx",
+      "hero": "vesper",
+      "displayName": "Standing Melee Attack Backhand",
+      "description": "Backhanded Upward Attack With Axe",
+      "catalogId": "128650911",
+      "sha256": "fcc972f83d965e7066186d410d0c9bfe8ee0be3c2e8944a09e3d840ae37ad7ae",
+      "bytes": 566672,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/melee-horizontal-rl.fbx",
+      "hero": "vesper",
+      "displayName": "Standing Melee Attack Horizontal",
+      "description": "Right To Left Attack With Axe",
+      "catalogId": "128650913",
+      "sha256": "3b0ef62eef4a30d70c4c52de2299be2ad73345b4aeb6178e378a8c4491947d7a",
+      "bytes": 494016,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/sword-outward-slash.fbx",
+      "hero": "vesper",
+      "displayName": "Stable Sword Outward Slash",
+      "description": "Outward Slashing With A Sword Standing Stable",
+      "catalogId": "104990902",
+      "sha256": "75941d8424e46cc11db08290bdd67ffd001a70668aa07032c7a7a7a15102eb0b",
+      "bytes": 425360,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/melee-idle.fbx",
+      "hero": "vesper",
+      "displayName": "Standing Idle",
+      "description": "Standing Idle With Axe",
+      "catalogId": "128650908",
+      "sha256": "4ab3b055de48ef5a2fe266c617b2707276a1c3ab6c9e5a4251e4fd696ebc66cd",
+      "bytes": 433392,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/one-hand-sword-combo.fbx",
+      "hero": "vesper",
+      "displayName": "One Hand Sword Combo",
+      "description": "One Handed Sword Combo Attack",
+      "catalogId": "128120901",
+      "sha256": "f0132b9ffecf1c3841dbc2149a624d780aff32767dd6f3aaf36202cbb7be9c96",
+      "bytes": 621168,
+      "inPlace": false
+    },
+    {
+      "file": "sakda/jab-cross-medium.fbx",
+      "hero": "sakda",
+      "displayName": "Jab Cross",
+      "description": "Boxing Jab Cross Medium",
+      "catalogId": "110440906",
+      "sha256": "b170c93375f3497f5c9c8400b355a6083ab21e87acef7f27d639f1fa93fefefb",
+      "bytes": 433936,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/idle-to-sprint.fbx",
+      "hero": "vesper",
+      "displayName": "Idle To Sprint",
+      "description": "Start Sprint From Action Idle",
+      "catalogId": "126550901",
+      "sha256": "76497bfd34f935d391736c322ccebd1b1a0e845260ee6684502a6326c7e93a4f",
+      "bytes": 343216,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/sword-inward-slash.fbx",
+      "hero": "vesper",
+      "displayName": "Stable Sword Inward Slash",
+      "description": "Inward Slashing With A Sword Standing Stable",
+      "catalogId": "104990901",
+      "sha256": "1c0e4ee936adc69a04e11fcc404cb58117843f606d405b51bf35a5d0215b006d",
+      "bytes": 439344,
+      "inPlace": false
+    },
+    {
+      "file": "vesper/ninja-run.fbx",
+      "hero": "vesper",
+      "displayName": "Run",
+      "description": "Female Ninja Run",
+      "catalogId": "125000901",
+      "sha256": "580593778c1a60801a089960b36bd34c0df1e80177db1f83f4d2f92b1fccf060",
+      "bytes": 312432,
+      "inPlace": true,
+      "downloadedAt": "2026-10-12T10:29:47.837Z"
+    },
+    {
+      "file": "vesper/sword-shield-run.fbx",
+      "hero": "vesper",
+      "displayName": "Sword And Shield Run",
+      "description": "Sword And Shield Run",
+      "catalogId": "122660901",
+      "sha256": "6f10a1c2d856e542c0b64e35ea1981b74c35141bfe65f64881871db0e32f0bd2",
+      "bytes": 304336,
+      "inPlace": true,
+      "downloadedAt": "2026-10-12T10:29:47.837Z"
+    },
+    {
+      "file": "vesper/sword-shield-walk.fbx",
+      "hero": "vesper",
+      "displayName": "Sword And Shield Walk",
+      "description": "Sword And Shield Walk",
+      "catalogId": "122650901",
+      "sha256": "18820f991ed538b208b1eb8da42c37560f3c962afe6152e931e17b1815188dde",
+      "bytes": 382320,
+      "inPlace": true,
+      "downloadedAt": "2026-10-12T10:29:47.837Z"
+    },
+    {
+      "file": "vesper/ninja-sneak-walk.fbx",
+      "hero": "vesper",
+      "displayName": "Sneak Walk",
+      "description": "Male Ninja Sneak Walk",
+      "catalogId": "125110901",
+      "sha256": "8afa66e5b65516e131d9694683662eadb1e6a808da3732692767f2595f8e9295",
+      "bytes": 334032,
+      "inPlace": true,
+      "downloadedAt": "2026-10-12T10:29:47.837Z"
+    },
+    {
+      "file": "vesper/sprint.fbx",
+      "hero": "vesper",
+      "displayName": "Sprint",
+      "description": "Standard Sprint",
+      "catalogId": "121480902",
+      "sha256": "18e40ce7ce2454415c12beb33da0520e92ea58891767b3352821b6506bc50c21",
+      "bytes": 315280,
+      "inPlace": false,
+      "inPlaceRequested": true,
+      "inPlaceNote": "The In Place option was requested in the Mixamo UI, but the delivered FBX still travels: the measured Hips translation from the first to the last key (0.533 s, 17 frames, one cycle) is 3.155 m in Y Bot metres along its forward axis, which is +2.682 m after the retarget's hip-height scaling onto Vesper's rig (5.03 m/s). A clip that needs it in place must pin the Hips (loadMixamoDonor option inPlace); otherwise the runtime rate follows the captured travel.",
+      "downloadedAt": "2026-10-12T11:05:44.076Z"
+    },
+    {
+      "file": "vesper/fast-run.fbx",
+      "hero": "vesper",
+      "displayName": "Fast Run",
+      "description": "Running Fast",
+      "catalogId": "128630905",
+      "sha256": "0d41ca16e51e45f2ae1c9965cbef89608365f38697ff142e332779ef151fc0a3",
+      "bytes": 304336,
+      "inPlace": true,
+      "downloadedAt": "2026-10-12T11:05:44.076Z"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "assetId": "leaves_forest_ground",
+  "name": "Leaves Forest Ground",
+  "sourceUrl": "https://polyhaven.com/a/leaves_forest_ground",
+  "apiUrl": "https://api.polyhaven.com/files/leaves_forest_ground",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Dario Barresi (processing), Dimitrios Savva (photography)",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 1.26,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leaves_forest_ground/leaves_forest_ground_diff_1k.jpg",
+      "sha256": "e4aa2be8f80192378bc8aca363fc01b1f01639ebea5a87a3973c549861a01b7a",
+      "md5": "6e9cd579b50046182663e3ab33681fc8",
+      "bytes": 1135712
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leaves_forest_ground/leaves_forest_ground_nor_gl_1k.jpg",
+      "sha256": "78b24836c2a1ddcfbd81a493de89ee0722319187b39016022a21e63d710c9284",
+      "md5": "68622609f38cc517f66c91288a009e71",
+      "bytes": 1380468
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leaves_forest_ground/leaves_forest_ground_arm_1k.jpg",
+      "sha256": "353c4b6cf159a0acd89ecc3ebf69fccc9f4876e1f0ddb07f7c38265304b0c270",
+      "md5": "e01dac9cea16f5774ba5eb043536d18d",
+      "bytes": 976450
+    }
+  }
+}

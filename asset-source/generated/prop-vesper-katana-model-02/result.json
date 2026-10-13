@@ -1,0 +1,14 @@
+{
+  "task_id": "74d921f2-eb21-4288-b141-1c532e5ad6c0",
+  "type": "image_to_model",
+  "status": "success",
+  "credits_consumed": 70,
+  "output_dir": "asset-source/generated/prop-vesper-katana-model-02/tripo-out/prop-vesper-katana-model-02-2-74d921f2",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-vesper-katana-model-02/tripo-out/prop-vesper-katana-model-02-2-74d921f2/model.glb",
+  "preview": "asset-source/generated/prop-vesper-katana-model-02/tripo-out/prop-vesper-katana-model-02-2-74d921f2/preview.png"
+}

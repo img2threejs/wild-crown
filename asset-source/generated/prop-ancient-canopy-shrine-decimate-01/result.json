@@ -1,0 +1,16 @@
+{
+  "task_id": "45631bef-25c0-4101-8ac6-3c4a038471da",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-ancient-canopy-shrine-decimate-01/tripo-out/prop-ancient-canopy-shrine-decim-45631bef",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-ancient-canopy-shrine-decimate-01/tripo-out/prop-ancient-canopy-shrine-decim-45631bef/model.glb",
+  "preview": "asset-source/generated/prop-ancient-canopy-shrine-decimate-01/tripo-out/prop-ancient-canopy-shrine-decim-45631bef/preview.png",
+  "started": "2026-10-11T03:33:52.763Z",
+  "finished": "2026-10-11T03:42:18.877Z"
+}

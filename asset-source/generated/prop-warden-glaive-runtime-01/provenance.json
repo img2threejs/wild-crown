@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-warden-glaive",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "308cff7b-dff1-482f-b0ce-f2896a047ffb",
+    "decimate": "93e71a35-af46-48a9-a440-ce8e0ac1822c"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 1024
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-warden-glaive-decimate-01/tripo-out/prop-warden-glaive-decimate-01-93e71a35/model.glb",
+      "sha256": "357960412bf400d9ea1b1bfd698aabc1a7f3974e20f1bf348268eee73e79a451"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+    "sha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822",
+    "bytes": 2138816,
+    "vertices": 12939,
+    "boundsMin": [
+      -0.05290393903851509,
+      -0.09153005480766296,
+      -0.4898366928100586
+    ],
+    "boundsMax": [
+      0.052936114370822906,
+      0.09128464013338089,
+      0.49351388216018677
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3578948,
+      "toBytes": 481000
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5260284,
+      "toBytes": 581118
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 15195942,
+      "toBytes": 600351
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -11,6 +11,7 @@ import {
   FIRST_PACT_LOCATIONS,
 } from "../../src/content/levels/act-i.js";
 import { CHAPTERS } from "../../src/content/story.js";
+import { distanceToWalkMesh } from "../../src/world/GreenwakeBoundary.js";
 
 const epsilon = 1e-5;
 
@@ -243,7 +244,15 @@ test("Act I walks authored grounded polygons with exact linked surface colliders
       }
     }
     for (const placement of region.props) {
-      assert.ok(surfaceAt(authored, placement.position), "canonical asset placement sits on visible authored terrain");
+      if (region.id === "greenwake") {
+        // The Greenwake route is sealed: a placement is either authored route furniture standing on the walk-mesh or
+        // visual-only dressing whose centre stays at least 0.5 m off it; nothing straddles the route edge.
+        const onRoute = surfaceAt(authored, placement.position) !== undefined;
+        assert.ok(onRoute || distanceToWalkMesh(authored, placement.position.x, placement.position.z) >= 0.5, `${placement.id} neither stands on nor clears the walk-mesh`);
+        if (/^greenwake-(corridor-)?edge-tree-/.test(placement.id)) assert.ok(!onRoute, `${placement.id} is off-route dressing`);
+      } else {
+        assert.ok(surfaceAt(authored, placement.position), "canonical asset placement sits on visible authored terrain");
+      }
     }
 
     for (const route of region.exits) {
@@ -420,4 +429,132 @@ test("First Pact's six directed mission beats occupy real reachable region nodes
   assert.deepEqual(reciprocal!.from, refugeRoute!.to);
   assert.deepEqual(reciprocal!.to, refugeRoute!.from);
   assert.equal(reciprocal!.traversalEvent, "grove-refuge");
+});
+
+test("Greenwake winds through authored collision geometry with three serialized corrupted-boar instances", () => {
+  const greenwake = ACT_I_REGIONS.find((region) => region.id === "greenwake")!;
+
+  // The Forest Entry mission beat now enumerates every Greenwake hostile archetype instance.
+  const forestEntry = FIRST_PACT_LOCATIONS.find((entry) => entry.segment === "Forest Entry")!;
+  assert.ok(forestEntry);
+  for (const hostileId of ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"]) {
+    assert.ok(forestEntry.entityIds.includes(hostileId), `${hostileId} is referenced by the Forest Entry beat`);
+  }
+
+  // All three hostile instances reuse the same authored candidate and asset.
+  const hostileIds = ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"];
+  const instances = hostileIds.map((id) => greenwake.entities.find((entry) => entry.id === id));
+  assert.ok(instances.every((entity) => entity !== undefined), "every authored instance is placed");
+  for (const entity of instances) {
+    assert.equal(entity!.kind, "actor");
+    assert.equal(entity!.actorId, "corrupted-boar");
+    assert.equal(entity!.assetId, ACTORS["corrupted-boar"]!.assetId, "the instance keeps the same manifest asset as the archetype");
+  }
+
+  // Sequential proximity pressure: instances must be at least 6 m apart on the XZ plane so that
+  // combat serialization can keep at most one enemy telegraph live at a time, while still pacing
+  // pressure along the winding trail.
+  const minimumSpacing = 6;
+  for (let i = 0; i < instances.length; i += 1) {
+    for (let j = i + 1; j < instances.length; j += 1) {
+      const distance = Math.hypot(
+        instances[i]!.position.x - instances[j]!.position.x,
+        instances[i]!.position.z - instances[j]!.position.z,
+      );
+      assert.ok(distance >= minimumSpacing, `${instances[i]!.id} and ${instances[j]!.id} should be spaced for combat serialization`);
+    }
+  }
+
+  // The authored route must visit a wider selection of walk polygons and reach the existing
+  // grove exit; this catches accidental regressions that collapse the trail to the original
+  // clearing.
+  const newSurfaceIds = ["greenwake-stream-bend", "greenwake-sap-pools", "greenwake-boar-thicket"];
+  for (const surfaceId of newSurfaceIds) {
+    const surface = greenwake.ground.surfaces.find((entry) => entry.id === surfaceId);
+    assert.ok(surface, `${surfaceId} is authored`);
+    assert.ok(surface!.walkable);
+    assert.ok(surface!.points.length >= 4);
+    const collider = greenwake.ground.colliders.find((entry) => entry.id === surface!.colliderId);
+    assert.ok(collider, `${surfaceId} has a paired collider`);
+    assert.equal(collider!.walkSurfaceId, surfaceId);
+  }
+
+  const obstaclePlacements = [
+    ["greenwake-fallen-bough", "greenwake-fallen-bough-visual"],
+    ["greenwake-sap-pantry", "greenwake-sap-pantry-visual"],
+    ["greenwake-root-buttress", "greenwake-root-buttress-visual"],
+  ] as const;
+  for (const [obstacleId, placementId] of obstaclePlacements) {
+    const obstacle = greenwake.ground.colliders.find((entry) => entry.id === obstacleId);
+    assert.ok(obstacle, `${obstacleId} is authored collision geometry`);
+    assert.ok(obstacle!.blocksMovement, `${obstacleId} blocks player movement`);
+    const visual = greenwake.props.find((placement) => placement.id === placementId);
+    assert.ok(visual, `${obstacleId} has a visible authored obstacle prop`);
+    assert.equal(visual!.position.x, obstacle!.from.x, `${placementId} is aligned to its collider`);
+    assert.equal(visual!.position.z, obstacle!.from.z, `${placementId} is aligned to its collider`);
+  }
+
+  // The stream-detour ribbon should sample only walk polygons along every leg.
+  const detour = greenwake.navigation.ribbons.find((ribbon) => ribbon.id === "greenwake-stream-detour");
+  assert.ok(detour, "stream-detour ribbon is authored");
+  for (let i = 0; i < detour!.points.length - 1; i += 1) {
+    const startPoint = detour!.points[i]!;
+    const endPoint = detour!.points[i + 1]!;
+    for (let step = 0; step <= 8; step += 1) {
+      const fraction = step / 8;
+      const point = {
+        x: startPoint.x + (endPoint.x - startPoint.x) * fraction,
+        y: startPoint.y + (endPoint.y - startPoint.y) * fraction,
+        z: startPoint.z + (endPoint.z - startPoint.z) * fraction,
+      };
+      assert.ok(surfaceAt(greenwake, point), `greenwake-stream-detour segment ${i} step ${step} stays on a walk polygon`);
+    }
+  }
+
+  // The new nodes must remain reachable from the existing navigation root so spawn-to-exit
+  // navigation still resolves.
+  const facts = completeCampaignFacts();
+  const start = greenwake.navigation.nodes[0]!;
+  const requiredNodes = [
+    "greenwake-stream-meander",
+    "greenwake-stream-ford",
+    "greenwake-sap-pools",
+    "greenwake-boar-thicket-edge",
+    "greenwake-grove-gateway",
+  ];
+  for (const nodeId of requiredNodes) {
+    assert.ok(
+      directedNodeReachable(greenwake, start.id, nodeId, facts),
+      `${nodeId} is reachable from the navigation root`,
+    );
+  }
+
+  // The route is sealed: no region-wide floor, and each trial arena pocket is a flat, collider-paired octagon.
+  assert.ok(!greenwake.ground.surfaces.some((surface) => surface.id === "greenwake-canopy-floor"), "the region-wide canopy floor is gone");
+  assert.ok(!greenwake.ground.colliders.some((collider) => collider.id === "greenwake-canopy-floor-collider"));
+  for (const pocketId of ["greenwake-frost-hollow", "greenwake-root-watch"]) {
+    const pocket = greenwake.ground.surfaces.find((entry) => entry.id === pocketId);
+    assert.ok(pocket && pocket.walkable && pocket.points.length >= 5 && pocket.points.every((point) => point.y === 0), `${pocketId} is a flat y=0 arena pocket`);
+    const collider = greenwake.ground.colliders.find((entry) => entry.id === pocket!.colliderId);
+    assert.equal(collider?.kind, "box");
+    assert.equal(collider?.walkSurfaceId, pocketId);
+  }
+  // The Forest Exit ring (2.2 m) lies completely on the final corridor.
+  const forestExit = greenwake.exits.find((exit) => exit.id === "greenwake-grove-out")!;
+  for (let step = 0; step < 24; step += 1) {
+    const angle = (step / 24) * Math.PI * 2;
+    assert.ok(
+      surfaceAt(greenwake, { x: forestExit.from.x + Math.cos(angle) * 2.2, y: 0, z: forestExit.from.z + Math.sin(angle) * 2.2 }),
+      "the Forest Exit goal ring is fully walkable",
+    );
+  }
+
+  // The exploration camera anchors must continue to drive CameraDirector while it remains the
+  // sole gameplay-camera writer: every non-encounter anchor should frame ahead of the player
+  // (camera offset's z component is positive on the exploration rails).
+  const explorationAnchors = greenwake.cameraAnchors.filter((anchor) => anchor.mode === "exploration");
+  assert.ok(explorationAnchors.length >= 1, "exploration rails frame the winding trail");
+  for (const anchor of explorationAnchors) {
+    assert.ok(anchor.position.z - anchor.lookAt.z >= 4, `${anchor.id} frames forward of the player`);
+  }
 });

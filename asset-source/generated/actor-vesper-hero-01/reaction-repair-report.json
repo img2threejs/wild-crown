@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "evidenceStatus": "offline-export-complete",
+  "scope": "Captured defeat and cleanse repairs, Requiem junction repair, and the subsequently approved walk-only wrist carry repair. Cleanse, Mist and all other recipes retain the cc964cf1655b32469e54b088e9e5d875a920a0b9dd00ce8b7201515f4eb30a25 cohort; the existing wrist solver is unchanged. No runtime, shared retarget, grip, portrait or manifest integration changes.",
+  "repairs": {
+    "aren-walk": {
+      "source": "asset-source/mixamo/vesper/run-with-sword.fbx",
+      "windowSeconds": [0, 0.8],
+      "totalTicks": 30,
+      "rootCause": "The centerline-only capsule objective does not represent the fitted guard's radial extent or the outer coat. Opt-in full wrist-axis sampling, a 0.05 m capsule margin and -15 degree carry pitch found a mesh-proven forward-low wrist-only correction without changing the captured gait.",
+      "recipe": { "maxSwing": 45, "maxCorrection": 45, "smooth": 1, "clear": { "maxPush": 45, "floor": 0.05, "margin": 0.05, "axes": 120 }, "carry": { "pitch": -15, "aheadMin": 0.25 }, "frame": "chest" },
+      "final": { "allCapsuleClearanceMetres": 0.03542795000355436, "bone": "RightUpLeg", "frame": 8, "bladeFloorMetres": 0.4810382732683381, "wristCorrectionDegrees": 43.3, "skinP999": 1.40383, "midFrameBladeDegreesRounded": 0.1 },
+      "focusedScratchGates": { "lowCarryDegrees": 102.44894100847738, "minimumAhead": 0.6318457079459365, "jointsOverLimit": [] },
+      "meshProvenCandidate": { "heroHash": "ca735da973387df491dc752a5e906e539ae30a1db2a1e763c11b9deb60ee36b1", "report": "/tmp/wc-runtime-geometry/surface-margin05-p15.json", "sampleHz": 240, "allBodyIntersectingSamples": 0, "rightLegMinimumClearanceMetres": 0.0045, "katanaFloorMetres": 0.4905, "finalCohortRuntimeRemeasurementRequired": false, "finalCohortReport": "runtime-motion-report.json" }
+    },
+    "aren-defeat": {
+      "source": "b:defeat_02",
+      "windowSeconds": [0, 8.46666622],
+      "totalTicks": 360,
+      "rootCause": "The blade-direction-only ring search cannot sample every bounded wrist orientation: the fitted palm anchor is off-axis and also moves under wrist roll. Dense full-axis feasibility sampling found a valid wrist orientation at the reported thigh penetration frames. Opt-in full-axis search retains the entire captured reaction and changes only RightHand.",
+      "recipe": { "maxSwing": 30, "maxCorrection": 30, "smooth": 1, "clear": { "maxPush": 30, "floor": 0.03, "margin": 0.01, "axes": 120 } },
+      "baseline": { "allCapsuleClearanceMetres": -0.03234099415820704, "bone": "RightUpLeg", "frame": 57 },
+      "final": { "allCapsuleClearanceMetres": 0.008217565144187122, "bone": "RightUpLeg", "frame": 57.125, "bladeFloorMetres": 0.04260108163279591, "wristCorrectionDegrees": 28.1, "skinP999": 0.71069, "midFrameBladeDegreesRounded": 0.7 },
+      "focusedScratchGates": { "kneeBackwardDegrees": 0, "jointsOverLimit": [] }
+    },
+    "vesper-cleanse": {
+      "source": "d:cast_a_spell",
+      "windowSeconds": [1.1333333, 2.6333333],
+      "totalTicks": 108,
+      "rootCause": "The older [1.1, 2.9] window includes the initial knee-lift step and the later hip-turning recovery. Prior donor diagnostics found hips-forward knee-sign failures at 1.07-1.10 and 2.67-3.70 seconds while the thigh-rest-frame anatomical diagnostic found no reverse knee bend. The existing stricter sign gate is unchanged: choose the continuous captured spell gesture between these ranges rather than substitute idle or alter the gate.",
+      "recipe": { "maxSwing": 30, "maxCorrection": 30, "smooth": 1, "clear": { "maxPush": 30, "floor": 0.05, "margin": 0.04 } },
+      "baseline": { "kneeBackwardDegrees": 74.7 },
+      "final": { "allCapsuleClearanceMetres": 0.012414672389360297, "bone": "RightUpLeg", "frame": 7.375, "bladeFloorMetres": 0.7196000378489739, "wristCorrectionDegrees": 20.7, "skinP999": 1.53684, "midFrameBladeDegreesRounded": 0.6 },
+      "focusedScratchGates": { "kneeBackwardDegrees": 0, "jointsOverLimit": [] }
+    },
+    "vesper-requiem": {
+      "totalTicks": 120,
+      "contactTicks": [12, 24, 36, 48, 60, 72, 84, 110],
+      "attacksRetained": 7,
+      "rootCause": "The down-cut to diagonal-cut captured-source junction at tick 30, not wrist correction or joint limiting. After frame 14 (ticks 28 to 30), raw and limited retargets both measure 16.29405621843582 degrees of mid-frame deviation; wrist/final measure 16.29404661168346. The default plus/minus 3-tick crossfade concentrates RightForeArm 39.538 degrees and RightHand 29.569 degrees into that key interval.",
+      "recipe": { "crossfadeTicks": 4, "sourceSegmentsChanged": false, "contactTicksChanged": false, "sourceRatesChanged": false, "keyDensityChanged": false, "wristLayerChanged": false },
+      "mechanism": "The existing smoothstep crossfade blends the actual captured whole-body donor poses over plus/minus 4 ticks instead of 3. It changes the composed motion, not samples along an identical SLERP path. This reduces the offending interval's raw forearm turn to 32.037 degrees and hand turn to 23.290 degrees.",
+      "baseline": { "midFrameBladeDegrees": 16.29404661168346, "frame": 14, "maximumAllowedDegrees": 15 },
+      "final": { "midFrameBladeDegrees": 10.551515832857492, "frame": 14, "allCapsuleClearanceMetres": 0.01360410303160388, "bladeFloorMetres": 0.06749048962082359, "wristCorrectionDegrees": 30, "skinP999": 1.51468, "jointLimitCorrections": {} },
+      "contactMeasurements": { "maximumCutEdgeAngleDegrees": 19.65779868885882, "minimumCutTipMetresPerSecond": 17.14631056961804, "maximumFrontalDegrees": 69.00043865455856, "thrustAngleDegrees": 13.821858410582264, "thrustTipMetresPerSecond": 3.2727603243741297 }
+    }
+  },
+  "completeExport": { "clips": 22, "actionMappings": 43, "contactSheets": 22, "offlineAcceptanceFailures": [] },
+  "residualSurfaceContactLimitation": {
+    "acceptanceBoundary": "Main retained the original cutting-blade/body and all-katana-vertices/torso/head requirements. Incidental tsuka or guard contact with leg-weighted outer coat is disclosed, not presented as zero all-mesh contact; no new solver, body motion edits, window cropping or gate relaxation was approved.",
+    "referenceEvidence": { "report": "runtime-motion-report.json", "heroHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf", "katanaHash": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753", "sampleHz": 240, "finalHashRuntimeRemeasurementRequired": false },
+    "finalClipMeasurements": {
+      "vesper-cleanse": { "rightLegIntersectingSamples": 26, "contactWindowSeconds": [0.2667, 1.3083], "contactAlongFromGripMetres": [-0.1979, 0.0575], "part": "tsuka/pommel", "torsoIntersectingSamples": 0, "headIntersectingSamples": 0 },
+      "vesper-mist-blink": { "rightLegIntersectingSamples": 9, "contactWindowSeconds": [0.3833, 0.4167], "contactAlongFromGripMetres": [0.2218, 0.2371], "part": "guard", "torsoIntersectingSamples": 0, "headIntersectingSamples": 0 }
+    },
+    "scratchEvidence": [
+      { "report": "/tmp/wc-runtime-geometry/surface-margin05-p15.json", "heroHash": "ca735da973387df491dc752a5e906e539ae30a1db2a1e763c11b9deb60ee36b1", "experiment": "Axes120 and margin0.05 on all three clips, walk pitch-15", "walkIntersectingSamples": 0, "cleanseRightLegIntersectingSamples": 35, "mistRightLegIntersectingSamples": 8, "decision": "Promote only the mesh-proven walk recipe." },
+      { "report": "/tmp/wc-vesper-surface-capvalid-runtime.json", "heroHash": "12d3f51376a6557a7235a578dfbfefed2b33f87c8c65248269e02547ec040bcd", "experiment": "Reject over-total-cap compounded search candidates before scoring, retaining original windows", "cleanseRightLegIntersectingSamples": 35, "mistRightLegIntersectingSamples": 9, "decision": "Not promoted; cap admissibility alone does not solve mesh contact." },
+      { "report": "/tmp/wc-vesper-surface-envelope1-runtime.json", "heroHash": "8c7cb4b8df32b3631e4687ff879815720103cd8d5f3af7d67235fa6210e357f5", "experiment": "Measured tsuka/guard/blade radial envelopes against leg capsules, cap-admissible search and unsmoothed Mist", "cleanseRightLegIntersectingSamples": 31, "cleanseRightArmIntersectingSamples": 9, "mistRightLegIntersectingSamples": 9, "decision": "Rejected; proxy envelope is insufficient and introduces forearm contact." },
+      { "report": "/tmp/wc-vesper-surface-fit-vesper-cleanse.json", "experiment": "Per-key actual-triangle-mesh feasibility", "sampledKeys": 55, "infeasibleSampledKeys": 0, "maximumWristCorrectionDegrees": 30, "decision": "Diagnostic only: key feasibility is not an interpolated, smoothed, joint-clamped export guarantee." },
+      { "report": "/tmp/wc-vesper-surface-fit-vesper-mist-blink.json", "experiment": "Per-key actual-triangle-mesh feasibility", "sampledKeys": 13, "infeasibleSampledKeys": 0, "maximumWristCorrectionDegrees": 33, "decision": "Diagnostic only; no exact-surface solver or new correction sequence integrated." }
+    ],
+    "scratchHarnessesRemoved": true
+  },
+  "measurements": {
+    "finalMetrics": "anatomy-report.json and acceptance-report.json for outputHash above; real delivered 30fps keys and eight joint-slerp subdivisions per interval",
+    "focusedProductionCommand": "env VESPER_DEFORM=1 /Users/hoainho/.nvm/versions/node/v22.22.3/bin/node scripts/assets/author-vesper-hero-clips.mjs --only=aren-defeat,vesper-cleanse --summary",
+    "completeExportCommand": "env PATH=/Users/hoainho/.nvm/versions/node/v22.22.3/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/sbin /Users/hoainho/.nvm/versions/node/v22.22.3/bin/node scripts/assets/author-vesper-hero-clips.mjs --previews",
+    "completeExportWallSeconds": 428.99,
+    "requiemCausalHarnessWallSeconds": 35.32,
+    "requiemRepairedHarnessWallSeconds": 40.09,
+    "projectTestsRun": false,
+    "browserRun": false,
+    "providerUsage": null,
+    "newPaidGeneration": false
+  },
+  "mainVerification": {
+    "heroHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+    "bun": { "command": "/tmp/wc-bin/bun test", "passed": 1915, "failed": 0, "files": 119, "wallSeconds": 246.96, "conditions": "Isolated final run, outer deadline 1800 seconds, internal test timeouts and assertions unchanged. Earlier overlapping verifier run had two internal timeout failures and was killed by its insufficient 300-second outer deadline; no product-code repair was made for that attempt." },
+    "node": { "command": "node --test tests/rendering/*.test.mjs tests/release/*.test.mjs tests/asset-lab/*.test.mjs", "passed": 522, "failed": 0, "skipped": 0, "wallSeconds": 156.79 },
+    "typescript": { "command": "npx tsc --noEmit -p .", "exitCode": 0 },
+    "build": { "command": "npm run build", "exitCode": 0, "warnings": ["Vite chunks larger than 500 kB"] },
+    "runtimeMotion": { "report": "runtime-motion-report.json", "manifestMatchesHero": true, "missingMappedClips": 0, "groundedClipSlots": 20, "engineGaits": 2, "sampleHz": 240, "wallSeconds": 1065.20, "torsoHeadIntersectingSamples": 0, "allMeshContactFree": false, "limitations": "Disclosed tsuka/guard-to-coat contacts above; sampled narrowphase plus broadphase audits, not a continuous collision proof. Residual foot sliding and transient idle-to-run sole penetration remain." },
+    "runtimeJump": { "report": "runtime-jump-report.json", "manifestMatchesHero": true, "scenarios": 5, "minimumWorldFloorMetres": 0.31459025998646795, "recoveryTicksPerScenario": 15 },
+    "runtimeGrip": { "anatomyMatchesHero": true, "axisErrorRig": 4.7435370949609647e-7, "palmErrorRig": 5.031718215869976e-7, "socketErrorRig": 1.645543181695753e-16, "postPoseHookRequested": false },
+    "browser": { "evidence": "../../playtests/evidence/combat-polish/vesper-native-actions-live.json", "nativeClipsExercised": 22, "assetErrorsObserved": 0, "shaderFailuresObserved": 0, "method": "Real GameApplication fixed-step keyboard fixtures; hit overlay from vitality loss, outcomes through actual presentation API rather than story completion. Final WebGL portrait and captured-Iai showcase inspected." },
+    "previewsReviewed": true,
+    "releasePromoted": false
+  }
+}

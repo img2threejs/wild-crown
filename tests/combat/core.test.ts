@@ -3,6 +3,7 @@ import { ACTORS, INTERACTIONS, REGIONS } from '../../src/content/campaign.js';
 import { CombatEngine, createEngineState, makeActor, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { vec } from '../../src/game/combat/geometry.js';
 import type { ActorId } from '../../src/game/contracts.js';
+import { EVASION_PROFILES } from '../../src/game/combat/evasion.js';
 
 const idle: CombatInput = {
   tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false,
@@ -22,9 +23,10 @@ function startHunters(): CombatEngine {
   return engine;
 }
 
+/** One Heavy to the end of its recovery; a connecting hit freezes the player clock, so wait on the deadline rather than a tick count. */
 function heavyHit(engine: CombatEngine): void {
   engine.fixedStep({ ...idle, heavyPressed: true });
-  for (let tick = 1; tick < 63; tick++) engine.fixedStep(idle);
+  for (let tick = 1; tick < 120 && engine.snapshotState().actionRecoveryUntil > 0; tick++) engine.fixedStep(idle);
 }
 
 function approach(engine:CombatEngine,targetId:ActorId):void{
@@ -39,6 +41,46 @@ function approach(engine:CombatEngine,targetId:ActorId):void{
     engine.fixedStep({...idle,move:vec(dx/distance,0,-dz/distance)});
   }
 }
+describe('Aren locomotion and jump animation inputs', () => {
+  it('selects Walk or Run and applies the faster Shift movement speed', () => {
+    const engine = new CombatEngine();
+    engine.fixedStep({ ...idle, move: vec(0, 0, 1) });
+    const walked = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
+    expect(walked.actionId).toBe('aren-walk');
+    const walkSpeed = Math.hypot(walked.velocity.x, walked.velocity.z);
+
+    engine.fixedStep({ ...idle, move: vec(0, 0, 1), sprintHeld: true });
+    const ran = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
+    expect(ran.actionId).toBe('aren-run');
+    expect(Math.hypot(ran.velocity.x, ran.velocity.z)).toBeGreaterThan(walkSpeed);
+  });
+
+
+
+  it('selects a forward diagonal Dive Roll', () => {
+    const engine = new CombatEngine();
+    engine.fixedStep({ ...idle, move: vec(-1, 0, 1), dodgePressed: true });
+    expect(engine.snapshotState().actors.find(actor => actor.id === 'aren')!.actionId).toBe('aren-forward-left-dive-roll');
+  });
+
+  it('moves a Dive Roll over its active animation instead of teleporting', () => {
+    const engine = new CombatEngine();
+    const before = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
+    const profile = EVASION_PROFILES.forward_left_dive_roll;
+    engine.fixedStep({ ...idle, move: vec(-1, 0, 1), dodgePressed: true });
+    const firstStep = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
+    expect(firstStep.actionId).toBe('aren-forward-left-dive-roll');
+    const firstDistance = Math.hypot(firstStep.position.x - before.position.x, firstStep.position.z - before.position.z);
+    expect(firstDistance).toBeGreaterThan(0);
+    expect(firstDistance).toBeLessThan(0.2);
+
+    for (let tick = 1; tick < profile.durationTicks; tick++) engine.fixedStep(idle);
+    const end = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
+    const totalDistance = Math.hypot(end.position.x - before.position.x, end.position.z - before.position.z);
+    expect(totalDistance).toBeCloseTo(profile.distance, 1);
+  });
+});
+
 describe('authored hunter encounters and mechanic-backed interactions', () => {
 
   it('emits the camp result only after both melee instances and the ranged instance are subdued', () => {
@@ -103,6 +145,10 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     expect(Math.hypot(closePlayer.position.x-asha.position.x,closePlayer.position.z-asha.position.z)).toBeLessThan(2.5);
 
     for(let cleared=1;cleared<=coreIds.length;cleared++){
+      if(engine.snapshot().player.mana<30){
+        for(let tick=0;tick<60;tick++)engine.fixedStep({...idle,move:vec(1,0,0)});
+        for(let tick=0;tick<60;tick++)engine.fixedStep({...idle,move:vec(-1,0,0)});
+      }
       expect(engine.useAbility('cleanse','asha')).toBe(true);
       for(let tick=0;tick<36;tick++)engine.fixedStep(idle);
       expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map((id,index)=>({id,cleansed:index<cleared})));

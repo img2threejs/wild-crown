@@ -1,0 +1,20 @@
+{
+  "task_id": "d20ceb8e-57cc-4a88-9462-2fcf857683e3",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animation": "preset:serpentine:march",
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "8efed69c-61f4-4398-9cef-1d6e64adc8a9"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 10,
+  "created_at": "2026-10-11T03:55:52.116581Z",
+  "completed_at": "2026-10-11T03:55:56.512126Z",
+  "files": [
+    "model.glb"
+  ]
+}

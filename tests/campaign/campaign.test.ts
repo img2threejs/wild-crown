@@ -11,6 +11,11 @@ import {
   INTERACTIONS,
   STORY_DIALOGUE,
 } from "../../src/game/campaign/index.js";
+import {
+  NARRATIVE_CUES,
+  isCueBeatAuthored,
+  cueForObjective,
+} from "../../src/content/narrative-cues.js";
 import { ACT_I_REGION_AUTHORING_STATUS, ACT_I_REGIONS } from "../../src/content/levels/act-i.js";
 import { LATER_ACT_REGION_AUTHORING_STATUS, LATER_ACT_REGIONS } from "../../src/content/levels/later-acts.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
@@ -874,4 +879,51 @@ test("Director accepts Living Pact through checkpoint restore and the final choi
   assert.equal(snapshot.ending, "living_pact");
   assert.equal(snapshot.worldFacts.circleOfTheWild, true);
   assert.equal(snapshot.lastEvent?.type, "choice");
+});
+
+
+test("each chapter 1-2 quest dialogue id has an explicit runtime cue", () => {
+  const firstPactQuests = ALL_QUESTS.filter(quest => quest.chapter === 1 || quest.chapter === 2);
+  for (const quest of firstPactQuests) {
+    const cue = NARRATIVE_CUES[quest.id];
+    assert.ok(cue, `cue entry exists for ${quest.id}`);
+    assert.equal(cue.questId, quest.id, `cue entry owns ${quest.id}`);
+    const cueBeats = [cue.onActivate, cue.onComplete].filter(Boolean) as string[];
+    for (const cueBeat of cueBeats) {
+      assert.ok(isCueBeatAuthored(cueBeat), `cue beat resolves in STORY_DIALOGUE: ${cueBeat}`);
+    }
+    for (const dialogueId of quest.dialogueIds) {
+      const expectedCue = [cue.onActivate, cue.onComplete].includes(dialogueId)
+        || Boolean(cue.onObjective?.some(cueEntry => cueEntry.beatId === dialogueId));
+      assert.ok(expectedCue, `${quest.id} dialogue ${dialogueId} has an explicit runtime cue`);
+    }
+    if (cue.onObjective) {
+      for (const cueEntry of cue.onObjective) {
+        assert.ok(isCueBeatAuthored(cueEntry.beatId), `objective cue beat resolves: ${cueEntry.beatId}`);
+        assert.equal(
+          cueForObjective(quest.id, cueEntry.objectiveId),
+          cueEntry.beatId,
+          `cueForObjective resolves ${cueEntry.objectiveId}`,
+        );
+      }
+    }
+  }
+});
+
+test("prologue is the only First Pact quest with no runtime cue because it is presented as the intro chain", () => {
+  const prologue = ALL_QUESTS.find(quest => quest.id === "prologue");
+  assert.ok(prologue);
+  const cue = NARRATIVE_CUES["prologue"];
+  assert.ok(cue, "prologue cue entry exists");
+  assert.equal(cue.onActivate, undefined, "prologue has no activation cue");
+  assert.equal(cue.onComplete, undefined, "prologue has no completion cue");
+  assert.equal(cue.onObjective, undefined, "prologue has no objective cue");
+});
+
+test("narrative cues only target authored First Pact chapters (0-2) and reference STORY_DIALOGUE", () => {
+  const authoredCueQuestIds = new Set(Object.keys(NARRATIVE_CUES));
+  const firstPactQuestIds = new Set(ALL_QUESTS.filter(quest => quest.chapter <= 2).map(quest => quest.id));
+  for (const cueQuestId of authoredCueQuestIds) {
+    assert.ok(firstPactQuestIds.has(cueQuestId), `cue target is a chapter 0-2 quest: ${cueQuestId}`);
+  }
 });

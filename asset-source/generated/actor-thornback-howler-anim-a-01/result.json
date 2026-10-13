@@ -1,0 +1,13 @@
+{
+  "task_id": "7adc33ab-7a4d-4a1b-bcce-18ce107a5227",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 50,
+  "output_dir": "asset-source/generated/actor-thornback-howler-anim-a-01/tripo-out/actor-thornback-howler-anim-a-01-7adc33ab",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-thornback-howler-anim-a-01/tripo-out/actor-thornback-howler-anim-a-01-7adc33ab/model.glb",
+  "started": "2026-10-11T03:56:06.967Z",
+  "finished": "2026-10-11T03:56:30.727Z"
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "9ce3acf1-6b12-4084-bdc5-a88419149ef7",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-greenwake-boulder-cluster-decimate-01/tripo-out/prop-greenwake-boulder-cluster-d-9ce3acf1",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-greenwake-boulder-cluster-decimate-01/tripo-out/prop-greenwake-boulder-cluster-d-9ce3acf1/model.glb",
+  "preview": "asset-source/generated/prop-greenwake-boulder-cluster-decimate-01/tripo-out/prop-greenwake-boulder-cluster-d-9ce3acf1/preview.png",
+  "started": "2026-10-10T11:34:15.240Z",
+  "finished": "2026-10-10T11:37:37.452Z"
+}

@@ -4,6 +4,7 @@ import { ENVIRONMENT_RECIPES, REGIONS } from "../../src/content/campaign.js";
 import { GameApplication } from "../../src/app/GameApplication.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
 import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
+import { DIALOGUE } from "../../src/content/dialogue.js";
 import { SaveRepository } from "../../src/game/storage/SaveRepository.js";
 import { FACTION_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
 import { NativeAssetError } from "../../src/rendering/NativeAssetLoader.js";
@@ -40,15 +41,26 @@ function headlessApp(): Record<string, any> {
   app.renderer = { dispose: () => {} };
   app.presentation = null;
   app.companionPreviews = new Map();
+  app.damageNumbers = { consume: () => {}, update: () => {}, clear: () => {}, dispose: () => {}, element: { hidden: true } };
+  app.monsterLabels = { clear: () => {}, dispose: () => {}, element: { hidden: true } };
   app.region = REGIONS.find(item => item.id === "blood-bamboo-valley");
   app.campaign = snapshot(false);
   app.campaignDirector = {};
   app.timePolicies = [] as string[];
-  app.combat = { commandCompanionCalls: 0, stepCalls: 0, setTimePolicy: (policy: string) => { app.timePolicies.push(policy); } };
+  app.combat = {
+    commandCompanionCalls: 0, stepCalls: 0, startNewRunCalls: [] as string[],
+    startNewRun: (runId: string) => { app.combat.startNewRunCalls.push(runId); },
+    setTimePolicy: (policy: string) => { app.timePolicies.push(policy); },
+  };
   app.pendingWorldEvents = [event];
   app.failedWorldEvent = null;
   app.durableEvents = Promise.resolve();
   app.sceneBlocked = false;
+  app.pendingNarrativeCues = [];
+  app.lastCueSnapshot = null;
+  app.loadingFromSave = false;
+  app.dialogue = null;
+  app.dialogueLineIndex = 0;
   app.screen = "game";
   app.loading = { active: false, label: "", progress: null };
   app.error = null;
@@ -61,6 +73,7 @@ function headlessApp(): Record<string, any> {
   app.startOrunEncounterIfReady = async () => {};
   return app;
 }
+
 
 it("blocks gameplay and saves while a durable move is pending, then retries the same event and resumes", async () => {
   const app = headlessApp();
@@ -143,7 +156,7 @@ it("marks blocked asset evidence and invalid manifests terminal while keeping tr
     componentAssetIds: components,
   } as unknown as AssetManifestEntry;
   let blockedError: unknown;
-  try { app.assertAssets(region, [blockedRecipe]); }
+  try { app.assertAssets(region, [blockedRecipe], recipe); }
   catch (error) { blockedError = error; }
   expect(blockedError).toBeInstanceOf(Error);
   app.showWorldError(blockedError, "region-load");
@@ -227,6 +240,7 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
 
   await app.dispatch({ type: "new-game", runId: "failed-new-run" });
   expect(app.screen).toBe("loading");
+  expect(app.combat.startNewRunCalls).toEqual(["failed-new-run"]);
   expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
   expect(app.loading.operationId).toBe("region-load");
   expect(app.renderer).toBeNull();
@@ -597,4 +611,425 @@ it("re-enables gameplay input after a successful blocked-scene retry even when n
     expect(app.canPlayWorld()).toBe(true);
     expect(enabled.at(-1)).toBe(true);
   }
+});
+
+it("walks every authored line of a multi-line beat in order before advancing the beat", async () => {
+  const beat = DIALOGUE["prologue-vision"];
+  const chainedBeat = DIALOGUE["prologue-vision"].next ? DIALOGUE[DIALOGUE["prologue-vision"].next!] : undefined;
+  expect(beat).toBeDefined();
+  expect(beat.lines.length).toBeGreaterThan(1);
+  const app = headlessApp();
+  app.combat = new CombatEngine();
+  app.slots = [];
+  app.activeCompanionSlots = {};
+  app.campaign = null;
+  app.region = null;
+  app.renderer = null;
+  const appPrototype = GameApplication.prototype as unknown as Record<string, any>;
+  app.ui = { render: () => {} };
+  app.model = appPrototype.model;
+  app.render = () => {};
+  let prologueEncounterCalls = 0;
+  app.startWildlifeEncounterIfReady = async (): Promise<void> => { prologueEncounterCalls += 1; };
+  app.screen = "dialogue";
+  app.dialogue = beat;
+  app.dialogueLineIndex = 0;
+  const viewOf = () => {
+    const view = app.model();
+    return { id: view.dialogue?.id ?? null, index: view.dialogueLineIndex, linesLength: view.dialogue?.lines.length ?? 0 };
+  };
+  const expectedLineIds = beat.lines.map(line => line.id);
+  const initial = viewOf();
+  expect(initial.id).toBe(beat.id);
+  expect(initial.linesLength).toBe(beat.lines.length);
+  expect(initial.index).toBe(0);
+  expect(prologueEncounterCalls).toBe(0);
+  const observedIndices: number[] = [initial.index];
+  for (let i = 1; i < expectedLineIds.length; i++) {
+    await app.dispatch({ type: "advance-dialogue", beatId: beat.id });
+    const next = viewOf();
+    expect(next.id).toBe(beat.id);
+    expect(next.linesLength).toBe(beat.lines.length);
+    expect(next.index).toBe(i);
+    observedIndices.push(next.index);
+    expect(prologueEncounterCalls).toBe(0);
+  }
+  expect(observedIndices).toEqual(expectedLineIds.map((_, i) => i));
+  expect(observedIndices.length).toBe(beat.lines.length);
+  expect(observedIndices.length).toBeGreaterThan(1);
+  await app.dispatch({ type: "advance-dialogue", beatId: beat.id });
+  const afterFinal = viewOf();
+  if (chainedBeat) {
+    expect(afterFinal.id).toBe(chainedBeat.id);
+    expect(afterFinal.index).toBe(0);
+    expect(prologueEncounterCalls).toBe(0);
+    for (let i = 1; i < chainedBeat.lines.length; i++) {
+      await app.dispatch({ type: "advance-dialogue", beatId: chainedBeat.id });
+      const next = viewOf();
+      expect(next.id).toBe(chainedBeat.id);
+      expect(next.index).toBe(i);
+      expect(prologueEncounterCalls).toBe(0);
+    }
+    await app.dispatch({ type: "advance-dialogue", beatId: chainedBeat.id });
+    const afterChain = viewOf();
+    expect(afterChain.id).toBeNull();
+    expect(afterChain.index).toBe(0);
+    expect(prologueEncounterCalls).toBe(1);
+  } else {
+    expect(afterFinal.id).toBeNull();
+    expect(afterFinal.index).toBe(0);
+    expect(prologueEncounterCalls).toBe(1);
+  }
+
+  const transientBeat = { id: "test-transient-prelude", lines: beat.lines, next: beat.id };
+  app.dialogue = transientBeat;
+  app.dialogueLineIndex = 0;
+  const transientInitial = viewOf();
+  expect(transientInitial.id).toBe(transientBeat.id);
+  expect(transientInitial.linesLength).toBe(transientBeat.lines.length);
+  expect(transientInitial.index).toBe(0);
+  expect(prologueEncounterCalls).toBe(1);
+  for (let i = 1; i < transientBeat.lines.length; i++) {
+    await app.dispatch({ type: "advance-dialogue", beatId: transientBeat.id });
+    const next = viewOf();
+    expect(next.id).toBe(transientBeat.id);
+    expect(next.index).toBe(i);
+    expect(prologueEncounterCalls).toBe(1);
+  }
+  await app.dispatch({ type: "advance-dialogue", beatId: transientBeat.id });
+  const afterTransient = viewOf();
+  expect(afterTransient.id).toBe(beat.id);
+  expect(afterTransient.linesLength).toBe(beat.lines.length);
+  expect(afterTransient.index).toBe(0);
+  expect(prologueEncounterCalls).toBe(1);
+});
+
+function cueApp(seedQuestIds: string[] = [], seedCompletedQuestIds: string[] = [], seedCompletedObjectiveIds: string[] = []): Record<string, any> {
+  const app = headlessApp();
+  app.combat = new CombatEngine();
+  app.campaign = {
+    regionId: "whispering-canopy",
+    chapter: 1,
+    runId: "cue-run",
+    activeQuestIds: [...seedQuestIds],
+    completedQuestIds: [...seedCompletedQuestIds],
+    activeObjectiveIds: [],
+    completedObjectiveIds: [...seedCompletedObjectiveIds],
+    worldFacts: {},
+  } as unknown as CampaignSnapshot;
+  app.region = REGIONS.find(item => item.id === "whispering-canopy")!;
+  app.choice = null;
+  app.startWildlifeEncounterIfReady = async (): Promise<void> => { /* noop */ };
+  app.setScreen = (screen: string) => { app.screen = screen; };
+  app.input = { clear: () => {}, setEnabled: () => {} };
+  app.render = () => { app.presentQueuedNarrativeCue(); };
+  return app;
+}
+
+
+it("queues the activation cue when a First Pact quest enters the active set", () => {
+  const app = cueApp([], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.dialogue?.id).toBe("fallen-scout-open");
+  expect(app.dialogueLineIndex).toBe(0);
+  expect(app.screen).toBe("dialogue");
+});
+
+it("queues the completion cue when an active First Pact quest completes", () => {
+  const app = cueApp(["fallen-scout"], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["thief-in-the-branches"],
+    completedQuestIds: ["fallen-scout"],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("fallen-scout-close");
+  expect(app.pendingNarrativeCues).toEqual(["branches-open"]);
+});
+
+it("queues only the objective cue when a non-terminal objective completes inside an unchanged quest set", () => {
+  const app = cueApp(["the-ash-hunters"], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["the-ash-hunters"],
+    completedQuestIds: [],
+    completedObjectiveIds: ["the-ash-hunters:rescue-tali"],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("tali-rescue");
+  expect(app.pendingNarrativeCues).toEqual([]);
+});
+
+it("orders objective, completion, and activation cues in a single snapshot transition", () => {
+  const app = cueApp(["fallen-scout", "the-ash-hunters"], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["thief-in-the-branches", "the-ash-hunters"],
+    completedQuestIds: ["fallen-scout"],
+    completedObjectiveIds: ["the-ash-hunters:rescue-tali"],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("tali-rescue");
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-close", "branches-open"]);
+  expect(app.pendingNarrativeCues.indexOf("fallen-scout-close")).toBeLessThan(app.pendingNarrativeCues.indexOf("branches-open"));
+});
+
+it("does not replay cues when an idempotent snapshot carries the same quest/objective state", () => {
+  const app = cueApp(["fallen-scout"], [], []);
+  const baseline = app.campaign;
+  const same = { ...baseline } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, same);
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.dialogue).toBeNull();
+});
+
+it("does not cue on load/import of already-existing progress", () => {
+  const app = cueApp(
+    ["fallen-scout", "thief-in-the-branches", "empty-orchard"],
+    [],
+    [],
+  );
+  const baseline = app.campaign;
+  const loaded = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout", "thief-in-the-branches"],
+    completedQuestIds: ["empty-orchard"],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.loadingFromSave = true;
+  app.primeNarrativeCuesFromTransition(baseline, loaded);
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.dialogue).toBeNull();
+  app.loadingFromSave = false;
+});
+it("discards queued cues from the replaced journey after successful load or import", async () => {
+  for (const action of ["load", "import"] as const) {
+    const app = cueApp(["fallen-scout"], [], []);
+    const previous = app.campaign;
+    const loaded = {
+      ...previous,
+      runId: action === "load" ? previous.runId : "imported-run",
+      activeQuestIds: ["fallen-scout", "thief-in-the-branches"],
+      completedQuestIds: [],
+      completedObjectiveIds: [],
+    } as CampaignSnapshot;
+    app.pendingNarrativeCues = ["branches-open"];
+    app.pendingWorldEvents = [];
+    app.pendingTravel = null;
+    app.pendingImportPayload = null;
+    app.pendingLoadSlotId = null;
+    app.slots = [];
+    app.initializeIfNeeded = async () => {};
+    app.beginWorldGeneration = () => ++app.worldGeneration;
+    app.isWorldGenerationCurrent = () => true;
+    app.campaignDirector = {
+      load: async () => { app.primeNarrativeCuesFromTransition(previous, loaded); },
+      importSave: async () => { app.primeNarrativeCuesFromTransition(previous, loaded); },
+      snapshot: () => loaded,
+    };
+    app.refreshSlots = async () => {};
+    app.prepareWorld = async (snapshot: CampaignSnapshot) => {
+      app.campaign = snapshot;
+      app.region = REGIONS.find(region => region.id === snapshot.regionId)!;
+      app.worldReady = true;
+      app.loading = { active: false, label: "", progress: null };
+      app.screen = "game";
+      app.render();
+    };
+
+    await app.dispatch(action === "load"
+      ? { type: "load", slotId: "loaded-slot" }
+      : { type: "import", payload: "imported-save" });
+
+    expect(app.pendingNarrativeCues).toEqual([]);
+    expect(app.dialogue).toBeNull();
+    expect(app.screen).toBe("game");
+  }
+});
+
+
+it("never interrupts a currently displayed beat when a new cue is queued", () => {
+  const app = cueApp([], [], []);
+  app.dialogue = DIALOGUE["prologue-vision"] ?? null;
+  app.dialogueLineIndex = 1;
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
+  expect(app.dialogue?.id).toBe("prologue-vision");
+  expect(app.dialogueLineIndex).toBe(1);
+});
+
+it("skip-cinematic drains the pending queue and preserves the existing safe continuation", async () => {
+  const app = cueApp([], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout", "thief-in-the-branches"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("fallen-scout-open");
+  expect(app.pendingNarrativeCues).toEqual(["branches-open"]);
+  await app.dispatch({ type: "skip-cinematic", cinematicId: "any" });
+  expect(app.dialogue).toBeNull();
+  expect(app.dialogueLineIndex).toBe(0);
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.screen).toBe("game");
+});
+
+it("skip-cinematic routes to the choice screen when a choice is pending instead of resuming game", async () => {
+  const app = cueApp([], [], []);
+  let encounterCalls = 0;
+  app.startWildlifeEncounterIfReady = async (): Promise<void> => { encounterCalls += 1; };
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("fallen-scout-open");
+  app.choice = { id: "canopy-water-seed-accord", title: "Choose", options: [] };
+  await app.dispatch({ type: "skip-cinematic", cinematicId: "any" });
+  expect(app.choice).toEqual({ id: "canopy-water-seed-accord", title: "Choose", options: [] });
+  expect(app.dialogue).toBeNull();
+  expect(app.dialogueLineIndex).toBe(0);
+  expect(app.screen).toBe("choice");
+  expect(encounterCalls).toBe(0);
+});
+
+it("queues an optional empty-nest cue from STORY_DIALOGUE", () => {
+  const app = cueApp([], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["the-empty-nest"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  app.render();
+  expect(app.dialogue?.id).toBe("the-empty-nest-opening");
+  expect(app.pendingNarrativeCues).toEqual([]);
+});
+
+it("defers cue presentation until the world, region, and active screen are ready", () => {
+  const app = cueApp([], [], []);
+  const baseline = app.campaign;
+  const next = {
+    ...baseline,
+    activeQuestIds: ["fallen-scout"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  // World not yet ready: presentation must not consume the queue.
+  app.worldReady = false;
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
+  expect(app.dialogue).toBeNull();
+  // Region mismatch: still defer.
+  app.worldReady = true;
+  app.region = REGIONS.find(item => item.id === "blood-bamboo-valley")!;
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
+  expect(app.dialogue).toBeNull();
+  // Region matches campaign: present.
+  app.region = REGIONS.find(item => item.id === "whispering-canopy")!;
+  // An authored choice remains in front of newly queued dialogue.
+  app.screen = "choice";
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
+  expect(app.dialogue).toBeNull();
+  app.screen = "game";
+  app.render();
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.dialogue?.id).toBe("fallen-scout-open");
+});
+
+it("return-title clears the cue schedule baseline and the pending queue", async () => {
+  const app = cueApp(["fallen-scout"], [], []);
+  app.lastCueSnapshot = app.campaign;
+  app.primeNarrativeCuesFromTransition(app.campaign, app.campaign);
+  app.pendingNarrativeCues.push("fallen-scout-open");
+  expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
+  await app.dispatch({ type: "return-title" });
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.lastCueSnapshot).toBeNull();
+});
+
+it("ignores unknown authored cue beat ids so the scheduler fails closed", () => {
+  const app = cueApp([], [], []);
+  app.enqueueNarrativeCue("nonexistent-cue-beat");
+  expect(app.pendingNarrativeCues).toEqual([]);
+  const baseline = app.campaign;
+  const next = { ...baseline, activeQuestIds: ["fall-of-the-grove"] } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, next);
+  expect(app.pendingNarrativeCues).toEqual([]);
+});
+
+it("queues the next queued cue after the current beat's final line advances", async () => {
+  const app = cueApp([], [], []);
+  app.dialogue = DIALOGUE["fallen-scout-open"] ?? null;
+  app.dialogueLineIndex = (DIALOGUE["fallen-scout-open"]?.lines.length ?? 1) - 1;
+  app.screen = "dialogue";
+  app.pendingNarrativeCues.push("branches-open");
+  await app.dispatch({ type: "advance-dialogue", beatId: "fallen-scout-open" });
+  expect(app.dialogue?.id).toBe("branches-open");
+  expect(app.pendingNarrativeCues).toEqual([]);
+});
+
+it("does not mutate the cue scheduler when a different runId snapshot arrives", () => {
+  const app = cueApp(["fallen-scout"], [], []);
+  const baseline = app.campaign;
+  const otherRun = {
+    ...baseline,
+    runId: "different-run",
+    activeQuestIds: ["thief-in-the-branches"],
+    completedQuestIds: [],
+    completedObjectiveIds: [],
+  } as CampaignSnapshot;
+  app.lastCueSnapshot = baseline;
+  app.primeNarrativeCuesFromTransition(baseline, otherRun);
+  expect(app.pendingNarrativeCues).toEqual([]);
+  expect(app.lastCueSnapshot?.runId).toBe("different-run");
 });

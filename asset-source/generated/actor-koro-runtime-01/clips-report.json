@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-koro",
+  "generator": "scripts/assets/author-creature-clips.mjs",
+  "input": {
+    "path": "asset-source/generated/actor-koro-runtime-01/actor-koro.glb",
+    "sha256": "4f8c5dc4e2afc2ced5d1a5902d27e2e35c436da52c50a7c21908eecb7ba3e693",
+    "bytes": 6899600
+  },
+  "output": {
+    "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
+    "sha256": "530bd0071e77a0bc9b4511d0107f7841de84a7dd228ee1104121a45d10f6b7b7",
+    "bytes": 6610688
+  },
+  "castSocketBone": "Head",
+  "inPlaceAnchorBone": "Hip",
+  "rootBone": "Root",
+  "body": {
+    "heightUnits": 0.9139,
+    "boundsMin": [
+      -0.2803,
+      0,
+      -0.4886
+    ],
+    "boundsMax": [
+      0.2803,
+      0.9139,
+      0.4886
+    ]
+  },
+  "fps": 30,
+  "slots": {
+    "monster-idle": {
+      "clip": "monster-idle",
+      "produced": "preset-conditioned",
+      "durationSeconds": 3,
+      "frames": 91,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "idle",
+        "anchors": null,
+        "window": [
+          3,
+          6
+        ],
+        "crossfadeSeconds": 0.6
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.033,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0019,
+          -0.0014
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.12,
+        "peakStrikeTime": 0.889,
+        "loopClosureStepDegrees": 0.193,
+        "maxInteriorStepDegrees": 1.864
+      }
+    },
+    "monster-walk": {
+      "clip": "monster-walk",
+      "produced": "preset-conditioned",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "walk",
+        "anchors": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            2.3667
+          ]
+        ],
+        "window": null,
+        "crossfadeSeconds": 0.4
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0028,
+        "maxMeshCentroidWanderUnits": 0.0491,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0079,
+          0.0465
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.159,
+        "peakStrikeTime": 0.917,
+        "loopClosureStepDegrees": 0.509,
+        "maxInteriorStepDegrees": 28.466
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-frost-sap-stalker",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "c67bbea8-c451-4722-97ea-8d9a4ca52829",
+    "decimate": "b72e55c9-b54b-470f-bc92-f33a23224421",
+    "rig": "8e65e176-d473-40ba-8e7a-d9add5cb7332",
+    "animA": "e84f9256-416c-4056-bdd4-b49644e1d196"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place"
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-frost-sap-stalker-anim-a-01/tripo-out/actor-frost-sap-stalker-anim-a-0-2-e84f9256/model.glb",
+      "sha256": "324942c6ef0113171b75cb044a93a04326df121e03bd6e7f959254667f20e792"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker.glb",
+    "sha256": "a115584f8f747682925774e54ee9040129a53d35f3824165a049dfc695962707",
+    "bytes": 7548980,
+    "vertices": 32565,
+    "boundsMin": [
+      -0.16989688575267792,
+      -1.7881393432617188e-7,
+      -0.4904926121234894
+    ],
+    "boundsMax": [
+      0.1698964536190033,
+      0.6565496921539307,
+      0.4904925227165222
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 21
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3587502,
+      "toBytes": 1478706
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6254665,
+      "toBytes": 2153056
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17573992,
+      "toBytes": 2009914
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

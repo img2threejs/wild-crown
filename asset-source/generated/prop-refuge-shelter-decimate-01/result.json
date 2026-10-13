@@ -1,0 +1,16 @@
+{
+  "task_id": "ba4bd828-02e2-42d2-a7ed-887634c0aac5",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-refuge-shelter-decimate-01/tripo-out/prop-refuge-shelter-decimate-01-ba4bd828",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-refuge-shelter-decimate-01/tripo-out/prop-refuge-shelter-decimate-01-ba4bd828/model.glb",
+  "preview": "asset-source/generated/prop-refuge-shelter-decimate-01/tripo-out/prop-refuge-shelter-decimate-01-ba4bd828/preview.png",
+  "started": "2026-10-11T09:11:36.596Z",
+  "finished": "2026-10-11T09:19:29.537Z"
+}

@@ -35,6 +35,30 @@ describe('shared terrain and collision geometry', () => {
     expect(cornerResult.z).toBeLessThan(0.66);
   });
 
+  it('climbs an overlapping ramp and steps onto its raised landing without catching the platform lip', () => {
+    const ramp: GroundSurfaceDefinition = {
+      id: 'ramp', profile: 'ramp',
+      points: [{ x: 6, y: 0, z: 4 }, { x: 13, y: 0, z: 4 }, { x: 13, y: 2, z: 14 }, { x: 6, y: 2, z: 14 }],
+      elevation: 0, walkable: true, material: 'earth', colliderId: 'ramp-collider',
+    };
+    const stacked: GroundSurfaceDefinition = {
+      ...flat, points: [{ x: -10, y: 0, z: -10 }, { x: 10, y: 0, z: -10 }, { x: 10, y: 0, z: 7 }, { x: -10, y: 0, z: 7 }],
+    };
+    const landing: GroundSurfaceDefinition = {
+      ...flat, id: 'landing', colliderId: 'landing-collider',
+      points: [{ x: 6, y: 2, z: 14 }, { x: 13, y: 2, z: 14 }, { x: 13, y: 2, z: 18 }, { x: 6, y: 2, z: 18 }],
+    };
+    const collider: RegionColliderDefinition = {
+      id: 'landing-collider', kind: 'box', from: { x: 9.5, y: 1.85, z: 16 },
+      halfExtents: { x: 3.5, y: 0.15, z: 2 }, walkSurfaceId: 'landing', blocksMovement: true, blocksCamera: false,
+    };
+    const terrain = { ...arena([collider], [stacked, ramp, landing]), bounds: { ...bounds, max: { ...bounds.max, z: 18 } } };
+    let position = { x: 9, y: 0, z: 3 };
+    for (let i = 0; i < 220; i++) position = moveCircle(terrain, position, { x: 0, y: 0, z: 0.06 }, 0.42);
+    expect(position.z).toBeCloseTo(16.2, 4);
+    expect(position.y).toBeCloseTo(2, 4);
+  });
+
   it('uses capsule radius and vertical overlap, and exposes authored traversal anchors', () => {
     const raised: RegionColliderDefinition = { id: 'raised-capsule', kind: 'capsule', from: { x: 2, y: 4, z: -2 }, to: { x: 2, y: 4, z: 2 }, radius: 0.5, blocksMovement: true, blocksCamera: false };
     const high = moveCircle(arena([raised]), { x: 0, y: 0, z: 0 }, { x: 4, y: 0, z: 0 }, 0.3);

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-grove-platform",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "d6f32a86-66ce-4666-89ff-48bc1e4f746e",
+    "decimate": "3dfc389e-2db5-4931-9366-78794d58daf2"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.5,
+    "maxError": 0.02,
+    "maxTexture": 1536,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-grove-platform-decimate-01/tripo-out/prop-grove-platform-decimate-01-3dfc389e/model.glb",
+      "sha256": "3ce0aadb12789b9a21b7a9ff77ed5b983b7a86173a8bd1923003d8713c3166fa"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-grove-platform-runtime-01/prop-grove-platform.glb",
+    "sha256": "b969c577f56cb1af7ebcb28d155f43c9aa8e5c11ee066999fd21cc18b4f870e9",
+    "bytes": 4727336,
+    "vertices": 22995,
+    "triangles": 12562,
+    "boundsMin": [
+      -0.32979,
+      -0.49105,
+      -0.32202
+    ],
+    "boundsMax": [
+      0.32962,
+      0.49133,
+      0.32008
+    ],
+    "worldBoundsMin": [
+      -0.32979,
+      -0.49105,
+      -0.32202
+    ],
+    "worldBoundsMax": [
+      0.32962,
+      0.49133,
+      0.32008
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4843094,
+      "toBytes": 1161435
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6775759,
+      "toBytes": 1295506
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19852485,
+      "toBytes": 1381733
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 18712,
+      "trianglesAfter": 12650,
+      "relativeError": 0.01959345117211342
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 18769,
+      "trianglesAfter": 18753,
+      "removed": 16,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 18753,
+      "trianglesAfter": 18712,
+      "removed": 41
+    },
+    {
+      "trianglesBefore": 12650,
+      "trianglesAfter": 12562,
+      "removed": 88
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 29064,
+      "verticesAfter": 22995
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

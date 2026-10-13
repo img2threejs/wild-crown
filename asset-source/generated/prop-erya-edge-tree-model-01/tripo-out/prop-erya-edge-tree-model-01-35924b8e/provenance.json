@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-erya-edge-tree",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "AI-candidate visual review only: full stylized S-curved trunk, separated canopy clusters, and buttress roots are visible in the concept and loaded GLB; retained for geometry optimization and further review, not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-erya-edge-tree-concept-03/tripo-out/prop-erya-edge-tree-concept-03-dd21ea06/generated_image.png",
+    "sha256": "cad69fa772866d9165f4f2ab8d36a99ab3128c7b459fe5e1d6c56124f092e98f"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-erya-edge-tree-multiview-01/tripo-out/prop-erya-edge-tree-multiview-01-29b3c117/generate_multiview_image.front_view.jpeg",
+      "sha256": "65a1d9af2c3fb7303c1f4100758d85b4fe34dba1625ad52c48215decf1fb51b4"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-erya-edge-tree-multiview-01/tripo-out/prop-erya-edge-tree-multiview-01-29b3c117/generate_multiview_image.left_view.jpeg",
+      "sha256": "bfa1ea2d644336e4a96ff11d32cdd0370232de57d8b2eadfe698cf2e88cecb2d"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-erya-edge-tree-multiview-01/tripo-out/prop-erya-edge-tree-multiview-01-29b3c117/generate_multiview_image.back_view.jpeg",
+      "sha256": "37fe5bf747abb935dee81a40b99f08b78de85c156b42b1bed970d9ee7878d25d"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-erya-edge-tree-multiview-01/tripo-out/prop-erya-edge-tree-multiview-01-29b3c117/generate_multiview_image.right_view.jpeg",
+      "sha256": "1e27aaa4aada4c86e0125772301245ca18b6553c1268262d76832b65af979ef3"
+    }
+  ],
+  "taskId": "35924b8e-36d8-4e0c-a766-7a702eeeae9e",
+  "generationTasks": [
+    {
+      "taskId": "bee6e7da-c400-4964-9612-043b6e21fa7b",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Rejected: too photorealistic for the requested stylized visual direction."
+    },
+    {
+      "taskId": "f06ecfa3-f975-4e5d-a37b-1aec86f2e531",
+      "type": "image_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Rejected: edit retained the photo-real leaf and bark treatment."
+    },
+    {
+      "taskId": "dd21ea06-7779-496e-88b7-5fe658acd1a5",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Selected: visibly sculpted leaf masses and broad bark forms, full silhouette, plain background."
+    },
+    {
+      "taskId": "29b3c117-3dc4-4b62-bc8c-9a6b2f6089f7",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four view outputs were visually inspected and used as model references."
+    },
+    {
+      "taskId": "35924b8e-36d8-4e0c-a766-7a702eeeae9e",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 85,
+  "output": {
+    "path": "model.glb",
+    "sha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15",
+    "bytes": 64095300,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 1005314,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-applicable-static-prop",
+    "animationQuality": "not-applicable-static-prop",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The original model contains 1,005,314 measured vertices and is not suitable for the target real-time budget without LOD reduction.",
+      "No collision mesh, authored world scale, environment lighting, or in-game placement evidence is present.",
+      "Asset-lab GLTFLoader success establishes loadability of this source GLB only; all production gates remain incomplete."
+    ]
+  }
+}

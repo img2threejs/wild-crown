@@ -29,6 +29,7 @@ function compatibilityArtifact(): Plugin {
 export default defineConfig({
   base: '/',
   plugins: [compatibilityArtifact()],
+  optimizeDeps: { include: ['meshoptimizer', 'three/addons/exporters/GLTFExporter.js'] },
   server: { host: '127.0.0.1', port: 5173, strictPort: true },
   preview: { host: '127.0.0.1', port: 4173, strictPort: true },
   build: {

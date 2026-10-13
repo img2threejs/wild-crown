@@ -1,0 +1,16 @@
+{
+  "task_id": "d4e8f94b-2aea-4fe3-a819-af13901f7190",
+  "type": "animate_rig",
+  "status": "success",
+  "credits_consumed": 25,
+  "output_dir": "asset-source/generated/actor-storm-hornbill-rig-01/tripo-out/actor-storm-hornbill-rig-01-d4e8f94b",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/actor-storm-hornbill-rig-01/tripo-out/actor-storm-hornbill-rig-01-d4e8f94b/model.glb",
+  "preview": "asset-source/generated/actor-storm-hornbill-rig-01/tripo-out/actor-storm-hornbill-rig-01-d4e8f94b/preview.png",
+  "started": "2026-10-11T03:50:31.680Z",
+  "finished": "2026-10-11T03:51:07.891Z"
+}

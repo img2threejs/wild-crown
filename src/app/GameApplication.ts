@@ -1,27 +1,46 @@
-import { AudioListener } from 'three';
+import { AudioListener, Color, Vector3 } from 'three';
 import { CampaignDirector, CampaignChoiceRejectedError, SaveRepository, SaveRepositoryError, REGIONS, QUESTS, DIALOGUE, CAMPAIGN_CHOICES, INTERACTIONS, ENVIRONMENT_RECIPES } from '../game/campaign/index.js';
 import type { SaveSlotSummary } from '../game/campaign/index.js';
-import type { AssetManifestEntry, CampaignSnapshot, CombatSnapshot, GameSettings, GameViewModel, InputBindingMaps, RegionDefinition, RegionId, UIAction, WorldEvent, ActorSnapshot } from '../game/contracts.js';
-import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS } from '../game/contracts.js';
-import { CombatEngine, COMBAT_ACTION_CLIPS, type CombatInput } from '../game/combat/CombatEngine.js';
+import type { AssetManifestEntry, CampaignSnapshot, CombatSnapshot, EnvironmentRecipeDefinition, GameSettings, GameViewModel, InputBindingMaps, RegionDefinition, RegionId, UIAction, WorldEvent, ActorSnapshot } from '../game/contracts.js';
+import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, normalizeInputBindings, isCanonicalKeyboardRemap } from '../game/contracts.js';
+import { CombatEngine, COMBAT_ACTION_CLIPS, type CombatEvent, type CombatInput } from '../game/combat/CombatEngine.js';
 import { COMPANION_ROSTER } from '../game/companions/CompanionSystem.js';
 import { ACTORS } from '../content/campaign.js';
-import { mountGameUI, type GameUIInstance } from '../ui/GameUI.js';
+import { mountGameUI, type GameUIInstance, type HeroPreviewController } from '../ui/GameUI.js';
 import { GameRenderer, mountCompanionPreview, type CompanionPreviewHandle } from '../rendering/GameRenderer.js';
+import { mountHeroPreview, type HeroPreviewHandle } from '../rendering/HeroPreview.js';
 import { NativeAssetError } from '../rendering/NativeAssetLoader.js';
 import { StoryPresentation } from '../effects/index.js';
-import { ENDINGS } from '../content/story.js';
+import { ENDINGS, STORY_DIALOGUE } from '../content/story.js';
+import {
+  NARRATIVE_CUES,
+  cueForObjective,
+  isCueBeatAuthored,
+} from '../content/narrative-cues.js';
 import { RuntimeInput } from '../input/RuntimeInput.js';
+import { DamageNumbers } from '../ui/DamageNumbers.js';
+import { StageGoal } from './StageGoal.js';
+import { TRIAL_GATE_ASSET_ID } from '../game/combat/CombatTrials.js';
+import { WAYSTONE_ASSET_ID } from '../rendering/WaystoneVisual.js';
+import { createCombatTrialRegion } from '../game/combat/TrialRegions.js';
+import { ASSET_PLAYTESTS, assetPlaytestFromSearch, type AssetPlaytest } from './AssetPlaytests.js';
+import { STORY_CHAPTERS } from './StoryChapters.js';
+import { HEROES, heroById, isHeroId, type HeroId } from '../game/heroes.js';
+import { browserPlaytestProgress } from './PlaytestProgress.js';
+import { MonsterLabels } from '../ui/MonsterLabels.js';
 const STEP = 1 / 60;
 const MAX_STEPS = 5;
 const MANIFEST_URL = '/assets/manifest.json';
+/** Rim hues only (HitFlash normalises colour and caps the rim): red for Aren, warm gold for struck monsters. */
+const PLAYER_HIT_RIM = new Color().setRGB(1, 0.1, 0.05);
+const ACTOR_HIT_RIM = new Color().setRGB(1, 0.7, 0.25);
 const COMMANDS = ['follow', 'stay', 'focus', 'defend', 'search', 'distract', 'special', 'recall'] as const;
 type Screen = GameViewModel['screen'];
 type Manifest = readonly AssetManifestEntry[];
 type ActiveCompanionSlots = Partial<Pick<CampaignSnapshot['party'], 'combat' | 'utility' | 'scout'>>;
 const mountedApplications = new WeakMap<HTMLElement, GameApplication>();
 const OVERLAY_SCREENS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'settings', 'credits'];
-const WORLD_PANELS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'dialogue', 'choice', 'ending'];
+const WORLD_PANELS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'dialogue', 'choice', 'ending', 'stage-complete', 'defeat'];
 function endingViewModel(id: NonNullable<CampaignSnapshot['ending']>): NonNullable<GameViewModel['ending']> {
     const ending = ENDINGS[id];
     return { id: ending.id, title: ending.title, summary: ending.summary };
@@ -42,7 +61,32 @@ function isTerminalAssetError(error: unknown): boolean {
 function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === 'object' && value !== null && !Array.isArray(value); }
 function isStringArray(value: unknown): value is string[] { return Array.isArray(value) && value.every(entry => typeof entry === 'string'); }
 function isActionMap(value: unknown): value is Record<string, string | null> { return isRecord(value) && Object.values(value).every(clip => clip === null || typeof clip === 'string'); }
+function isPlaytestAnimation(value: unknown): value is NonNullable<AssetManifestEntry['playtestAnimation']> {
+    if (!isRecord(value) || !['biped', 'avian', 'quadruped'].includes(String(value.rigFamily))
+        || !isStringArray(value.actionIds) || value.actionIds.length === 0
+        || value.actionIds.some(actionId => actionId.length === 0) || new Set(value.actionIds).size !== value.actionIds.length
+        || ['torsoBoneNames', 'armRootNames', 'legRootNames', 'wingRootNames', 'wingSecondaryBoneNames', 'limbRootNames'].some(key => key in value && !isStringArray(value[key]))
+        || ('headBoneName' in value && typeof value.headBoneName !== 'string')) return false;
+    if (value.rigFamily === 'biped') {
+        const needsLegRoots = (value.actionIds as string[]).some(actionId => /run|jump/i.test(actionId));
+        return Array.isArray(value.armRootNames) && value.armRootNames.length === 2
+            && Array.isArray(value.torsoBoneNames) && value.torsoBoneNames.length > 0
+            && (!needsLegRoots || Array.isArray(value.legRootNames) && value.legRootNames.length === 2);
+    }
+    if (value.rigFamily === 'avian') return Array.isArray(value.wingRootNames) && value.wingRootNames.length === 2;
+    return Array.isArray(value.limbRootNames) && value.limbRootNames.length === 4;
+}
 function optionalNullableString(record: Record<string, unknown>, key: string): boolean { return !(key in record) || record[key] === null || typeof record[key] === 'string'; }
+function isVector3Value(value: unknown): value is { x: number; y: number; z: number } {
+    return isRecord(value) && typeof value.x === 'number' && Number.isFinite(value.x)
+        && typeof value.y === 'number' && Number.isFinite(value.y)
+        && typeof value.z === 'number' && Number.isFinite(value.z);
+}
+function isCoordinateTransform(value: unknown): boolean {
+    return isRecord(value) && typeof value.scale === 'number' && Number.isFinite(value.scale) && value.scale > 0
+        && isVector3Value(value.forward)
+        && (!('originOffset' in value) || isVector3Value(value.originOffset));
+}
 function isManifestEntry(value: unknown): value is AssetManifestEntry {
     if (!isRecord(value))
         return false;
@@ -55,13 +99,18 @@ function isManifestEntry(value: unknown): value is AssetManifestEntry {
         && ['not-started', 'in-progress', 'verified', 'blocked'].includes(String(value.evidenceStatus))
         && optionalNullableString(value, 'runtimeUrl') && optionalNullableString(value, 'sourceHash')
         && optionalNullableString(value, 'sourceInputHash') && optionalNullableString(value, 'outputHash')
+        && (!('playtestAnimation' in value) || isPlaytestAnimation(value.playtestAnimation))
         && (!('actorId' in value) || typeof value.actorId === 'string')
         && (!('variantOf' in value) || typeof value.variantOf === 'string')
         && (!('componentAssetIds' in value) || isStringArray(value.componentAssetIds))
-        && (!('proceduralRecipeId' in value) || typeof value.proceduralRecipeId === 'string');
+        && (!('proceduralRecipeId' in value) || typeof value.proceduralRecipeId === 'string')
+        && (!('coordinateTransform' in value) || value.coordinateTransform === null || isCoordinateTransform(value.coordinateTransform));
 }
 function isManifest(value: unknown): value is Manifest { return Array.isArray(value) && value.every(isManifestEntry); }
 export class GameApplication {
+    private assetPlaytest: AssetPlaytest | null = import.meta.env.DEV ? assetPlaytestFromSearch(window.location.search) : null;
+    private readonly playtestProgress = browserPlaytestProgress();
+    private selectedHero: HeroId = 'aren';
     private readonly root: HTMLElement;
     private readonly world = document.createElement('div');
     private readonly canvas = document.createElement('canvas');
@@ -73,6 +122,13 @@ export class GameApplication {
     private readonly campaignDirector = new CampaignDirector({ saves: this.saves });
     private readonly combat = new CombatEngine();
     private readonly ui: GameUIInstance;
+    private readonly damageNumbers: DamageNumbers;
+    private readonly monsterLabels: MonsterLabels;
+    private stageGoal: StageGoal | null = null;
+    private stageCompleted = false;
+    private playerOutcome: 'victory' | 'defeat' | null = null;
+    private outcomeElapsed = 0;
+    private outcomeSnapshot: CombatSnapshot | null = null;
     private manifestPromise: Promise<Manifest>;
     private campaign: CampaignSnapshot | null = null;
     private settings: GameSettings = { ...DEFAULT_GAME_SETTINGS };
@@ -89,6 +145,7 @@ export class GameApplication {
     private renderer: GameRenderer | null = null;
     private presentation: StoryPresentation | null = null;
     private readonly companionPreviews = new Map<CompanionPreviewHandle, HTMLElement>();
+    private heroPreview: HeroPreviewHandle | null = null;
     private region: RegionDefinition | null = null;
     private activeCompanionSlots: ActiveCompanionSlots = {};
     private screen: Screen = 'title';
@@ -97,6 +154,7 @@ export class GameApplication {
     private loading: GameViewModel['loading'] = { active: false, label: '', progress: null };
     private error: GameViewModel['error'] = null;
     private dialogue: GameViewModel['dialogue'] = null;
+    private dialogueLineIndex = 0;
     private choice: GameViewModel['choice'] = null;
     private ending: GameViewModel['ending'] = null;
     private interaction: GameViewModel['hud']['interaction'];
@@ -107,6 +165,9 @@ export class GameApplication {
     private pendingAbility: string | null = null;
     private accumulator = 0;
     private previousTime = 0;
+    private previousRenderSnapshot: CombatSnapshot | undefined;
+    private renderSnapshot: CombatSnapshot | undefined;
+    private readonly listenerForward = new Vector3();
     private raf = 0;
     private disposed = false;
     private suspended = false;
@@ -119,6 +180,28 @@ export class GameApplication {
     private pendingWorldEvents: WorldEvent[] = [];
     private failedWorldEvent: WorldEvent | null = null;
     private sceneBlocked = false;
+    /**
+     * Ordered, in-memory queue of `STORY_DIALOGUE` beat ids the cue scheduler
+     * has scheduled from committed campaign snapshot transitions. Each entry
+     * is presented one beat at a time, never interrupting the currently
+     * displayed beat, and is cleared on `skip-cinematic`, `return-title`, and
+     * successful `new-game`, `load`, or `import`. Cues are never generated
+     * while restoring existing progress (see {@link primeNarrativeCuesFromTransition}).
+     */
+    private pendingNarrativeCues: string[] = [];
+    /**
+     * Snapshot used as the cue diff baseline. `null` means the scheduler has
+     * no baseline yet and the next transition seeds it from `prev` without
+     * emitting cues; `loadingFromSave` skips cue detection and resets the
+     * baseline once load/import completes (see dispatch handlers).
+     */
+    private lastCueSnapshot: CampaignSnapshot | null = null;
+    /**
+     * `true` while `CampaignDirector.load` / `importSave` publishes its
+     * checkpoint-restore snapshots. This suppresses cue detection until the
+     * loaded snapshot resets the baseline in the dispatch handler.
+     */
+    private loadingFromSave = false;
     private unsubscribe: (() => void) | null = null;
     private readonly onUserGesture = () => { void this.presentation?.unlockAudio(); };
     constructor(root: HTMLElement) {
@@ -140,16 +223,28 @@ export class GameApplication {
         this.wheel.className = 'wc-command-wheel';
         this.wheel.setAttribute('role', 'status');
         this.wheel.hidden = true;
-        this.overlay.append(this.inputHost, this.wheel);
-        root.append(this.world, this.overlay);
+        if (this.assetPlaytest) {
+            const banner = document.createElement('aside');
+            banner.className = 'wc-asset-playtest-banner';
+            banner.setAttribute('role', 'status');
+            banner.textContent = this.assetPlaytest.banner;
+            root.append(this.world, this.overlay, banner);
+        } else {
+            root.append(this.world, this.overlay);
+        }
+        this.overlay.append(this.inputHost);
         this.input = new RuntimeInput(this.inputHost);
-        this.ui = mountGameUI(this.overlay, { onAction: action => { void this.dispatch(action); }, onPreviewHost: (host, id) => this.preview(host, id) });
+        this.ui = mountGameUI(this.overlay, { onAction: action => { void this.dispatch(action); }, onPreviewHost: (host, id) => this.preview(host, id), onHeroPreviewHost: host => this.mountHeroPreviewHost(host) });
+        this.damageNumbers = new DamageNumbers(this.overlay);
+        this.monsterLabels = new MonsterLabels(this.overlay);
         this.manifestPromise = this.readManifest();
         void this.manifestPromise.catch(() => undefined);
         this.unsubscribe = this.campaignDirector.subscribe(snapshot => {
             if (this.activeRunId && snapshot.runId !== this.activeRunId) return;
+            const prev = this.campaign;
             this.activeRunId = snapshot.runId;
             this.campaign = snapshot;
+            this.primeNarrativeCuesFromTransition(prev, snapshot);
             this.render();
         });
         this.overlay.addEventListener('pointerdown', this.onUserGesture);
@@ -181,10 +276,10 @@ export class GameApplication {
             if (!this.isLifecycleCurrent(generation)) return;
             if (data) {
                 this.settings = { ...DEFAULT_GAME_SETTINGS, ...data.settings };
-                this.bindings = {
+                this.bindings = normalizeInputBindings({
                     keyboard: { ...data.bindings.keyboard },
                     gamepad: { ...data.bindings.gamepad },
-                };
+                });
             }
             this.slots = await this.saves.listSlots();
             if (!this.isLifecycleCurrent(generation)) return;
@@ -199,9 +294,11 @@ export class GameApplication {
         }
     }
     private async readManifest(): Promise<Manifest> {
-        const response = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        const manifestUrl = this.assetPlaytest ? this.assetPlaytest.manifestUrl : MANIFEST_URL;
+        const label = this.assetPlaytest ? this.assetPlaytest.manifestLabel : 'Required public asset manifest';
+        const response = await fetch(manifestUrl, { cache: 'no-store' });
         if (!response.ok) {
-            const message = 'Required public asset manifest ' + MANIFEST_URL + ' is unavailable (HTTP ' + response.status + ').';
+            const message = label + ' ' + manifestUrl + ' is unavailable (HTTP ' + response.status + ').';
             if (response.status >= 400 && response.status < 500 && response.status !== 408 && response.status !== 429) throw new AssetGateError(message);
             throw new Error(message);
         }
@@ -209,9 +306,9 @@ export class GameApplication {
         try { json = await response.json(); }
         catch (error) {
             if (error instanceof Error && error.name === 'AbortError') throw error;
-            throw new AssetGateError('Required public asset manifest ' + MANIFEST_URL + ' contains invalid JSON.');
+            throw new AssetGateError(label + ' ' + manifestUrl + ' contains invalid JSON.');
         }
-        if (!isManifest(json)) throw new AssetGateError('Required public asset manifest ' + MANIFEST_URL + ' is not an AssetManifestEntry array.');
+        if (!isManifest(json)) throw new AssetGateError(label + ' ' + manifestUrl + ' is not an AssetManifestEntry array.');
         return json;
     }
     private async prepareWorld(snapshot: CampaignSnapshot, showIntro = false, generation = this.beginWorldGeneration()): Promise<void> {
@@ -223,27 +320,37 @@ export class GameApplication {
         this.input.clear();
         this.screen = 'loading';
         this.combat.setTimePolicy('paused');
-        this.loading = { active: true, label: 'Checking required native assets', progress: null, operationId: 'region-load' };
+        this.loading = { active: true, label: 'Checking required native assets', progress: null, operationId: 'region-load', detail: { stage: 'checking-assets', message: 'Reading the manifest and confirming the forest\'s required native assets.' } };
         this.error = null;
         this.render();
-        const manifest = await this.readManifest();
+        const allAssets = await this.readManifest();
+        const npc = this.assetPlaytest ? heroById(this.selectedHero).npcActorId : undefined;
+        const manifest = npc ? allAssets.filter(entry => entry.actorId !== npc) : allAssets;
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
         this.manifestPromise = Promise.resolve(manifest);
         this.manifest = manifest;
-        const region = REGIONS.find(item => item.id === snapshot.regionId);
-        if (!region) throw new AssetGateError('No authored region definition for ' + snapshot.regionId + '.');
-        this.assertAssets(region, manifest);
-        const recipe = ENVIRONMENT_RECIPES.find(item => item.id === region.environmentRecipeId);
-        if (!recipe) throw new AssetGateError('No authored environment recipe for ' + region.id + '.');
+        const authoredRegion = REGIONS.find(item => item.id === snapshot.regionId);
+        if (!authoredRegion) throw new AssetGateError('No authored region definition for ' + snapshot.regionId + '.');
+        const region = this.assetPlaytest ? createCombatTrialRegion(authoredRegion, this.selectedHero) : authoredRegion;
+        const authoredRecipe = ENVIRONMENT_RECIPES.find(item => item.id === region.environmentRecipeId);
+        if (!authoredRecipe) throw new AssetGateError('No authored environment recipe for ' + region.id + '.');
+        const recipe = region === authoredRegion ? authoredRecipe : { ...authoredRecipe, assetPlacementIds: region.props.map(prop => prop.id), groundSurfaceIds: region.ground.surfaces.map(surface => surface.id) };
+        this.assertAssets(region, manifest, recipe);
         if (!this.renderer)
-            this.renderer = new GameRenderer({ canvas: this.canvas, onProgress: p => {
-                if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
-                this.loading = { ...this.loading, progress: p.ratio };
-                this.render();
-            } });
-        this.loading = { active: true, label: 'Loading ' + region.name, progress: null, operationId: 'region-load' };
+            this.renderer = new GameRenderer({ canvas: this.canvas, allowMissingActionClips: this.assetPlaytest !== null, simplifyBlockedPlaytestGeometry: this.assetPlaytest !== null });
+        this.renderer.setReducedMotion(this.settings.reducedMotion);
+        this.loading = { active: true, label: 'Loading ' + region.name, progress: 0, operationId: 'region-load', detail: { stage: 'loading-scene-assets', message: 'Preparing the forest...' } };
         this.render();
-        await this.renderer.loadRegion(region, manifest, recipe);
+        await this.renderer.loadRegion(region, manifest, recipe, progress => {
+            if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+            const total = Math.max(0, progress.total);
+            const completed = Math.max(0, Math.min(progress.completed, total));
+            const detail: GameViewModel['loading']['detail'] = { stage: 'loading-scene-assets', message: total > 0 ? `Loaded ${completed} of ${total} scene assets` : 'Preparing the forest...' };
+            this.loading = { ...this.loading, progress: progress.ratio, detail };
+            this.render();
+        });
+        if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+        await this.renderer.setPlayerHero(this.assetPlaytest ? this.selectedHero : 'aren');
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
         this.region = region;
         this.syncWorldFacts();
@@ -259,17 +366,43 @@ export class GameApplication {
         if (party.utility && presentActors.get(party.utility) !== 1) delete party.utility;
         if (party.scout && presentActors.get(party.scout) !== 1) delete party.scout;
         this.activeCompanionSlots = party;
-        this.combat.loadRegion({ regionId: region.id, runId: snapshot.runId, presentActorIds: present, companionSlots: party, chapter: snapshot.chapter, wardenCall: snapshot.worldFacts.wardenCall === true, dominionUsed: snapshot.campaign.dominionHistory.length > 0, worldFacts: snapshot.worldFacts });
+        this.combat.loadRegion({ regionId: region.id, regionDefinition: region, runId: snapshot.runId, presentActorIds: present, companionSlots: party, chapter: snapshot.chapter, wardenCall: snapshot.worldFacts.wardenCall === true, dominionUsed: snapshot.campaign.dominionHistory.length > 0, worldFacts: snapshot.worldFacts });
+        this.combat.setPlayerHero(this.assetPlaytest ? this.selectedHero : 'aren');
+        this.combat.setSceneColliders(this.renderer.getNativeSolidColliders());
+        const initialCombatSnapshot = this.combat.snapshot();
+        this.renderer.sync(initialCombatSnapshot.actors, initialCombatSnapshot, 0);
         this.combat.setTimePolicy('paused');
         this.refreshInteraction();
         this.presentation?.dispose();
         this.presentation = null;
         const listener = new AudioListener();
         this.renderer.camera.add(listener);
-        this.presentation = new StoryPresentation({ scene: this.renderer.scene, resolveSocket: (actor, socket) => this.renderer?.resolveSocket(actor, socket), audioListener: listener, reducedEffects: this.settings.reducedMotion });
+        this.presentation = new StoryPresentation({
+            scene: this.renderer.scene,
+            resolveSocket: (actor, socket) => this.renderer?.resolveSocket(actor, socket),
+            resolveActorRoot: actor => this.renderer?.resolveActorRoot(actor),
+            impact: {
+                shake: (amplitude, duration, frequency) => this.renderer?.addCameraShake(amplitude, duration, frequency),
+                flashActor: (actor, color, intensity, duration, mode) => this.renderer?.flashActor(actor, color, intensity, duration, mode),
+                impulse: (strength, seconds) => this.renderer?.addScreenImpulse(strength, seconds),
+            },
+            audioListener: listener, reducedEffects: this.settings.reducedMotion,
+        });
         this.presentation.setSettings(this.settings);
         this.presentation.startBiomeAmbience(region.id);
         this.syncStoryState();
+        if (this.assetPlaytest) {
+            const exitId = this.assetPlaytest.exitRouteId;
+            const exit = region.exits.find(route => route.id === exitId);
+            if (!exit) throw new Error(this.assetPlaytest.name + ' playtest requires its authored exit ' + exitId + '.');
+            this.stageGoal = new StageGoal(exit.from);
+            await this.renderer.prepareWaystone(this.stageGoal.position, this.stageGoal.pillarPosition(region, this.renderer.getInputBasis().right));
+        }
+        this.renderer.prewarm([this.presentation.effects.group]);
+        // Compile the cleanse-dissolve shell program once against the real trial monster rigs so the first cleanse never hitches.
+        const monsterRoots = (this.assetPlaytest?.trialSet.trials ?? []).map(stage => this.renderer!.resolveActorRoot(stage.monsterId)).filter((root): root is NonNullable<typeof root> => root !== undefined);
+        if (this.assetPlaytest && monsterRoots.length) this.presentation.effects.warden.dissolve.prewarm(monsterRoots, () => this.renderer!.prewarm(monsterRoots));
+        this.renderer.render();
         this.loading = { active: false, label: '', progress: null };
         this.sceneBlocked = false;
         this.worldReady = true;
@@ -277,11 +410,12 @@ export class GameApplication {
         this.screen = showIntro ? 'dialogue' : 'game';
         this.combat.setTimePolicy(showIntro ? 'paused' : 'normal');
         this.dialogue = showIntro ? DIALOGUE['prologue-vision'] ?? null : null;
+        this.dialogueLineIndex = 0;
         this.render();
         await this.startOrunEncounterIfReady(generation);
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
         if (!showIntro)
-            await this.startGreenwakePrologueEncounterIfReady();
+            await this.startWildlifeEncounterIfReady();
     }
     private async startOrunEncounterIfReady(generation = this.worldGeneration): Promise<void> {
         const lifecycleGeneration = this.lifecycleGeneration;
@@ -304,32 +438,138 @@ export class GameApplication {
         this.combat.setTimePolicy('normal');
         this.render();
     }
-    private async startGreenwakePrologueEncounterIfReady(): Promise<void> {
-        if (!this.campaign || !this.region || this.region.id !== 'greenwake' || this.campaign.chapter !== 0 || !this.campaign.activeQuestIds.some(id => id === 'prologue')) {
+    private async startWildlifeEncounterIfReady(): Promise<void> {
+        const generation = this.worldGeneration, lifecycleGeneration = this.lifecycleGeneration;
+        const playtest = this.assetPlaytest;
+        const encounterRegionId = playtest?.regionId ?? 'greenwake';
+        if (!this.campaign || !this.region || this.region.id !== encounterRegionId || !playtest && (this.campaign.chapter !== 0 || !this.campaign.activeQuestIds.some(id => id === 'prologue'))) {
             if (this.screen === 'dialogue')
                 this.setScreen('game');
             return;
         }
-        if (this.combat.snapshot().encounterId === 'greenwake-boar') {
+        const encounterId = playtest?.trialSet.encounterId ?? 'greenwake-boar';
+        if (this.combat.snapshot().encounterId === encounterId && (!playtest || this.combat.snapshot().encounterStatus?.trial)) {
             this.setScreen('game');
             return;
         }
         this.input.clear();
         this.screen = 'loading';
         this.combat.setTimePolicy('paused');
-        this.loading = { active: true, label: 'Beginning the Greenwake encounter', progress: null, operationId: 'region-load' };
+        this.loading = { active: true, label: playtest?.loadingLabel ?? 'Beginning the Greenwake encounter', progress: null, operationId: 'region-load' };
         this.render();
-        this.combat.startEncounter({ encounterId: 'greenwake-boar', regionId: 'greenwake', runId: this.campaign.runId, companionSlots: this.activeCompanionSlots });
+        this.combat.startEncounter({ encounterId, regionId: encounterRegionId, runId: this.campaign.runId, companionSlots: this.activeCompanionSlots });
+        if (playtest) {
+            await this.renderer!.prepareCombatTrialGates();
+            if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
+            this.combat.enableCombatTrials();
+        }
+        const combatSnapshot = this.combat.snapshot();
+        this.renderer?.sync(combatSnapshot.actors, combatSnapshot, 0);
+        this.renderer?.render();
         this.combat.setTimePolicy('paused');
         this.loading = { active: false, label: '', progress: null };
         this.screen = 'game';
         this.combat.setTimePolicy('normal');
         this.render();
     }
-    private assertAssets(region: RegionDefinition, manifest: Manifest): void {
+    /**
+     * Pushes authored narrative beats into the cue queue when a committed
+     * campaign snapshot adds a new active quest, completes an active quest,
+     * or completes a configured objective. Idempotent snapshots, identical
+     * baseline transitions, and load/import of already-existing progress
+     * never replay cues.
+     */
+    private primeNarrativeCuesFromTransition(prev: CampaignSnapshot | null, next: CampaignSnapshot): void {
+        if (this.loadingFromSave) {
+            this.lastCueSnapshot = next;
+            return;
+        }
+        const baseline = this.lastCueSnapshot ?? prev;
+        if (!baseline || baseline.runId !== next.runId) {
+            this.lastCueSnapshot = next;
+            return;
+        }
+        for (const objectiveId of next.completedObjectiveIds) {
+            if (baseline.completedObjectiveIds.includes(objectiveId)) continue;
+            const owner = this.findQuestOwningObjective(next, objectiveId);
+            if (!owner) continue;
+            const beat = cueForObjective(owner, objectiveId);
+            if (beat) this.enqueueNarrativeCue(beat);
+        }
+        for (const questId of next.completedQuestIds) {
+            if (baseline.completedQuestIds.includes(questId)) continue;
+            const beat = NARRATIVE_CUES[questId]?.onComplete;
+            if (beat) this.enqueueNarrativeCue(beat);
+        }
+        for (const questId of next.activeQuestIds) {
+            if (baseline.activeQuestIds.includes(questId)) continue;
+            const beat = NARRATIVE_CUES[questId]?.onActivate;
+            if (beat) this.enqueueNarrativeCue(beat);
+        }
+        this.lastCueSnapshot = next;
+    }
+    private enqueueNarrativeCue(beatId: string): void {
+        if (!isCueBeatAuthored(beatId)) return;
+        this.pendingNarrativeCues.push(beatId);
+    }
+    /**
+     * Locates the quest that owns a completed objective id, used to resolve
+     * an objective-completion cue against the right quest key. Iterates the
+     * snapshot's active and completed quest id arrays directly because the
+     * owning quest can have just transitioned from active to completed in
+     * the same snapshot.
+     */
+    private findQuestOwningObjective(snapshot: CampaignSnapshot, objectiveId: string): string | null {
+        for (const questId of snapshot.activeQuestIds) {
+            const quest = QUESTS.find(candidate => candidate.id === questId);
+            if (quest && quest.objectives.some(objective => objective.id === objectiveId)) return questId;
+        }
+        for (const questId of snapshot.completedQuestIds) {
+            const quest = QUESTS.find(candidate => candidate.id === questId);
+            if (quest && quest.objectives.some(objective => objective.id === objectiveId)) return questId;
+        }
+        return null;
+    }
+    /**
+     * Presents the next queued cue beat when no beat is currently displayed.
+     * Resolves authored beat ids through `STORY_DIALOGUE` (which includes
+     * `DIALOGUE` and `ADDITIONAL_DIALOGUE`) so optional quest beats that
+     * live only in additional connective dialogue still resolve at runtime.
+     * Honors the "never interrupt a currently displayed beat" invariant and
+     * the "skip must clear the queue and continue safely" invariant.
+     */
+    private maybePresentNextNarrativeCue(): void {
+        if (this.dialogue || !this.pendingNarrativeCues.length) return;
+        if (!this.canPresentNarrativeCueNow()) return;
+        const nextBeatId = this.pendingNarrativeCues.shift()!;
+        const beat = STORY_DIALOGUE[nextBeatId] ?? null;
+        if (!beat) {
+            this.maybePresentNextNarrativeCue();
+            return;
+        }
+        this.dialogue = beat;
+        this.dialogueLineIndex = 0;
+        this.choice = null;
+        this.setScreen('dialogue');
+    }
+    /**
+     * Defer presentation until the world is fully prepared and the active
+     * region matches the campaign snapshot; otherwise a region-transition
+     * event from the same committed snapshot would consume a cue before the
+     * new region finishes loading and leave an invisible queued beat.
+     */
+    private canPresentNarrativeCueNow(): boolean {
+        if (this.loading.active || this.sceneBlocked) return false;
+        if (!this.worldReady || !this.region || !this.campaign) return false;
+        if (this.region.id !== this.campaign.regionId) return false;
+        if (this.screen !== 'game' && this.screen !== 'dialogue') return false;
+        return true;
+    }
+    private clearNarrativeCueQueue(): void {
+        this.pendingNarrativeCues.length = 0;
+    }
+    private assertAssets(region: RegionDefinition, manifest: Manifest, recipe: EnvironmentRecipeDefinition): void {
         const byId = new Map(manifest.map(entry => [entry.id, entry]));
-        const recipe = ENVIRONMENT_RECIPES.find(item => item.id === region.environmentRecipeId);
-        if (!recipe) throw new AssetGateError('No authored environment recipe for ' + region.id + '.');
         const recipeEntry = byId.get(recipe.id);
         if (!recipeEntry || recipeEntry.sourceType !== 'composed-recipe' || recipeEntry.kind !== 'environment') {
             throw new AssetGateError('Environment recipe ' + recipe.id + ' is not a normalized composed-recipe entry.');
@@ -356,8 +596,35 @@ export class GameApplication {
                 throw new AssetGateError('Movable prop ' + movable.id + ' references missing support surface ' + movable.supportSurfaceId + '.');
             }
         }
+        const playtest = this.assetPlaytest;
+        if (playtest && region.id !== playtest.regionId) throw new AssetGateError('The real-asset candidate playtest only supports ' + playtest.name + '; other regions remain gated by production evidence.');
         const required = new Set<string>([region.environmentRecipeId, ...region.props.map(prop => prop.assetId), ...region.entities.filter(entity => entity.actorId).map(entity => entity.assetId ?? ACTORS[entity.actorId!]?.assetId).filter((id): id is string => Boolean(id)), ACTORS.aren?.assetId ?? 'actor-aren']);
+        // Every playable kit is an explicit candidate dependency; variants remain character assets and an unarmed hero (Sakda) has no weapon prop.
+        const standaloneProps = playtest ? [TRIAL_GATE_ASSET_ID, WAYSTONE_ASSET_ID, ...HEROES.flatMap(hero => hero.weaponAssetId ? [hero.weaponAssetId] : [])] : [];
+        for (const id of standaloneProps) required.add(id);
+        if (playtest) for (const hero of HEROES) if (hero.variantAssetId) required.add(hero.variantAssetId);
         if (region.id === 'heartroot-hollow') required.add('actor-orun-crowned-beast');
+        if (!playtest && manifest.some(entry => entry.playtestAnimation)) throw new AssetGateError('Playtest-only animation profiles cannot enter the production asset manifest.');
+        if (playtest) {
+            if (manifest.length !== required.size || byId.size !== required.size || [...byId.keys()].some(id => !required.has(id))) {
+                throw new AssetGateError(playtest.name + ' candidate playtest manifest must contain exactly the authored ' + playtest.name + ' dependencies, including the player asset.');
+            }
+            for (const id of required) {
+                const entry = byId.get(id);
+                if (!entry) throw new AssetGateError(playtest.name + ' candidate playtest manifest is missing ' + id + '.');
+                if (entry.evidenceStatus === 'verified') throw new AssetGateError('Candidate playtest asset ' + id + ' must remain explicitly unverified.');
+                if (id === region.environmentRecipeId) continue;
+                const expectedKind = region.props.some(prop => prop.assetId === id) || standaloneProps.includes(id) ? 'prop' : 'character';
+                if (entry.kind !== expectedKind || entry.sourceType !== 'native-glb') throw new AssetGateError('Candidate playtest asset ' + id + ' must be a native ' + expectedKind + ' GLB.');
+                if (!entry.runtimeUrl?.startsWith('/asset-source/generated/') || entry.runtimeUrl.includes('..')) throw new AssetGateError('Candidate playtest asset ' + id + ' must load from a local generated GLB.');
+                if (!entry.outputHash || !/^[a-f0-9]{64}$/i.test(entry.outputHash)) throw new AssetGateError('Candidate playtest asset ' + id + ' requires the SHA-256 of its actual GLB bytes.');
+                if (entry.kind === 'character' && (!entry.actorId || entry.requiredActionIds.length > 0)) {
+                    throw new AssetGateError('Candidate playtest character ' + id + ' must identify its actor and must not claim unverified action clips.');
+                }
+                if (entry.playtestAnimation && entry.evidenceStatus !== 'blocked') throw new AssetGateError('Playtest animation profiles must remain explicitly blocked from production acceptance.');
+            }
+            return;
+        }
         for (const id of required) {
             const entry = byId.get(id);
             if (!entry) throw new AssetGateError('Required asset ' + id + ' is missing from ' + MANIFEST_URL + '.');
@@ -415,6 +682,32 @@ export class GameApplication {
             disposeHandle();
         };
     }
+    /** Hero-select stage: the preview mounts once the candidate manifest is read; commands issued earlier are replayed. */
+    private mountHeroPreviewHost(host: HTMLElement): HeroPreviewController {
+        let handle: HeroPreviewHandle | null = null;
+        let canceled = false;
+        let shown: HeroId | null = null;
+        void this.manifestPromise.then(assets => {
+            if (canceled || this.disposed || !host.isConnected) return;
+            handle = mountHeroPreview(host, assets, { reducedMotion: this.settings.reducedMotion });
+            this.heroPreview = handle;
+            if (shown) handle.show(shown);
+        }).catch((error: unknown) => {
+            if (canceled || this.disposed) return;
+            const status = host.querySelector<HTMLElement>('[data-preview-placeholder]');
+            if (status) status.textContent = errorText(error);
+        });
+        return {
+            show: heroId => { shown = heroId; handle?.show(heroId); },
+            showcase: actionIds => handle?.showcase(actionIds),
+            dispose: () => {
+                canceled = true;
+                if (handle && this.heroPreview === handle) this.heroPreview = null;
+                handle?.dispose();
+                handle = null;
+            },
+        };
+    }
     private disposeCompanionPreviews(): void {
         for (const handle of this.companionPreviews.keys()) handle.dispose();
         this.companionPreviews.clear();
@@ -423,6 +716,38 @@ export class GameApplication {
         if (this.disposed)
             return;
         if (action.type === 'retry-load' && this.error?.recoverable === false) return;
+        if (this.assetPlaytest) {
+            if (action.type === 'map-select' || action.type === 'new-game' && this.screen === 'title') {
+                if (action.type === 'map-select' && !['stage-complete', 'defeat', 'hero-select', 'map-select'].includes(this.screen)) return;
+                this.beginWorldGeneration();
+                this.releaseWorld();
+                this.error = null;
+                this.setScreen('map-select');
+                return;
+            }
+            if (action.type === 'select-map') {
+                if (!['map-select', 'stage-complete'].includes(this.screen) || !this.playtestProgress.isUnlocked(action.mapId)) return;
+                const mapId = action.mapId;
+                const map = ASSET_PLAYTESTS.find(candidate => candidate.id === mapId);
+                if (!map) return;
+                this.beginWorldGeneration();
+                this.releaseWorld();
+                this.assetPlaytest = map;
+                const banner = this.root.querySelector('.wc-asset-playtest-banner');
+                if (banner) banner.textContent = map.banner;
+                this.error = null;
+                this.setScreen('hero-select');
+                return;
+            }
+            if (action.type === 'select-hero') {
+                if (this.screen !== 'hero-select' || !isHeroId(action.heroId) || !this.playtestProgress.isUnlocked(this.assetPlaytest.id)) return;
+                this.selectedHero = action.heroId;
+                action = { type: 'new-game', runId: action.runId };
+            } else if (action.type === 'new-game' && !['stage-complete', 'defeat', 'loading'].includes(this.screen)) return;
+            // Campaign saves are separate from local map/hero runs.
+            if (['continue', 'load', 'import', 'travel', 'save', 'create-save-slot'].includes(action.type)) return;
+        } else if (action.type === 'select-map' || action.type === 'select-hero' || action.type === 'map-select') return;
+        if (this.playerOutcome && action.type !== 'new-game' && action.type !== 'return-title') return;
         if (this.failedWorldEvent) {
             const retryingEvent = action.type === 'retry-load' && action.operationId === 'durable-event';
             const replacingWorld = action.type === 'new-game' || action.type === 'continue' || action.type === 'load' || action.type === 'return-title';
@@ -455,11 +780,15 @@ export class GameApplication {
                     this.pendingLoadSlotId = null;
                     this.pendingImportPayload = null;
                     this.pendingTravel = null;
-                    this.campaign = this.campaignDirector.startNewRun(action.runId);
+                    const showcaseRegion = this.assetPlaytest?.showcaseRegionId;
+                    this.campaign = showcaseRegion ? this.campaignDirector.startShowcase(action.runId, showcaseRegion) : this.campaignDirector.startNewRun(action.runId);
+                    this.combat.startNewRun(this.campaign.runId);
                     this.pendingNewRunId = null;
                     this.activeRunId = this.campaign.runId;
+                    this.lastCueSnapshot = this.campaign;
+                    this.clearNarrativeCueQueue();
                     this.pendingNewRunId = null;
-                    await this.prepareWorld(this.campaign, true, generation);
+                    await this.prepareWorld(this.campaign, !this.assetPlaytest, generation);
                     break;
                 case 'continue':
                     this.pendingLoadSlotId = action.slotId;
@@ -476,10 +805,17 @@ export class GameApplication {
                     this.sceneBlocked = false;
                     this.pendingImportPayload = null;
                     this.pendingTravel = null;
-                    await this.campaignDirector.load(action.slotId);
+                    this.loadingFromSave = true;
+                    try {
+                        await this.campaignDirector.load(action.slotId);
+                    } finally {
+                        this.loadingFromSave = false;
+                    }
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                     this.campaign = this.campaignDirector.snapshot();
                     this.activeRunId = this.campaign.runId;
+                    this.lastCueSnapshot = this.campaign;
+                    this.clearNarrativeCueQueue();
                     this.pendingLoadSlotId = null;
                     await this.prepareWorld(this.campaign, false, generation);
                     break;
@@ -536,13 +872,24 @@ export class GameApplication {
                     break;
                 case 'advance-dialogue':
                     if (this.dialogue?.id === action.beatId) {
-                        this.dialogue = this.dialogue.next ? DIALOGUE[this.dialogue.next] ?? null : null;
-                        if (this.dialogue)
+                        const totalLines = this.dialogue.lines.length;
+                        if (totalLines > 0 && this.dialogueLineIndex < totalLines - 1) {
+                            this.dialogueLineIndex += 1;
                             this.setScreen('dialogue');
-                        else if (this.choice)
-                            this.setScreen('choice');
-                        else
-                            await this.startGreenwakePrologueEncounterIfReady();
+                        } else {
+                            this.dialogue = this.dialogue.next ? STORY_DIALOGUE[this.dialogue.next] ?? null : null;
+                            this.dialogueLineIndex = 0;
+                            if (this.dialogue)
+                                this.setScreen('dialogue');
+                            else if (this.choice)
+                                this.setScreen('choice');
+                            else if (this.pendingNarrativeCues.length) {
+                                this.maybePresentNextNarrativeCue();
+                                if (!this.dialogue)
+                                    await this.startWildlifeEncounterIfReady();
+                            } else
+                                await this.startWildlifeEncounterIfReady();
+                        }
                     }
                     break;
                 case 'return-title':
@@ -566,8 +913,11 @@ export class GameApplication {
                     this.activeCompanionSlots = {};
                     this.interaction = undefined;
                     this.dialogue = null;
+                    this.dialogueLineIndex = 0;
                     this.choice = null;
                     this.ending = null;
+                    this.clearNarrativeCueQueue();
+                    this.lastCueSnapshot = null;
                     this.loading = { active: false, label: '', progress: null };
                     this.error = null;
                     this.accumulator = 0;
@@ -626,10 +976,17 @@ export class GameApplication {
                     this.sceneBlocked = false;
                     this.pendingImportPayload = null;
                     this.pendingTravel = null;
-                    await this.campaignDirector.load(action.slotId);
+                    this.loadingFromSave = true;
+                    try {
+                        await this.campaignDirector.load(action.slotId);
+                    } finally {
+                        this.loadingFromSave = false;
+                    }
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                     this.campaign = this.campaignDirector.snapshot();
                     this.activeRunId = this.campaign.runId;
+                    this.lastCueSnapshot = this.campaign;
+                    this.clearNarrativeCueQueue();
                     this.pendingLoadSlotId = null;
                     await this.prepareWorld(this.campaign, false, generation);
                     break;
@@ -648,10 +1005,17 @@ export class GameApplication {
                     this.sceneBlocked = false;
                     this.pendingLoadSlotId = null;
                     this.pendingTravel = null;
-                    await this.campaignDirector.importSave(action.payload, 'import-' + Date.now().toString(36), 'Imported Journey');
+                    this.loadingFromSave = true;
+                    try {
+                        await this.campaignDirector.importSave(action.payload, 'import-' + Date.now().toString(36), 'Imported Journey');
+                    } finally {
+                        this.loadingFromSave = false;
+                    }
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                     this.campaign = this.campaignDirector.snapshot();
                     this.activeRunId = this.campaign.runId;
+                    this.lastCueSnapshot = this.campaign;
+                    this.clearNarrativeCueQueue();
                     this.pendingImportPayload = null;
                     await this.refreshSlots();
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
@@ -732,27 +1096,38 @@ export class GameApplication {
                     this.settings = { ...this.settings, ...action.settings };
                     this.input.setDeadzone(this.settings.gamepadDeadzone);
                     this.presentation?.setSettings(this.settings);
+                    this.renderer?.setReducedMotion(this.settings.reducedMotion);
                     await this.saves.saveSettings(this.settings, this.bindings);
                     this.render();
                     break;
-                case 'remap':
+                case 'remap': {
+                    const deviceBindings = { ...this.bindings[action.device] };
+                    const attempted = typeof action.binding === 'string' ? action.binding : '';
+                    if (action.device === 'keyboard' && !isCanonicalKeyboardRemap(action.actionId, attempted)) {
+                        deviceBindings[action.actionId] = DEFAULT_INPUT_BINDINGS.keyboard[action.actionId] ?? '';
+                    } else {
+                        deviceBindings[action.actionId] = action.binding;
+                    }
                     this.bindings = {
                         ...this.bindings,
-                        [action.device]: {
-                            ...this.bindings[action.device],
-                            [action.actionId]: action.binding,
-                        },
+                        [action.device]: deviceBindings,
                     };
                     this.applyBindings();
                     await this.saves.saveSettings(this.settings, this.bindings);
                     this.render();
                     break;
+                }
                 case 'skip-cinematic':
                     this.presentation?.onCinematicSkip(action.cinematicId);
                     this.dialogue = null;
-                    this.choice = null;
-                    this.setScreen('game');
-                    await this.startGreenwakePrologueEncounterIfReady();
+                    this.dialogueLineIndex = 0;
+                    this.clearNarrativeCueQueue();
+                    if (this.choice) {
+                        this.setScreen('choice');
+                    } else {
+                        this.setScreen('game');
+                        await this.startWildlifeEncounterIfReady();
+                    }
                     break;
             }
         }
@@ -830,6 +1205,8 @@ export class GameApplication {
             return;
         }
         if (screen === 'game' && !this.canPlayWorld()) screen = this.error || this.loading.active ? 'loading' : 'title';
+        if (screen === 'game' && this.stageCompleted) screen = 'stage-complete';
+        else if (screen === 'game' && this.playerOutcome === 'defeat') screen = 'defeat';
         else if (screen === 'game' && this.suspended) screen = 'pause';
         if (!returning && screen !== this.screen) {
             if (OVERLAY_SCREENS.includes(screen)) this.screenHistory.push(this.screen);
@@ -846,6 +1223,15 @@ export class GameApplication {
     }
     private releaseWorld(): void {
         this.worldReady = false;
+        this.previousRenderSnapshot = undefined;
+        this.renderSnapshot = undefined;
+        this.damageNumbers.clear();
+        this.monsterLabels.clear();
+        this.stageGoal = null;
+        this.stageCompleted = false;
+        this.playerOutcome = null;
+        this.outcomeElapsed = 0;
+        this.outcomeSnapshot = null;
         this.disposeCompanionPreviews();
         this.presentation?.dispose();
         this.presentation = null;
@@ -856,9 +1242,8 @@ export class GameApplication {
     private applyBindings(): void {
         this.input.setBindings(this.bindings);
     }
-    private model(): GameViewModel {
+    private model(snap: CombatSnapshot = this.combat.snapshot()): GameViewModel {
         const c = this.campaign;
-        const snap = this.combat.snapshot();
         const last = this.slots.find(slot => slot.kind === 'campaign');
         const regions = REGIONS.map(region => {
             const exits = c ? REGIONS.find(item => item.id === c.regionId)?.exits.filter(route => route.destinationRegionId === region.id) ?? [] : [];
@@ -896,7 +1281,7 @@ export class GameApplication {
         const abilities = companionState ? rosterAbilities : [];
         const view: GameViewModel = {
             screen: this.screen,
-            canOpenWorldPanels: this.canPlayWorld(),
+            canOpenWorldPanels: this.canPlayWorld() && !this.stageCompleted,
             loading: this.loading,
             error: this.error,
             settings: this.settings,
@@ -907,19 +1292,41 @@ export class GameApplication {
             relationships: c?.factions ?? null,
             journal: { quests: QUESTS, region: c?.regionId ?? null },
             map: { currentRegion: c?.regionId ?? null, regions },
+            playtestStage: this.assetPlaytest?.stage,
+            playtestSelection: this.assetPlaytest ? {
+                selectedMapId: this.assetPlaytest.id, heroId: this.selectedHero,
+                nextMapId: this.stageCompleted ? ASSET_PLAYTESTS[ASSET_PLAYTESTS.indexOf(this.assetPlaytest) + 1]?.id : undefined,
+                progressWarning: this.playtestProgress.warning,
+                maps: STORY_CHAPTERS.map(chapter => {
+                    const map = ASSET_PLAYTESTS.find(playtest => playtest.id === chapter.playtestId);
+                    return {
+                        id: map?.id ?? chapter.id, label: chapter.label, name: chapter.name, setting: chapter.setting,
+                        thumbnailUrl: map?.thumbnailUrl ?? null, mapArt: chapter.mapArt,
+                        monsters: map ? map.trialSet.trials.map(trial => trial.monsterName) : [],
+                        comingSoon: !map,
+                        unlocked: map ? this.playtestProgress.isUnlocked(map.id) : false,
+                        cleared: map ? this.playtestProgress.isCleared(map.id) : false,
+                    };
+                }),
+            } : undefined,
             hud: {
+                heroId: snap.player.heroId,
                 vitality: snap.player.vitality,
                 maxVitality: snap.player.maxVitality,
-                dodgeCharges: snap.player.dodgeCharges,
-                maxDodgeCharges: snap.player.maxDodgeCharges,
+                mana: snap.player.mana,
+                maxMana: snap.player.maxMana,
+                skills: snap.skills,
+                encounterStatus: snap.encounterStatus,
                 instinct: snap.player.instinct,
                 boss: snap.boss,
                 interaction: this.interaction,
                 targetId: snap.targetId,
                 target: snap.actors.find(actor => actor.id === snap.targetId),
+                destination: this.destinationHud(snap),
             },
             abilities,
             dialogue: this.dialogue,
+            dialogueLineIndex: this.dialogue ? Math.max(0, Math.min(this.dialogueLineIndex, this.dialogue.lines.length - 1)) : 0,
             choice: this.choice,
             ending: this.ending ?? (c?.ending ? endingViewModel(c.ending) : null),
             trackedObjectiveId: c?.trackedObjectiveId ?? null,
@@ -933,11 +1340,29 @@ export class GameApplication {
             return;
         }
         if (this.screen !== 'companions') this.disposeCompanionPreviews();
+        this.previousRenderSnapshot = undefined;
+        this.renderSnapshot = undefined;
         const model = this.model();
         this.ui.render(model);
         const active = this.ready && this.screen === 'game' && this.canPlayWorld();
         this.input.setEnabled(active);
+        this.damageNumbers.element.hidden = !(active || this.screen === 'defeat' && this.outcomeElapsed < 0.8);
+        this.monsterLabels.element.hidden = !active;
         if (!active) this.input.clear();
+        this.presentQueuedNarrativeCue();
+    }
+    /**
+     * Render-time cue presentation: if no beat is currently displayed and a
+     * queued cue is waiting, present it. `maybePresentNextNarrativeCue`
+     * re-checks the world-readiness gate so a region-transition event fired
+     * by the same committed snapshot defers presentation until the new
+     * region is fully loaded.
+     */
+    private presentQueuedNarrativeCue(): void {
+        if (this.dialogue) return;
+        if (!this.pendingNarrativeCues.length) return;
+        if (!this.canPresentNarrativeCueNow()) return;
+        this.maybePresentNextNarrativeCue();
     }
     private syncStoryState(): void { if (!this.presentation || !this.campaign)
         return; const combat = this.combat.snapshot(); const corruption = Math.max(0, ...combat.actors.map(actor => actor.corruption ?? 0)); const restoration = Object.values(this.campaign.campaign.world.regions).filter(state => state === 'restored').length; this.presentation.setStoryState({ corruption, restoration, bond: this.combat.companions.bond, dominion: this.campaign.campaign.dominionHistory.length }); }
@@ -946,6 +1371,7 @@ export class GameApplication {
         this.combat.syncWorldFacts(this.campaign.worldFacts);
         const facts = Object.fromEntries(Object.entries(this.campaign.worldFacts).filter((entry): entry is [string, boolean] => typeof entry[1] === 'boolean'));
         this.renderer?.syncWorldFacts(facts);
+        if (this.renderer) this.combat.setSceneColliders(this.renderer.getNativeSolidColliders());
     }
     private queueEvents(events: readonly WorldEvent[]): void {
         if (!events.length) return;
@@ -1039,6 +1465,7 @@ export class GameApplication {
         const now = nowMs / 1000;
         const delta = this.previousTime ? Math.min(Math.max(0, now - this.previousTime), STEP * MAX_STEPS) : 0;
         this.previousTime = now;
+        if (this.screen === 'hero-select' && this.heroPreview && !document.hidden) this.heroPreview.update(delta);
         if (this.screen === 'companions' && !document.hidden && delta > 0) {
             for (const [handle, host] of this.companionPreviews) {
                 if (!host.isConnected) {
@@ -1049,8 +1476,26 @@ export class GameApplication {
                 handle.update(delta);
             }
         }
+        if (this.playerOutcome && this.renderer && this.outcomeSnapshot && !document.hidden) {
+            this.outcomeElapsed += delta;
+            this.renderer.updatePlayerOutcome(this.outcomeElapsed);
+            if (this.playerOutcome === 'victory') {
+                this.renderer.updateWaystone(delta, true);
+                if (this.screen === 'game' && this.outcomeElapsed >= 1.2) this.setScreen('stage-complete');
+            }
+            if (this.playerOutcome === 'defeat' && this.outcomeElapsed >= 0.8) {
+                this.damageNumbers.clear();
+                this.damageNumbers.element.hidden = true;
+            } else if (this.playerOutcome === 'defeat') {
+                this.damageNumbers.update(this.outcomeSnapshot.worldClock, this.renderer.camera, this.root.clientWidth, this.root.clientHeight, this.settings.reducedMotion);
+            }
+            this.renderer.render();
+            return;
+        }
         if (this.screen !== 'game' || !this.canPlayWorld() || !this.renderer || !this.campaign || document.hidden) {
             this.accumulator = 0;
+            this.previousRenderSnapshot = undefined;
+            this.renderSnapshot = undefined;
             return;
         }
         this.accumulator = Math.min(this.accumulator + delta, STEP * MAX_STEPS);
@@ -1067,13 +1512,23 @@ export class GameApplication {
         if (this.screen === 'game' && steps === MAX_STEPS) {
             this.accumulator = 0;
         }
-        if (steps > 0 && this.screen === 'game') {
-            const snapshot = this.combat.snapshot();
-            this.renderer.sync(snapshot.actors, snapshot, STEP * steps);
+        if (this.screen === 'game') {
+            const snapshot = this.renderSnapshot ?? this.combat.snapshot();
+            this.renderSnapshot = snapshot;
+            const alpha = this.previousRenderSnapshot ? this.accumulator / STEP : 1;
+            this.renderer.sync(snapshot.actors, snapshot, delta, this.previousRenderSnapshot, alpha);
             const camera = this.renderer.camera;
-            const forward = camera.getWorldDirection(camera.position.clone());
-            this.presentation?.update(snapshot.worldClock, { position: camera.position, forward, up: camera.up });
-            this.ui.render(this.model());
+            camera.getWorldDirection(this.listenerForward);
+            this.presentation?.update(snapshot.worldClock, { position: camera.position, forward: this.listenerForward, up: camera.up });
+            this.presentation?.updateActors(snapshot.actors);
+            this.presentation?.updateCombat(snapshot, alpha);
+            for (const gate of this.renderer.drainGateOpenings()) this.presentation?.effects.impactBurst(gate, 'sap', 2.6);
+            this.ui.setGateContact(this.renderer.closestClosedGateDistance <= 1.5);
+            this.renderer.updateWaystone(delta, snapshot.encounterStatus?.trial?.complete === true);
+            this.damageNumbers.update(snapshot.worldClock, camera, this.root.clientWidth, this.root.clientHeight, this.settings.reducedMotion);
+            this.monsterLabels.update(snapshot, camera, this.root.clientWidth, this.root.clientHeight, id => this.renderer?.resolveSocket(id, 'cast'));
+            this.renderer.render();
+            if (steps > 0) this.ui.render(this.model(snapshot));
         }
     };
     private simulateTick(): void {
@@ -1144,21 +1599,22 @@ export class GameApplication {
             }
         }
         const abilityInteractionActivated = Boolean(requested && requestedDefinition?.inputHint === 'ability' && actions.abilityPressed);
-        const exposed = Boolean(before.boss?.exposed && before.boss.corruption > 0);
         const ability = this.pendingAbility ?? (actions.abilityPressed && !abilityInteractionActivated ? 'contextual' : '');
         this.pendingAbility = null;
         const inputBasis = this.renderer!.getInputBasis();
         const input: CombatInput = {
             tick: this.combat.simulationTick + 1, move: { x: actions.moveX, y: 0, z: actions.moveZ },
-            dodgePressed: actions.dodgePressed, lightPressed: actions.lightPressed, heavyPressed: actions.heavyPressed,
+            dodgePressed: actions.dodgePressed, jumpPressed: actions.jumpPressed, sprintHeld: actions.sprintHeld,
+            lightPressed: actions.lightPressed, heavyPressed: actions.heavyPressed,
             heavyHeld: actions.heavyHeld, heavyReleased: actions.heavyReleased, interactPressed: traversalPressed,
+            rangedPressed: actions.rangedPressed, rangedHeld: actions.rangedHeld, rangedReleased: actions.rangedReleased, ultimatePressed: actions.ultimatePressed,
             interactTargetId: actionInteraction?.targetId ?? requested?.targetId ?? this.interaction?.targetId,
             interactionId: actionInteraction?.interactionId,
             interactionTargetId: actionInteraction?.targetId,
             traversalId: traversalPressed ? route?.id : undefined,
             abilityPressed: ability || undefined,
-            tetherPressed: ability === 'root-tether' || ability === 'contextual' && !exposed,
-            cleansePressed: ability === 'cleanse' || ability === 'contextual' && exposed,
+            tetherPressed: ability === 'root-tether' || ability === 'contextual' && before.skills.some(skill => skill.id === 'root_tether'),
+            cleansePressed: ability === 'cleanse' || ability === 'contextual' && before.skills.some(skill => skill.id === 'cleanse'),
             ferocityPressed: ability === 'ferocity', corruptionPressed: ability === 'corruption',
         };
         this.combat.step(input, STEP, { forward: inputBasis.forward, right: inputBasis.right });
@@ -1166,11 +1622,76 @@ export class GameApplication {
         const cues = this.combat.drainPresentationCues();
         if (cues.length)
             this.presentation?.consumeTick(cues);
-        this.combat.consumeEvents();
+        const events = this.combat.consumeEvents();
+        this.damageNumbers.consume(events);
+        this.presentDamageFeedback(events);
         this.queueEvents(this.combat.consumeWorldEvents());
         const after = this.combat.snapshot();
+        this.previousRenderSnapshot = before;
+        this.renderSnapshot = after;
         const afterPlayer = this.resolvePresentActor(after.actors, 'aren');
         this.interaction = afterPlayer ? this.nearestInteraction(after, afterPlayer.position) : undefined;
+        if (after.player.vitality <= 0) this.presentPlayerOutcome('defeat', after);
+        else this.checkStageArrival(after);
+    }
+    /** Presentation-only vitality-loss feedback: camera shake for Aren and a rim flash on every damaged actor (the red vignette pulses inside DamageNumbers). */
+    private presentDamageFeedback(events: readonly CombatEvent[]): void {
+        if (!this.renderer) return;
+        for (const event of events) {
+            const damage = event.damage;
+            if (!damage || !(damage.amount > 0)) continue;
+            if (damage.targetId !== 'aren') { this.renderer.flashActor(damage.targetId, ACTOR_HIT_RIM, 1.3, 0.18, 'hit'); continue; }
+            this.renderer.addCameraShake(Math.min(0.32, 0.07 + damage.amount * 0.011), 0.3, 20);
+            this.renderer.flashActor('aren', PLAYER_HIT_RIM, 1.6, 0.24, 'hit');
+        }
+    }
+    private destinationHud(snapshot: CombatSnapshot): GameViewModel['hud']['destination'] {
+        const playtest = this.assetPlaytest;
+        if (!playtest || !this.stageGoal || this.stageCompleted || !this.renderer) return undefined;
+        const player = this.resolvePresentActor(snapshot.actors, 'aren');
+        if (!player) return undefined;
+        const trial = snapshot.encounterStatus?.trial;
+        const stage = trial && !trial.complete ? playtest.trialSet.trials[trial.stage - 1] : undefined;
+        const destination = stage?.monsterPosition ?? this.stageGoal.position;
+        const dx = destination.x - player.position.x;
+        const dz = destination.z - player.position.z;
+        const basis = this.renderer.getInputBasis();
+        return {
+            label: stage ? stage.title + ' — Gate Locked' : playtest.stage.exitName + ' — Open',
+            distanceMeters: Math.hypot(dx, dz),
+            bearingDegrees: Math.atan2(dx * basis.right.x + dz * basis.right.z,
+                dx * basis.forward.x + dz * basis.forward.z) * 180 / Math.PI,
+        };
+    }
+    private checkStageArrival(snapshot: CombatSnapshot): void {
+        if (!this.assetPlaytest || !this.stageGoal || this.stageCompleted || this.screen !== 'game'
+            || !this.canPlayWorld() || snapshot.player.vitality <= 0) return;
+        if (!snapshot.encounterStatus?.trial?.complete) return;
+        const player = this.resolvePresentActor(snapshot.actors, 'aren');
+        if (!player || !this.stageGoal.contains(player.position)) return;
+        this.stageCompleted = true;
+        this.playtestProgress.complete(this.assetPlaytest.id);
+        this.combat.finishLocalStage();
+        this.presentPlayerOutcome('victory', snapshot);
+    }
+    private presentPlayerOutcome(outcome: 'victory' | 'defeat', snapshot: CombatSnapshot): void {
+        if (this.playerOutcome || !this.renderer) return;
+        this.playerOutcome = outcome;
+        this.outcomeElapsed = 0;
+        this.outcomeSnapshot = snapshot;
+        this.presentation?.onRegionUnload();
+        if (outcome === 'victory') this.damageNumbers.clear();
+        this.interaction = undefined;
+        if (outcome === 'victory') {
+            this.renderer.beginWaystoneArrival();
+            this.combat.setTimePolicy('paused');
+            this.input.clear();
+            this.input.setEnabled(false);
+        }
+        this.renderer.sync(snapshot.actors, snapshot, 0);
+        this.renderer.startPlayerOutcome(outcome);
+        this.renderer.render();
+        if (outcome === 'defeat') this.setScreen('defeat');
     }
     private resolvePresentActor(actors: readonly ActorSnapshot[], identity: string, allowPossessed = false): ActorSnapshot | undefined {
         const isPresent = (actor: ActorSnapshot) => actor.visible && !actor.downed && (allowPossessed || !actor.possessed);
@@ -1228,7 +1749,7 @@ export class GameApplication {
     }) { return this.combat.nearestTraversal(position); }
     private onBlur = () => { this.input.clear(); if (this.screen === 'game')
         this.setScreen('pause'); };
-    private onVisibility = () => { if (document.hidden) {
+    private onVisibility = () => { this.previousTime = 0; if (document.hidden) {
         this.input.clear();
         if (this.screen === 'game')
             this.setScreen('pause');
@@ -1266,6 +1787,8 @@ export class GameApplication {
         this.unsubscribe?.();
         this.unsubscribe = null;
         this.releaseWorld();
+        this.damageNumbers.dispose();
+        this.monsterLabels.dispose();
         this.saves.close();
         window.removeEventListener('pagehide', this.onPageHide);
         window.removeEventListener('pageshow', this.onPageShow);

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-vara",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "sourceConcept": {
+    "path": "asset-source/generated/actor-vara-concept-02/tripo-out/actor-vara-concept-02-6a7545fa/generated_image.png",
+    "sha256": "2f3ae4196a9f1955d80eca23bbbdbb746cb24a1e62f1a18b1225e24a55519437"
+  },
+  "tasks": [
+    {
+      "taskId": "3e1a3063-220f-4d1b-ac3d-a1f75d4098e1",
+      "type": "text_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Rejected: close crop omitted the full body and feet."
+    },
+    {
+      "taskId": "6a7545fa-15d7-4e98-8494-af7eb145ff0e",
+      "type": "generate_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Selected: entire hornbill, casque, feet and wings visible in a game-style full-body character concept."
+    },
+    {
+      "taskId": "767db347-6aec-46df-bd56-6574691edddd",
+      "type": "generate_multiview_image",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four identity views visually inspected; front, side and back preserve the hornbill scout silhouette, livery and harness."
+    }
+  ],
+  "selectedChainCredits": 15,
+  "allCreativeAttemptsCredits": 20,
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "generate_multiview_image.front_view.jpeg",
+      "sha256": "b8cbb3ec3ccf2f92d1e81b2d2f17a33fb7b5ba036603cd668e98434e4d1ab5f9"
+    },
+    {
+      "role": "left",
+      "path": "generate_multiview_image.left_view.jpeg",
+      "sha256": "40ab12625a35988bf35a004e16ba6c8349beec169bafbd087513dd265a57bba4"
+    },
+    {
+      "role": "back",
+      "path": "generate_multiview_image.back_view.jpeg",
+      "sha256": "9911fea4a968892c0bd5839c727393345313b56b9f4f28f88dda1ad063eb42f8"
+    },
+    {
+      "role": "right",
+      "path": "generate_multiview_image.right_view.jpeg",
+      "sha256": "985eac397cf690a34275043c90de10149a4f1cec9d897486acbd3d9d971ed134"
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "These are AI-generated design references, not verified assets.",
+      "Front view wings nearly span the frame; maintain margin and avoid crop in later review.",
+      "Character model, avian rig validation, motion, scale, collision and approval remain pending."
+    ]
+  }
+}

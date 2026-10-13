@@ -1,0 +1,16 @@
+{
+  "task_id": "11e837df-5508-439c-8146-f8649d2e26bb",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-water-basin-decimate-01/tripo-out/prop-water-basin-decimate-01-11e837df",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-water-basin-decimate-01/tripo-out/prop-water-basin-decimate-01-11e837df/model.glb",
+  "preview": "asset-source/generated/prop-water-basin-decimate-01/tripo-out/prop-water-basin-decimate-01-11e837df/preview.png",
+  "started": "2026-10-11T09:09:34.003Z",
+  "finished": "2026-10-11T09:15:09.428Z"
+}

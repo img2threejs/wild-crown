@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-rainforest-canopy-tree",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "8208e48b-713e-4c52-9a7b-58c4c7260331",
+    "decimate": "26c69d5e-29c4-4390-aede-40526f4c886a"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.23,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-rainforest-canopy-tree-decimate-01/tripo-out/prop-rainforest-canopy-tree-deci-26c69d5e/model.glb",
+      "sha256": "a12eb3145f0a1210fe57bcc8c888564570599351013d4c77987c27fce9e09424"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-rainforest-canopy-tree-runtime-01/prop-rainforest-canopy-tree.glb",
+    "sha256": "db9347f79497ca80bdd4b4abae3cbdfde35668f5d2986d269131d534ef5078bc",
+    "bytes": 2405424,
+    "vertices": 9539,
+    "triangles": 6299,
+    "boundsMin": [
+      -0.45178,
+      -0.48969,
+      -0.47537
+    ],
+    "boundsMax": [
+      0.45673,
+      0.42264,
+      0.47913
+    ],
+    "worldBoundsMin": [
+      -0.45178,
+      -0.48969,
+      -0.47537
+    ],
+    "worldBoundsMax": [
+      0.45673,
+      0.42264,
+      0.47913
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 5619608,
+      "toBytes": 639895
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5044230,
+      "toBytes": 539429
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 22093803,
+      "toBytes": 843196
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 27433,
+      "trianglesAfter": 6300,
+      "relativeError": 0.007686868775635958
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 29885,
+      "trianglesAfter": 27433,
+      "removed": 2452,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 6300,
+      "trianglesAfter": 6299,
+      "removed": 1
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 40510,
+      "verticesAfter": 9539
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

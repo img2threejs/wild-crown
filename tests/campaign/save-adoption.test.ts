@@ -228,8 +228,8 @@ test("Greenwake wildlife checkpoint resolves authoritative combat content despit
   const director = new CampaignDirector({ runId: "greenwake-checkpoint" });
   const checkpoint = await director.captureCheckpoint();
   assert.equal(checkpoint.encounterReset.encounterId, "greenwake-boar");
-  assert.deepEqual(checkpoint.encounterReset.actorIds, ["corrupted-boar"]);
-  await director.processEvent({ type: "encounter-resolved", eventId: "boar", idempotencyKey: "boar", encounterId: "greenwake-boar", resolution: "cleansed", actorIds: ["corrupted-boar"] });
+  assert.deepEqual(checkpoint.encounterReset.actorIds, ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"]);
+  await director.processEvent({ type: "encounter-resolved", eventId: "boar", idempotencyKey: "boar", encounterId: "greenwake-boar", resolution: "cleansed", actorIds: ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"] });
   assert.equal((await director.captureCheckpoint()).encounterReset.encounterId, null);
 });
 

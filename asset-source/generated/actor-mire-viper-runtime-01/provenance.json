@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-mire-viper",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6",
+    "decimate": "80178975-e50c-4619-8743-99a6efa0bac8",
+    "rig": "8efed69c-61f4-4398-9cef-1d6e64adc8a9",
+    "animA": "d20ceb8e-57cc-4a88-9462-2fcf857683e3"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 serpentine (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": 0.8,
+    "maxError": 0.01,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-mire-viper-anim-a-01/tripo-out/actor-mire-viper-anim-a-01-d20ceb8e/model.glb",
+      "sha256": "c9fc07997500dad5decd21ad6cdf663e127befed3902765309dc7b178a60ac98"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper.glb",
+    "sha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
+    "bytes": 7526196,
+    "vertices": 30554,
+    "triangles": 23998,
+    "boundsMin": [
+      -0.23971,
+      0,
+      -0.48901
+    ],
+    "boundsMax": [
+      0.23971,
+      0.49477,
+      0.48901
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:serpentine:march",
+      "durationSeconds": 1.25,
+      "channels": 2
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4145051,
+      "toBytes": 1682856
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5051469,
+      "toBytes": 1749643
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19972698,
+      "toBytes": 2206729
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 29998,
+      "trianglesAfter": 23998,
+      "relativeError": 0.0008095335797406733
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 34358,
+      "verticesAfter": 30554
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

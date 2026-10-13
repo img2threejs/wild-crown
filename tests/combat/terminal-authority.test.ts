@@ -43,7 +43,8 @@ describe('terminal player combat authority', () => {
   });
   it('clears a genuinely buffered follow-up when the player dies during recovery', () => {
     const e = combat(60); e.fixedStep({ ...idle, heavyPressed: true });
-    for (let t = 0; t < 54; t++) e.fixedStep(idle);
+    // The connecting Heavy freezes the player clock, so wait for the actual last-8-ticks buffer window.
+    for (let t = 0; t < 200 && e.snapshotState().actionRecoveryUntil - e.snapshotState().tick > 8; t++) e.fixedStep(idle);
     e.fixedStep({ ...idle, lightPressed: true });
     expect(e.snapshotState().bufferedAction?.action).toBe('light_1');
     for (let t = 0; t < 104; t++) e.fixedStep(idle);

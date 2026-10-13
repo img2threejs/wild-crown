@@ -1,0 +1,16 @@
+{
+  "task_id": "195c80a3-772d-4ec0-ab7c-bee6a7ad4d6c",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-training-post-decimate-01/tripo-out/prop-training-post-decimate-01-195c80a3",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-training-post-decimate-01/tripo-out/prop-training-post-decimate-01-195c80a3/model.glb",
+  "preview": "asset-source/generated/prop-training-post-decimate-01/tripo-out/prop-training-post-decimate-01-195c80a3/preview.png",
+  "started": "2026-10-11T09:09:36.555Z",
+  "finished": "2026-10-11T09:14:56.075Z"
+}
