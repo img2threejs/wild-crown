@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-savanna-acacia",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "d69e7b23-5d6e-4d4f-a202-53a4c3f17dd6"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00959,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-savanna-acacia-model-01/tripo-out/prop-savanna-acacia-model-01-d69e7b23/model.glb",
+      "sha256": "74e49be1aad0a30670662cfa8db61b2b9fe48fff81a13ddf60294438a7cd95ad"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-savanna-acacia-runtime-01/prop-savanna-acacia.glb",
+    "sha256": "a31bf1c7c6637e1ce1252ef6c590d2984a32ee7c4e21b2b9844d3031295c74b2",
+    "bytes": 2245588,
+    "vertices": 15454,
+    "triangles": 18008,
+    "boundsMin": [
+      -0.37301,
+      -0.39521,
+      -0.48947
+    ],
+    "boundsMax": [
+      0.37312,
+      0.39404,
+      0.48877
+    ],
+    "worldBoundsMin": [
+      -0.37301,
+      -0.39521,
+      -0.48947
+    ],
+    "worldBoundsMax": [
+      0.37312,
+      0.39404,
+      0.48877
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 6996928,
+      "toBytes": 806812
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 1563691,
+      "toBytes": 476229
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 3342172,
+      "toBytes": 249752
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1878122,
+      "trianglesAfter": 18008,
+      "relativeError": 0.0016192501643672585
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 987945,
+      "verticesAfter": 15454
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

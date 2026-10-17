@@ -1,0 +1,40 @@
+{
+  "kind": "actual-game-screenshot-montage",
+  "image": "asset-source/generated/hero-pedestal-preview.webp",
+  "sourceViewport": { "width": 1440, "height": 900 },
+  "sourceCrop": { "left": 318, "top": 152, "right": 892, "bottom": 802 },
+  "sources": [
+    "asset-source/generated/hero-pedestal-aren-runtime-01/stage-review.webp",
+    "asset-source/generated/hero-pedestal-yara-runtime-01/stage-review.webp",
+    "asset-source/generated/hero-pedestal-vesper-runtime-01/stage-review.webp",
+    "asset-source/generated/hero-pedestal-sakda-runtime-01/stage-review.webp"
+  ],
+  "observedVerification": {
+    "nativeFloors": "All four loaded with matching selected hero and exactly one hero-preview canvas.",
+    "interactions": "Drag rotation, four native basic-skill previews, arrow-key focus plus Enter activation, stage exit/remount and 1024x768 resize exercised.",
+    "reducedMotion": "Enabled through Settings; remounted native Vesper stage with the reduced-motion UI class. Setting restored after smoke.",
+    "asyncRaces": "Delayed real Yara floor completion did not replace Aren after returning to the already-ready hero. Rapid Vesper-to-Sakda selection showed only actor-sakda-hero and hero-pedestal-sakda.",
+    "release": "Eleven loaded native instances released exactly once with all roots detached; eleven native mesh disposal events observed exactly once. Closing during eleven in-flight loads disposed all eleven late template meshes exactly once, with no preview canvas remaining.",
+    "browserErrors": 0,
+    "typecheck": "tsc -b passed",
+    "bunTests": { "pass": 2141, "fail": 0 },
+    "nodeTests": { "pass": 781, "fail": 0 },
+    "newNativeGroundingTests": { "pass": 4, "fail": 0 },
+    "build": "Vite production build passed; reports chunks larger than 500 kB.",
+    "designDetector": "Changed TypeScript targets: no findings. Canvas quality checked from actual browser screenshots.",
+    "integratedGateSeconds": 462.02
+  },
+  "credits": {
+    "initialBalance": 136040,
+    "concepts": 20,
+    "referenceEdits": 20,
+    "models": 240,
+    "total": 280,
+    "additionalApprovedStep": 260,
+    "finalBalance": 135760,
+    "frozen": 0,
+    "paidRerolls": 0
+  },
+  "evidenceStatus": "blocked",
+  "releaseNote": "Candidate preview only; runtime smoke and screenshots do not promote these assets to production-release verification."
+}

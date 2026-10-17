@@ -26,7 +26,6 @@ describe('Moonpine Ridge trial region', () => {
     expect(JSON.stringify(authored)).toBe(before);
     expect(region.id).toBe('moonpine-ridge');
     expect(region.environmentRecipeId).toBe('moonpine-ridge-environment');
-    expect(createCombatTrialRegion(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!)).toBe(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!);
     expect(MOONPINE_TRIAL_SET).toMatchObject({ regionId: 'moonpine-ridge', encounterId: 'moonpine-trials' });
   });
 

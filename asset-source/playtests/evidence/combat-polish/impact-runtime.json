@@ -1,0 +1,94 @@
+{
+  "vesper": {
+    "tick": 19,
+    "worldTick": 19,
+    "hitStop": {
+      "remainingTicks": 3,
+      "strength": 0.42857142857142855
+    },
+    "damage": 12,
+    "monster": {
+      "id": "corrupted-boar",
+      "archetypeId": "corrupted-boar",
+      "species": "boar",
+      "allegiance": "hostile",
+      "position": {
+        "x": 6.008513576278938,
+        "y": 0,
+        "z": -3.140296755131043
+      },
+      "velocity": {
+        "x": 0.35025669437056095,
+        "y": 0,
+        "z": -1.5539855383677637
+      },
+      "facing": {
+        "x": 0.21987662974065864,
+        "y": 0,
+        "z": -0.975527686790021
+      },
+      "actionId": "wild-crown:actor-idle",
+      "phase": "idle",
+      "normalizedTime": 0,
+      "vitality": 99988,
+      "maxVitality": 100000,
+      "ferocity": 88,
+      "corruption": 60,
+      "renderVariantId": "actor-ember-boar",
+      "sockets": {
+        "root": {
+          "x": 6.008513576278938,
+          "y": 0,
+          "z": -3.140296755131043
+        },
+        "head": {
+          "x": 6.008513576278938,
+          "y": 1.5,
+          "z": -3.140296755131043
+        }
+      },
+      "interactionRequirements": [],
+      "visible": true,
+      "downed": false,
+      "possessed": false,
+      "weakPointExposed": false,
+      "heroMarks": [
+        {
+          "kind": "death-stack",
+          "stacks": 1,
+          "remainingTicks": 180
+        }
+      ],
+      "yawRate": -3.5,
+      "hitReact": 0
+    },
+    "nativeAction": "monster-walk",
+    "overlayShare": 0.85,
+    "overlayKeys": [
+      "action",
+      "duration",
+      "loops",
+      "phase",
+      "rate",
+      "value",
+      "from",
+      "to"
+    ],
+    "alphaDraws": 41,
+    "additiveDraws": 41,
+    "overlayClip": "monster-hurt",
+    "overlayTime": 0.08399999856948852
+  },
+  "sakda": {
+    "tick": 24,
+    "damage": 20,
+    "hitStop": {
+      "remainingTicks": 6,
+      "strength": 0.8571428571428571
+    },
+    "hero": "sakda",
+    "overlayClip": "monster-hurt",
+    "overlayShare": 0.85,
+    "action": "sakda-tempest"
+  }
+}

@@ -9,8 +9,8 @@
   },
   "output": {
     "path": "asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
-    "sha256": "a5f4ac093f79968dda96e0cd1d0f7209b0f34bfd869d2ddfb176d049467e8c26",
-    "bytes": 7160728
+    "sha256": "362813aeead1086dbc505324ac07a6231e18dc7dde481c461ad52b096e4ca5d9",
+    "bytes": 7245060
   },
   "castSocketBone": "tripo::Head_0",
   "inPlaceAnchorBone": "tripo::Spine_0",
@@ -251,6 +251,131 @@
         ],
         "peakStrikeSpeedUnitsPerSecond": 1.7,
         "peakStrikeTime": 0.017
+      }
+    },
+    "monster-death": {
+      "clip": "monster-death",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "flailEnd": 0.5,
+        "contact": 0.7,
+        "rest": 0.84
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": 0,
+          "final": 0
+        },
+        "heldFromTime": 0.875,
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0307,
+        "maxRootBoneTravelUnits": 0.3002,
+        "hipHeightRangeUnits": [
+          -0.2753,
+          0.0168
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 4.208,
+        "peakStrikeTime": 0.167
+      }
+    },
+    "monster-spawn": {
+      "clip": "monster-spawn",
+      "produced": "authored",
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "risen": 0.4,
+        "alert": 0.54,
+        "shake": 0.7,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.01,
+          "final": -0.0061
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0.0088,
+        "maxMeshCentroidWanderUnits": 0.0273,
+        "maxRootBoneTravelUnits": 0.0615,
+        "hipHeightRangeUnits": [
+          -0.0742,
+          0.0446
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 4.14,
+        "peakStrikeTime": 0.643
+      }
+    },
+    "monster-knockdown": {
+      "clip": "monster-knockdown",
+      "produced": "authored",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "flailEnd": 0.32,
+        "contact": 0.45,
+        "rest": 0.62
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": 0,
+          "final": 0
+        },
+        "heldFromTime": 0.611,
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0434,
+        "maxRootBoneTravelUnits": 0.3007,
+        "hipHeightRangeUnits": [
+          -0.2592,
+          0.0137
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 5.197,
+        "peakStrikeTime": 0.167
+      }
+    },
+    "monster-getup": {
+      "clip": "monster-getup",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "wing": 0.18,
+        "sternal": 0.34,
+        "crouch": 0.62,
+        "stand": 0.86,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.0061,
+          "final": -0.0061
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0.0234,
+        "maxMeshCentroidWanderUnits": 0.0523,
+        "maxRootBoneTravelUnits": 0.3006,
+        "hipHeightRangeUnits": [
+          -0.2064,
+          0.049
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.898,
+        "peakStrikeTime": 0.25
       }
     },
     "monster-tail": {

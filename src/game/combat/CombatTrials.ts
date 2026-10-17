@@ -30,7 +30,7 @@ export const TRIAL_GATE_ASSET_ID = 'prop-greenwake-root-gate';
 export const GREENWAKE_COMBAT_TRIALS: readonly CombatTrialDefinition[] = [
   // Gate 1 seals the root ramp (6..13 m wide, rising 0.2 m per metre) that is the start basin's only exit.
   { id: 'ember-crossing', title: 'Ember Crossing', monsterId: 'corrupted-boar', monsterName: 'Ember Boar', monsterAssetId: 'actor-ember-boar',
-    monsterPosition: { x: 6, y: 0, z: -3 }, arena: { center: { x: 8, y: 0, z: -3 }, radius: 8 },
+    monsterPosition: { x: 6, y: 0, z: -3 }, arena: { center: { x: 8, y: 0, z: -4 }, radius: 8 },
     attackIds: ['boar-charge', 'boar-ember-lance', 'boar-gale-scythe'],
     gate: gate('ember-crossing', 9.5, 11, true, 1.28, 1.52) },
   // Gate 2 crosses the 7 m north-south corridor below the Frost Hollow pocket.

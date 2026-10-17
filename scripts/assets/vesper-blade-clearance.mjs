@@ -83,6 +83,27 @@ export function segmentSegmentDistance(p, q, a, b) {
   return w.addScaledVector(u, s).addScaledVector(v, -t).length();
 }
 
+const GUARD_SAMPLES = 16, guardU = new Vector3(), guardV = new Vector3(), guardPoint = new Vector3(), guardScratch = new Vector3();
+/**
+ * Clearance (rig units) of the tsuba disc to a capsule `a`–`b` of `radius`: rim and half-radius rings on both faces of the guard.
+ * `seat` = the grip point and `axis` = the unit blade axis, both in the capsule's space.
+ */
+export function guardClearance(seat, axis, a, b, radius, katana = KATANA_GRIP, scale = 1.7) {
+  guardU.set(0, 1, 0).cross(axis);
+  if (guardU.lengthSq() < 1e-6) guardU.set(1, 0, 0).cross(axis);
+  guardU.normalize(); guardV.copy(axis).cross(guardU);
+  let min = Infinity;
+  for (const along of katana.guardFromPommel) {
+    const face = (along - katana.gripFromPommel) / scale;
+    for (const ring of [0.5, 1]) for (let i = 0; i < GUARD_SAMPLES; i += 1) {
+      const angle = i / GUARD_SAMPLES * 2 * Math.PI, r = ring * katana.guardRadius / scale;
+      guardPoint.copy(seat).addScaledVector(axis, face).addScaledVector(guardU, Math.cos(angle) * r).addScaledVector(guardV, Math.sin(angle) * r);
+      min = Math.min(min, segmentDistance(guardPoint, a, b, guardScratch) - radius);
+    }
+  }
+  return min;
+}
+
 /**
  * Minimum shaft/body-proxy clearance over keys and eight joint-slerp subdivisions per key interval.
  * `grip` = `{ s, palm }` in hand-local rig units; katana dimensions default to the runtime authority in metres.
@@ -115,6 +136,11 @@ export function bladeClearance(rig, frames, count, capsules, grip, katana = KATA
         if (hi < lo) continue;
         const clearance = segmentSegmentDistance(at(lo), at(hi), a, b) - capsule.radius;
         if (clearance < frameMin) { frameMin = clearance; frameBone = capsule.name; }
+      }
+      // The sword arm's own capsules wrap the fist; the guard is checked against every other body part.
+      if (near === undefined) {
+        const guard = guardClearance(palm, axis, a, b, capsule.radius, katana, scale);
+        if (guard < frameMin) { frameMin = guard; frameBone = capsule.name; }
       }
     }
     result.perFrame.push(frameMin); result.bones.push(frameBone);

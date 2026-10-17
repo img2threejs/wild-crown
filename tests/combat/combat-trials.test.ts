@@ -4,6 +4,7 @@ import { REGIONS } from '../../src/content/campaign.js';
 import { CombatEngine, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
 import { moveAerialCircle, moveCircle, vec } from '../../src/game/combat/geometry.js';
+import { CHAIN_LATE_TICKS, LIGHT_STEPS } from '../../src/game/combat/PlayerSkills.js';
 
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 function setup(playtest: AssetPlaytest): CombatEngine {
@@ -30,7 +31,7 @@ function facingMonster(engine: CombatEngine, playtest: AssetPlaytest, vitality: 
 }
 function strike(engine: CombatEngine): void {
   engine.fixedStep({ ...idle, lightPressed: true });
-  for (let tick = 0; tick < 60; tick++) engine.fixedStep(idle);
+  for (let tick = 0; tick < LIGHT_STEPS[0]!.ticks + CHAIN_LATE_TICKS + LIGHT_STEPS[0]!.hitStopTicks + 1; tick++) engine.fixedStep(idle);
 }
 
 describe('monster victory and physical local stage gates', () => {

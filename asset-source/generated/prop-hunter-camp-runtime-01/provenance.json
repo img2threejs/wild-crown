@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-hunter-camp",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "0ec9c82a-5668-4be3-8f42-da3f8fb3c2c6",
+    "decimate": "ed933be1-6765-4f07-8162-31bfb391f9a1"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.009,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1536
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-hunter-camp-model-01/tripo-out/prop-hunter-camp-model-01-0ec9c82a/model.glb",
+      "sha256": "f3e6e13f6206e7ce54c2d3122f459cc075e25c345f16d05249a1495422a8a435"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-hunter-camp-runtime-01/prop-hunter-camp.glb",
+    "sha256": "43592898cc2a3abf8032e52fe68b7842e1e73e6ef1a96cf125d5966d6a00d72d",
+    "bytes": 2185864,
+    "vertices": 14061,
+    "triangles": 16744,
+    "boundsMin": [
+      -0.49069,
+      -0.24715,
+      -0.49005
+    ],
+    "boundsMax": [
+      0.48983,
+      0.24761,
+      0.48874
+    ],
+    "worldBoundsMin": [
+      -0.49069,
+      -0.24715,
+      -0.49005
+    ],
+    "worldBoundsMax": [
+      0.48983,
+      0.24761,
+      0.48874
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 9496047,
+      "toBytes": 722270
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 2152654,
+      "toBytes": 459402
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 4759106,
+      "toBytes": 351153
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1861310,
+      "trianglesAfter": 16744,
+      "relativeError": 0.0024412916973233223
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 996340,
+      "verticesAfter": 14061
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

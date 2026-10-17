@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-vara-harpy",
+  "generator": "scripts/assets/author-creature-clips.mjs",
+  "input": {
+    "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy.glb",
+    "sha256": "9a389f59842619e8557ca58d68de69d43562bb40938d6eae02d3d67cab2e75e7",
+    "bytes": 6832348
+  },
+  "output": {
+    "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+    "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60",
+    "bytes": 7220152
+  },
+  "castSocketBone": "tripo::Head_2",
+  "inPlaceAnchorBone": "tripo::Spine_0",
+  "rootBone": "tripo::Root",
+  "skinCleanup": {
+    "verticesCleaned": 1023,
+    "influencesRemoved": 1040,
+    "ratio": 5,
+    "floor": 0.03,
+    "minDistance": 0.2,
+    "groundAnchoredVertices": 0,
+    "groundLevel": 0.03,
+    "groundDistance": 0.12
+  },
+  "body": {
+    "heightUnits": 0.5212,
+    "boundsMin": [
+      -0.2356,
+      0,
+      -0.4914
+    ],
+    "boundsMax": [
+      0.2356,
+      0.5212,
+      0.4914
+    ]
+  },
+  "fps": 30,
+  "slots": {
+    "vara:idle": {
+      "clip": "vara:idle",
+      "produced": "authored",
+      "durationSeconds": 3,
+      "frames": 91,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0033,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.005,
+          0.005
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.222,
+        "peakStrikeTime": 0.544,
+        "loopClosureStepDegrees": 0.956,
+        "maxInteriorStepDegrees": 0.971
+      }
+    },
+    "vara:walk": {
+      "clip": "vara:walk",
+      "produced": "authored",
+      "durationSeconds": 0.8,
+      "frames": 25,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0075,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.008,
+          0.008
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.996,
+        "peakStrikeTime": 0.542,
+        "loopClosureStepDegrees": 5.935,
+        "maxInteriorStepDegrees": 5.934
+      }
+    },
+    "vara:takeoff": {
+      "clip": "vara:takeoff",
+      "produced": "authored",
+      "durationSeconds": 0.6,
+      "frames": 19,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.22,
+        "launch": 0.28,
+        "peak": 0.55,
+        "tuckDone": 0.72
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0273,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0208,
+          0.125
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 4.07,
+        "peakStrikeTime": 0.333
+      }
+    },
+    "vara:fly": {
+      "clip": "vara:fly",
+      "produced": "authored",
+      "durationSeconds": 0.7,
+      "frames": 22,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0124,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.005,
+          0.005
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 7.056,
+        "peakStrikeTime": 0.238,
+        "loopClosureStepDegrees": 19.301,
+        "maxInteriorStepDegrees": 38.584
+      }
+    },
+    "vara:hover": {
+      "clip": "vara:hover",
+      "produced": "authored",
+      "durationSeconds": 0.9,
+      "frames": 28,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.008,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.01,
+          0.01
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 4.278,
+        "peakStrikeTime": 0.333,
+        "loopClosureStepDegrees": 17.18,
+        "maxInteriorStepDegrees": 25.263
+      }
+    },
+    "vara:land": {
+      "clip": "vara:land",
+      "produced": "authored",
+      "durationSeconds": 0.7,
+      "frames": 22,
+      "loop": false,
+      "semanticKeyTimes": {
+        "flarePeak": 0.3,
+        "touchdown": 0.55,
+        "settle": 0.85
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0235,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0156,
+          0.0312
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.585,
+        "peakStrikeTime": 0.048
+      }
+    },
+    "vara:dive": {
+      "clip": "vara:dive",
+      "produced": "authored",
+      "durationSeconds": 0.4,
+      "frames": 13,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.18,
+        "stoop": 0.4,
+        "talons": 0.7,
+        "recover": 0.9
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0614,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.031,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.585,
+        "peakStrikeTime": 0.417
+      }
+    },
+    "vara:strike": {
+      "clip": "vara:strike",
+      "produced": "authored",
+      "durationSeconds": 0.5667,
+      "frames": 18,
+      "loop": false,
+      "semanticKeyTimes": {
+        "mantlePeak": 0.35,
+        "contact": 0.5,
+        "recover": 0.78
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0141,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0207,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.664,
+        "peakStrikeTime": 0.059
+      }
+    },
+    "vara-sky-mark": {
+      "clip": "vara-sky-mark",
+      "produced": "authored",
+      "durationSeconds": 0.8,
+      "frames": 25,
+      "loop": false,
+      "semanticKeyTimes": {
+        "throwUp": 0.3,
+        "hold": 0.6
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0212,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0057,
+          0.0057
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.877,
+        "peakStrikeTime": 0.958
+      }
+    },
+    "vara:hurt": {
+      "clip": "vara:hurt",
+      "produced": "authored",
+      "durationSeconds": 0.5,
+      "frames": 16,
+      "loop": false,
+      "semanticKeyTimes": {
+        "flinch": 0.18,
+        "settle": 0.4
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0117,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0119,
+          0.0048
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.903,
+        "peakStrikeTime": 0.067
+      }
+    },
+    "vara-sky-survey": {
+      "clip": "vara-sky-survey",
+      "produced": "authored",
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": false,
+      "semanticKeyTimes": {
+        "scanLeft": 0.3,
+        "scanRight": 0.65,
+        "reveal": 0.9
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0132,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.41,
+        "peakStrikeTime": 0.933
+      }
+    }
+  }
+}

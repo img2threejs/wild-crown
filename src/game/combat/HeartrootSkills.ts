@@ -1,15 +1,15 @@
 import type { PlayerSkillId } from './PlayerSkills.js';
 
-/** Uses the shared player action clocks, mana costs, charge thresholds and cancellation rules. */
+/** Action/contact offsets share the simulation clock; projectile lifetime and mana costs are independent. */
 export const HEARTROOT = {
   thornDamage: 16, twinDamage: 12, seedDamage: 32, seedRadius: 2.4,
   projectileSpeed: 14, projectileTicks: 90,
-  spikeRange: 9, spikeWidth: 1.5, spikeDamage: 37, spikeAt: 20, spikeTicks: 63,
-  eruptionRange: 12, eruptionRadius: 3, eruptionDamage: 55, eruptionAt: 36, eruptionTicks: 76,
+  spikeRange: 9, spikeWidth: 1.5, spikeDamage: 37, spikeAt: 30, spikeTicks: 95,
+  eruptionRange: 12, eruptionRadius: 3, eruptionDamage: 55, eruptionAt: 54, eruptionTicks: 114,
   lanceRange: 14, lanceWidth: 0.65, lanceDamage: 40,
-  stormLaunches: [12, 18, 24, 30, 36, 42] as readonly number[], stormDamage: 13,
-  bloomTicks: 156, bloomRadius: 8, meteorFrom: 30, meteorInterval: 10, meteorCount: 9,
-  meteorRadius: 1.8, meteorDamage: 13, bloomPulseAt: 132, bloomPulseDamage: 58,
+  stormTicks: 90, stormLockTicks: 75, stormLaunches: [18, 27, 36, 45, 54, 63] as readonly number[], stormDamage: 13,
+  bloomTicks: 234, bloomRadius: 8, meteorFrom: 45, meteorInterval: 15, meteorCount: 9,
+  meteorRadius: 1.8, meteorDamage: 13, bloomPulseAt: 198, bloomPulseDamage: 58,
 } as const;
 
 export const HEARTROOT_LABELS: Partial<Record<PlayerSkillId, string>> = {

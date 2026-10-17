@@ -196,7 +196,7 @@
     "telegraph_intensity_description": "Adjust the visibility of attack warnings on the ground and around enemies.",
     "offscreen_warning_strength": "Off-Screen Warning Strength",
     "offscreen_warning_strength_description": "Adjust how strongly incoming attacks outside the camera view are signaled.",
-    "camera_shake": "Camera Shake",
+    "camera_shake": "Reduced Camera Shake",
     "camera_shake_description": "Reduce camera shake during impacts and large attacks.",
     "motion_blur": "Motion Blur",
     "motion_blur_description": "Reduce blur during movement and combat.",

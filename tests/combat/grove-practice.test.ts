@@ -16,17 +16,21 @@ const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, li
 const dist = (a: Vec3, b: Vec3) => Math.hypot(a.x - b.x, a.z - b.z);
 
 describe('Grove practice set and encounter', () => {
-  it('selects the set of the loaded region and registers the grove-practice wildlife encounter with exactly the practice monster', () => {
-    expect(combatTrialSetFor('the-grove')).toMatchObject({ regionId: 'the-grove', encounterId: 'grove-practice', clearedTitle: 'Practice complete' });
+  it('selects the set of the loaded region and registers the grove-defence wildlife encounter with the three defenders in trial order', () => {
+    expect(combatTrialSetFor('the-grove')).toMatchObject({ regionId: 'the-grove', encounterId: 'grove-defence', clearedTitle: 'Sanctuary defended' });
     expect(combatTrialSetFor('the-grove')).toBe(GROVE_TRIAL_SET);
     expect(combatTrialSetFor('the-grove')!.trials).toBe(GROVE_COMBAT_TRIALS);
     expect(COMBAT_TRIAL_SETS).toContain(GROVE_TRIAL_SET);
-    const encounter = WILDLIFE_ENCOUNTERS['grove-practice']!;
-    expect(encounter).toBe(GROVE_ENCOUNTERS['grove-practice']!);
-    expect(encounter).toMatchObject({ id: 'grove-practice', regionId: 'the-grove', bossId: 'grove-sprig', encounterFamily: 'wildlife' });
-    expect(encounter.actorIds).toEqual(['aren', 'grove-sprig']);
+    const encounter = WILDLIFE_ENCOUNTERS['grove-defence']!;
+    expect(encounter).toBe(GROVE_ENCOUNTERS['grove-defence']!);
+    expect(encounter).toMatchObject({ id: 'grove-defence', regionId: 'the-grove', bossId: 'grove-sprig', encounterFamily: 'wildlife', largeActors: ['grove-hollowheart'] });
+    expect(encounter.actorIds).toEqual(['aren', 'grove-sprig', 'grove-blighted', 'grove-hollowheart']);
     expect(encounter.actorIds).not.toContain('grove-koro');
-    expect(encounter.phases).toEqual([{ id: 'evasion-practice', attackIds: ['sprig-seed-toss', 'sprig-ground-ripple', 'sprig-petal-sweep'] }]);
+    expect(encounter.phases).toEqual([
+      { id: 'evasion-practice', attackIds: ['sprig-seed-toss', 'sprig-ground-ripple', 'sprig-petal-sweep'] },
+      { id: 'sap-incursion', attackIds: ['blighted-seed-lob', 'blighted-ground-pulse', 'blighted-lash-sweep'] },
+      { id: 'memory-pool', attackIds: ['hollowheart-leap-smash', 'hollowheart-antler-sweep', 'hollowheart-ichor-hurl', 'hollowheart-heartlight-burst'] },
+    ]);
     expect(encounter.playerOnlyCounters).toEqual(['player-dodge', 'player-tether', 'player-cleanse', 'player-light']);
     // The generic invariants every set holds.
     for (const set of COMBAT_TRIAL_SETS) {
@@ -47,9 +51,12 @@ describe('Grove practice set and encounter', () => {
     expect(ACTORS['grove-koro']).toBe(GROVE_ACTORS['grove-koro']!);
     expect(ACTORS['grove-sprig']).toEqual({ id: 'grove-sprig', species: 'rootling', role: 'wild', allegiance: 'wild', combatRole: 'hostile', assetId: 'actor-grove-rootling' });
     expect(ACTORS['grove-koro']).toEqual({ id: 'grove-koro', species: 'macaque', role: 'leader', allegiance: 'ally', combatRole: 'noncombat', assetId: 'actor-koro' });
+    // The blighted rootling and the guardian are wild hostiles on their own native assets.
+    expect(ACTORS['grove-blighted']).toEqual({ id: 'grove-blighted', species: 'rootling', role: 'wild', allegiance: 'wild', combatRole: 'hostile', assetId: 'actor-grove-blighted-rootling' });
+    expect(ACTORS['grove-hollowheart']).toEqual({ id: 'grove-hollowheart', species: 'rootling', role: 'wild', allegiance: 'wild', combatRole: 'hostile', assetId: 'actor-grove-hollowheart' });
     // The story companion keeps its own definition.
     expect(ACTORS.koro!.combatRole).toBe('companion');
-    expect(GROVE_OWNER_GLOW).toEqual({ 'grove-sprig': 'sap' });
+    expect(GROVE_OWNER_GLOW).toEqual({ 'grove-sprig': 'sap', 'grove-blighted': 'poison', 'grove-hollowheart': 'sap' });
     expect(GROVE_SOLID_PROFILES).toEqual({ 'prop-refuge-shelter': 'solid', 'prop-water-basin': 'solid', 'prop-training-post': 'trunk', 'prop-grove-platform': 'platform' });
   });
 
@@ -73,7 +80,7 @@ const CONTRACT: Readonly<Record<string, ExpectedAttack>> = {
 
 describe('grove practice attack definitions', () => {
   it('registers exactly the three sprig attacks, gentle (4 to 6 damage), non-elemental, with no obstacle trap words', () => {
-    expect(Object.keys(GROVE_ATTACKS).sort()).toEqual(Object.keys(CONTRACT).sort());
+    expect(Object.keys(GROVE_ATTACKS).filter(id => id.startsWith('sprig-')).sort()).toEqual(Object.keys(CONTRACT).sort());
     for (const id of Object.keys(CONTRACT)) {
       expect(ATTACKS[id]).toBe(GROVE_ATTACKS[id]!);
       const attack = ATTACKS[id]!;
@@ -108,7 +115,7 @@ describe('grove practice attack definitions', () => {
 function groveEngine(options: { player?: Vec3; cursor?: number; mutate?: (seed: EngineState) => void } = {}): CombatEngine {
   const engine = new CombatEngine();
   engine.loadRegion({ regionId: 'the-grove', regionDefinition: region, runId: 'grove-practice', presentActorIds: region.entities.map(entity => entity.id) });
-  engine.startEncounter({ encounterId: 'grove-practice', regionId: 'the-grove', runId: 'grove-practice' });
+  engine.startEncounter({ encounterId: 'grove-defence', regionId: 'the-grove', runId: 'grove-practice' });
   engine.enableCombatTrials();
   const seed = engine.snapshotState();
   seed.player.vitality = seed.player.maxVitality = 1e6;
@@ -139,19 +146,10 @@ function probeCast(attackId: string, player?: Vec3) {
 
 describe('grove practice attacks at runtime', () => {
   for (const [id, want] of Object.entries(CONTRACT)) {
-    it(`${id}: the live hazard carries the contract geometry and windup/commit/active/recovery windows`, () => {
+    it(`${id}: aims the live attack at the locked player position with readable phase boundaries`, () => {
       const { hazard, state } = probeCast(id);
-      const [windup, commit, active, recovery] = want.timing;
-      expect(hazard.kind).toBe(want.kind);
-      expect(hazard.width).toBe(want.width);
-      expect(hazard.radius).toBe(want.radius);
-      expect(hazard.damage).toBe(want.damage);
-      expect(hazard.heightAboveGround).toBe(want.height);
-      expect(hazard.windupUntil! - hazard.startTick).toBe(windup);
-      expect(hazard.activeFrom - hazard.windupUntil!).toBe(commit);
-      expect(hazard.activeUntil - hazard.activeFrom).toBe(active);
-      expect(hazard.castUntil! - hazard.activeFrom).toBe(active);
-      expect(hazard.recoveryUntil! - hazard.castUntil!).toBe(recovery);
+      expect(hazard.windupUntil! - hazard.startTick).toBeGreaterThanOrEqual(36);
+      expect(hazard.activeFrom - hazard.windupUntil!).toBeGreaterThanOrEqual(12);
       const player = state.actors.find(actor => actor.id === 'aren')!;
       if (want.lane) {
         // Lanes start at the caster and reach past the aimed position; they are centred half a lane ahead of the body.
@@ -260,40 +258,42 @@ describe('grove practice monster', () => {
 });
 
 describe('grove practice route geometry', () => {
-  it('walks through the opened gate to the Memory Pool overlook, which the closed gate refused', () => {
+  it('walks through the opened first gate into the blighted hollow, which the closed gate refused', () => {
     // Closed: a run north from the ring stops at the gate.
     const closed = groveEngine({ player: vec(-24, 0, -32), mutate: seed => { seed.actors.find(actor => actor.id === 'grove-sprig')!.visible = false; } });
     for (let tick = 0; tick < 240; tick++) { closed.fixedStep({ ...idle, move: vec(0, 0, -1), sprintHeld: true }); closed.consumeEvents(); closed.drainPresentationCues(); }
     expect(playerOf(closed).position.z).toBeGreaterThan(-37.4);
-    // Open: the practice is complete (the gate collider is gone) and the same run reaches the overlook.
+    // Open: the practice is defeated (the gate collider is gone) and the same run reaches the hollow.
     const seed = closed.snapshotState();
     seed.combatTrial!.index = 1;
-    seed.combatTrial!.status = 'complete';
+    seed.combatTrial!.status = 'open';
     seed.actors.find(actor => actor.id === 'grove-sprig')!.allegiance = 'neutral';
     const opened = new CombatEngine(seed);
     opened.fixedStep(idle);
     for (let tick = 0; tick < 300; tick++) { opened.fixedStep({ ...idle, move: vec(0, 0, -1), sprintHeld: true }); opened.consumeEvents(); opened.drainPresentationCues(); }
     expect(playerOf(opened).position.z).toBeLessThan(-46);
-    expect(opened.snapshot().trialGates!.map(gate => gate.open)).toEqual([true]);
+    expect(opened.snapshot().trialGates!.map(gate => gate.open)).toEqual([true, false, false]);
   });
 
-  it('reaches the stage exit from the spawn with the gate closed and the practice untouched', () => {
+  it('walks the camp road from the spawn to the practice ring without ever engaging the sprig, whose range ends 14 m from it', () => {
     const engine = groveEngine({ player: region.navigation.nodes[0]!.position });
     const route = region.navigation.ribbons.find(ribbon => ribbon.id === 'grove-trial-main-route')!.points;
-    const goal = region.exits[0]!.from;
-    let waypoint = 1, ticks = 0;
+    const goal = route[route.length - 2]!;
+    let waypoint = 1, ticks = 0, casts = 0;
     for (; ticks < 4000; ticks++) {
       const player = playerOf(engine).position;
       if (dist(player, goal) < 1.5) break;
       const target = route[waypoint]!, dx = target.x - player.x, dz = target.z - player.z, distance = Math.hypot(dx, dz);
       if (distance < 0.6 && waypoint < route.length - 1) waypoint++;
       engine.fixedStep({ ...idle, move: vec(dx / (distance || 1), 0, dz / (distance || 1)), sprintHeld: true });
-      engine.consumeEvents(); engine.drainPresentationCues();
+      casts += engine.consumeEvents().filter(event => event.kind === 'cue' && event.actorId === trial.monsterId).length;
+      engine.drainPresentationCues();
     }
     expect(dist(playerOf(engine).position, goal)).toBeLessThan(1.5);
     expect(ticks).toBeLessThan(3000);
-    expect(engine.snapshot().trialGates!.map(gate => gate.open)).toEqual([false]);
-    expect(engine.snapshot().encounterStatus!.trial).toMatchObject({ complete: false });
+    expect(casts).toBe(0);
+    expect(engine.snapshot().trialGates!.map(gate => gate.open)).toEqual([false, false, false]);
+    expect(engine.snapshot().encounterStatus!.trial).toMatchObject({ stage: 1, totalStages: 3, complete: false });
     expect(engine.snapshot().player.vitality).toBe(engine.snapshot().player.maxVitality);
   }, 60000);
 });

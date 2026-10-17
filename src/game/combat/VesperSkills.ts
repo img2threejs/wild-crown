@@ -1,8 +1,12 @@
+import { HERO_COMBAT } from './HeroProfiles.js';
 import type { PlayerSkillId } from './PlayerSkills.js';
+import { hit, type HitSpec } from './reactions.js';
 
 /**
  * Vesper, the Moonshade Blade (`umbral`). Uses the shared mana costs, hold thresholds and Instinct of PlayerSkills.
  * Every tick count is in simulation ticks at 60 Hz from the first tick of the skill; `*At` fields are the tick the effect lands.
+ * Offensive durations and phase offsets share Vesper's attack rate, preserving normalized contact frames.
+ * Cooldowns, hold thresholds, defensive actions and status lifetimes retain their own balance windows.
  */
 export interface VesperIaiStep {
   readonly ticks: number;
@@ -14,6 +18,8 @@ export interface VesperIaiStep {
   readonly arcDegrees: number;
 }
 
+const attackTicks = (ticks: number): number => Math.round(ticks / HERO_COMBAT.vesper.attackPlaybackRate);
+
 export const VESPER = {
   /** Passive Death Mark: three hits within the window mark the target; the next hit consumes it. */
   deathMark: { stacksRequired: 3, stackWindowTicks: 180, markTicks: 240, executionDamage: 25, executionHitStopTicks: 6 },
@@ -22,33 +28,49 @@ export const VESPER = {
   /** Moonlit Iai chain; step 4 "Crescent Rift" dashes through the target (collision-safe) and is untouchable while dashing. */
   iai: {
     steps: [
-      { ticks: 18, activeAt: 6, damage: 12, reach: 2.6, arcDegrees: 140 },
-      { ticks: 18, activeAt: 6, damage: 12, reach: 2.6, arcDegrees: 140 },
-      { ticks: 22, activeAt: 8, damage: 15, reach: 2.8, arcDegrees: 140 },
-      { ticks: 30, activeAt: 10, damage: 22, reach: 2.8, arcDegrees: 140 },
+      { ticks: attackTicks(27), activeAt: attackTicks(9), damage: 12, reach: 2.6, arcDegrees: 140 },
+      { ticks: attackTicks(27), activeAt: attackTicks(9), damage: 12, reach: 2.6, arcDegrees: 140 },
+      { ticks: attackTicks(33), activeAt: attackTicks(12), damage: 15, reach: 2.8, arcDegrees: 140 },
+      { ticks: attackTicks(45), activeAt: attackTicks(15), damage: 22, reach: 2.8, arcDegrees: 140 },
     ] as readonly VesperIaiStep[],
-    chainEarlyTicks: 4, chainLateTicks: 18,
-    riftDashFrom: 6, riftDashTo: 14, riftDashDistance: 4.5,
+    chainEarlyTicks: attackTicks(6), chainLateTicks: attackTicks(27),
+    riftDashFrom: attackTicks(9), riftDashTo: attackTicks(21), riftDashDistance: 4.5,
   },
-  shadowStep: { ticks: 26, blinkAt: 4, strikeAt: 8, blinkRange: 9, fallbackDistance: 6, damage: 26 },
+  shadowStep: { ticks: attackTicks(39), blinkAt: attackTicks(6), strikeAt: attackTicks(12), blinkRange: 9, fallbackDistance: 6, damage: 26 },
   thousandCuts: {
-    ticks: 72, strikeAt: [8, 18, 28, 38, 48, 58] as readonly number[], strikeDamage: 9,
-    finisherAt: 66, finisherDamage: 20, range: 8,
+    ticks: attackTicks(108), strikeAt: [12, 27, 42, 57, 72, 87].map(attackTicks) as readonly number[], strikeDamage: 9,
+    finisherAt: attackTicks(99), finisherDamage: 20, range: 8,
   },
   kunaiFan: {
-    ticks: 24, releaseAt: 9, count: 3, spreadDegrees: 12, speed: 22, range: 16, damage: 9, radius: 0.15,
+    ticks: attackTicks(36), releaseAt: attackTicks(14), count: 3, spreadDegrees: 12, speed: 22, range: 16, damage: 9, radius: 0.15,
   },
   shadeSwap: {
-    ticks: 40, cloneLaunchAt: 8, swapAt: 30, dashDistance: 8, laneWidth: 1.4, damage: 24, untouchableTicks: 12,
+    ticks: attackTicks(60), cloneLaunchAt: attackTicks(12), swapAt: attackTicks(45), dashDistance: 8, laneWidth: 1.4, damage: 24, untouchableTicks: 12,
   },
-  severingShadow: { ticks: 36, strikeAt: 12, range: 7, damage: 10 },
+  severingShadow: { ticks: attackTicks(54), strikeAt: attackTicks(18), range: 7, damage: 10 },
   /** Cleanse keeps Aren's timing. */
   cleanse: { lockTicks: 90, activeAt: 35 },
   mistBlink: { distance: 6.5, durationTicks: 12, iframes: 14, recoveryTicks: 12, hideFrom: 0.10, hideTo: 0.60 },
   requiem: {
-    ticks: 120, markAt: 6, markRadius: 12, slashFrom: 12, slashInterval: 12, slashCount: 7, slashDamage: 8,
-    detonationAt: 110, detonationDamage: 45,
+    ticks: attackTicks(180), markAt: attackTicks(9), markRadius: 12, slashFrom: attackTicks(18), slashInterval: attackTicks(18), slashCount: 7, slashDamage: 8,
+    detonationAt: attackTicks(165), detonationDamage: 45,
   },
+} as const;
+
+/**
+ * Weight, poise damage and knockback of every Vesper blow (reactions.ts). The iai cuts flinch (steps 1-2) and stagger (step 3);
+ * the Crescent Rift finisher breaks poise (a stun for any non-boss). Thousand Cuts flinches every strike and ends in a knockdown.
+ */
+export const VESPER_HITS = {
+  iai: [hit('light', 7, 0), hit('light', 8, 0), hit('medium', 14, 0), hit('finisher', 45, 1.8, { stun: true })] as readonly HitSpec[],
+  shadowStep: hit('heavy', 24, 1.2),
+  cut: hit('light', 3, 0),
+  cutsFinisher: hit('finisher', 30, 2),
+  sever: hit('medium', 10, 0),
+  requiemSlash: hit('light', 3, 0),
+  requiem: hit('finisher', 50, 2.5),
+  kunai: hit('light', 3, 0),
+  clone: hit('heavy', 22, 1.5),
 } as const;
 
 export const VESPER_LABELS: Partial<Record<PlayerSkillId, string>> = {

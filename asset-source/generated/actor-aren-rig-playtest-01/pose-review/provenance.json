@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "candidate-rig-review-pose",
+  "assetId": "actor-aren",
+  "sourceAsset": {
+    "path": "asset-source/generated/actor-aren-rig-playtest-01/tripo-out/wild-crown-greenwake-playtest-ar-35882c7c/model.glb",
+    "sha256": "44a5d61adc88728953df70da369844199f22b67930f00d47b84849e7ff6adf6d"
+  },
+  "sourceReference": {
+    "path": "asset-source/references/aren-approved-concept.png",
+    "sha256": "6239212164ff7e2cc96e79e83d1a23f8ffa3eda393392fa584be4147704cc5f3"
+  },
+  "pose": {
+    "name": "T-pose rig review",
+    "method": "Loaded the existing Tripo-rigged candidate in Three.js and rotated both arm chains in memory to align with the shoulder-derived lateral axis. No geometry, skin weights, or GLB data was modified or exported.",
+    "projection": "orthographic",
+    "views": [
+      {
+        "angle": "front",
+        "file": "aren-tpose-front.png",
+        "bytes": 445993,
+        "sha256": "995254817413033b73ac1d6fbb8248fb98c47d9296315e7aaa6c88158ff68fa5"
+      },
+      {
+        "angle": "back",
+        "file": "aren-tpose-back.png",
+        "bytes": 416204,
+        "sha256": "93be3c606fdefe69291aa81cbd2f4b18e06188a556e196328c75c5e8bfc64434"
+      },
+      {
+        "angle": "right",
+        "file": "aren-tpose-right.png",
+        "bytes": 252035,
+        "sha256": "19536498620c162475a707cd4d83458d6d944d1a6471d3a08e709e9cc7b0e5c5"
+      },
+      {
+        "angle": "left",
+        "file": "aren-tpose-left.png",
+        "bytes": 265080,
+        "sha256": "e0c5a5a5e9be83985c244f9103e8fa0edb0197900c4491b2f3c29e12740f6d3a"
+      }
+    ]
+  },
+  "limitations": [
+    "These images are derived candidate-rig review views, not Tripo-generated multi-view source references and not replacements for the approved single-view concept.",
+    "The candidate GLB contains one skinned mesh with the staff/weapon merged into the character; the weapon visibly obstructs the left arm in front and back views.",
+    "The candidate's arm-root bind-pose heights are asymmetric; the image pose does not repair the native rig or establish deformation quality.",
+    "The candidate GLB contains no native animation clips; these review poses are not animation evidence."
+  ]
+}

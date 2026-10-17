@@ -1,0 +1,9 @@
+{
+  "taskId": "84e182df-0564-4426-8c26-f55846ca9d30",
+  "status": "success",
+  "type": "image_to_model",
+  "model": "v3.1-20260211",
+  "creditsConsumed": 60,
+  "conceptTaskId": "d1be3736-a304-443c-9974-d3c5e2798615",
+  "modelFile": "asset-source/generated/hero-pedestal-yara-runtime-01/tripo-out/tripo-out/hero-pedestal-yara-model-01-84e182df/model.glb"
+}

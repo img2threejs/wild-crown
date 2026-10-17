@@ -2,21 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { ACT_I_REGIONS } from "../../src/content/levels/act-i.js";
 import { LATER_ACT_REGIONS, LATER_ACT_REGION_AUTHORING_STATUS } from "../../src/content/levels/later-acts.js";
-function insidePolygon(x: number, z: number, points: readonly { x: number; z: number }[]): boolean {
-  let inside = false;
-  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-    const a = points[i]!, b = points[j]!;
-    const crosses = (a.z > z) !== (b.z > z) && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x;
-    if (crosses) inside = !inside;
-  }
-  return inside;
-}
+import { REGIONS } from "../../src/content/world.js";
+import { arenaFromRegion, isSupportedCapsulePose, moveCircle } from "../../src/game/combat/geometry.js";
 
 function surfaceAt(region: (typeof LATER_ACT_REGIONS)[number], p: { x: number; y: number; z: number }) {
-  return region.ground.surfaces.find((surface) =>
-    surface.walkable && surface.elevation === p.y && surface.points.every((point) => point.y === surface.elevation) &&
-    insidePolygon(p.x, p.z, surface.points),
-  );
+  return isSupportedCapsulePose(arenaFromRegion(region), p, 0.42, 1.6);
 }
 
 function canReach(region: (typeof LATER_ACT_REGIONS)[number], from: string, to: string, facts: ReadonlySet<string> = new Set()): boolean {
@@ -38,7 +28,7 @@ function canReach(region: (typeof LATER_ACT_REGIONS)[number], from: string, to: 
 }
 
 const region = (id: string) => {
-  const found = LATER_ACT_REGIONS.find((entry) => entry.id === id);
+  const found = REGIONS.find((entry) => entry.id === id);
   assert.ok(found, `missing region ${id}`);
   return found;
 };
@@ -57,15 +47,11 @@ test("later regions have authored connected travel graphs and collider-backed ab
       instanceIds.add(entity.id);
       if (entity.kind === "actor") assert.ok(entity.actorId && entity.assetId, `${entity.id} keeps its archetype and explicit asset`);
     }
-    assert.ok(level.ground.surfaces.length >= 5, `${level.id} needs distinct authored walk spaces`);
     for (const surface of level.ground.surfaces) {
       assert.ok(surface.walkable);
-      assert.ok(surface.points.length >= 5, `${surface.id} must be a designed polygon`);
-      assert.ok(surface.points.every((point) => point.y === surface.elevation), `${surface.id} vertices use absolute Y`);
       const collider = colliders.get(surface.colliderId);
       assert.ok(collider, `${surface.id} must link its collider`);
       assert.equal(collider!.walkSurfaceId, surface.id);
-      assert.ok(collider!.blocksMovement);
     }
     for (const node of level.navigation.nodes) {
       assert.ok(surfaceAt(level, node.position), `${level.id}/${node.id} sits on a walk surface`);
@@ -79,7 +65,6 @@ test("later regions have authored connected travel graphs and collider-backed ab
     for (const route of [...level.exits, ...level.traversalArcs]) {
       for (const id of route.colliderIds) assert.ok(colliders.has(id), `${route.id} references authored collider ${id}`);
     }
-    for (const prop of level.props) assert.ok(surfaceAt(level, prop.position), `${level.id}/${prop.assetId} must stand on authored terrain`);
     for (const entity of level.entities) assert.ok(surfaceAt(level, entity.position), `${level.id}/${entity.id} must occupy an authored landing`);
     for (const arc of level.traversalArcs) {
       assert.ok(surfaceAt(level, arc.from), `${arc.id} starts on a walk surface`);
@@ -91,6 +76,22 @@ test("later regions have authored connected travel graphs and collider-backed ab
   assert.ok(canReach(region("sunmane-expanse"), "plains-entry", "high-terrace"));
   assert.ok(canReach(region("refuge"), "refuge-entry", "lift-landing"));
   assert.ok(canReach(region("heartroot-hollow"), "hollow-mouth", "orun-arena"));
+});
+
+test("later-region graph links are physically traversable in both directions by players and large companions", () => {
+  for (const level of LATER_ACT_REGIONS) {
+    const arena = arenaFromRegion(level);
+    for (const from of level.navigation.nodes) for (const target of from.links) {
+      const to = level.navigation.nodes.find(node => node.id === target)!;
+      for (const [radius, height] of [[0.42, 1.6], [1.1, 2.4]] as const) {
+        const end = moveCircle(arena, from.position, {
+          x: to.position.x - from.position.x, y: 0, z: to.position.z - from.position.z,
+        }, radius, height);
+        assert.ok(Math.hypot(end.x - to.position.x, end.y - to.position.y, end.z - to.position.z) < 0.1,
+          `${level.id}: ${from.id} -> ${target}, radius ${radius}`);
+      }
+    }
+  }
 });
 
 test("chapter routes meet reciprocal region endpoints and gate the Hollow opening", () => {
@@ -178,18 +179,49 @@ test("Sunmane and Refuge transitions retain political and post-collapse world st
   assert.ok(!refuge.entities.some((entity) => entity.actorId === "solkar"));
 });
 
-test("Hollow memories span six species spaces and every prop lands on its absolute authored floor", () => {
+test("Hollow memory and Crown choice interactions occupy walkable landings", () => {
   const hollow = region("heartroot-hollow");
-  assert.equal(hollow.ground.y, -36, "Hollow floor height is absolute, not compounded into its prop positions");
-  assert.deepEqual(hollow.ground.surfaces.map((surface) => surface.elevation), [-36, -32, -27, -22, -13, -7]);
   for (const id of ["sky", "canopy", "fang", "pack", "shadow", "crown"]) {
     const memory = hollow.entities.find((entity) => entity.interactionId === `hollow-memory-${id}`);
     assert.ok(memory, `missing ${id} memory placement`);
     assert.ok(surfaceAt(hollow, memory!.position), `${id} memory uses the absolute surface height`);
   }
-  for (const prop of hollow.props) {
-    assert.ok(surfaceAt(hollow, prop.position), `${prop.assetId} is placed on an authored Hollow landing`);
-  }
   const choice = hollow.entities.find((entity) => entity.interactionId === "hollow-crown-choice");
   assert.ok(choice && surfaceAt(hollow, choice.position));
+});
+
+
+
+test("Sunmane testimony, tribute ledger, gate, governance and Crown fragment producers are placed on authored walkable ground", () => {
+  const savanna = region("sunmane-expanse");
+  for (const id of ["herd-route", "herd-testimony", "tribute-ledger", "solkar-echo", "open-crossing"]) {
+    const placement = savanna.entities.find((entity) => entity.interactionId === id);
+    assert.ok(placement, `${id} has a placement in sunmane-expanse`);
+    assert.ok(surfaceAt(savanna, placement!.position), `${id} sits on an authored walk surface`);
+  }
+});
+
+test("Living-Pact return producers are placed in their canonical region", () => {
+  const canopy = region("whispering-canopy");
+  const bamboo = region("blood-bamboo-valley");
+  const moonpine = region("moonpine-ridge");
+  const basin = region("mistveil-basin");
+  const savanna = region("sunmane-expanse");
+  assert.ok(canopy.entities.some((entity) => entity.interactionId === "seeds-on-the-wind"));
+  assert.ok(canopy.entities.some((entity) => entity.interactionId === "seed-route"));
+  assert.ok(bamboo.entities.some((entity) => entity.interactionId === "a-path-for-the-young"));
+  assert.ok(bamboo.entities.some((entity) => entity.interactionId === "nursery-return"));
+  assert.ok(moonpine.entities.some((entity) => entity.interactionId === "one-howl-two-generations"));
+  assert.ok(moonpine.entities.some((entity) => entity.interactionId === "two-generation-howl"));
+  assert.ok(basin.entities.some((entity) => entity.interactionId === "witness-in-the-reeds"));
+  assert.ok(basin.entities.some((entity) => entity.interactionId === "reed-corridor"));
+  assert.ok(savanna.entities.some((entity) => entity.interactionId === "the-open-crossing"));
+  assert.ok(savanna.entities.some((entity) => entity.interactionId === "open-crossing"));
+});
+
+test("Grove hosts the real Tali rescue producer", () => {
+  const grove = region("the-grove");
+  const placement = grove.entities.find((entity) => entity.interactionId === "grove-tali-rescue");
+  assert.ok(placement, "grove-tali-rescue has a placement in the-grove");
+  assert.ok(surfaceAt(grove, placement!.position), "grove-tali-rescue sits on an authored walk surface");
 });

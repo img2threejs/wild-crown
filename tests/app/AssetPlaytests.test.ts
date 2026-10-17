@@ -1,12 +1,15 @@
 import { afterEach, describe, expect, it } from 'bun:test';
 import { CANOPY_PLAYTEST, GREENWAKE_PLAYTEST, assetPlaytestFromSearch, type AssetPlaytest } from '../../src/app/AssetPlaytests.js';
 import { GameApplication } from '../../src/app/GameApplication.js';
+import { PRODUCTION_SESSION, trialsSession } from '../../src/app/SessionConfig.js';
+import { appDefaults } from './fakeApp.js';
 import { ENVIRONMENT_RECIPES, REGIONS } from '../../src/content/campaign.js';
 import { CampaignDirector } from '../../src/game/campaign/CampaignDirector.js';
 import { CombatEngine } from '../../src/game/combat/CombatEngine.js';
 import { TRIAL_GATE_ASSET_ID } from '../../src/game/combat/CombatTrials.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
 import { WARDEN_WEAPON_ASSET_ID } from '../../src/rendering/WardenWeapon.js';
+import { createFakeAppAudio } from './fakeAppAudio.js';
 import { HEROES, HEARTROOT_STAFF_ASSET_ID, SAKDA_HERO_ASSET_ID, VESPER_HERO_ASSET_ID, VESPER_KATANA_ASSET_ID, YARA_HERO_ASSET_ID } from '../../src/game/heroes.js';
 import { WAYSTONE_ASSET_ID } from '../../src/rendering/WaystoneVisual.js';
 import type { AssetManifestEntry, EnvironmentRecipeDefinition, RegionDefinition } from '../../src/game/contracts.js';
@@ -17,7 +20,8 @@ afterEach(() => { globalThis.fetch = realFetch; });
 
 const authoredRegion = (id: string) => REGIONS.find(region => region.id === id)!;
 const playtestRegion = (playtest: AssetPlaytest): RegionDefinition => createCombatTrialRegion(authoredRegion(playtest.regionId));
-const bareApp = (fields: AppFields): AppFields => Object.assign(Object.create(GameApplication.prototype), fields);
+const bareApp = (fields: AppFields): AppFields => Object.assign(Object.create(GameApplication.prototype), appDefaults(), fields);
+const sessionOf = (playtest: AssetPlaytest | null) => playtest ? trialsSession(playtest.id) : PRODUCTION_SESSION;
 
 describe('?assetPlaytest selection', () => {
   it('opens the selector for any assetPlaytest query and leaves ordinary URLs in campaign mode', () => {
@@ -41,13 +45,13 @@ describe('playtest manifest requests', () => {
   it('fetches the manifest of the selected playtest, and the production manifest otherwise', async () => {
     const requested: string[] = [];
     globalThis.fetch = (async (url: string) => { requested.push(url); return new Response('[]', { status: 200 }); }) as unknown as typeof fetch;
-    for (const playtest of [GREENWAKE_PLAYTEST, CANOPY_PLAYTEST, null]) await bareApp({ assetPlaytest: playtest }).readManifest();
+    for (const playtest of [GREENWAKE_PLAYTEST, CANOPY_PLAYTEST, null]) await bareApp({ session: sessionOf(playtest) }).readManifest();
     expect(requested).toEqual(['/asset-source/playtests/greenwake.json', '/asset-source/playtests/canopy.json', '/assets/manifest.json']);
   });
 
   it('names the playtest in the gate error when its manifest is missing', async () => {
     globalThis.fetch = (async () => new Response('missing', { status: 404 })) as unknown as typeof fetch;
-    await expect(bareApp({ assetPlaytest: CANOPY_PLAYTEST }).readManifest()).rejects.toThrow('Whispering Canopy candidate asset playtest manifest /asset-source/playtests/canopy.json is unavailable (HTTP 404).');
+    await expect(bareApp({ session: sessionOf(CANOPY_PLAYTEST) }).readManifest()).rejects.toThrow('Whispering Canopy candidate asset playtest manifest /asset-source/playtests/canopy.json is unavailable (HTTP 404).');
   });
 });
 
@@ -75,7 +79,7 @@ function recipeFor(region: RegionDefinition): EnvironmentRecipeDefinition {
 describe('per-region playtest asset gate', () => {
   for (const playtest of [GREENWAKE_PLAYTEST, CANOPY_PLAYTEST]) {
     it(`${playtest.name}: rejects a missing dependency, an extra asset, a verified asset and a non-native prop`, () => {
-      const region = playtestRegion(playtest), run = (manifest: AssetManifestEntry[]) => () => bareApp({ assetPlaytest: playtest }).assertAssets(region, manifest, recipeFor(region));
+      const region = playtestRegion(playtest), run = (manifest: AssetManifestEntry[]) => () => bareApp({ session: sessionOf(playtest) }).assertAssets(region, manifest, recipeFor(region));
       const full = playtestManifest(region);
       expect(run(full.filter(entry => entry.id !== WARDEN_WEAPON_ASSET_ID))).toThrow(playtest.name + ' candidate playtest manifest must contain exactly');
       expect(run(full.filter(entry => entry.id !== WAYSTONE_ASSET_ID))).toThrow(playtest.name + ' candidate playtest manifest must contain exactly');
@@ -87,19 +91,19 @@ describe('per-region playtest asset gate', () => {
 
   it('refuses a region that does not belong to the selected playtest', () => {
     const canopy = playtestRegion(CANOPY_PLAYTEST), greenwake = playtestRegion(GREENWAKE_PLAYTEST);
-    expect(() => bareApp({ assetPlaytest: GREENWAKE_PLAYTEST }).assertAssets(canopy, playtestManifest(canopy), recipeFor(canopy))).toThrow('only supports Greenwake');
-    expect(() => bareApp({ assetPlaytest: CANOPY_PLAYTEST }).assertAssets(greenwake, playtestManifest(greenwake), recipeFor(greenwake))).toThrow('only supports Whispering Canopy');
+    expect(() => bareApp({ session: sessionOf(GREENWAKE_PLAYTEST) }).assertAssets(canopy, playtestManifest(canopy), recipeFor(canopy))).toThrow('only supports Greenwake');
+    expect(() => bareApp({ session: sessionOf(CANOPY_PLAYTEST) }).assertAssets(greenwake, playtestManifest(greenwake), recipeFor(greenwake))).toThrow('only supports Whispering Canopy');
   });
 
   it('keeps the production gate closed to playtest animations and unverified assets when no playtest is selected', () => {
     const region = authoredRegion('blood-bamboo-valley'), recipe = ENVIRONMENT_RECIPES.find(item => item.id === region.environmentRecipeId)!;
     const manifest = playtestManifest(playtestRegion(CANOPY_PLAYTEST));
-    expect(() => bareApp({ assetPlaytest: null }).assertAssets(region, manifest, recipe)).toThrow();
+    expect(() => bareApp({ session: PRODUCTION_SESSION }).assertAssets(region, manifest, recipe)).toThrow();
   });
 
   it('requires every armed hero\u2019s weapon and every hero variant, and never a weapon for the unarmed hero', () => {
     const playtest = GREENWAKE_PLAYTEST, region = playtestRegion(playtest), full = playtestManifest(region);
-    const run = (manifest: AssetManifestEntry[]) => () => bareApp({ assetPlaytest: playtest }).assertAssets(region, manifest, recipeFor(region));
+    const run = (manifest: AssetManifestEntry[]) => () => bareApp({ session: sessionOf(playtest) }).assertAssets(region, manifest, recipeFor(region));
     expect(run(full)).not.toThrow();
     expect(HEROES.map(hero => hero.id)).toEqual(['aren', 'yara', 'vesper', 'sakda']);
     expect(HEROES.filter(hero => !hero.weaponAssetId).map(hero => hero.id)).toEqual(['sakda']);
@@ -128,8 +132,8 @@ function readyApp(playtest: AssetPlaytest | null, regionId: string) {
   const calls: string[] = [];
   const input = { enabled: true, clear() {}, setEnabled(value: boolean) { this.enabled = value; } };
   const app = bareApp({
-    assetPlaytest: playtest, region, campaign, combat, input, screen: 'loading', screenHistory: [], worldReady: true, ready: true, disposed: false, suspended: false,
-    loading: { active: false }, error: null, sceneBlocked: false, stageCompleted: false, playerOutcome: null, activeCompanionSlots: {}, lifecycleGeneration: 0, worldGeneration: 0,
+    session: sessionOf(playtest), region, campaign, combat, input, screen: 'loading', screenHistory: [], worldReady: true, ready: true, disposed: false, suspended: false,
+    loading: { active: false }, error: null, sceneBlocked: false, stageCompleted: false, playerOutcome: null, activeCompanionId: undefined, lifecycleGeneration: 0, worldGeneration: 0,
     renderer: { async prepareCombatTrialGates() { calls.push('gates'); }, sync() {}, render() {} }, render() {},
   });
   return { app, combat, calls };

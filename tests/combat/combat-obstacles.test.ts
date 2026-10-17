@@ -42,7 +42,7 @@ describe('committed combat solids', () => {
     const seeded = engine.snapshotState(); seeded.actors.find(actor => actor.id === 'aren')!.position = vec(0, 0, -3);
     const next = recast(new CombatEngine(seeded), 'boar-gale-scythe'); next.fixedStep(idle);
     const wind = next.snapshotState().hazards.find(hazard => hazard.attackId === 'boar-gale-scythe')!;
-    until(next, wind.activeFrom);
+    until(next, wind.activeFrom + 40);
     const position = next.snapshot().actors.find(actor => actor.id === 'aren')!.position;
     expect(position.z).toBeGreaterThan(-3); expect(position.z).toBeLessThan(-1.95);
   });

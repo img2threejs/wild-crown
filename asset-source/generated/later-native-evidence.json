@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-14T14:38:02.009Z",
+  "status": "candidate-smoke-complete-not-accepted",
+  "assets": [
+    {
+      "id": "prop-seed-supply-basket",
+      "path": "asset-source/generated/prop-seed-supply-basket-runtime-01/prop-seed-supply-basket.glb",
+      "sha256": "93ce0dbcc3518de68d61bfff8ff9c40998759d0d36963ffcc32eebabe175fdd5",
+      "bytes": 2082900,
+      "vertices": 7201,
+      "triangles": 4470,
+      "evidenceStatus": "blocked",
+      "runtimeVisualSmoke": "Native keyboard-driven ordered carry/delivery and save reload passed; winter cache viewed. Not asset acceptance."
+    },
+    {
+      "id": "prop-bird-nest",
+      "path": "asset-source/generated/prop-bird-nest-runtime-01/prop-bird-nest.glb",
+      "sha256": "737efa48e650e9b90f91c29278dab7d453a649117dd7b1bf4f2fe9bc16085bca",
+      "bytes": 2174824,
+      "vertices": 12488,
+      "triangles": 9151,
+      "evidenceStatus": "blocked",
+      "runtimeVisualSmoke": "Viewed in the native Grove with returning birds on supported meadow. Not asset acceptance."
+    },
+    {
+      "id": "actor-luma",
+      "path": "asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
+      "sha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d",
+      "bytes": 6094300,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-sable",
+      "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+      "sha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01",
+      "bytes": 6357640,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-nyra",
+      "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
+      "sha256": "6ec519525a22aa151b30ad015c1ac570cb9f464f6b39c734840d3082e2c4ab3a",
+      "bytes": 5361640,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-solkar",
+      "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
+      "sha256": "4988bfd69cfb48f4425aabccb3930827dd7a5d0272fc6303d23da0f7d457f6b8",
+      "bytes": 7677656,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-orun",
+      "path": "asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+      "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+      "bytes": 6745644,
+      "actionBindings": 15,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-orun-crowned-beast",
+      "path": "asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
+      "sha256": "2b148adb2ee1dec205c6bab047c4dc7124798438d97b4f509840814cba6d5256",
+      "bytes": 7976108,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "actor-council-envoy",
+      "path": "asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb",
+      "sha256": "97fb5f8a5a1a7f53903ac639321fce33b3096d9c23b90bd8657ad9898c639800",
+      "bytes": 6124464,
+      "actionBindings": 13,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-sunmane-stone-terrace",
+      "path": "asset-source/generated/prop-sunmane-stone-terrace-runtime-01/prop-sunmane-stone-terrace.glb",
+      "sha256": "fc1108a8201e6113f98c8c985cc00c47fbc8a2bc6f42ca769a574034e7f382af",
+      "bytes": 2816212,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-migration-gate",
+      "path": "asset-source/generated/prop-migration-gate-runtime-01/prop-migration-gate-articulated.glb",
+      "sha256": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b",
+      "bytes": 2829472,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-water-allotment-gate",
+      "path": "asset-source/generated/prop-water-allotment-gate-runtime-01/prop-water-allotment-gate.glb",
+      "sha256": "95438d07e9f14b74849f682602168a263183f5303b8e91b8b05b7b87c5b2a9bf",
+      "bytes": 2160752,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-plains-stone-arch",
+      "path": "asset-source/generated/prop-plains-stone-arch-runtime-01/prop-plains-stone-arch.glb",
+      "sha256": "a36819ac2d46692c59e3f0c6a095a64bdc7302881cec9013bdf1454a9402cb2b",
+      "bytes": 2295468,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-savanna-acacia",
+      "path": "asset-source/generated/prop-savanna-acacia-runtime-01/prop-savanna-acacia.glb",
+      "sha256": "a31bf1c7c6637e1ce1252ef6c590d2984a32ee7c4e21b2b9844d3031295c74b2",
+      "bytes": 2245588,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-map-table",
+      "path": "asset-source/generated/prop-map-table-runtime-01/prop-map-table.glb",
+      "sha256": "924e1281730d63b269db5d39b1c1ec6563606d40223dbd2d7b13cc31ab08d23b",
+      "bytes": 1924476,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-heartroot-fragment-stone",
+      "path": "asset-source/generated/prop-heartroot-fragment-stone-runtime-01/prop-heartroot-fragment-stone.glb",
+      "sha256": "1d8ff4a75c588d03f2a6884cb60be8c9b35dd593f1d49db759bc7827bf235cbf",
+      "bytes": 1730292,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-heartroot-root-column",
+      "path": "asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb",
+      "sha256": "99de3cbd57986b32dc62a81b0eba038c97965f1789e5c11f46aad267915b67ef",
+      "bytes": 2335360,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-six-fragment-shrine",
+      "path": "asset-source/generated/prop-six-fragment-shrine-runtime-01/prop-six-fragment-shrine.glb",
+      "sha256": "30fde41fd063369f9600ccc5b48d2af6649a4649bf2545283d9c122e2ca526d9",
+      "bytes": 2197172,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-root-crown-altar",
+      "path": "asset-source/generated/prop-root-crown-altar-runtime-01/prop-root-crown-altar.glb",
+      "sha256": "bbabd257d859a287e617fca717cf42e6ce00c53fc2e97cd750931a6f6adfb92d",
+      "bytes": 2172368,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-hollow-cavern-rock",
+      "path": "asset-source/generated/prop-hollow-cavern-rock-runtime-01/prop-hollow-cavern-rock.glb",
+      "sha256": "a75f5a0d3fe74c06f6291cd90d38963281e1ec4322f691a41355429a61a49839",
+      "bytes": 2069324,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    },
+    {
+      "id": "prop-root-tether-anchor",
+      "path": "asset-source/generated/prop-root-tether-anchor-runtime-01/prop-root-tether-anchor.glb",
+      "sha256": "74aee811ab2e8984a3611427b05a3202c506a2593fdd93bc91781a8f61ee9ef5",
+      "bytes": 2264984,
+      "actionBindings": 0,
+      "evidenceStatus": "blocked"
+    }
+  ],
+  "observations": {
+    "migrationGate": {
+      "status": "native-passage-smoke-not-accepted",
+      "outputHash": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b",
+      "originalTriangles": 16278,
+      "frameTriangles": 5514,
+      "panelTriangles": 10764,
+      "nativeLift": 0.4,
+      "worldLiftMetres": 3.332,
+      "closedBlocksCentre": true,
+      "openPassesPlayer": true,
+      "openPassesLargeCompanion": true,
+      "openPassesThreeMetreCapsule": true,
+      "openStoneJambBlocksOffsetCrossing": true,
+      "clearedFactClosesPassage": true,
+      "inputDrivenArrivalAndInteraction": true,
+      "directorCommittedOpeningFact": true,
+      "closedControlGapMetres": 0.6485356,
+      "frameCollidersIdenticalAcrossPoses": true,
+      "reviewFiles": [
+        "asset-source/generated/prop-migration-gate-runtime-01/derived-static-review.png",
+        "asset-source/generated/prop-migration-gate-runtime-01/derived-open-review.png"
+      ]
+    },
+    "browser": {
+      "viewport": {
+        "width": 1200,
+        "height": 688,
+        "dpr": 2
+      },
+      "nativeRunPreviews": 7,
+      "poseAdvanceObserved": true,
+      "reviewFiles": [
+        "asset-source/generated/later-native-run-review.webp",
+        "asset-source/generated/later-native-run-review-next.webp"
+      ]
+    },
+    "orun": {
+      "worldSpaceHipPin": {
+        "clipCount": 15,
+        "samplesPerClip": 5,
+        "maxPlanarDrift": 1.2885529410668013e-7
+      },
+      "nativeWeaponActions": [
+        "monster-idle",
+        "monster-slash",
+        "orun-root-tether",
+        "orun-back-handspring",
+        "orun-cartwheel-counter"
+      ],
+      "crownedVariant": {
+        "baseVisible": false,
+        "beastVisible": true,
+        "humanWeaponCarrierVisible": false,
+        "usesHumanWeaponSocket": false
+      },
+      "restoredHuman": {
+        "humanVisible": true,
+        "beastVisible": false,
+        "weaponSocketRestored": true
+      },
+      "animationIssues": [],
+      "inputDrivenNativeFight": {
+        "ticks": 3126,
+        "remainingVitality": 10,
+        "phasesCleared": [0, 1, 2],
+        "contextualCleanseCasts": 2,
+        "contextualRootTetherCasts": 3,
+        "resolution": "cleansed",
+        "earnedNativeVariantSwapViewed": true
+      }
+    },
+    "inputDrivenNativeGuardians": {
+      "ruun": { "ticks": 9378, "remainingVitality": 94, "resolution": "cleansed", "finalStandSaveRestoreCompleted": true },
+      "ghor": { "ticks": 2014, "remainingVitality": 120, "resolution": "cleansed" },
+      "solkar": { "ticks": 1708, "remainingVitality": 120, "resolution": "cleansed", "encounterResetReplayCompleted": true }
+    },
+    "inputDrivenNativeFall": {
+      "startTick": 811,
+      "finishTick": 2124,
+      "remainingVitality": 120,
+      "protectionCleared": true,
+      "pillarActivated": true,
+      "taliShelterArrival": { "x": 24.448225251487486, "y": 0, "z": 10.957555788575956 },
+      "rescueEventProduced": true,
+      "resolution": "escaped"
+    },
+    "nativeNavigation": {
+      "directedBodySweeps": 128,
+      "playerRadiusMetres": 0.42,
+      "playerHeightMetres": 1.6,
+      "largeCompanionRadiusMetres": 1.1,
+      "largeCompanionHeightMetres": 2.4,
+      "movement": "target-directed steering along every authored graph link in both directions"
+    },
+    "chapterApplication": {
+      "viewport": { "width": 1200, "height": 688, "dpr": 1.25 },
+      "fixtureOrigin": "public Director authored-event progression; recorded native Fall events; other guardian resolutions supplied as event fixtures",
+      "authoredRegionTransitions": 22,
+      "mainQuestsCompletedBeforeEnding": 24,
+      "nativeKeyboardRestorations": ["moonpine-ridge", "sunmane-expanse"],
+      "nativeCovenantChoices": ["sky", "canopy", "fang", "pack", "shadow", "crown"],
+      "livingPactBlockedBeforeHollowResolution": true,
+      "sameSessionCheckpointReloadEndings": ["dominion", "severance", "living_pact"],
+      "creditsReachedForEveryEnding": true,
+      "runtimeErrorsAfterSaveHistoryRepair": [],
+      "reviewFiles": [
+        "asset-source/generated/later-chapter-moonpine-restoration.webp",
+        "asset-source/generated/later-chapter-sunmane-restoration.webp",
+        "asset-source/generated/later-chapter-covenants.webp",
+        "asset-source/generated/later-chapter-ending-choices.webp",
+        "asset-source/generated/later-chapter-credits.webp"
+      ]
+    },
+    "hubAndSideQuests": {
+      "report": "asset-source/generated/later-native-sidequests.json",
+      "method": "All twelve quests completed with public Director checkpoint fixtures, real engine inputs and native GLB collision; all twelve survived save reload. Not an uninterrupted playthrough.",
+      "browser": { "width": 1200, "height": 688, "dpr": 1.25 },
+      "keyboardScenariosCompleted": ["ordered-seed-deliveries", "nursery-escort", "marek-assistance"],
+      "seedDeliverySaveReloadPassed": true,
+      "nurseryHudGuidesToShelterWhileEscorting": true,
+      "marekNativeActionsObserved": ["monster-walk", "npc-talk-point"],
+      "packNativeActionsObserved": ["monster-walk"],
+      "taliNativeActionsObserved": ["monster-walk", "tali-play"],
+      "ambientReuse": {
+        "ridge-elder-scout": "Existing Sable native mesh/clips; separate unnamed wildlife identity, not Sable's return.",
+        "ridge-young-scout": "Existing Luma native mesh/clips; separate unnamed wildlife identity, not Luma's return.",
+        "roost-hornbill": "Existing Vara candidate mesh and in-memory avian idle profile; not native GLTF animation acceptance."
+      },
+      "renderedRiverLevelOffsets": { "repair": 0, "break-dam": 0.35 },
+      "riverComparisonMethod": "Controlled saved branch fixtures; restored palette retained in both native scenes.",
+      "hubMouseStopPassed": true,
+      "hubPracticeVitalityBeforeAndAfterStop": [120, 120],
+      "animationIssuesInObservedScenes": [],
+      "reviewFiles": [
+        "asset-source/generated/later-native-grove-growth.png",
+        "asset-source/generated/later-native-seed-carry.png",
+        "asset-source/generated/later-native-seed-delivered.png",
+        "asset-source/generated/later-native-winter-cache.png",
+        "asset-source/generated/later-native-pack-patrol.png",
+        "asset-source/generated/later-native-marek-assistance.png",
+        "asset-source/generated/later-native-nursery-escort.png",
+        "asset-source/generated/later-native-nursery-safe.png",
+        "asset-source/generated/later-native-tali-play.png",
+        "asset-source/generated/later-native-river-repair.png",
+        "asset-source/generated/later-native-river-break-dam.png",
+        "asset-source/generated/later-native-hub-services.png"
+      ]
+    },
+    "propReviewFiles": [
+      "asset-source/generated/later-prop-review-1.png",
+      "asset-source/generated/later-prop-review-2.png",
+      "asset-source/generated/later-prop-review-3.png"
+    ],
+    "playCameraReview": "asset-source/generated/actor-luma-runtime-01/play-review.png"
+  },
+  "budget": {
+    "ceiling": 5000,
+    "previousConservativeUsed": 1815,
+    "laterLedgerUsed": 2060,
+    "hubNestUsed": 115,
+    "hubNestTasks": [
+      { "taskId": "8d965191-9285-4b06-9687-1eaeb0849123", "credits": 15 },
+      { "taskId": "8d18fc27-e807-48b0-b9f3-250c66900ce6", "credits": 70 },
+      { "taskId": "b80bcd27-8680-41ae-b1f7-50b382369fb7", "credits": 30 }
+    ],
+    "supplyBasketUsed": 115,
+    "supplyBasketTasks": [
+      { "taskId": "f5df33e3-21fb-4296-a496-3b577dba0507", "credits": 15 },
+      { "taskId": "8e67c5ba-5683-4699-bd00-6a39e2a4bd95", "credits": 70 },
+      { "taskId": "a5fa06a3-c2bf-4fc7-8e34-092be77f4246", "credits": 30 }
+    ],
+    "totalConservativeUsed": 4105,
+    "remaining": 895
+  },
+  "limits": [
+    "Earlier renderer variant snapshots validated presentation only. Later native combat probes completed individual encounters; they are not an uninterrupted campaign playthrough.",
+    "Hollow scene composition and combat remain unaccepted; its arena is sparse and actor lighting is dark.",
+    "Asset G gates, reference-hardware benchmarks and user acceptance are not established.",
+    "Luma and Sable run planting metrics report roughly 15% maximum slip; no perfect-foot-contact claim.",
+    "Browser error history includes a diagnostic waitFor call incorrectly given JavaScript instead of a CSS selector; not a game-source exception."
+  ]
+}

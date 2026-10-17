@@ -1,0 +1,122 @@
+{
+  "sequences": [
+    {
+      "start": 0,
+      "actions": [
+        "aren-idle",
+        "aren-jump",
+        "vesper-mist-blink",
+        "aren-walk"
+      ],
+      "maxY": 1.2500000000000004,
+      "flightDeadlines": [
+        50
+      ],
+      "dashedFrames": 43,
+      "landed": {
+        "t": 84,
+        "tick": 84,
+        "y": 0,
+        "action": "aren-walk",
+        "phase": "idle",
+        "mana": 78.10666666666768,
+        "jump": null
+      },
+      "contacts": [
+        {
+          "t": 17,
+          "y": 0.8418367346938775,
+          "action": "vesper-mist-blink",
+          "phase": "active"
+        }
+      ]
+    },
+    {
+      "start": 90,
+      "actions": [
+        "aren-walk",
+        "aren-jump",
+        "vesper-kunai-fan",
+        "aren-idle"
+      ],
+      "maxY": 1.25,
+      "flightDeadlines": [
+        140
+      ],
+      "dashedFrames": 0,
+      "landed": {
+        "t": 174,
+        "tick": 174,
+        "y": 0,
+        "action": "aren-walk",
+        "phase": "idle",
+        "mana": 66.92761904762106,
+        "jump": null
+      },
+      "contacts": [
+        {
+          "t": 107,
+          "y": 0.8418367346938775,
+          "action": "vesper-kunai-fan",
+          "phase": "anticipation"
+        },
+        {
+          "t": 121,
+          "y": 1.2386621315192743,
+          "action": "vesper-kunai-fan",
+          "phase": "active"
+        },
+        {
+          "t": 124,
+          "y": 1.179138321995465,
+          "action": "vesper-kunai-fan",
+          "phase": "recovery"
+        }
+      ]
+    },
+    {
+      "start": 180,
+      "actions": [
+        "aren-walk",
+        "aren-jump",
+        "vesper-iai-1",
+        "aren-idle"
+      ],
+      "maxY": 1.25,
+      "flightDeadlines": [
+        230
+      ],
+      "dashedFrames": 0,
+      "landed": {
+        "t": 264,
+        "tick": 264,
+        "y": 0,
+        "action": "aren-walk",
+        "phase": "idle",
+        "mana": 71.99428571428848,
+        "jump": null
+      },
+      "contacts": [
+        {
+          "t": 197,
+          "y": 0.8418367346938775,
+          "action": "vesper-iai-1",
+          "phase": "anticipation"
+        },
+        {
+          "t": 206,
+          "y": 1.2244897959183674,
+          "action": "vesper-iai-1",
+          "phase": "active"
+        },
+        {
+          "t": 211,
+          "y": 1.2386621315192743,
+          "action": "vesper-iai-1",
+          "phase": "recovery"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

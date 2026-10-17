@@ -71,6 +71,9 @@ export class StoryPresentation {
     for (const actor of actors) if (actor.id === 'aren' || (!player && actor.allegiance === 'player')) player = actor;
     this.effects.setFocus(player?.position);
     this.actors.update(actors);
+    this.effects.reactions.update(actors);
+    this.effects.companions.update(actors);
+    this.audio.consumeActors(actors);
   }
 
   /**
@@ -89,6 +92,7 @@ export class StoryPresentation {
 
   setSettings(settings: GameSettings): void {
     this.effects.setReducedEffects(settings.reducedMotion);
+    this.effects.setTelegraphIntensity(settings.telegraphIntensity);
     this.audio.setSettings(settings);
   }
 

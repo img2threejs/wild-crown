@@ -108,12 +108,18 @@ function slotMapping(id, report, slots) {
   }));
 }
 
-/** Character entry: explicit slots restrict non-combat actors; a native tail clip is mapped only when present. */
+/**
+ * Character entry: a full monster maps every MONSTER_SLOTS key (the base ten plus the one-shot `monster-death` / `monster-spawn` and the non-lethal
+ * `monster-knockdown` / `monster-getup`; the clips report must list them all) and a native tail clip only when present. Explicit slots restrict
+ * non-combat actors, which still map the lifecycle slots their report lists.
+ */
 export function monsterEntry(id, spec) {
   const dir = `asset-source/generated/${id}-runtime-${String(spec.revision).padStart(2, '0')}`;
   const glb = `${dir}/${id}-animated.glb`, report = read(`${dir}/clips-report.json`), provenance = read(`${dir}/provenance.json`);
-  const hasTail = Boolean(report.slots?.['monster-tail']?.clip ?? report.clips?.['monster-tail']);
-  const slots = spec.slots ?? [...MONSTER_SLOTS, ...(hasTail ? ['monster-tail'] : [])];
+  const hasClip = slot => Boolean(report.slots?.[slot]?.clip ?? report.clips?.[slot]);
+  const slots = spec.slots
+    ? [...spec.slots, ...['monster-death', 'monster-spawn', 'monster-knockdown', 'monster-getup'].filter(slot => hasClip(slot) && !spec.slots.includes(slot))]
+    : [...MONSTER_SLOTS, ...(hasClip('monster-tail') ? ['monster-tail'] : [])];
   const mapping = slotMapping(id, report, slots);
   return {
     id, actorId: spec.actorId, sourceType: 'native-glb', kind: 'character', rigFamily: spec.rigFamily, castSocketBone: report.castSocketBone ?? report.rig.headTipJoint,

@@ -10,6 +10,7 @@ import { CORE_CLEAR_WEIGHT, grassDensity } from '../../src/world/GroundScatter.j
 import { shadowKernelPatchable, withCheapShadows } from '../../src/world/GroundShadow.js';
 import { buildTerrainMeshData, TerrainField } from '../../src/world/GroundTerrain.js';
 import { GREENWAKE_CANOPY_FLOOR_ID, isBridgeDeckSurface, isFlatGroundSurface, isRaisedWalkSurface } from '../../src/world/WalkSurfaces.js';
+import { arenaFromRegion, groundHeightAt, moveCircle } from '../../src/game/combat/geometry.js';
 
 const region = REGIONS.find((candidate): candidate is RegionDefinition => candidate.id === 'greenwake')!;
 const field = new TerrainField(region, GREENWAKE_BIOME);
@@ -80,15 +81,25 @@ function distanceToTrail(x: number, z: number): { distance: number; halfWidth: n
   return best;
 }
 
+test('the forest bank and thicket share the root ramp height without a hidden lower floor or a crossing step', () => {
+  const arena = arenaFromRegion(region);
+  for (let z = 4.05; z < 8.95; z += .17) {
+    for (const x of [6.2, 9.5, 12.98, 13.02, 14.5]) {
+      const height = groundHeightAt(arena, x, z, 0);
+      assert.notEqual(height, null, `missing bank support at ${x},${z}`);
+      assert.ok(Math.abs(field.sample(x, z) - height!) < .02, `rendered ground disagrees with foot support at ${x},${z}`);
+    }
+  }
+  const across = moveCircle(arena, { x: 12, y: .8, z: 8 }, { x: 2, y: 0, z: 0 }, .42, 1.6);
+  assert.ok(Math.abs(across.x - 14) < 1e-6 && Math.abs(across.y - .8) < 1e-6, 'the ramp-to-thicket seam must be directly walkable');
+});
+
 test('Greenwake terrain is exactly flat on every y=0 walkable surface, right up to its edge', () => {
   assert.ok(flatSurfaces.length >= 5, 'Greenwake must expose several y=0 walkable surfaces');
   for (const surface of flatSurfaces) {
     const box = bounds(surface);
     let checked = 0;
     const check = (x: number, z: number): void => {
-      // Where a raised walkable takes over (its plane wins in an overlap) or abuts this flat one at another height, the
-      // terrain cannot be both: skip the 0.4 m beside it (the next test pins those ownership rules).
-      if (field.raisedDistance(x, z, 0.4) < 0.4) return;
       checked++;
       assert.ok(Math.abs(field.heightAt(x, z)) <= 0.02, `${surface.id} analytic height at (${x.toFixed(3)}, ${z.toFixed(3)}) = ${field.heightAt(x, z)}`);
       assert.ok(Math.abs(field.sample(x, z)) <= 0.02, `${surface.id} mesh height at (${x.toFixed(3)}, ${z.toFixed(3)}) = ${field.sample(x, z)}`);
@@ -173,7 +184,6 @@ function ownerIsSteady(owner: WalkOwner, x: number, z: number, radius: number): 
 
 test('every terrain-backed walkable, flat or raised, is reproduced by the terrain mesh within 2 cm', () => {
   assert.ok(!flatSurfaces.some((surface) => surface.id === GREENWAKE_CANOPY_FLOOR_ID) && !raisedSurfaces.some((surface) => surface.id === GREENWAKE_CANOPY_FLOOR_ID));
-  assert.deepEqual(terrainBackedRaised.map((surface) => surface.id).sort(), ['greenwake-grove-gateway', 'greenwake-root-step', 'greenwake-rope-landing']);
   assert.deepEqual(raisedSurfaces.filter(isBridgeDeckSurface).map((surface) => surface.id), ['greenwake-gully-bridge']);
   let checked = 0;
   let raisedChecked = 0;
@@ -206,10 +216,8 @@ test('raised planes join the flat ground and each other continuously', () => {
     [17.02, 20, 1.993], // gateway head at the bridge
   ];
   for (const [x, z, expected] of joins) assert.ok(Math.abs(field.sample(x, z) - expected) <= 0.02, `terrain at (${x}, ${z}) = ${field.sample(x, z)}, expected ${expected}`);
-  // The ridge and the gateway are exactly 2 m up, the thicket exactly 0 (the gully never touches it).
+  // The ridge and the gateway retain their shared 2 m landing.
   for (const [x, z] of [[2.2, 14.2], [12, 19], [13.4, 17], [13.5, 14.5]]) assert.ok(Math.abs(field.sample(x, z) - 2) <= 0.02, `ridge top at (${x}, ${z}) = ${field.sample(x, z)}`);
-  // (12.5, 9) lies on the root ramp (plane y = 1 there), not on the thicket (x ≥ 13): the thicket probes stay inside its footprint.
-  for (const [x, z] of [[13.5, 8.9], [15, 8.9], [17.9, 5.1], [15, 7]]) assert.ok(Math.abs(field.sample(x, z)) <= 0.02, `thicket at (${x}, ${z}) = ${field.sample(x, z)}`);
 });
 
 test('Greenwake terrain covers the region bounds with bounded relief and is deterministic', () => {

@@ -129,6 +129,14 @@ MAPS.grove = {
       concept: `A natural forest spring pool: a ring of large flat mossy stones and smooth river rocks forming a shallow round basin about 4 metres across, clear turquoise water inside with a few lily pads and small white flowers, a tiny trickle of water spilling over one stone, ferns at the edge. Three-quarter view from slightly above, entire basin visible, resting on its base. ${ISOLATED} ${STYLE}`,
       faces: 9000,
     },
+    'prop-bird-nest': {
+      concept: `A single sanctuary bird nest built from interwoven slender brown twigs, soft dry grasses and moss, an open deep bowl about 0.8 metres wide with three small pale blue eggs nestled inside. A few loose ivory down feathers along the rim. The nest rests on one short forked weathered branch with no trunk, stand or ground. Clear three-quarter view slightly from above, entire nest and branch visible. No birds, no text. ${ISOLATED} ${STYLE}`,
+      faces: 5000,
+    },
+    'prop-seed-supply-basket': {
+      concept: `A single sturdy round woodland supply basket about 0.8 metres wide, tightly woven from warm brown wicker with two short rope handles. Its open top contains a folded ochre cloth sack full of mixed brown acorns, pale grain seeds and a few dry pine cones, with one small green leaf tucked beneath the rim. Flat stable base, practical hand-carried forest provisions, no stand, no table, no ground or scenery. Three-quarter view from above, entire basket and its contents visible. No text, no characters, no eggs. ${ISOLATED} ${STYLE}`,
+      faces: 5000,
+    },
     'prop-grove-platform': {
       concept: `A monkey-built treetop lookout platform: a round wooden plank platform about 4 metres across raised on four sturdy log stilts lashed with vines, a rope ladder, a woven leaf canopy roof, hanging fruit baskets and colourful bird feathers, rope railings. Three-quarter view, entire structure visible, standing on its base. ${ISOLATED} ${STYLE}`,
       faces: 12000,
@@ -142,6 +150,15 @@ MAPS.grove = {
       concept: `Koro, leader of the forest monkeys: a strong clever macaque-like monkey about 1.3 metres tall standing upright, sleek golden-brown fur with a grey mane over the shoulders, a scar across one brow, a woven vine sash carrying a small pouch of seeds, a healed scar on one shoulder where a black thorn was pulled out, alert amber eyes, long tail curled behind. ${BIPED_POSE} ${STYLE}`,
       faces: 16000, ...BIPED_RIG,
       batches: [['preset:biped:idle', 'preset:biped:walk']],
+    },
+    // The Memory Pool guardian: a Heartroot Warden spirit whose heart-light the Black Sap has cracked. Biped rig v1.0 like the Howler (full preset set).
+    'actor-grove-hollowheart': {
+      concept: `Hollowheart, the Sapbound Guardian: a towering corrupted Heartroot guardian spirit about 2.8 metres tall, a hulking broad-shouldered humanoid of dark gnarled living wood and braided roots with heavy moss-covered shoulder plates, a faceless carved-wood head crowned by a huge branching antler-like crown of pale splayed branches, two glowing amber eyes, a wide open chest cavity of cracked pale-amber heartroot crystal glowing warm gold, split by glistening black Black Sap veins that creep outward over the ribs, shoulders and the left arm, the left arm swollen with black sap-oozing thorny growths and ending in a huge heavy burl fist, the right arm still pale silver-brown living roots with a few green leaves, thick root-bundle legs gripping flat stone feet, hanging moss and a few drips of black sap. ${BIPED_POSE} ${STYLE}`,
+      faces: 20000, ...BIPED_RIG,
+      batches: [
+        ['preset:biped:idle', 'preset:biped:walk', 'preset:biped:run', 'preset:biped:slash', 'preset:biped:pitch_baseball'],
+        ['preset:biped:jump', 'preset:biped:hurt', 'preset:biped:turn', 'preset:biped:dive'],
+      ],
     },
   },
 };
@@ -240,6 +257,14 @@ MAPS.shared = {
       concept: `An ancient Warden waystone obelisk about 4 metres tall: one single tapering four-sided standing stone of pale weathered grey-green granite with flowing spiral leaf runes carved as shallow channels on its faces, an open circular stone ring at the top cradling a faceted pale gold crystal held by three carved stone prongs, living Heartroot roots of silver-brown wood spiralling up from the base and gripping the stone, small moss patches and tiny white flowers at the foot, the base widens into a low stepped octagonal plinth about 1.6 metres across. Front three-quarter view, entire object visible, standing upright on its base. ${ISOLATED} ${STYLE}`,
       faces: 14000,
     },
+    // Vara, the Storm Harpy (replaces the hornbill companion). User-approved concept 01, recomposed into a symmetric
+    // T-pose rigging sheet (concept 04, image_to_image). Avian rig like the Storm Hornbill: Tripo has no avian presets,
+    // so every clip (walk, flight, dive, talon strike) is authored offline on the Tripo skeleton.
+    'actor-vara-harpy': {
+      existingConcept: 'asset-source/generated/actor-vara-harpy-concept-04/tripo-out/actor-vara-harpy-concept-04-0e0e0c6b/generated_image.png',
+      faces: 20000, rig: 'avian', checkRig: true,
+      batches: [],
+    },
   },
 };
 
@@ -261,6 +286,165 @@ MAPS.heroes = {
     'prop-vesper-katana': {
       concept: `A fantasy katana for a shadow samurai assassin: a gently curved single-edged blade of dark blackened steel with a glowing violet-to-crimson hamon line along the cutting edge, a round blackened tsuba guard engraved with a crescent moon, a long tsuka grip wrapped in black and crimson silk diamond wrap over ray skin, a small silver kashira pommel, about 1.05 metres long overall. Entire weapon visible, laid horizontally in pure side view, blade pointing right with its edge facing up, centred. ${ISOLATED} ${STYLE}`,
       faces: 8000,
+    },
+  },
+};
+
+// Chapter 2 — Blood Bamboo Valley (docs/WILD-CROWN-GAME-DESIGN-BIBLE-CODEX-CLI.md, "CHAPTER 2"; docs/production/03-ART-RIG-VFX-PIPELINE.md art notes; concept board
+// docs/production/visual-review/images/C01 + C02). Playtest manifest: asset-source/playtests/bamboo.json (scripts/assets/build-bamboo-manifest.mjs), not wired into app code.
+// Credit ceiling for this map: 1,200 (every task is appended to asset-source/generated/bamboo-tripo-log.jsonl).
+// Koro here is the Chapter 1 boss form (the Black Sap thorn still in his shoulder); the healed ally stays `actor-koro` in the Grove map.
+// Asha and Tali share the Greenwake quadruped chain (walk preset only, every other clip authored offline); Marek follows the hero rig recipe (rig-v1.0, mixamo
+// spec) on a decimated model because he is an NPC, not a playable hero.
+MAPS.bamboo = {
+  log: 'asset-source/generated/bamboo-tripo-log.jsonl',
+  batches: GREENWAKE_BATCHES,
+  jobs: {
+    'actor-koro-branchbreaker': {
+      concept: `Koro, the Branchbreaker: the monkey leader Koro while a Black Sap thorn is still lodged in his shoulder, a strong clever macaque-like monkey about 1.5 metres tall standing upright, broader and more muscular than usual with a slightly hunched aggressive stance, sleek golden-brown fur with a grey mane over the shoulders, a scar across one brow under a furious heavy brow ridge, a woven vine sash carrying a small pouch of seeds, one long jagged glossy black Black Sap thorn driven into the left shoulder with dark sap veins spreading under the fur around it and a few thinner black veins creeping up the neck, glowing amber-red eyes, long tail curled behind. ${BIPED_POSE} ${STYLE}`,
+      faces: 20000, ...BIPED_RIG,
+      // Boss kit like the Howler: the five conditioned presets (idle, walk, run, slash = log sweep, pitch = rock throw); jump (the leap), hurt, turn, dive (platform charge), roar are authored offline.
+      batches: [['preset:biped:idle', 'preset:biped:walk', 'preset:biped:run', 'preset:biped:slash', 'preset:biped:pitch_baseball']],
+    },
+    'actor-asha': {
+      concept: `Asha, the Broken Fang: a powerful adult female tiger, a protective mother and one of the strongest creatures of the forest, simplified stylized fur masses (no individual hair strands), a rich ochre-orange coat with broad charcoal stripes that fork and branch like river tributaries, cream chest, belly and cheeks, a heavy muscular shoulder mass, a long pale scar across the muzzle, amber eyes, a rusted broken iron snare cuff with a short snapped chain on the right foreleg crusted with glistening black Black Sap, thin black sap veins creeping from the cuff up the leg onto the shoulder. About 1.1 metres at the shoulder. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, ...QUADRUPED_RIG,
+    },
+    'actor-tali': {
+      concept: `Tali, the tiger cub: a young tiger cub about half a metre at the shoulder with juvenile proportions (a big round head, large soft paws, short plump legs, a short thick tail with a dark ring tip), fluffy simplified stylized ochre-orange fur masses with thin dark stripes that fork like river tributaries (echoing the mother's pattern), cream chest and cheeks, small rounded ears, big bright curious amber eyes, faint rope-rub marks on the neck fur, no accessories. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, ...QUADRUPED_RIG,
+    },
+    'actor-marek': {
+      concept: `Marek, the Ash Hunter: a lean weathered man in his late thirties about 1.78 metres tall with a slightly hunched pragmatic posture, short messy dark brown hair, stubble and a sun-lined wary face, a worn brown leather jacket with rolled sleeves over a grey linen shirt, crossed leather harness straps and a wide belt with pouches, coils of rope and iron trap hooks hanging from the belt, one small corked glass vial of glowing black-purple Black Sap clipped to the belt, wrapped leather forearm bracers, patched dark brown trousers with knee patches tucked into heavy scuffed leather boots grey with ash. ${HERO_POSE} ${STYLE}`,
+      faces: 20000, rig: 'biped', checkRig: true, spec: 'mixamo', rigParams: { model: 'rig-v1.0' },
+      // NPC kit: idle, walk, run (his escape with the sample), then two talking idles (relaxed, swagger) used as the conversation gestures.
+      batches: [
+        ['preset:biped:idle', 'preset:biped:walk', 'preset:biped:run', 'preset:biped:standing_relax', 'preset:biped:swagger'],
+      ],
+    },
+    'prop-bamboo-grove-cluster': {
+      concept: `A dense grove cluster of tall Blood Bamboo about 9 metres tall, shown small inside a large frame with a wide empty white margin on every side and above the tips: sixteen thick jointed culms rising from one low shared base in deep ochre-gold with red-brown tinted nodes and a few dark green culms, a handful of split and broken culms, thin feathery leaf sprays near the tops, fallen dry leaves and young shoots at the base, tangled roots. The entire cluster from the roots to the very top of every leaf spray is fully inside the image, nothing cropped. Tall vertical composition, standing upright. ${ISOLATED} ${STYLE}`,
+      faces: 16000,
+    },
+    'prop-hunter-camp': {
+      concept: `An Ash Hunters' poacher camp for a bamboo valley: two patched canvas-and-hide tents on lashed bamboo frames, a small lashed bamboo lookout platform with a ladder, a blackened fire pit ringed with stones, stacked wooden crates and barrels with glowing black-purple Black Sap leaking from one barrel, a rope line with hanging hides, a skinning rack, iron hooks and chains. About 8 metres wide, all on one flat round ground base. Elevated front three-quarter view, entire camp visible, standing on its base. ${ISOLATED} ${STYLE}`,
+      faces: 20000,
+    },
+    'prop-ancient-bamboo-shrine': {
+      concept: `An ancient overgrown bamboo valley shrine: a small stepped stone platform with a short stone staircase, a curved dark tiled roof on four weathered faded red lacquered wooden posts, a stone altar inside with faint glowing red lanterns, two weathered stone tiger guardian statues flanking the stairs, moss, bamboo roots and hanging vines over the stones. About 7 metres wide. Front three-quarter view, entire shrine visible, standing on its base. ${ISOLATED} ${STYLE}`,
+      faces: 18000,
+    },
+    'prop-black-sap-jaw-trap': {
+      concept: `A hunter's Black Sap jaw trap: a heavy rusted iron two-jaw trap with long serrated jaws sprung wide open, a spring plate in the middle, bolted to a thick wooden base plank with a coil of chain and a driven iron ground stake, a small glass reservoir wired to the trigger glowing with black-purple sap, a few dark sap stains on the planks. About 1.2 metres wide. Three-quarter view from slightly above, entire object visible, resting on its base. ${ISOLATED} ${STYLE}`,
+      faces: 8000,
+    },
+    // Wave 2 decision 1: the Ash Hunters of the Black Sap extraction camp (two melee trappers, one ranged netter = the three `camp-hunters` instances). Marek's
+    // recipe: rig-v1.0 biped, mixamo spec, decimated model. The carried weapon is part of the mesh (rigidly re-skinned to the holding hand offline, one prompt
+    // detail makes that possible: the weapon is held upright, clear of the body). Credit ceiling for these two jobs: 450 (same bamboo log).
+    // Revision 1 concepts (inked-cartoon melee, long net-trailing crossbow overlapping the thigh) were rejected in review; revision 2 adds the realistic-render style
+    // line and the upright clear-of-the-body weapon pose.
+    'actor-camp-hunter-melee': {
+      concept: `Ash Hunter trapper (melee), a poacher of the Black Sap extraction camp: a broad-shouldered heavy man in his thirties about 1.85 metres tall with a hard unshaven face under an ash-grey canvas hood, a rolled grey cloth scarf around the neck and lower face, a dark brown leather jerkin with riveted iron shoulder plates under an ash-grey canvas tabard ending at mid-thigh, crossed leather harness straps, a wide belt with iron trap hooks and a coil of rope, one small corked glass vial of glowing black-purple Black Sap clipped to the belt, wrapped leather forearm bracers, patched dark trousers and heavy scuffed leather boots grey with ash, a weighted rope net bundle hanging on the left hip. In his right hand he holds one ash-wood trapping pole about 1.7 metres long gripped at hip height, held perfectly vertical straight up beside the body, parallel to the body axis, the lower end resting on the ground a hand's width away from the right foot, topped with a broad leaf-shaped iron spear blade and a curved barbed iron catch-hook just below the blade, the whole pole fully visible and clear of the legs. The left arm hangs relaxed slightly away from the body with the hand open. Full body front view, facing straight toward the camera, symmetrical neutral stance with feet shoulder-width apart, both feet flat and visible. Realistic stylized cinematic 3D game character render, detailed physically based materials, no outlines, no ink lines, no comic shading. Plain pure white background, soft even studio lighting, no ground shadow, no text, no watermark.`,
+      faces: 20000, rig: 'biped', checkRig: true, spec: 'mixamo', rigParams: { model: 'rig-v1.0' },
+      // idle, walk, run, slash (the hook-pole sweep) and hit_to_head (the hurt flinch); thrust, turn, knockdown, get-up, kneel and the rest are authored offline.
+      batches: [
+        ['preset:biped:idle', 'preset:biped:walk', 'preset:biped:run', 'preset:biped:slash', 'preset:biped:hit_to_head'],
+      ],
+    },
+    'actor-camp-hunter-ranged': {
+      concept: `Ash Hunter netter (ranged), a poacher of the Black Sap extraction camp: a lean wiry man in his late twenties about 1.72 metres tall with a sharp wary face, an ash-grey canvas hood and a rolled grey cloth scarf covering the lower face, a short ash-grey canvas jacket ending at the hips over a dark brown leather vest with crossed harness straps, a wide belt with iron trap hooks, a leather pouch and a coil of rope, one small corked glass vial of glowing black-purple Black Sap clipped to the belt, wrapped leather forearm bracers, patched dark trousers and scuffed leather boots grey with ash. In his right hand he holds a compact one-handed iron-bound hardwood net-launcher crossbow, a short stout crossbow only about 0.45 metres long and 0.4 metres wide, with a short thick steel bow and a small ball of bundled weighted rope net loaded on the rail (no web or mesh stretched across the bow), gripped by its handle with the right forearm bent and raised a little forward and out to the side at waist height, the crossbow pointing upward and outward, held entirely clear of the body, the legs and the jacket. The left arm hangs relaxed slightly away from the body with the hand open. Full body front view, facing straight toward the camera, symmetrical neutral stance with feet shoulder-width apart, both feet flat and visible. Realistic stylized cinematic 3D game character render, detailed physically based materials, no outlines, no ink lines, no comic shading. Plain pure white background, soft even studio lighting, no ground shadow, no text, no watermark.`,
+      faces: 20000, rig: 'biped', checkRig: true, spec: 'mixamo', rigParams: { model: 'rig-v1.0' },
+      // idle, walk, run, hit_to_head (the hurt flinch) -- aim, shoot, reload, turn, knockdown, get-up, kneel and the rest are authored offline, because the crossbow rides the hand.
+      batches: [
+        ['preset:biped:idle', 'preset:biped:walk', 'preset:biped:run', 'preset:biped:hit_to_head'],
+      ],
+    },
+  },
+};
+
+// Acts II–IV: distinct missing sources only. Existing Ruun and Grove assets are reused.
+// Whole-remediation ceiling: 5,000 credits, explicitly approved before this map was added.
+MAPS.later = {
+  log: 'asset-source/generated/later-acts-tripo-log.jsonl',
+  batches: GREENWAKE_BATCHES,
+  jobs: {
+    'actor-luma': {
+      concept: `Luma, a young adult female grey wolf leader, natural quadruped animal, lean athletic build with long legs, alert upright ears, warm grey and tawny-brown fur along the back, creamy white chest muzzle and lower legs, golden eyes, thick straight lowered tail. Calm confident alert expression, distinct youthful silhouette, no armour, no jewellery, no corruption, no chains. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'quadruped', checkRig: true,
+    },
+    'actor-sable': {
+      concept: `Sable, a natural black wolf scout companion, lean muscular long-bodied wolf with a dense charcoal-black coat, subtle warm grey muzzle and throat, pointed ears, bright amber eyes, thick long lowered tail. Alert thoughtful expression, powerful shoulders but slimmer than an elder alpha, no clothing, no armour, no chains, no corruption. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'quadruped', checkRig: true,
+    },
+    'actor-nyra': {
+      concept: `Nyra, a powerful natural melanistic leopard panther companion with sleek near-black charcoal fur and subtle dark rosette markings visible on the flanks, deep muscular shoulders, long graceful curved tail, rounded small ears, golden amber eyes and a calm watchful expression. No armour, no clothing, no collar, no corruption. Four feline paws with distinct toes. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'quadruped', checkRig: true,
+    },
+    'actor-solkar': {
+      concept: `Solkar, a regal adult male African lion king, muscular golden-tan body, enormous sculpted mane made of layered pointed golden ochre and dark umber fur clumps forming a sunburst silhouette around the head and shoulders, proud stern face, pale muzzle, amber eyes, long tail with dark tuft, natural feline anatomy. No metal crown, no clothing, no weapons, no chains. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'quadruped', checkRig: true,
+    },
+    'actor-orun': {
+      concept: `Orun the Hollow King, an elderly gaunt human man, swept-back short grey hair, pale weathered angular face, tired amber eyes, a small crown of black wooden root spikes. Fitted black gnarled-root rib armour over a dark sleeveless leather tunic, one embedded glowing amber heart crystal in his chest, short shoulder panels ending above the elbows, dark fitted trousers and worn leather boots. Both legs entirely free and separated, no long cloak, no skirt, no staff or weapon, empty open hands. ${BIPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'biped', checkRig: true, spec: 'mixamo',
+      rigParams: { model: 'rig-v1.0' },
+      batches: [], // Retarget the existing native Warden action library locally onto Orun's own Mixamo rig.
+    },
+    'actor-orun-crowned-beast': {
+      concept: `The Crowned Beast, a colossal quadrupedal lion-shaped living-root monster: four thick separate bark-covered legs with huge clawed paws, a regal stone-grey lion face, layered dark wooden root mane, a tall branching crown with six embedded glowing amber stones, heavy intertwined root armour over a muscular feline body. A human elder face is embedded as a shallow amber carving in the centre of its broad chest. Jagged connected root ridges along the spine, one long thick root tail curling behind, small patches of moss. No wings, no extra legs, no separate figures or floating pieces. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 20000, rig: 'quadruped', checkRig: true,
+    },
+    'actor-council-envoy': {
+      concept: `A dignified adult antelope council envoy, natural quadruped savanna animal, slender golden-tan body, white belly and inner legs, dark facial stripe, large alert ears, two long elegant gently spiralling horns, fine cloven hooves, short dark tail. One small simple woven green neck band with a wooden leaf medallion resting flat against the upper chest. Calm wise expression, no human body, no weapons, no armour. ${QUADRUPED_POSE} ${STYLE}`,
+      faces: 18000, rig: 'quadruped', checkRig: true,
+    },
+    'prop-sunmane-stone-terrace': {
+      concept: `An ancient savanna council terrace, one broad low circular sandstone platform with three shallow concentric steps, a large completely flat clear walkable top, weathered ochre stone slabs, subtle carved sun-ray patterns around the outer rim, sparse dry grass at the base. About twelve metres wide and one metre high. No throne, pillars, roof or people. Entire platform visible in elevated three-quarter view. ${STYLE}`,
+      faces: 18000,
+    },
+    'prop-migration-gate': {
+      concept: `An ancient savanna migration gate, two massive weathered ochre sandstone posts joined by a single sturdy horizontal lintel, a wide rectangular passage between them filled with a closed lattice of thick vertical wooden root bars. Simple carved antelope and hoof motifs on the posts, dry grass at the base, no roof, no surrounding walls, no animals. About six metres wide and four metres tall. Entire gate visible in front three-quarter view. ${STYLE}`,
+      faces: 16000,
+    },
+    'prop-water-allotment-gate': {
+      concept: `A savanna water-allotment sluice gate, two low weathered sandstone side supports and a closed heavy wooden sluice panel with three visible horizontal braces, a large wooden handwheel and screw mechanism above the panel. The structure controls a narrow irrigation channel, but include only the freestanding dry gate assembly, no water or landscape. Ochre stone, dark aged wood, small green moss stains at the bottom. Entire assembly visible in three-quarter view. ${STYLE}`,
+      faces: 14000,
+    },
+    'prop-plains-stone-arch': {
+      concept: `A freestanding natural sandstone arch on a dry savanna, two broad eroded ochre stone legs joined by a thick curved rock span, one large clear opening wide enough for a lion, layered red-gold sediment, chips and shallow cracks, sparse tufts of dry grass at each base. No foliage canopy, no symbols, no people. Entire arch visible in three-quarter view. ${STYLE}`,
+      faces: 14000,
+    },
+    'prop-savanna-acacia': {
+      concept: `A mature African savanna acacia tree, one twisted dark brown trunk dividing into a few sturdy spreading branches, a broad flat umbrella crown of small clustered olive-green leaves, visible gaps between leaf clusters, exposed buttress roots and a small dry earth base. Entire isolated tree from roots to crown visible, no animals, no other trees, no scenery. Three-quarter view. ${STYLE}`,
+      faces: 18000,
+    },
+    'prop-map-table': {
+      concept: `A rustic forest refuge planning table, a sturdy low rectangular dark timber table on four thick separate legs, one broad parchment map lying flat on its top held by four small river stones, simple ink paths and forest shapes without letters, two small wooden marker tokens, a rolled parchment at one side. No chairs, no people, no floor tile. Entire table and all four legs visible in elevated three-quarter view. ${STYLE}`,
+      faces: 10000,
+    },
+    'prop-heartroot-fragment-stone': {
+      concept: `A small Heartroot fragment shrine stone, a squat irregular mossy grey boulder with a shallow carved bowl at its top holding one embedded glowing amber crystal shard, thin living roots wrapped tightly around the sides and base, faint green rune-like grooves without text. The crystal is one solid attached piece, not floating. About one metre high. Entire isolated object visible in three-quarter view. ${STYLE}`,
+      faces: 10000,
+    },
+    'prop-heartroot-root-column': {
+      concept: `A huge underground living-root support column, three thick intertwined dark wooden roots rising vertically from a broad flared rooted base, rough bark, small moss patches and subtle amber sap seams, top ends cut flat as if continuing into the cavern ceiling. Tall narrow upright silhouette about eight metres high, no canopy or leaves, no floating branches. Entire isolated column visible in three-quarter view. ${STYLE}`,
+      faces: 16000,
+    },
+    'prop-six-fragment-shrine': {
+      concept: `A low circular ancient Heartroot shrine with exactly six small evenly spaced stone-and-root sockets arranged around an open central shallow basin, one attached coloured crystal in each socket: pale gold, green, orange, silver, violet, amber. Weathered dark stone, intertwined roots along the outer rim, completely clear flat floor in the middle, no roof or high pillars. Entire isolated shrine visible from elevated three-quarter view. ${STYLE}`,
+      faces: 18000,
+    },
+    'prop-root-crown-altar': {
+      concept: `The Root Crown altar, one broad low dark stone altar raised on two shallow steps, a compact crown-shaped cluster of six thick upward-curving wooden roots firmly attached at its centre, a small warm amber light glowing between the roots. Ancient mossy stone and dark bark, faint carved concentric rings on the altar top, no figures, no skulls, no surrounding scenery. Entire isolated altar visible in three-quarter view. ${STYLE}`,
+      faces: 16000,
+    },
+    'prop-hollow-cavern-rock': {
+      concept: `A broad rugged dark basalt cavern rock formation, several connected angular stone slabs and low ledges, cracked charcoal-grey surfaces with muted green mineral stains and small patches of moss, an irregular but flat supported base. About six metres wide and four metres tall, no opening or tunnel, no trees or glowing crystals, no scenery. Entire isolated formation visible in three-quarter view. ${STYLE}`,
+      faces: 14000,
+    },
+    'prop-root-tether-anchor': {
+      concept: `A heavy rooted tether anchor for an ancient forest cavern, a squat weathered dark stone block bound by thick interwoven wooden roots, one large sturdy arched root loop rising from its top as a clearly visible grapple point, the loop opening completely clear. Moss at the base and a subtle amber sap seam along the loop. About two metres high, no rope attached, no scenery, entire isolated object visible in three-quarter view. ${STYLE}`,
+      faces: 10000,
     },
   },
 };

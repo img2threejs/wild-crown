@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { parseGlb, encodeGlb } from './import-aren-animation-set.mjs';
 import { readAccessorAny } from './creature-rig-kit.mjs';
-import { buildBodyProxy, bladeClearance, interpolateFrame, midFrameBladeDeviation, NEAR_FIST, segmentSegmentDistance } from './vesper-blade-clearance.mjs';
+import { buildBodyProxy, bladeClearance, guardClearance, interpolateFrame, midFrameBladeDeviation, NEAR_FIST, segmentSegmentDistance } from './vesper-blade-clearance.mjs';
 import { Rig, buildClip, appendClips, limitJoints, jointExcursions, skinDeformationReport, retargetFrames, JOINT_LIMITS, COMBAT_LIMITS, FPS } from './retarget-aren-tripo-clips.mjs';
 import { resolveMixamoSources, loadMixamoDonor } from './mixamo-import.mjs';
 import { repairVesperFlapWeights } from './vesper-skin-weights.mjs';
@@ -24,6 +24,8 @@ import { KATANA_GRIP } from '../../src/rendering/KatanaGrip.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const DEG = Math.PI / 180;
 const TICKS_PER_SECOND = 60;
+/** The toolkit's 30 fps key rate; the layers below shadow `FPS` with `layer.fps ?? LAYER_FPS` so a 60 Hz clip (the knockdown / get-up set) maps frames to ticks correctly. */
+const LAYER_FPS = FPS;
 // Approved delivered native envelope: docs/features/asset-pipeline.md, Anatomy method,
 // original GLB SHA256 93ebfb377d0a9a2c44bcd10d5f457f57f09c4ca95fc5821371d7b975582c81b4.
 const APPROVED_NATIVE_P999 = 1.75485;
@@ -53,8 +55,8 @@ function principalAxis(points, seed, perpendicular) {
 }
 
 /**
- * Right-hand native bind anatomy: metacarpal direction `d`, thumb side `thumb`, palm normal `n`;
- * katana rigid fist: shaft direction `s`, point `palm`, `shaftRadius` in hand-local rig units, mirroring `computeHandGrip`.
+ * Right-hand native bind anatomy: metacarpal direction `d`, calibration side `thumb` (whole-hand skew), palm normal `n`;
+ * katana rigid fist: shaft direction `s`, seat `palm`, `shaftRadius` in hand-local rig units, mirroring `computeHandGrip` and its rigid katana fist.
  */
 function handAnatomy(base) {
   const side = 'Right', { json, bin } = base, primitive = json.meshes[0].primitives[0], joints = json.skins[0].joints;
@@ -81,30 +83,42 @@ function handAnatomy(base) {
   let skew = 0;
   for (const point of points) skew += (point.dot(knuckles) - mean) ** 3;
   const thumb = knuckles.clone().multiplyScalar(skew > 0 ? 1 : -1);
-  const n = thumb.clone().cross(d).normalize();
+  // Calibration frame of the captured blade and edge (kept stable); the anatomical palm is resolved from the thumb below.
+  const reference = thumb.clone().cross(d).normalize();
   // Middle-finger axis: centroid direction of the hand vertices farthest from the wrist.
   const far = points.map((point) => ({ point, distance: point.length() })).sort((x, y) => y.distance - x.distance).slice(0, Math.floor(points.length * 0.15));
   const fingers = far.reduce((sum, item) => sum.add(item.point), new Vector3()).divideScalar(far.length).normalize();
-  const anatomy = { side, d, thumb, n, fingers, points };
   const s = thumb.clone().multiplyScalar(Math.cos(KATANA_GRIP.diagonalRadians)).addScaledVector(d, Math.sin(KATANA_GRIP.diagonalRadians)).normalize();
   const bend = d.clone().addScaledVector(s, -d.dot(s)).normalize();
-  const lengths = points.map((point) => point.dot(bend)).sort((x, y) => x - y), length = lengths[Math.floor(lengths.length * 0.98)], hinge = length * 0.42;
-  const palmPoints = points.filter((point) => point.dot(bend) < hinge);
-  let plane = 0, across = 0;
-  for (const point of palmPoints) { plane += point.dot(n); across += point.dot(s); }
-  plane /= palmPoints.length; across /= palmPoints.length;
-  let low = Infinity, high = -Infinity, fingerDepth = 0;
+  // The katana seat mirrors the runtime rigid fist (katanaHandGrip): Vesper's thumb protrudes below the knuckles, and thumb × fingers is the palm.
+  const lengths = points.map((point) => point.dot(d)).sort((x, y) => x - y), length = lengths[Math.floor(lengths.length * 0.98)], hinge = length * 0.42;
+  const natural = s.clone().addScaledVector(d, -s.dot(d)).normalize();
+  const fingerPoints = points.filter((point) => point.dot(d) > hinge);
+  const laterals = points.filter((point) => point.dot(d) > hinge + (length - hinge) * 0.25).map((point) => point.dot(natural)).sort((x, y) => x - y);
+  const middle = laterals[Math.floor(laterals.length / 2)];
+  let positive = 0, negative = 0;
   for (const point of points) {
-    low = Math.min(low, point.dot(s)); high = Math.max(high, point.dot(s));
-    if (point.dot(bend) > hinge) fingerDepth = Math.max(fingerDepth, point.dot(n) - plane);
+    const along = point.dot(d);
+    if (along <= length * 0.15 || along >= hinge) continue;
+    const lateral = point.dot(natural) - middle;
+    positive = Math.max(positive, lateral); negative = Math.max(negative, -lateral);
   }
-  const shaftRadius = (high - low) * 0.16, radius = Math.max((length - hinge) / 2.7, fingerDepth + shaftRadius);
+  const n = natural.clone().multiplyScalar(positive > negative ? 1 : -1).cross(d).normalize();
+  const fingerLengths = fingerPoints.map((point) => point.dot(d)).sort((x, y) => x - y), reach = fingerLengths[Math.floor(fingerLengths.length * 0.98)] - hinge;
+  let acrossMin = Infinity, acrossMax = -Infinity, surface = -Infinity;
+  for (const point of fingerPoints) {
+    const across = point.dot(natural);
+    acrossMin = Math.min(acrossMin, across); acrossMax = Math.max(acrossMax, across); surface = Math.max(surface, point.dot(n));
+  }
+  const shaftRadius = Math.min((acrossMax - acrossMin) * 0.09, reach * 0.18);
+  const anatomy = { side, d, thumb, n, fingers, points };
   anatomy.s = s;
-  // The cutting edge: cos(edgeRadians)·(-n) + sin(edgeRadians)·bend, mirroring computeHandGrip.
-  anatomy.dPerp = n.clone().negate().multiplyScalar(Math.cos(KATANA_GRIP.edgeRadians)).addScaledVector(bend, Math.sin(KATANA_GRIP.edgeRadians)).normalize();
+  // The cutting edge: cos(edgeRadians)·(-reference) + sin(edgeRadians)·bend, mirroring computeHandGrip.
+  anatomy.dPerp = reference.clone().negate().multiplyScalar(Math.cos(KATANA_GRIP.edgeRadians)).addScaledVector(bend, Math.sin(KATANA_GRIP.edgeRadians)).normalize();
   anatomy.shaftRadius = shaftRadius;
-  anatomy.palm = bend.clone().multiplyScalar(hinge).addScaledVector(s, across).addScaledVector(n, plane + radius);
-  anatomy.rigid = { bend, hinge, plane, radius };
+  anatomy.palm = d.clone().multiplyScalar(hinge).addScaledVector(natural, (acrossMin + acrossMax) / 2).addScaledVector(n, surface + shaftRadius)
+    .applyQuaternion(new Quaternion().setFromUnitVectors(natural, s));
+  anatomy.rigid = { bend, hinge, plane: surface + shaftRadius - reach / 3, radius: reach / 3 };
   return anatomy;
 }
 
@@ -135,6 +149,7 @@ const slerpDirection = (from, to, t) => {
  */
 function wristLayer(context, frames, count, layer) {
   const { target, grip } = context;
+  const FPS = layer.fps ?? LAYER_FPS; // key rate of `frames`: 30 for the toolkit clips, 60 for the knockdown / get-up clips
   const id = (name) => target.index.get(`mixamorig:${name}`);
   const hand = id('RightHand'), fore = id('RightForeArm'), parent = target.parent[hand], chest = id('Spine2');
   const chestRestInverse = target.restWorldQuaternion[chest].clone().invert();
@@ -191,12 +206,14 @@ function wristLayer(context, frames, count, layer) {
         from.copy(rotated).addScaledVector(direction, lo); to.copy(rotated).addScaledVector(direction, hi);
         min = Math.min(min, segmentSegmentDistance(from, to, a, b) - r);
       }
+      if (near === undefined) min = Math.min(min, guardClearance(rotated, direction, a, b, r, KATANA_GRIP, RIG_SCALE));
     }
     const base = rotated.y;
     return { min, low: Math.min(base + direction.y * tipReach, base + direction.y * pommelAlong) };
   }
   const aimKeys = layer.aim?.map(([t, yaw, pitch, w = 1]) => ({ t, yaw, pitch, w }));
   const raw = [], applied = { swing: 0, roll: 0 };
+  const evals = [];
   for (let k = 0; k < count; k += 1) {
     const tick = k * TICKS_PER_SECOND / FPS;
     let wanted = blades[k].clone();
@@ -239,6 +256,7 @@ function wristLayer(context, frames, count, layer) {
       const world = target.poseFrame(frames, k), wristPos = new Vector3().setFromMatrixPosition(world[hand]), palmWorld = grip.palm.clone().applyQuaternion(handQ0[k]);
       const segments = bodyCapsules.map((capsule) => ({ name: capsule.name, a: new Vector3().setFromMatrixPosition(world[capsule.node]), b: capsule.headTip ? new Vector3(0, 0.15, 0).applyMatrix4(world[capsule.node]) : new Vector3().setFromMatrixPosition(world[capsule.toNode]), r: capsule.radius }));
       const evaluate = (q) => bladeClearanceNow(q, wristPos, palmWorld, blades[k], segments);
+      evals[k] = evaluate;
       const ok = (r) => r.min >= clearMargin && r.low >= clearFloor;
       let result = evaluate(swing);
       if (!ok(result)) {
@@ -256,7 +274,6 @@ function wristLayer(context, frames, count, layer) {
           }
           if (bestScore >= -0.002 * step) break search;
         }
-        if (process.env.VESPER_DEBUG_WRIST && best) { const after = evaluate(best); console.error('wrist', k, 'before', result.min.toFixed(3), result.low.toFixed(3), 'after', after.min.toFixed(3), after.low.toFixed(3), 'need', clearMargin.toFixed(3), clearFloor.toFixed(3), 'angle', (2 * Math.acos(Math.min(1, Math.abs(best.w))) / DEG).toFixed(0)); }
         if (best) swing.copy(best);
       }
     }
@@ -272,10 +289,31 @@ function wristLayer(context, frames, count, layer) {
         roll = new Quaternion().setFromAxisAngle(blade, Math.max(-maxTwist, Math.min(maxTwist, phi)) * weight);
       }
     }
-    const total = roll.multiply(swing);
-    const correctionAngle = 2 * Math.acos(Math.min(1, Math.abs(total.w)));
-    if (correctionAngle > maxCorrection) total.slerp(new Quaternion(), 1 - maxCorrection / correctionAngle);
+    // The cap binds the edge roll before the blade swing: the swing keeps the blade in its frontal arc and clear of the body.
+    let total = roll.clone().multiply(swing);
+    const angleOf = (q) => 2 * Math.acos(Math.min(1, Math.abs(q.w)));
+    if (angleOf(total) > maxCorrection) {
+      if (angleOf(swing) >= maxCorrection) total = swing.clone().slerp(new Quaternion(), 1 - maxCorrection / angleOf(swing));
+      else {
+        let low = 0, high = 1;
+        for (let pass = 0; pass < 24; pass += 1) {
+          const mid = (low + high) / 2;
+          if (angleOf(new Quaternion().slerp(roll, mid).multiply(swing)) > maxCorrection) high = mid; else low = mid;
+        }
+        total = new Quaternion().slerp(roll, low).multiply(swing);
+      }
+    }
     raw.push(total);
+  }
+  // `coherent`: a key whose own solution leaves the steel inside the margins adopts whichever neighbouring key's rotation clears best (the ring search can jump between two far-apart solutions from one key to the next).
+  if (layer.coherent && layer.clear !== false) {
+    const score = (r) => Math.min(r.min - clearMargin, r.low - clearFloor);
+    for (let pass = 0; pass < 4; pass += 1) for (let k = 0; k < count; k += 1) {
+      let best = raw[k], bestScore = score(evals[k](raw[k]));
+      if (bestScore >= 0) continue;
+      for (const j of [k - 1, k + 1, k - 2, k + 2]) if (j >= 0 && j < count) { const s = score(evals[k](raw[j])); if (s > bestScore) { bestScore = s; best = raw[j]; } }
+      raw[k] = best;
+    }
   }
   // Smooth the corrections (aligned to one hemisphere) so a clamp switching on or off never kinks the wrist.
   const radius = layer.smooth ?? 2, total = new Quaternion(), reference = new Quaternion(), identity = new Quaternion();
@@ -293,30 +331,384 @@ function wristLayer(context, frames, count, layer) {
   return applied;
 }
 
-/** Every skin vertex that a triangle references and that a Foot/ToeBase bone dominates, CPU-skinned on demand; `rest` is the bind pose's lowest sole height (the floor). */
-function soleKit(target, glb) {
+/**
+ * Bounded shoulder correction for captured poses whose palm-seated katana cannot clear the body or reach its frontal arc with the wrist alone.
+ * Only `mixamorig:RightArm` is rotated (a world rotation about the shoulder; forearm, hand and katana follow); the wrist layer runs afterwards and limitJoints still clamps.
+ *   `clear: { margin, floor, maxDegrees, axes?, maxPitch? }`  the smallest rotation that keeps the steel and tsuba `margin` metres from every torso, head, leg and left-arm capsule, both blade ends `floor` metres up and, with `maxPitch`, the blade at or below that pitch (degrees);
+ *   `frontal: { ticks, degrees }`  turns the blade toward the chest heading by at most `degrees`, ramped in over ±4 ticks around each strike tick;
+ *   `thrusts: [{ tick, from, to, degrees }]`  bends the kissaki's path inside each thrust window onto the blade line of its strike tick (≤ `degrees` per frame), so the point travels along the steel.
+ * Corrections are smoothed over ±`smooth` frames; `afterWrist` runs the layer after the wrist layer (a carried blade the wrist re-aims). Returns the largest applied rotation (degrees).
+ */
+function armLayer(context, frames, count, layer) {
+  const { target, grip } = context;
+  const FPS = layer.fps ?? LAYER_FPS;
+  const id = (name) => target.index.get(`mixamorig:${name}`);
+  const arm = id('RightArm'), hand = id('RightHand'), parent = target.parent[arm], chest = id('Spine2');
+  const chestRestInverse = target.restWorldQuaternion[chest].clone().invert();
+  const tipReach = (KATANA_GRIP.length - KATANA_GRIP.gripFromPommel) * M, pommelAlong = -KATANA_GRIP.gripFromPommel * M;
+  const capsules = proxy.filter((capsule) => !/^Right(Arm|ForeArm)$/.test(capsule.name));
+  const clear = layer.clear, margin = (clear?.margin ?? 0.04) / RIG_SCALE, floor = (clear?.floor ?? 0.04) / RIG_SCALE, maxClear = (clear?.maxDegrees ?? 20) * DEG;
+  // A carried blade keeps its low carry while the shoulder clears it: the blade may not rise above `maxPitch` degrees.
+  const pitchCeiling = clear?.maxPitch === undefined ? Infinity : Math.sin(clear.maxPitch * DEG);
+  const axisCount = clear?.axes ?? 96, axes = Array.from({ length: axisCount }, (_, i) => {
+    const y = 1 - 2 * (i + 0.5) / axisCount, radius = Math.sqrt(1 - y * y), phi = i * Math.PI * (3 - Math.sqrt(5));
+    return new Vector3(Math.cos(phi) * radius, y, Math.sin(phi) * radius);
+  });
+  const at = (k) => (layer.loop ? ((k % (count - 1)) + (count - 1)) % (count - 1) : Math.max(0, Math.min(count - 1, k)));
+  const angleOf = (q) => 2 * Math.acos(Math.min(1, Math.abs(q.w)));
+  const thrustLines = (layer.thrusts ?? []).map(({ tick, from, to, degrees }) => {
+    const k = Math.round(tick * FPS / TICKS_PER_SECOND), world = target.poseFrame(frames, k), q = quaternionOf(world[hand]);
+    return { k, from: Math.round(from * FPS / TICKS_PER_SECOND), to: Math.round(to * FPS / TICKS_PER_SECOND), limit: (degrees ?? 12) * DEG, blade: grip.s.clone().applyQuaternion(q),
+      tip: new Vector3().setFromMatrixPosition(world[hand]).add(grip.palm.clone().addScaledVector(grip.s, tipReach).applyQuaternion(q)) };
+  });
+  const raw = [];
+  for (let k = 0; k < count; k += 1) {
+    const world = target.poseFrame(frames, k), shoulder = new Vector3().setFromMatrixPosition(world[arm]);
+    const handQ = quaternionOf(world[hand]), wrist = new Vector3().setFromMatrixPosition(world[hand]);
+    const blade = grip.s.clone().applyQuaternion(handQ), seat = wrist.clone().add(grip.palm.clone().applyQuaternion(handQ));
+    let rotation = new Quaternion();
+    if (layer.frontal) {
+      const tick = k * TICKS_PER_SECOND / FPS;
+      const weight = Math.max(0, ...layer.frontal.ticks.map((strike) => 1 - Math.abs(tick - strike) / 4));
+      if (weight > 0) {
+        const heading = new Vector3(1, 0, 0).applyQuaternion(quaternionOf(world[chest]).multiply(chestRestInverse)).setY(0).normalize();
+        const turn = new Quaternion().setFromUnitVectors(blade, heading), limit = layer.frontal.degrees * DEG * weight, angle = angleOf(turn);
+        rotation = angle > limit ? new Quaternion().slerp(turn, limit / angle) : turn;
+      }
+    }
+    for (const line of thrustLines) {
+      if (k <= line.from || k >= line.to || k === line.k) continue;
+      const weight = 1 - Math.abs(k - line.k) / (k < line.k ? line.k - line.from : line.to - line.k);
+      const tip = wrist.clone().add(grip.palm.clone().addScaledVector(grip.s, tipReach).applyQuaternion(handQ)).sub(shoulder).applyQuaternion(rotation).add(shoulder);
+      const onLine = line.tip.clone().addScaledVector(line.blade, tip.clone().sub(line.tip).dot(line.blade));
+      const bend = new Quaternion().setFromUnitVectors(tip.sub(shoulder).normalize(), onLine.sub(shoulder).normalize()), angle = angleOf(bend) * weight;
+      rotation = new Quaternion().slerp(bend, Math.min(angle, line.limit) / Math.max(angleOf(bend), 1e-9)).multiply(rotation);
+    }
+    if (clear) {
+      const segments = capsules.map((capsule) => ({ name: capsule.name, a: new Vector3().setFromMatrixPosition(world[capsule.node]), b: capsule.headTip ? new Vector3(0, 0.15, 0).applyMatrix4(world[capsule.node]) : new Vector3().setFromMatrixPosition(world[capsule.toNode]), r: capsule.radius }));
+      const from = new Vector3(), to = new Vector3(), base = new Vector3(), direction = new Vector3();
+      const evaluate = (q) => {
+        base.copy(seat).sub(shoulder).applyQuaternion(q).add(shoulder); direction.copy(blade).applyQuaternion(q);
+        let min = Infinity;
+        for (const { a, b, r } of segments) {
+          from.copy(base).addScaledVector(direction, pommelAlong); to.copy(base).addScaledVector(direction, tipReach);
+          min = Math.min(min, segmentSegmentDistance(from, to, a, b) - r, guardClearance(base, direction, a, b, r, KATANA_GRIP, RIG_SCALE));
+        }
+        return Math.min(min - margin, Math.min(base.y + direction.y * tipReach, base.y + direction.y * pommelAlong) - floor, (pitchCeiling - direction.y) * 0.5);
+      };
+      if (evaluate(rotation) < 0) {
+        let best = rotation, bestScore = evaluate(rotation);
+        search: for (let degrees = 2; degrees <= maxClear / DEG + 1e-9; degrees += 2) {
+          for (const axis of axes) {
+            const candidate = new Quaternion().setFromAxisAngle(axis, degrees * DEG).multiply(rotation), score = evaluate(candidate) - 0.0005 * degrees;
+            if (score > bestScore) { bestScore = score; best = candidate; }
+          }
+          if (bestScore >= -0.0005 * degrees) break search;
+        }
+        rotation = best;
+      }
+    }
+    raw.push(rotation);
+  }
+  const radius = layer.smooth ?? 2, total = new Quaternion(), reference = new Quaternion(), identity = new Quaternion();
+  let largest = 0;
+  for (let k = 0; k < count; k += 1) {
+    let x = 0, y = 0, z = 0, w = 0;
+    for (let j = -radius; j <= radius; j += 1) {
+      const q = raw[at(k + j)], weight = radius + 1 - Math.abs(j), sign = q.w < 0 ? -1 : 1;
+      x += sign * weight * q.x; y += sign * weight * q.y; z += sign * weight * q.z; w += sign * weight * q.w;
+    }
+    total.set(x, y, z, w).normalize();
+    largest = Math.max(largest, angleOf(total) / DEG);
+    const world = target.poseFrame(frames, k), parentWorld = quaternionOf(world[parent], reference);
+    parentWorld.invert().multiply(total).multiply(quaternionOf(world[parent])).multiply(frames.rotations[arm] ? new Quaternion().fromArray(frames.rotations[arm], k * 4) : identity).normalize().toArray(frames.rotations[arm], k * 4);
+  }
+  return largest;
+}
+
+/**
+ * Katana clearance of the knockdown / get-up clips over BOTH katana layers at once: the shoulder (`arm`: the upper arm turns about the shoulder, the fist, the hand and the blade
+ * turn with it) and the wrist (`wrist`: the hand turns about its own joint). The per-key searches of `wristLayer` / `armLayer` pick an unrelated rotation at each key, average the
+ * neighbours and fix one layer before the other, which is neither smooth nor safe in a lying pose (the fist often rests against the thigh, where only the shoulder can free it and only
+ * the wrist can then free the blade, inside a thin region of rotation pairs). Here the pair of rotations is one path found by Viterbi over per-key candidate lists:
+ *  - the candidates of a key are the identity (the donor's own pose), the best of a coarse grid of pairs (`axes` × the layer's `cap`), and the previous key's candidates; every one of
+ *    them is polished by a pattern search (steps of 6°, 3°, 1.5° along the three axes of each layer) until the steel clears `margin` from the body capsules (and the guard) and
+ *    both blade ends clear `floor`, so a thin feasible region is followed from key to key instead of being missed by a grid;
+ *  - each node pays for what is still short (the floor part first answered by a bounded Hips lift, below), for the size of both rotations (the donor's pose is kept wherever it
+ *    already clears) and for every degree either rotation changes between keys (steps over JUMP_FREE cost extra), and every transition is also scored at the in-between poses the engine slerps (against the geometry of
+ *    the keys around them, with an extra margin); bridge candidates (small steps from the best earlier poses toward the best poses of the key) let a path walk between two clear poses;
+ *  - a switch the Viterbi still makes (two clear poses the path cannot walk between) is re-planned: first through a Dijkstra over clear poses at the geometry of the switch (`planBridge`), and when the two poses are
+ *    not connected by any clear path inside the caps (the back get-up's sit-up, tick 30) it is left as the one documented hand switch.
+ * The Hips lift (`lift.flat` metres in a lying frame, `lift.free` otherwise) is answered per key for the floor term only and is widened and blurred over ±`lift.spread` keys so it never steps.
+ * `pin` fixes the first key's pose and lift to the previous clip's last (a get-up's seam); `holdKey` makes the keys from it on one state. Returns the largest applied `{ arm, wrist, lift, last }` (degrees, degrees, metres).
+ */
+function dpPair(context, frames, count, arm, wrist, holdKey, pin) {
+  const { target, grip } = context;
+  const id = (name) => target.index.get(`mixamorig:${name}`);
+  const armNode = id('RightArm'), handNode = id('RightHand'), hipsNode = id('Hips');
+  const tipReach = (KATANA_GRIP.length - KATANA_GRIP.gripFromPommel) * M, pommelAlong = -KATANA_GRIP.gripFromPommel * M;
+  const margin = arm.margin / RIG_SCALE, floor = arm.floor / RIG_SCALE, capA = arm.cap * DEG, capW = wrist.cap * DEG;
+  const MID_MARGIN = 0.008;
+  let marginExtra = 0;
+  const weight = { shortfall: arm.shortfallWeight ?? 1500, change: arm.changeWeight ?? 0.5, size: arm.sizeWeight ?? 0.01 };
+  const lift = { flat: arm.lift?.flat ?? 0.026, free: arm.lift?.free ?? 0.14, weight: arm.lift?.weight ?? 0.1, spread: arm.lift?.spread ?? 12 };
+  const angleOf = (q) => 2 * Math.acos(Math.min(1, Math.abs(q.w)));
+  const between = (p, q) => 2 * Math.acos(Math.min(1, Math.abs(p.dot(q))));
+  const grid = (cap, axes) => {
+    const out = [new Quaternion()];
+    for (let i = 0; i < axes; i += 1) {
+      const y = 1 - 2 * (i + 0.5) / axes, radius = Math.sqrt(1 - y * y), phi = i * Math.PI * (3 - Math.sqrt(5)), axis = new Vector3(Math.cos(phi) * radius, y, Math.sin(phi) * radius);
+      for (const fraction of [0.5, 1]) out.push(new Quaternion().setFromAxisAngle(axis, cap * fraction));
+    }
+    return out;
+  };
+  const gridA = grid(capA, arm.axes ?? 10), gridW = grid(capW, wrist.axes ?? 10);
+  const geometry = (k, source = frames) => {
+    const world = target.poseFrame(source, k), q = quaternionOf(world[handNode]);
+    const pivot = new Vector3().setFromMatrixPosition(world[armNode]), wristPos = new Vector3().setFromMatrixPosition(world[handNode]);
+    const seat = wristPos.clone().add(grip.palm.clone().applyQuaternion(q)), blade = grip.s.clone().applyQuaternion(q);
+    const segments = proxy.map((capsule) => ({ name: capsule.name, a: new Vector3().setFromMatrixPosition(world[capsule.node]), b: capsule.headTip ? new Vector3(0, 0.15, 0).applyMatrix4(world[capsule.node]) : new Vector3().setFromMatrixPosition(world[capsule.toNode]), r: capsule.radius }));
+    const flat = Math.abs(torsoFrame(target, world).forward.y) > 0.7 && world[hipsNode].elements[13] < 0.3 / RIG_SCALE;
+    return { pivot, wristPos, seat, blade, segments, cap: (flat ? lift.flat : lift.free) / RIG_SCALE };
+  };
+  const from = new Vector3(), to = new Vector3(), rotated = new Vector3(), direction = new Vector3(), wrist1 = new Vector3(), seat1 = new Vector3(), blade1 = new Vector3();
+  /** Shortfalls (rig units) of the steel for the shoulder rotation `qa` followed by the wrist rotation `qw`: `{ body, floor }`. */
+  const shortfall = (g, qa, qw) => {
+    wrist1.copy(g.wristPos).sub(g.pivot).applyQuaternion(qa).add(g.pivot); seat1.copy(g.seat).sub(g.pivot).applyQuaternion(qa).add(g.pivot); blade1.copy(g.blade).applyQuaternion(qa);
+    rotated.copy(seat1).sub(wrist1).applyQuaternion(qw).add(wrist1); direction.copy(blade1).applyQuaternion(qw);
+    let min = Infinity;
+    for (const segment of g.segments) {
+      const { name, r } = segment, moved = /^Right(Arm|ForeArm)$/.test(name);
+      const a = moved ? segment.a.clone().sub(g.pivot).applyQuaternion(qa).add(g.pivot) : segment.a, b = moved ? segment.b.clone().sub(g.pivot).applyQuaternion(qa).add(g.pivot) : segment.b;
+      const near = NEAR_FIST[name], intervals = near === undefined ? [[pommelAlong, tipReach]] : [[pommelAlong, -near], [near, tipReach]];
+      for (const [lo, hi] of intervals) {
+        if (hi < lo) continue;
+        from.copy(rotated).addScaledVector(direction, lo); to.copy(rotated).addScaledVector(direction, hi);
+        min = Math.min(min, segmentSegmentDistance(from, to, a, b) - r);
+      }
+      if (near === undefined) min = Math.min(min, guardClearance(rotated, direction, a, b, r, KATANA_GRIP, RIG_SCALE));
+    }
+    const low = Math.min(rotated.y + direction.y * tipReach, rotated.y + direction.y * pommelAlong);
+    return { body: Math.max(0, margin + marginExtra - min), floor: Math.max(0, floor - low) };
+  };
+  /** What a candidate costs before smoothness: the body shortfall, the floor part the Hips lift cannot cover, a small price for the lift, and the size of both rotations. */
+  const price = (g, qa, qw) => {
+    const s = shortfall(g, qa, qw), covered = Math.min(s.floor, g.cap), unpaid = s.body + Math.max(0, s.floor - g.cap);
+    return { unpaid, deficit: covered, cost: weight.shortfall * (unpaid + lift.weight * covered) + weight.size * (angleOf(qa) + angleOf(qw)) / DEG };
+  };
+  const clamp = (q, cap) => { const angle = angleOf(q); if (angle > cap) q.slerp(new Quaternion(), 1 - cap / angle); return q; };
+  const AXES = [new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1)];
+  const polish = (g, candidate) => {
+    let current = { qa: candidate.qa.clone(), qw: candidate.qw.clone(), ...price(g, candidate.qa, candidate.qw) };
+    for (const [step, iterations] of [[6 * DEG, 24], [3 * DEG, 10], [1.5 * DEG, 8]]) for (let iteration = 0; iteration < iterations && current.unpaid > 0; iteration += 1) {
+      let best;
+      for (const layer of [0, 1]) for (const axis of AXES) for (const sign of [1, -1]) {
+        const turn = new Quaternion().setFromAxisAngle(axis, sign * step), qa = layer === 0 ? clamp(turn.clone().multiply(current.qa), capA) : current.qa, qw = layer === 1 ? clamp(turn.clone().multiply(current.qw), capW) : current.qw;
+        const priced = price(g, qa, qw);
+        if (priced.cost < (best?.cost ?? current.cost) - 1e-9) best = { qa, qw, ...priced };
+      }
+      if (!best) break;
+      current = best;
+    }
+    return current;
+  };
+  const KEEP = arm.keep ?? 18, SEEDS = arm.seeds ?? 8, BRIDGE_FROM = 6, BRIDGE_GOALS = 2, BRIDGE_STEPS = [0.1, 0.25];
+  const lists = [];
+  let previous = [];
+  const geoms = [];
+  for (let k = 0; k < count; k += 1) {
+    const g = geometry(k), seeds = [{ qa: new Quaternion(), qw: new Quaternion() }];
+    if (k === 0 && pin) { geoms.push(g); const kept = [{ qa: pin.qa.clone(), qw: pin.qw.clone(), ...price(g, pin.qa, pin.qw) }]; lists.push(kept); previous = kept; continue; }
+    geoms.push(g);
+    const coarse = [];
+    for (const qa of gridA) for (const qw of gridW) coarse.push({ qa, qw, ...price(g, qa, qw) });
+    coarse.sort((x, y) => x.cost - y.cost);
+    for (const item of coarse.slice(0, SEEDS)) seeds.push({ qa: item.qa, qw: item.qw });
+    for (const item of previous) seeds.push({ qa: item.qa, qw: item.qw });
+    // Bridges: a small step from each of the best previous states toward each of the best states of this key, so a path can walk between two feasible islands over several keys instead of jumping.
+    for (const from of previous.slice(0, BRIDGE_FROM)) for (const goal of coarse.slice(0, BRIDGE_GOALS)) for (const f of BRIDGE_STEPS) seeds.push({ qa: from.qa.clone().slerp(goal.qa, f), qw: from.qw.clone().slerp(goal.qw, f) });
+    const polished = seeds.map((seed) => polish(g, seed)).sort((x, y) => x.cost - y.cost), kept = [];
+    for (const item of polished) {
+      if (kept.length >= KEEP) break;
+      if (kept.every((other) => between(other.qa, item.qa) + between(other.qw, item.qw) > 2 * DEG)) kept.push(item);
+    }
+    if (!kept.some((item) => angleOf(item.qa) === 0 && angleOf(item.qw) === 0)) kept.push({ qa: new Quaternion(), qw: new Quaternion(), ...price(g, new Quaternion(), new Quaternion()) });
+    lists.push(kept); previous = kept;
+  }
+  // Viterbi over the lists.
+  const cost = lists.map((list) => new Float64Array(list.length)), back = lists.map((list) => new Int32Array(list.length));
+  lists[0].forEach((item, s) => { cost[0][s] = item.cost; });
+  // A transition is also scored at the poses the engine plays between the two keys (slerp at ¼, ½, ¾ of each layer's rotation, against the later key's geometry).
+  const middle = new Quaternion(), middleW = new Quaternion();
+  const T_MID = [0.25, 0.5, 0.75];
+  const mids = (k) => (midCache[k] ??= T_MID.map((t) => geometry(0, interpolateFrame(frames, k - 1 + t))));
+  const midCache = [];
+  const inBetween = (k, p, s) => {
+    let worst = 0;
+    for (const [i, t] of T_MID.entries()) for (const g of [mids(k)[i], geoms[k]]) {
+      middle.copy(p.qa).slerp(s.qa, t); middleW.copy(p.qw).slerp(s.qw, t);
+      marginExtra = MID_MARGIN / RIG_SCALE;
+      const priced = price(g, middle, middleW);
+      marginExtra = 0;
+      worst = Math.max(worst, priced.unpaid);
+    }
+    return worst;
+  };
+  // A step between two keys is free up to JUMP_FREE degrees (shoulder + wrist) and then pays JUMP_WEIGHT per degree: the shoulder / wrist walk between two feasible poses over several keys (the bridge seeds) instead of snapping.
+  const JUMP_FREE = 12, JUMP_WEIGHT = 20;
+  for (let k = 1; k < count; k += 1) lists[k].forEach((item, s) => {
+    let best = Infinity, arg = 0;
+    lists[k - 1].forEach((other, p) => {
+      const turn = (between(other.qa, item.qa) + between(other.qw, item.qw)) / DEG;
+      const value = cost[k - 1][p] + weight.change * turn + JUMP_WEIGHT * Math.max(0, turn - JUMP_FREE) + weight.shortfall * inBetween(k, other, item);
+      if (value < best) { best = value; arg = p; }
+    });
+    cost[k][s] = best + item.cost; back[k][s] = arg;
+  });
+  const path = new Int32Array(count);
+  let bestEnd = Infinity;
+  cost[count - 1].forEach((value, s) => { if (value < bestEnd) { bestEnd = value; path[count - 1] = s; } });
+  for (let k = count - 1; k > 0; k -= 1) path[k - 1] = back[k][path[k]];
+  // From `holdKey` on the clip holds one pose (every key identical), so those keys take one state (the first held key's) and, below, one lift.
+  const chosenRaw = (k) => lists[holdKey !== undefined && k > holdKey ? holdKey : k][path[holdKey !== undefined && k > holdKey ? holdKey : k]];
+  const states = Array.from({ length: count }, (_, k) => chosenRaw(k));
+  // A jump between two keys (more than JUMP_FREE degrees: the optimum switched between two feasible poses that the straight slerp between them also keeps feasible) is spread over the keys before it, or failing that after it,
+  // along that slerp, 8° per key at most, wherever every key and every in-between pose of the ramp stays clear.
+  const RAMP_STEP = 8, RAMP_KEY_TOLERANCE = 0.011 / RIG_SCALE, RAMP_BETWEEN_TOLERANCE = 0.018 / RIG_SCALE;
+  const stateAt = (k, qa, qw) => ({ qa, qw, ...price(geoms[k], qa, qw) });
+  const rampClear = (list, from, to) => { for (let k = Math.max(1, from); k <= to; k += 1) { if (list[k].unpaid > RAMP_KEY_TOLERANCE || inBetween(k, list[k - 1], list[k]) > RAMP_BETWEEN_TOLERANCE) return false; } return true; };
+  // A branch switch between two feasible poses whose straight slerp is not feasible: plan a path through feasible poses at the geometry of the switch (Dijkstra over the neighbouring keys' candidates and some
+  // seeded random poses, an edge where the slerp between two poses is feasible at both keys' geometry), then walk it along the keys around the switch.
+  const STATIC_TOLERANCE = 0.004 / RIG_SCALE, EDGE_DEGREES = 30, PLAN_SAMPLES = 700;
+  const planBridge = (k) => {
+    const g0 = geoms[k - 1], g1 = geoms[k], p = states[k - 1], s = states[k], mid = new Quaternion(), midW = new Quaternion();
+    const feasible = (qa, qw) => price(g0, qa, qw).unpaid <= STATIC_TOLERANCE && price(g1, qa, qw).unpaid <= STATIC_TOLERANCE;
+    const nodes = [p, s];
+    for (let j = Math.max(0, k - 3); j <= Math.min(count - 1, k + 2); j += 1) for (const item of lists[j]) if (feasible(item.qa, item.qw)) nodes.push(item);
+    let seed = 12345 + k;
+    const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    const randomState = (cap) => { const u = random() * 2 - 1, phi = random() * 2 * Math.PI, r = Math.sqrt(1 - u * u); return new Quaternion().setFromAxisAngle(new Vector3(r * Math.cos(phi), u, r * Math.sin(phi)), random() * cap); };
+    const perturb = (q, cap, spread) => { const turned = randomState(spread).multiply(q); return angleOf(turned) > cap ? q.clone() : turned; };
+    for (let i = 0; i < PLAN_SAMPLES; i += 1) {
+      const origin = nodes[i % 2 === 0 ? Math.floor(random() * nodes.length) : i % 4 === 1 ? 0 : 1];
+      const qa = perturb(origin.qa, capA, 18 * DEG), qw = perturb(origin.qw, capW, 18 * DEG);
+      if (feasible(qa, qw)) nodes.push({ qa, qw });
+    }
+    const distance = (x, y) => (between(x.qa, y.qa) + between(x.qw, y.qw)) / DEG;
+    const best = new Float64Array(nodes.length).fill(Infinity), from = new Int32Array(nodes.length).fill(-1), done = new Uint8Array(nodes.length);
+    best[0] = 0;
+    for (;;) {
+      let u = -1;
+      for (let i = 0; i < nodes.length; i += 1) if (!done[i] && best[i] < Infinity && (u < 0 || best[i] < best[u])) u = i;
+      if (u < 0 || u === 1) break;
+      done[u] = 1;
+      for (let v = 0; v < nodes.length; v += 1) {
+        if (done[v]) continue;
+        const d = distance(nodes[u], nodes[v]);
+        if (d > EDGE_DEGREES || best[u] + d >= best[v]) continue;
+        let clear = true;
+        for (const t of [0.25, 0.5, 0.75]) { mid.copy(nodes[u].qa).slerp(nodes[v].qa, t); midW.copy(nodes[u].qw).slerp(nodes[v].qw, t); if (!feasible(mid, midW)) { clear = false; break; } }
+        if (clear) { best[v] = best[u] + d; from[v] = u; }
+      }
+    }
+    if (!(best[1] < Infinity)) return false;
+    const route = [];
+    for (let i = 1; i >= 0; i = from[i]) route.unshift(nodes[i]);
+    const lengths = [0];
+    for (let i = 1; i < route.length; i += 1) lengths.push(lengths[i - 1] + distance(route[i - 1], route[i]));
+    const total = lengths.at(-1);
+    for (let span = Math.max(4, Math.ceil(total / RAMP_STEP)); span <= 48; span += 2) {
+      const start = k - 1 - Math.floor(span / 2), end = start + span;
+      if (start < 1 || end > count - 1) break;
+      const trial = states.slice();
+      for (let j = start + 1; j < end; j += 1) {
+        const d = (j - start) / span * total;
+        let i = 1; while (i < route.length - 1 && lengths[i] < d) i += 1;
+        const f = lengths[i] === lengths[i - 1] ? 1 : (d - lengths[i - 1]) / (lengths[i] - lengths[i - 1]);
+        trial[j] = stateAt(j, route[i - 1].qa.clone().slerp(route[i].qa, f), route[i - 1].qw.clone().slerp(route[i].qw, f));
+      }
+      if (rampClear(trial, start + 1, end)) { for (let j = start + 1; j < end; j += 1) states[j] = trial[j]; return true; }
+    }
+    return false;
+  };
+  for (let k = 1; k < count; k += 1) {
+    const turn = (between(states[k - 1].qa, states[k].qa) + between(states[k - 1].qw, states[k].qw)) / DEG;
+    if (turn <= JUMP_FREE) continue;
+    planBridge(k);
+  }
+  const chosen = (k) => states[k];
+  // The Hips lift the chosen path asks for, widened and blurred over ±spread keys so it never drops below what a key needs and never steps.
+  const spread = lift.spread, need = Float64Array.from({ length: count }, (_, k) => chosen(k).deficit), widened = new Float64Array(count), lifts = new Float64Array(count);
+  for (let k = 1; k < count; k += 1) {
+    const p = chosen(k - 1), s = chosen(k);
+    for (const [i, t] of T_MID.entries()) {
+      middle.copy(p.qa).slerp(s.qa, t); middleW.copy(p.qw).slerp(s.qw, t);
+      need[k] = Math.max(need[k], price(mids(k)[i], middle, middleW).deficit);
+    }
+  }
+  for (let k = 0; k < count; k += 1) for (let j = Math.max(0, k - spread); j <= Math.min(count - 1, k + spread); j += 1) widened[k] = Math.max(widened[k], need[j]);
+  for (let k = 0; k < count; k += 1) { let sum = 0, weightSum = 0; for (let j = -spread; j <= spread; j += 1) { const i = Math.max(0, Math.min(count - 1, k + j)), w = spread + 1 - Math.abs(j); sum += w * widened[i]; weightSum += w; } lifts[k] = Math.max(need[k], sum / weightSum); }
+  // Apply: first the shoulder over the whole clip, then the wrist (its pivot is where the shoulder put it), then the lift.
+  const reference = new Quaternion(), identity = new Quaternion(), largest = { arm: 0, wrist: 0, lift: 0 };
+  const apply = (node, parent, pick, key) => {
+    for (let k = 0; k < count; k += 1) {
+      const total = pick(chosen(k));
+      largest[key] = Math.max(largest[key], angleOf(total) / DEG);
+      const world = target.poseFrame(frames, k), parentWorld = quaternionOf(world[parent], reference);
+      parentWorld.invert().multiply(total).multiply(quaternionOf(world[parent])).multiply(frames.rotations[node] ? new Quaternion().fromArray(frames.rotations[node], k * 4) : identity).normalize().toArray(frames.rotations[node], k * 4);
+    }
+  };
+  apply(armNode, target.parent[armNode], (item) => item.qa, 'arm');
+  apply(handNode, target.parent[handNode], (item) => item.qw, 'wrist');
+  if (holdKey !== undefined) { const held = Math.max(...Array.from(lifts).slice(holdKey)); for (let k = holdKey; k < count; k += 1) lifts[k] = held; }
+  // A pinned first key (a get-up's seam) carries exactly the lift the knockdown ended with, so frame 0 is the knockdown's last frame; `last.lift` is what a following clip pins.
+  if (pin) lifts[0] = pin.lift ?? 0;
+  largest.lift = Math.max(...lifts) * RIG_SCALE;
+  largest.last = { qa: chosen(count - 1).qa.clone(), qw: chosen(count - 1).qw.clone(), lift: lifts[count - 1] };
+  offsetHips(target, frames, count, (k) => [0, lifts[k], 0]);
+  return largest;
+}
+
+/** Head-joint vertices farther than this from the skull axis (rig units) are hair, not floor contacts (the same constant is in tests/rendering/vesper-anatomy.test.mjs). */
+const HAIR_RADIUS = 0.09;
+/**
+ * Every skin vertex that a triangle references and that a Foot/ToeBase bone dominates (with `all`: every referenced vertex, every `stride`-th), CPU-skinned on demand; `rest` is
+ * the bind pose's lowest height (the floor). `skipHair` leaves out the hair: the Head-dominated vertices farther than `HAIR_RADIUS` (0.09 rig units) from the skull's axis (Head joint to 0.15 up, the
+ * capsule the blade clearance fits to the skull) in the bind pose. The hair is skinned rigidly to the head, so a lying Vesper pushes it 15–30 cm through the floor; real hair
+ * drapes over the floor, and no pose of the head can change that. The skull itself (inside the radius, with a margin over its widest vertices) rests on the floor.
+ */
+function soleKit(target, glb, { all = false, stride = 1, skipHair = false } = {}) {
   const { json, bin } = glb, primitive = json.meshes[0].primitives[0], read = (id) => readAccessorAny(json, bin, id);
   const positions = read(primitive.attributes.POSITION), joints = read(primitive.attributes.JOINTS_0), weights = read(primitive.attributes.WEIGHTS_0), inverseBind = read(json.skins[0].inverseBindMatrices), indices = read(primitive.indices);
   const skinJoints = json.skins[0].joints, soles = [], referenced = new Uint8Array(positions.length / 3);
+  const headNode = target.index.get('mixamorig:Head'), skullA = new Vector3().setFromMatrixPosition(target.restWorld[headNode]), skullAxis = new Vector3(0, 0.15, 0).applyMatrix4(target.restWorld[headNode]).sub(skullA), point = new Vector3(), nearest = new Vector3();
+  const hairOf = (v) => {
+    point.set(positions[v * 3], positions[v * 3 + 1], positions[v * 3 + 2]);
+    const along = Math.max(0, Math.min(1, point.clone().sub(skullA).dot(skullAxis) / skullAxis.lengthSq()));
+    return point.distanceTo(nearest.copy(skullA).addScaledVector(skullAxis, along)) > HAIR_RADIUS;
+  };
   for (const index of indices) referenced[index] = 1;
   for (let v = 0; v < referenced.length; v += 1) {
     if (!referenced[v]) continue;
     let best = 0;
     for (let s = 1; s < 4; s += 1) if (weights[v * 4 + s] > weights[v * 4 + best]) best = s;
-    if (/Foot|ToeBase/.test(target.names[skinJoints[joints[v * 4 + best]]])) soles.push(v);
+    const hair = skipHair && skinJoints[joints[v * 4 + best]] === headNode && hairOf(v);
+    if (!hair && v % stride === 0 && (all || /Foot|ToeBase/.test(target.names[skinJoints[joints[v * 4 + best]]]))) soles.push(v);
   }
   const matrices = skinJoints.map(() => new Matrix4()), inverse = new Matrix4();
+  let lowestVertex = -1;
   const lowestOf = (world) => {
     skinJoints.forEach((node, j) => matrices[j].multiplyMatrices(world[node], inverse.fromArray(inverseBind, j * 16)));
     let lowest = Infinity;
     for (const v of soles) {
       let y = 0;
       for (let s = 0; s < 4; s += 1) { const w = weights[v * 4 + s]; if (w > 0) { const e = matrices[joints[v * 4 + s]].elements; y += w * (e[1] * positions[v * 3] + e[5] * positions[v * 3 + 1] + e[9] * positions[v * 3 + 2] + e[13]); } }
-      lowest = Math.min(lowest, y);
+      if (y < lowest) { lowest = y; lowestVertex = v; }
     }
     return lowest;
   };
-  return { rest: lowestOf(target.restWorld), lowest: (frames, k) => lowestOf(target.poseFrame(frames, k)) };
+  const dominantBone = (v) => { let best = 0; for (let s = 1; s < 4; s += 1) if (weights[v * 4 + s] > weights[v * 4 + best]) best = s; return target.names[skinJoints[joints[v * 4 + best]]].replace('mixamorig:', ''); };
+  return { rest: lowestOf(target.restWorld), lowest: (frames, k) => lowestOf(target.poseFrame(frames, k)), lowestBone: (frames, k) => { lowestOf(target.poseFrame(frames, k)); return dominantBone(lowestVertex); } };
 }
 let soleCache;
 /** One constant Hips lift (world Y) that puts the lowest skinned sole of the whole cycle on the actor's ground (Y = 0, the exported actor root sits on the floor with no origin offset) plus 1 mm; the bind-rest sole height is NOT the runtime floor (measured by the runtime probe). No per-frame change, no foot edit. Returns metres. */
@@ -362,6 +754,299 @@ function continuity(frames, count) {
   }
 }
 
+/* ------------------------------------------------------------------ knockdown / get-up (60 Hz, Mixamo reaction takes) */
+
+const hipsWorld = (target, frames, k) => new Vector3().setFromMatrixPosition(target.poseFrame(frames, k)[target.index.get('mixamorig:Hips')]);
+const wrapDegrees = (degrees) => ((((degrees + 180) % 360) + 360) % 360) - 180;
+/** A skinned vertex within this height of the floor counts as touching it (rig units; 3 cm). */
+const FLOOR_CONTACT = 0.03 / RIG_SCALE;
+/** The lowest skinned vertex may dip this far below the floor at most (rig units; ~3.4 mm, inside the brief's 1 cm). */
+const FLOOR_MARGIN = 0.002;
+/** A body lying flat settles this far into the floor (rig units; 8 mm, inside the brief's 1 cm): Vesper's coat, hair and chest are deep, and this keeps his pelvis (Hips joint) at or under 25 cm. */
+const FLOOR_SINK = 0.008 / RIG_SCALE;
+/** The knockdown / get-up clips are keyed four times per simulation tick (240 Hz): the engine's joint-wise slerp between two keys is then the pose the katana layers measured, however fast the take turns the hand. Every tick-valued input below (`keys`, `holdFrom`, `blend`, `travel`, `idleFrom`) stays in ticks. */
+const KEY_RATE = 240, KPT = KEY_RATE / TICKS_PER_SECOND;
+
+/** Adds a world-space offset `(dx, dy, dz)(k, hipsWorld)` to the Hips. */
+function offsetHips(target, frames, count, offset) {
+  const hips = target.index.get('mixamorig:Hips'), world = target.restWorld[target.parent[hips]], inverse = world.clone().invert(), p = new Vector3();
+  for (let k = 0; k < count; k += 1) {
+    p.fromArray(frames.positions[hips], k * 3).applyMatrix4(world);
+    const [dx, dy, dz] = offset(k, p);
+    p.set(p.x + dx, p.y + dy, p.z + dz).applyMatrix4(inverse).toArray(frames.positions[hips], k * 3);
+  }
+}
+
+/** Whole-body cross-fade between captured frames (`s` of `other` frame `ko` into frame `k`), shortest-path rotations. */
+function blendInto(frames, other, k, ko, s) {
+  const a = new Quaternion(), b = new Quaternion();
+  frames.rotations.forEach((track, node) => {
+    if (!track || !other.rotations[node]) return;
+    a.fromArray(track, k * 4).slerp(b.fromArray(other.rotations[node], ko * 4), s).normalize().toArray(track, k * 4);
+  });
+  frames.positions.forEach((track, node) => {
+    if (!track || !other.positions[node]) return;
+    for (let c = 0; c < 3; c += 1) track[k * 3 + c] += (other.positions[node][ko * 3 + c] - track[k * 3 + c]) * s;
+  });
+}
+
+/** A deep copy of rotation/position frame data. */
+const cloneFrames = (frames) => ({ rotations: frames.rotations.map((track) => track && track.slice()), positions: frames.positions.map((track) => track && track.slice()) });
+
+/** Monotone-cubic (Fritsch–Carlson) interpolation of one scalar series (no overshoot between keys; zero slope where the series turns). */
+function monotoneAt(times, values, tick) {
+  const n = times.length;
+  let i = 0;
+  while (i < n - 2 && tick > times[i + 1]) i += 1;
+  const t0 = times[i], t1 = times[i + 1], h = t1 - t0;
+  if (h <= 0) return values[i + 1];
+  const slope = (a, b) => (values[b] - values[a]) / (times[b] - times[a]);
+  const tangent = (j) => {
+    if (j === 0 || j === n - 1) return j === 0 ? slope(0, 1) : slope(n - 2, n - 1);
+    const before = slope(j - 1, j), after = slope(j, j + 1), hb = times[j] - times[j - 1], ha = times[j + 1] - times[j];
+    if (before * after <= 0) return 0;
+    const w1 = 2 * ha + hb, w2 = ha + 2 * hb;
+    return (w1 + w2) / (w1 / before + w2 / after);
+  };
+  const s = (tick - t0) / h, s2 = s * s, s3 = s2 * s;
+  return (2 * s3 - 3 * s2 + 1) * values[i] + (s3 - 2 * s2 + s) * h * tangent(i) + (-2 * s3 + 3 * s2) * values[i + 1] + (s3 - s2) * h * tangent(i + 1);
+}
+/** Monotone time warp through `keys` ([tick, source seconds]); clamped outside the keys, so a held key range plays one constant source time (identical frames). */
+function timeWarp(keys) {
+  const times = keys.map((key) => key[0]), values = keys.map((key) => key[1]), n = keys.length;
+  if (n === 1) return () => values[0];
+  return (tick) => (tick <= times[0] ? values[0] : tick >= times[n - 1] ? values[n - 1] : monotoneAt(times, values, tick));
+}
+
+/**
+ * The torso's own frame from one posed skeleton (independent of any rest convention): `up` = Hips → Neck, `right` = LeftArm → RightArm, `forward` = up × right
+ * (the rig faces +X with +Y up and its right +Z, so a standing hero has forward = +X). `forward.y > 0.7` is lying on the back, `< -0.7` on the stomach.
+ * `axis` is the heading of Hips → Head in the floor plane (degrees, 0 = +X forward, + toward -Z), the direction a lying body points to.
+ */
+function torsoFrame(target, world) {
+  const at = (name) => new Vector3().setFromMatrixPosition(world[target.index.get(`mixamorig:${name}`)]);
+  const hips = at('Hips'), up = at('Neck').sub(hips).normalize(), right = at('RightArm').sub(at('LeftArm')).normalize(), forward = new Vector3().crossVectors(up, right).normalize();
+  const head = at('Head').sub(hips);
+  return { up, right, forward, axis: Math.atan2(-head.z, head.x) / DEG };
+}
+
+/** Turns a retargeted take about the vertical (world yaw `degrees`, + toward the actor's left): every world rotation and the Hips' displacement from its rest position. */
+function yawFrames(target, frames, count, degrees) {
+  const hips = target.index.get('mixamorig:Hips'), parent = target.parent[hips], turn = new Quaternion().setFromAxisAngle(UP, degrees * DEG);
+  const parentQ = target.restWorldQuaternion[parent], parentWorld = target.restWorld[parent], inverse = parentWorld.clone().invert(), rest = target.restWorldPosition[hips];
+  const local = new Quaternion(), p = new Vector3();
+  for (let k = 0; k < count; k += 1) {
+    local.fromArray(frames.rotations[hips], k * 4);
+    parentQ.clone().invert().multiply(turn).multiply(parentQ).multiply(local).normalize().toArray(frames.rotations[hips], k * 4);
+    p.fromArray(frames.positions[hips], k * 3).applyMatrix4(parentWorld).sub(rest).applyQuaternion(turn).add(rest).applyMatrix4(inverse).toArray(frames.positions[hips], k * 3);
+  }
+}
+
+/** Scales the Hips' horizontal travel (from the clip's first frame) uniformly so it never exceeds `maxMetres`; the vertical Hips motion is not touched. Returns the scale. */
+function limitTravel(target, frames, count, maxMetres) {
+  const first = hipsWorld(target, frames, 0), offsets = [];
+  let peak = 0;
+  for (let k = 0; k < count; k += 1) { const p = hipsWorld(target, frames, k); offsets.push([p.x - first.x, p.z - first.z]); peak = Math.max(peak, Math.hypot(p.x - first.x, p.z - first.z)); }
+  const scale = Math.min(1, maxMetres / RIG_SCALE / peak);
+  offsetHips(target, frames, count, (k) => [offsets[k][0] * (scale - 1), 0, offsets[k][1] * (scale - 1)]);
+  return scale;
+}
+
+/**
+ * Floor contact of a lying clip, frame by frame, through the Hips height alone (every rotation and the horizontal travel stay the donor's): the lowest skinned
+ * vertex of the WHOLE mesh is lifted out of the floor wherever it dips below it, and lowered onto it wherever it is within 3 cm of it (a body resting there)
+ * or the torso is flat on the floor. In between (the fall, the flight of a kip-up) the donor's own height is kept, the lift is smoothed so the Hips do not
+ * jerk, and the no-penetration lift is re-applied last. Frames from `holdFrom` on rest exactly on the floor and are identical to each other. `first` / `last`
+ * (a lift in rig units) pin frame 0 / the last frame to that lift (a seam to the neighbouring clip). `settle` is the lighter finishing pass after the katana layers. Returns the applied lifts (rig units).
+ */
+function floorCorrect(target, frames, count, kit, { holdFrom = count, first, last, settle = false } = {}) {
+  const hips = target.index.get('mixamorig:Hips'), low = [], flat = [];
+  for (let k = 0; k < count; k += 1) {
+    const world = target.poseFrame(frames, k);
+    low.push(kit.lowest(frames, k) - kit.rest);
+    flat.push(Math.abs(torsoFrame(target, world).forward.y) > 0.7 && (world[hips].elements[13] - low[k]) < 0.3 / RIG_SCALE);
+  }
+  const pinnedValue = (k) => (k === 0 && first !== undefined ? first : k === count - 1 && last !== undefined ? last : undefined);
+  if (settle) {
+    // The finishing pass after the katana layers: the layers measured their floor clearance at the heights floor contact had already given the Hips, so no frame is lowered or re-seated (that
+    // would move the blade the layers just cleared); only a vertex that the layers pushed below the floor is lifted out, and the seam frames keep the pin.
+    const lifts = low.map((l, k) => pinnedValue(k) ?? Math.max(0, -FLOOR_MARGIN - l));
+    offsetHips(target, frames, count, (k) => [0, lifts[k], 0]);
+    return lifts;
+  }
+  const seated = (k) => k >= holdFrom || flat[k] || low[k] < FLOOR_CONTACT;
+  let lift = low.map((l, k) => pinnedValue(k) ?? (seated(k) ? -l : 0));
+  const smoothed = Math.min(holdFrom, count);
+  for (let pass = 0; pass < 24; pass += 1) {
+    const next = lift.slice();
+    for (let k = 0; k < smoothed; k += 1) if (pinnedValue(k) === undefined) next[k] = (lift[Math.max(0, k - 1)] + 2 * lift[k] + lift[Math.min(count - 1, k + 1)]) / 4;
+    lift = next;
+  }
+  lift = lift.map((value, k) => {
+    if (pinnedValue(k) !== undefined) return pinnedValue(k);
+    if (k >= holdFrom || flat[k]) return -low[k] - FLOOR_SINK;
+    return Math.max(value, -FLOOR_MARGIN - low[k]);
+  });
+  offsetHips(target, frames, count, (k) => [0, lift[k], 0]);
+  return lift;
+}
+
+/** Largest rotation difference between two frames (degrees, every rotation track) and the Hips' position difference (millimetres). */
+function frameDelta(target, framesA, ka, framesB, kb) {
+  const a = new Quaternion(), b = new Quaternion(), hips = target.index.get('mixamorig:Hips');
+  let rotation = 0;
+  framesA.rotations.forEach((track, node) => { if (track && framesB.rotations[node]) rotation = Math.max(rotation, a.fromArray(track, ka * 4).normalize().angleTo(b.fromArray(framesB.rotations[node], kb * 4).normalize())); });
+  const position = new Vector3().fromArray(framesA.positions[hips], ka * 3).distanceTo(new Vector3().fromArray(framesB.positions[hips], kb * 3));
+  return { rotationDegrees: rotation / DEG, hipsMillimetres: position * RIG_SCALE * 1e3 };
+}
+
+/** Largest per-tick rotation step (degrees) of any joint (between keys one simulation tick apart) from key `from` to the last. */
+function maxJointStep(frames, count, from) {
+  const a = new Quaternion(), b = new Quaternion();
+  let worst = 0;
+  for (const track of frames.rotations) if (track) for (let k = Math.max(KPT, from); k < count; k += 1) worst = Math.max(worst, a.fromArray(track, (k - KPT) * 4).normalize().angleTo(b.fromArray(track, k * 4).normalize()));
+  return worst / DEG;
+}
+
+/** One take part of a knockdown / get-up at 240 Hz (key k = tick k / 4): the toolkit retarget of the part's donor through the monotone time warp of its `keys`, turned by `part.yaw`. */
+function sampleReaction(target, rigs, part, count) {
+  const donor = rigs[part.source.donor], decoded = donor.decodeAnimation(part.source.animation), warp = timeWarp(part.keys);
+  const frames = retargetFrames(target, donor, decoded, count, (k) => warp(k / KPT), Boolean(part.mirror));
+  if (part.yaw) yawFrames(target, frames, count, part.yaw);
+  return frames;
+}
+
+/**
+ * A knockdown (`spec.lie`) or get-up (`spec.getup`) at 60 Hz from Mixamo reaction takes, before the katana layers:
+ *  - every part is sampled (`keys`: [tick, source seconds], monotone warp; later parts cross-faded in over ±`crossfadeTicks` around their first tick) and the shared
+ *    joint guard (`limits`) is applied to the take alone;
+ *  - knockdown: the Hips' horizontal travel is scaled to at most `spec.travel.maxMetres`; get-up: the take is turned about the vertical so its lie points the way the
+ *    knockdown's held lie does (measured), the Hips' horizontal path is one smooth slide over `getup.travel` ticks from where the knockdown left them onto the standing
+ *    XZ, and over `getup.blend` ticks the knockdown's held lie (its last frame before the katana layers, which therefore become the get-up's frame 0) is cross-faded
+ *    into the take's own lying frames;
+ *  - the whole-mesh lowest vertex is put on the floor through the Hips height alone (`floorCorrect`); the clip keeps a copy of those frames as `pre`.
+ */
+function buildLying(spec, target, rigs, kit, knock, idle) {
+  const count = spec.sim.totalTicks * KPT + 1, first = spec.parts[0];
+  if (spec.getup) {
+    const donor = rigs[first.source.donor], lie = retargetFrames(target, donor, donor.decodeAnimation(first.source.animation), 1, () => first.keys[0][1], Boolean(first.mirror));
+    const donorAxis = torsoFrame(target, target.poseFrame(lie, 0)).axis, knockAxis = torsoFrame(target, target.poseFrame(knock.pre, knock.count - 1)).axis;
+    const yaw = Math.round(wrapDegrees(knockAxis - donorAxis) * 10) / 10;
+    for (const part of spec.parts) part.yaw = yaw;
+  }
+  if (spec.lie && spec.parts.length > 1) {
+    // A later part (the take whose lying frame the knockdown holds, and the get-up starts from) is turned about the vertical onto the lie the earlier part reaches at its boundary.
+    for (let i = 1; i < spec.parts.length; i += 1) {
+      const boundary = spec.parts[i].ticks[0] * KPT, axisOf = (part) => torsoFrame(target, target.poseFrame(sampleReaction(target, rigs, part, boundary + 1), boundary)).axis;
+      spec.parts[i].yaw = Math.round(wrapDegrees(axisOf(spec.parts[i - 1]) - axisOf({ ...spec.parts[i], yaw: 0 })) * 10) / 10;
+    }
+  }
+  const sampled = spec.parts.map((part) => sampleReaction(target, rigs, part, count)), frames = sampled[0], crossfade = spec.crossfadeTicks ?? 3;
+  if (spec.lie) {
+    // The lying part's own Hips XZ is where its take started (near the standing spot); carry on from where the fall left the Hips at the boundary instead of snapping back.
+    for (let i = 1; i < sampled.length; i += 1) {
+      const key = spec.parts[i].ticks[0] * KPT, before = hipsWorld(target, sampled[i - 1], key), after = hipsWorld(target, sampled[i], key);
+      offsetHips(target, sampled[i], count, () => [before.x - after.x, 0, before.z - after.z]);
+    }
+  }
+  for (let i = 1; i < sampled.length; i += 1) {
+    const boundary = spec.parts[i].ticks[0];
+    for (let k = 0; k < count; k += 1) { const s = smooth((k / KPT - (boundary - crossfade)) / (2 * crossfade)); if (s > 0) blendInto(frames, sampled[i], k, k, s); }
+  }
+  const guard = limitJoints(target, frames, count, spec.limits);
+  if (spec.lie) spec.travelScale = Math.round(limitTravel(target, frames, count, spec.travel.maxMetres) * 1e4) / 1e4;
+  if (spec.getup) {
+    const last = knock.count - 1, stand = hipsWorld(target, idle.frames, 0), home = hipsWorld(target, knock.pre, last), [from, to] = spec.getup.travel;
+    offsetHips(target, frames, count, (k, p) => {
+      const ramp = smooth((k / KPT - from) / (to - from));
+      return [home.x + (stand.x - home.x) * ramp - p.x, 0, home.z + (stand.z - home.z) * ramp - p.z];
+    });
+    const blend = spec.getup.blend * KPT;
+    for (let k = 0; k < blend; k += 1) blendInto(frames, knock.pre, k, last, 1 - smooth(k / blend));
+  }
+  const lift = floorCorrect(target, frames, count, kit, { holdFrom: spec.lie ? spec.lie.holdFrom * KPT : undefined, first: spec.getup ? 0 : undefined });
+  const clip = { spec, frames, times: Float32Array.from({ length: count }, (_, k) => k / KEY_RATE), count, duration: spec.sim.totalTicks / TICKS_PER_SECOND, keys: spec.parts.flatMap((part) => part.keys), contact: undefined, totalTicks: spec.sim.totalTicks, jointNodes: [...target.joints], aim: undefined, guard };
+  clip.pre = cloneFrames(frames);
+  clip.floorLiftMetres = { min: Math.round(Math.min(...lift) * RIG_SCALE * 1e4) / 1e4, max: Math.round(Math.max(...lift) * RIG_SCALE * 1e4) / 1e4 };
+  return clip;
+}
+
+/** The take's playback speed against real time per part: its source range and the fastest keyed stretch (source seconds per second). */
+function sourceTimeScale(spec) {
+  return spec.parts.map((part) => {
+    const keys = part.keys, speeds = keys.slice(1).map(([tick, time], i) => (time - keys[i][1]) / ((tick - keys[i][0]) / TICKS_PER_SECOND)).filter((speed) => Number.isFinite(speed));
+    return { take: part.source.file.replace(/^.*\//, '').replace(/\.fbx$/, ''), fromSeconds: keys[0][1], toSeconds: keys.at(-1)[1], fastestKeyedStretch: Math.round(Math.max(...speeds) * 100) / 100 };
+  });
+}
+
+/**
+ * The measurements of the brief's acceptance list for one knockdown / get-up clip. Heights are of the Hips joint ("pelvis") in metres; floor clearances are of the
+ * lowest skinned vertex of the whole mesh above the floor, in centimetres; a frame "lies" when the torso is flat (|forward.y| > 0.7) and the pelvis is below 30 cm.
+ */
+function lieReport(spec, target, clip, kit, knock, idle, corrections) {
+  const hips = target.index.get('mixamorig:Hips'), rows = [];
+  for (let k = 0; k < clip.count; k += 1) {
+    const world = target.poseFrame(clip.frames, k), torso = torsoFrame(target, world), p = new Vector3().setFromMatrixPosition(world[hips]);
+    rows.push({ k, pelvis: p.y * RIG_SCALE, x: p.x, z: p.z, facing: torso.forward.y, lowest: (kit.lowest(clip.frames, k) - kit.rest) * RIG_SCALE * 100 });
+  }
+  const round = (value, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
+  const lying = rows.filter((row) => Math.abs(row.facing) > 0.7 && row.pelvis < 0.3), rest = target.restWorldPosition[hips];
+  const result = {
+    ticks: clip.totalTicks,
+    pelvisMetresAtTick30: round(rows[30 * KPT].pelvis),
+    lyingFacing: round(rows[spec.lie ? spec.lie.holdFrom * KPT : 0].facing, 2),
+    floorLowestVertexCm: { overAllFrames: round(Math.min(...rows.map((row) => row.lowest)), 2), lyingFramesMin: round(Math.min(...lying.map((row) => row.lowest)), 2), lyingFramesMax: round(Math.max(...lying.map((row) => row.lowest)), 2) },
+    maxHipsHorizontalOffsetMetres: round(Math.max(...rows.map((row) => Math.hypot(row.x - rest.x, row.z - rest.z))) * RIG_SCALE),
+    jointGuard: { jointsCorrected: Object.values(corrections).filter((degrees) => degrees > 0).length, maxCorrectionDegrees: round(Math.max(0, ...Object.values(corrections)), 2) },
+    sourceTimeScale: sourceTimeScale(spec),
+    ...(clip.floorLiftMetres ? { floorLiftMetres: clip.floorLiftMetres } : {}),
+  };
+  if (spec.lie) {
+    // Ground contact: the first tick at which the pelvis is at or below 25 cm and never again rises above 30 cm (a settle/bounce of a few centimetres is allowed).
+    const hold = spec.lie.holdFrom * KPT, groundKey = rows.findIndex((row, k) => row.pelvis <= 0.25 && rows.slice(k).every((later) => later.pelvis <= 0.3)), groundTick = groundKey < 0 ? -1 : groundKey / KPT;
+    // "Every key identical": compared component by component on the stored (float32) tracks, not through an angle.
+    const component = (tracks, size) => { let worst = 0; for (const track of tracks) if (track) for (let k = hold + 1; k < clip.count; k += 1) for (let c = 0; c < size; c += 1) worst = Math.max(worst, Math.abs(track[k * size + c] - track[hold * size + c])); return worst; };
+    const maxRotation = component(clip.frames.rotations, 4), maxHips = component(clip.frames.positions, 3);
+    Object.assign(result, {
+      groundContactTick: groundTick < 0 ? null : groundTick,
+      pelvisMetresAtContactTick: groundTick < 0 ? null : round(rows[groundKey].pelvis),
+      pelvisMetresMaxFromContactOn: groundTick < 0 ? null : round(Math.max(...rows.slice(groundKey).map((row) => row.pelvis))),
+      pelvisMetresInLie: round(rows[hold].pelvis),
+      heldRange: { fromTick: hold / KPT, toTick: (clip.count - 1) / KPT, keyRateHz: KEY_RATE, maxRotationComponentDelta: maxRotation, maxHipsComponentDelta: maxHips, identical: maxRotation === 0 && maxHips === 0 },
+      lieHipsOffsetFromStandingMetres: { back: round((rest.x - rows[hold].x) * RIG_SCALE), side: round((rows[hold].z - rest.z) * RIG_SCALE) },
+    });
+  }
+  if (spec.getup) {
+    const stand = hipsWorld(target, idle.frames, 0);
+    Object.assign(result, {
+      seamFromKnockdown: Object.fromEntries(Object.entries(frameDelta(target, clip.frames, 0, knock.frames, knock.count - 1)).map(([key, value]) => [key, round(value, 4)])),
+      idleEnd: Object.fromEntries(Object.entries(frameDelta(target, clip.frames, clip.count - 1, idle.frames, 0)).map(([key, value]) => [key, round(value, 4)])),
+      endHipsXZOffsetFromStandingMillimetres: round(Math.hypot(rows.at(-1).x - stand.x, rows.at(-1).z - stand.z) * RIG_SCALE * 1e3, 3),
+      maxJointStepLastQuarterDegreesPerTick: round(maxJointStep(clip.frames, clip.count, Math.round((clip.count - 1) * 0.75)), 3),
+    });
+  }
+  return result;
+}
+
+/** The last quarter of a get-up (`from` = its first tick) slerps, whole body, into `aren-idle`'s first frame: the last frame IS that frame. */
+function blendIdle(frames, count, idle, from) {
+  for (let k = from; k < count; k += 1) blendInto(frames, idle.frames, k, 0, smooth((k - from) / (count - 1 - from)));
+}
+
+/** Hips-only vertical contact of the finished clip (after the katana layers and the joint guard) — the last step, so every pin is bit-exact. */
+function settleLying(spec, target, clip, kit, knock, idle) {
+  if (spec.getup) {
+    // The layers smooth their corrections over ±2 keys, which moves a get-up's frame 0 off the knockdown's identical lie by a hair: the seam frame is the knockdown's own.
+    const last = knock.count - 1;
+    clip.frames.rotations.forEach((track, node) => { if (track && knock.frames.rotations[node]) for (let c = 0; c < 4; c += 1) track[c] = knock.frames.rotations[node][last * 4 + c]; });
+    blendIdle(clip.frames, clip.count, idle, spec.getup.idleFrom * KPT);
+  }
+  continuity(clip.frames, clip.count);
+  const hold = spec.lie ? spec.lie.holdFrom * KPT : undefined;
+  const first = spec.getup ? knock.finalLift[knock.count - 1] : undefined;
+  clip.finalLift = floorCorrect(target, clip.frames, clip.count, kit, { holdFrom: hold, first, last: spec.getup ? 0 : undefined, settle: true });
+}
+
 /* ------------------------------------------------------------------ clip specs */
 
 const specs = [];
@@ -378,23 +1063,25 @@ const CUT_WRIST = { lead: 1, maxTwist: 30, maxSwing: 25, maxCorrection: 30, smoo
 const CARRY_WRIST = { maxSwing: 25, maxCorrection: 30, smooth: 2 };
 /** Non-strike carry only (the sword hand is merely carried, nothing is cut): the bounded correction is raised to the smallest cap that clears the body and the floor on the captured gait. Strikes and throws stay ≤ 30°. */
 const carryReach = (cap, extra = {}) => ({ ...CARRY_WRIST, maxSwing: cap, maxCorrection: cap, clear: { maxPush: cap, floor: 0.05, margin: 0.04 }, ...extra });
+/** Shoulder layer for captured poses that press the sword fist against the body: the palm-seated tsuka needs the hand lifted off the thigh or torso, which no wrist turn provides. */
+const armClear = (margin, floor, maxDegrees, smooth = 2, maxPitch) => ({ clear: { margin, floor, maxDegrees, ...(maxPitch === undefined ? {} : { maxPitch }) }, smooth });
 realParts('aren-idle', 240, [{ donor: 'mixamo', file: 'asset-source/mixamo/vesper/melee-idle.fbx', ticks: [0, 240], window: [0, 4] }], { loop: { overlapSeconds: 0.4 }, wrist: carryReach(36, { aim: [[0, 0, -25]], frame: 'chest' }) });
 // Walk 4.9 m/s: Mixamo run-with-sword (in place, unmirrored), the full 0.8 s cycle in 30 ticks (4 steps/s). Full wrist-axis sampling and a 5 cm capsule margin clear the fitted katana's guard from the leg-weighted coat; pitch <= -15deg retains the forward-low carry after smoothing.
-realParts('aren-walk', 30, [{ donor: 'mixamo', file: 'asset-source/mixamo/vesper/run-with-sword.fbx', ticks: [0, 30], window: [0, 0.8] }], { loop: { overlapSeconds: 0 }, ground: true, wrist: { ...CARRY_WRIST, maxSwing: 45, maxCorrection: 45, smooth: 1, clear: { maxPush: 45, floor: 0.05, margin: 0.05, axes: 120 }, carry: { pitch: -15, aheadMin: 0.25 }, frame: 'chest' } });
+realParts('aren-walk', 30, [{ donor: 'mixamo', file: 'asset-source/mixamo/vesper/run-with-sword.fbx', ticks: [0, 30], window: [0, 0.8] }], { loop: { overlapSeconds: 0 }, ground: true, arm: { ...armClear(0.08, 0.06, 30, 1, -12), afterWrist: true }, wrist: { ...CARRY_WRIST, maxSwing: 45, maxCorrection: 45, smooth: 1, clear: false, carry: { pitch: -15, aheadMin: 0.25 }, frame: 'chest' } });
 // Run 7.5 m/s: the same capture, left/right mirrored, in 22 ticks (5.46 steps/s); a constant Hips lift from the actual skinned sole envelope grounds the cycle (no foot edit); the blade is carried low and forward (pitch <= -12deg).
-realParts('aren-run', 22, [{ donor: 'mixamo', file: 'asset-source/mixamo/vesper/run-with-sword.fbx', ticks: [0, 22], window: [0, 0.8], mirror: true }], { loop: { overlapSeconds: 0 }, ground: true, wrist: { ...CARRY_WRIST, maxSwing: 45, maxCorrection: 45, smooth: 0, clear: { maxPush: 45, floor: 0.05, margin: 0.04 }, carry: { pitch: -12 }, frame: 'chest' } });
+realParts('aren-run', 22, [{ donor: 'mixamo', file: 'asset-source/mixamo/vesper/run-with-sword.fbx', ticks: [0, 22], window: [0, 0.8], mirror: true }], { loop: { overlapSeconds: 0 }, ground: true, arm: { ...armClear(0.04, 0.06, 25, 1, -11), afterWrist: true }, wrist: { ...CARRY_WRIST, maxSwing: 45, maxCorrection: 45, smooth: 0, clear: false, carry: { pitch: -12 }, frame: 'chest' } });
 // The native jump take is five hops in 2.23 s; one hop is keyed onto the engine's phase spans (rising 0-10, apex ~18, falling to 42) so the clip is not five jumps aliased into one.
-real('aren-jump', 42, 'b', 'jump', undefined, { keys: [[0, 0], [10, 0.117], [18.5, 0.25], [28.5, 0.4], [42, 0.533]], airborne: true, wrist: carryReach(45, { smooth: 1, carry: { pitch: -15 }, frame: 'chest' }) });
-real('aren-hit', 24, 'f', 'hit_to_body_01', [0.12, 0.9], { wrist: CARRY_WRIST });
+real('aren-jump', 42, 'b', 'jump', undefined, { keys: [[0, 0], [10, 0.117], [18.5, 0.25], [28.5, 0.4], [42, 0.533]], airborne: true, arm: { ...armClear(0.04, 0.05, 30, 1, -11), afterWrist: true }, wrist: carryReach(45, { smooth: 1, clear: false, carry: { pitch: -15 }, frame: 'chest' }) });
+real('aren-hit', 24, 'f', 'hit_to_body_01', [0.12, 0.9], { arm: armClear(0.12, 0.06, 15, 1), wrist: CARRY_WRIST });
 // The cheer's arms-up phase starts at 2 s of the take (its first seconds peak at p99.9 1.9 on the native shoulder skin); [2, 7] keeps the arms-up cheer and the lowering.
-real('aren-cheer', 300, 'b', 'cheer', [2, 7], { wrist: CARRY_WRIST });
-// Retain the complete captured defeat. Full wrist-axis sampling clears the thigh by rolling the off-axis fist anchor; blade-direction-only swings miss that feasible correction.
-real('aren-defeat', 360, 'b', 'defeat_02', [0, 8.46666622], { wrist: carryReach(30, { smooth: 1, clear: { maxPush: 30, floor: 0.03, margin: 0.01, axes: 120 } }) });
-// Skill clips from real motion. Mixamo sword takes (asset-source/mixamo/vesper) where they carry the cut, Tripo presets otherwise; each strike part puts the
-// donor's fastest edge-leading kissaki on the engine tick (`resolveStrikes`) and plays its own acceleration around it (`preRate` / `postRate` source seconds per second).
+real('aren-cheer', 300, 'b', 'cheer', [2, 7], { arm: { ...armClear(0.06, 0.05, 30), afterWrist: true }, wrist: CARRY_WRIST });
+// Retain the complete captured defeat. The shoulder lifts the palm-seated fist off the thigh; full wrist-axis sampling then rolls the fist clear.
+real('aren-defeat', 360, 'b', 'defeat_02', [0, 8.46666622], { arm: armClear(0.02, 0.04, 35), wrist: carryReach(30, { smooth: 1, clear: { maxPush: 30, floor: 0.03, margin: 0.01, axes: 120 } }) });
+// Captured full-body sword motion, with separate loaded anticipation, cutting acceleration,
+// overshoot and controlled settling. Contact markers remain on the simulation's normalized beats.
 const MX = (file) => `asset-source/mixamo/vesper/${file}.fbx`;
-const mxPart = (file, ticks, tick, search, extra = {}) => ({ donor: 'mixamo', file: MX(file), mirror: Boolean(extra.mirror), reverse: Boolean(extra.reverse), ticks, strike: { tick, search, kind: extra.kind ?? 'cut', preRate: extra.preRate ?? 1.5, postRate: extra.postRate ?? 1.1 } });
-const STRIKE = { pin: { maxVertical: 0.12 }, wrist: CUT_WRIST };
+const mxPart = (file, ticks, tick, search, extra = {}) => ({ donor: 'mixamo', file: MX(file), mirror: Boolean(extra.mirror), reverse: Boolean(extra.reverse), ticks, strike: { tick, search, kind: extra.kind ?? 'cut', preRate: extra.preRate ?? 1.5, postRate: extra.postRate ?? 1.1, accent: true, ...extra } });
+const STRIKE = { pin: { maxVertical: 0.16 }, wrist: CUT_WRIST };
 const strikeClip = (clip, ticks, parts, strikes, extra = {}) => {
   const thrusts = parts.filter((part) => part.strike?.kind === 'thrust').map((part) => ({ tick: part.strike.tick, from: part.ticks[0], to: part.ticks[1] }));
   realParts(clip, ticks, parts, { sim: strikes.length === 1 ? { activeTick: strikes[0] } : {}, strikes, ...STRIKE, ...extra,
@@ -404,46 +1091,82 @@ const mxChain = (strikes, ranges, files) => strikes.map((tick, i) => typeof file
 // Cut windows whose retargeted skin stretch stays inside the approved native envelope (measured per donor window by VESPER_AUDIT=deform|…): the inward sword slash (1.17 s) and
 // the one-handed sword combo's second (2.00 s, forward-right diagonal) and third (2.97 s, forward-left downward diagonal) cuts. The axe/outward/360 takes peak at 1.9-2.0 on the native shoulder skin.
 const SLASHES = {
-  inward: ['sword-inward-slash', [1.05, 1.25]], lead: ['sword-inward-slash', [1.05, 1.25], { preRate: 0.3, postRate: 0.8 }], last: ['sword-inward-slash', [1.05, 1.25], { postRate: 0.3 }], down: ['one-hand-sword-combo', [1.9, 2.1]], pass: ['one-hand-sword-combo', [2.9, 3.05]],
-  thrust: ['thrust-slash', [0.7, 0.8], { kind: 'thrust', preRate: 0.45, postRate: 0.45 }],
-  passEnd: ['one-hand-sword-combo', [2.9, 3.05], { postRate: 0.15 }],
+  inward: ['sword-inward-slash', [1.05, 1.25], { accent: false }], lead: ['sword-inward-slash', [1.05, 1.25], { preRate: 0.3, postRate: 0.8, accent: false }], last: ['sword-inward-slash', [1.05, 1.25], { postRate: 0.3 }], down: ['one-hand-sword-combo', [1.9, 2.1]], pass: ['one-hand-sword-combo', [2.9, 3.05]],
+  thrust: ['thrust-slash', [0.7, 0.8], { kind: 'thrust', preRate: 0.45, postRate: 0.45, accent: false }],
+  // Short thrusts retain their captured point-first velocity; the surrounding diagonal cuts carry the accents.
+  quickThrust: ['thrust-slash', [0.7, 0.8], { kind: 'thrust', preRate: 0.55, postRate: 0.55, accent: false }],
+  passEnd: ['one-hand-sword-combo', [2.9, 3.05], { postRate: 0.15, settleHold: true }],
 };
 /** The inward and outward donors hold the blade sideways at their contact (80-106° off the chest heading); a wrist aim toward the chest heading, ramped in only around those ticks, brings it inside the 140° frontal arc (swing ≤ 30°). */
 const frontalWrist = (...ticks) => ({ ...CUT_WRIST, maxSwing: 30, aim: ticks.flatMap((tick) => [[tick - 4, 0, 0, 0], [tick, 0, 0, 1], [tick + 4, 0, 0, 0]]), frame: 'chest' });
+/** Where the wrist's 30° budget leaves the sideways donor blade just outside the frontal arc, the shoulder turns it a few degrees further toward the chest heading. */
+const frontalArm = (...ticks) => ({ frontal: { ticks, degrees: 12 }, smooth: 0 });
+// Four distinct commitments: loaded draw, return diagonal, rising cut and low through-cut.
 strikeClip('vesper-iai-1', 18, [
   { donor: 'mixamo', file: MX('draw-sword-1'), ticks: [0, 2], window: [0, 0.1] },
-  mxPart(SLASHES.inward[0], [2, 18], 6, SLASHES.inward[1]),
-], [6], { crossfadeTicks: 3, wrist: frontalWrist(6) });
-strikeClip('vesper-iai-2', 18, [mxPart('one-hand-sword-combo', [0, 18], 6, [2.9, 3.05], { preRate: 1, postRate: 0.5 })], [6]);
-strikeClip('vesper-iai-3', 22, [mxPart('sword-outward-slash', [0, 22], 8, [0.85, 0.9], { preRate: 0.6, postRate: 0.3 })], [8], { wrist: frontalWrist(8) });
-strikeClip('vesper-iai-4', 30, [mxPart('sword-inward-slash', [0, 30], 10, [1.05, 1.25], { preRate: 0.3, postRate: 0.8 })], [10], { wrist: frontalWrist(10) });
+  mxPart(SLASHES.inward[0], [2, 18], 6, SLASHES.inward[1], { preRate: 1.5, postRate: 1.1 }),
+], [6], { crossfadeTicks: 3, arm: armClear(0.02, 0.04, 20, 2), wrist: frontalWrist(6) });
+strikeClip('vesper-iai-2', 18, [mxPart('one-hand-sword-combo', [0, 18], 6, [2.9, 3.05], { preRate: 1.35, postRate: 0.45 })], [6], { arm: armClear(0.04, 0.05, 20, 1) });
+strikeClip('vesper-iai-3', 22, [mxPart('sword-outward-slash', [0, 22], 8, [0.85, 0.9], { preRate: 0.8, postRate: 0.45 })], [8], { arm: frontalArm(8), wrist: frontalWrist(8) });
+strikeClip('vesper-iai-4', 30, [mxPart('sword-inward-slash', [0, 30], 10, [1.05, 1.25], { preRate: 0.8, postRate: 0.8, settleHold: true })], [10], { arm: frontalArm(10), wrist: frontalWrist(10) });
 strikeClip('vesper-thousand-cuts', 72, mxChain([8, 18, 28, 38, 48, 58, 66], [[0, 13], [13, 23], [23, 33], [33, 43], [43, 53], [53, 62], [62, 72]],
-  [SLASHES.lead, SLASHES.down, SLASHES.pass, SLASHES.inward, SLASHES.down, SLASHES.thrust, SLASHES.pass]), [8, 18, 28, 38, 48, 58, 66], { wrist: frontalWrist(8, 38) });
+  [SLASHES.lead, SLASHES.down, SLASHES.pass, SLASHES.inward, SLASHES.down, SLASHES.quickThrust, SLASHES.pass]), [8, 18, 28, 38, 48, 58, 66], { arm: { ...frontalArm(8, 38), clear: { margin: 0.02, floor: 0.04, maxDegrees: 20 }, thrusts: [{ tick: 58, from: 53, to: 62, degrees: 8 }] }, wrist: frontalWrist(8, 38) });
 // The down-cut -> diagonal-cut junction at tick 30 needs the existing blend over +/-4 ticks: +/-3 concentrates the captured forearm/hand turns into keys 28->30 and bows the intervening blade path by 16.3deg even before the wrist layer. This blends actual donor poses; all contact ticks and source rates stay unchanged.
 strikeClip('vesper-requiem', 120, [
   ...mxChain([12, 24, 36, 48, 60, 72, 84], [[0, 18], [18, 30], [30, 42], [42, 54], [54, 66], [66, 78], [78, 120]],
     [SLASHES.lead, SLASHES.down, SLASHES.pass, SLASHES.inward, SLASHES.down, SLASHES.thrust, SLASHES.passEnd]),
-], [12, 24, 36, 48, 60, 72, 84, 110], { crossfadeTicks: 4, wrist: frontalWrist(12, 48) });
-strikeClip('vesper-severing-shadow', 36, [mxPart('one-hand-sword-combo', [0, 36], 12, [2.9, 3.05], { preRate: 0.3, postRate: 0.25 })], [12]);
-strikeClip('vesper-shadow-step', 26, [mxPart(SLASHES.thrust[0], [0, 26], 8, SLASHES.thrust[1], SLASHES.thrust[2])], [8], { wrist: CARRY_WRIST });
+], [12, 24, 36, 48, 60, 72, 84, 110], { crossfadeTicks: 4, arm: { ...frontalArm(12, 48), thrusts: [{ tick: 72, from: 66, to: 78, degrees: 4 }] }, wrist: frontalWrist(12, 48) });
+strikeClip('vesper-severing-shadow', 36, [mxPart('one-hand-sword-combo', [0, 36], 12, [2.9, 3.05], { preRate: 0.5, postRate: 0.28, settleHold: true })], [12], { arm: armClear(0.04, 0.05, 20, 1) });
+strikeClip('vesper-shadow-step', 26, [mxPart(SLASHES.thrust[0], [0, 26], 8, SLASHES.thrust[1], { ...SLASHES.thrust[2], preRate: 0.6, postRate: 0.5, accent: true, settleHold: true })], [8], { arm: { thrusts: [{ tick: 8, from: 0, to: 26, degrees: 4 }], smooth: 0 }, wrist: CARRY_WRIST });
 // The cast proper between the initial knee-lift step and the hip-turning recovery. The broader [1.1, 2.9] window includes both knee-sign failures; this continuous captured window retains the spell gesture without either.
-real('vesper-cleanse', 108, 'd', 'cast_a_spell', [1.1333333, 2.6333333], { wrist: { ...CARRY_WRIST, maxSwing: 30, smooth: 1, clear: { maxPush: 30, floor: 0.05, margin: 0.04 } } });
-realParts('vesper-cuts-charge', 60, [{ donor: 'mixamo', file: MX('melee-idle'), ticks: [0, 60], window: [0.5, 1.5] }], { loop: { overlapSeconds: 0.3 }, wrist: CARRY_WRIST });
-realParts('vesper-shade-charge', 60, [{ donor: 'mixamo', file: MX('melee-idle'), ticks: [0, 60], window: [1.5, 2.5] }], { loop: { overlapSeconds: 0.3 }, wrist: CARRY_WRIST });
-// Left-handed throws (the katana stays in the right fist): the left-right mirror of Tripo's overhand baseball pitch; the engine tick lands on the forward overhand release (left hand 10 m/s, pitch -22° at tick 9).
+real('vesper-cleanse', 108, 'd', 'cast_a_spell', [1.1333333, 2.6333333], { arm: armClear(0.14, 0.06, 35, 1), wrist: { ...CARRY_WRIST, maxSwing: 30, smooth: 1, clear: { maxPush: 30, floor: 0.05, margin: 0.08, axes: 120 } } });
+// Loaded blade and a summoning hand-sign: charge silhouettes are no longer two melee-idle loops.
+realParts('vesper-cuts-charge', 60, [{ donor: 'mixamo', file: MX('sheath-sword-1'), ticks: [0, 60], keys: [[0, 0.1], [30, 0.22], [60, 0.1]] }], { loop: { overlapSeconds: 0 }, pin: { maxVertical: 0.12 }, arm: armClear(0.05, 0.06, 30, 1), wrist: carryReach(45, { smooth: 1, clear: { maxPush: 45, floor: 0.05, margin: 0.04, axes: 120 } }) });
+realParts('vesper-shade-charge', 60, [{ donor: 'd', animation: 'cast_a_spell', ticks: [0, 60], keys: [[0, 1.5], [30, 1.63], [60, 1.5]] }], { loop: { overlapSeconds: 0 }, pin: { maxVertical: 0.12 }, arm: armClear(0.14, 0.06, 35, 1), wrist: CARRY_WRIST });
+// The left-hand release is compressed into a knife flick; Shade instead commands a spectre with a captured casting gesture.
 const THROW_WRIST = { ...CARRY_WRIST, maxSwing: 30, maxCorrection: 30, smooth: 0, clear: { maxPush: 30, floor: 0.07, margin: 0.04 } };
-realParts('vesper-kunai-fan', 24, [{ donor: 'e', animation: 'pitch_baseball', mirror: true, ticks: [0, 24], keys: [[0, 1.683], [9, 1.833], [24, 2.083]] }], { sim: { activeTick: 9 }, wrist: THROW_WRIST });
-realParts('vesper-shade-swap', 40, [{ donor: 'e', animation: 'pitch_baseball', mirror: true, ticks: [0, 40], keys: [[0, 1.7], [8, 1.833], [40, 2.3]] }], { sim: { activeTick: 8 }, wrist: THROW_WRIST });
-realParts('vesper-mist-blink', 24, [{ donor: 'mixamo', file: MX('idle-to-sprint'), ticks: [0, 24], window: [0.1, 0.5] }], { airborne: true, pin: { maxVertical: 0.12 }, wrist: carryReach(45, { aim: [[0, 0, -30]], frame: 'chest' }) });
+realParts('vesper-kunai-fan', 24, [{ donor: 'e', animation: 'pitch_baseball', mirror: true, ticks: [0, 24], keys: [[0, 1.72], [6, 1.75], [9, 1.833], [12, 1.93], [24, 1.97]] }], { sim: { activeTick: 9 }, arm: armClear(0.05, 0.08, 30, 1), wrist: THROW_WRIST });
+realParts('vesper-shade-swap', 40, [{ donor: 'd', animation: 'cast_a_spell', ticks: [0, 40], keys: [[0, 1.3], [5, 1.4], [8, 1.6333333], [16, 1.9], [29, 2.0], [30, 2.12], [40, 2.2]] }], { sim: { activeTick: 8 }, pin: { maxVertical: 0.12 }, arm: armClear(0.14, 0.06, 35, 1), wrist: { ...CARRY_WRIST, maxSwing: 30, clear: { maxPush: 30, floor: 0.05, margin: 0.08, axes: 120 } } });
+realParts('vesper-mist-blink', 24, [{ donor: 'mixamo', file: MX('idle-to-sprint'), ticks: [0, 24], keys: [[0, 0.1], [5, 0.14], [10, 0.3], [16, 0.45], [24, 0.5]] }], { airborne: true, pin: { maxVertical: 0.12 }, arm: { ...armClear(0.13, 0.05, 25, 1), afterWrist: true }, wrist: carryReach(45, { aim: [[0, 0, -30]], frame: 'chest' }) });
 // Second jump ("treading the wind"): two air steps, a somersault tuck, open-out and a soft landing, in place.
 compose('aren-air-step', 60, [
   { donor: 'd', animation: 'run_upstairs', window: [0, 0.8], ticks: [0, 60] },
   { donor: 'd', animation: 'flip', keys: [[0, 0.9], [26, 1.2], [38, 1.9], [60, 3.4]], ticks: [14, 60] },
   { donor: 'b', animation: 'jump', keys: [[40, 0.8], [49, 0.967], [60, 1.067]], ticks: [40, 60] },
-], { limits: LOCOMOTION, airborne: true, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, wrist: carryReach(45, { smooth: 1, aim: [[0, 45, -20]], frame: 'chest' }) });
+], { limits: LOCOMOTION, airborne: true, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, arm: { ...armClear(0.06, 0.05, 25, 1), afterWrist: true }, wrist: carryReach(45, { smooth: 1, aim: [[0, 45, -20]], frame: 'chest' }) });
+
+/* ------------------------------------------------------------------ knockdown / get-up (aren-knockdown, aren-knockdown-forward, aren-getup, aren-getup-forward) */
+// Real motion only (shared Mixamo reaction takes, retargeted like every other Mixamo clip of this hero), 60 Hz keys (one per simulation tick): `buildLying` samples the
+// takes, keeps their vertical Hips motion, limits only the Hips' horizontal travel, puts the WHOLE mesh's lowest vertex on the floor through the Hips height, and holds
+// the knockdowns' lie exactly from tick 48. The katana layers below then keep the steel seated in the fitted fist, clear of the body, the arms and the floor.
+const R = (file) => `asset-source/mixamo/reactions/${file}.fbx`;
+const HOLD_FROM = 48, TRAVEL_METRES = 0.62;
+/**
+ * Katana layers of the four clips (240 Hz keys, `dpPair`): the shoulder and the wrist are chosen together, so the steel stays ≥ 12 mm from the body capsules and both blade ends ≥ 30 mm above the floor
+ * (the gates are 0 and 20 mm). The budgets are the carried-sword ones (shoulder ≤ 35°, wrist ≤ 45°) for the knockdowns and the stomach get-up.
+ * EXCEPTION, `aren-getup` only (approved by the coordinator; the per-clip limits are `GETUP_BACK_CAPS` in tests/rendering/vesper-anatomy.test.mjs): the back get-up's sit-up holds the katana fist about 7 cm off
+ * the floor with the donor's blade pointing 40° down through the floor and the right leg, which no pair of ≤ 45° / ≤ 35° corrections clears; it gets a first pass of shoulder ≤ 50° / wrist ≤ 75° plus a
+ * second, measured refinement pass of ≤ 10° / ≤ 15° (total ≤ 60° / ≤ 90°), still inside the Hand / Arm joint tables.
+ */
+const REACT_MARGIN = 0.012, REACT_FLOOR = 0.03;
+const REACT_ARM = { dp: true, cap: 35, axes: 10, margin: REACT_MARGIN, floor: REACT_FLOOR, changeWeight: 1, fps: KEY_RATE };
+const REACT_WRIST = { dp: true, cap: 45, axes: 10, margin: REACT_MARGIN, floor: REACT_FLOOR, fps: KEY_RATE };
+const GETUP_BACK_ARM = { ...REACT_ARM, cap: 50, refine: { arm: 10, wrist: 15, margin: 0.03, floor: 0.03 } }, GETUP_BACK_WRIST = { ...REACT_WRIST, cap: 75 };
+const lieClip = (clip, ticks, parts, extra) => realParts(clip, ticks, parts.map(({ take, ...rest }) => ({ donor: 'mixamo', file: R(take), ...rest })), { arm: REACT_ARM, wrist: REACT_WRIST, ...extra });
+lieClip('aren-knockdown', 90, [
+  { take: 'react-backward', ticks: [0, 44], keys: [[0, 1.55], [30, 2.3], [44, 2.7]] },
+  { take: 'getting-up-back', mirror: true, ticks: [44, 90], keys: [[44, 3.05], [HOLD_FROM, 3.05], [90, 3.05]] },
+], { lie: { holdFrom: HOLD_FROM }, travel: { maxMetres: TRAVEL_METRES } });
+lieClip('aren-knockdown-forward', 90, [{ take: 'fall-flat-hit-back', ticks: [0, 90], keys: [[0, 0.25], [30, 1.0], [HOLD_FROM, 1.95], [90, 1.95]] }], { lie: { holdFrom: HOLD_FROM }, travel: { maxMetres: TRAVEL_METRES } });
+lieClip('aren-getup', 66, [{ take: 'getting-up-back', mirror: true, ticks: [0, 66], keys: [[0, 3.05], [8, 3.3], [26, 4.3], [42, 5.0], [58, 5.85], [66, 5.95]] }],
+  { getup: { from: 'aren-knockdown', blend: 8, travel: [26, 56], idleFrom: 50 }, arm: GETUP_BACK_ARM, wrist: GETUP_BACK_WRIST });
+lieClip('aren-getup-forward', 66, [
+  { take: 'getting-up-stomach', ticks: [0, 30], keys: [[0, 2.35], [8, 2.45], [28, 3.2]] },
+  { take: 'getting-up-stomach', ticks: [28, 66], keys: [[28, 4.2], [54, 5.4], [66, 5.6]] },
+], { getup: { from: 'aren-knockdown-forward', blend: 8, travel: [8, 46], idleFrom: 50 } });
 
 
-for (const spec of specs) if (spec.wrist) spec.wrist = { ...spec.wrist, loop: Boolean(spec.loop) };
+for (const spec of specs) for (const layer of ['arm', 'wrist']) if (spec[layer]) spec[layer] = { ...spec[layer], loop: Boolean(spec.loop) };
 
 /* ------------------------------------------------------------------ build */
 
@@ -482,7 +1205,63 @@ const rigs = { target: new Rig(baseGlb) };
 for (const [key, path] of Object.entries(sources)) rigs[key] = new Rig(parseGlb(await readFile(root + path)));
 const target = rigs.target;
 const grip = handAnatomy(baseGlb);
+/** Every 3rd vertex of the whole mesh (not only the soles): the floor contact of the lying clips. Built on first use. */
+let wholeBody;
+const bodyKit = () => (wholeBody ??= soleKit(target, baseGlb, { all: true, stride: 3, skipHair: true }));
 const context = { target, grip };
+// Authoring aids for the knockdown / get-up takes. `--lie-timeline=<take>` prints, every 1/30 s of the retargeted take: Hips x / height / z (m, from the standing XZ),
+// the torso's forward.y (> 0.7 on the back, < -0.7 on the stomach), the lie axis, the head height and the lowest skinned vertex above the floor (cm).
+// `--probe=<take>:<from s>:<to s>[:ticks]` writes /tmp/vesper-probe.glb with that stretch of the take (60 Hz, no katana layers, no floor fix) as clip `probe`.
+if (option('lie-timeline') || option('probe')) {
+  const [name, from, to, ticks] = (option('probe') ?? option('lie-timeline')).split(':');
+  const loaded = await loadMixamoDonor(root + R(name), { target });
+  rigs.probe = loaded.rig;
+  if (option('probe')) {
+    const length = Number(ticks ?? Math.round((Number(to) - Number(from)) * TICKS_PER_SECOND));
+    const frames = sampleReaction(target, rigs, { source: { donor: 'probe', animation: loaded.animation }, keys: [[0, Number(from)], [length, Number(to)]] }, length * KPT + 1);
+    const probe = { spec: { clip: 'probe' }, frames, times: Float32Array.from({ length: length * KPT + 1 }, (_, k) => k / KEY_RATE), count: length * KPT + 1, duration: length / TICKS_PER_SECOND, keys: [], contact: undefined, totalTicks: length, jointNodes: [...target.joints], aim: undefined, guard: {} };
+    const glb = parseGlb(appendClips(base, [probe])), index = glb.json.nodes.length;
+    glb.json.nodes.push({ name: 'VesperForward', rotation: [0, -Math.SQRT1_2, 0, Math.SQRT1_2], children: glb.json.scenes[0].nodes });
+    glb.json.scenes[0].nodes = [index];
+    await writeFile('/tmp/vesper-probe.glb', encodeGlb(glb.json, glb.bin));
+    process.exit(0);
+  }
+  const decoded = loaded.rig.decodeAnimation(loaded.animation), n = Math.round(decoded.duration * 30) + 1;
+  const frames = retargetFrames(target, loaded.rig, decoded, n, (k) => k / 30, args.includes('--mirror')), kit = bodyKit(), hipsNode = target.index.get('mixamorig:Hips'), handNode = target.index.get('mixamorig:RightHand');
+  const tipReach = (KATANA_GRIP.length - KATANA_GRIP.gripFromPommel) * M, pommelAlong = -KATANA_GRIP.gripFromPommel * M;
+  console.log(`${name}${args.includes('--mirror') ? ' (mirrored)' : ''} ${decoded.duration.toFixed(3)} s · floor (bind lowest vertex) ${(kit.rest * RIG_SCALE).toFixed(4)} m · t hipsX hipsY hipsZ (m) torsoFwdY lieAxis(deg) headY(m) lowestVertex(cm) bone | blade pitch(deg) kissakiY pommelY (m, body on the floor)`);
+  for (let k = 0; k < n; k += 1) {
+    const world = target.poseFrame(frames, k), p = new Vector3().setFromMatrixPosition(world[hipsNode]), head = new Vector3().setFromMatrixPosition(world[target.index.get('mixamorig:Head')]), torso = torsoFrame(target, world);
+    const q = quaternionOf(world[handNode]), blade = grip.s.clone().applyQuaternion(q), seat = new Vector3().setFromMatrixPosition(world[handNode]).add(grip.palm.clone().applyQuaternion(q)), low = kit.lowest(frames, k) - kit.rest;
+    console.log((k / 30).toFixed(2), ((p.x - target.restWorldPosition[hipsNode].x) * RIG_SCALE).toFixed(2), (p.y * RIG_SCALE).toFixed(2), ((p.z - target.restWorldPosition[hipsNode].z) * RIG_SCALE).toFixed(2), torso.forward.y.toFixed(2), torso.axis.toFixed(0), (head.y * RIG_SCALE).toFixed(2), (low * RIG_SCALE * 100).toFixed(1), kit.lowestBone(frames, k), '|', Math.round(Math.asin(blade.y) / DEG), ((seat.y + blade.y * tipReach - low) * RIG_SCALE).toFixed(2), ((seat.y + blade.y * pommelAlong - low) * RIG_SCALE).toFixed(2));
+  }
+  process.exit(0);
+}
+// `--splice-scan=<take>:<a from>:<a to>:<b from>:<b to>[:m]` (0.1 s grid): for every pair (a, b) the lowest kissaki height (m, body on the floor) over the cross-fade from the pose at `a` into the one at `b`,
+// to find a splice whose blend keeps the carried blade off the floor (`m` mirrors the take).
+if (option('splice-scan')) {
+  const [name, a0, a1, b0, b1, flag] = option('splice-scan').split(':'), loaded = await loadMixamoDonor(root + R(name), { target }), decoded = loaded.rig.decodeAnimation(loaded.animation), kit = bodyKit();
+  const handNode = target.index.get('mixamorig:RightHand'), reach = (KATANA_GRIP.length - KATANA_GRIP.gripFromPommel) * M, back = -KATANA_GRIP.gripFromPommel * M;
+  const pose = (time) => retargetFrames(target, loaded.rig, decoded, 1, () => time, flag === 'm');
+  // The blade rotation (degrees) a pose needs to lift both ends of the steel 2.5 cm off the floor about the fist: the pitch it has against the pitch the fist height allows.
+  const measure = (frames) => {
+    const w = target.poseFrame(frames, 0), q = quaternionOf(w[handNode]), b = grip.s.clone().applyQuaternion(q), seat = new Vector3().setFromMatrixPosition(w[handNode]).add(grip.palm.clone().applyQuaternion(q)), low = kit.lowest(frames, 0) - kit.rest;
+    const fist = seat.y - low, floor = 0.025 / RIG_SCALE, pitch = Math.asin(Math.max(-1, Math.min(1, b.y)));
+    const tipPitch = Math.asin(Math.max(-1, Math.min(1, (floor - fist) / reach))), pommelPitch = Math.asin(Math.max(-1, Math.min(1, (fist - floor) / -back)));
+    return Math.max(0, (tipPitch - pitch) / DEG, (pitch - pommelPitch) / DEG);
+  };
+  const bs = []; for (let b = Number(b0); b <= Number(b1) + 1e-9; b += 0.1) bs.push(b);
+  console.log('rows: a, columns: b =', bs.map((b) => b.toFixed(1)).join(' '));
+  for (let a = Number(a0); a <= Number(a1) + 1e-9; a += 0.1) {
+    const cells = bs.map((b) => {
+      let worst = 0;
+      for (const s of [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1]) { const mix = cloneFrames(pose(a)); blendInto(mix, pose(b), 0, 0, s); worst = Math.max(worst, measure(mix)); }
+      return worst.toFixed(0).padStart(4);
+    });
+    console.log(a.toFixed(1), cells.join(' '));
+  }
+  process.exit(0);
+}
 if (process.env.VESPER_AUDIT === 'grade') {
   // Edge-to-travel at every fast kissaki peak (> 8 m/s) of the Mixamo sword clips, for the grip in force.
   const hand = target.index.get('mixamorig:RightHand'), tipReach = (KATANA_GRIP.length - KATANA_GRIP.gripFromPommel) * M, all = [];
@@ -681,8 +1460,17 @@ function resolveStrikes(list) {
     if (!pick) throw new Error(`${spec.clip}: nothing to strike inside ${search}`);
     const [from, to] = part.ticks;
     const sign = part.reverse ? -1 : 1, clampTime = (time) => Math.max(0, Math.min(scan.duration, time));
-    part.keys = [[from, clampTime(pick.time - sign * preRate * (tick - from) / TICKS_PER_SECOND)], [tick, pick.time], [to, clampTime(pick.time + sign * postRate * (to - tick) / TICKS_PER_SECOND)]];
-    part.strike.resolved = { kind, reversed: Boolean(part.reverse), sourceSeconds: pick.time, donorTipMetresPerSecond: pick.speed, donorContactAngle: pick.lead, contactWithinMax: Boolean(best), preRate, postRate };
+    const start = clampTime(pick.time - sign * preRate * (tick - from) / TICKS_PER_SECOND);
+    const finish = clampTime(pick.time + sign * postRate * (to - tick) / TICKS_PER_SECOND);
+    if (part.strike.accent) {
+      const windup = Math.max(from, tick - 4), overshoot = Math.min(to, tick + 4);
+      const before = pick.time - sign * Math.abs(pick.time - start) * 0.45;
+      const after = pick.time + sign * Math.abs(finish - pick.time) * 0.35;
+      part.keys = [[from, start], ...(windup > from ? [[windup, before]] : []), [tick, pick.time],
+        ...(overshoot < to ? [[overshoot, after]] : []),
+        ...(part.strike.settleHold && to - overshoot > 8 ? [[Math.min(to - 2, tick + 10), finish]] : []), [to, finish]];
+    } else part.keys = [[from, start], [tick, pick.time], [to, finish]];
+    part.strike.resolved = { kind, reversed: Boolean(part.reverse), sourceSeconds: pick.time, donorTipMetresPerSecond: pick.speed, donorContactAngle: pick.lead, contactWithinMax: Boolean(best), preRate, postRate, accent: Boolean(part.strike.accent) };
   }
 }
 
@@ -713,7 +1501,9 @@ function edgeLead(frames, count, ticks) {
 }
 
 const clips = [], report = {};
-const selected = specs.filter((item) => !only || only.includes(item.clip));
+// A get-up is built from its knockdown's held lie and ends in the idle, so `--only` pulls those two clips in.
+const wanted = only && new Set(only.flatMap((name) => { const spec = specs.find((item) => item.clip === name); return spec?.getup ? [name, spec.getup.from, 'aren-idle'] : [name]; }));
+const selected = specs.filter((item) => !wanted || wanted.has(item.clip));
 const mixamoProvenance = await resolveMixamoSources(selected, rigs, root);
 resolveStrikes(selected);
 const proxy = buildBodyProxy(baseGlb, target);
@@ -721,18 +1511,46 @@ const proxy = buildBodyProxy(baseGlb, target);
 const ARM_CAPSULES = /Arm|Hand/;
 const layerDeform = (stage, built) => { const d = skinDeformationReport(appendClips(base, [built]), built.spec.clip); console.error('layer', built.spec.clip, stage, 'p99', d.p99, 'p999', d.p999, 'max', d.max, d.worstBone, d.worstSeconds); };
 for (const spec of selected) {
-  if (process.env.VESPER_LAYERS) {
+  if (process.env.VESPER_LAYERS && !spec.lie && !spec.getup) {
     // Layer-causal diagnosis: skin deformation of the raw retarget, after the toolkit limits, after the wrist layer and after the final limits/continuity.
     const raw = buildClip({ ...spec, limits: null }, rigs); if (spec.pin) pinHips(target, raw.frames, raw.count, spec.pin.maxVertical); layerDeform('raw', raw);
     const limited = buildClip(spec, rigs); if (spec.pin) pinHips(target, limited.frames, limited.count, spec.pin.maxVertical); layerDeform('limits', limited);
+    if (spec.arm && !spec.arm.afterWrist) { armLayer(context, limited.frames, limited.count, spec.arm); layerDeform('arm', limited); }
     if (spec.wrist) { wristLayer(context, limited.frames, limited.count, spec.wrist); layerDeform('wrist', limited); }
+    if (spec.arm?.afterWrist) { armLayer(context, limited.frames, limited.count, spec.arm); layerDeform('arm', limited); }
   }
-  const clip = buildClip(spec, rigs);
+  const lying = Boolean(spec.lie || spec.getup), knock = spec.getup ? clips.find((item) => item.spec.clip === spec.getup.from) : undefined, idle = spec.getup ? clips.find((item) => item.spec.clip === 'aren-idle') : undefined;
+  const clip = lying ? buildLying(spec, target, rigs, bodyKit(), knock, idle) : buildClip(spec, rigs);
   const limits = spec.limits ?? COMBAT_LIMITS;
   if (spec.pin) pinHips(target, clip.frames, clip.count, spec.pin.maxVertical);
-  const wristApplied = spec.wrist ? wristLayer(context, clip.frames, clip.count, spec.wrist) : undefined;
+  // Constant world-Y lift of the Hips (rig units). Used by the knockdown clips so the lying donor pose (which the captured Mixamo take settles
+  // with the katana fist almost on the floor) clears the wrist layer's floor guard; the held lie still reads as the body on the floor (≤ 2 cm above it).
+  // The parent of the Hips is the root node, which only carries a rest yaw on Mixamo-retargeted rigs, so a world +Y shift is a parent-local +Y shift too.
+  if (spec.hipsLift) {
+    const hipsNode = target.index.get('mixamorig:Hips'), track = clip.frames.positions[hipsNode], shift = spec.hipsLift / RIG_SCALE;
+    for (let k = 0; k < clip.count; k += 1) track[k * 3 + 1] += shift;
+  }
+  // The knockdown / get-up clips clear the katana with both layers at once (`dpPair`); the other clips keep the per-key layers (a carried blade the wrist re-aims is cleared by the shoulder afterwards).
+  let armApplied, wristApplied;
+  if (spec.arm?.dp) {
+    const applied = dpPair(context, clip.frames, clip.count, spec.arm, spec.wrist, spec.lie ? spec.lie.holdFrom * KPT : undefined, spec.getup ? knock.dpLast : undefined);
+    clip.dpLast = applied.last;
+    armApplied = applied.arm; wristApplied = { swing: applied.wrist };
+    if (spec.arm.refine && spec.getup) {
+      // A second, small pass on the corrected frames (their displayed in-between poses are now measured, not modelled): the shoulder / wrist budgets of the passes add up to the clip's caps.
+      const { arm: armCap, wrist: wristCap, margin, floor } = spec.arm.refine, identity = { qa: new Quaternion(), qw: new Quaternion() };
+      const again = dpPair(context, clip.frames, clip.count, { ...spec.arm, cap: armCap, margin: margin ?? spec.arm.margin, floor: floor ?? spec.arm.floor }, { ...spec.wrist, cap: wristCap }, undefined, identity);
+      armApplied += again.arm; wristApplied = { swing: applied.wrist + again.wrist };
+    }
+  } else {
+    armApplied = spec.arm && !spec.arm.afterWrist ? armLayer(context, clip.frames, clip.count, spec.arm) : undefined;
+    wristApplied = spec.wrist ? wristLayer(context, clip.frames, clip.count, spec.wrist) : undefined;
+    if (spec.arm?.afterWrist) armApplied = armLayer(context, clip.frames, clip.count, spec.arm);
+  }
   const corrections = limitJoints(target, clip.frames, clip.count, limits);
   continuity(clip.frames, clip.count);
+  // The knockdown / get-up clips end with the idle blend (get-ups) and the final Hips-only floor contact, after the katana layers and the joint guard.
+  if (lying) settleLying(spec, target, clip, bodyKit(), knock, idle);
   if (spec.ground) spec.groundMetres = groundHips(target, clip.frames, clip.count);
   if (process.env.VESPER_LAYERS) layerDeform('final', clip);
   const excursions = jointExcursions(target, clip.frames, clip.count, limits);
@@ -743,6 +1561,7 @@ for (const spec of selected) {
   report[spec.clip] = {
     origin: originOf(spec),
     source: (spec.parts ?? [spec]).map((part) => ({ donor: part.source.file ?? `tripo:${part.source.animation}`, ...(part.mirror ? { mirrored: true } : {}), ...(part.strike?.resolved ? { strike: part.strike.resolved } : {}) })),
+    ...(armApplied !== undefined ? { armMaxCorrectionDegrees: Math.round(armApplied * 10) / 10 } : {}),
     ...(wristApplied ? { wristMaxCorrectionDegrees: Math.round(wristApplied.swing * 10) / 10 } : {}),
     limits: limits === JOINT_LIMITS ? 'JOINT_LIMITS' : limits === COMBAT_LIMITS ? 'COMBAT_LIMITS' : 'custom',
     peakSwing: Math.round(Math.max(...worst.map((e) => e.swing)) * 10) / 10, peakTwist: Math.round(Math.max(...worst.map((e) => e.twist)) * 10) / 10,
@@ -754,6 +1573,7 @@ for (const spec of selected) {
     ...(spec.strikes ? { edgeLead: edgeLead(clip.frames, clip.count, spec.strikes) } : {}),
     ...(spec.pin ? { hipsTravel: (() => { const t = hipsTravel(target, clip.frames, clip.count); return { horizontalMetres: Math.round(t.horizontal * RIG_SCALE * 1e4) / 1e4, verticalMetres: Math.round(t.vertical * RIG_SCALE * 1e4) / 1e4 }; })() } : {}),
     ...(spec.ground ? { soleGroundShiftMetres: Math.round(spec.groundMetres * 1e5) / 1e5 } : {}),
+    ...(lying ? { lie: lieReport(spec, target, clip, bodyKit(), knock, idle, corrections) } : {}),
   };
   clips.push(clip);
 }
@@ -766,6 +1586,8 @@ for (const scene of animated.json.scenes) {
 }
 const bytes = encodeGlb(animated.json, animated.bin);
 if (only) {
+  // `--only` authoring aid: the clips with the katana prism seated in the fitted fist, for `render-clip-preview.mjs` (the delivered GLB is not touched).
+  await writeFile('/tmp/vesper-only.glb', await withKatana(bytes));
   if (process.env.VESPER_DEFORM) for (const clip of clips) { const d = skinDeformationReport(bytes, clip.spec.clip); console.error('deformation', clip.spec.clip, d.p99, d.p999, d.max, d.worstBone, d.worstSeconds); }
   const measured = args.includes('--summary') ? Object.fromEntries(Object.entries(report).map(([name, { bladeClearance: { intersections, ...clearance }, ...rest }]) => [name, { ...rest, bladeClearance: clearance }])) : report;
   console.log(JSON.stringify(measured, null, 1));
@@ -895,7 +1717,8 @@ const acceptance = Object.fromEntries(clips.map(({ spec }) => {
   // Air Step is lifted by the engine (boost apex 2.1 m): its floor is the world minimum of runtime-jump-report.json (measure-runtime-jump.mjs), not the model-relative value at root y 0.
   if (clear.floorMetres < 0.02 && spec.clip !== 'aren-air-step') failures.push({ gate: 'floor-clearance', frame: clear.floorFrame, metres: clear.floorMetres });
   // Wrist delta from the donor hand: strikes, thrusts and throws stay ≤ 30°; a merely carried sword (nothing is cut) may use up to 45°, always inside the native Hand joint table (limitJoints runs after the wrist layer).
-  const wristMaximum = spec.strikes || spec.clip === 'vesper-kunai-fan' ? 30 : 45;
+  // Retain the already-approved back-get-up hand release (GETUP_BACK_CAPS in vesper-anatomy.test.mjs), not an offensive wrist allowance.
+  const wristMaximum = spec.clip === 'aren-getup' ? 90 : spec.strikes || spec.clip === 'vesper-kunai-fan' ? 30 : 45;
   if ((measured.wristMaxCorrectionDegrees ?? 0) > wristMaximum + 0.01) failures.push({ gate: 'wrist-delta', degrees: measured.wristMaxCorrectionDegrees, maximum: wristMaximum });
   const skinLimit = APPROVED_NATIVE_P999;
   if (deformation[spec.clip].p999 > skinLimit) failures.push({ gate: 'skin-deformation', p999: deformation[spec.clip].p999, maximum: skinLimit });
@@ -916,7 +1739,7 @@ const spent = Object.values(credits).reduce((sum, value) => sum + value, 0) + Ob
 await writeFile(root + output + '/provenance.json', JSON.stringify({
   schemaVersion: 1, originalModelTask: '3f1576b2-896f-42cf-8b59-b9368468cef2', conceptTask: 'bd53412d-7442-4aae-b977-ecbe1aa4ab46', katanaTasks: { concept: '6023d57f-5e39-4697-abd0-92e08b9a02d7', model: 'fca9127c-62c2-4fe3-81a1-7ffc6fa8c40b', decimate: 'b88adf6d-e632-4c14-ba67-1c80f6e90e1c' },
   katanaTasksRevision2: { concept: '41a68468-0a85-4b8d-aa39-1fdfdc8c85bc', modelRejected: '7df29eae-352a-465e-9831-f90a2f183d19', conceptRedo: '75aaa1f6-6e22-41ed-a65f-a7c68af3300e', model: '74d921f2-eb21-4288-b141-1c532e5ad6c0', decimate: '5674dcee-968a-4920-a8b9-428e53394b52' },
-  animationRework: { reason: 'Replaced synthetic full-body/arm IK with captured Mixamo sword motion and native Tripo presets; timing, in-place pinning, loops and bounded wrist corrections only', newTripoTasks: 0, newCredits: 0 },
+  animationRework: { reason: 'Moonshade pressure choreography: captured loaded windups, accelerated contacts, carried overshoot and controlled settles; distinct sword-charge and summoning poses, knife flick and Shade command. Existing native skeleton, skin/clearance gates and normalized hit markers retained.', newTripoTasks: 0, newCredits: 0 },
   tasks, sources, presets, sourceHash: hash(sourceBytes), skinWeightRepair: { ...skinRepair.report, repairedBaseHash: hash(base) }, outputHash: hash(bytes),
   operation: 'Offline captured-motion retarget through Rig/buildClip/appendClips; original native skinned mesh retained. Runtime and authoring import KatanaGrip.mjs.',
   rigNotes: 'The delivered rig is task 97eb3992 (biped, spec mixamo, -p model=rig-v1.0) on the full-quality model; the default v2.5 rig ignores the mixamo naming and was discarded (see discarded).',
@@ -959,6 +1782,9 @@ if (args.includes('--previews')) {
     ['cuts-requiem-front', 'front', ['vesper-thousand-cuts', 'vesper-requiem', 'vesper-cleanse'], 12],
     ['cuts-requiem-iso', 'iso', ['vesper-thousand-cuts', 'vesper-requiem', 'vesper-cleanse'], 12],
     ['air-step-iso', 'iso', ['aren-air-step'], 12],
+    ['knockdown-side', 'side', ['aren-knockdown', 'aren-knockdown-forward', 'aren-getup', 'aren-getup-forward'], 10],
+    ['knockdown-front', 'front', ['aren-knockdown', 'aren-knockdown-forward', 'aren-getup', 'aren-getup-forward'], 10],
+    ['knockdown-iso', 'iso', ['aren-knockdown', 'aren-knockdown-forward', 'aren-getup', 'aren-getup-forward'], 10],
   ];
   for (const view of ['front', 'side', 'iso']) sheets.push([`contacts-${view}`, view, contactClips.map((clip) => clip.spec.clip), 1]);
   for (const [name, view, names, frames] of sheets) {

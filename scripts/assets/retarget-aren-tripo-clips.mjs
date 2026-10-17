@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { encodeGlb, parseGlb, transplantAnimations } from './import-aren-animation-set.mjs';
+import { resolveMixamoSources } from './mixamo-import.mjs';
 
 /**
  * Retargets Tripo combat clips onto Aren's 65-joint Mixamo skeleton and appends them to the playtest GLB.
@@ -112,6 +113,30 @@ export const CLIP_SPECS = [
       { ticks: [74, 90], source: { donor: 'b', animation: 'flip' }, window: [3.1, 3.7] },
     ],
     aim: [[0, ...CARRY], [90, ...CARRY]] },
+  // Knockdown (back, hit from front): Mixamo "Knocked Out Falling To Back". The actual fall lives in source 1.0–2.6 s; we warp
+  // that whole segment onto output 0–1.5 s and freeze source 2.6 s for the held range ticks 48–90 (every key identical).
+  // `inPlace: true` pins the donor Hips horizontal so the fall stays in place (within the brief's ±0.7 m budget).
+  // `lyingSurface: 'Spine1'` aligns the floor by the mid-spine joint, not the feet (which hover when lying on back).
+  { clip: 'aren-knockdown', source: { donor: 'mixamo', file: 'asset-source/mixamo/reactions/knocked-out-back.fbx', inPlace: true }, sim: { totalTicks: 90 }, airborne: true, lyingSurface: 'Spine1', groundContactTick: 30,
+    keys: [[0, 1.0], [30, 2.4], [48, 2.6], [90, 2.6]] },
+  // Knockdown-forward (stomach, hit from behind): Use Mixamo's "Standing React Death Forward" film — the only stomach-fall
+  // film that starts STANDING (Hips ~0.49 m at source t=0). We play the falling portion source [0, 2.4] (well before the
+  // t≈3 s death-settle) so the actor is upright at frame 0, hits the floor by tick 30 (source t≈2.0, Hips ~0.23 m), and
+  // settles into a flat-prone hold by tick 48 (source t≈2.4, Hips ~0.11 m). Held-prone range ticks 48–90 = source 2.4 s
+  // (constant for the verbatim contract). `inPlace: true` keeps the fall in place within the brief's ±0.7 m Hips XZ budget.
+  { clip: 'aren-knockdown-forward', source: { donor: 'mixamo', file: 'asset-source/mixamo/reactions/react-forward.fbx', inPlace: true }, sim: { totalTicks: 90 }, airborne: true, lyingSurface: 'Spine1', groundContactTick: 30,
+    keys: [[0, 0.0], [30, 2.0], [48, 2.4], [90, 2.4]] },
+  // Get-up (back, 66 ticks): Mixamo "Kip Up" plays the full lie→knee→mid-air→plant→rise→stand (Hips 113°, UpLeg 100° in source);
+  // source 0–1.7 s into 66 ticks is 1.55× (within the brief's 1.6× cap). Seam onto `aren-knockdown`'s hold via `seamFromHold`; last 25 % blend to idle.
+  { clip: 'aren-getup', source: { donor: 'mixamo', file: 'asset-source/mixamo/reactions/kip-up.fbx', inPlace: true }, sim: { totalTicks: 66 }, airborne: true, lyingSurface: 'Spine1', seamFromHold: 'aren-knockdown', idleBlendTail: 0.25,
+    keys: [[0, 0.0], [40, 0.5], [66, 1.7]] },
+  // Get-up-forward (stomach): Mixamo "Getting Up From Stomach" plays the captured push-up rise from prone to stand
+  // (Hips y goes 0.05 → 0.36 between source 2.0–3.4 s). `seamFromHold: 'aren-knockdown-forward'` with `seamBlendTicks: 12` slerps
+  // every joint + Hips translation from the held-prone lie to the take's first lying frame over the first 12 ticks
+  // (≈0.4 s) — both prone, same headZ sign, no body flip. Source 2.0–3.4 s into 66 ticks = 1.27× (within the 1.6× cap).
+  // The last 25 % are an idle-blend tail.
+  { clip: 'aren-getup-forward', source: { donor: 'mixamo', file: 'asset-source/mixamo/reactions/getting-up-stomach.fbx', inPlace: true }, sim: { totalTicks: 66 }, airborne: true, lyingSurface: 'Spine1', seamFromHold: 'aren-knockdown-forward', seamBlendTicks: 12, idleBlendTail: 0.25,
+    keys: [[0, 2.0], [10, 2.1], [30, 2.4], [50, 3.0], [66, 3.4]] },
 ];
 
 /** Dense float accessor → fresh Float32Array (honours byteStride). */
@@ -336,6 +361,95 @@ function lockToGround(target, frames, count) {
     const world = target.poseFrame(frames, k);
     const lift = Math.min(...FEET.map((name) => jointPosition(world, target, name, p).y)) - ground;
     if (lift > 0) hips[k * 3 + 1] -= lift;
+  }
+}
+
+/** Knocked-down / get-up clips rest the body's contact point on the floor via this joint instead of the feet (whose world Y floats when lying). */
+const LYING_GROUND_EPSILON = 0.02;
+/** Per-frame floor alignment: translate Hips Y so a chosen contact joint (`Spine1`/`Spine2`) lands on the floor plane.
+ *  When `firstFrameOnly` is true, only frame 0 receives the offset (used for get-up clips where the actor must rise from the lie).
+ *  When `fromFrameToFrame` is given as `[fromFrame, toFrame]`, only that frame range receives the offset (used for knockdowns to
+ *  keep the captured fall upright and only put the held-prone frames on the floor). */
+function pinLyingSurface(target, frames, count, jointName, firstFrameOnly = false, fromFrameToFrame = null) {
+  const hips = frames.positions[target.index.get('mixamorig:Hips')], surface = target.index.get(`mixamorig:${jointName}`);
+  const p = new Vector3();
+  if (firstFrameOnly) {
+    const world = target.poseFrame(frames, 0);
+    const y = jointPosition(world, target, jointName, p).y;
+    const delta = y - LYING_GROUND_EPSILON;
+    hips[0 * 3 + 1] -= delta;
+    void surface;
+    return;
+  }
+  const lo = fromFrameToFrame ? fromFrameToFrame[0] : 0;
+  const hi = fromFrameToFrame ? fromFrameToFrame[1] : count;
+  for (let k = lo; k < hi; k += 1) {
+    const world = target.poseFrame(frames, k);
+    const y = jointPosition(world, target, jointName, p).y;
+    const delta = y - LYING_GROUND_EPSILON;
+    hips[k * 3 + 1] -= delta;
+  }
+  void surface;
+}
+
+/** Slerp every `jointName` quaternion toward identity by `amount` (0..1) over a frame range. Softens captured
+ *  bent-knee prone holds so the feet trail near the floor instead of pointing up like a corpse pose. */
+function softenJointRange(target, frames, count, jointName, fromSec, toSec, amount) {
+  const node = target.index.get(`mixamorig:${jointName}`);
+  if (!frames.rotations[node]) return;
+  const track = frames.rotations[node];
+  const fromFrame = Math.round(fromSec * FPS), toFrame = Math.round(toSec * FPS) + 1;
+  const restInverse = target.restQuaternion[node].clone().invert();
+  const current = new Quaternion(), rel = new Quaternion(), reduced = new Quaternion();
+  for (let k = fromFrame; k < toFrame; k += 1) {
+    current.fromArray(track, k * 4);
+    rel.copy(restInverse).multiply(current);
+    reduced.set(0, 0, 0, 1).slerp(rel, 1 - amount);
+    restInverse.clone().invert().multiply(reduced).normalize().toArray(track, k * 4);
+  }
+}
+
+/** Clamp the held-lying section so every key is byte-identical (knockdown contract: ticks 48–90). */
+function freezeHeldSection(frames, count, fromSeconds, toSeconds, totalTicks) {
+  const fromFrame = Math.round(fromSeconds * FPS), toFrame = Math.round(toSeconds * FPS);
+  const reference = count - 1;
+  for (let k = fromFrame; k < toFrame; k += 1) {
+    for (const list of [frames.rotations, frames.positions]) for (const track of list) if (track) {
+      const stride = list === frames.rotations ? 4 : 3;
+      for (let c = 0; c < stride; c += 1) track[k * stride + c] = track[reference * stride + c];
+    }
+  }
+  void totalTicks;
+}
+
+/** Copy every joint rotation and the Hips translation from frame `fromFrame` of one frame set into frame `toFrame` of another (lying-seam continuity). */
+function copyFrame(fromFrames, fromFrame, toFrames, toFrame) {
+  for (const [node, track] of toFrames.rotations.entries()) if (track && fromFrames.rotations[node]) for (let c = 0; c < 4; c += 1) track[toFrame * 4 + c] = fromFrames.rotations[node][fromFrame * 4 + c];
+  for (const [node, track] of toFrames.positions.entries()) if (track && fromFrames.positions[node]) for (let c = 0; c < 3; c += 1) track[toFrame * 3 + c] = fromFrames.positions[node][fromFrame * 3 + c];
+}
+
+/** Blend frames [0..N) of `toFrames` from the corresponding frame values of `fromFrames` to the natural toFrames values.
+ *  `fromFrame` is a single reference index into `fromFrames`; `toFrames` is overwritten at every k in [0, N) by
+ *  `slerp(fromFrames[fromFrame], toFrames[k], smoothstep(1 - k/N))` so frame 0 stays at the fromFrames pose and frame N-1 is the natural pose. */
+function blendSeamFrames(fromFrames, fromFrame, toFrames, frameCount) {
+  const qa = new Quaternion(), qb = new Quaternion();
+  for (let k = 0; k < frameCount; k += 1) {
+    const t = k / frameCount;
+    const s = t * t * (3 - 2 * t); // smoothstep
+    for (const [node, toTrack] of toFrames.rotations.entries()) {
+      const fromTrack = fromFrames.rotations[node];
+      if (!toTrack || !fromTrack) continue;
+      qa.fromArray(fromTrack, fromFrame * 4);
+      qb.fromArray(toTrack, k * 4);
+      qa.slerp(qb, s).normalize().toArray(toTrack, k * 4);
+    }
+    for (const [node, toTrack] of toFrames.positions.entries()) {
+      const fromTrack = fromFrames.positions[node];
+      if (!toTrack || !fromTrack) continue;
+      for (let c = 0; c < 3; c += 1) {
+        toTrack[k * 3 + c] = fromTrack[fromFrame * 3 + c] * (1 - s) + toTrack[k * 3 + c] * s;
+      }
+    }
   }
 }
 
@@ -818,8 +932,18 @@ export function buildClip(spec, rigs) {
   if (rawCount !== count) {
     for (const list of [frames.rotations, frames.positions]) list.forEach((track, node) => { if (track) list[node] = track.slice(0, count * (list === frames.rotations ? 4 : 3)); });
   }
-  if (spec.sway) addSway(target, frames, count, period, spec.sway.joints, spec.sway.amplitude);
+if (spec.sway) addSway(target, frames, count, period, spec.sway.joints, spec.sway.amplitude);
   if (spec.torso) addTorsoYaw(target, frames, count, spec.torso);
+  if (spec.lyingSurface) {
+    let firstFrameOnly = Boolean(spec.seamFromHold);
+    let range = null;
+    if (!firstFrameOnly && spec.groundContactTick && spec.sim?.totalTicks) {
+      // For knockdowns, only put the held-prone pose on the floor; the upright fall uses the captured motion.
+      const startFrame = Math.round((spec.groundContactTick * FPS) / spec.sim.totalTicks * (count - 1));
+      range = [startFrame, count];
+    }
+    pinLyingSurface(target, frames, count, spec.lyingSurface, firstFrameOnly, range);
+  }
   // Anatomical guard: every clip with a retargeted Tripo segment is clamped before grounding and before the glaive aim solve.
   const limits = spec.limits === undefined ? (built.some((entry) => !entry.source.native) ? COMBAT_LIMITS : null) : spec.limits;
   const guardCorrections = limits ? limitJoints(target, frames, count, limits) : {};
@@ -837,9 +961,16 @@ export function buildClip(spec, rigs) {
     if (dot < 0) for (let c = 0; c < 4; c += 1) track[k * 4 + c] = -track[k * 4 + c];
   }
   for (const track of [...frames.rotations, ...frames.positions]) if (track && track.some((value) => !Number.isFinite(value))) throw new Error(`${spec.clip} contains non-finite samples`);
+  // Held section freeze: knockdowns expose `sim.totalTicks` and the brief mandates every key from tick 48 to clip end is identical.
+  let heldLastFrame = null;
+  if (spec.lyingSurface && !spec.seamFromHold && spec.sim?.totalTicks) {
+    const heldStartSec = 48 / TICKS_PER_SECOND, heldEndSec = spec.sim.totalTicks / TICKS_PER_SECOND;
+    freezeHeldSection(frames, count, heldStartSec, heldEndSec, spec.sim.totalTicks);
+    heldLastFrame = count - 1;
+  }
   const times = Float32Array.from({ length: count }, (_, k) => k / FPS);
   const contact = built.find((entry) => entry.contact)?.contact;
-  return { spec, frames, times, count, duration: length, keys: built.flatMap((entry) => entry.keys), contact, totalTicks, jointNodes, aim: aimReport, guard: guardCorrections };
+  return { spec, frames, times, count, duration: length, keys: built.flatMap((entry) => entry.keys), contact, totalTicks, jointNodes, aim: aimReport, guard: guardCorrections, heldLastFrame };
 }
 
 export function appendClips(baseBytes, clips) {
@@ -915,14 +1046,23 @@ function clipReport(clip, target, ids) {
     if (hipTrack) probe.horizontal = Math.max(probe.horizontal, Math.hypot(hipTrack[k * 3] - hipTrack[0], hipTrack[k * 3 + 2] - hipTrack[2]));
   }
   const parts = spec.parts ?? [spec];
-  const describe = (part) => ({
-    source: part.source.donor === 'native' ? { native: part.source.animation } : { taskId: ids[part.source.donor], animation: part.source.animation },
-    ...part.mirror && { mirrored: true },
-    ...part.window && { sourceWindowSeconds: part.window },
-    ...part.keys && { tickToSourceSeconds: part.keys },
-    ...part.ticks && { ticks: part.ticks },
-    ...part.window && part.window[1] < part.window[0] && { reversed: true },
-  });
+  const describe = (part) => {
+    const isMixamo = part.source.donor?.startsWith('mixamo:');
+    const source = part.source.donor === 'native' ? { native: part.source.animation }
+      : isMixamo ? { mixamoFile: part.source.file, animation: part.source.animation }
+      : { taskId: ids[part.source.donor], animation: part.source.animation };
+    return {
+      source,
+      ...part.mirror && { mirrored: true },
+      ...part.window && { sourceWindowSeconds: part.window },
+      ...part.keys && { tickToSourceSeconds: part.keys },
+      ...part.ticks && { ticks: part.ticks },
+      ...part.window && part.window[1] < part.window[0] && { reversed: true },
+      ...isMixamo && { inPlace: part.source.inPlace === true },
+      ...spec.lyingSurface && { lyingSurface: spec.lyingSurface },
+      ...spec.seamFromHold && { seamFromHold: spec.seamFromHold },
+    };
+  };
   const settle = contact?.settle, window = contact?.window;
   const speeds = contact && contact.keys.slice(1).map(([t, s], i) => round(Math.abs(s - contact.keys[i][1]) / (t - contact.keys[i][0]), 3));
   return {
@@ -963,9 +1103,41 @@ export async function retargetAren() {
   ]);
   const base = transplantAnimations(seam, animationSource);
   const rigs = { target: new Rig(parseGlb(base.bytes)), ...Object.fromEntries(donorNames.map((name, i) => [name, new Rig(parseGlb(donorBytes[i]))])) };
-  const clips = CLIP_SPECS.map((spec) => buildClip(spec, rigs));
+  // Deep-clone CLIP_SPECS into a per-call array so resolveMixamoSources's in-place rewrites of `donor: 'mixamo:…'`
+  // never leak back into the exported CLIP_SPECS (would otherwise break the byte-identical rebuild gate on a second call).
+  const specs = structuredClone(CLIP_SPECS);
+  await resolveMixamoSources(specs, rigs, fileURLToPath(new URL('../../', import.meta.url)));
+  const clips = specs.map((spec) => buildClip(spec, rigs));
+  // Lying-seam pass: copy each knockdown's frozen last frame into its paired get-up's frame 0 (lying pose matches every joint within the brief tolerance).
+  const heldByName = Object.fromEntries(clips.filter((clip) => clip.spec.lyingSurface && !clip.spec.seamFromHold).map((clip) => [clip.spec.clip, clip]));
+  const target = rigs.target;
+  const idle = (() => {
+    try { return readClipFrames(target, 'idle.001').frames; } catch { return undefined; }
+  })();
+  for (const clip of clips) {
+    const spec = clip.spec;
+    if (spec.seamFromHold && heldByName[spec.seamFromHold]) {
+      const heldClip = heldByName[spec.seamFromHold];
+      const blendTicks = spec.seamBlendTicks ?? 0;
+      if (blendTicks > 0) {
+        const blendFrames = Math.max(1, Math.round(blendTicks * FPS / TICKS_PER_SECOND));
+        blendSeamFrames(heldClip.frames, heldClip.count - 1, clip.frames, Math.min(blendFrames, clip.count));
+      } else {
+        copyFrame(heldClip.frames, heldClip.count - 1, clip.frames, 0);
+      }
+    }
+    if (spec.idleBlendTail && idle) {
+      const tailStart = Math.floor(clip.count * (1 - spec.idleBlendTail));
+      const qa = new Quaternion(), qb = new Quaternion();
+      for (let k = tailStart; k < clip.count; k += 1) {
+        const s = smoothstep((k - tailStart) / Math.max(1, (clip.count - 1) - tailStart));
+        blendFrames(clip.frames, idle, k, 0, s, qa, qb);
+      }
+    }
+  }
   const bytes = appendClips(base.bytes, clips);
   const ids = Object.fromEntries(donorNames.map((name) => [name, DONORS[name].taskId]));
+  for (const spec of specs) for (const holder of spec.parts ?? [spec]) if (holder.source?.donor?.startsWith?.('mixamo:')) ids[holder.source.donor] = `mixamo:${holder.source.file}`;
   const actionToClipMapping = Object.fromEntries(clips.map((clip) => [clip.spec.clip, clip.spec.clip]));
   const rootMotion = Object.fromEntries(clips.map((clip) => [clip.spec.clip, rootMotionEntry(clip, rigs.target)]));
   const finished = new Rig(parseGlb(bytes)), peaks = (name) => { const { frames, count } = readClipFrames(finished, name); return Object.fromEntries(Object.entries(jointExcursions(finished, frames, count)).map(([joint, e]) => [joint.replace('mixamorig:', ''), { swingDegrees: round(e.swing, 1), twistDegrees: round(e.twist, 1) }])); };

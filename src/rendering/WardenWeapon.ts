@@ -1,5 +1,5 @@
 import { BufferAttribute, BufferGeometry, Color, Group, Matrix4, Mesh, MeshStandardMaterial, Object3D, Quaternion, Vector3, type Material } from 'three';
-import { computeHandGrip, fitRigidNativeHand, referencedVertices, type HandGeometryEdit, type HandGrip } from './NativeHandGrip';
+import { computeHandGrip, fitRigidNativeHand, referencedVertices, type HandGeometryEdit, type HandGrip, type HiltProfile } from './NativeHandGrip';
 import { KATANA_GRIP } from './KatanaGrip.mjs';
 export { KATANA_GRIP } from './KatanaGrip.mjs';
 
@@ -31,6 +31,8 @@ export type WardenWeaponKind = 'warden' | 'heartroot' | 'katana';
 interface WeaponProfile {
   readonly length: number;
   readonly gripFraction: number;
+  /** Centre of the fitted handle band (fraction from the pommel); the hand may sit anywhere inside it. */
+  readonly shaftFraction: number;
   readonly bladeFraction: number;
   readonly shaftCore: number;
   readonly shaftOuter: number;
@@ -41,11 +43,13 @@ interface WeaponProfile {
   readonly name: string;
   /** Which end is the blade: the end with the wider cross-section (glaive crescent) or the long side of the guard (straight sword). */
   readonly orientation: 'crescent' | 'guard';
+  /** Katana only: the slender handle runs up to a thin collar right behind the guard instead of flaring back to the native radius. */
+  readonly fuchi?: { readonly backFromPommel: number; readonly length: number; readonly scale: number };
 }
 const WEAPON_PROFILES: Readonly<Record<WardenWeaponKind, WeaponProfile>> = Object.freeze({
-  warden: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: false, tilt: WARDEN_GRIP.tiltRadians, edgeColor: WARDEN_EDGE_COLOR, name: 'wc:warden-weapon', orientation: 'crescent' },
-  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: true, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent' },
-  katana: { length: KATANA_GRIP.length, gripFraction: KATANA_GRIP.gripFromPommel / KATANA_GRIP.length, bladeFraction: KATANA_GRIP.bladeLength / KATANA_GRIP.length, shaftCore: .08, shaftOuter: .2, rigidFist: true, tilt: KATANA_GRIP.diagonalRadians, edgeColor: KATANA_EDGE_COLOR, name: 'wc:vesper-katana', orientation: 'guard' },
+  warden: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: false, tilt: WARDEN_GRIP.tiltRadians, edgeColor: WARDEN_EDGE_COLOR, name: 'wc:warden-weapon', orientation: 'crescent' },
+  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .55, shaftOuter: .68, rigidFist: true, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent' },
+  katana: { length: KATANA_GRIP.length, gripFraction: KATANA_GRIP.gripFromPommel / KATANA_GRIP.length, shaftFraction: KATANA_GRIP.handleFromPommel / KATANA_GRIP.length, bladeFraction: KATANA_GRIP.bladeLength / KATANA_GRIP.length, shaftCore: .15, shaftOuter: .2, rigidFist: true, tilt: KATANA_GRIP.diagonalRadians, edgeColor: KATANA_EDGE_COLOR, name: 'wc:vesper-katana', orientation: 'guard', fuchi: { backFromPommel: KATANA_GRIP.tsubaBackFromPommel, length: KATANA_GRIP.fuchi.length, scale: KATANA_GRIP.fuchi.scale } },
 });
 
 /** Weapon kind for a hero's `weaponGrip` (a hero without a grip declaration carries the Warden glaive). */
@@ -155,29 +159,57 @@ function basisOf(axis: Vector3, curl: Vector3): Matrix4 {
   return new Matrix4().makeBasis(x, y, z);
 }
 
-/** Narrow only the native handle around the hand; preserve the blade, pommel, topology and texture coordinates. */
+const FUCHI_BLEND = .003, FUCHI_GUARD_BLEED = .0005, FUCHI_RADIUS_FULL = .041, FUCHI_RADIUS_NONE = .05;
+const smoothUnit = (t: number): number => { const u = Math.max(0, Math.min(1, t)); return u * u * (3 - 2 * u); };
+/** Radial gain of the katana hilt `metres` from the pommel and its derivative per metre: the fitted `reduction` up to the fuchi, the fuchi's thin collar behind the guard, native again beyond it. */
+function fuchiGain(fuchi: NonNullable<WeaponProfile['fuchi']>, reduction: number, metres: number, slope: { value: number }): number {
+  const start = fuchi.backFromPommel - fuchi.length, peak = Math.min(1, reduction * fuchi.scale), end = fuchi.backFromPommel + FUCHI_GUARD_BLEED;
+  let t: number;
+  if (metres <= start) { slope.value = 0; return reduction; }
+  if (metres < start + FUCHI_BLEND) { t = (metres - start) / FUCHI_BLEND; slope.value = (peak - reduction) * 6 * t * (1 - t) / FUCHI_BLEND; return reduction + (peak - reduction) * smoothUnit(t); }
+  if (metres <= end) { slope.value = 0; return peak; }
+  if (metres < end + FUCHI_BLEND) { t = (metres - end) / FUCHI_BLEND; slope.value = (1 - peak) * 6 * t * (1 - t) / FUCHI_BLEND; return peak + (1 - peak) * smoothUnit(t); }
+  slope.value = 0;
+  return 1;
+}
+const fuchiSlope = { value: 0 };
+
+/** Fit the native handle continuously; the measurement band excludes decorative collars and the blade. */
 function fitShaft(geometry: BufferGeometry, frame: GlaiveFrame, radius: number, profile: WeaponProfile): void {
   const position = geometry.getAttribute('position'), normal = geometry.getAttribute('normal');
   const scale = profile.length / frame.length;
-  const center = frame.origin.clone().addScaledVector(frame.axis, profile.gripFraction * frame.length);
+  const center = frame.origin.clone().addScaledVector(frame.axis, profile.shaftFraction * frame.length);
   const core = profile.shaftCore / scale, outer = profile.shaftOuter / scale;
+  const measureCore = Math.min(core, .1 / scale);
   let maximum = 0;
   for (const vertex of referencedVertices(geometry)) {
     scratchA.fromBufferAttribute(position, vertex).sub(center);
     const along = scratchA.dot(frame.axis);
-    if (Math.abs(along) > core) continue;
+    if (Math.abs(along) > measureCore) continue;
     maximum = Math.max(maximum, scratchA.addScaledVector(frame.axis, -along).length() * scale);
   }
   const reduction = Math.min(1, radius / maximum);
   if (reduction >= 1) return;
+  const fuchi = profile.fuchi, fromPommel = profile.shaftFraction * profile.length;
   for (let vertex = 0; vertex < position.count; vertex++) {
     scratchA.fromBufferAttribute(position, vertex).sub(center);
     const along = scratchA.dot(frame.axis);
-    if (Math.abs(along) >= outer) continue;
+    const front = fuchi !== undefined && along > 0;
+    if (!front && Math.abs(along) >= outer) continue;
     scratchA.addScaledVector(frame.axis, -along);
-    const t = Math.max(0, Math.min(1, (Math.abs(along) - core) / (outer - core)));
-    const gain = reduction + (1 - reduction) * t * t * (3 - 2 * t);
-    const derivative = (1 - reduction) * 6 * t * (1 - t) / (outer - core) * Math.sign(along);
+    let gain: number, derivative: number;
+    if (front) {
+      // The tube of the handle and fuchi is radius-selected: the guard disc itself (radius beyond FUCHI_RADIUS_NONE) never moves.
+      const weight = 1 - smoothUnit((scratchA.length() * scale - FUCHI_RADIUS_FULL) / (FUCHI_RADIUS_NONE - FUCHI_RADIUS_FULL));
+      const raw = fuchiGain(fuchi, reduction, fromPommel + along * scale, fuchiSlope);
+      gain = 1 + (raw - 1) * weight;
+      derivative = fuchiSlope.value * weight * scale;
+    } else {
+      const t = Math.max(0, Math.min(1, (Math.abs(along) - core) / (outer - core)));
+      gain = reduction + (1 - reduction) * t * t * (3 - 2 * t);
+      derivative = (1 - reduction) * 6 * t * (1 - t) / (outer - core) * Math.sign(along);
+    }
+    if (gain === 1 && derivative === 0) continue;
     if (normal) {
       scratchB.fromBufferAttribute(normal, vertex);
       const axial = scratchB.dot(frame.axis);
@@ -186,10 +218,33 @@ function fitShaft(geometry: BufferGeometry, frame: GlaiveFrame, radius: number, 
       scratchB.multiplyScalar(1 / gain).addScaledVector(frame.axis, corrected).normalize();
       normal.setXYZ(vertex, scratchB.x, scratchB.y, scratchB.z);
     }
+
     scratchA.multiplyScalar(gain).addScaledVector(frame.axis, along).add(center);
     position.setXYZ(vertex, scratchA.x, scratchA.y, scratchA.z);
   }
   geometry.computeBoundingBox(); geometry.computeBoundingSphere();
+}
+
+/** Hilt radius per 2 mm slice behind the guard's back face, measured on the fitted mesh (metres from the seat along the blade axis); the fist keeps its skin outside it. */
+const HILT_PROFILE_FROM = -.16, HILT_PROFILE_STEP = .002;
+function measureHiltProfile(geometry: BufferGeometry, frame: GlaiveFrame, profile: WeaponProfile): HiltProfile | undefined {
+  const fuchi = profile.fuchi;
+  if (!fuchi) return undefined;
+  const position = geometry.getAttribute('position'), scale = profile.length / frame.length, seat = profile.gripFraction * profile.length;
+  const to = fuchi.backFromPommel - seat - FUCHI_GUARD_BLEED, bins = Math.ceil((to - HILT_PROFILE_FROM) / HILT_PROFILE_STEP) + 1, radius = new Float32Array(bins);
+  for (const vertex of referencedVertices(geometry)) {
+    scratchA.fromBufferAttribute(position, vertex).sub(frame.origin);
+    const along = scratchA.dot(frame.axis), z = along * scale - seat;
+    if (z < HILT_PROFILE_FROM || z > to) continue;
+    const r = scratchA.addScaledVector(frame.axis, -along).length() * scale;
+    if (r > FUCHI_RADIUS_FULL) continue;
+    const bin = Math.max(0, Math.min(bins - 1, Math.round((z - HILT_PROFILE_FROM) / HILT_PROFILE_STEP)));
+    radius[bin] = Math.max(radius[bin]!, r);
+  }
+  // A slice a vertex fell between takes its widest neighbour; every slice also takes its neighbours' widest value, so the profile is a safe envelope.
+  const envelope = new Float32Array(bins);
+  for (let bin = 0; bin < bins; bin++) envelope[bin] = Math.max(radius[Math.max(0, bin - 1)]!, radius[bin]!, radius[Math.min(bins - 1, bin + 1)]!);
+  return { from: HILT_PROFILE_FROM, step: HILT_PROFILE_STEP, radius: envelope };
 }
 
 /**
@@ -350,7 +405,7 @@ export class WardenWeapon {
   private readonly handGeometry: HandGeometryEdit | undefined;
   private disposed = false;
 
-  constructor(glaive: WeaponSource, owner: WeaponOwner, kind: WardenWeaponKind = 'warden') {
+  constructor(glaive: WeaponSource, owner: WeaponOwner, kind: WardenWeaponKind = 'warden', rigidHand = WEAPON_PROFILES[kind].rigidFist) {
     const meshes: Mesh[] = [];
     glaive.root.traverse((node) => { if (node instanceof Mesh) meshes.push(node); });
     const mesh = meshes[0];
@@ -362,8 +417,7 @@ export class WardenWeapon {
     this.glaive = glaive;
     this.owner = owner;
     const profile = WEAPON_PROFILES[kind];
-    this.grip = computeHandGrip(owner.root, profile.rigidFist, profile.tilt, kind === 'katana' ? KATANA_GRIP.edgeRadians : undefined);
-    this.handGeometry = fitRigidNativeHand(this.grip);
+    this.grip = computeHandGrip(owner.root, rigidHand, profile.tilt, kind === 'katana' ? KATANA_GRIP.edgeRadians : undefined);
 
     const position = mesh.geometry.getAttribute('position'), referenced = referencedVertices(mesh.geometry);
     let vertices: ArrayLike<number>;
@@ -376,6 +430,7 @@ export class WardenWeapon {
     const frame = analyzeGlaive(vertices, profile.orientation);
     this.geometry = splitBladeGeometry(mesh.geometry, frame, profile.bladeFraction);
     fitShaft(this.geometry, frame, this.grip.shaftRadius, profile);
+    this.handGeometry = fitRigidNativeHand(this.grip, measureHiltProfile(this.geometry, frame, profile));
     if (kind === 'katana') sharpenKatanaBlade(this.geometry, frame, profile);
     const body = source.clone(), edge = source.clone();
     body.name = `${source.name}:body`;

@@ -1,6 +1,7 @@
 import { Color, Vector3, type Object3D } from 'three';
 import { ATTACKS } from '../../game/combat/content.js';
 import { dangerFamily, type StoryCue } from '../story-cues.js';
+import { BAMBOO_ATTACK_KITS, createBambooKits, type BambooKitId } from './BambooKits.js';
 import { CanopyKits, isCanopyKit, type CanopyKitId } from './CanopyKits.js';
 import { GROVE_ATTACK_KITS, createGroveKits, type GroveKitId } from './GroveKits.js';
 import { MISTVEIL_ATTACK_KITS, createMistveilKits, type MistveilKitId } from './MistveilKits.js';
@@ -12,6 +13,7 @@ import { OWNER_GLOW, PALETTE, type VfxElement } from './palette.js';
 import { VFX_COLORS, type VfxSystem } from './VfxSystem.js';
 import type { RockSlot } from './LobbedRocksFx.js';
 import type { SigilSlot } from './SigilFx.js';
+import { CONTACT_PRE_AGE, HitImpactFx } from './HitImpactFx.js';
 import type { WardenFx } from './WardenFx.js';
 import { HeartrootCues } from './HeartrootCues.js';
 import { EmberCues } from './EmberCues.js';
@@ -45,7 +47,7 @@ export type KitId =
   | 'roar' | 'landing' | 'staff-hit' | 'contact' | 'gather' | 'beam' | 'pulse' | 'vein' | 'footprint'
   | 'sigil' | 'slash' | 'projectile' | 'projectile-impact' | 'lightning' | 'judgement' | 'judgement-mark' | 'player-hit'
   | 'cleanse' | 'root-lash' | HeartrootKitId | UmbralKitId | EmberKitId
-  | CanopyKitId | GroveKitId | MoonpineKitId | MistveilKitId;
+  | CanopyKitId | GroveKitId | MoonpineKitId | MistveilKitId | BambooKitId;
 
 /** Kits driven by the Warden arsenal (`WardenCues`) rather than the monster element kits. */
 export const WARDEN_KITS: Readonly<Partial<Record<KitId, true>>> = {
@@ -79,7 +81,7 @@ const ATTACK_KITS: Readonly<Record<string, readonly [KitId, VfxElement]>> = {
   'viper-venom-spit': ['viper-venom-spit', 'poison'],
   'viper-tail-lash': ['viper-tail-lash', 'poison'],
   'viper-strike-lunge': ['viper-strike-lunge', 'poison'],
-  ...GROVE_ATTACK_KITS, ...MOONPINE_ATTACK_KITS, ...MISTVEIL_ATTACK_KITS,
+  ...GROVE_ATTACK_KITS, ...MOONPINE_ATTACK_KITS, ...MISTVEIL_ATTACK_KITS, ...BAMBOO_ATTACK_KITS,
 };
 const ELEMENT_KITS: Readonly<Record<string, KitId>> = { fire: 'cinder-burst', ice: 'frost-bloom', poison: 'venom-mist', wind: 'gale' };
 const STORY_ELEMENTS: Readonly<Partial<Record<StoryCue['kind'], VfxElement>>> = {
@@ -167,6 +169,7 @@ export class CueKits {
   private readonly c = new Vector3();
 
   private readonly canopy: CanopyKits;
+  private readonly hitImpact: HitImpactFx;
   private readonly mapKits: readonly MapKitFamily[];
   private readonly heartroot: HeartrootCues;
   private readonly umbral: UmbralCues;
@@ -174,10 +177,11 @@ export class CueKits {
 
   constructor(private readonly vfx: VfxSystem, private readonly resolveSocket?: SocketResolver, private impact?: ImpactSink, private readonly warden?: WardenFx) {
     this.canopy = new CanopyKits(vfx, resolveSocket, impact, this);
-    this.mapKits = [createGroveKits, createMoonpineKits, createMistveilKits].map(create => create(vfx, resolveSocket, impact, this));
+    this.mapKits = [createGroveKits, createMoonpineKits, createMistveilKits, createBambooKits].map(create => create(vfx, resolveSocket, impact, this));
     this.heartroot = new HeartrootCues(vfx, warden);
     this.umbral = new UmbralCues(vfx, warden);
     this.ember = new EmberCues(vfx, warden);
+    this.hitImpact = new HitImpactFx(vfx, id => this.warden?.resolveActorRoot?.(id), warden?.bodies);
   }
 
   setImpactSink(impact: ImpactSink | undefined): void {
@@ -190,7 +194,19 @@ export class CueKits {
     return this.mapKits.find(family => family.owns(kit));
   }
 
+  /**
+   * A confirmed hit is drawn at the contact point on the frame the engine reports it: every particle starts with a little age (the world
+   * clock freezes during hit-stop), then the kit's own accent and the shared blood/material/ground layer follow.
+   */
   begin(slot: KitSlot, worldTick: number): void {
+    const cue = slot.cue;
+    if (cue.kind !== 'hit' && cue.kind !== 'projectile-impact') { this.beginKit(slot, worldTick); return; }
+    this.vfx.beginContact(CONTACT_PRE_AGE);
+    try { this.beginKit(slot, worldTick); } finally { this.vfx.endContact(); }
+    if (cue.kind === 'hit') this.hitImpact.play(cue, slot.element, slot.owner);
+  }
+
+  private beginKit(slot: KitSlot, worldTick: number): void {
     const cue = slot.cue, vfx = this.vfx, time = vfx.time;
     slot.phaseStart = cue.phaseStartedAtWorldTick ?? cue.worldTick;
     slot.acc.fill(0); slot.pulses = 0; slot.lastTime = time;
@@ -581,9 +597,11 @@ export class CueKits {
 
   private staffHit(slot: KitSlot): void {
     const vfx = this.vfx, cue = slot.cue, owner = slot.owner, attackId = cue.attackId ?? '';
-    this.actorRoot(cue.targetId, this.a, undefined, cue.position);
     const heavy = attackId.includes('charged') ? 2 : attackId.includes('heavy') ? 1 : 0;
-    const y = this.a.y + 0.9;
+    // The engine reports the contact point (on the struck body, already at hit height); the root lift is only the fallback.
+    const contact = cue.position;
+    if (contact) this.a.set(contact.x, contact.y, contact.z); else this.actorRoot(cue.targetId, this.a);
+    const y = contact ? this.a.y : this.a.y + 0.9;
     if (slot.element === 'spirit') {
       vfx.leaves(this.a.x, y, this.a.z, 10, 0.3, 0, 0, owner);
       vfx.sparks(this.a.x, y, this.a.z, 14, 3.5, 'spirit', owner, 0.3);
@@ -596,11 +614,12 @@ export class CueKits {
 
   private contact(slot: KitSlot): void {
     const vfx = this.vfx, cue = slot.cue, owner = slot.owner;
-    this.actorRoot(cue.targetId, this.a, undefined, cue.position);
-    const y = this.a.y + 1;
+    const contact = cue.position;
+    if (contact) this.a.set(contact.x, contact.y, contact.z); else this.actorRoot(cue.targetId, this.a);
+    const y = contact ? this.a.y : this.a.y + 1;
     vfx.sparks(this.a.x, y, this.a.z, 12, 3.5, slot.element, owner, 0.4);
     vfx.glow(this.a.x, y, this.a.z, 0.8, 0.18, slot.element, 0.45, owner);
-    if (slot.element === 'poison' || slot.element === 'sap') vfx.bubbles(this.a.x, this.a.y + 0.6, this.a.z, 6, 0.3, owner, slot.element);
+    if (slot.element === 'poison' || slot.element === 'sap') vfx.bubbles(this.a.x, y - 0.4, this.a.z, 6, 0.3, owner, slot.element);
     if (slot.element === 'ice') vfx.shards(this.a.x, y, this.a.z, 8, 2.5, owner);
   }
 

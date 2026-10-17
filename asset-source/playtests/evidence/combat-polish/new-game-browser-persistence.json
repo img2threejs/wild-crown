@@ -1,0 +1,372 @@
+{
+  "surface": "Built Vite distribution served standalone on http://127.0.0.1:5185/",
+  "browser": "Coordinator-owned headless Brave; 1440x900 DPR1",
+  "beforeFix": {
+    "session": {
+      "kind": "chapters",
+      "assets": "verified",
+      "saveScope": "production"
+    },
+    "screen": "loading",
+    "worldReady": false,
+    "error": "Required asset greenwake-environment is not verified (blocked); gameplay is blocked."
+  },
+  "afterFix": {
+    "entry": "Title → New Game → Aren & Koro → Begin → native Greenwake",
+    "movement": "Trusted WASD around native tree collision",
+    "interaction": "Trusted E completed prologue:hear-roars",
+    "beforeReload": {
+      "runId": "af077843-2414-45bb-93a1-cfc91648572d",
+      "slotId": "autosave:af077843-2414-45bb-93a1-cfc91648572d",
+      "scope": "candidate-chapters",
+      "heroId": "aren",
+      "chapter": 0,
+      "regionId": "greenwake",
+      "updatedAt": 1792163697424,
+      "objectives": [
+        "prologue:hear-roars"
+      ],
+      "resume": {
+        "segmentId": "prologue",
+        "layoutRevision": 1,
+        "checkpointId": "prologue-run-entry",
+        "activeEncounterId": null,
+        "requiredBeatQueue": [],
+        "dialogue": null,
+        "completedBeatIds": [
+          "prologue-opening"
+        ],
+        "pendingChoiceId": null
+      },
+      "party": {
+        "companionId": "koro"
+      },
+      "eventKeys": [
+        "af077843-2414-45bb-93a1-cfc91648572d:interaction:greenwake-roars"
+      ]
+    },
+    "afterReload": {
+      "runId": "af077843-2414-45bb-93a1-cfc91648572d",
+      "slotId": "autosave:af077843-2414-45bb-93a1-cfc91648572d",
+      "scope": "candidate-chapters",
+      "heroId": "aren",
+      "chapter": 0,
+      "regionId": "greenwake",
+      "updatedAt": 1792163697424,
+      "objectives": [
+        "prologue:hear-roars"
+      ],
+      "resume": {
+        "segmentId": "prologue",
+        "layoutRevision": 1,
+        "checkpointId": "prologue-run-entry",
+        "activeEncounterId": null,
+        "requiredBeatQueue": [],
+        "dialogue": null,
+        "completedBeatIds": [
+          "prologue-opening"
+        ],
+        "pendingChoiceId": null
+      },
+      "party": {
+        "companionId": "koro"
+      },
+      "eventKeys": [
+        "af077843-2414-45bb-93a1-cfc91648572d:interaction:greenwake-roars"
+      ]
+    },
+    "manualSave": {
+      "runId": "af077843-2414-45bb-93a1-cfc91648572d",
+      "slotId": "slot-8d7a5a3c-0ef9-47e2-83df-6883875af627",
+      "scope": "candidate-chapters",
+      "heroId": "aren",
+      "chapter": 0,
+      "regionId": "greenwake",
+      "updatedAt": 1792163893103,
+      "objectives": [
+        "prologue:hear-roars"
+      ],
+      "resume": {
+        "segmentId": "prologue",
+        "layoutRevision": 1,
+        "checkpointId": "prologue-run-entry",
+        "activeEncounterId": null,
+        "requiredBeatQueue": [],
+        "dialogue": null,
+        "completedBeatIds": [
+          "prologue-opening"
+        ],
+        "pendingChoiceId": null
+      },
+      "party": {
+        "companionId": "koro"
+      },
+      "eventKeys": [
+        "af077843-2414-45bb-93a1-cfc91648572d:interaction:greenwake-roars"
+      ]
+    },
+    "manualLoad": "Full reload → Title Load Game → manual slot → native Greenwake, Step 2 Tend to Vara",
+    "restoredHud": "AREN\nWARDEN OF THE WILD\nVitality\nMana\n\n100 / 100\nMove to Restore Mana\n\nInstinct\n\nTHE NIGHT OF A THOUSAND ROARS\nSTEP 2 OF 6\n\nTend to Vara\n\nFollow the trail · 6 m\n\nPROLOGUE\n\nR\nCOMMAND\nKoro\nF\n25 MP\nDive\nREADY\nSPACE\n8 MP\nJump\nREADY\nJ\nFREE\nWarden Blade\nREADY\nK\n12 / 20 MP\nHeavy\nNo target\nL\n15 / 35 MP\nSigil Bolt\nREADY\nQ\n20 MP\nRoot Tether\nNo target\nU\nINSTINCT\nJudgement\nNeed full Instinct\nW A S D / ARROWS MOVE · SHIFT RUN · F DIVE · SPACE ×2 DOUBLE JUMP · PAUSE ESC\nCANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+    "bannerRetained": true,
+    "screenshots": [
+      "new-game-built-objective.png",
+      "new-game-built-continued.png"
+    ]
+  },
+  "gates": {
+    "bun": "523 pass, 0 fail; tests/app tests/ui tests/storage tests/campaign tests/content packages/campaign/test",
+    "build": "tsc -b && vite build passed; 325 modules; pre-existing >500kB chunk warning",
+    "packagedAssetSource": "1.3G measured by du -sh",
+    "nodeRelease": "236 pass, 0 fail; tests/release/artifact.test.mjs tests/release/validate.test.mjs",
+    "strictLifecycle": {
+      "startedAt": "2026-10-16T15:19:50.394Z",
+      "endedAt": "2026-10-16T15:19:56.544Z",
+      "databaseName": "wild-crown-m01-6b45e811-f9a5-42b7-9fdd-c926aa6b635d",
+      "checks": [
+        {
+          "name": "untouched title Escape/Backspace stays title with no world or HUD",
+          "result": "pass"
+        },
+        {
+          "name": "Title Settings hides world controls and rejects direct or stale gamepad navigation without changing Back origin",
+          "result": "pass"
+        },
+        {
+          "name": "genuine asset error and Settings/back/title loops remain navigable without an initialized world",
+          "result": "pass"
+        },
+        {
+          "name": "persisted transition resume is idempotent and requires prior suspension",
+          "result": "pass"
+        },
+        {
+          "name": "same-root native replacement retires old RAF/listeners/database, and stale dispose preserves new DOM",
+          "result": "pass"
+        },
+        {
+          "name": "immediate replacement and disposal during native initialization cannot leave late owners",
+          "result": "pass"
+        },
+        {
+          "name": "non-persisted hide disposes the native mount and later persisted show cannot revive it",
+          "result": "pass"
+        }
+      ],
+      "samples": [
+        {
+          "label": "title keyboard recovery",
+          "applicationFrames": 1,
+          "totalFrames": 1,
+          "listeners": 23,
+          "databaseHandles": 1
+        },
+        {
+          "label": "ten native recovery loops",
+          "applicationFrames": 1,
+          "totalFrames": 1,
+          "listeners": 23,
+          "databaseHandles": 1
+        },
+        {
+          "label": "synthetic persisted resume invariant",
+          "applicationFrames": 1,
+          "totalFrames": 1,
+          "listeners": 23,
+          "databaseHandles": 1
+        },
+        {
+          "label": "ten same-root native replacements",
+          "applicationFrames": 1,
+          "totalFrames": 1,
+          "listeners": 23,
+          "databaseHandles": 1
+        },
+        {
+          "label": "idempotent native disposal",
+          "applicationFrames": 0,
+          "totalFrames": 0,
+          "listeners": 0,
+          "databaseHandles": 0
+        },
+        {
+          "label": "native pending-initialization disposal",
+          "applicationFrames": 0,
+          "totalFrames": 0,
+          "listeners": 0,
+          "databaseHandles": 0
+        },
+        {
+          "label": "synthetic non-persisted disposal invariant",
+          "applicationFrames": 0,
+          "totalFrames": 0,
+          "listeners": 0,
+          "databaseHandles": 0
+        }
+      ],
+      "failure": null,
+      "cleanup": true,
+      "limitations": [
+        "Synthetic pagehide/pageshow is not evidence of real BFCache restoration.",
+        "Required native assets still gate initialized gameplay; this fixture never supplies substitute assets."
+      ]
+    }
+  },
+  "limitations": [
+    "Candidate assets remain blocked/unverified; not release qualification.",
+    "Browser profile/site-origin local IndexedDB, not cloud sync.",
+    "Safe checkpoint spawn, not exact movement/combat frame.",
+    "No full campaign playthrough; initial prologue objective and save/load exercised."
+  ],
+  "runtimeRequests": [
+    {
+      "url": "http://127.0.0.1:5185/asset-source/ui/maps/greenwake.jpg",
+      "status": 304,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/playtests/greenwake.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/playtests/bamboo.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/playtests/later.json",
+      "status": 200,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/leaves_forest_ground/normal.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/leaves_forest_ground/arm.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/forest_leaves_02/normal.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/forest_leaves_02/arm.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/stony_dirt_path/normal.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/stony_dirt_path/arm.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/grass_path_2/normal.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/grass_path_2/arm.jpg",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/leaves_forest_ground/diffuse.jpg",
+      "status": 304,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/forest_leaves_02/diffuse.jpg",
+      "status": 304,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/stony_dirt_path/diffuse.jpg",
+      "status": 304,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/textures/greenwake/grass_path_2/diffuse.jpg",
+      "status": 304,
+      "type": "image"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/model.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+      "status": 304,
+      "type": "fetch"
+    },
+    {
+      "url": "http://127.0.0.1:5185/asset-source/ui/heroes/aren.png",
+      "status": 304,
+      "type": "image"
+    }
+  ]
+}

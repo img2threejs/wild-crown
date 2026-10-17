@@ -157,7 +157,10 @@ void main() {
   float glow = exp(-gx * gx);
   float fade = life * life * (3.0 - 2.0 * life);
   vec3 color = uEdge * edge * (0.25 + 0.75 * fade) + uBody * body * body * 0.95 * fade * fade + uGlow * glow * 0.55 * fade;
-  gl_FragColor = vec4(clamp(color * vWeight * uIntensity, vec3(0.0), vec3(4.0)), 1.0);
+  vec3 emission = clamp(color * vWeight * uIntensity, vec3(0.0), vec3(4.0));
+  // Preserve additive RGB on opaque worlds without painting the transparent preview's unlit strip black.
+  float coverage = clamp(max(emission.r, max(emission.g, emission.b)), 0.0, 1.0);
+  gl_FragColor = vec4(emission, coverage);
 }`;
 
 type TrailUniforms = { uEdge: IUniform<Color>; uBody: IUniform<Color>; uGlow: IUniform<Color>; uIntensity: IUniform<number>; uWidth: IUniform<number> };
@@ -188,7 +191,7 @@ export class BladeTrailFx {
     for (let i = 0; i < MAX_ROWS - 1; i++) index.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
     geometry.setIndex(index);
     geometry.setDrawRange(0, 0);
-    const material = new ShaderMaterial({ name: 'vfx-blade-trail', vertexShader: VERTEX, fragmentShader: FRAGMENT, uniforms: this.uniforms, transparent: true, depthWrite: false, blending: AdditiveBlending, side: DoubleSide });
+    const material = new ShaderMaterial({ name: 'vfx-blade-trail', vertexShader: VERTEX, fragmentShader: FRAGMENT, uniforms: this.uniforms, transparent: true, depthWrite: false, premultipliedAlpha: true, blending: AdditiveBlending, side: DoubleSide });
     this.mesh = new Mesh(geometry, material);
     this.mesh.name = 'vfx-blade-trail'; this.mesh.frustumCulled = false; this.mesh.visible = false; this.mesh.renderOrder = 14;
     this.setStyle('arcane', 1, 0.16);

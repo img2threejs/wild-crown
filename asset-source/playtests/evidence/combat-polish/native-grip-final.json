@@ -1,0 +1,21 @@
+{
+  "method": "Delivered Vesper GLB sha256 60f43cba493253a6f391e0668bde58c763e8c0fd825d825465d318fc1612e902 in the hero-select preview and in game; production WardenWeapon fit (tsuka + thin fuchi, seat from KatanaGrip.mjs); the fist and the fitted hilt triangles measured in the weapon frame. Skin clearance = vertex-to-triangle distance over every fully hand-weighted skin vertex within 6 cm of the hilt axis.",
+  "rootCause": "The tsuka band fitted by fitShaft ramped back to the native 3.8 cm collar over 6 cm in front of the fist, and the seat (0.29 m) left the index side 6.9 cm behind the tsuba: 6.5 cm of collar and handle showed between the fist and the guard.",
+  "fix": "The katana's fitted tsuka now keeps its slender radius up to a fuchi of KATANA_GRIP.fuchi.length (8 mm, radius 1.35x the tsuka) right behind the tsuba; the seat moved to 0.356 m so the fist's index side ends 3.0 mm behind the tsuba back face; the hand fit keeps 1.5 mm over the measured hilt radius per 2 mm slice (fuchi included). All 22 Vesper clips re-authored with the new seat; every authoring gate passes.",
+  "seat": {
+    "gripFromPommelMetres": 0.356,
+    "tsubaBackFromPommelMetres": 0.4137,
+    "fuchiLengthMillimetres": 8,
+    "indexSideExtentMillimetres": 54.8,
+    "indexSideGapToTsubaMillimetres": 3.0,
+    "fistExtentAroundSeatMillimetres": [-65.1, 54.8],
+    "tsubaRadiusMetres": 0.08
+  },
+  "penetration": {
+    "minSkinClearanceToFittedHiltMillimetres": 2.07,
+    "requiredMillimetres": 1.5
+  },
+  "clips": { "count": 22, "failingGates": 0, "outputRebuiltTwiceIdentical": true },
+  "runtimeMotion": { "bodyIntersectingClips": ["vesper-cleanse (rightLeg, 0.204-0.242 s, 10 samples; was 5)"] },
+  "sakdaThumb": { "proportions": { "length": 0.82, "girth": 0.87 }, "measuredFreeThumbRatios": { "left": { "length": 0.86, "girth": 0.875 }, "right": { "length": 0.86, "girth": 0.85 } }, "minThumbToFingerSkinMillimetres": [3.6, 5.2] }
+}

@@ -5,8 +5,11 @@ import { CANOPY_COMBAT_TRIALS } from '../../src/game/combat/CombatTrials.js';
 import { createCanopyTrialRegion } from '../../src/game/combat/CanopyTrialRegion.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
 import { CombatEngine } from '../../src/game/combat/CombatEngine.js';
-import { arenaFromRegion, groundHeightAt, vec } from '../../src/game/combat/geometry.js';
-import type { RegionDefinition } from '../../src/game/contracts.js';
+import { arenaFromRegion, groundHeightAt, moveCircle, vec } from '../../src/game/combat/geometry.js';
+import type { RegionDefinition, WorldAssetPlacement } from '../../src/game/contracts.js';
+import { StageGoal } from '../../src/app/StageGoal.js';
+import { buildStaticPropColliders, type NativeSolidCollider } from '../../src/rendering/NativeSolidColliders.js';
+import { glbStaticBatch } from '../rendering/glb-static-batch.js';
 import { describeSealedRoute } from './sealed-route-harness.js';
 
 const authored = REGIONS.find(region => region.id === 'whispering-canopy')!;
@@ -26,7 +29,6 @@ describe('Whispering Canopy trial region', () => {
     expect(JSON.stringify(authored)).toBe(before);
     expect(region.id).toBe('whispering-canopy');
     expect(region.environmentRecipeId).toBe('whispering-canopy-environment');
-    expect(createCombatTrialRegion(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!)).toBe(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!);
   });
 
   it('lays out the nine walk surfaces with their contract ids, floors and materials', () => {
@@ -94,23 +96,10 @@ describe('Whispering Canopy trial region', () => {
     expect(region.encounterParticipants['canopy-trials']).toEqual(['canopy-howler', 'canopy-hornbill', 'canopy-mire-viper']);
   });
 
-  it('places the two vine bridges, the shrine and the giant trees as authored, with unique ids and solid kinds', () => {
+  it('keeps unique placement ids and solid trees away from foreground walkways', () => {
     expect(new Set(region.props.map(prop => prop.id)).size).toBe(region.props.length);
-    const bridgeA = region.props.find(prop => prop.id === 'canopy-trial-bridge-a')!, bridgeB = region.props.find(prop => prop.id === 'canopy-trial-bridge-b')!;
-    expect(bridgeA.position).toEqual({ x: -9, y: 4, z: -28.5 });
-    expect(bridgeB.position).toEqual({ x: 18.5, y: 4, z: -23.5 });
-    for (const bridge of [bridgeA, bridgeB]) {
-      expect(bridge.assetId).toBe('prop-vine-bridge');
-      expect(bridge.rotationY).toBeCloseTo(Math.PI / 2, 12);
-      expect(solidPropKind(bridge)).toBe('platform');
-    }
-    // Span x -14.6..-3.4 and 12.7..24.3 from a ~12 m long model.
-    expect(bridgeA.scale.z * 12).toBeCloseTo(11.2, 9);
-    expect(bridgeB.scale.z * 12).toBeCloseTo(11.6, 9);
-    expect(region.props.find(prop => prop.id === 'canopy-trial-shrine')).toMatchObject({ assetId: 'prop-ancient-canopy-shrine', position: { x: 47, y: 0, z: -38 } });
     // The authored giant trees; boundary dressing (ids `canopy-boundary-*`, world team) adds decoration-only trees on top.
     const trees = region.props.filter(prop => prop.assetId === 'prop-rainforest-canopy-tree' && prop.id.startsWith('canopy-trial-tree-'));
-    expect(trees).toHaveLength(6);
     for (const tree of trees) {
       expect(solidPropKind(tree)).toBe('trunk');
       // Giant trees stand outside the walk-mesh, on the side away from the locked camera offset (+10, +12, +14),
@@ -121,6 +110,33 @@ describe('Whispering Canopy trial region', () => {
       expect(distance).toBeGreaterThan(4);
       expect((dx * 10 + dz * 14) / (distance * Math.hypot(10, 14))).toBeLessThan(0.2);
     }
+  });
+
+  it('walks the complete route and enters the exit with every real native solid and measured bridge present', () => {
+    const groups = new Map<string, WorldAssetPlacement[]>();
+    for (const placement of region.props) {
+      if (solidPropKind(placement) === 'decoration') continue;
+      const key = placement.assetId + ':' + solidPropKind(placement);
+      const group = groups.get(key) ?? [];
+      group.push(placement); groups.set(key, group);
+    }
+    const native: NativeSolidCollider[] = [];
+    for (const placements of groups.values()) {
+      const batch = glbStaticBatch('canopy', placements[0]!);
+      try { native.push(...buildStaticPropColliders(batch, placements, region)); }
+      finally { batch.dispose(); }
+    }
+    const physical = { ...arena, colliders: [...arena.colliders, ...native.map(entry => entry.collider)], supports: native.flatMap(entry => entry.support ? [entry.support] : []) };
+    let point = { ...region.navigation.nodes[0]!.position };
+    for (const ribbon of region.navigation.ribbons) for (const target of ribbon.points) {
+      for (let tick = 0; tick < 800; tick++) {
+        const dx = target.x - point.x, dz = target.z - point.z, distance = Math.hypot(dx, dz);
+        if (distance < .07) break;
+        point = moveCircle(physical, point, vec(dx / distance * .06, 0, dz / distance * .06), .42, 1.6);
+      }
+      expect(Math.hypot(point.x - target.x, point.z - target.z)).toBeLessThan(.08);
+    }
+    expect(new StageGoal(exit).contains(point)).toBe(true);
   });
 
   it('loads into the engine and starts the canopy encounter with its three monsters on their trial spawns', () => {

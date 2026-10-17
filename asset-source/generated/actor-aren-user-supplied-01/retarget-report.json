@@ -339,8 +339,8 @@
   },
   "output": {
     "file": "aren-playtest-animated.glb",
-    "sha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
-    "bytes": 18238764
+    "sha256": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1",
+    "bytes": 18468132
   },
   "notes": [
     "Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope (see anatomy.nativeLimitRaises).",
@@ -370,7 +370,11 @@
     "aren-hit": "aren-hit",
     "aren-stagger": "aren-stagger",
     "aren-back-handspring": "aren-back-handspring",
-    "aren-air-step": "aren-air-step"
+    "aren-air-step": "aren-air-step",
+    "aren-knockdown": "aren-knockdown",
+    "aren-knockdown-forward": "aren-knockdown-forward",
+    "aren-getup": "aren-getup",
+    "aren-getup-forward": "aren-getup-forward"
   },
   "rootMotion": {
     "aren-light-1": {
@@ -859,6 +863,134 @@
     },
     "aren-air-step": {
       "mode": "in-place",
+      "evidenceStatus": "verified"
+    },
+    "aren-knockdown": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.001952,
+            "y": 0.489657,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 0.733333,
+          "position": {
+            "x": 0.001952,
+            "y": 0.067299,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 1.5,
+          "position": {
+            "x": 0.001952,
+            "y": 0.067147,
+            "z": -0.009761
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-knockdown-forward": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.001952,
+            "y": 0.492497,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 0.733333,
+          "position": {
+            "x": 0.001952,
+            "y": 0.093443,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 1.5,
+          "position": {
+            "x": 0.001952,
+            "y": 0.113863,
+            "z": -0.009761
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-getup": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.001952,
+            "y": 0.067147,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 0.533333,
+          "position": {
+            "x": 0.001952,
+            "y": 0.096265,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 1.1,
+          "position": {
+            "x": 0.001952,
+            "y": 0.550391,
+            "z": -0.009761
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-getup-forward": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.001952,
+            "y": 0.113863,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 0.533333,
+          "position": {
+            "x": 0.001952,
+            "y": 0.130848,
+            "z": -0.009761
+          }
+        },
+        {
+          "time": 1.1,
+          "position": {
+            "x": 0.001952,
+            "y": 0.550391,
+            "z": -0.009761
+          }
+        }
+      ],
       "evidenceStatus": "verified"
     }
   },
@@ -4272,6 +4404,602 @@
           "max": 3.47008,
           "worstBone": "LeftUpLeg",
           "worstSeconds": 0.7
+        }
+      }
+    },
+    {
+      "action": "aren-knockdown",
+      "source": {
+        "mixamoFile": "asset-source/mixamo/reactions/knocked-out-back.fbx",
+        "animation": "mixamo.com"
+      },
+      "tickToSourceSeconds": [
+        [
+          0,
+          1
+        ],
+        [
+          30,
+          2.4
+        ],
+        [
+          48,
+          2.6
+        ],
+        [
+          90,
+          2.6
+        ]
+      ],
+      "inPlace": false,
+      "lyingSurface": "Spine1",
+      "outputFrames": 46,
+      "outputDurationSeconds": 1.5,
+      "simulation": {
+        "totalTicks": 90
+      },
+      "channels": 66,
+      "hipsY": [
+        0.0294,
+        0.5488
+      ],
+      "maxHorizontalHipsTravel": 0,
+      "lowestFootY": 0.0299,
+      "maxHandHeightAboveHips": 0.219,
+      "anatomy": {
+        "guardMaxCorrectionDegrees": {
+          "mixamorig:Head": 0.22,
+          "mixamorig:LeftHand": 5.16,
+          "mixamorig:RightHand": 26.75,
+          "mixamorig:RightUpLeg": 3.97,
+          "mixamorig:LeftFoot": 1.04,
+          "mixamorig:RightFoot": 3.04
+        },
+        "peaks": {
+          "Spine": {
+            "swingDegrees": 15.7,
+            "twistDegrees": 6
+          },
+          "Spine1": {
+            "swingDegrees": 7.8,
+            "twistDegrees": 3.1
+          },
+          "Spine2": {
+            "swingDegrees": 17.7,
+            "twistDegrees": 9.5
+          },
+          "Neck": {
+            "swingDegrees": 15.7,
+            "twistDegrees": 9.9
+          },
+          "Head": {
+            "swingDegrees": 38.1,
+            "twistDegrees": 47.2
+          },
+          "LeftShoulder": {
+            "swingDegrees": 26.1,
+            "twistDegrees": 7.2
+          },
+          "RightShoulder": {
+            "swingDegrees": 23.8,
+            "twistDegrees": 8.4
+          },
+          "LeftArm": {
+            "swingDegrees": 88.3,
+            "twistDegrees": 38.7
+          },
+          "RightArm": {
+            "swingDegrees": 94.4,
+            "twistDegrees": 47.8
+          },
+          "LeftForeArm": {
+            "swingDegrees": 53.2,
+            "twistDegrees": 1.3
+          },
+          "RightForeArm": {
+            "swingDegrees": 82.4,
+            "twistDegrees": 1.1
+          },
+          "LeftHand": {
+            "swingDegrees": 29.4,
+            "twistDegrees": 34.9
+          },
+          "RightHand": {
+            "swingDegrees": 35.7,
+            "twistDegrees": 35
+          },
+          "LeftUpLeg": {
+            "swingDegrees": 32.5,
+            "twistDegrees": 8.8
+          },
+          "RightUpLeg": {
+            "swingDegrees": 41.6,
+            "twistDegrees": 39.8
+          },
+          "LeftLeg": {
+            "swingDegrees": 33.9,
+            "twistDegrees": 8.7
+          },
+          "RightLeg": {
+            "swingDegrees": 65.8,
+            "twistDegrees": 12.4
+          },
+          "LeftFoot": {
+            "swingDegrees": 39.3,
+            "twistDegrees": 24.6
+          },
+          "RightFoot": {
+            "swingDegrees": 33.1,
+            "twistDegrees": 24.9
+          },
+          "LeftToeBase": {
+            "swingDegrees": 7.1,
+            "twistDegrees": 1.5
+          },
+          "RightToeBase": {
+            "swingDegrees": 13.7,
+            "twistDegrees": 4.7
+          }
+        },
+        "deformation": {
+          "edges": 37955,
+          "p99": 0.34582,
+          "p999": 0.76243,
+          "max": 3.20568,
+          "worstBone": "RightUpLeg",
+          "worstSeconds": 0.0333
+        }
+      }
+    },
+    {
+      "action": "aren-knockdown-forward",
+      "source": {
+        "mixamoFile": "asset-source/mixamo/reactions/react-forward.fbx",
+        "animation": "mixamo.com"
+      },
+      "tickToSourceSeconds": [
+        [
+          0,
+          0
+        ],
+        [
+          30,
+          2
+        ],
+        [
+          48,
+          2.4
+        ],
+        [
+          90,
+          2.4
+        ]
+      ],
+      "inPlace": false,
+      "lyingSurface": "Spine1",
+      "outputFrames": 46,
+      "outputDurationSeconds": 1.5,
+      "simulation": {
+        "totalTicks": 90
+      },
+      "channels": 66,
+      "hipsY": [
+        0.0907,
+        0.5326
+      ],
+      "maxHorizontalHipsTravel": 0,
+      "lowestFootY": 0.0686,
+      "maxHandHeightAboveHips": 0.2227,
+      "anatomy": {
+        "guardMaxCorrectionDegrees": {
+          "mixamorig:Neck": 38.43,
+          "mixamorig:Head": 0.04,
+          "mixamorig:LeftShoulder": 12.34,
+          "mixamorig:RightShoulder": 9.81,
+          "mixamorig:RightArm": 18.2,
+          "mixamorig:LeftForeArm": 0.92,
+          "mixamorig:RightForeArm": 0.26,
+          "mixamorig:LeftHand": 0.03,
+          "mixamorig:RightHand": 17.67,
+          "mixamorig:LeftLeg": 3.96,
+          "mixamorig:RightLeg": 4.87,
+          "mixamorig:LeftFoot": 2.07,
+          "mixamorig:RightFoot": 9.69,
+          "mixamorig:LeftToeBase": 49.75,
+          "mixamorig:RightToeBase": 23.21
+        },
+        "peaks": {
+          "Spine": {
+            "swingDegrees": 11,
+            "twistDegrees": 1.6
+          },
+          "Spine1": {
+            "swingDegrees": 10.1,
+            "twistDegrees": 3.3
+          },
+          "Spine2": {
+            "swingDegrees": 18.6,
+            "twistDegrees": 8.7
+          },
+          "Neck": {
+            "swingDegrees": 35,
+            "twistDegrees": 28.3
+          },
+          "Head": {
+            "swingDegrees": 37.2,
+            "twistDegrees": 29
+          },
+          "LeftShoulder": {
+            "swingDegrees": 23.3,
+            "twistDegrees": 15
+          },
+          "RightShoulder": {
+            "swingDegrees": 21.5,
+            "twistDegrees": 15
+          },
+          "LeftArm": {
+            "swingDegrees": 71.5,
+            "twistDegrees": 56.2
+          },
+          "RightArm": {
+            "swingDegrees": 77.9,
+            "twistDegrees": 80
+          },
+          "LeftForeArm": {
+            "swingDegrees": 76.7,
+            "twistDegrees": 67.6
+          },
+          "RightForeArm": {
+            "swingDegrees": 127.1,
+            "twistDegrees": 66.2
+          },
+          "LeftHand": {
+            "swingDegrees": 35.9,
+            "twistDegrees": 32.5
+          },
+          "RightHand": {
+            "swingDegrees": 32.5,
+            "twistDegrees": 35
+          },
+          "LeftUpLeg": {
+            "swingDegrees": 31,
+            "twistDegrees": 18.4
+          },
+          "RightUpLeg": {
+            "swingDegrees": 31.4,
+            "twistDegrees": 31.5
+          },
+          "LeftLeg": {
+            "swingDegrees": 132.8,
+            "twistDegrees": 15
+          },
+          "RightLeg": {
+            "swingDegrees": 94.5,
+            "twistDegrees": 15
+          },
+          "LeftFoot": {
+            "swingDegrees": 40.4,
+            "twistDegrees": 24.9
+          },
+          "RightFoot": {
+            "swingDegrees": 50,
+            "twistDegrees": 24.4
+          },
+          "LeftToeBase": {
+            "swingDegrees": 40,
+            "twistDegrees": 10
+          },
+          "RightToeBase": {
+            "swingDegrees": 25.7,
+            "twistDegrees": 10
+          }
+        },
+        "deformation": {
+          "edges": 37955,
+          "p99": 0.34409,
+          "p999": 0.89108,
+          "max": 2.22438,
+          "worstBone": "LeftArm",
+          "worstSeconds": 0.3667
+        }
+      }
+    },
+    {
+      "action": "aren-getup",
+      "source": {
+        "mixamoFile": "asset-source/mixamo/reactions/kip-up.fbx",
+        "animation": "mixamo.com"
+      },
+      "tickToSourceSeconds": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0.5
+        ],
+        [
+          66,
+          1.7
+        ]
+      ],
+      "inPlace": false,
+      "lyingSurface": "Spine1",
+      "seamFromHold": "aren-knockdown",
+      "outputFrames": 34,
+      "outputDurationSeconds": 1.1,
+      "simulation": {
+        "totalTicks": 66
+      },
+      "channels": 66,
+      "hipsY": [
+        0.0671,
+        0.5504
+      ],
+      "maxHorizontalHipsTravel": 0,
+      "lowestFootY": 0.0209,
+      "maxHandHeightAboveHips": 0.1794,
+      "anatomy": {
+        "guardMaxCorrectionDegrees": {
+          "mixamorig:Spine": 20.26,
+          "mixamorig:Head": 0.19,
+          "mixamorig:LeftArm": 56.76,
+          "mixamorig:RightArm": 68.77,
+          "mixamorig:LeftHand": 33.59,
+          "mixamorig:RightHand": 36.9,
+          "mixamorig:LeftUpLeg": 22.6,
+          "mixamorig:RightUpLeg": 2.61,
+          "mixamorig:LeftLeg": 0.45,
+          "mixamorig:RightLeg": 0.98,
+          "mixamorig:LeftFoot": 5.42,
+          "mixamorig:LeftToeBase": 0.02,
+          "mixamorig:RightToeBase": 0.11
+        },
+        "peaks": {
+          "Spine": {
+            "swingDegrees": 35,
+            "twistDegrees": 3.4
+          },
+          "Spine1": {
+            "swingDegrees": 7.3,
+            "twistDegrees": 2.2
+          },
+          "Spine2": {
+            "swingDegrees": 16.9,
+            "twistDegrees": 7.7
+          },
+          "Neck": {
+            "swingDegrees": 29.5,
+            "twistDegrees": 9.9
+          },
+          "Head": {
+            "swingDegrees": 29.7,
+            "twistDegrees": 46.7
+          },
+          "LeftShoulder": {
+            "swingDegrees": 21.4,
+            "twistDegrees": 8.6
+          },
+          "RightShoulder": {
+            "swingDegrees": 21,
+            "twistDegrees": 10.1
+          },
+          "LeftArm": {
+            "swingDegrees": 88.3,
+            "twistDegrees": 80
+          },
+          "RightArm": {
+            "swingDegrees": 79,
+            "twistDegrees": 80
+          },
+          "LeftForeArm": {
+            "swingDegrees": 75.9,
+            "twistDegrees": 20
+          },
+          "RightForeArm": {
+            "swingDegrees": 68,
+            "twistDegrees": 19.5
+          },
+          "LeftHand": {
+            "swingDegrees": 74,
+            "twistDegrees": 35
+          },
+          "RightHand": {
+            "swingDegrees": 70.9,
+            "twistDegrees": 35
+          },
+          "LeftUpLeg": {
+            "swingDegrees": 100,
+            "twistDegrees": 40
+          },
+          "RightUpLeg": {
+            "swingDegrees": 105.2,
+            "twistDegrees": 39.8
+          },
+          "LeftLeg": {
+            "swingDegrees": 118.4,
+            "twistDegrees": 10.9
+          },
+          "RightLeg": {
+            "swingDegrees": 121.8,
+            "twistDegrees": 10.7
+          },
+          "LeftFoot": {
+            "swingDegrees": 48.7,
+            "twistDegrees": 25
+          },
+          "RightFoot": {
+            "swingDegrees": 42.1,
+            "twistDegrees": 17
+          },
+          "LeftToeBase": {
+            "swingDegrees": 14.4,
+            "twistDegrees": 6.9
+          },
+          "RightToeBase": {
+            "swingDegrees": 17.1,
+            "twistDegrees": 8.3
+          }
+        },
+        "deformation": {
+          "edges": 37955,
+          "p99": 0.47431,
+          "p999": 1.03993,
+          "max": 3.84755,
+          "worstBone": "LeftUpLeg",
+          "worstSeconds": 0.3
+        }
+      }
+    },
+    {
+      "action": "aren-getup-forward",
+      "source": {
+        "mixamoFile": "asset-source/mixamo/reactions/getting-up-stomach.fbx",
+        "animation": "mixamo.com"
+      },
+      "tickToSourceSeconds": [
+        [
+          0,
+          2
+        ],
+        [
+          10,
+          2.1
+        ],
+        [
+          30,
+          2.4
+        ],
+        [
+          50,
+          3
+        ],
+        [
+          66,
+          3.4
+        ]
+      ],
+      "inPlace": false,
+      "lyingSurface": "Spine1",
+      "seamFromHold": "aren-knockdown-forward",
+      "outputFrames": 34,
+      "outputDurationSeconds": 1.1,
+      "simulation": {
+        "totalTicks": 66
+      },
+      "channels": 66,
+      "hipsY": [
+        0.0622,
+        0.5504
+      ],
+      "maxHorizontalHipsTravel": 0,
+      "lowestFootY": 0.0347,
+      "maxHandHeightAboveHips": 0.0395,
+      "anatomy": {
+        "guardMaxCorrectionDegrees": {
+          "mixamorig:Head": 0.01,
+          "mixamorig:RightShoulder": 0.51,
+          "mixamorig:LeftHand": 17.27,
+          "mixamorig:RightUpLeg": 8.47,
+          "mixamorig:RightLeg": 0.04,
+          "mixamorig:RightFoot": 10.34,
+          "mixamorig:LeftToeBase": 45.43,
+          "mixamorig:RightToeBase": 26.63
+        },
+        "peaks": {
+          "Spine": {
+            "swingDegrees": 15.5,
+            "twistDegrees": 6.2
+          },
+          "Spine1": {
+            "swingDegrees": 5.3,
+            "twistDegrees": 1.4
+          },
+          "Spine2": {
+            "swingDegrees": 12.9,
+            "twistDegrees": 7
+          },
+          "Neck": {
+            "swingDegrees": 23.4,
+            "twistDegrees": 28.3
+          },
+          "Head": {
+            "swingDegrees": 20.4,
+            "twistDegrees": 42.1
+          },
+          "LeftShoulder": {
+            "swingDegrees": 16.4,
+            "twistDegrees": 15
+          },
+          "RightShoulder": {
+            "swingDegrees": 20.4,
+            "twistDegrees": 14.6
+          },
+          "LeftArm": {
+            "swingDegrees": 68.7,
+            "twistDegrees": 44.3
+          },
+          "RightArm": {
+            "swingDegrees": 61.5,
+            "twistDegrees": 33.5
+          },
+          "LeftForeArm": {
+            "swingDegrees": 104.8,
+            "twistDegrees": 52.4
+          },
+          "RightForeArm": {
+            "swingDegrees": 98.5,
+            "twistDegrees": 23.9
+          },
+          "LeftHand": {
+            "swingDegrees": 27.9,
+            "twistDegrees": 34.5
+          },
+          "RightHand": {
+            "swingDegrees": 53.8,
+            "twistDegrees": 24.1
+          },
+          "LeftUpLeg": {
+            "swingDegrees": 14.2,
+            "twistDegrees": 6.6
+          },
+          "RightUpLeg": {
+            "swingDegrees": 47.8,
+            "twistDegrees": 27.1
+          },
+          "LeftLeg": {
+            "swingDegrees": 46.6,
+            "twistDegrees": 7.9
+          },
+          "RightLeg": {
+            "swingDegrees": 64.2,
+            "twistDegrees": 14.1
+          },
+          "LeftFoot": {
+            "swingDegrees": 29.4,
+            "twistDegrees": 24
+          },
+          "RightFoot": {
+            "swingDegrees": 49.8,
+            "twistDegrees": 25
+          },
+          "LeftToeBase": {
+            "swingDegrees": 35.9,
+            "twistDegrees": 10
+          },
+          "RightToeBase": {
+            "swingDegrees": 33.2,
+            "twistDegrees": 10
+          }
+        },
+        "deformation": {
+          "edges": 37955,
+          "p99": 0.28894,
+          "p999": 0.65195,
+          "max": 2.30782,
+          "worstBone": "RightUpLeg",
+          "worstSeconds": 0.9
         }
       }
     }

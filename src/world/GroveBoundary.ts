@@ -12,7 +12,8 @@ import {
   type Point,
 } from './GreenwakeBoundary.js';
 import { mulberry32 } from './GroundNoise.js';
-import { channelReach, GROVE_POND, waterMargin } from './GrovePond.js';
+import { blightAt } from './GroveBlight.js';
+import { channelReach, GROVE_POND, MEMORY_POOL, waterMargin } from './GrovePond.js';
 import { groveBackdrop, HEARTROOT_MOUND } from './GroveTerrain.js';
 
 export { GROVE_BOUNDARY_ID_PREFIX };
@@ -24,6 +25,9 @@ export const GROVE_BOUNDARY_CLEARANCE = 0.8;
 export const GROVE_EXIT_CLEAR_RADIUS = 4.5;
 /** Trees keep this far (centre to exit) from the goal, so the trailhead reads as a sunlit clearing. */
 export const GROVE_EXIT_TREE_CLEARING = 11;
+/** Blight strength (GroveBlight) above which boundary ferns / Erya trees are withheld. */
+const BLIGHT_FERN_LIMIT = 0.15;
+const BLIGHT_TREE_LIMIT = 0.25;
 
 const TREE = 'prop-erya-edge-tree';
 const ROCK = 'prop-greenwake-boulder-cluster';
@@ -120,6 +124,9 @@ export function buildGroveBoundaryPlacements(region: RegionDefinition, keepClear
 
   const add = (assetId: string, kind: 'tree' | 'rock' | 'fern', x: number, z: number, requestedScale: number, bank = false): boolean => {
     let scale = requestedScale;
+    // Inside the Black Sap's reach the lush ferns and Erya trees are gone: dead trees and shrubs (GroveBlightDressing) stand there instead.
+    const blight = blightAt(x, z);
+    if ((kind === 'fern' && blight > BLIGHT_FERN_LIMIT) || (kind === 'tree' && blight > BLIGHT_TREE_LIMIT)) return false;
     // Edges whose outward normal faces the camera: no boulders or trees at all, and only small ferns (scale <= 0.6) at least 4 m
     // from the walk-mesh, so nothing big fills the lower-right of the screen.
     if (outwardCameraDot(walkable, x, z) > CAMERA_FACING && distanceToWalkable(x, z) < CAMERA_FACING_RANGE) {
@@ -163,13 +170,15 @@ export function buildGroveBoundaryPlacements(region: RegionDefinition, keepClear
     }
   });
 
-  // 2. The pond's bank: ferns all round and a few boulders, standing just above the waterline.
-  for (let step = 0; step < 16; step++) {
-    const angle = (step / 16) * Math.PI * 2 + between(-0.15, 0.15);
-    const kind = step % 4 === 3;
-    const scale = kind ? between(0.5, 0.8) : between(0.8, 1.2);
-    const reach = kind ? 1.35 : 1.3 + 0.1 * random();
-    add(kind ? ROCK : FERN, kind ? 'rock' : 'fern', GROVE_POND.x + Math.cos(angle) * GROVE_POND.radiusX * reach, GROVE_POND.z + Math.sin(angle) * GROVE_POND.radiusZ * reach, scale, true);
+  // 2. The pools' banks: ferns all round and a few boulders, standing just above the waterline (the Memory Pool's bank takes twice the ring).
+  for (const [pool, steps] of [[GROVE_POND, 16], [MEMORY_POOL, 28]] as const) {
+    for (let step = 0; step < steps; step++) {
+      const angle = (step / steps) * Math.PI * 2 + between(-0.15, 0.15);
+      const kind = step % 4 === 3;
+      const scale = kind ? between(0.5, 0.8) : between(0.8, 1.2);
+      const reach = kind ? 1.35 : 1.3 + 0.1 * random();
+      add(kind ? ROCK : FERN, kind ? 'rock' : 'fern', pool.x + Math.cos(angle) * pool.radiusX * reach, pool.z + Math.sin(angle) * pool.radiusZ * reach, scale, true);
+    }
   }
 
   // 3. Round the young Heartroot's mound: a loose ring of ferns and two or three boulders at its foot.
@@ -208,7 +217,7 @@ export function buildGroveBoundaryPlacements(region: RegionDefinition, keepClear
 
   // 5. Meadow fill: sparse trees on a jittered grid on level ground behind the route (never camera-facing), then fern clumps between
   // everything within reach of the route, so no bare ground shows past the dressing along the edges.
-  const extent = { minX: -64, maxX: 56, minZ: -78, maxZ: 62 };
+  const extent = { minX: -80, maxX: 56, minZ: -150, maxZ: 62 };
   for (let z = extent.minZ; z < extent.maxZ; z += FILL_TREE_CELL) {
     for (let x = extent.minX; x < extent.maxX; x += FILL_TREE_CELL) {
       const tx = x + between(0, FILL_TREE_CELL);

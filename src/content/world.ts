@@ -12,6 +12,8 @@ import {
   ACT_I_REGION_AUTHORING_STATUS,
   ACT_I_REGIONS,
 } from "./levels/act-i.js";
+import { ACT_I_INTERACTIONS } from "./act-i-interactions.js";
+import { LATER_ACT_INTERACTIONS } from "./later-act-interactions.js";
 import {
   LATER_ACT_REGION_AUTHORING_STATUS,
   LATER_ACT_REGIONS,
@@ -19,6 +21,9 @@ import {
 import { GROVE_ACTORS } from "../game/combat/GroveContent.js";
 import { MISTVEIL_ACTORS } from "../game/combat/MistveilContent.js";
 import { MOONPINE_ACTORS } from "../game/combat/MoonpineContent.js";
+import { SIDE_QUEST_ACTORS, SIDE_QUEST_DELIVERIES, SIDE_QUEST_DELIVERY_INTERACTIONS, SIDE_QUEST_ENTITIES, SIDE_QUEST_FIELD_TRAPS, SIDE_QUEST_INTERACTIONS, SIDE_QUEST_ROUTES } from "./side-quests.js";
+import { placement, uniform } from "./levels/layout-kit.js";
+import { v } from "./levels/schema.js";
 
 export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
   aren: {
@@ -39,7 +44,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
   },
   vara: {
     id: "vara",
-    species: "hornbill",
+    species: "harpy-eagle",
     role: "scout",
     allegiance: "ally",
     combatRole: "companion",
@@ -52,6 +57,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     allegiance: "ally",
     combatRole: "companion",
     assetId: "actor-koro",
+    assetVariants: { branchbreaker: "actor-koro-branchbreaker" },
     absentSafeAlternative: "manual-contextual-interaction",
   },
   asha: {
@@ -71,6 +77,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     combatRole: "noncombat",
     assetId: "actor-tali",
   },
+  ...SIDE_QUEST_ACTORS,
   ruun: {
     id: "ruun",
     species: "wolf",
@@ -128,8 +135,8 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     id: "marek",
     species: "human",
     role: "enemy",
-    allegiance: "hostile",
-    combatRole: "hostile",
+    allegiance: "neutral",
+    combatRole: "noncombat",
     assetId: "actor-marek",
     absentSafeAlternative: "field-ledger-and-hand-release",
   },
@@ -149,6 +156,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     allegiance: "hostile",
     combatRole: "hostile",
     assetId: "actor-poacher-scout",
+    assetVariants: { "camp-ranged": "actor-camp-hunter-ranged" },
   },
   "poacher-hunter": {
     id: "poacher-hunter",
@@ -157,6 +165,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     allegiance: "hostile",
     combatRole: "hostile",
     assetId: "actor-poacher-hunter",
+    assetVariants: { "camp-melee": "actor-camp-hunter-melee" },
   },
   "corrupted-boar": {
     id: "corrupted-boar",
@@ -165,6 +174,7 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
     allegiance: "wild",
     combatRole: "hostile",
     assetId: "actor-corrupted-boar",
+    assetVariants: { ember: "actor-ember-boar", "frost-sap-stalker": "actor-frost-sap-stalker", "root-rammer": "actor-root-rammer" },
   },
   // Whispering Canopy playtest monsters (hostile wildlife corrupted by Black Sap); placed only by the canopy trial region variant.
   "canopy-howler": {
@@ -207,7 +217,52 @@ export const ACTORS: Readonly<Record<string, ActorDefinition>> = {
 const sourceRegions: readonly RegionDefinition[] = [
   ...ACT_I_REGIONS,
   ...LATER_ACT_REGIONS,
-];
+].map((region): RegionDefinition => {
+  const traps = SIDE_QUEST_FIELD_TRAPS[region.id] ?? [];
+  const deliveries = SIDE_QUEST_DELIVERIES[region.id] ?? [];
+  return {
+    ...region,
+    entities: [
+      ...region.entities, ...(SIDE_QUEST_ENTITIES[region.id] ?? []),
+      ...deliveries.flatMap(delivery => [
+        { id: delivery.pickupInteractionId, kind: "interaction" as const, position: delivery.from, placement: "elevated" as const, interactionId: delivery.pickupInteractionId },
+        { id: delivery.deliveryInteractionId, kind: "interaction" as const, position: delivery.to, placement: "elevated" as const, interactionId: delivery.deliveryInteractionId },
+      ]),
+      ...(region.id === "refuge" ? [{
+        id: "refuge-council-envoy", actorId: "council-envoy", assetId: "actor-council-envoy",
+        kind: "actor" as const, position: v(16, 3, 3), placement: "elevated" as const, visibleWhen: "side:crown-refusal",
+      }] : []),
+    ],
+    traversalArcs: [...region.traversalArcs, ...(SIDE_QUEST_ROUTES[region.id] ?? [])],
+    fieldTraps: [...(region.fieldTraps ?? []), ...traps],
+    deliveries: [...(region.deliveries ?? []), ...deliveries],
+    props: [
+      ...region.props,
+      ...deliveries.map(delivery => ({
+        ...placement(delivery.id, delivery.assetId, delivery.from, "ground", 0, uniform(1)),
+        visibleWhen: `quest:${delivery.questId}:accepted`,
+      })),
+      ...(region.id === "moonpine-ridge" ? [{
+        ...placement("moonpine-winter-shelter", "prop-refuge-shelter", v(-23, 8, 10), "ground", 0, uniform(0.65)),
+        visibleWhen: "quest:winter-stores:accepted",
+      }] : []),
+      ...(region.id === "blood-bamboo-valley" ? [
+        placement("nursery-safe-hollow", "prop-root-cavern-mouth", v(-44, 0, -21), "ground", 0, uniform(0.35)),
+      ] : []),
+      ...(region.id === "mistveil-basin" ? [
+        placement("tributary-filter", "prop-black-sap-filter-drum", v(21.5, 0, -4), "ground", 0, uniform(0.65)),
+      ] : []),
+      ...traps.map(trap => placement(trap.id, "prop-black-sap-jaw-trap", trap.position, "ground", 0, uniform(1))),
+      ...(region.id === "refuge" ? [
+        { ...placement("refuge-shared-garden-water", "prop-water-basin", v(-18, 1.5, -5), "ground", 0, uniform(0.6)), visibleWhen: "hub:refuge-garden" },
+        ...[v(-18, 1.5, -11), v(-20, 1.5, -9), v(-17, 1.5, -8)].map((position, index) => ({
+          ...placement("refuge-shared-garden-" + index, "prop-canopy-fern-cluster", position, "ground", index, uniform(0.7)),
+          visibleWhen: "hub:refuge-garden",
+        })),
+      ] : []),
+    ],
+  };
+});
 const regionIds = new Set<RegionId>();
 
 function requireUniqueIds(values: readonly string[], label: string): void {
@@ -223,7 +278,7 @@ for (const region of sourceRegions) {
     throw new Error("Region source contains duplicate region: " + region.id);
   }
   regionIds.add(region.id);
-  const expectedStatus = ACT_I_REGIONS.includes(region)
+  const expectedStatus = ACT_I_REGIONS.some(source => source.id === region.id)
     ? ACT_I_REGION_AUTHORING_STATUS
     : LATER_ACT_REGION_AUTHORING_STATUS;
   if (region.authoringStatus !== expectedStatus) {
@@ -441,74 +496,10 @@ function interaction(
   };
 }
 export const INTERACTIONS: readonly InteractionDefinition[] = [
-  interaction(
-    "greenwake-gate",
-    "greenwake",
-    "greenwake-gate",
-    "traverse",
-    "Open the settlement gate",
-    success("semantic-interaction", {
-      kind: "traverse",
-      targetId: "greenwake-gate",
-    }),
-  ),
-  interaction(
-    "greenwake-roars",
-    "greenwake",
-    "greenwake-roars",
-    "inspect",
-    "Listen for the roars",
-    success("semantic-interaction", {
-      kind: "inspect",
-      targetId: "greenwake-roars",
-    }),
-  ),
-  interaction(
-    "boar-sap",
-    "greenwake",
-    "corrupted-boar",
-    "cleanse",
-    "Cleanse the boar",
-    success("semantic-interaction", {
-      kind: "cleanse",
-      targetId: "corrupted-boar",
-    }),
-    [],
-    "cleanse-pulse",
-    [],
-    "ability",
-    "press-release",
-  ),
-  interaction(
-    "vara-fragment",
-    "greenwake",
-    "heartroot-sky",
-    "collect",
-    "Receive the Sky fragment",
-    success("fragment", { fragmentId: "heartroot-sky", sourceId: "vara" }),
-  ),
-  interaction(
-    "warden-staff",
-    "greenwake",
-    "warden-staff",
-    "collect",
-    "Take the Warden Staff",
-    success("semantic-interaction", {
-      kind: "collect",
-      targetId: "warden-staff",
-    }),
-  ),
-  interaction(
-    "grove-heartroot",
-    "the-grove",
-    "grove-heartroot",
-    "inspect",
-    "Listen to Heartroot",
-    success("semantic-interaction", {
-      kind: "inspect",
-      targetId: "grove-heartroot",
-    }),
-  ),
+  ...ACT_I_INTERACTIONS,
+  ...LATER_ACT_INTERACTIONS,
+  ...SIDE_QUEST_INTERACTIONS,
+  ...SIDE_QUEST_DELIVERY_INTERACTIONS,
   {
     id: "grove-pillar",
     regionId: "the-grove",
@@ -533,7 +524,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     kind: "coordinate",
     promptLabel: "Move Grove services to the Refuge",
     radiusMeters: 2,
-    requiresFacts: [],
+    requiresFacts: ["refugeOpen"],
     requiresActors: [],
     inputHint: "interact",
     activation: "press",
@@ -564,7 +555,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
       kind: "signal",
       targetId: "warden-call",
     }),
-    [],
+    ["groveFallPending"],
     "contextual-interact",
     ["aren"],
   ),
@@ -587,158 +578,6 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     }),
     repeatable: false,
   },
-  interaction(
-    "canopy-waterwheel",
-    "whispering-canopy",
-    "canopy-waterwheel",
-    "repair",
-    "Repair the waterwheel",
-    success("semantic-interaction", {
-      kind: "repair",
-      targetId: "canopy-waterwheel",
-    }),
-    [],
-    "contextual-repair",
-  ),
-  interaction(
-    "orchard-seeds",
-    "whispering-canopy",
-    "orchard-seeds",
-    "collect",
-    "Carry the shared seeds",
-    success("semantic-interaction", {
-      kind: "collect",
-      targetId: "orchard-seeds",
-    }),
-  ),
-  interaction(
-    "monkey-rescue",
-    "whispering-canopy",
-    "monkey-rescue",
-    "rescue",
-    "Free the trapped monkeys",
-    success("rescue", {
-      targetId: "monkey-rescue",
-      locationId: "monkey-rescue",
-    }),
-  ),
-  interaction(
-    "koro-thorn",
-    "whispering-canopy",
-    "koro-thorn",
-    "inspect",
-    "Inspect the thorn",
-    success("semantic-interaction", {
-      kind: "inspect",
-      targetId: "koro-thorn",
-    }),
-  ),
-  interaction(
-    "canopy-fragment",
-    "whispering-canopy",
-    "heartroot-canopy",
-    "collect",
-    "Receive the Canopy fragment",
-    success("fragment", { fragmentId: "heartroot-canopy", sourceId: "koro" }),
-  ),
-  interaction(
-    "bamboo-tracks",
-    "blood-bamboo-valley",
-    "bamboo-tracks",
-    "track",
-    "Examine the broken bamboo",
-    success("semantic-interaction", {
-      kind: "inspect",
-      targetId: "bamboo-tracks",
-    }),
-  ),
-  interaction(
-    "hunter-camp",
-    "blood-bamboo-valley",
-    "hunter-camp",
-    "inspect",
-    "Inspect the hunters’ camp",
-    success("semantic-interaction", {
-      kind: "inspect",
-      targetId: "hunter-camp",
-    }),
-  ),
-  interaction(
-    "camp-disable",
-    "blood-bamboo-valley",
-    "hunter-camp",
-    "break",
-    "Disable traps and the signal rig",
-    success("semantic-interaction", {
-      kind: "break",
-      targetId: "hunter-camp",
-    }),
-    [],
-    "staff-heavy",
-    [],
-    "heavy",
-    "press-release",
-  ),
-  {
-    id: "koro-drop-object",
-    regionId: "blood-bamboo-valley",
-    targetId: "camp-loose-snare",
-    kind: "move-object",
-    promptLabel: "Koro utility special: Drop the loose snare",
-    radiusMeters: 2.5,
-    requiresFacts: [],
-    requiresActors: ["koro"],
-    requiresCompanionCommand: { companionId: "koro", slot: "utility", command: "special" },
-    playerActionId: undefined,
-    inputHint: "ability",
-    activation: "press",
-    success: success("object-move", { objectId: "camp-loose-snare" }),
-    repeatable: false,
-  },
-  {
-    id: "player-drop-object",
-    regionId: "blood-bamboo-valley",
-    targetId: "camp-loose-snare",
-    kind: "move-object",
-    promptLabel: "Aren staff-heavy fallback: Knock the loose snare toward the ranged hunter",
-    radiusMeters: 2.5,
-    requiresFacts: [],
-    requiresActors: [],
-    playerActionId: "staff-heavy",
-    inputHint: "heavy",
-    activation: "press-release",
-    success: success("object-move", { objectId: "camp-loose-snare" }),
-    repeatable: false,
-  },
-  interaction(
-    "tali-cage",
-    "blood-bamboo-valley",
-    "tali",
-    "rescue",
-    "Rescue Tali safely",
-    success("rescue", { targetId: "tali", locationId: "tali-cage" }),
-  ),
-  interaction(
-    "asha-cleanse",
-    "blood-bamboo-valley",
-    "asha",
-    "cleanse",
-    "Cleanse Asha",
-    success("semantic-interaction", { kind: "cleanse", targetId: "asha" }),
-    [],
-    "cleanse-pulse",
-    [],
-    "ability",
-    "press-release",
-  ),
-  interaction(
-    "fang-fragment",
-    "blood-bamboo-valley",
-    "heartroot-fang",
-    "collect",
-    "Receive the Fang fragment",
-    success("fragment", { fragmentId: "heartroot-fang", sourceId: "asha" }),
-  ),
   interaction(
     "three-beat-howl",
     "moonpine-ridge",
@@ -788,6 +627,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
       targetId: "pack-settlement",
       optionIds: ["ruun", "luma", "dominion-ruun", "dominion-luma"],
     }),
+    ["encounter-ruun-cleansed"],
   ),
   interaction(
     "pack-fragment",
@@ -796,6 +636,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     "collect",
     "Receive the Pack fragment",
     success("fragment", { fragmentId: "heartroot-pack", sourceId: "sable" }),
+    ["choice:pack-leadership"],
   ),
   interaction(
     "mist-tracks",
@@ -840,12 +681,8 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     "river-source",
     "restore",
     "Neutralize the river source",
-    success("restoration", {
-      regionId: "mistveil-basin",
-      state: "restored",
-      causeId: "river-source",
-    }),
-    [],
+    success("semantic-interaction", { kind: "restore", targetId: "river-source" }),
+    ["encounter-ghor-cleansed"],
     "cleanse-pulse",
     [],
     "ability",
@@ -871,6 +708,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     "collect",
     "Receive the Shadow fragment",
     success("fragment", { fragmentId: "heartroot-shadow", sourceId: "nyra" }),
+    ["restoration:mistveil-basin:restored"],
   ),
   interaction(
     "silent-crossing",
@@ -905,6 +743,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
       targetId: "solkar",
       optionIds: ["bond", "exile", "dominion"],
     }),
+    ["encounter-solkar-cleansed"],
   ),
   interaction(
     "crown-council",
@@ -926,6 +765,7 @@ export const INTERACTIONS: readonly InteractionDefinition[] = [
     "collect",
     "Receive the Crown fragment",
     success("fragment", { fragmentId: "heartroot-crown", sourceId: "solkar" }),
+    ["choice:sunmane-resolution"],
   ),
   {
     id: "refuge-services",
@@ -1102,10 +942,11 @@ function validateInteractionPlacements(): void {
         !movable.movedFactId ||
         new Set(movable.requiredFacts).size !== movable.requiredFacts.length ||
         movable.effect.kind !== "distraction" ||
-        movable.effect.targetActorInstanceId !== "hunter-ranged" ||
-        targetActor?.kind !== "actor" || targetDefinition?.combatRole !== "hostile" ||
-        !Number.isFinite(movable.effect.radiusMeters) || movable.effect.radiusMeters !== 2.5 ||
-        movable.effect.interruptRangedWindupTicks !== 24
+        // The target is a hostile instance or a boss participant (Asha starts hostile although her archetype is an ally).
+        targetActor?.kind !== "actor" ||
+        !(targetDefinition?.combatRole === "hostile" || Object.values(region.encounterParticipants).some((participants) => participants.includes(targetActor.id as never))) ||
+        !Number.isFinite(movable.effect.radiusMeters) || movable.effect.radiusMeters <= 0 ||
+        !Number.isInteger(movable.effect.interruptRangedWindupTicks) || movable.effect.interruptRangedWindupTicks <= 0
       ) {
         throw new Error("Movable object does not match registered prop, surface, effect, or source geometry: " + region.id + "/" + movable.id);
       }
@@ -1120,7 +961,7 @@ function validateInteractionPlacements(): void {
       if (
         !koro || !player || !isMoveForObject(koro) || !isMoveForObject(player) ||
         command?.companionId !== movable.requiredCompanionId ||
-        command.slot !== "utility" || command.command !== "special" ||
+        command.command !== "special" ||
         !koro.requiresActors.includes(movable.requiredCompanionId) ||
         koro.playerActionId !== undefined || koro.inputHint !== "ability" || koro.actionId !== undefined ||
         player.playerActionId !== "staff-heavy" || player.inputHint !== "heavy" ||

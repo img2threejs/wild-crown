@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-camp-hunter-ranged",
+  "generator": "scripts/assets/repair-hunter-weapon-skin.mjs",
+  "reason": "Tripo blended clavicle and forearm influence islands into the hand-bound crossbow, so its bow swung with the clavicle and the crossbow bent.",
+  "input": {
+    "sha256": "ad35d782aeecc8626f90beda6309cd7bcea26640023ce7107171f39093a897df",
+    "bytes": 7379996
+  },
+  "output": {
+    "sha256": "cf700f3c185c1614114c251b64ba65d6006b8a404d62280faf0eb1805928e1a4",
+    "bytes": 7379996
+  },
+  "detachedInfluence": {
+    "mixamorig:RightForeArm": {
+      "islands": 1,
+      "vertices": 45,
+      "largestWeight": 0.0787
+    },
+    "mixamorig:RightShoulder": {
+      "islands": 5,
+      "vertices": 3419,
+      "largestWeight": 0.2548
+    }
+  },
+  "reboundTo": "mixamorig:RightHand",
+  "verticesRebound": 3464
+}

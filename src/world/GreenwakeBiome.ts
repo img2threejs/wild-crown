@@ -204,21 +204,67 @@ export const GREENWAKE_BIOME: BiomeProfile = {
   water: WATER,
   features: [],
   atmosphere: {
-    background: 0x9fb4a8,
-    fogColor: 0x9fb4a8,
-    fogNear: 22,
-    fogFar: 70,
-    hemisphereSky: 0x9fb9c9,
-    hemisphereGround: 0x5a4a30,
-    hemisphereIntensity: 1.05,
-    sunColor: 0xffd9a0,
-    sunIntensity: 3.1,
-    fillColor: 0x8fa58f,
-    fillIntensity: 0.2,
-    sunOffset: { x: -38, y: 27, z: 14 },
+    background: 0x6f8a98,
+    fogColor: 0x6f8a98,
+    fogNear: 28,
+    fogFar: 84,
+    // Cool, dim hemisphere fill so the warm key light reads as the dominant source. The fill tints the deep shadows teal,
+    // which is what sells the late golden-hour turning to dusk look.
+    hemisphereSky: 0x6e8aac,
+    hemisphereGround: 0x46342a,
+    hemisphereIntensity: 0.85,
+    // Strong warm key (the sun), modest cool ambient fill — the warm/cool contrast is the spine of the look.
+    sunColor: 0xffc878,
+    sunIntensity: 3.6,
+    fillColor: 0x6f8aa8,
+    fillIntensity: 0.32,
+    // Sun lower in the sky (≈22° elevation, was ~34°): the projection hits the screen, shafts land, and the key
+    // shadow length reads as "golden hour". The horizontal offset widens so the shaft direction is clearly off-axis.
+    sunOffset: { x: -52, y: 18, z: 22 },
     /** 44 m square around the focus (22 m radius covers everything past the 22 m fog start that is still legible); 1536² keeps ≈2.9 cm/texel. */
     shadowHalfWidth: 22,
     shadowMapSize: 1536,
+    sky: {
+      // Late golden hour tipping into dusk: warm amber sun sinking through a teal sky, deep woods.
+      zenith: 0x2a4458,
+      horizon: 0xd2a26a,
+      ground: 0x20282a,
+      sunDiscSize: 0.026,
+      sunDiscColor: 0xffd498,
+      sunGlowSize: 0.32,
+      sunGlowColor: 0xff8a3c,
+      // Lower cloud coverage so the warm/cool sky split reads at the horizon instead of milking out the upper frame.
+      cloudColor: 0xffc89a,
+      cloudCoverage: 0.35,
+      cloudSpeed: 0.7,
+    },
+    heightFog: {
+      // Cooler body so the late golden-hour sun tints the far haze amber without lifting the whole frame to milk.
+      // The `density` is now per-region tunable; the screen-Y bias + near-floor in the shader keeps the haze off the
+      // play area and pools it toward the bottom / horizon.
+      color: 0x5e7088,
+      density: 0.045,
+      falloff: 0.22,
+      sunTint: 0.9,
+      sunTintColor: 0xff7a36,
+      groundBias: 0.85,
+      nearFloor: 0.34,
+    },
+    grade: {
+      // Warm key / cool fill: lift a touch cool in the shadows, gamma a touch warm in the highlights, gain boosts warm
+      // channels, and a gentle S-curve comes from the gamma asymmetry. Saturation stays near 1 so the late greens are
+      // not muddied; the warm/cool split tints are now effective (the shader reads them as direct colour adds).
+      lift: [0.005, 0.012, 0.028],
+      gamma: [0.96, 0.99, 1.04],
+      gain: [1.04, 1.0, 0.94],
+      saturation: 1.06,
+      warmHighlight: [0.22, 0.14, 0.06],
+      coolShadow: [0.04, 0.07, 0.14],
+      vignette: 0.18,
+    },
+    // Strong shafts: the sun is now in-frame, the bridge drops the threshold to 0.55 (so the bloomed sun disc feeds
+    // the radial blur) and uses the profile sunGlowColor so the rays read as warm. Strength 0.85 reads as visible rays.
+    lightShafts: 0.85,
   },
   boundaryRocks: { idPrefix: 'greenwake-boundary-rock-', assetId: 'prop-greenwake-boulder-cluster', footprintRadius: 1.5 },
 };

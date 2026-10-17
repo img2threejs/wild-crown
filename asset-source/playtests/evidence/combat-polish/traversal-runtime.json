@@ -1,0 +1,236 @@
+{
+  "fixture": "Real loaded native models and renderer-measured support fields; deterministic fixed-step jump inputs with the actual camera basis, 60 resting ticks, then restored to the live renderer. Greenwake bridge and initial Greenwake rock jump/dismount also exercised through real keyboard input.",
+  "props": [
+    {
+      "region": "greenwake",
+      "hero": "vesper",
+      "results": [
+        {
+          "ownerId": "greenwake-trial-jump-rock",
+          "start": {
+            "x": 8.0125,
+            "y": 0,
+            "z": -6.3125
+          },
+          "landed": {
+            "x": 10.854499999999998,
+            "y": 1.1640844369471464,
+            "z": -6.3125
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 9
+        }
+      ],
+      "supportOwners": [
+        "greenwake-branch-bridge",
+        "greenwake-trial-jump-rock"
+      ]
+    },
+    {
+      "region": "whispering-canopy",
+      "hero": "vesper",
+      "results": [
+        {
+          "ownerId": "canopy-trial-jump-rock",
+          "start": {
+            "x": -52.9875,
+            "y": 0,
+            "z": -34.3125
+          },
+          "landed": {
+            "x": -50.145500000000006,
+            "y": 1.1640844369471475,
+            "z": -34.3125
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 12
+        }
+      ],
+      "supportOwners": [
+        "canopy-trial-bridge-a",
+        "canopy-trial-bridge-b",
+        "canopy-trial-jump-rock"
+      ]
+    },
+    {
+      "region": "the-grove",
+      "hero": "vesper",
+      "results": [
+        {
+          "ownerId": "grove-trial-practice-basin",
+          "start": {
+            "x": -32.9875,
+            "y": 0,
+            "z": -24.3125
+          },
+          "landed": {
+            "x": -29.55749999999999,
+            "y": 0.678822829136577,
+            "z": -24.3125
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 76
+        }
+      ],
+      "supportOwners": [
+        "grove-trial-lookout-a",
+        "grove-trial-lookout-b",
+        "grove-trial-memory-basin",
+        "grove-trial-practice-basin"
+      ]
+    },
+    {
+      "region": "moonpine-ridge",
+      "hero": "vesper",
+      "results": [
+        {
+          "ownerId": "moonpine-trial-jump-rock",
+          "start": {
+            "x": 1.0125000000000002,
+            "y": 0,
+            "z": -28.3125
+          },
+          "landed": {
+            "x": 3.854500000000001,
+            "y": 1.1640844369471464,
+            "z": -28.3125
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 12
+        }
+      ],
+      "supportOwners": [
+        "moonpine-trial-bridge",
+        "moonpine-trial-jump-rock",
+        "moonpine-trial-rock-0",
+        "moonpine-trial-rock-1",
+        "moonpine-trial-rock-2"
+      ]
+    },
+    {
+      "region": "mistveil-basin",
+      "hero": "vesper",
+      "results": [
+        {
+          "ownerId": "mistveil-trial-rock-0",
+          "start": {
+            "x": 8.5125,
+            "y": 0,
+            "z": -23.5625
+          },
+          "landed": {
+            "x": 11.354499999999998,
+            "y": 1.1301193030810974,
+            "z": -23.5625
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 11
+        },
+        {
+          "ownerId": "mistveil-trial-rock-1",
+          "start": {
+            "x": -46.9875,
+            "y": 0,
+            "z": -23.8125
+          },
+          "landed": {
+            "x": -44.145500000000006,
+            "y": 1.1640844369471472,
+            "z": -23.8125
+          },
+          "stable": true,
+          "supported": true,
+          "attempts": 1,
+          "validLandingCells": 12
+        }
+      ],
+      "supportOwners": [
+        "mistveil-trial-rock-0",
+        "mistveil-trial-rock-1",
+        "mistveil-trial-drum"
+      ]
+    }
+  ],
+  "greenwakeKeyboardBridge": {
+    "start": {
+      "x": 10.046501427837804,
+      "y": 2,
+      "z": 17.357750237972972
+    },
+    "end": {
+      "x": 24.064101955788132,
+      "y": 0,
+      "z": 20.1496821204856
+    },
+    "minY": 0,
+    "maxY": 2.2528913750692117,
+    "samples": 239,
+    "deckSamples": [
+      {
+        "x": 13.506198957703463,
+        "y": 2.128329198290568,
+        "z": 18.063021893512776
+      },
+      {
+        "x": 13.867876729775256,
+        "y": 2.042871504390374,
+        "z": 18.12330152219139
+      },
+      {
+        "x": 14.22955450184705,
+        "y": 1.9295265244958586,
+        "z": 18.183581150870005
+      },
+      {
+        "x": 14.591232273918843,
+        "y": 1.8443206188729604,
+        "z": 18.24386077954862
+      },
+      {
+        "x": 14.952910045990636,
+        "y": 1.7986347263076243,
+        "z": 18.304140408227234
+      },
+      {
+        "x": 15.345734147094257,
+        "y": 1.758133587138809,
+        "z": 18.341293260127166
+      },
+      {
+        "x": 15.70741191916605,
+        "y": 1.7315340654192544,
+        "z": 18.40157288880578
+      },
+      {
+        "x": 16.069089691237842,
+        "y": 1.73371962506138,
+        "z": 18.461852517484395
+      },
+      {
+        "x": 16.430767463309635,
+        "y": 1.7561269320981807,
+        "z": 18.52213214616301
+      },
+      {
+        "x": 16.79244523538143,
+        "y": 1.7817620553993279,
+        "z": 18.582411774841624
+      }
+    ]
+  },
+  "greenwakeKeyboardDismount": {
+    "fromY": 1.1640844369471464,
+    "toY": 0,
+    "maxObservedFrameYStep": 0.11333333333333334
+  }
+}

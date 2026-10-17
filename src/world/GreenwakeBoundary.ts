@@ -149,7 +149,7 @@ export function buildGreenwakeBoundaryPlacements(
     if (polygonArea(points) < 0) points.reverse();
     polygons.push({ points, elevated: surface.elevation !== 0 || surface.points.some(point => point.y !== 0) });
   }
-  const exit = region.exits.find(route => route.id === 'greenwake-grove-out')?.from;
+  const exit = region.exits.find(route => route.id === 'greenwake-canopy-out')?.from;
   const random = mulberry32(SEED);
   const between = (min: number, max: number) => min + (max - min) * random();
 
@@ -239,11 +239,27 @@ export function buildGreenwakeBoundaryPlacements(
         // Trees only stand behind edges that face away from the camera; low props wrap every edge.
         if (kind === 'outer' && cameraDot >= 0) continue;
         const [spacingMin, spacingMax] = kind === 'inner' ? INNER_SPACING : OUTER_SPACING;
+        // Clustered placement: 2-5 props sit close along an "along" span of `spacingMin/2` m, then a `spacingMax` m gap. Mixed scales
+        // per cluster. The result breaks the previous regular lattice while keeping the same overall density and the existing
+        // clearance rules (each ring's per-edge period still averages to the original `spacingMin`–`spacingMax` budget).
         let distance = between(0.5, spacingMin), serial = 0;
         while (distance < length - 0.2) {
-          const base = { x: a.x + direction.x * distance, z: a.z + direction.z * distance };
-          tryPlace(kind === 'inner' ? innerRing : outerRing, kind, edge, `${polygonIndex}-${index}-${serial++}`, base, normal, direction);
-          distance += between(spacingMin, spacingMax);
+          const clusterSize = 2 + Math.floor(between(0, 4)); // 2-5 props
+          const clusterSpan = Math.max(1.5, spacingMin / 2);
+          const clusterGap = spacingMax;
+          for (let clusterIndex = 0; clusterIndex < clusterSize; clusterIndex++) {
+            const clusterProgress = clusterSize === 1 ? 0.5 : clusterIndex / (clusterSize - 1);
+            const baseDistance = distance + clusterSpan * clusterProgress;
+            if (baseDistance >= length - 0.2) break;
+            // Per-prop jitter perpendicular to the edge (a small leaf-fan-shaped cluster): a uniform ±0.4 m shift breaks the row.
+            const lateral = (between(-0.4, 0.4));
+            const base = {
+              x: a.x + direction.x * baseDistance + normal.x * lateral,
+              z: a.z + direction.z * baseDistance + normal.z * lateral,
+            };
+            tryPlace(kind === 'inner' ? innerRing : outerRing, kind, edge, `${polygonIndex}-${index}-${serial++}`, base, normal, direction);
+          }
+          distance += clusterSpan + clusterGap;
         }
       }
       // Convex corners get one symmetric boulder/tree along the outward bisector so hedges stay continuous.

@@ -1,0 +1,89 @@
+/*
+ * Boss intro title card. Visual language matches the survey-sheet chrome (dark frame over the live scene):
+ *   - boss-name column in Barlow Condensed, uppercase, generous letter-spacing
+ *   - epithet line below in italic Alegreya
+ *   - 1 px route-colour rule between the two
+ *   - card fades + scales in over ~360 ms, holds for the caller's duration, fades + scales out over ~320 ms
+ *   - aria-live polite (the live region lives on the root in BossIntro.ts)
+ *
+ * Reduced motion: the in/out classes are still added, but the keyframe + transitions are suppressed; the card
+ * appears for the full duration and disappears without animation.
+ */
+
+.wc-boss-intro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  /* Lower third: the reveal camera frames the boss in the middle of the screen; the card must not cover it. */
+  place-items: end center;
+  padding-bottom: clamp(48px, 16vh, 160px);
+  pointer-events: none;
+  z-index: 20;
+  --wc-boss-rule: var(--wc-route-bright, #ee7fa3);
+}
+
+.wc-boss-intro__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 28px 22px;
+  background: rgba(21, 25, 18, 0.78);
+  border-radius: 3px;
+  box-shadow: 0 18px 48px -22px rgba(4, 6, 3, .8), 0 2px 6px -2px rgba(4, 6, 3, .55);
+  color: var(--wc-frame-text, #efe8d6);
+  min-width: 280px;
+  max-width: 560px;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity .4s cubic-bezier(.2, .8, .4, 1), transform .4s cubic-bezier(.2, .8, .4, 1);
+}
+
+.wc-boss-intro__card--in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.wc-boss-intro__card--out {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity .3s cubic-bezier(.4, 0, .6, 1), transform .3s cubic-bezier(.4, 0, .6, 1);
+}
+
+.wc-boss-intro__name {
+  margin: 0;
+  font: 600 clamp(30px, 4vw, 44px)/1.1 var(--wc-display, 'Barlow Condensed', 'Barlow', system-ui, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--wc-frame-text, #efe8d6);
+  text-shadow: 0 2px 6px rgba(4, 6, 3, .65);
+}
+
+.wc-boss-intro__rule {
+  margin: 0;
+  width: 64px;
+  height: 1px;
+  border: 0;
+  background: var(--wc-boss-rule);
+  box-shadow: 0 0 6px rgba(238, 127, 163, .35);
+}
+
+.wc-boss-intro__epithet {
+  margin: 0;
+  font: italic 400 17px/1.35 var(--wc-lore, 'Alegreya', Georgia, serif);
+  color: var(--wc-frame-soft, #cfc8b2);
+}
+
+/* Reduced motion: no fade or scale; the in/out classes toggle visibility through their CSS variables instead. */
+.wc-reduced-motion .wc-boss-intro__card,
+.wc-boss-intro[data-reduced-motion="true"] .wc-boss-intro__card {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+.wc-reduced-motion .wc-boss-intro__card--out,
+.wc-boss-intro[data-reduced-motion="true"] .wc-boss-intro__card--out {
+  opacity: 0 !important;
+  transition: opacity .2s linear !important;
+}

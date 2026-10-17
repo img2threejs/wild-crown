@@ -232,6 +232,68 @@ describe('DamageNumbers — clipping and behind-camera', () => {
   });
 });
 
+describe('DamageNumbers — companion-sourced damage anchors at the target like player damage', () => {
+  /**
+   * Build a camera that mirrors the live gameplay pose: (offset.x, offset.y, offset.z) = (7, 7.2, 10), looking at
+   * the player's torso (y = 0.85), with the same FOV / aspect as GameRenderer's three-quarter view. The
+   * storm-talon strike queued by applyStormTalonStrike reuses the same `applyHostileDamage` path the player
+   * strike uses, so the boar's `target.position` is the anchor; the live bug was the number landing at
+   * (0, 0) (top-left of the overlay) when the boar's projection was clipped or stale.
+   */
+  function gameplayCamera(): PerspectiveCamera {
+    const c = new PerspectiveCamera(49.5, 16 / 9, 0.1, 200);
+    c.position.set(7, 7.2, 10);
+    c.lookAt(0, 0.85, 0);
+    c.updateMatrixWorld(true);
+    return c;
+  }
+
+  /** Storm Talon (Vara) and a basic player strike should anchor at the boar's projected position, not at the top-left. */
+  it('a Vara storm-talon strike at the boar projects the label over the boar (same as a player strike)', () => {
+    installDocument();
+    const { ui } = mount();
+    // The same payload, the only difference is the actorId (source) and the attackId.
+    const playerStrike: CombatEvent = { id: 'p-strike', tick: 200, kind: 'damage', message: 'slash', actorId: 'aren', targetId: 'boar-1' as ActorId, actionId: 'aren-slash', attackId: 'aren-slash', damage: { targetId: 'boar-1' as ActorId, amount: 17, position: { x: 5, y: 0, z: -3 }, worldTick: 200 } };
+    const varaStrike: CombatEvent = { id: 'v-strike', tick: 201, kind: 'damage', message: 'Storm Talon', actorId: 'vara', targetId: 'boar-1' as ActorId, actionId: 'storm-talon', attackId: 'vara-storm-talon', damage: { targetId: 'boar-1' as ActorId, amount: 24, position: { x: 5, y: 0, z: -3 }, worldTick: 201 } };
+    ui.consume([playerStrike, varaStrike]);
+    ui.update(clock(201), gameplayCamera(), 1280, 720, false);
+    const labels = visibleLabels(ui);
+    expect(labels.length).toBe(2);
+    const playerLabel = labels.find(c => c.textContent === '-17')!;
+    const varaLabel = labels.find(c => c.textContent === '-24')!;
+    // Both labels are visible and on the overlay (not the off-screen parked position).
+    expect(playerLabel.style['transform']).not.toBe('translate(-9999px,-9999px) translate(-50%, -100%)');
+    expect(varaLabel.style['transform']).not.toBe('translate(-9999px,-9999px) translate(-50%, -100%)');
+    // The boar's projection through the gameplay camera lands in the lower-right of the viewport (z < 0, x > 0).
+    const playerX = Number(playerLabel.style['transform'].match(/translate\(([-\d.]+)px/)![1]);
+    const playerY = Number(playerLabel.style['transform'].match(/translate\(([-\d.]+)px,\s*([-\d.]+)px/)![2]);
+    expect(playerX).toBeGreaterThan(640);
+    expect(playerY).toBeGreaterThan(180);
+    expect(playerX).toBeLessThan(1280);
+    expect(playerY).toBeLessThan(720);
+    // Storm Talon anchors at the same point (the boar's position); the side-stagger and rise are deterministic
+    // from worldTick + slot index, so the storm-talon label may sit a few pixels off but stays in the same neighbourhood.
+    const varaX = Number(varaLabel.style['transform'].match(/translate\(([-\d.]+)px/)![1]);
+    const varaY = Number(varaLabel.style['transform'].match(/translate\(([-\d.]+)px,\s*([-\d.]+)px/)![2]);
+    expect(Math.abs(varaX - playerX)).toBeLessThan(120);
+    expect(Math.abs(varaY - playerY)).toBeLessThan(200);
+    // Crucially: the storm-talon label is not at the top-left of the screen. A label whose boar's projection
+    // failed (e.g. a stale (0,0,0) anchor or a camera matrix from a previous frame) would land at the very
+    // origin of the overlay; reject that and any near-edge position above the boar's neighbourhood.
+    expect(varaX).toBeGreaterThan(64);
+    expect(varaY).toBeGreaterThan(16);
+  });
+
+  it('a companion strike whose target is offscreen is hidden (opacity 0), not parked at the top-left', () => {
+    installDocument();
+    const { ui } = mount();
+    ui.consume([{ id: 'v-far', tick: 1, kind: 'damage', message: 'Storm Talon', actorId: 'vara', targetId: 'boar-1' as ActorId, attackId: 'vara-storm-talon', damage: { targetId: 'boar-1' as ActorId, amount: 24, position: { x: 100000, y: 0, z: 0 }, worldTick: 1 } }]);
+    ui.update(clock(1), gameplayCamera(), 1280, 720, false);
+    const label = spawnedLabels(ui)[0]!;
+    expect(label.style['opacity']).toBe('0');
+  });
+});
+
 describe('DamageNumbers — clear and dispose lifecycle', () => {
   it('clear() removes active labels and resets dedup so a region load replays fresh', () => {
     installDocument();

@@ -1,0 +1,703 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-16T07:01:19.392Z",
+  "assetId": "actor-vesper-hero",
+  "evidenceStatus": "blocked",
+  "qualification": "Local native candidate; not release approval",
+  "hashes": {
+    "hero": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc",
+    "manifest": "fab79f31af9159f10c1bb9823005e68df9a086ff7aa83ea9331a93a4c2eef9c1",
+    "sword": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753"
+  },
+  "asset": {
+    "bytes": 89287420,
+    "clips": 26,
+    "actionBindings": 47,
+    "deformationP999": 1.71734,
+    "approvedDeformationGate": 1.75485
+  },
+  "verification": {
+    "integrated": {
+      "command": "bun test tests/effects tests/combat/vesper-kit.test.ts tests/combat/hero-kit-seam.test.ts tests/rendering/*.test.ts",
+      "passed": 794,
+      "failed": 0,
+      "files": 61,
+      "assertions": 372314,
+      "seconds": 47.44
+    },
+    "native": {
+      "command": "node --test tests/rendering/vesper-anatomy.test.mjs",
+      "passed": 32,
+      "failed": 0,
+      "seconds": 27.96
+    },
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -b",
+      "passed": true
+    },
+    "productionBuild": {
+      "command": "node node_modules/vite/bin/vite.js build",
+      "passed": true,
+      "existingWarning": "Chunks larger than 500 kB"
+    },
+    "jump": {
+      "scenarios": 5,
+      "minimumWeaponFloorMetres": 0.3706165166,
+      "includes": "Four boost timings and plain jump, take-off and 15 grounded recovery ticks"
+    }
+  },
+  "preview": {
+    "cssViewport": {
+      "width": 1777,
+      "height": 969
+    },
+    "realNativeModel": true,
+    "realFittedKatana": true,
+    "skillCards": [
+      {
+        "skill": 0,
+        "actions": [
+          "vesper-iai-1",
+          "vesper-iai-2",
+          "vesper-iai-3",
+          "vesper-iai-4",
+          "aren-idle"
+        ],
+        "cues": 4,
+        "maxGhosts": 9,
+        "issues": []
+      },
+      {
+        "skill": 1,
+        "actions": [
+          "vesper-shadow-step",
+          "vesper-cuts-charge",
+          "vesper-thousand-cuts",
+          "aren-idle"
+        ],
+        "cues": 11,
+        "maxGhosts": 10,
+        "issues": []
+      },
+      {
+        "skill": 2,
+        "actions": [
+          "vesper-kunai-fan",
+          "vesper-shade-charge",
+          "vesper-shade-swap",
+          "aren-idle"
+        ],
+        "cues": 4,
+        "maxGhosts": 1,
+        "issues": []
+      },
+      {
+        "skill": 3,
+        "actions": [
+          "vesper-severing-shadow",
+          "vesper-cleanse",
+          "aren-idle"
+        ],
+        "cues": 2,
+        "maxGhosts": 4,
+        "issues": []
+      },
+      {
+        "skill": 4,
+        "actions": [
+          "vesper-mist-blink",
+          "aren-idle"
+        ],
+        "cues": 1,
+        "maxGhosts": 0,
+        "issues": []
+      },
+      {
+        "skill": 5,
+        "actions": [
+          "vesper-requiem",
+          "aren-idle"
+        ],
+        "cues": 10,
+        "maxGhosts": 10,
+        "issues": []
+      }
+    ],
+    "video": "vesper-reworked-skills-live.mp4",
+    "encodedSize": {
+      "width": 1778,
+      "height": 970
+    },
+    "note": "H.264 export pads one pixel on the right and bottom; encoded frame rate is not runtime performance evidence"
+  },
+  "phaseAlignment": {
+    "fixture": "Real CombatEngine and actual final native AnimationController, target pinned and backstab disabled",
+    "contacts": [
+      {
+        "gameplayTick": 13,
+        "gameplayProgress": 0.09774436090225563,
+        "nativeTick": 12,
+        "nativeProgress": 0.1,
+        "damage": 8
+      },
+      {
+        "gameplayTick": 26,
+        "gameplayProgress": 0.19548872180451127,
+        "nativeTick": 24,
+        "nativeProgress": 0.2,
+        "damage": 8
+      },
+      {
+        "gameplayTick": 39,
+        "gameplayProgress": 0.2932330827067669,
+        "nativeTick": 36,
+        "nativeProgress": 0.3,
+        "damage": 8
+      },
+      {
+        "gameplayTick": 52,
+        "gameplayProgress": 0.39097744360902253,
+        "nativeTick": 48,
+        "nativeProgress": 0.4,
+        "damage": 33
+      },
+      {
+        "gameplayTick": 65,
+        "gameplayProgress": 0.48872180451127817,
+        "nativeTick": 60,
+        "nativeProgress": 0.5,
+        "damage": 8
+      },
+      {
+        "gameplayTick": 78,
+        "gameplayProgress": 0.5864661654135338,
+        "nativeTick": 72,
+        "nativeProgress": 0.6,
+        "damage": 8
+      },
+      {
+        "gameplayTick": 91,
+        "gameplayProgress": 0.6842105263157895,
+        "nativeTick": 84,
+        "nativeProgress": 0.7,
+        "damage": 33
+      },
+      {
+        "gameplayTick": 122,
+        "gameplayProgress": 0.9172932330827067,
+        "nativeTick": 110,
+        "nativeProgress": 0.9166666666666666,
+        "damage": 45
+      }
+    ],
+    "maximumObservedPhaseError": 0.000001
+  },
+  "accessibility": [
+    {
+      "reducedMotion": false,
+      "motionBlur": true,
+      "maxGhosts": 12,
+      "maxTrailRows": 36,
+      "requiemCues": 10,
+      "issues": [],
+      "afterSwitchToRealAren": {
+        "ghosts": 0,
+        "trailRows": 0
+      }
+    },
+    {
+      "reducedMotion": false,
+      "motionBlur": false,
+      "maxGhosts": 0,
+      "maxTrailRows": 36,
+      "requiemCues": 10,
+      "issues": [],
+      "afterSwitchToRealAren": {
+        "ghosts": 0,
+        "trailRows": 0
+      }
+    },
+    {
+      "reducedMotion": true,
+      "motionBlur": true,
+      "maxGhosts": 0,
+      "maxTrailRows": 0,
+      "requiemCues": 10,
+      "issues": [],
+      "afterSwitchToRealAren": {
+        "ghosts": 0,
+        "trailRows": 0
+      }
+    }
+  ],
+  "transparentTrail": {
+    "probe": "Real WebGL RGBA pixels, no actor or weapon geometry required",
+    "before": {
+      "empty": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "interior": [
+        1,
+        0,
+        7,
+        255
+      ],
+      "edge": [
+        255,
+        98,
+        255,
+        255
+      ]
+    },
+    "after": {
+      "empty": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "interior": [
+        1,
+        0,
+        7,
+        7
+      ],
+      "edge": [
+        255,
+        98,
+        255,
+        255
+      ]
+    },
+    "opaqueWorldRgbMismatches": 0
+  },
+  "fittedRuntime": {
+    "sampleRateHz": 240,
+    "groundedClips": 24,
+    "installsGameRendererFootGrounding": false,
+    "changedClips": [
+      {
+        "id": "vesper-iai-1",
+        "katanaFloorMinMetres": 0.3825,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-iai-2",
+        "katanaFloorMinMetres": 0.7016,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-iai-3",
+        "katanaFloorMinMetres": 0.5913,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-iai-4",
+        "katanaFloorMinMetres": 0.3469,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-shadow-step",
+        "katanaFloorMinMetres": 0.6177,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-cuts-charge",
+        "katanaFloorMinMetres": 0.6114,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-thousand-cuts",
+        "katanaFloorMinMetres": 0.5788,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-kunai-fan",
+        "katanaFloorMinMetres": 0.4776,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-shade-charge",
+        "katanaFloorMinMetres": 1.0711,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-shade-swap",
+        "katanaFloorMinMetres": 0.8146,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-severing-shadow",
+        "katanaFloorMinMetres": 0.6454,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-mist-blink",
+        "katanaFloorMinMetres": 0.1113,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      },
+      {
+        "id": "vesper-requiem",
+        "katanaFloorMinMetres": 0.3465,
+        "bodyIntersectingSamples": 0,
+        "broadphaseMisses": 0
+      }
+    ],
+    "limitations": [
+      "Sampled, not continuous collision proof",
+      "Unchanged Cleanse: 10 handle/thigh-coat contact samples",
+      "Unchanged back knockdown: 3 contact samples; back get-up: 1",
+      "Raw forward get-up fitted weapon floor minimum -0.0189 m",
+      "Raw sole roll about -0.0324 m and gait sliding remain; live foot grounding is separate"
+    ]
+  },
+  "nativeWorld": {
+    "setup": "Live native world; target durability raised to 1000 and AI recovery pinned, player moved within 2.5m; no source/balance changes",
+    "before": {
+      "playerPosition": {
+        "x": -18,
+        "y": 0,
+        "z": -9
+      },
+      "targetVitality": 160,
+      "targetMaxVitality": 160
+    },
+    "records": [
+      {
+        "tick": 84,
+        "worldTick": 84,
+        "action": "charged-heavy-charge",
+        "targetVitality": 1000,
+        "playerVitality": 80
+      },
+      {
+        "tick": 89,
+        "worldTick": 89,
+        "action": "vesper-shadow-step",
+        "targetVitality": 1000,
+        "playerVitality": 80
+      },
+      {
+        "tick": 98,
+        "worldTick": 98,
+        "action": "vesper-shadow-step",
+        "targetVitality": 961,
+        "playerVitality": 80
+      },
+      {
+        "tick": 122,
+        "worldTick": 118,
+        "action": "idle",
+        "targetVitality": 961,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1410,
+        "worldTick": 1406,
+        "action": "vesper-requiem",
+        "targetVitality": 961,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1423,
+        "worldTick": 1419,
+        "action": "vesper-requiem",
+        "targetVitality": 949,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1437,
+        "worldTick": 1432,
+        "action": "vesper-requiem",
+        "targetVitality": 941,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1451,
+        "worldTick": 1445,
+        "action": "vesper-requiem",
+        "targetVitality": 929,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1465,
+        "worldTick": 1458,
+        "action": "vesper-requiem",
+        "targetVitality": 896,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1484,
+        "worldTick": 1471,
+        "action": "vesper-requiem",
+        "targetVitality": 884,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1498,
+        "worldTick": 1484,
+        "action": "vesper-requiem",
+        "targetVitality": 876,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1512,
+        "worldTick": 1497,
+        "action": "vesper-requiem",
+        "targetVitality": 843,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1549,
+        "worldTick": 1528,
+        "action": "vesper-requiem",
+        "targetVitality": 798,
+        "playerVitality": 80
+      },
+      {
+        "tick": 1566,
+        "worldTick": 1539,
+        "action": "idle",
+        "targetVitality": 798,
+        "playerVitality": 80
+      }
+    ],
+    "cues": [
+      {
+        "action": "vesper-shadow-step",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 93
+      },
+      {
+        "action": "vesper-shadow-step",
+        "kind": "slash",
+        "phase": "active",
+        "tick": 98
+      },
+      {
+        "action": "vesper-shadow-step",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 98
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "judgement",
+        "phase": "anticipation",
+        "tick": 1406
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "judgement",
+        "phase": "commit",
+        "tick": 1413
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "judgement-mark",
+        "phase": "commit",
+        "tick": 1413
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1419
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1419
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1432
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1432
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1445
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1445
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1458
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1458
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1458
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1471
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1471
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1484
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1484
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "blink",
+        "phase": "commit",
+        "tick": 1497
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1497
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1497
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "judgement-mark",
+        "phase": "hit",
+        "tick": 1528
+      },
+      {
+        "action": "vesper-requiem",
+        "kind": "hit",
+        "phase": "hit",
+        "tick": 1528
+      }
+    ],
+    "player": {
+      "heroId": "vesper",
+      "vitality": 80,
+      "maxVitality": 80,
+      "instinct": 14,
+      "mana": 88,
+      "maxMana": 100
+    },
+    "video": "vesper-reworked-combat-live.mp4",
+    "recording": {
+      "elapsedMs": 43847,
+      "capturedFrames": 358,
+      "encodedFps": 30,
+      "encodedSize": {
+        "width": 1778,
+        "height": 970
+      }
+    },
+    "observedBrowserErrors": [
+      {
+        "seq": 10,
+        "ts": 1792133635140,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/combat-a.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/combat-a.ogg"
+      },
+      {
+        "seq": 11,
+        "ts": 1792133635140,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/combat-a.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/combat-a.ogg"
+      },
+      {
+        "seq": 12,
+        "ts": 1792133635284,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 13,
+        "ts": 1792133635290,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 14,
+        "ts": 1792133635290,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 15,
+        "ts": 1792133635448,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      }
+    ],
+    "note": "Actual Greenwake GameRenderer, native models and gameplay keyboard bindings 2/4. Music requests were aborted during scene changes; recordings contain no audio and do not qualify audio. A stale Vite meshoptimizer HTTP504 prevented the initial world load; restarting the same local server with --force resolved it."
+  },
+  "scope": {
+    "damageManaMovementAndCadenceUnchanged": true,
+    "vesperCadence": 1.35,
+    "otherHeroAssetsUnchanged": true,
+    "newGenerationCredits": 0,
+    "acceptanceGatesRelaxed": false
+  }
+}

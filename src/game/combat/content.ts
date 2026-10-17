@@ -1,9 +1,11 @@
 import type { ActorId, RegionId } from '../contracts.js';
 import type { HazardDefinition } from './evasion.js';
 import { boss, strike } from './attack-builders.js';
+import { ACT_ONE_ATTACKS, ASHA_ENCOUNTER, KORO_ENCOUNTER } from './ActOneBossContent.js';
 import { GROVE_ATTACKS, GROVE_ENCOUNTERS } from './GroveContent.js';
 import { MISTVEIL_ATTACKS, MISTVEIL_ENCOUNTERS } from './MistveilContent.js';
 import { MOONPINE_ATTACKS, MOONPINE_ENCOUNTERS } from './MoonpineContent.js';
+import { ORUN_ATTACKS, ORUN_ENCOUNTER, ORUN_ENCOUNTER_ID } from './OrunBossContent.js';
 
 /** Monster elements plus the player elements: Aren's `arcane`/`lightning`, Yara's amber-green `heartroot` sorcery, Vesper's violet-black `umbral` and Sakda's flame-orange `ember`. */
 export type AttackElement = 'fire' | 'ice' | 'wind' | 'poison' | 'arcane' | 'lightning' | 'heartroot' | 'umbral' | 'ember';
@@ -19,10 +21,14 @@ export interface AttackDefinition {
   castTicks?: number;
   /** Per-hit gameplay modifiers (slow, push). */
   onHit?: Readonly<{ slowFactor?: number; slowTicks?: number; pushMeters?: number }>;
-  /** Trial monsters only: the sweep lane starts at the caster and reaches past the target instead of centring on it. */
+  /** Committed lane shape: the sweep lane starts at the caster and reaches past the target instead of centring on it (trial monsters and Act I bosses). */
   laneFromSource?: boolean;
-  /** Trial monsters only: committed body movement. `charge` runs the whole lane during the active window; `step` lunges up to `meters` during commit. */
+  /** Committed body movement (trial monsters and Act I bosses). `charge` runs the whole lane during the active window; `step` lunges up to `meters` during commit. */
   lunge?: Readonly<{ kind: 'charge' } | { kind: 'step'; meters: number }>;
+  /** Environment hazard (a falling branch): the source only triggers it, no body clip plays. */
+  environment?: boolean;
+  /** Melee reach: the hazard centre lands at most this many metres from the caster's starting body (a slam or kick aimed past it falls short), never centred on a distant target. */
+  reach?: number;
   windupTicks: number;
   commitTicks: number;
   activeTicks: number;
@@ -32,31 +38,19 @@ export interface AttackDefinition {
   hazard: HazardDefinition;
 }
 export interface AuthoredBossPhase {id:string;attackIds:readonly string[];aspect?:string;actorVariantId?:string;requiredAction?:'cleanse'|'tether'|'counter'|'none';}
-export interface BossEncounterDefinition {id:string;regionId:RegionId;bossId:ActorId;actorIds:readonly ActorId[];supportActorIds?:readonly ActorId[];phases:readonly AuthoredBossPhase[];largeActors:readonly ActorId[];playerOnlyCounters:readonly string[];safeAbsenceResolution:'cleansed'|'subdued'|'escaped';corruptionCoreIds?:readonly string[];/** Pressure-driven wildlife encounters (Greenwake and the Whispering Canopy playtest): shared cadence, concurrency caps and impact cues. */encounterFamily?:'wildlife';}
+export interface BossEncounterDefinition {id:string;regionId:RegionId;bossId:ActorId;actorIds:readonly ActorId[];supportActorIds?:readonly ActorId[];phases:readonly AuthoredBossPhase[];largeActors:readonly ActorId[];playerOnlyCounters:readonly string[];safeAbsenceResolution:'cleansed'|'subdued'|'escaped';corruptionCoreIds?:readonly string[];/** Ordinary damage never downs, subdues or recruits this boss: only its authored cleanse sequence resolves it. */cleanseOnly?:true;/** The authored causal cleanse sequence this boss runs. */sequence?:'koro-thorn'|'asha-cub';/** Pressure-driven wildlife encounters (Greenwake and the Whispering Canopy playtest): shared cadence, concurrency caps and impact cues. */encounterFamily?:'wildlife';}
 export const ATTACKS:Readonly<Record<string,AttackDefinition>>={
-  'koro-branch-swing':strike('koro-branch-swing','koro','Koro coils his shoulders before sweeping a branch across his near side. Step beyond its reach.',{kind:'sweep',width:5,depth:2.3,radius:0,heightAboveGround:1.3,damage:12,hitGroup:'koro-sweep'},48,12,9,48),
   'koro-fruit-burst':strike('koro-fruit-burst','koro','Koro winds up to scatter fruit. Watch the falling debris and move clear of the landing.',{kind:'area',width:3.4,depth:3.4,radius:0,heightAboveGround:.1,damage:10,hitGroup:'koro-fruit'},54,12,18,45),
-  'koro-vine-vault':strike('koro-vine-vault','koro','Koro gathers himself along the vine before launching. Move away from where you stood.',{kind:'strike',width:1.8,depth:2,radius:1.35,heightAboveGround:.2,damage:15,hitGroup:'koro-pounce'},60,15,8,54),
-  'asha-guarding-pounce':strike('asha-guarding-pounce','asha','Asha gathers herself before a guarding pounce. Clear the place she is facing.',{kind:'strike',width:2.5,depth:2.5,radius:1.5,heightAboveGround:.4,damage:18,hitGroup:'asha-pounce'},54,12,9,48),
-  'asha-claw-combination':strike('asha-claw-combination','asha','Asha raises her paw; two claw arcs will follow in sequence.',{kind:'sweep',width:4.6,depth:2.2,radius:0,heightAboveGround:1.4,damage:11,hitGroup:'asha-claw-a'},48,12,7,18),
-  'asha-ground-wave':strike('asha-ground-wave','asha','Asha lifts her forelegs before striking the earth. Move aside or use the Staff Vault opening.',{kind:'wave',width:7,depth:1.4,radius:0,heightAboveGround:.15,damage:16,hitGroup:'asha-wave'},60,18,12,54),
-  'asha-protective-roar':strike('asha-protective-roar','asha','Asha draws breath. Move out of the space in front of her before the protective roar.',{kind:'cone',width:7,depth:4,radius:0,heightAboveGround:2.4,damage:12,hitGroup:'asha-roar'},54,15,12,48),
-  'ruun-track-charge':strike('ruun-track-charge','ruun','Ruun lowers his shoulders and tracks the committed line. Cross the path, do not retreat.',{kind:'sweep',width:2.2,depth:8,radius:0,heightAboveGround:1.2,damage:18,hitGroup:'ruun-charge'},66,18,15,60),
+  'ruun-track-charge':{...strike('ruun-track-charge','ruun','Ruun lowers his shoulders and tracks the committed line. Cross the path, do not retreat.',{kind:'sweep',width:2.2,depth:8,radius:0,heightAboveGround:1.2,damage:18,hitGroup:'ruun-charge'},66,18,15,60),laneFromSource:true,lunge:{kind:'charge'}},
   'ruun-pack-call':strike('ruun-pack-call','ruun','Ruun raises his head to call the pack. Keep moving as dust and arriving pounces converge.',{kind:'area',width:5,depth:5,radius:0,heightAboveGround:1,damage:13,hitGroup:'ruun-pack'},72,15,18,54),
-  'ruun-claw-arc':strike('ruun-claw-arc','ruun','Ruun turns into a broad claw arc. Move beyond his paw or behind him.',{kind:'sweep',width:5.5,depth:2.6,radius:0,heightAboveGround:1.4,damage:13,hitGroup:'ruun-claw'},48,12,8,44),
-  'ghor-hammering-charge':strike('ghor-hammering-charge','ghor','Ghor stamps a straight charge lane into the ground. Shift across the lane.',{kind:'sweep',width:2.7,depth:9,radius:0,heightAboveGround:1.6,damage:21,hitGroup:'ghor-charge'},72,18,18,63),
+  'ruun-claw-arc':{...strike('ruun-claw-arc','ruun','Ruun turns into a broad claw arc. Move beyond his paw or behind him.',{kind:'sweep',width:5.5,depth:2.6,radius:0,heightAboveGround:1.4,damage:13,hitGroup:'ruun-claw'},48,12,8,44),laneFromSource:true,lunge:{kind:'step',meters:1.5}},
+  'ghor-hammering-charge':{...strike('ghor-hammering-charge','ghor','Ghor stamps a straight charge lane into the ground. Shift across the lane.',{kind:'sweep',width:2.7,depth:9,radius:0,heightAboveGround:1.6,damage:21,hitGroup:'ghor-charge'},72,18,18,63),laneFromSource:true,lunge:{kind:'charge'}},
   'ghor-stonefall':strike('ghor-stonefall','ghor','Ghor shakes loose stones. Watch the falling debris and leave the impact ground.',{kind:'area',width:4.3,depth:4.3,radius:0,heightAboveGround:0,damage:17,hitGroup:'ghor-stones'},60,18,15,54),
-  'ghor-overhead-slam':strike('ghor-overhead-slam','ghor','Ghor lifts both forelegs. Retreat from the wide ground slam before they fall.',{kind:'area',width:6,depth:6,radius:0,heightAboveGround:0,damage:20,hitGroup:'ghor-slam'},66,18,12,57),
+  'ghor-overhead-slam':{...strike('ghor-overhead-slam','ghor','Ghor lifts both forelegs. Retreat from the wide ground slam before they fall.',{kind:'area',width:6,depth:6,radius:0,heightAboveGround:0,damage:20,hitGroup:'ghor-slam'},66,18,12,57),lunge:{kind:'step',meters:3},reach:4.5},
   'solkar-commanding-roar':strike('solkar-commanding-roar','solkar','Solkar draws breath for a rallying roar. Step behind him or clear the space ahead.',{kind:'cone',width:8,depth:6,radius:0,heightAboveGround:2.5,damage:14,hitGroup:'solkar-roar'},60,15,15,54),
-  'solkar-pride-rush':strike('solkar-pride-rush','solkar','Solkar crouches into a pride rush. Cross his facing line before he lunges.',{kind:'sweep',width:2.5,depth:8,radius:0,heightAboveGround:1.4,damage:18,hitGroup:'solkar-rush'},66,18,12,57),
-  'solkar-paw-slam':strike('solkar-paw-slam','solkar','Solkar raises one paw. Leave the ground he is aiming at before the slam.',{kind:'area',width:4.5,depth:4.5,radius:0,heightAboveGround:0,damage:18,hitGroup:'solkar-slam'},54,15,9,48),
-  'orun-sky-aspect':strike('orun-sky-aspect','orun','Sky aspect gathers its wings before diving forward. Step across its flight path.',{kind:'sweep',width:2,depth:9,radius:0,heightAboveGround:2,damage:17,hitGroup:'orun-sky'},60,15,12,48),
-  'orun-canopy-aspect':strike('orun-canopy-aspect','orun','Canopy roots gather and burst upward. Move between the roots before they close in.',{kind:'area',width:4,depth:4,radius:0,heightAboveGround:1,damage:16,hitGroup:'orun-canopy'},60,15,15,48),
-  'orun-fang-aspect':strike('orun-fang-aspect','orun','Fang aspect coils for a pounce toward where you stood. Move aside before it lands.',{kind:'strike',width:2.4,depth:2.4,radius:1.4,heightAboveGround:.3,damage:19,hitGroup:'orun-fang'},54,15,9,51),
-  'orun-pack-aspect':strike('orun-pack-aspect','orun','Pack aspect drives a low ground wave forward. Jump or move aside.',{kind:'wave',width:7,depth:1.3,radius:0,heightAboveGround:.1,damage:18,hitGroup:'orun-pack'},66,18,15,54),
-  'orun-shadow-aspect':strike('orun-shadow-aspect','orun','Shadow energy gathers around the aspect. Move out of its forward reach before the veil erupts.',{kind:'cone',width:7.4,depth:4.2,radius:0,heightAboveGround:2.5,damage:18,hitGroup:'orun-shadow'},66,18,15,54),
-  'orun-crown-aspect':strike('orun-crown-aspect','orun','Crown aspect gathers its force. Interrupt at the exposed Heartroot seam or leave the pulse radius.',{kind:'area',width:5.5,depth:5.5,radius:0,heightAboveGround:.2,damage:22,hitGroup:'orun-crown'},78,18,18,72),
-  'orun-last-warden-sweep':strike('orun-last-warden-sweep','orun','The Last Warden raises a root staff. Move beyond its reach before the sweep.',{kind:'sweep',width:5.2,depth:2.2,radius:0,heightAboveGround:1.4,damage:16,hitGroup:'orun-warden-sweep'},54,15,9,48),
+  'solkar-pride-rush':{...strike('solkar-pride-rush','solkar','Solkar crouches into a pride rush. Cross his facing line before he lunges.',{kind:'sweep',width:2.5,depth:8,radius:0,heightAboveGround:1.4,damage:18,hitGroup:'solkar-rush'},66,18,12,57),laneFromSource:true,lunge:{kind:'charge'}},
+  'solkar-paw-slam':{...strike('solkar-paw-slam','solkar','Solkar raises one paw. Leave the ground he is aiming at before the slam.',{kind:'area',width:4.5,depth:4.5,radius:0,heightAboveGround:0,damage:18,hitGroup:'solkar-slam'},54,15,9,48),lunge:{kind:'step',meters:2},reach:3.4},
+  ...ORUN_ATTACKS,
   'orun-root-surge':strike('orun-root-surge','orun','Heartroot roots gather beneath the earth. Move aside or jump as they surge upward.',{kind:'wave',width:7,depth:1.6,radius:0,heightAboveGround:.1,damage:18,hitGroup:'orun-root-surge'},66,18,12,54),
   'orun-crown-possession':{...strike('orun-crown-possession','orun','Orun reaches for the companion you brought. Avoid the gathering grasp or break the hold without harming your ally.',{kind:'area',width:4.8,depth:4.8,radius:0,heightAboveGround:1.4,damage:0,hitGroup:'orun-possession'},72,18,8,60),targetClass:'companion'},
   'boar-charge':{
@@ -143,15 +137,28 @@ export const ATTACKS:Readonly<Record<string,AttackDefinition>>={
   'poacher-scout-net':strike('poacher-scout-net','hunter-ranged','The ranged scout winds up a weighted net. Step across its flight before it closes.',{kind:'projectile',width:1.4,depth:7,radius:.65,heightAboveGround:1.5,damage:8,hitGroup:'poacher-net'},48,12,9,42),
   'poacher-hunter-spear':strike('poacher-hunter-spear','hunter-melee-west','The west hunter draws back his spear. Move beyond its reach before the sweep.',{kind:'sweep',width:2.4,depth:2.4,radius:0,heightAboveGround:1.3,damage:10,hitGroup:'poacher-spear-west'},42,12,8,42),
   'poacher-hunter-east-spear':strike('poacher-hunter-east-spear','hunter-melee-east','The east hunter turns into a side-on spear sweep. Move behind him or beyond its reach.',{kind:'sweep',width:2.4,depth:2.4,radius:0,heightAboveGround:1.3,damage:10,hitGroup:'poacher-spear-east'},48,12,8,42),
-  ...GROVE_ATTACKS, ...MOONPINE_ATTACKS, ...MISTVEIL_ATTACKS,
+  ...ACT_ONE_ATTACKS, ...GROVE_ATTACKS, ...MOONPINE_ATTACKS, ...MISTVEIL_ATTACKS,
+  // Nyra's Shadow Ambush as a hostile move (Chapter 6 possession): the CompanionSystem `shadow-ambush` support strike
+  // (reach target radius + 2.4 m, 10 damage, SUPPORT_RECOVERY 45 ticks) turned on Aren from the rear.
+  'nyra-shadow-ambush':{
+    ...strike('nyra-shadow-ambush','nyra','Nyra sinks into the shadows behind Aren before an ambush lunge. Turn and step out of her line.',{kind:'strike',width:2,depth:2,radius:1.2,heightAboveGround:.6,damage:10,hitGroup:'nyra-ambush'},36,12,8,45),
+    lunge:{kind:'step',meters:2.4},
+  },
 };
 export const BOSS_ENCOUNTERS:Readonly<Record<string,BossEncounterDefinition>>={
-  'encounter-koro':boss('koro','whispering-canopy',[{id:'broken-branches',attackIds:['koro-branch-swing','koro-fruit-burst']},{id:'canopy-escape',attackIds:['koro-vine-vault','koro-fruit-burst'],requiredAction:'tether'}],['koro']),
-  'encounter-asha':{...boss('asha','blood-bamboo-valley',[{id:'protective-instinct',attackIds:['asha-guarding-pounce','asha-claw-combination']},{id:'mother-roar',attackIds:['asha-ground-wave','asha-protective-roar']},{id:'reunion-opening',attackIds:['asha-claw-combination','asha-guarding-pounce'],requiredAction:'cleanse'}],['asha'],['player-dodge','staff-vault','player-cleanse','player-light']),corruptionCoreIds:['asha-corruption-core-1','asha-corruption-core-2','asha-corruption-core-3']},
-  'encounter-ruun':boss('ruun','moonpine-ridge',[{id:'separated-tracks',attackIds:['ruun-track-charge','ruun-claw-arc']},{id:'pack-pressure',attackIds:['ruun-pack-call','ruun-track-charge'],requiredAction:'counter'}],['ruun']),
-  'encounter-ghor':boss('ghor','mistveil-basin',[{id:'marsh-territory',attackIds:['ghor-hammering-charge','ghor-stonefall']},{id:'flooded-den',attackIds:['ghor-overhead-slam','ghor-hammering-charge'],requiredAction:'tether'}],['ghor']),
-  'encounter-solkar':boss('solkar','sunmane-expanse',[{id:'contested-leadership',attackIds:['solkar-commanding-roar','solkar-paw-slam']},{id:'pride-in-motion',attackIds:['solkar-pride-rush','solkar-commanding-roar'],requiredAction:'counter'}],['solkar']),
-  'encounter-orun':boss('orun','heartroot-hollow',[{id:'last-warden',attackIds:['orun-last-warden-sweep','orun-root-surge'],requiredAction:'counter'},{id:'crowned-beast',aspect:'Six Heartroot aspects',actorVariantId:'actor-orun-crowned-beast',attackIds:['orun-sky-aspect','orun-canopy-aspect','orun-fang-aspect','orun-pack-aspect','orun-shadow-aspect','orun-crown-aspect'],requiredAction:'cleanse'},{id:'crown-choice-possession',aspect:'Crown choice and possession',actorVariantId:'actor-orun-crowned-beast',attackIds:['orun-crown-possession','orun-crown-aspect'],requiredAction:'cleanse'}],['orun'],['player-dodge','player-light','player-heavy','player-tether','player-cleanse']),
+  'encounter-koro':KORO_ENCOUNTER,
+  'encounter-asha':ASHA_ENCOUNTER,
+  // Ruun, Ghor and Solkar are cleanse-only: ordinary damage wears them down, and only a Cleanse in their final phase, after its
+  // required action and once their ferocity is worn down, resolves them (CombatEngine `cleanseBlockFor`).
+  'encounter-ruun':{...boss('ruun','moonpine-ridge',[{id:'separated-tracks',attackIds:['ruun-track-charge','ruun-claw-arc']},{id:'pack-pressure',attackIds:['ruun-pack-call','ruun-track-charge'],requiredAction:'counter'}],['ruun']),cleanseOnly:true},
+  'encounter-ghor':{...boss('ghor','mistveil-basin',[{id:'marsh-territory',attackIds:['ghor-hammering-charge','ghor-stonefall']},{id:'flooded-den',attackIds:['ghor-overhead-slam','ghor-hammering-charge'],requiredAction:'tether'}],['ghor']),cleanseOnly:true},
+  'encounter-solkar':{...boss('solkar','sunmane-expanse',[{id:'contested-leadership',attackIds:['solkar-commanding-roar','solkar-paw-slam']},{id:'pride-in-motion',attackIds:['solkar-pride-rush','solkar-commanding-roar'],requiredAction:'counter'}],['solkar']),cleanseOnly:true},
+  [ORUN_ENCOUNTER_ID]:ORUN_ENCOUNTER,
+  // Chapter 6 Fall of the Grove (Bible ch. 6): Orun seizes a present recruit through Aren's bond (`orun-crown-possession`);
+  // the held ally attacks with its own authored move until a timed Cleanse, a Perfect Dodge or its Bond-timed escape breaks
+  // the hold. With no eligible recruit present Orun turns `orun-root-surge` on Aren, answered by evading or countering it.
+  // Phase 1 is protection-free: Tali reaches her shelter, the pillar is braced and Aren escapes onto the lookout pad.
+  'encounter-fall':{...boss('orun','the-grove',[{id:'possession-pulse',aspect:'Possession pulse',attackIds:['orun-crown-possession','orun-root-surge']},{id:'collapse-escape',aspect:'Tali shelter, pillar brace and escape',attackIds:[]}],[],['player-dodge','player-cleanse','player-light']),id:'encounter-fall',safeAbsenceResolution:'escaped',cleanseOnly:true,supportActorIds:['tali']},
   'camp-hunters':{...boss('hunter-melee-west','blood-bamboo-valley',[{id:'camp-cordon',attackIds:['poacher-scout-net','poacher-hunter-spear','poacher-hunter-east-spear']}],[],['player-dodge','player-light','player-heavy']),id:'camp-hunters',actorIds:['aren','hunter-melee-west','hunter-melee-east','hunter-ranged'],supportActorIds:['tali']},
 };
 export const WILDLIFE_ENCOUNTERS:Readonly<Record<string,BossEncounterDefinition>>={
@@ -213,5 +220,5 @@ export const WILDLIFE_ENCOUNTERS:Readonly<Record<string,BossEncounterDefinition>
   },
   ...GROVE_ENCOUNTERS, ...MOONPINE_ENCOUNTERS, ...MISTVEIL_ENCOUNTERS,
 };
-export const MAJOR_BOSS_ENCOUNTER_IDS:readonly string[]=['encounter-koro','encounter-asha','encounter-ruun','encounter-ghor','encounter-solkar','encounter-orun'];
+export const MAJOR_BOSS_ENCOUNTER_IDS:readonly string[]=['encounter-koro','encounter-asha','encounter-ruun','encounter-ghor','encounter-solkar','encounter-orun','encounter-fall'];
 export const ENCOUNTER_IDS:readonly string[]=[...Object.keys(BOSS_ENCOUNTERS),...Object.keys(WILDLIFE_ENCOUNTERS)];

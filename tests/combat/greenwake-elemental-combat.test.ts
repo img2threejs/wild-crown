@@ -199,7 +199,7 @@ describe('Elemental counterplay and persistent status', () => {
     const seed = oneCast('boar-gale-scythe').snapshotState();
     seed.arena.obstacles = [{ minX: -3, maxX: 3, minZ: 0.7, maxZ: 1.5 }];
     const engine = new CombatEngine(seed);
-    until(engine, seed.hazards[0]!.activeFrom);
+    until(engine, seed.hazards[0]!.activeFrom + 40);
     expect(engine.snapshot().player.vitality).toBe(991);
     expect(player(engine).position.z).toBeGreaterThan(0);
     expect(player(engine).position.z).toBeLessThanOrEqual(0.28 + 1e-6);
@@ -210,7 +210,7 @@ describe('Elemental counterplay and persistent status', () => {
     const activeFrom = engine.snapshotState().hazards[0]!.activeFrom;
     until(engine, activeFrom - 10);
     engine.fixedStep({ ...runRight, jumpPressed: true });
-    until(engine, activeFrom, runRight);
+    until(engine, activeFrom + 4, runRight);
     expect(engine.snapshot().player.vitality).toBe(991);
     const pushedZ = player(engine).position.z;
     expect(pushedZ).toBeGreaterThan(0);

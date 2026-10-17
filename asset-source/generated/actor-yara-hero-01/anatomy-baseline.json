@@ -1,5 +1,5 @@
 {
-  "note": "Measured on the delivered Yara clips (raw Tripo cast_a_spell/shoot retarget, no limits, original wrist hack) before this upgrade; same metrics as anatomy-report.json.",
+  "note": "Measured on the delivered Yara clips (raw Tripo cast_a_spell/shoot retarget, no limits, original wrist hack) before this upgrade; same metrics as anatomy-report.json. The four aren-knockdown / aren-getup clips are the first knockdown delivery (toolkit time-warp of Mixamo takes: lying at frame 0, plank-like stomach rise), measured on its delivered bytes with JOINT_LIMITS before the knockdown rework.",
   "clips": {
     "aren-idle": {
       "peakSwing": 33.7,
@@ -277,6 +277,30 @@
         "max": 3.90447,
         "worstBone": "LeftUpLeg"
       }
+    },
+    "aren-knockdown": {
+      "peakSwing": 115.7,
+      "peakTwist": 39,
+      "jointsOverJointLimits": [],
+      "deformation": { "p99": 1.06806, "p999": 1.66792, "max": 4.44095, "worstBone": "RightUpLeg" }
+    },
+    "aren-knockdown-forward": {
+      "peakSwing": 107.4,
+      "peakTwist": 77.7,
+      "jointsOverJointLimits": [],
+      "deformation": { "p99": 1.17663, "p999": 1.76401, "max": 4.46845, "worstBone": "LeftUpLeg" }
+    },
+    "aren-getup": {
+      "peakSwing": 143.6,
+      "peakTwist": 70.1,
+      "jointsOverJointLimits": [],
+      "deformation": { "p99": 1.44701, "p999": 2.19233, "max": 4.42646, "worstBone": "RightUpLeg" }
+    },
+    "aren-getup-forward": {
+      "peakSwing": 108.5,
+      "peakTwist": 72.9,
+      "jointsOverJointLimits": [],
+      "deformation": { "p99": 0.40953, "p999": 0.85795, "max": 2.59227, "worstBone": "LeftForeArm" }
     }
   }
 }

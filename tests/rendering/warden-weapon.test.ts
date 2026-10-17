@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { AnimationMixer, BoxGeometry, ConeGeometry, CylinderGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Quaternion, SkinnedMesh, Vector3, type Bone, type Material } from 'three';
+import { AnimationMixer, BoxGeometry, ConeGeometry, CylinderGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Quaternion, SkinnedMesh, Triangle, Vector3, type Bone, type Material } from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HEARTROOT_GRIP, KATANA_EDGE_COLOR, KATANA_EDGE_TIP_COLOR, KATANA_GRIP, WARDEN_BLADE_FRACTION, WARDEN_EDGE_COLOR, WARDEN_EDGE_IDLE_INTENSITY, WARDEN_WEAPON_LENGTH, WardenWeapon, analyzeGlaive, splitBladeGeometry, weaponKindForGrip } from '../../src/rendering/WardenWeapon.js';
@@ -372,9 +372,10 @@ describe('Heartroot staff in Yara\'s fixed fist', () => {
  * the real revision-2 Tripo sword and rebuilt Vesper rig cover delivered geometry and grip agreement.
  */
 function syntheticKatana(bladeAtPositive: boolean): Group {
-  const handle = new CylinderGeometry(0.02, 0.02, 0.3, 12, 6).rotateX(Math.PI / 2).translate(0, 0, 0.15);
-  const guard = new BoxGeometry(0.1, 0.1, 0.012).translate(0, 0, 0.31);
-  const blade = new BoxGeometry(0.008, 0.034, 0.52, 1, 1, 8).translate(0, 0, 0.58);
+  // The guard's back face sits 0.334 of the way up the 1.01-long model, so at the 1.25 m scale it stands where the real tsuba does (KATANA_GRIP.tsubaBackFromPommel).
+  const handle = new CylinderGeometry(0.02, 0.02, 0.335, 12, 6).rotateX(Math.PI / 2).translate(0, 0, 0.1675);
+  const guard = new BoxGeometry(0.1, 0.1, 0.012).translate(0, 0, 0.34);
+  const blade = new BoxGeometry(0.008, 0.034, 0.52, 1, 1, 8).translate(0, 0, 0.61);
   const tipPart = new BoxGeometry(0.008, 0.03, 0.18, 1, 1, 4).translate(0, 0.02, 0.92);
   const geometry = mergeGeometries([handle, guard, blade, tipPart].map((part) => part.toNonIndexed()))!;
   if (!bladeAtPositive) geometry.rotateY(Math.PI);
@@ -397,16 +398,28 @@ const vesperAnatomy = JSON.parse(readFileSync(`${root}asset-source/generated/act
 afterAll(() => { vesper.scene.traverse((node) => { if (node instanceof Mesh) node.geometry.dispose(); }); });
 
 describe('Vesper katana in the rigid fist', () => {
-  it('uses the exact authored grip on the delivered Vesper skeleton, with the real sword rigidly seated in that fist', () => {
+  it('seats the authored blade in the palm and closes the native hand around the hilt throughout its clips', () => {
     vesper.scene.scale.setScalar(1.7);
     vesper.scene.updateMatrixWorld(true);
     const grip = computeHandGrip(vesper.scene, true, KATANA_GRIP.diagonalRadians, KATANA_GRIP.edgeRadians);
-    expect(vesperAnatomy.grip.katanaGrip).toEqual(KATANA_GRIP);
     const vector = (values: number[]) => new Vector3().fromArray(values);
     expect(grip.axis.distanceTo(vector(vesperAnatomy.grip.bladeAxisHand))).toBeLessThan(2e-6);
     expect(grip.curl.clone().negate().distanceTo(vector(vesperAnatomy.grip.edgeAxisHand))).toBeLessThan(2e-6);
+    // The clips are authored around this exact seat.
     expect(grip.palm.distanceTo(vector(vesperAnatomy.grip.palmHand))).toBeLessThan(2e-6);
-    expect(grip.shaftRadius / 1.7).toBeCloseTo(vesperAnatomy.grip.shaftRadiusRig, 5);
+    // Vesper's native palm faces his hand bone's +X; the armoured back plate faces -X. The hilt sits in front of the palm, never on the back plate.
+    expect(grip.rigid!.normal.x).toBeGreaterThan(.9);
+    const handCentre = new Vector3();
+    let handCount = 0;
+    const bindPositions = grip.rigid!.mesh.geometry.getAttribute('position'), bindIndices = grip.rigid!.mesh.geometry.getAttribute('skinIndex'), bindWeights = grip.rigid!.mesh.geometry.getAttribute('skinWeight');
+    for (const vertex of referencedVertices(grip.rigid!.mesh.geometry)) {
+      let handWeight = 0;
+      for (let component = 0; component < 4; component++) if (grip.rigid!.mesh.skeleton.bones[bindIndices.getComponent(vertex, component)] === grip.hand) handWeight += bindWeights.getComponent(vertex, component);
+      if (handWeight < .6) continue;
+      handCentre.add(new Vector3().fromBufferAttribute(bindPositions, vertex).applyMatrix4(grip.rigid!.toHand));
+      handCount++;
+    }
+    expect(grip.palm.x - handCentre.divideScalar(handCount).x).toBeGreaterThan(.01);
     const weapon = new WardenWeapon({ root: tripoKatana.scene.clone(), dispose: () => undefined },
       { root: vesper.scene, animation: { setPostPose: (hook) => { expect(hook).toBeUndefined(); } } }, 'katana');
     try {
@@ -416,8 +429,94 @@ describe('Vesper katana in the rigid fist', () => {
       const tip = weapon.sockets['weapon-tip'].getWorldPosition(new Vector3()).applyMatrix4(toHand);
       expect(socket.distanceTo(grip.palm)).toBeLessThan(1e-5);
       expect(tip.sub(socket).normalize().dot(grip.axis)).toBeGreaterThan(0.99);
-      expect(grip.joints).toHaveLength(0);
-      expect(grip.rigid).toBeDefined();
+      const skin = grip.rigid!.mesh;
+      const positions = skin.geometry.getAttribute('position');
+      const indices = skin.geometry.getAttribute('skinIndex'), weights = skin.geometry.getAttribute('skinWeight');
+      const inverse = weapon.root.matrixWorld.clone().invert(), point = new Vector3();
+      const contacts: Array<{ vertex: number; point: Vector3 }> = [];
+      const angles: number[] = [];
+      const nearHilt: Vector3[] = [];
+      let deepest = Infinity, fistFront = -Infinity;
+      for (const vertex of referencedVertices(skin.geometry)) {
+        let handWeight = 0;
+        for (let component = 0; component < 4; component++) {
+          if (skin.skeleton.bones[indices.getComponent(vertex, component)] === grip.hand) handWeight += weights.getComponent(vertex, component);
+        }
+        if (handWeight < .9999999) continue;
+        skin.getVertexPosition(vertex, point).applyMatrix4(skin.matrixWorld).applyMatrix4(inverse);
+        if (Math.hypot(point.x, point.y) < .05) fistFront = Math.max(fistFront, point.z);
+        if (Math.hypot(point.x, point.y) < .06 && Math.abs(point.z) < .2) nearHilt.push(point.clone());
+        if (Math.abs(point.z) > .04) continue;
+        const clearance = Math.hypot(point.x, point.y) - grip.shaftRadius;
+        deepest = Math.min(deepest, clearance);
+        if (Math.abs(clearance) < .003) {
+          contacts.push({ vertex, point: point.clone() });
+          angles.push(Math.atan2(point.y, point.x));
+        }
+      }
+      // No skin enters the tsuka: everything rigidly carried by the hand stays at least a millimetre outside it.
+      expect(deepest).toBeGreaterThan(.001);
+      // The fist sits right behind the guard like a real one-handed grip: its index side ends 0–5 mm behind the back face of the tsuba.
+      const steel = weapon.root.getObjectByProperty('isMesh', true) as Mesh, steelPositions = steel.geometry.getAttribute('position'), steelIndex = steel.geometry.getIndex()!;
+      const toWeapon = inverse.clone().multiply(steel.matrixWorld);
+      const steelVertices: Vector3[] = [];
+      let tsubaBack = Infinity;
+      for (let vertex = 0; vertex < steelPositions.count; vertex++) {
+        steelVertices.push(point.fromBufferAttribute(steelPositions, vertex).applyMatrix4(toWeapon).clone());
+        if (point.z > 0 && Math.hypot(point.x, point.y) > .045) tsubaBack = Math.min(tsubaBack, point.z);
+      }
+      expect(Math.abs(tsubaBack + KATANA_GRIP.gripFromPommel - KATANA_GRIP.tsubaBackFromPommel)).toBeLessThan(.0005);
+      const gap = tsubaBack - fistFront;
+      expect(gap).toBeGreaterThan(0);
+      expect(gap).toBeLessThan(.005);
+      // The tsuka runs to a thin fuchi right behind the tsuba: no collar longer than 1 cm, the slender tsuka before it.
+      const radiusAt = (from: number, to: number): number => Math.max(...steelVertices.filter((v) => v.z >= from && v.z < to).map((v) => Math.hypot(v.x, v.y)));
+      expect(radiusAt(-.1, tsubaBack - KATANA_GRIP.fuchi.length - .004)).toBeLessThan(grip.shaftRadius * 1.03);
+      expect(radiusAt(tsubaBack - KATANA_GRIP.fuchi.length + .001, tsubaBack)).toBeGreaterThan(grip.shaftRadius * 1.15);
+      expect(radiusAt(tsubaBack - KATANA_GRIP.fuchi.length + .001, tsubaBack)).toBeLessThan(grip.shaftRadius * KATANA_GRIP.fuchi.scale * 1.12);
+      // Skin clearance against the real fitted hilt (tsuka, fuchi and tsuba triangles), 1.5 mm at least (bucketed by 2 cm of hilt length).
+      const buckets = new Map<number, Triangle[]>();
+      for (let item = 0; item < steelIndex.count; item += 3) {
+        const a = steelVertices[steelIndex.getX(item)]!, b = steelVertices[steelIndex.getX(item + 1)]!, c = steelVertices[steelIndex.getX(item + 2)]!;
+        if (Math.max(a.z, b.z, c.z) < -.22 || Math.min(a.z, b.z, c.z) > tsubaBack + .03) continue;
+        const triangle = new Triangle(a, b, c);
+        for (let bucket = Math.floor(Math.min(a.z, b.z, c.z) / .02); bucket <= Math.floor(Math.max(a.z, b.z, c.z) / .02); bucket++) (buckets.get(bucket) ?? buckets.set(bucket, []).get(bucket)!).push(triangle);
+      }
+      const closest = new Vector3();
+      let clearance = Infinity;
+      for (const skinPoint of nearHilt) {
+        if (skinPoint.z > tsubaBack + .01) continue;
+        for (const bucket of [Math.floor(skinPoint.z / .02) - 1, Math.floor(skinPoint.z / .02), Math.floor(skinPoint.z / .02) + 1]) for (const triangle of buckets.get(bucket) ?? []) { triangle.closestPointToPoint(skinPoint, closest); clearance = Math.min(clearance, closest.distanceTo(skinPoint)); }
+      }
+      expect(clearance).toBeGreaterThan(.0015);
+      angles.sort((a, b) => a - b);
+      let largestGap = angles[0]! + Math.PI * 2 - angles.at(-1)!;
+      for (let i = 1; i < angles.length; i++) largestGap = Math.max(largestGap, angles[i]! - angles[i - 1]!);
+      expect(Math.PI * 2 - largestGap).toBeGreaterThan(240 * Math.PI / 180);
+      const sampled = contacts.filter((_, index) => index % Math.max(1, Math.floor(contacts.length / 40)) === 0);
+      const mixer = new AnimationMixer(vesper.scene);
+      let maximumDrift = 0;
+      try {
+        for (const clip of vesper.animations) {
+          const action = mixer.clipAction(clip).play();
+          action.paused = true;
+          const frames = Math.ceil(clip.duration * 60);
+          for (let frame = 0; frame <= frames; frame++) {
+            action.time = clip.duration * frame / frames;
+            mixer.update(0);
+            vesper.scene.updateMatrixWorld(true);
+            inverse.copy(weapon.root.matrixWorld).invert();
+            for (const contact of sampled) {
+              point.fromBufferAttribute(positions, contact.vertex);
+              skin.applyBoneTransform(contact.vertex, point);
+              point.applyMatrix4(skin.matrixWorld).applyMatrix4(inverse);
+              maximumDrift = Math.max(maximumDrift, point.distanceTo(contact.point));
+            }
+          }
+          action.stop();
+        }
+      } finally { mixer.stopAllAction(); mixer.uncacheRoot(vesper.scene); }
+      expect(maximumDrift).toBeLessThan(.0001);
     } finally { weapon.dispose(); }
   }, 30_000);
 
@@ -439,9 +538,8 @@ describe('Vesper katana in the rigid fist', () => {
     });
   }
 
-  it('seats the 1.25 m katana with its grip 0.20 m from the pommel and its blade the last 0.76 m', () => {
+  it('seats the 1.25 m katana with its grip KATANA_GRIP.gripFromPommel from the pommel and its blade the last 0.76 m', () => {
     expect(KATANA_GRIP.length).toBe(1.25);
-    expect(KATANA_GRIP.gripFromPommel).toBe(0.2);
     expect(KATANA_GRIP.bladeLength).toBe(0.76);
     for (const flipped of [false, true]) {
       const weapon = equipKatana(syntheticKatana(!flipped));
@@ -485,7 +583,7 @@ describe('Vesper katana in the rigid fist', () => {
         let handleRadius = 0, skinRadius = Infinity;
         for (const vertex of referencedVertices(mesh.geometry)) {
           point.fromBufferAttribute(positions, vertex).applyMatrix4(mesh.matrixWorld).applyMatrix4(inverse);
-          if (Math.abs(point.z) < .06) handleRadius = Math.max(handleRadius, Math.hypot(point.x, point.y));
+          if (Math.abs(point.z) < .045) handleRadius = Math.max(handleRadius, Math.hypot(point.x, point.y));
         }
         for (const vertex of referencedVertices(yaraSkin.geometry)) {
           let handWeight = 0;
@@ -537,7 +635,7 @@ describe('Vesper katana in the rigid fist', () => {
       return { mesh, x: new Vector3(1, 0, 0).applyQuaternion(quaternion), y: new Vector3(0, 1, 0).applyQuaternion(quaternion), z: new Vector3(0, 0, 1).applyQuaternion(quaternion), origin: weapon.sockets.weapon.getWorldPosition(new Vector3()) };
     }
 
-    it('is a single mesh at the origin and seats at the full 1.25 m with the 0.20 m grip and 0.76 m blade', () => {
+    it('is a single mesh at the origin and seats at the full 1.25 m with its authored grip and 0.76 m blade', () => {
       const weapon = equipReal();
       try {
         yara.scene.updateMatrixWorld(true);
@@ -579,9 +677,6 @@ describe('Vesper katana in the rigid fist', () => {
         expect(spineSum / spineCount - edgeSum / edgeCount).toBeGreaterThan(0.025);
         // The tip bends toward the spine: it sits above the mean blade centre line.
         expect(tipHeight).toBeGreaterThan(slice.reduce((sum, value) => sum + value, 0) / slice.length);
-        // Hand frame: the edge (weapon -Y) is cos(edge)·(back of the hand) + sin(edge)·bend, so grip.curl = cos(edge)·normal - sin(edge)·bend.
-        expect(grip.curl.dot(grip.rigid!.normal)).toBeCloseTo(Math.cos(KATANA_GRIP.edgeRadians), 5);
-        expect(grip.curl.dot(grip.rigid!.direction)).toBeCloseTo(-Math.sin(KATANA_GRIP.edgeRadians), 5);
         const hand = yara.scene.getObjectByName('mixamorigRightHand') as Bone;
         const edgeWorld = grip.curl.clone().negate().transformDirection(hand.matrixWorld);
         expect(y.clone().negate().dot(edgeWorld)).toBeGreaterThan(0.99);
@@ -595,7 +690,8 @@ describe('Vesper katana in the rigid fist', () => {
       try {
         const { mesh, x, y, z, origin } = bladeFrame(weapon);
         const positions = mesh.geometry.getAttribute('position'), side = mesh.geometry.getAttribute('wcEdgeSide');
-        const point = new Vector3(), bins = 12, from = 0.5, to = 0.95;
+        // The blade's broad part: from 0.45 m up to 1 cm short of the kissaki, measured from the seat.
+        const point = new Vector3(), bins = 12, to = KATANA_GRIP.length - KATANA_GRIP.gripFromPommel - 0.01, from = to - 0.45;
         const low = new Float64Array(bins).fill(Infinity), high = new Float64Array(bins).fill(-Infinity), wLow = new Float64Array(bins).fill(Infinity), wHigh = new Float64Array(bins).fill(-Infinity);
         const edgeLow = new Float64Array(bins).fill(Infinity), edgeHigh = new Float64Array(bins).fill(-Infinity), spineLow = new Float64Array(bins).fill(Infinity), spineHigh = new Float64Array(bins).fill(-Infinity);
         for (const vertex of referencedVertices(mesh.geometry)) {

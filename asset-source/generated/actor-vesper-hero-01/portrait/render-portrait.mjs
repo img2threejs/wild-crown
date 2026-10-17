@@ -30,7 +30,7 @@ export async function renderPortrait(heroId, manifestUrl = '/asset-source/playte
       observer.observe(host, { attributes: true, attributeFilter: ['data-preview-state'] });
       timer = setTimeout(() => reject(new Error(`Portrait loading timed out: ${hero.id}`)), 60000);
     });
-    preview = mountHeroPreview(host, assets, { reducedMotion: true });
+    preview = mountHeroPreview(host, assets, { reducedMotion: true, motionBlur: false });
     preview.show(hero.id);
     await ready;
     // Render and copy synchronously: WebGL's non-preserved drawing buffer is valid in this task.

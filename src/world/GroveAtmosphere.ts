@@ -12,26 +12,39 @@ import {
   UniformsUtils,
   Vector2,
   Vector3,
+  Vector4,
   type Camera,
   type Scene,
   type WebGLRenderer,
 } from 'three';
 import type { FeatureContext, GroundFeature } from './BiomeProfile';
 import { hash3 } from './GroundNoise';
+import { ARENA_CENTRE, HOLLOW_CENTRE } from './GroveBlight';
+import { MEMORY_POOL } from './GrovePond';
 import { HEARTROOT_MOUND } from './GroveTerrain';
 
-/** Particle budget (one Points draw call): drifting golden pollen, fireflies and loose petals around the player. */
+/**
+ * Particle budget (one Points draw call): drifting golden pollen, fireflies and loose petals around the player, plus two fixed-place
+ * kinds that only ever show in their zone: dark Black Sap spores rising over the blighted hollow and the Memory Pool arena, and amber
+ * heart-light embers rising off the Memory Pool.
+ */
 export const POLLEN_COUNT = 140;
 export const FIREFLY_COUNT = 36;
 export const PETAL_COUNT = 30;
+export const SPORE_COUNT = 120;
+export const EMBER_COUNT = 28;
 const KIND_POLLEN = 0;
 const KIND_FIREFLY = 1;
 const KIND_PETAL = 2;
+const KIND_SPORE = 3;
+const KIND_EMBER = 4;
 /** The drifting volume follows the focus; particles wrap inside this box (x, y, z in metres). */
 const VOLUME = new Vector3(26, 5, 26);
 const SEED = 7219;
-/** Reduced Motion / Reduced Effects keep this share of the pollen and drop fireflies and petals. */
+/** Reduced Motion / Reduced Effects keep this share of the pollen and spores and drop fireflies, petals and embers. */
 const REDUCED_POLLEN_SHARE = 0.35;
+/** Black Sap zones (x, z, radius in metres): the blighted hollow, and the Memory Pool arena where the sap has reached the water. */
+export const BLIGHT_ZONES: readonly (readonly [number, number, number])[] = [[HOLLOW_CENTRE.x, HOLLOW_CENTRE.z, 12], [ARENA_CENTRE.x, ARENA_CENTRE.z - 4, 17]];
 
 const PARTICLE_VERTEX = `
 attribute vec4 aSeed;
@@ -41,6 +54,8 @@ uniform vec3 uFocus;
 uniform vec3 uVolume;
 uniform float uScale;
 uniform float uReduced;
+uniform vec3 uZones[2];
+uniform vec4 uPool;
 varying vec4 vColor;
 varying float vPetal;
 varying float vAngle;
@@ -82,6 +97,28 @@ void main() {
     tint = vec3(0.78, 1.0, 0.42);
     float blink = smoothstep(0.35, 0.9, 0.5 + 0.5 * sin(uTime * (0.7 + aSeed.x * 0.8) + aSeed.z * 60.0));
     alpha = blink * 0.9;
+    kept = 1.0 - uReduced;
+  } else if (aKind < 3.5) {
+    // Black Sap spore: a dark mote rising slowly over the blighted hollow or the Memory Pool arena, fading in and out of sight as it climbs.
+    vec3 zone = aSeed.w < 0.5 ? uZones[0] : uZones[1];
+    float angle = aSeed.x * 6.2832;
+    float radius = sqrt(aSeed.y) * zone.z;
+    float rise = fract(aSeed.z + uTime * (0.05 + aSeed.y * 0.05));
+    world = vec3(zone.x + cos(angle) * radius + sin(uTime * 0.3 + aSeed.z * 20.0) * 0.5, 0.2 + rise * 3.2, zone.y + sin(angle) * radius + cos(uTime * 0.25 + aSeed.x * 20.0) * 0.5);
+    size = 0.15 + aSeed.w * 0.07;
+    // Sickly ochre spores over the hollow, bruised violet ones over the Memory Pool arena.
+    tint = mix(vec3(0.9, 0.74, 0.3), vec3(0.66, 0.44, 0.95), step(0.5, aSeed.w));
+    alpha = sin(rise * 3.1416) * 0.85;
+    kept = step(aSeed.z, mix(1.0, ${REDUCED_POLLEN_SHARE.toFixed(2)}, uReduced));
+  } else if (aKind < 4.5) {
+    // Heart-light ember: a warm amber spark lifting off the Memory Pool's surface.
+    float rise = fract(aSeed.z + uTime * (0.07 + aSeed.w * 0.06));
+    float angle = aSeed.x * 6.2832;
+    float radius = sqrt(aSeed.y);
+    world = vec3(uPool.x + cos(angle) * radius * uPool.z + sin(uTime * 0.4 + aSeed.x * 40.0) * 0.4, 0.1 + rise * 4.0, uPool.y + sin(angle) * radius * uPool.w);
+    size = 0.1 + aSeed.w * 0.06;
+    tint = mix(vec3(1.0, 0.68, 0.22), vec3(1.0, 0.86, 0.45), aSeed.y);
+    alpha = sin(rise * 3.1416) * 0.9;
     kept = 1.0 - uReduced;
   } else {
     // Petal: slow fall, flutter and tumbling; warm pink and cream.
@@ -150,7 +187,7 @@ export interface GroveAtmosphereData {
 }
 
 function buildParticles(): { seeds: Float32Array; kinds: Float32Array } {
-  const count = POLLEN_COUNT + FIREFLY_COUNT + PETAL_COUNT;
+  const count = POLLEN_COUNT + FIREFLY_COUNT + PETAL_COUNT + SPORE_COUNT + EMBER_COUNT;
   const seeds = new Float32Array(count * 4);
   const kinds = new Float32Array(count);
   let index = 0;
@@ -163,6 +200,8 @@ function buildParticles(): { seeds: Float32Array; kinds: Float32Array } {
   add(KIND_POLLEN, POLLEN_COUNT);
   add(KIND_FIREFLY, FIREFLY_COUNT);
   add(KIND_PETAL, PETAL_COUNT);
+  add(KIND_SPORE, SPORE_COUNT);
+  add(KIND_EMBER, EMBER_COUNT);
   return { seeds, kinds };
 }
 
@@ -182,8 +221,10 @@ function glowMesh(name: string, size: number, color: Color, x: number, y: number
 /**
  * Grove atmosphere: drifting golden pollen, fireflies and loose petals around the player (one Points draw call, all motion in the
  * vertex shader from the world clock), a warm clearing glow on the ground at the stage exit and a soft gold-green glow at the
- * young Heartroot's foot. Reduced effects keeps a third of the pollen, drops fireflies, petals and the Heartroot glow, and keeps the exit glow
- * (a readability aid).
+ * young Heartroot's foot. The north of the map adds the Black Sap: dark spores rising over the blighted hollow and the Memory Pool
+ * arena (same Points draw call), amber heart-light embers and a warm glow on the Memory Pool. The sap's ground work (stains, veins, the
+ * dead trees and the corrupted pool surface) is GroveBlightDressing. Reduced effects keeps a third of the pollen and spores and drops
+ * fireflies, petals, embers and the Heartroot and pool glows; the exit glow stays on (a readability aid).
  */
 export class GroveAtmosphere implements GroundFeature {
   readonly group = new Group();
@@ -192,6 +233,8 @@ export class GroveAtmosphere implements GroundFeature {
   /** Warm ground glow at the stage exit: stays on under reduced effects. */
   readonly exitGlow: Mesh<PlaneGeometry, ShaderMaterial> | undefined;
   readonly heartrootGlow: Mesh<PlaneGeometry, ShaderMaterial>;
+  /** Amber heart-light glow over the Memory Pool. */
+  readonly poolGlow: Mesh<PlaneGeometry, ShaderMaterial>;
   private readonly size = new Vector2();
   private disposed = false;
 
@@ -213,6 +256,8 @@ export class GroveAtmosphere implements GroundFeature {
           uVolume: { value: VOLUME.clone() },
           uScale: { value: 600 },
           uReduced: { value: 0 },
+          uZones: { value: BLIGHT_ZONES.map(([x, z, radius]) => new Vector3(x, z, radius)) },
+          uPool: { value: new Vector4(MEMORY_POOL.x, MEMORY_POOL.z, MEMORY_POOL.radiusX, MEMORY_POOL.radiusZ) },
         },
       ]),
       vertexShader: PARTICLE_VERTEX,
@@ -236,6 +281,8 @@ export class GroveAtmosphere implements GroundFeature {
     }
     this.heartrootGlow = glowMesh('grove-heartroot-glow', 17, new Color(0.9, 0.95, 0.5).multiplyScalar(0.16), HEARTROOT_MOUND.x, context.field.sample(HEARTROOT_MOUND.x, HEARTROOT_MOUND.z) + 0.2, HEARTROOT_MOUND.z);
     this.group.add(this.heartrootGlow);
+    this.poolGlow = glowMesh('grove-pool-glow', 24, new Color(1.0, 0.7, 0.3).multiplyScalar(0.06), MEMORY_POOL.x, context.field.sample(MEMORY_POOL.x, MEMORY_POOL.z) + 0.15, MEMORY_POOL.z);
+    this.group.add(this.poolGlow);
     this.setReducedEffects(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
 
@@ -243,12 +290,14 @@ export class GroveAtmosphere implements GroundFeature {
     if (this.disposed) return;
     this.points.material.uniforms.uTime!.value = worldTimeSeconds;
     this.heartrootGlow.material.uniforms.uPulse!.value = 0.85 + 0.15 * Math.sin(worldTimeSeconds * 0.6);
+    this.poolGlow.material.uniforms.uPulse!.value = 0.8 + 0.2 * Math.sin(worldTimeSeconds * 0.9 + 1);
     if (focus) (this.points.material.uniforms.uFocus!.value as Vector3).set(focus.x, focus.y, focus.z);
   }
 
   setReducedEffects(reduced: boolean): void {
     this.points.material.uniforms.uReduced!.value = reduced ? 1 : 0;
     this.heartrootGlow.visible = !reduced;
+    this.poolGlow.visible = !reduced;
   }
 
   dispose(): void {
@@ -257,7 +306,7 @@ export class GroveAtmosphere implements GroundFeature {
     this.group.removeFromParent();
     this.points.geometry.dispose();
     this.points.material.dispose();
-    for (const glow of [this.exitGlow, this.heartrootGlow]) {
+    for (const glow of [this.exitGlow, this.heartrootGlow, this.poolGlow]) {
       glow?.geometry.dispose();
       glow?.material.dispose();
     }

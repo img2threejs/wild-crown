@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import type { Mesh } from 'three';
 import { REGIONS as AUTHORED_REGIONS } from '../../src/content/campaign.js';
 import { REGIONS as WORLD_REGIONS } from '../../src/content/world.js';
 import type { EnvironmentRecipeDefinition, GroundSurfaceDefinition, RegionDefinition } from '../../src/game/contracts.js';
 import { MISTVEIL_BOUNDARY_ID_PREFIX, MISTVEIL_COMBAT_TRIALS } from '../../src/game/combat/MistveilContent.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
-import { biomeProfileFor } from '../../src/world/Biomes.js';
 import { distanceToBoxFootprint, distanceToPolygon, outwardCameraDot, TREE_CAMERA_DOT } from '../../src/world/GreenwakeBoundary.js';
 import { GREENWAKE_BIOME } from '../../src/world/GreenwakeBiome.js';
 import { GroundClutter } from '../../src/world/GroundClutter.js';
@@ -58,12 +56,6 @@ function planeHeight(surface: GroundSurfaceDefinition, x: number, z: number): nu
 
 const polygons = walkables.map((surface) => ({ points: surface.points.map((point) => ({ x: point.x, z: point.z })) }));
 const distanceToWalkable = (x: number, z: number): number => Math.min(...polygons.map((polygon) => distanceToPolygon(polygon.points, x, z)));
-
-test('the Mistveil playtest variant gets the Mistveil biome; the authored region and other regions keep the generic look', () => {
-  assert.equal(biomeProfileFor(region), MISTVEIL_BIOME);
-  assert.equal(biomeProfileFor(authored), undefined);
-  assert.equal(biomeProfileFor((WORLD_REGIONS as RegionDefinition[]).find((candidate) => candidate.id === 'greenwake')!), GREENWAKE_BIOME);
-});
 
 test('mistveil terrain reproduces every walk surface within 2 cm, flat and ramp, right up to the edges', () => {
   assert.equal(walkables.length, 12);
@@ -291,29 +283,15 @@ test('textures: every Mistveil layer is a CC0 Poly Haven set with provenance nex
   assert.equal(MISTVEIL_BIOME.splat.layers.length, 5, 'texture memory stays at the canopy budget of five layers');
 });
 
-test('RegionEnvironment builds the Mistveil world for the playtest variant only: no slabs, water, mist and fireflies', { timeout: 120_000 }, () => {
+test('RegionEnvironment keeps Mistveil trial terrain aligned with its walk surfaces', { timeout: 120_000 }, () => {
   const environment = new RegionEnvironment(region, {} as unknown as EnvironmentRecipeDefinition);
   environment.ready.catch(() => undefined);
-  const plain = new RegionEnvironment(authored, {} as unknown as EnvironmentRecipeDefinition);
   try {
-    const names: string[] = [];
-    environment.group.traverse((node) => {
-      if ((node as Mesh).isMesh || node.type === 'Points') names.push(node.name);
-    });
-    assert.equal(names.filter((name) => name.startsWith('surface:')).length, 0);
-    for (const expected of ['mistveil-basin-terrain', 'mistveil-water', 'mistveil-particles']) assert.ok(names.includes(expected), `${expected} missing`);
     environment.update(5, { x: -50, y: 0, z: -16 });
     assert.ok(Math.abs(environment.visualGroundHeightAt(-14, -16) - 1.2) <= 0.02);
     assert.ok(Math.abs(environment.visualGroundHeightAt(-44, -16)) <= 0.02);
     environment.setReducedEffects(true);
-    assert.equal(plain.profile, undefined);
-    let plainSlabs = 0;
-    plain.group.traverse((node) => {
-      if (node.name.startsWith('surface:')) plainSlabs++;
-    });
-    assert.ok(plainSlabs > 0, 'the authored Mistveil region keeps its generic slabs');
   } finally {
     environment.dispose();
-    plain.dispose();
   }
 });

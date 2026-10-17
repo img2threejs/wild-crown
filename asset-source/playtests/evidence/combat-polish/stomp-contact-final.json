@@ -1,0 +1,139 @@
+{
+  "screen": "pause",
+  "frames": [
+    {
+      "tick": 0,
+      "action": "aren-idle",
+      "y": 0
+    },
+    {
+      "tick": 1,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 2,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 3,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 4,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 5,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 6,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 7,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 8,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 9,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 10,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 11,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 12,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 13,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 14,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 15,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 16,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 17,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 18,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 19,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 20,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 21,
+      "action": "sakda-tempest",
+      "y": 0
+    },
+    {
+      "tick": 22,
+      "action": "sakda-tempest",
+      "y": 0
+    }
+  ],
+  "contacts": [
+    {
+      "position": [
+        -58,
+        0.012,
+        -20
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "life": 4.8,
+      "age": 0.07500000000000001
+    }
+  ],
+  "shaderLinked": [
+    true
+  ]
+}

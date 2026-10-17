@@ -222,6 +222,24 @@ describe('Vesper and Sakda cue kits', () => {
     }
   });
 
+  it('Requiem releases once per marked target even when its damage hit follows the mark cue', () => {
+    const impact = sink(), effects = new StoryEffects({ scene: new Scene(), impact });
+    try {
+      const contact = { element: 'umbral', actionId: 'vesper-requiem' as ActionId, phase: 'hit', position: at, targetId: 'boar' as ActorSnapshot['targetId'], intensity: 2.4 } as const;
+      effects.emit(cue({ ...contact, kind: 'judgement-mark', scopeId: 'requiem:release' }, 110));
+      expect(impact.shakes).toHaveLength(1);
+      effects.emit(cue({ ...contact, kind: 'hit', confirmedDamage: 45 }, 110));
+      // The shared confirmed-hit overlay still draws; only the heavyweight ritual release is deduplicated.
+      expect(impact.impulses).toEqual([0.6]);
+      expect(impact.shakes).toHaveLength(1);
+      expect(impact.rims).toContain('boar:hit');
+      // A different victim and a later release must not be swallowed by the contact ledger.
+      effects.emit(cue({ ...contact, kind: 'hit', targetId: 'stag' as ActorSnapshot['targetId'], confirmedDamage: 45 }, 110));
+      effects.emit(cue({ ...contact, kind: 'hit', confirmedDamage: 45 }, 111));
+      expect(impact.shakes).toHaveLength(3);
+    } finally { effects.dispose(); }
+  });
+
   it("Sakda's elbow barrage raises the uppercut pillar on the closing hit only", () => {
     const effects = new StoryEffects({ scene: new Scene() });
     try {

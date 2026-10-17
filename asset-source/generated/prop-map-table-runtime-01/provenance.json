@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-map-table",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "0dca4158-5917-4195-8a92-a058e6cfeb8a"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00529,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-map-table-model-01/tripo-out/prop-map-table-model-01-0dca4158/model.glb",
+      "sha256": "fff0c069f2397108bf91f727a62a2b5334a2d79e440e1fa3aab62a4f4b21adbe"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-map-table-runtime-01/prop-map-table.glb",
+    "sha256": "924e1281730d63b269db5d39b1c1ec6563606d40223dbd2d7b13cc31ab08d23b",
+    "bytes": 1924476,
+    "vertices": 9909,
+    "triangles": 9998,
+    "boundsMin": [
+      -0.33591,
+      -0.25345,
+      -0.48888
+    ],
+    "boundsMax": [
+      0.33631,
+      0.25357,
+      0.48888
+    ],
+    "worldBoundsMin": [
+      -0.33591,
+      -0.25345,
+      -0.48888
+    ],
+    "worldBoundsMax": [
+      0.33631,
+      0.25357,
+      0.48888
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 7568388,
+      "toBytes": 834419
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 1211516,
+      "toBytes": 369160
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 2976597,
+      "toBytes": 281756
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1890200,
+      "trianglesAfter": 9998,
+      "relativeError": 0.0020854459144175053
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 991154,
+      "verticesAfter": 9909
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { Mesh, Object3D, Scene, Vector3 } from 'three';
+import { Mesh, Object3D, Scene, ShaderMaterial, Vector3 } from 'three';
 import { StoryEffects } from '../../src/effects/StoryEffects.js';
 import { StoryPresentation } from '../../src/effects/StoryPresentation.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
@@ -12,7 +12,11 @@ import { ATTACKS } from '../../src/game/combat/content.js';
 import type { ActorSnapshot, AttackId, WorldClockSnapshot } from '../../src/game/contracts.js';
 
 const clock = (worldTick: number): WorldClockSnapshot => ({ simulationTick: Math.floor(worldTick), worldTick, worldTimeSeconds: worldTick / 60, timeScale: 1, policy: 'normal' });
-const ELEMENT_OF: Readonly<Record<string, string>> = { 'sprig-seed-toss': 'sap', 'sprig-ground-ripple': 'earth', 'sprig-petal-sweep': 'spirit' };
+const ELEMENT_OF: Readonly<Record<string, string>> = {
+  'sprig-seed-toss': 'sap', 'sprig-ground-ripple': 'earth', 'sprig-petal-sweep': 'spirit',
+  'blighted-seed-lob': 'poison', 'blighted-ground-pulse': 'poison', 'blighted-lash-sweep': 'poison',
+  'hollowheart-leap-smash': 'earth', 'hollowheart-antler-sweep': 'sap', 'hollowheart-ichor-hurl': 'poison', 'hollowheart-heartlight-burst': 'gold',
+};
 
 type Phase = 'anticipation' | 'commit' | 'active';
 /** Mirrors the engine's hazardPresentation convention: strikes are disks, sweeps arcs, waves bands; `from` is the source. */
@@ -58,31 +62,64 @@ function playAttack(effects: StoryEffects, attackId: string, yaw = 0.4, onTick?:
 }
 
 describe('grove VFX kits', () => {
-  it('resolves every sprig attack id to its own kit with the amber/green element, in all three phases', () => {
-    expect([...GROVE_KIT_IDS]).toEqual(['sprig-seed-toss', 'sprig-ground-ripple', 'sprig-petal-sweep']);
-    expect(Object.keys(GROVE_ATTACK_KITS).sort()).toEqual([...GROVE_KIT_IDS].sort());
-    for (const attackId of GROVE_KIT_IDS) {
+  it('resolves every Grove attack id to its kit and element, in all three phases', () => {
+    expect([...GROVE_KIT_IDS]).toEqual(['sprig-seed-toss', 'sprig-ground-ripple', 'sprig-petal-sweep', 'hollowheart-leap-smash', 'hollowheart-antler-sweep', 'hollowheart-ichor-hurl', 'hollowheart-heartlight-burst']);
+    expect(Object.keys(GROVE_ATTACK_KITS).sort()).toEqual(Object.keys(ELEMENT_OF).sort());
+    for (const [attackId, element] of Object.entries(ELEMENT_OF)) {
       expect(ATTACKS[attackId], attackId).toBeDefined();
-      expect(isGroveKit(attackId)).toBe(true);
+      expect(isGroveKit(attackId) || GROVE_ATTACK_KITS[attackId] !== undefined).toBe(true);
       expect(isCanopyKit(attackId)).toBe(false);
-      expect(GROVE_ATTACK_KITS[attackId]).toEqual([attackId, ELEMENT_OF[attackId]!]);
+      const [kit] = GROVE_ATTACK_KITS[attackId]!;
+      expect(GROVE_ATTACK_KITS[attackId]).toEqual([kit, element]);
+      expect(isGroveKit(kit)).toBe(true);
       for (const phase of ['anticipation', 'commit', 'active'] as const) {
         const resolved = resolveKit(hazardCue(attackId, phase, 60, 0));
-        expect({ attackId, phase, kit: resolved.kit, attack: resolved.attack }).toEqual({ attackId, phase, kit: attackId, attack: true });
-        expect(resolved.element).toBe(ELEMENT_OF[attackId]!);
+        expect({ attackId, phase, kit: resolved.kit, attack: resolved.attack }).toEqual({ attackId, phase, kit, attack: true });
+        expect(resolved.element).toBe(element);
       }
       // The contact flash of the hit phase stays on the shared contact kit, tinted by the same element; never the player-only heartroot look.
       const hit = { ...hazardCue(attackId, 'active', 60, 0), kind: 'hit' as const, phase: 'hit' as const };
-      expect(resolveKit(hit)).toEqual({ kit: 'contact', element: ELEMENT_OF[attackId]!, attack: true });
-      expect(ELEMENT_OF[attackId]).not.toBe('heartroot');
+      expect(resolveKit(hit)).toEqual({ kit: 'contact', element, attack: true });
+      expect(element).not.toBe('heartroot');
     }
+    // The blighted rootling plays the sprig's three kits in poison; the guardian has four kits of its own.
+    expect(GROVE_ATTACK_KITS['blighted-seed-lob']).toEqual(['sprig-seed-toss', 'poison']);
+    expect(GROVE_ATTACK_KITS['blighted-ground-pulse']).toEqual(['sprig-ground-ripple', 'poison']);
+    expect(GROVE_ATTACK_KITS['blighted-lash-sweep']).toEqual(['sprig-petal-sweep', 'poison']);
     expect(isGroveKit('gale')).toBe(false);
     expect(isGroveKit('howler-rock-hurl')).toBe(false);
   });
 
-  it('gives the sprig its own gold-green identity glow and the gentlest existing aura theme', () => {
+  it('gives each Grove monster its own identity glow and aura: earth motes, toxic motes and the guardian\'s glowing heart', () => {
     expect(OWNER_GLOW['grove-sprig']).toBe('sap');
-    expect(GROVE_AURAS).toEqual({ 'grove-sprig': 'earth' });
+    expect(OWNER_GLOW['grove-blighted']).toBe('poison');
+    expect(OWNER_GLOW['grove-hollowheart']).toBe('sap');
+    expect(GROVE_AURAS).toEqual({ 'grove-sprig': 'earth', 'grove-blighted': 'toxic', 'grove-hollowheart': 'heartlight' });
+  });
+
+  it('draws the ground tell 1.5x for the sprig, 2.2x (1x for the gold heart-light burst) plus the contrast-aware tell for the blighted rootling and the guardian, so it reads on the dark blighted ground', () => {
+    /** Ground fill intensity and tell at the given tick of the windup, and the base value the kit would drive at that progress without any gain. */
+    const tell = (attackId: string): { intensity: number; base: number; tell: number } => {
+      const { effects } = rig(), offset = Math.floor(ATTACKS[attackId]!.windupTicks * 0.75);
+      try {
+        effects.emit(hazardCue(attackId, 'anticipation', 60, 0.4));
+        effects.update(clock(60 + offset));
+        let peak = 0, contrast = -1;
+        effects.vfx.ground.group.traverse(node => {
+          if (!(node instanceof Mesh) || !node.visible || !(node.material instanceof ShaderMaterial)) return;
+          if (node.material.uniforms.uMode!.value === 0) { peak = Math.max(peak, node.material.uniforms.uIntensity!.value); contrast = node.material.uniforms.uTell!.value; }
+        });
+        return { intensity: peak, base: 0.8 + 0.25 * (offset / ATTACKS[attackId]!.windupTicks) * 0.8, tell: contrast };
+      } finally { effects.dispose(); }
+    };
+    const sprig = tell('sprig-seed-toss');
+    expect(sprig.intensity).toBeCloseTo(sprig.base * 1.5, 2);
+    expect(sprig.tell).toBe(0);
+    for (const attackId of ['blighted-seed-lob', 'blighted-ground-pulse', 'blighted-lash-sweep', ...GROVE_KIT_IDS.filter(id => id.startsWith('hollowheart'))]) {
+      const dark = tell(attackId);
+      expect(dark.intensity, attackId).toBeCloseTo(dark.base * (attackId === 'hollowheart-heartlight-burst' ? 1 : 2.2), 2);
+      expect(dark.tell, attackId).toBeCloseTo(0.8, 5);
+    }
   });
 
   for (const attackId of GROVE_KIT_IDS) it(`${attackId}: spawns within every cap, shows all phases and ends cleanly`, () => {

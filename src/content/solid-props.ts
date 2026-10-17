@@ -15,7 +15,7 @@ const PROFILES: Readonly<Record<string, SolidPropKind>> = {
   'prop-greenwake-rope-bridge': 'platform', 'prop-grove-platform': 'platform',
   'prop-monkey-rope-platform': 'platform', 'prop-bamboo-footbridge': 'platform',
   'prop-moonpine-log-bridge': 'platform', 'prop-vine-bridge': 'platform',
-  'prop-sunmane-stone-terrace': 'platform',
+  'prop-sunmane-stone-terrace': 'solid',
   'prop-mistveil-reed-cluster': 'decoration',
   ...GROVE_SOLID_PROFILES, ...MOONPINE_SOLID_PROFILES, ...MISTVEIL_SOLID_PROFILES,
 };
@@ -25,4 +25,19 @@ const DECORATION_PREFIXES = [GREENWAKE_BOUNDARY_ID_PREFIX, CANOPY_BOUNDARY_ID_PR
 export function solidPropKind(placement: WorldAssetPlacement): SolidPropKind {
   if (DECORATION_PREFIXES.some(prefix => placement.id.startsWith(prefix))) return 'decoration';
   return PROFILES[placement.assetId] ?? 'solid';
+}
+
+export type SupportKind = 'deck' | 'top' | 'none';
+/** Solid props whose measured top is a combat step: rocks, drums and the Grove basin, whose 0.6 m rim is the one flat native top. Trees, arches, houses, rails and foliage are never stood on. */
+const TOP_SUPPORT_ASSETS: Readonly<Record<string, true>> = {
+  'prop-snow-ridge-rock': true, 'prop-mire-bank-rock': true, 'prop-greenwake-boulder-cluster': true,
+  'prop-canopy-cliff-rock': true, 'prop-black-sap-filter-drum': true, 'prop-water-basin': true,
+  'prop-sunmane-stone-terrace': true,
+};
+
+/** What a placement offers to stand on: a bridge/platform deck, a solid prop's top, or nothing. */
+export function supportKind(placement: WorldAssetPlacement): SupportKind {
+  const kind = solidPropKind(placement);
+  if (kind === 'platform') return 'deck';
+  return kind === 'solid' && TOP_SUPPORT_ASSETS[placement.assetId] === true ? 'top' : 'none';
 }

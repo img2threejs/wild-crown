@@ -152,6 +152,8 @@ export interface GrassProfile {
   readonly baseDry: number;
   readonly tipDry: number;
   readonly cacheKey: string;
+  /** Optional blight (an infection spreading over the ground): per-point strength 0..1, the dead blade colours and the share of height lost at full strength. */
+  readonly blight?: { amount(x: number, z: number): number; readonly base: number; readonly tip: number; readonly shrink: number };
 }
 
 export interface ScatterContext {
@@ -255,6 +257,77 @@ export interface WaterPlan {
   readonly deepDepth: number;
 }
 
+/**
+ * Per-region mood values that drive the sky dome (gradient + sun + drifting clouds), the screen-space height fog and the
+ * final color grade pass. The legacy `background` is the flat colour the sky shader falls back to when the dome is hidden
+ * (e.g. inside a closed structure); `fogNear`/`fogFar` remain the linear `three.Fog` exposed to the establishing-shot
+ * planner and to the Orun presentation easing (the height-fog pass is layered on top and gives the regional mood).
+ */
+export interface SkyProfile {
+  /** Top-of-sky colour at the zenith. */
+  readonly zenith: number;
+  /** Horizon band colour (where the sky meets the terrain). */
+  readonly horizon: number;
+  /** Colour rendered below the horizon (bowl beneath the terrain ring); usually a darker horizon tint. */
+  readonly ground: number;
+  /** Sun-direction angular half-width of the visible disc, radians. */
+  readonly sunDiscSize: number;
+  /** Sun-disc body colour. */
+  readonly sunDiscColor: number;
+  /** Glow halo size (radians); the halo fades between sunDiscSize and sunGlowSize. */
+  readonly sunGlowSize: number;
+  /** Sun glow halo colour (the bloom-friendly in-scatter behind the disc). */
+  readonly sunGlowColor: number;
+  /** Cloud colour blended over the dome; near white for midday, warm for sunset, blue for moonlit. */
+  readonly cloudColor: number;
+  /** 0..1 cloud coverage. */
+  readonly cloudCoverage: number;
+  /** Drift speed multiplier on the cloud-noise world-clock (the dome freezes drift under reduced motion). */
+  readonly cloudSpeed: number;
+}
+
+/**
+ * Screen-space height fog layered onto the HDR scene buffer before the grade pass. The base linear `three.Fog` keeps the
+ * establishing-shot near/far ease; the height-fog pass fades the air with altitude so deep hollows stay readable while
+ * hilltops stay clear. Density and falloff are tuned per region; the sun tint lets fog lift a warm/cool hue toward the sun.
+ */
+export interface HeightFogProfile {
+  readonly color: number;
+  /** Exponential density (0..1, exponent base `-density*dist*falloff`). */
+  readonly density: number;
+  /** Multiplier on `(cameraY - targetY)` in the height falloff. 0 = uniform, higher = clearer up high. */
+  readonly falloff: number;
+  /** Mix 0..1 between `color` and `sunTintColor` in the sun direction. */
+  readonly sunTint: number;
+  /** Sun-direction in-scatter tint; defaults to the profile sun colour. */
+  readonly sunTintColor: number;
+  /** 0..1 vertical-pooling strength: 0 = uniform, 1 = pools entirely at the bottom of the frame. */
+  readonly groundBias?: number;
+  /** Bottom-N share of the frame kept nearly fog-free (keeps the play area at full contrast). */
+  readonly nearFloor?: number;
+}
+
+/**
+ * Per-region colour grade pack applied in the final pre-output pass: lift/gamma/gain (linear HDR), saturation,
+ * split-toning warm-highlight/cool-shadow and a soft vignette. All entries are non-negative; the pass leaves the image
+ * unchanged when the grade pack is undefined.
+ */
+export interface RegionGradeProfile {
+  readonly lift: readonly [number, number, number];
+  readonly gamma: readonly [number, number, number];
+  readonly gain: readonly [number, number, number];
+  readonly saturation: number;
+  /** Warm highlight tint (added to highlight luminance in linear HDR). */
+  readonly warmHighlight: readonly [number, number, number];
+  /** Cool shadow tint (added to shadow luminance in linear HDR). */
+  readonly coolShadow: readonly [number, number, number];
+  /** 0..1 vignette strength. */
+  readonly vignette: number;
+}
+
+/** 0..1 absolute strength of the screen-space light shafts (god rays) for this region. 0 disables the pass. */
+export type LightShaftsStrength = number;
+
 export interface AtmosphereProfile {
   readonly background: number;
   readonly fogColor: number;
@@ -271,6 +344,14 @@ export interface AtmosphereProfile {
   readonly sunOffset: Vec3;
   readonly shadowHalfWidth: number;
   readonly shadowMapSize: number;
+  /** Per-region sky dome values; falls back to defaults when undefined. */
+  readonly sky?: SkyProfile;
+  /** Per-region height-fog values; falls back to no extra pass when undefined. */
+  readonly heightFog?: HeightFogProfile;
+  /** Per-region colour grade; falls back to identity when undefined. */
+  readonly grade?: RegionGradeProfile;
+  /** Light-shaft strength (0..1). 0 or undefined disables the screen-space shafts pass for this region. */
+  readonly lightShafts?: LightShaftsStrength;
 }
 
 

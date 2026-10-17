@@ -1,9 +1,37 @@
-import { BufferAttribute, BufferGeometry, Matrix4, Object3D, PropertyBinding, Quaternion, SkinnedMesh, Vector3, type Bone, type Skeleton } from 'three';
+import { BufferAttribute, BufferGeometry, InterleavedBufferAttribute, Matrix4, Object3D, PropertyBinding, Quaternion, SkinnedMesh, Vector3, type Bone, type Skeleton } from 'three';
 
 const HAND_NAME = 'mixamorig:RightHand';
 const FINGERS = ['Index', 'Middle', 'Ring', 'Pinky', 'Thumb'] as const;
 
 interface FingerJoint { readonly bone: Bone; readonly grip: Quaternion }
+interface GripThumb {
+  readonly pivot: Vector3;
+  readonly axis: Vector3;
+  readonly length: number;
+  readonly radius: number;
+  readonly rotation: Quaternion;
+}
+interface FingerWrap {
+  readonly centres: Float64Array;
+  readonly acrossMin: number;
+  readonly acrossSpan: number;
+  readonly reach: number;
+  readonly core: number;
+  readonly rotation: Quaternion;
+  thumb?: GripThumb;
+}
+const GRIP_COLUMNS = 12, GRIP_ROWS = 10, GRIP_CURL = 4.6, GRIP_RAMP = .5;
+/** Fitted skin keeps this much air (metres) over the tsuka, and the guard is applied within this distance (metres) of the seat along the hilt. */
+const HILT_SKIN_CLEARANCE = .0015, HILT_SKIN_REACH = .1;
+/**
+ * Radius of the fitted hilt along its axis, measured on the real fitted weapon mesh: `radius[i]` (metres) holds for the slice `from + i * step` (metres from the grip
+ * seat, + toward the blade). The fist skin keeps `HILT_SKIN_CLEARANCE` over this profile, so a collar right behind the guard lifts the fingers over it.
+ */
+export interface HiltProfile { readonly from: number; readonly step: number; readonly radius: Float32Array }
+function hiltRadiusAt(profile: HiltProfile, along: number): number {
+  const position = Math.max(0, Math.min(profile.radius.length - 1, (along - profile.from) / profile.step)), low = Math.floor(position), high = Math.min(profile.radius.length - 1, low + 1);
+  return profile.radius[low]! + (profile.radius[high]! - profile.radius[low]!) * (position - low);
+}
 interface RigidHandShape {
   readonly mesh: SkinnedMesh;
   readonly toHand: Matrix4;
@@ -13,6 +41,7 @@ interface RigidHandShape {
   readonly hinge: number;
   readonly plane: number;
   readonly radius: number;
+  readonly wrap?: FingerWrap;
 }
 export interface HandGrip {
   readonly hand: Bone;
@@ -28,8 +57,16 @@ export interface HandGeometryEdit { readonly mesh: SkinnedMesh; readonly origina
 
 /** Only vertices referenced by rendered triangles contribute to anatomy or weapon fitting. */
 export function referencedVertices(geometry: BufferGeometry): number[] {
-  const index = geometry.getIndex();
-  return index ? Array.from(new Set(index.array)) : Array.from({ length: geometry.getAttribute('position').count }, (_, index) => index);
+  const index = geometry.getIndex(), count = geometry.getAttribute('position').count;
+  if (!index) return Array.from({ length: count }, (_, vertex) => vertex);
+  const seen = new Uint8Array(count), vertices: number[] = [];
+  // Preserve first-reference order without hashing every triangle corner.
+  for (const vertex of index.array) {
+    if (seen[vertex]) continue;
+    seen[vertex] = 1;
+    vertices.push(vertex);
+  }
+  return vertices;
 }
 function named(skeleton: Skeleton, name: string): Bone {
   const result = skeleton.getBoneByName(PropertyBinding.sanitizeNodeName(name)) ?? skeleton.getBoneByName(name);
@@ -53,6 +90,152 @@ function principalAxis(points: readonly Vector3[], seed: Vector3, perpendicular?
   }
   if (axis.dot(seed) < 0) axis.negate();
   return axis;
+}
+
+/** Local finger centre and its along/across derivatives. The native fingers are not a flat slab. */
+function fingerCentre(shape: RigidHandShape, along: number, across: number, out: Vector3): Vector3 {
+  const wrap = shape.wrap!;
+  const rawX = (across - wrap.acrossMin) / wrap.acrossSpan * GRIP_COLUMNS - .5;
+  const rawY = (along - shape.hinge) / wrap.reach * GRIP_ROWS - .5;
+  const x = Math.max(0, Math.min(GRIP_COLUMNS - 1, rawX)), y = Math.max(0, Math.min(GRIP_ROWS - 1, rawY));
+  const x0 = Math.floor(x), y0 = Math.floor(y), x1 = Math.min(GRIP_COLUMNS - 1, x0 + 1), y1 = Math.min(GRIP_ROWS - 1, y0 + 1);
+  const tx = x - x0, ty = y - y0, values = wrap.centres;
+  const a = values[y0 * GRIP_COLUMNS + x0]!, b = values[y0 * GRIP_COLUMNS + x1]!;
+  const c = values[y1 * GRIP_COLUMNS + x0]!, d = values[y1 * GRIP_COLUMNS + x1]!;
+  const low = a + (b - a) * tx, high = c + (d - c) * tx;
+  return out.set(low + (high - low) * ty,
+    rawY > 0 && rawY < GRIP_ROWS - 1 ? (high - low) * GRIP_ROWS / wrap.reach : 0,
+    rawX > 0 && rawX < GRIP_COLUMNS - 1 ? ((b - a) * (1 - ty) + (d - c) * ty) * GRIP_COLUMNS / wrap.acrossSpan : 0);
+}
+
+/** Close the native fingers first, then align that grasp to the captured sword axis without changing blade heading. */
+function katanaHandGrip(mesh: SkinnedMesh, hand: Bone, toHand: Matrix4, points: readonly Vector3[], direction: Vector3, axis: Vector3, curl: Vector3, handScale: number): HandGrip {
+  const lengths = points.map(point => point.dot(direction)).sort((a, b) => a - b);
+  const length = lengths[Math.floor(lengths.length * .98)]!, hinge = length * .42;
+  const naturalAxis = axis.clone().addScaledVector(direction, -axis.dot(direction)).normalize();
+  const fingers = points.filter(point => point.dot(direction) > hinge);
+  const laterals = points.filter(point => point.dot(direction) > hinge + (length - hinge) * .25)
+    .map(point => point.dot(naturalAxis)).sort((a, b) => a - b);
+  const middle = laterals[Math.floor(laterals.length / 2)]!;
+  let positive = 0, negative = 0;
+  for (const point of points) {
+    const along = point.dot(direction);
+    if (along <= length * .15 || along >= hinge) continue;
+    const lateral = point.dot(naturalAxis) - middle;
+    positive = Math.max(positive, lateral); negative = Math.max(negative, -lateral);
+  }
+  // Vesper's thumb protrudes below the knuckles. Whole-hand skew incorrectly identifies the opposite side.
+  // Right hand: thumb × fingers is the palm normal; the fingers curl toward it and the hilt sits in that palm.
+  const normal = naturalAxis.clone().multiplyScalar(positive > negative ? 1 : -1).cross(direction).normalize();
+  const fingerLengths = fingers.map(point => point.dot(direction)).sort((a, b) => a - b);
+  const reach = fingerLengths[Math.floor(fingerLengths.length * .98)]! - hinge;
+  let acrossMin = Infinity, acrossMax = -Infinity, surface = -Infinity;
+  for (const point of fingers) {
+    const across = point.dot(naturalAxis);
+    acrossMin = Math.min(acrossMin, across); acrossMax = Math.max(acrossMax, across);
+    surface = Math.max(surface, point.dot(normal));
+  }
+  const acrossSpan = acrossMax - acrossMin;
+  const low = new Float64Array(GRIP_COLUMNS * GRIP_ROWS).fill(Infinity), high = new Float64Array(low.length).fill(-Infinity);
+  for (const point of fingers) {
+    const x = Math.max(0, Math.min(GRIP_COLUMNS - 1, Math.floor((point.dot(naturalAxis) - acrossMin) / acrossSpan * GRIP_COLUMNS)));
+    const y = Math.max(0, Math.min(GRIP_ROWS - 1, Math.floor((point.dot(direction) - hinge) / reach * GRIP_ROWS)));
+    const index = y * GRIP_COLUMNS + x, depth = point.dot(normal);
+    low[index] = Math.min(low[index]!, depth); high[index] = Math.max(high[index]!, depth);
+  }
+  const centres = new Float64Array(low.length), measured: number[] = [];
+  for (let index = 0; index < low.length; index++) {
+    centres[index] = (low[index]! + high[index]!) / 2;
+    if (Number.isFinite(centres[index])) measured.push(index);
+  }
+  if (!measured.length || !(reach > 0 && acrossSpan > 0)) throw new Error('The native katana hand has no measurable fingers.');
+  // Empty cells lie between fingers, not on their skin. Extend the nearest measured section into those gaps.
+  for (let index = 0; index < centres.length; index++) {
+    if (Number.isFinite(centres[index])) continue;
+    let nearest = measured[0]!, distance = Infinity;
+    for (const candidate of measured) {
+      const delta = (index % GRIP_COLUMNS - candidate % GRIP_COLUMNS) ** 2
+        + (Math.floor(index / GRIP_COLUMNS) - Math.floor(candidate / GRIP_COLUMNS)) ** 2;
+      if (delta < distance) { distance = delta; nearest = candidate; }
+    }
+    centres[index] = centres[nearest]!;
+  }
+  const core = Math.min(acrossSpan * .09, reach * .18);
+  const rotation = new Quaternion().setFromUnitVectors(naturalAxis, axis);
+  const wrap: FingerWrap = { centres, acrossMin, acrossSpan, reach, core, rotation };
+  const shape: RigidHandShape = { mesh, toHand, direction, axis: naturalAxis, normal, hinge, plane: 0, radius: 0, wrap };
+  const sample = new Vector3();
+  let half = 0;
+  for (const point of fingers) {
+    const along = point.dot(direction);
+    if (along <= hinge + reach * .25) continue;
+    fingerCentre(shape, along, point.dot(naturalAxis), sample);
+    half = Math.max(half, Math.abs(point.dot(normal) - sample.x));
+  }
+  const radius = Math.max(reach / GRIP_CURL, core * 1.3), center = surface + core;
+  const palm = direction.clone().multiplyScalar(hinge).addScaledVector(naturalAxis, (acrossMin + acrossMax) / 2)
+    .addScaledVector(normal, center).applyQuaternion(rotation);
+  const fitted: RigidHandShape = { ...shape, radius, plane: center - radius };
+  wrap.thumb = opposedGripThumb(points, fitted, middle, positive > negative ? 1 : -1);
+  return { hand, axis, curl, palm, shaftRadius: core * handScale, joints: [], rigid: fitted };
+}
+
+function gripThumbWeight(thumb: GripThumb, point: Vector3, scratch: Vector3): number {
+  scratch.copy(point).sub(thumb.pivot);
+  const along = scratch.dot(thumb.axis), off = scratch.addScaledVector(thumb.axis, -along).length();
+  return smoothstep(0, thumb.length * .5, along) * (1 - smoothstep(thumb.radius, thumb.radius * 1.8, off));
+}
+
+/** Rigid thumb opposition preserves its volume; fitting its actual pad avoids a floating conservative bounding sphere. */
+function opposedGripThumb(points: readonly Vector3[], shape: RigidHandShape, middle: number, sign: number): GripThumb {
+  const { direction, axis, normal, hinge, wrap } = shape;
+  const lower = points.filter(point => point.dot(direction) > hinge * .35 && point.dot(direction) < hinge)
+    .sort((a, b) => sign * (b.dot(axis) - a.dot(axis)));
+  if (lower.length < 10) throw new Error('The native katana hand has no measurable thumb.');
+  const tip = new Vector3(), count = Math.max(10, Math.floor(lower.length * .04));
+  for (let index = 0; index < count; index++) tip.add(lower[index]!);
+  tip.divideScalar(count);
+  let plane = 0, palmCount = 0;
+  for (const point of points) if (point.dot(direction) < hinge) { plane += point.dot(normal); palmCount++; }
+  plane /= palmCount;
+  const pivot = axis.clone().multiplyScalar(middle + sign * wrap!.acrossSpan * .15)
+    .addScaledVector(direction, hinge * .3).addScaledVector(normal, plane);
+  const thumbAxis = tip.clone().sub(pivot), length = thumbAxis.length();
+  thumbAxis.divideScalar(length);
+  const point = new Vector3(), scratch = new Vector3(), spreads: number[] = [];
+  for (const source of points) {
+    if (source.distanceTo(tip) >= length * .4) continue;
+    point.copy(source).sub(pivot);
+    const along = point.dot(thumbAxis);
+    spreads.push(point.addScaledVector(thumbAxis, -along).length());
+  }
+  spreads.sort((a, b) => a - b);
+  const radius = spreads[Math.floor(spreads.length * .9)]!;
+  if (!(length > 0 && radius > 0)) throw new Error('The native katana thumb has no measurable pad.');
+  const thumb: GripThumb = { pivot, axis: thumbAxis, length, radius, rotation: new Quaternion() };
+  const center = shape.plane + shape.radius, pivotD = pivot.dot(direction), pivotN = pivot.dot(normal);
+  let outer = wrap!.core + radius;
+  for (let pass = 0; pass < 3; pass++) {
+    let d = hinge - outer, n = center;
+    let remaining = length * length - (d - pivotD) ** 2 - (n - pivotN) ** 2;
+    if (remaining < 0) {
+      const pd = pivotD - hinge, pn = pivotN - center, distance = Math.hypot(pd, pn);
+      d = hinge + pd / distance * outer; n = center + pn / distance * outer;
+      remaining = length * length - (d - pivotD) ** 2 - (n - pivotN) ** 2;
+    }
+    point.copy(axis).multiplyScalar(pivot.dot(axis) - sign * Math.sqrt(Math.max(0, remaining)))
+      .addScaledVector(direction, d).addScaledVector(normal, n).sub(pivot).normalize();
+    thumb.rotation.setFromUnitVectors(thumbAxis, point);
+    if (pass === 2) break;
+    let clearance = Infinity;
+    for (const source of points) {
+      if (gripThumbWeight(thumb, source, scratch) < .95) continue;
+      point.copy(source).sub(pivot).applyQuaternion(thumb.rotation).add(pivot);
+      clearance = Math.min(clearance, Math.hypot(point.dot(direction) - hinge, point.dot(normal) - center));
+    }
+    outer = Math.max(wrap!.core, outer - (clearance - wrap!.core - .0005));
+  }
+  return thumb;
 }
 
 /**
@@ -93,18 +276,22 @@ export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: num
     const forearm = local(named(skeleton, 'mixamorig:RightForeArm')).negate().normalize();
     const direction = principalAxis(points, forearm);
     const knuckles = principalAxis(points, new Vector3(0, 1, 0).transformDirection(handInverse), direction);
-    // The thumb is the lateral protrusion: the long tail of the across-hand distribution.
+    // Keep the calibrated weapon frame stable; the katana resolves the anatomical thumb separately.
     let meanAcross = 0;
     for (const point of points) meanAcross += point.dot(knuckles);
     meanAcross /= points.length;
     let skew = 0;
     for (const point of points) skew += (point.dot(knuckles) - meanAcross) ** 3;
     const thumbSide = knuckles.clone().multiplyScalar(skew > 0 ? 1 : -1);
-    // Right hand: the palm faces thumbSide × direction (thumb up, fingers forward → palm toward the body midline).
+    // This reference normal also defines the captured blade-edge calibration.
     const normal = thumbSide.clone().cross(direction).normalize();
     const axis = thumbSide.clone().multiplyScalar(Math.cos(tiltRadians)).addScaledVector(direction, Math.sin(tiltRadians)).normalize();
     // Fingers curl about the shaft in the plane perpendicular to it: `bend` is the metacarpal direction without its shaft component.
     const bend = direction.clone().addScaledVector(axis, -direction.dot(axis)).normalize();
+    if (edgeRadians !== undefined) {
+      const curl = normal.clone().multiplyScalar(Math.cos(edgeRadians)).addScaledVector(bend, -Math.sin(edgeRadians));
+      return katanaHandGrip(mesh, hand, toHand, points, direction, axis, curl, handScale);
+    }
     const lengths = points.map(point => point.dot(bend)).sort((a, b) => a - b);
     const length = lengths[Math.floor(lengths.length * .98)]!;
     const hinge = length * .42;
@@ -119,8 +306,7 @@ export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: num
     }
     const shaftRadius = (high - low) * handScale * .16;
     const radius = Math.max((length - hinge) / 2.7, fingerDepth + shaftRadius / handScale);
-    const edgeDirection = edgeRadians === undefined ? normal.clone() : normal.clone().negate().multiplyScalar(Math.cos(edgeRadians)).addScaledVector(bend, Math.sin(edgeRadians));
-    return { hand, axis, curl: edgeRadians === undefined ? normal.clone().negate() : edgeDirection.negate(), palm: bend.clone().multiplyScalar(hinge).addScaledVector(axis, across).addScaledVector(normal, plane + radius), shaftRadius, joints: [], rigid: { mesh, toHand, direction: bend, axis, normal, hinge, plane, radius } };
+    return { hand, axis, curl: normal.clone().negate(), palm: bend.clone().multiplyScalar(hinge).addScaledVector(axis, across).addScaledVector(normal, plane + radius), shaftRadius, joints: [], rigid: { mesh, toHand, direction: bend, axis, normal, hinge, plane, radius } };
   }
   const finger = (name: string, joint: number): Bone => named(skeleton, `mixamorig:RightHand${name}${joint}`);
   const index = local(finger('Index', 1)), pinky = local(finger('Pinky', 1)), middle = local(finger('Middle', 1)), thumb = local(finger('Thumb', 1));
@@ -180,8 +366,8 @@ export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: num
 
 /** Copy only referenced vertices: Yara's source has 1,014,289 slots but just 62,494 rendered vertices. */
 function editableGeometry(source: BufferGeometry): BufferGeometry {
-  const used = referencedVertices(source), remap = new Map<number, number>();
-  used.forEach((vertex, index) => remap.set(vertex, index));
+  const used = referencedVertices(source), remap = new Uint32Array(source.getAttribute('position').count);
+  for (let index = 0; index < used.length; index++) remap[used[index]!] = index;
   const geometry = new BufferGeometry();
   for (const name of Object.keys(source.attributes)) {
     const attribute = source.getAttribute(name);
@@ -193,7 +379,7 @@ function editableGeometry(source: BufferGeometry): BufferGeometry {
   const sourceIndex = source.getIndex();
   if (sourceIndex) {
     const indices = used.length > 65535 ? new Uint32Array(sourceIndex.count) : new Uint16Array(sourceIndex.count);
-    for (let index = 0; index < sourceIndex.count; index++) indices[index] = remap.get(sourceIndex.getX(index))!;
+    for (let index = 0; index < sourceIndex.count; index++) indices[index] = remap[sourceIndex.getX(index)]!;
     geometry.setIndex(new BufferAttribute(indices, 1));
   }
   for (const group of source.groups) geometry.addGroup(group.start, group.count, group.materialIndex);
@@ -201,10 +387,193 @@ function editableGeometry(source: BufferGeometry): BufferGeometry {
   return geometry;
 }
 
+function fitWrappedNativeHand(grip: HandGrip, shape: RigidHandShape, hilt: HiltProfile | undefined): HandGeometryEdit {
+  const wrap = shape.wrap!, original = shape.mesh.geometry, edited = editableGeometry(original);
+  const positions = edited.getAttribute('position'), normals = edited.getAttribute('normal'), tangents = edited.getAttribute('tangent');
+  const indices = edited.getAttribute('skinIndex'), weights = edited.getAttribute('skinWeight');
+  const handIndex = shape.mesh.skeleton.bones.indexOf(grip.hand), fromHand = shape.toHand.clone().invert();
+  const point = new Vector3(), vector = new Vector3(), rotated = new Vector3(), centre = new Vector3();
+  const sourcePoint = new Vector3(), thumbPoint = new Vector3(), thumbVector = new Vector3(), offset = new Vector3();
+  const { direction, axis, normal, radius, hinge } = shape;
+  // Skin rigidly carried by the hand never enters the hilt: the fitted surface stays 1.5 mm outside the tsuka within a hand's length of the seat.
+  const handScale = grip.shaftRadius / wrap.core, hiltReach = HILT_SKIN_REACH / handScale;
+  // The fitted surface at `z` (hand units from the seat along the hilt) stands 1.5 mm outside the real hilt there (never inside the nominal tsuka radius).
+  const skinAt = (z: number): number => Math.max(wrap.core, hilt ? hiltRadiusAt(hilt, z * handScale) / handScale : 0) + HILT_SKIN_CLEARANCE / handScale;
+  const rigid: number[] = [];
+  for (let vertex = 0; vertex < positions.count; vertex++) {
+    let weight = 0;
+    for (let component = 0; component < 4; component++) if (indices.getComponent(vertex, component) === handIndex) weight += weights.getComponent(vertex, component);
+    if (weight <= 0) continue;
+    point.fromBufferAttribute(positions, vertex).applyMatrix4(shape.toHand);
+    const along = point.dot(direction), across = point.dot(axis), depth = point.dot(normal);
+    sourcePoint.copy(point);
+    const opposition = wrap.thumb ? gripThumbWeight(wrap.thumb, point, rotated) : 0;
+    let xd = 1, xa = 0, xn = 0, yd = 0, ya = 0, yn = 1;
+    if (weight >= .6 && along > hinge && opposition < 1) {
+      fingerCentre(shape, along, across, centre);
+      const angle = (along - hinge) / radius, sine = Math.sin(angle), cosine = Math.cos(angle);
+      const t = Math.max(0, Math.min(1, angle / GRIP_RAMP)), ramp = t * t * (3 - 2 * t);
+      const rampD = 6 * t * (1 - t) / (GRIP_RAMP * radius);
+      const raw = radius - (depth - centre.x), gap = raw - wrap.core;
+      // Smooth contact projects palm-side skin onto the handle without flattening the entire finger.
+      const soft = Math.sqrt(gap * gap + .0003 ** 2), contact = wrap.core + (gap + soft) / 2;
+      const gain = 1 + (.5 * (1 + gap / soft) - 1) * ramp;
+      const radial = raw + (contact - raw) * ramp;
+      const rd = gain * centre.y + (contact - raw) * rampD, ra = gain * centre.z, rn = -gain;
+      const cd = centre.y * (1 - ramp) + (shape.plane - centre.x) * rampD, ca = centre.z * (1 - ramp);
+      xd = rd * sine + radial * cosine / radius; xa = ra * sine; xn = rn * sine;
+      yd = cd - rd * cosine + radial * sine / radius; ya = ca - ra * cosine; yn = -rn * cosine;
+      point.copy(direction).multiplyScalar(hinge + radial * sine)
+        .addScaledVector(normal, centre.x + (shape.plane - centre.x) * ramp + radius - radial * cosine)
+        .addScaledVector(axis, across);
+    }
+    if (wrap.thumb && opposition > 0) {
+      thumbPoint.copy(sourcePoint).sub(wrap.thumb.pivot).applyQuaternion(wrap.thumb.rotation).add(wrap.thumb.pivot);
+      point.lerp(thumbPoint, opposition);
+    }
+    // Native thumb vertices carried up to 12% forearm influence: that moved the grasp away from a hand-mounted hilt.
+    // Pin the distal grasp to the existing hand bone, retaining a smooth native-weight transition through the wrist.
+    const t = weight >= .6 ? Math.max(0, Math.min(1, along / (hinge * .5))) : 0;
+    const pin = t * t * (3 - 2 * t), fittedWeight = Math.min(1, weight + (1 - weight) * pin);
+    if (pin > 0) {
+      let assigned = false;
+      for (let component = 0; component < 4; component++) {
+        if (indices.getComponent(vertex, component) === handIndex) {
+          weights.setComponent(vertex, component, assigned ? 0 : fittedWeight); assigned = true;
+        } else weights.setComponent(vertex, component, weights.getComponent(vertex, component) * (1 - pin));
+      }
+    }
+    rotated.copy(point).applyQuaternion(wrap.rotation);
+    point.lerp(rotated, fittedWeight);
+    if (fittedWeight > .9999) {
+      rigid.push(vertex);
+      offset.copy(point).sub(grip.palm);
+      const alongHilt = offset.dot(grip.axis);
+      offset.addScaledVector(grip.axis, -alongHilt);
+      const distance = offset.length();
+      const skinRadius = skinAt(alongHilt);
+      if (Math.abs(alongHilt) < hiltReach && distance < skinRadius) {
+        if (distance < 1e-9) offset.copy(grip.curl).addScaledVector(grip.axis, -grip.curl.dot(grip.axis)); else offset.divideScalar(distance);
+        point.copy(grip.palm).addScaledVector(grip.axis, alongHilt).addScaledVector(offset.normalize(), skinRadius);
+      }
+    }
+    point.applyMatrix4(fromHand);
+    positions.setXYZ(vertex, point.x, point.y, point.z);
+    if (normals) {
+      vector.fromBufferAttribute(normals, vertex).transformDirection(shape.toHand);
+      if (wrap.thumb && opposition > 0) thumbVector.copy(vector).applyQuaternion(wrap.thumb.rotation);
+      const d = vector.dot(direction), a = vector.dot(axis), n = vector.dot(normal), determinant = xd * yn - xn * yd;
+      vector.copy(direction).multiplyScalar(yn * d - yd * n)
+        .addScaledVector(axis, -(xa * yn - xn * ya) * d + determinant * a + (xa * yd - xd * ya) * n)
+        .addScaledVector(normal, -xn * d + xd * n).normalize();
+      if (opposition > 0) vector.lerp(thumbVector, opposition).normalize();
+      rotated.copy(vector).applyQuaternion(wrap.rotation);
+      vector.lerp(rotated, fittedWeight).normalize().transformDirection(fromHand);
+      normals.setXYZ(vertex, vector.x, vector.y, vector.z);
+    }
+    if (tangents) {
+      vector.fromBufferAttribute(tangents, vertex).transformDirection(shape.toHand);
+      if (wrap.thumb && opposition > 0) thumbVector.copy(vector).applyQuaternion(wrap.thumb.rotation);
+      const d = vector.dot(direction), a = vector.dot(axis), n = vector.dot(normal);
+      vector.copy(direction).multiplyScalar(xd * d + xa * a + xn * n)
+        .addScaledVector(axis, a).addScaledVector(normal, yd * d + ya * a + yn * n).normalize();
+      if (opposition > 0) vector.lerp(thumbVector, opposition).normalize();
+      rotated.copy(vector).applyQuaternion(wrap.rotation);
+      vector.lerp(rotated, fittedWeight).normalize().transformDirection(fromHand);
+      tangents.setXYZ(vertex, vector.x, vector.y, vector.z);
+    }
+  }
+  closeFistOnHilt(grip, shape, positions, normals, tangents, rigid, skinAt, hiltReach);
+  edited.computeBoundingBox(); edited.computeBoundingSphere();
+  shape.mesh.geometry = edited;
+  return { mesh: shape.mesh, original, edited };
+}
+
+/** Angular sectors and axial rows (metres) of the inner-envelope map the fist closing uses, and the reach (metres from the hilt surface) it moves. */
+const CLOSE_SECTORS = 48, CLOSE_ROW = .01, CLOSE_REACH = .07, CLOSE_FADE = .01, CLOSE_SHELL = .025;
+const closeQuaternion = new Quaternion();
+
+/**
+ * Shuts the fitted fist on the hilt. In the hilt's cylindrical frame, every rigidly carried skin point within `CLOSE_REACH` of the tsuka is moved by
+ * its row's inner envelope: palm and finger walls that stand off the handle are pulled onto it (outer layers follow with a smooth falloff, so
+ * the hand is compressed, never folded), and the open sector between the fingertips and the thumb/palm is closed by turning its two edges
+ * halfway in from either side (neighbours spread smoothly). Rows blend linearly along the hilt and fade out at the ends of the fist.
+ */
+function closeFistOnHilt(grip: HandGrip, shape: RigidHandShape, positions: BufferAttribute | InterleavedBufferAttribute, normals: BufferAttribute | InterleavedBufferAttribute | undefined, tangents: BufferAttribute | InterleavedBufferAttribute | undefined, vertices: readonly number[], skinAt: (z: number) => number, hiltReach: number): void {
+  const handScale = grip.shaftRadius / shape.wrap!.core, reachOver = CLOSE_REACH / handScale, row = CLOSE_ROW / handScale;
+  const axis = grip.axis, u = grip.curl.clone().addScaledVector(axis, -grip.curl.dot(axis)).normalize(), w = axis.clone().cross(u);
+  const fromHand = shape.toHand.clone().invert(), point = new Vector3(), vector = new Vector3();
+  const near: { vertex: number; z: number; r: number; theta: number }[] = [];
+  let zLow = Infinity, zHigh = -Infinity;
+  for (const vertex of vertices) {
+    point.fromBufferAttribute(positions, vertex).applyMatrix4(shape.toHand).sub(grip.palm);
+    const z = point.dot(axis), x = point.dot(u), y = point.dot(w), r = Math.hypot(x, y);
+    if (Math.abs(z) >= hiltReach || r >= skinAt(z) + reachOver) continue;
+    near.push({ vertex, z, r, theta: Math.atan2(y, x) });
+    if (r < skinAt(z) + CLOSE_SHELL / handScale) { zLow = Math.min(zLow, z); zHigh = Math.max(zHigh, z); }
+  }
+  if (!near.length || !(zHigh > zLow)) return;
+  const rows = Math.max(1, Math.ceil((zHigh - zLow) / row)), sectorOf = (theta: number) => (Math.floor((theta + Math.PI) / (2 * Math.PI) * CLOSE_SECTORS) % CLOSE_SECTORS + CLOSE_SECTORS) % CLOSE_SECTORS;
+  const envelope = new Float64Array(rows * CLOSE_SECTORS).fill(Infinity);
+  const rowOf = (z: number) => Math.max(0, Math.min(rows - 1, Math.floor((z - zLow) / row)));
+  for (const item of near) { const cell = rowOf(item.z) * CLOSE_SECTORS + sectorOf(item.theta); envelope[cell] = Math.min(envelope[cell]!, item.r); }
+  // Per row: the radial gap of each sector (circularly smoothed) and the widest empty run, which is the opening to shut.
+  const sectorWidth = 2 * Math.PI / CLOSE_SECTORS, gaps = new Float64Array(rows * CLOSE_SECTORS), windows: { centre: number; half: number }[] = [];
+  for (let r = 0; r < rows; r++) {
+    const base = r * CLOSE_SECTORS, rowSkin = skinAt(zLow + (r + .5) * row), rowReach = rowSkin + reachOver, open = (s: number) => !(envelope[base + ((s % CLOSE_SECTORS) + CLOSE_SECTORS) % CLOSE_SECTORS]! < rowReach);
+    for (let s = 0; s < CLOSE_SECTORS; s++) {
+      let sum = 0, count = 0;
+      for (const k of [-1, 0, 1]) { const e = envelope[base + (s + k + CLOSE_SECTORS) % CLOSE_SECTORS]!; if (e < rowReach) { sum += Math.max(0, e - rowSkin); count++; } }
+      gaps[base + s] = count ? sum / count : 0;
+    }
+    let bestStart = -1, bestLength = 0;
+    for (let s = 0; s < CLOSE_SECTORS; s++) {
+      if (!open(s) || open(s - 1)) continue;
+      let length = 0;
+      while (length < CLOSE_SECTORS && open(s + length)) length++;
+      if (length > bestLength) { bestLength = length; bestStart = s; }
+    }
+    windows.push(bestLength > 0 && bestLength < CLOSE_SECTORS / 2
+      ? { centre: -Math.PI + (bestStart + bestLength / 2) * sectorWidth, half: bestLength * sectorWidth / 2 } : { centre: 0, half: 0 });
+  }
+  const angularShift = (r: number, theta: number): number => {
+    const { centre, half } = windows[r]!;
+    if (half <= 0) return 0;
+    const span = Math.max(2.2 * half, Math.PI / 3), offset = Math.atan2(Math.sin(theta - centre), Math.cos(theta - centre));
+    const distance = Math.abs(offset) - half;
+    if (distance < 0 || distance >= span) return 0;
+    const t = 1 - distance / span;
+    return -Math.sign(offset) * half * t * t;
+  };
+  for (const item of near) {
+    const position = Math.max(0, Math.min(rows - 1, (item.z - zLow) / row - .5)), r0 = Math.floor(position), r1 = Math.min(rows - 1, r0 + 1), f = position - r0;
+    const fade = smoothstep(0, CLOSE_FADE / handScale, item.z - zLow + CLOSE_FADE / handScale * .5) * smoothstep(0, CLOSE_FADE / handScale, zHigh - item.z + CLOSE_FADE / handScale * .5);
+    const sector = sectorOf(item.theta);
+    const rawShift = (angularShift(r0, item.theta) * (1 - f) + angularShift(r1, item.theta) * f) * fade;
+    const gap = (gaps[r0 * CLOSE_SECTORS + sector]! * (1 - f) + gaps[r1 * CLOSE_SECTORS + sector]! * f) * fade;
+    const inner = Math.min(envelope[r0 * CLOSE_SECTORS + sector]!, envelope[r1 * CLOSE_SECTORS + sector]!, item.r);
+    const span = Math.max(1.6 * gap, CLOSE_SHELL / handScale);
+    const radius = Math.max(skinAt(item.z), item.r - gap * (1 - smoothstep(0, span, item.r - inner)));
+    // Only the inner shell turns into the opening; outer layers (back of the hand, plate) stay put, so nothing shears.
+    const shift = rawShift * (1 - smoothstep(0, 2 * CLOSE_SHELL / handScale, item.r - inner));
+    const theta = item.theta + shift;
+    point.copy(grip.palm).addScaledVector(axis, item.z).addScaledVector(u, Math.cos(theta) * radius).addScaledVector(w, Math.sin(theta) * radius).applyMatrix4(fromHand);
+    positions.setXYZ(item.vertex, point.x, point.y, point.z);
+    if (shift === 0) continue;
+    closeQuaternion.setFromAxisAngle(axis, shift);
+    for (const attribute of [normals, tangents]) {
+      if (!attribute) continue;
+      vector.fromBufferAttribute(attribute, item.vertex).transformDirection(shape.toHand).applyQuaternion(closeQuaternion).transformDirection(fromHand);
+      attribute.setXYZ(item.vertex, vector.x, vector.y, vector.z);
+    }
+  }
+}
+
 /** Fixed native mesh grasp follows the original hand skin weights through every native animation. */
-export function fitRigidNativeHand(grip: HandGrip): HandGeometryEdit | undefined {
+export function fitRigidNativeHand(grip: HandGrip, hilt?: HiltProfile): HandGeometryEdit | undefined {
   const shape = grip.rigid;
   if (!shape) return undefined;
+  if (shape.wrap) return fitWrappedNativeHand(grip, shape, hilt);
   const original = shape.mesh.geometry, edited = editableGeometry(original);
   const positions = edited.getAttribute('position'), normals = edited.getAttribute('normal'), tangents = edited.getAttribute('tangent');
   const indices = edited.getAttribute('skinIndex'), weights = edited.getAttribute('skinWeight');
@@ -251,7 +620,13 @@ const FIST_CORE = .003;
 const FIST_RAMP = .5;
 const FIST_COLUMNS = 10;
 /** Oppose the thumb across the curled fingers, keeping its flesh outside their palm-side surface (rig units). */
-const THUMB_SWING = 1.7, THUMB_CLEARANCE = .003;
+const THUMB_SWING = 1.7, THUMB_CLEARANCE = .003, THUMB_SCALE_RAMP = .3;
+/**
+ * Proportions of the folded thumb against the native one (Sakda's stylised thumb is bulky across the fist): `length` along its axis from the point where it
+ * leaves the palm, `girth` across it. Both fade in with the fold weight, so the thenar base keeps its native surface without a seam.
+ */
+export interface ThumbProportions { readonly length: number; readonly girth: number }
+export const FIST_THUMB: ThumbProportions = Object.freeze({ length: .82, girth: .87 });
 
 /** A vertex mask: 1 where at least one rendered triangle uses the vertex (no Set of millions of indices). */
 function referencedMask(geometry: BufferGeometry): Uint8Array {
@@ -388,23 +763,27 @@ function ownedGeometry(source: BufferGeometry, owned: readonly string[]): Buffer
   return geometry;
 }
 
-/** How much of the thumb's swing a point of the hand takes: 0 in the palm and the fingers, 1 at the thumb tip, fading along and around the thumb axis (a capsule from the pivot to the tip). */
-function thumbWeight(shape: FistShape, lateral: number, along: number, depth: number): number {
+/** How much of the thumb's swing a point of the hand takes: 0 in the palm and the fingers, 1 at the thumb tip, fading along and around the thumb axis (a capsule from the pivot to the tip); `ramp` is the share of the thumb's length over which it rises from the palm. */
+function thumbWeight(shape: FistShape, lateral: number, along: number, depth: number, ramp = .45): number {
   const thumb = shape.thumb!;
   const dLateral = lateral - thumb.lateral, dAlong = along - thumb.along;
   const reachAlong = dLateral * thumb.axisLateral + dAlong * thumb.axisAlong, off = Math.hypot(dLateral - reachAlong * thumb.axisLateral, dAlong - reachAlong * thumb.axisAlong, depth - thumb.depth);
-  return smoothstep(0, .45, reachAlong / thumb.length) * smoothstep(shape.edge - .004, shape.edge + .004, lateral) * (1 - smoothstep(thumb.radius, thumb.radius * 2, off));
+  return smoothstep(0, ramp, reachAlong / thumb.length) * smoothstep(shape.edge - .004, shape.edge + .004, lateral) * (1 - smoothstep(thumb.radius, thumb.radius * 2, off));
 }
 
-/** Swings the thumb across the palm about the point where it leaves it; weights fade it into the palm (behind the pivot) and away from the index finger. */
-function foldThumb(shape: FistShape, source: BufferGeometry, positions: BufferAttribute, normals: BufferAttribute | undefined, tangents: BufferAttribute | undefined, indices: BufferAttribute, weights: BufferAttribute, used: Uint8Array): void {
+/**
+ * Swings the thumb across the palm about the point where it leaves it, after scaling it to `proportions` (length along its axis about the pivot, girth about the axis);
+ * weights fade it into the palm (behind the pivot) and away from the index finger.
+ */
+function foldThumb(shape: FistShape, source: BufferGeometry, positions: BufferAttribute, normals: BufferAttribute | undefined, tangents: BufferAttribute | undefined, indices: BufferAttribute, weights: BufferAttribute, used: Uint8Array, proportions: ThumbProportions): void {
   const thumb = shape.thumb;
   if (!thumb) return;
   const point = new Vector3(), vector = new Vector3(), from = source.getAttribute('position');
   const cosine = Math.cos(THUMB_SWING), sine = Math.sin(THUMB_SWING);
-  const tipLateral = thumb.lateral + thumb.length * (thumb.axisLateral * cosine - thumb.axisAlong * sine);
-  const forward = shape.hinge * .95 - thumb.along - thumb.length * (thumb.axisLateral * sine + thumb.axisAlong * cosine);
-  const lift = Math.max(THUMB_CLEARANCE, centreAt(shape, tipLateral) + 2 * shape.radius + thumb.radius + THUMB_CLEARANCE - thumb.depth);
+  const length = thumb.length * proportions.length, radius = thumb.radius * proportions.girth;
+  const tipLateral = thumb.lateral + length * (thumb.axisLateral * cosine - thumb.axisAlong * sine);
+  const forward = shape.hinge * .95 - thumb.along - length * (thumb.axisLateral * sine + thumb.axisAlong * cosine);
+  const lift = Math.max(THUMB_CLEARANCE, centreAt(shape, tipLateral) + 2 * shape.radius + radius + THUMB_CLEARANCE - thumb.depth);
   const { direction, across, normal } = shape, attributes = [normals, tangents];
   for (let vertex = 0; vertex < positions.count; vertex++) {
     if (!used[vertex]) continue;
@@ -415,9 +794,15 @@ function foldThumb(shape: FistShape, source: BufferGeometry, positions: BufferAt
     const lateral = point.dot(across), along = point.dot(direction), depth = point.dot(normal);
     const w = thumbWeight(shape, lateral, along, depth);
     if (w <= 0) continue;
-    const dLateral = lateral - thumb.lateral, dAlong = along - thumb.along;
+    // Scale about the pivot and the thumb axis (at the pad's depth); the scale reaches full strength over the first 30% of the thumb, so the thenar base melts into the native palm.
+    let dLateral = lateral - thumb.lateral, dAlong = along - thumb.along, dDepth = depth - thumb.depth;
+    const reach = dLateral * thumb.axisLateral + dAlong * thumb.axisAlong, shrink = thumbWeight(shape, lateral, along, depth, THUMB_SCALE_RAMP);
+    const stretch = 1 - (1 - proportions.length) * shrink, thick = 1 - (1 - proportions.girth) * shrink;
+    dLateral = reach * stretch * thumb.axisLateral + (dLateral - reach * thumb.axisLateral) * thick;
+    dAlong = reach * stretch * thumb.axisAlong + (dAlong - reach * thumb.axisAlong) * thick;
+    dDepth *= thick;
     const newLateral = thumb.lateral + dLateral * cosine - dAlong * sine, newAlong = thumb.along + dLateral * sine + dAlong * cosine;
-    point.copy(direction).multiplyScalar(newAlong + forward).addScaledVector(across, newLateral).addScaledVector(normal, depth + lift).applyMatrix4(shape.fromHand);
+    point.copy(direction).multiplyScalar(newAlong + forward).addScaledVector(across, newLateral).addScaledVector(normal, thumb.depth + dDepth + lift).applyMatrix4(shape.fromHand);
     point.lerp(vector.fromBufferAttribute(from, vertex), 1 - w);
     positions.setXYZ(vertex, point.x, point.y, point.z);
     for (const attribute of attributes) {
@@ -479,10 +864,11 @@ function curlFingers(shape: FistShape, source: BufferGeometry, positions: Buffer
 
 /**
  * Closes both native hands into the fists of the model's martial-art stance by bending the existing finger geometry once (this rig has no finger bones).
+ * The thumbs fold across the fingers at `thumb` proportions of the native thumb (default `FIST_THUMB`; `{ length: 1, girth: 1 }` is the native thumb).
  * The edit owns a copy of the position/normal/tangent buffers only; skin weights stay those of the hand bone, so the fists follow every animation, and the
  * source geometry is never touched. `releaseHandGeometry(edit)` restores the original.
  */
-export function fitUnarmedFists(root: Object3D): HandGeometryEdit {
+export function fitUnarmedFists(root: Object3D, thumb: ThumbProportions = FIST_THUMB): HandGeometryEdit {
   let mesh: SkinnedMesh | undefined;
   root.traverse(node => { if (!mesh && node instanceof SkinnedMesh && HAND_SIDES.every(side => node.skeleton.getBoneByName(PropertyBinding.sanitizeNodeName(`mixamorig:${side}Hand`)))) mesh = node; });
   if (!mesh) throw new Error('The hero has no native skinned hands.');
@@ -494,7 +880,7 @@ export function fitUnarmedFists(root: Object3D): HandGeometryEdit {
   const edit = { mesh, original, edited };
   try {
     for (const shape of shapes) {
-      foldThumb(shape, original, positions, normals, tangents, indices, weights, used);
+      foldThumb(shape, original, positions, normals, tangents, indices, weights, used, thumb);
       curlFingers(shape, original, positions, normals, tangents, indices, weights, used);
     }
     edited.computeBoundingBox(); edited.computeBoundingSphere();

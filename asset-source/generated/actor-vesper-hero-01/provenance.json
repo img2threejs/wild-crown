@@ -15,7 +15,7 @@
     "decimate": "5674dcee-968a-4920-a8b9-428e53394b52"
   },
   "animationRework": {
-    "reason": "Replaced synthetic full-body/arm IK with captured Mixamo sword motion and native Tripo presets; timing, in-place pinning, loops and bounded wrist corrections only",
+    "reason": "Moonshade pressure choreography: captured loaded windups, accelerated contacts, carried overshoot and controlled settles; distinct sword-charge and summoning poses, knife flick and Shade command. Existing native skeleton, skin/clearance gates and normalized hit markers retained.",
     "newTripoTasks": 0,
     "newCredits": 0
   },
@@ -157,16 +157,27 @@
     "normalization": "top-4 by weight, non-negative, renormalised to sum 1 (float32)",
     "repairedBaseHash": "efc52ac237896a5505d40ec70a7f0ff959ae3c81f08e7504b1613dad2b7bfee7"
   },
-  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "outputHash": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc",
   "operation": "Offline captured-motion retarget through Rig/buildClip/appendClips; original native skinned mesh retained. Runtime and authoring import KatanaGrip.mjs.",
   "rigNotes": "The delivered rig is task 97eb3992 (biped, spec mixamo, -p model=rig-v1.0) on the full-quality model; the default v2.5 rig ignores the mixamo naming and was discarded (see discarded).",
   "grip": {
     "katanaGrip": {
       "length": 1.25,
-      "gripFromPommel": 0.2,
+      "gripFromPommel": 0.356,
+      "handleFromPommel": 0.2,
       "bladeLength": 0.76,
       "diagonalRadians": 2.45,
-      "edgeRadians": 1.18
+      "edgeRadians": 1.18,
+      "guardFromPommel": [
+        0.405,
+        0.445
+      ],
+      "guardRadius": 0.08,
+      "tsubaBackFromPommel": 0.4137,
+      "fuchi": {
+        "length": 0.008,
+        "scale": 1.35
+      }
     },
     "bladeDiagonalDegrees": 140.3746598070517,
     "bladeToMiddleFingerDegrees": 22.907574682065906,
@@ -182,11 +193,11 @@
       -0.373005
     ],
     "palmHand": [
-      -0.055898,
-      0.034703,
-      0.002205
+      0.010844,
+      0.036443,
+      0.02122
     ],
-    "shaftRadiusRig": 0.016384,
+    "shaftRadiusRig": 0.007222,
     "metacarpalHand": [
       -0.140246,
       0.868738,
@@ -198,9 +209,9 @@
       0.877585
     ],
     "palmNormalHand": [
-      -0.990113,
-      -0.12433,
-      -0.064946
+      0.990113,
+      0.12433,
+      0.064946
     ],
     "edgeAxisHand": [
       0.278835,
@@ -213,9 +224,9 @@
         0.363376,
         0.925554
       ],
-      "hingeRig": 0.020595280001362796,
-      "planeRig": 0.014674176909812892,
-      "radiusRig": 0.03621293645779568
+      "hingeRig": 0.03172922235470955,
+      "planeRig": 0.0013688992009214026,
+      "radiusRig": 0.0152773613910783
     }
   },
   "credits": {
@@ -491,12 +502,177 @@
         "RightToeBase": 8.1
       }
     },
+    "asset-source/mixamo/vesper/sheath-sword-1.fbx": {
+      "sha256": "230182fcdb245d17d9a95ee5dac3f62809151399af61e6a8aa204f55641bb453",
+      "duration": 1.2666666507720947,
+      "animation": "mixamo.com",
+      "unitScale": 0.01,
+      "frames": 39,
+      "bindPose": false,
+      "facingDegrees": 92.14,
+      "alignment": {
+        "Hips": 4.6,
+        "Spine": 4.5,
+        "Spine1": 4.5,
+        "Spine2": 5.7,
+        "Neck": 19.5,
+        "LeftShoulder": 14.6,
+        "LeftArm": 60.6,
+        "LeftForeArm": 59.1,
+        "RightShoulder": 11.2,
+        "RightArm": 60.9,
+        "RightForeArm": 62,
+        "LeftUpLeg": 9.4,
+        "LeftLeg": 4,
+        "RightUpLeg": 6.1,
+        "RightLeg": 8.1,
+        "Head": 19.5,
+        "LeftHand": 59.1,
+        "RightHand": 62,
+        "LeftFoot": 4,
+        "RightFoot": 8.1,
+        "LeftToeBase": 4,
+        "RightToeBase": 8.1
+      }
+    },
     "asset-source/mixamo/vesper/idle-to-sprint.fbx": {
       "sha256": "76497bfd34f935d391736c322ccebd1b1a0e845260ee6684502a6326c7e93a4f",
       "duration": 0.800000011920929,
       "animation": "mixamo.com",
       "unitScale": 0.01,
       "frames": 25,
+      "bindPose": false,
+      "facingDegrees": 92.14,
+      "alignment": {
+        "Hips": 4.6,
+        "Spine": 4.5,
+        "Spine1": 4.5,
+        "Spine2": 5.7,
+        "Neck": 19.5,
+        "LeftShoulder": 14.6,
+        "LeftArm": 60.6,
+        "LeftForeArm": 59.1,
+        "RightShoulder": 11.2,
+        "RightArm": 60.9,
+        "RightForeArm": 62,
+        "LeftUpLeg": 9.4,
+        "LeftLeg": 4,
+        "RightUpLeg": 6.1,
+        "RightLeg": 8.1,
+        "Head": 19.5,
+        "LeftHand": 59.1,
+        "RightHand": 62,
+        "LeftFoot": 4,
+        "RightFoot": 8.1,
+        "LeftToeBase": 4,
+        "RightToeBase": 8.1
+      }
+    },
+    "asset-source/mixamo/reactions/react-backward.fbx": {
+      "sha256": "b064739eb919d0f0d8795f7f316cc05618b5e2fbcacb6ef5c0d1dafb38a8a3c0",
+      "duration": 3.633333444595337,
+      "animation": "mixamo.com",
+      "unitScale": 0.01,
+      "frames": 110,
+      "bindPose": false,
+      "facingDegrees": 92.14,
+      "alignment": {
+        "Hips": 4.6,
+        "Spine": 4.5,
+        "Spine1": 4.5,
+        "Spine2": 5.7,
+        "Neck": 19.5,
+        "LeftShoulder": 14.6,
+        "LeftArm": 60.6,
+        "LeftForeArm": 59.1,
+        "RightShoulder": 11.2,
+        "RightArm": 60.9,
+        "RightForeArm": 62,
+        "LeftUpLeg": 9.4,
+        "LeftLeg": 4,
+        "RightUpLeg": 6.1,
+        "RightLeg": 8.1,
+        "Head": 19.5,
+        "LeftHand": 59.1,
+        "RightHand": 62,
+        "LeftFoot": 4,
+        "RightFoot": 8.1,
+        "LeftToeBase": 4,
+        "RightToeBase": 8.1
+      }
+    },
+    "asset-source/mixamo/reactions/getting-up-back.fbx": {
+      "sha256": "52e197c6849ee23e3478382763646d05ece583b135560f8e3fb23c2df3805e03",
+      "duration": 8.333333015441895,
+      "animation": "mixamo.com",
+      "unitScale": 0.01,
+      "frames": 251,
+      "bindPose": false,
+      "facingDegrees": 92.14,
+      "alignment": {
+        "Hips": 4.6,
+        "Spine": 4.5,
+        "Spine1": 4.5,
+        "Spine2": 5.7,
+        "Neck": 19.5,
+        "LeftShoulder": 14.6,
+        "LeftArm": 60.6,
+        "LeftForeArm": 59.1,
+        "RightShoulder": 11.2,
+        "RightArm": 60.9,
+        "RightForeArm": 62,
+        "LeftUpLeg": 9.4,
+        "LeftLeg": 4,
+        "RightUpLeg": 6.1,
+        "RightLeg": 8.1,
+        "Head": 19.5,
+        "LeftHand": 59.1,
+        "RightHand": 62,
+        "LeftFoot": 4,
+        "RightFoot": 8.1,
+        "LeftToeBase": 4,
+        "RightToeBase": 8.1
+      }
+    },
+    "asset-source/mixamo/reactions/fall-flat-hit-back.fbx": {
+      "sha256": "02b583f08362f2cd97a29f1d37778a1c7b0081eced15a91ddd2dc64fa0b3412f",
+      "duration": 2.5333333015441895,
+      "animation": "mixamo.com",
+      "unitScale": 0.01,
+      "frames": 77,
+      "bindPose": false,
+      "facingDegrees": 92.14,
+      "alignment": {
+        "Hips": 4.6,
+        "Spine": 4.5,
+        "Spine1": 4.5,
+        "Spine2": 5.7,
+        "Neck": 19.5,
+        "LeftShoulder": 14.6,
+        "LeftArm": 60.6,
+        "LeftForeArm": 59.1,
+        "RightShoulder": 11.2,
+        "RightArm": 60.9,
+        "RightForeArm": 62,
+        "LeftUpLeg": 9.4,
+        "LeftLeg": 4,
+        "RightUpLeg": 6.1,
+        "RightLeg": 8.1,
+        "Head": 19.5,
+        "LeftHand": 59.1,
+        "RightHand": 62,
+        "LeftFoot": 4,
+        "RightFoot": 8.1,
+        "LeftToeBase": 4,
+        "RightToeBase": 8.1
+      }
+    },
+    "asset-source/mixamo/reactions/getting-up-stomach.fbx": {
+      "sha256": "ead02bf768fb1d97870f820aa7b199bd199f702b59af36ea1cd6108f32250675",
+      "duration": 8.600000381469727,
+      "animation": "mixamo.com",
+      "unitScale": 0.01,
+      "frames": 259,
       "bindPose": false,
       "facingDegrees": 92.14,
       "alignment": {
@@ -600,16 +776,22 @@
         "overlapSeconds": 0
       },
       "ground": true,
+      "arm": {
+        "clear": {
+          "margin": 0.08,
+          "floor": 0.06,
+          "maxDegrees": 30,
+          "maxPitch": -12
+        },
+        "smooth": 1,
+        "afterWrist": true,
+        "loop": true
+      },
       "wrist": {
         "maxSwing": 45,
         "maxCorrection": 45,
         "smooth": 1,
-        "clear": {
-          "maxPush": 45,
-          "floor": 0.05,
-          "margin": 0.05,
-          "axes": 120
-        },
+        "clear": false,
         "carry": {
           "pitch": -15,
           "aheadMin": 0.25
@@ -648,15 +830,22 @@
         "overlapSeconds": 0
       },
       "ground": true,
+      "arm": {
+        "clear": {
+          "margin": 0.04,
+          "floor": 0.06,
+          "maxDegrees": 25,
+          "maxPitch": -11
+        },
+        "smooth": 1,
+        "afterWrist": true,
+        "loop": true
+      },
       "wrist": {
         "maxSwing": 45,
         "maxCorrection": 45,
         "smooth": 0,
-        "clear": {
-          "maxPush": 45,
-          "floor": 0.05,
-          "margin": 0.04
-        },
+        "clear": false,
         "carry": {
           "pitch": -12
         },
@@ -699,15 +888,22 @@
         ]
       ],
       "airborne": true,
+      "arm": {
+        "clear": {
+          "margin": 0.04,
+          "floor": 0.05,
+          "maxDegrees": 30,
+          "maxPitch": -11
+        },
+        "smooth": 1,
+        "afterWrist": true,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 45,
         "maxCorrection": 45,
         "smooth": 1,
-        "clear": {
-          "maxPush": 45,
-          "floor": 0.05,
-          "margin": 0.04
-        },
+        "clear": false,
         "carry": {
           "pitch": -15
         },
@@ -730,6 +926,15 @@
         0.9
       ],
       "limits": "JOINT_LIMITS",
+      "arm": {
+        "clear": {
+          "margin": 0.12,
+          "floor": 0.06,
+          "maxDegrees": 15
+        },
+        "smooth": 1,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 25,
         "maxCorrection": 30,
@@ -752,6 +957,16 @@
         7
       ],
       "limits": "JOINT_LIMITS",
+      "arm": {
+        "clear": {
+          "margin": 0.06,
+          "floor": 0.05,
+          "maxDegrees": 30
+        },
+        "smooth": 2,
+        "afterWrist": true,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 25,
         "maxCorrection": 30,
@@ -774,6 +989,15 @@
         8.46666622
       ],
       "limits": "JOINT_LIMITS",
+      "arm": {
+        "clear": {
+          "margin": 0.02,
+          "floor": 0.04,
+          "maxDegrees": 35
+        },
+        "smooth": 2,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 30,
         "maxCorrection": 30,
@@ -831,15 +1055,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -850,6 +1076,10 @@
             [
               6,
               1.1666666666666667
+            ],
+            [
+              10,
+              1.2436666666666667
             ],
             [
               18,
@@ -863,7 +1093,7 @@
         6
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -896,6 +1126,15 @@
         "loop": false
       },
       "crossfadeTicks": 3,
+      "arm": {
+        "clear": {
+          "margin": 0.02,
+          "floor": 0.04,
+          "maxDegrees": 20
+        },
+        "smooth": 2,
+        "loop": false
+      },
       "origin": "mixamo"
     },
     {
@@ -924,31 +1163,41 @@
               3.05
             ],
             "kind": "cut",
-            "preRate": 1,
-            "postRate": 0.5,
+            "preRate": 1.35,
+            "postRate": 0.45,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
-              "preRate": 1,
-              "postRate": 0.5
+              "preRate": 1.35,
+              "postRate": 0.45,
+              "accent": true
             }
           },
           "keys": [
             [
               0,
-              2.8666666666666667
+              2.8316666666666666
+            ],
+            [
+              2,
+              2.9059166666666667
             ],
             [
               6,
               2.966666666666667
             ],
             [
+              10,
+              2.9981666666666666
+            ],
+            [
               18,
-              3.066666666666667
+              3.0566666666666666
             ]
           ]
         }
@@ -958,7 +1207,7 @@
         6
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -967,6 +1216,15 @@
         "maxCorrection": 30,
         "smooth": 0,
         "thrusts": [],
+        "loop": false
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.04,
+          "floor": 0.05,
+          "maxDegrees": 20
+        },
+        "smooth": 1,
         "loop": false
       },
       "origin": "mixamo"
@@ -997,31 +1255,41 @@
               0.9
             ],
             "kind": "cut",
-            "preRate": 0.6,
-            "postRate": 0.3,
+            "preRate": 0.8,
+            "postRate": 0.45,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 0.8666666666666667,
-              "donorTipMetresPerSecond": 34.14080759966591,
-              "donorContactAngle": 28.459642007009727,
+              "donorTipMetresPerSecond": 29.077115176345778,
+              "donorContactAngle": 27.131143024316692,
               "contactWithinMax": true,
-              "preRate": 0.6,
-              "postRate": 0.3
+              "preRate": 0.8,
+              "postRate": 0.45,
+              "accent": true
             }
           },
           "keys": [
             [
               0,
-              0.7866666666666667
+              0.76
+            ],
+            [
+              4,
+              0.8186666666666667
             ],
             [
               8,
               0.8666666666666667
             ],
             [
+              12,
+              0.9034166666666666
+            ],
+            [
               22,
-              0.9366666666666668
+              0.9716666666666667
             ]
           ]
         }
@@ -1031,7 +1299,7 @@
         8
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -1063,6 +1331,16 @@
         "thrusts": [],
         "loop": false
       },
+      "arm": {
+        "frontal": {
+          "ticks": [
+            8
+          ],
+          "degrees": 12
+        },
+        "smooth": 0,
+        "loop": false
+      },
       "origin": "mixamo"
     },
     {
@@ -1091,27 +1369,42 @@
               1.25
             ],
             "kind": "cut",
-            "preRate": 0.3,
+            "preRate": 0.8,
             "postRate": 0.8,
+            "accent": true,
+            "settleHold": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
-              "preRate": 0.3,
-              "postRate": 0.8
+              "preRate": 0.8,
+              "postRate": 0.8,
+              "accent": true
             }
           },
           "keys": [
             [
               0,
-              1.1166666666666667
+              1.0333333333333334
+            ],
+            [
+              6,
+              1.1066666666666667
             ],
             [
               10,
               1.1666666666666667
+            ],
+            [
+              14,
+              1.26
+            ],
+            [
+              20,
+              1.4333333333333333
             ],
             [
               30,
@@ -1125,7 +1418,7 @@
         10
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -1157,6 +1450,16 @@
         "thrusts": [],
         "loop": false
       },
+      "arm": {
+        "frontal": {
+          "ticks": [
+            10
+          ],
+          "degrees": 12
+        },
+        "smooth": 0,
+        "loop": false
+      },
       "origin": "mixamo"
     },
     {
@@ -1186,15 +1489,17 @@
             "kind": "cut",
             "preRate": 0.3,
             "postRate": 0.8,
+            "accent": false,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
               "preRate": 0.3,
-              "postRate": 0.8
+              "postRate": 0.8,
+              "accent": false
             }
           },
           "keys": [
@@ -1233,15 +1538,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2,
-              "donorTipMetresPerSecond": 20.548626369707556,
-              "donorContactAngle": 29.595707893867853,
+              "donorTipMetresPerSecond": 17.12328943713777,
+              "donorContactAngle": 27.211584869766586,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1250,8 +1557,16 @@
               1.875
             ],
             [
+              14,
+              1.94375
+            ],
+            [
               18,
               2
+            ],
+            [
+              22,
+              2.0320833333333335
             ],
             [
               23,
@@ -1280,15 +1595,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1297,8 +1614,16 @@
               2.841666666666667
             ],
             [
+              24,
+              2.910416666666667
+            ],
+            [
               28,
               2.966666666666667
+            ],
+            [
+              32,
+              2.9987500000000002
             ],
             [
               33,
@@ -1327,15 +1652,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": false,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": false
             }
           },
           "keys": [
@@ -1374,15 +1701,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2,
-              "donorTipMetresPerSecond": 20.548626369707556,
-              "donorContactAngle": 29.595707893867853,
+              "donorTipMetresPerSecond": 17.12328943713777,
+              "donorContactAngle": 27.211584869766586,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1391,8 +1720,16 @@
               1.875
             ],
             [
+              44,
+              1.94375
+            ],
+            [
               48,
               2
+            ],
+            [
+              52,
+              2.0320833333333335
             ],
             [
               53,
@@ -1419,23 +1756,25 @@
               0.8
             ],
             "kind": "thrust",
-            "preRate": 0.45,
-            "postRate": 0.45,
+            "preRate": 0.55,
+            "postRate": 0.55,
+            "accent": false,
             "resolved": {
               "kind": "thrust",
               "reversed": false,
               "sourceSeconds": 0.7333333333333333,
-              "donorTipMetresPerSecond": 9.670429509560144,
-              "donorContactAngle": 19.261958335611943,
+              "donorTipMetresPerSecond": 8.912444238700171,
+              "donorContactAngle": 16.261240586290217,
               "contactWithinMax": true,
-              "preRate": 0.45,
-              "postRate": 0.45
+              "preRate": 0.55,
+              "postRate": 0.55,
+              "accent": false
             }
           },
           "keys": [
             [
               53,
-              0.6958333333333333
+              0.6875
             ],
             [
               58,
@@ -1443,7 +1782,7 @@
             ],
             [
               62,
-              0.7633333333333333
+              0.7699999999999999
             ]
           ]
         },
@@ -1468,15 +1807,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1487,6 +1828,10 @@
             [
               66,
               2.966666666666667
+            ],
+            [
+              70,
+              3.0051666666666668
             ],
             [
               72,
@@ -1506,7 +1851,7 @@
         66
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -1562,6 +1907,30 @@
         ],
         "loop": false
       },
+      "arm": {
+        "frontal": {
+          "ticks": [
+            8,
+            38
+          ],
+          "degrees": 12
+        },
+        "smooth": 0,
+        "clear": {
+          "margin": 0.02,
+          "floor": 0.04,
+          "maxDegrees": 20
+        },
+        "thrusts": [
+          {
+            "tick": 58,
+            "from": 53,
+            "to": 62,
+            "degrees": 8
+          }
+        ],
+        "loop": false
+      },
       "origin": "mixamo"
     },
     {
@@ -1591,15 +1960,17 @@
             "kind": "cut",
             "preRate": 0.3,
             "postRate": 0.8,
+            "accent": false,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
               "preRate": 0.3,
-              "postRate": 0.8
+              "postRate": 0.8,
+              "accent": false
             }
           },
           "keys": [
@@ -1638,15 +2009,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2,
-              "donorTipMetresPerSecond": 20.548626369707556,
-              "donorContactAngle": 29.595707893867853,
+              "donorTipMetresPerSecond": 17.12328943713777,
+              "donorContactAngle": 27.211584869766586,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1655,8 +2028,16 @@
               1.85
             ],
             [
+              20,
+              1.9325
+            ],
+            [
               24,
               2
+            ],
+            [
+              28,
+              2.0385
             ],
             [
               30,
@@ -1685,15 +2066,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1702,8 +2085,16 @@
               2.816666666666667
             ],
             [
+              32,
+              2.899166666666667
+            ],
+            [
               36,
               2.966666666666667
+            ],
+            [
+              40,
+              3.0051666666666668
             ],
             [
               42,
@@ -1732,15 +2123,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": false,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 1.1666666666666667,
-              "donorTipMetresPerSecond": 27.42276429832554,
-              "donorContactAngle": 21.238803348331494,
+              "donorTipMetresPerSecond": 22.480366571279962,
+              "donorContactAngle": 19.468484946234003,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": false
             }
           },
           "keys": [
@@ -1779,15 +2172,17 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 1.1,
+            "accent": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2,
-              "donorTipMetresPerSecond": 20.548626369707556,
-              "donorContactAngle": 29.595707893867853,
+              "donorTipMetresPerSecond": 17.12328943713777,
+              "donorContactAngle": 27.211584869766586,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 1.1
+              "postRate": 1.1,
+              "accent": true
             }
           },
           "keys": [
@@ -1796,8 +2191,16 @@
               1.85
             ],
             [
+              56,
+              1.9325
+            ],
+            [
               60,
               2
+            ],
+            [
+              64,
+              2.0385
             ],
             [
               66,
@@ -1826,15 +2229,17 @@
             "kind": "thrust",
             "preRate": 0.45,
             "postRate": 0.45,
+            "accent": false,
             "resolved": {
               "kind": "thrust",
               "reversed": false,
               "sourceSeconds": 0.7333333333333333,
-              "donorTipMetresPerSecond": 9.670429509560144,
-              "donorContactAngle": 19.261958335611943,
+              "donorTipMetresPerSecond": 8.912444238700171,
+              "donorContactAngle": 16.261240586290217,
               "contactWithinMax": true,
               "preRate": 0.45,
-              "postRate": 0.45
+              "postRate": 0.45,
+              "accent": false
             }
           },
           "keys": [
@@ -1873,15 +2278,18 @@
             "kind": "cut",
             "preRate": 1.5,
             "postRate": 0.15,
+            "accent": true,
+            "settleHold": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
               "preRate": 1.5,
-              "postRate": 0.15
+              "postRate": 0.15,
+              "accent": true
             }
           },
           "keys": [
@@ -1890,8 +2298,20 @@
               2.816666666666667
             ],
             [
+              80,
+              2.899166666666667
+            ],
+            [
               84,
               2.966666666666667
+            ],
+            [
+              88,
+              2.9981666666666666
+            ],
+            [
+              94,
+              3.0566666666666666
             ],
             [
               120,
@@ -1912,7 +2332,7 @@
         110
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -1969,6 +2389,25 @@
         "loop": false
       },
       "crossfadeTicks": 4,
+      "arm": {
+        "frontal": {
+          "ticks": [
+            12,
+            48
+          ],
+          "degrees": 12
+        },
+        "smooth": 0,
+        "thrusts": [
+          {
+            "tick": 72,
+            "from": 66,
+            "to": 78,
+            "degrees": 4
+          }
+        ],
+        "loop": false
+      },
       "origin": "mixamo"
     },
     {
@@ -1997,31 +2436,46 @@
               3.05
             ],
             "kind": "cut",
-            "preRate": 0.3,
-            "postRate": 0.25,
+            "preRate": 0.5,
+            "postRate": 0.28,
+            "accent": true,
+            "settleHold": true,
             "resolved": {
               "kind": "cut",
               "reversed": false,
               "sourceSeconds": 2.966666666666667,
-              "donorTipMetresPerSecond": 29.33595700817657,
-              "donorContactAngle": 18.881926600527905,
+              "donorTipMetresPerSecond": 25.130496644338837,
+              "donorContactAngle": 18.149305758288055,
               "contactWithinMax": true,
-              "preRate": 0.3,
-              "postRate": 0.25
+              "preRate": 0.5,
+              "postRate": 0.28,
+              "accent": true
             }
           },
           "keys": [
             [
               0,
-              2.9066666666666667
+              2.8666666666666667
+            ],
+            [
+              8,
+              2.921666666666667
             ],
             [
               12,
               2.966666666666667
             ],
             [
+              16,
+              3.005866666666667
+            ],
+            [
+              22,
+              3.078666666666667
+            ],
+            [
               36,
-              3.066666666666667
+              3.078666666666667
             ]
           ]
         }
@@ -2031,7 +2485,7 @@
         12
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "lead": 1,
@@ -2040,6 +2494,15 @@
         "maxCorrection": 30,
         "smooth": 0,
         "thrusts": [],
+        "loop": false
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.04,
+          "floor": 0.05,
+          "maxDegrees": 20
+        },
+        "smooth": 1,
         "loop": false
       },
       "origin": "mixamo"
@@ -2070,31 +2533,46 @@
               0.8
             ],
             "kind": "thrust",
-            "preRate": 0.45,
-            "postRate": 0.45,
+            "preRate": 0.6,
+            "postRate": 0.5,
+            "accent": true,
+            "settleHold": true,
             "resolved": {
               "kind": "thrust",
               "reversed": false,
               "sourceSeconds": 0.7333333333333333,
-              "donorTipMetresPerSecond": 9.670429509560144,
-              "donorContactAngle": 19.261958335611943,
+              "donorTipMetresPerSecond": 8.912444238700171,
+              "donorContactAngle": 16.261240586290217,
               "contactWithinMax": true,
-              "preRate": 0.45,
-              "postRate": 0.45
+              "preRate": 0.6,
+              "postRate": 0.5,
+              "accent": true
             }
           },
           "keys": [
             [
               0,
-              0.6733333333333332
+              0.6533333333333333
+            ],
+            [
+              4,
+              0.6973333333333332
             ],
             [
               8,
               0.7333333333333333
             ],
             [
+              12,
+              0.7858333333333333
+            ],
+            [
+              18,
+              0.8833333333333333
+            ],
+            [
               26,
-              0.8683333333333333
+              0.8833333333333333
             ]
           ]
         }
@@ -2104,7 +2582,7 @@
         8
       ],
       "pin": {
-        "maxVertical": 0.12
+        "maxVertical": 0.16
       },
       "wrist": {
         "maxSwing": 25,
@@ -2117,6 +2595,18 @@
             "to": 26
           }
         ],
+        "loop": false
+      },
+      "arm": {
+        "thrusts": [
+          {
+            "tick": 8,
+            "from": 0,
+            "to": 26,
+            "degrees": 4
+          }
+        ],
+        "smooth": 0,
         "loop": false
       },
       "origin": "mixamo"
@@ -2135,6 +2625,15 @@
         2.6333333
       ],
       "limits": "JOINT_LIMITS",
+      "arm": {
+        "clear": {
+          "margin": 0.14,
+          "floor": 0.06,
+          "maxDegrees": 35
+        },
+        "smooth": 1,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 30,
         "maxCorrection": 30,
@@ -2142,7 +2641,8 @@
         "clear": {
           "maxPush": 30,
           "floor": 0.05,
-          "margin": 0.04
+          "margin": 0.08,
+          "axes": 120
         },
         "loop": false
       },
@@ -2156,28 +2656,56 @@
       "parts": [
         {
           "source": {
-            "donor": "mixamo:asset-source/mixamo/vesper/melee-idle.fbx",
+            "donor": "mixamo:asset-source/mixamo/vesper/sheath-sword-1.fbx",
             "animation": "mixamo.com",
-            "file": "asset-source/mixamo/vesper/melee-idle.fbx"
+            "file": "asset-source/mixamo/vesper/sheath-sword-1.fbx"
           },
           "ticks": [
             0,
             60
           ],
-          "window": [
-            0.5,
-            1.5
+          "keys": [
+            [
+              0,
+              0.1
+            ],
+            [
+              30,
+              0.22
+            ],
+            [
+              60,
+              0.1
+            ]
           ]
         }
       ],
       "limits": "JOINT_LIMITS",
       "loop": {
-        "overlapSeconds": 0.3
+        "overlapSeconds": 0
+      },
+      "pin": {
+        "maxVertical": 0.12
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.05,
+          "floor": 0.06,
+          "maxDegrees": 30
+        },
+        "smooth": 1,
+        "loop": true
       },
       "wrist": {
-        "maxSwing": 25,
-        "maxCorrection": 30,
-        "smooth": 2,
+        "maxSwing": 45,
+        "maxCorrection": 45,
+        "smooth": 1,
+        "clear": {
+          "maxPush": 45,
+          "floor": 0.05,
+          "margin": 0.04,
+          "axes": 120
+        },
         "loop": true
       },
       "origin": "mixamo"
@@ -2190,23 +2718,44 @@
       "parts": [
         {
           "source": {
-            "donor": "mixamo:asset-source/mixamo/vesper/melee-idle.fbx",
-            "animation": "mixamo.com",
-            "file": "asset-source/mixamo/vesper/melee-idle.fbx"
+            "donor": "d",
+            "animation": "cast_a_spell"
           },
           "ticks": [
             0,
             60
           ],
-          "window": [
-            1.5,
-            2.5
+          "keys": [
+            [
+              0,
+              1.5
+            ],
+            [
+              30,
+              1.63
+            ],
+            [
+              60,
+              1.5
+            ]
           ]
         }
       ],
       "limits": "JOINT_LIMITS",
       "loop": {
-        "overlapSeconds": 0.3
+        "overlapSeconds": 0
+      },
+      "pin": {
+        "maxVertical": 0.12
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.14,
+          "floor": 0.06,
+          "maxDegrees": 35
+        },
+        "smooth": 1,
+        "loop": true
       },
       "wrist": {
         "maxSwing": 25,
@@ -2214,7 +2763,7 @@
         "smooth": 2,
         "loop": true
       },
-      "origin": "mixamo"
+      "origin": "tripo"
     },
     {
       "clip": "vesper-kunai-fan",
@@ -2236,20 +2785,37 @@
           "keys": [
             [
               0,
-              1.683
+              1.72
+            ],
+            [
+              6,
+              1.75
             ],
             [
               9,
               1.833
             ],
             [
+              12,
+              1.93
+            ],
+            [
               24,
-              2.083
+              1.97
             ]
           ]
         }
       ],
       "limits": "JOINT_LIMITS",
+      "arm": {
+        "clear": {
+          "margin": 0.05,
+          "floor": 0.08,
+          "maxDegrees": 30
+        },
+        "smooth": 1,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 30,
         "maxCorrection": 30,
@@ -2272,10 +2838,9 @@
       "parts": [
         {
           "source": {
-            "donor": "e",
-            "animation": "pitch_baseball"
+            "donor": "d",
+            "animation": "cast_a_spell"
           },
-          "mirror": true,
           "ticks": [
             0,
             40
@@ -2283,28 +2848,57 @@
           "keys": [
             [
               0,
-              1.7
+              1.3
+            ],
+            [
+              5,
+              1.4
             ],
             [
               8,
-              1.833
+              1.6333333
+            ],
+            [
+              16,
+              1.9
+            ],
+            [
+              29,
+              2
+            ],
+            [
+              30,
+              2.12
             ],
             [
               40,
-              2.3
+              2.2
             ]
           ]
         }
       ],
       "limits": "JOINT_LIMITS",
+      "pin": {
+        "maxVertical": 0.12
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.14,
+          "floor": 0.06,
+          "maxDegrees": 35
+        },
+        "smooth": 1,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 30,
         "maxCorrection": 30,
-        "smooth": 0,
+        "smooth": 2,
         "clear": {
           "maxPush": 30,
-          "floor": 0.07,
-          "margin": 0.04
+          "floor": 0.05,
+          "margin": 0.08,
+          "axes": 120
         },
         "loop": false
       },
@@ -2326,9 +2920,27 @@
             0,
             24
           ],
-          "window": [
-            0.1,
-            0.5
+          "keys": [
+            [
+              0,
+              0.1
+            ],
+            [
+              5,
+              0.14
+            ],
+            [
+              10,
+              0.3
+            ],
+            [
+              16,
+              0.45
+            ],
+            [
+              24,
+              0.5
+            ]
           ]
         }
       ],
@@ -2336,6 +2948,16 @@
       "airborne": true,
       "pin": {
         "maxVertical": 0.12
+      },
+      "arm": {
+        "clear": {
+          "margin": 0.13,
+          "floor": 0.05,
+          "maxDegrees": 25
+        },
+        "smooth": 1,
+        "afterWrist": true,
+        "loop": false
       },
       "wrist": {
         "maxSwing": 45,
@@ -2437,6 +3059,16 @@
       "pin": {
         "maxVertical": 0.08
       },
+      "arm": {
+        "clear": {
+          "margin": 0.06,
+          "floor": 0.05,
+          "maxDegrees": 25
+        },
+        "smooth": 1,
+        "afterWrist": true,
+        "loop": false
+      },
       "wrist": {
         "maxSwing": 45,
         "maxCorrection": 45,
@@ -2457,6 +3089,332 @@
         "loop": false
       },
       "origin": "tripo"
+    },
+    {
+      "clip": "aren-knockdown",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/react-backward.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/react-backward.fbx"
+          },
+          "ticks": [
+            0,
+            44
+          ],
+          "keys": [
+            [
+              0,
+              1.55
+            ],
+            [
+              30,
+              2.3
+            ],
+            [
+              44,
+              2.7
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/getting-up-back.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-back.fbx"
+          },
+          "mirror": true,
+          "ticks": [
+            44,
+            90
+          ],
+          "keys": [
+            [
+              44,
+              3.05
+            ],
+            [
+              48,
+              3.05
+            ],
+            [
+              90,
+              3.05
+            ]
+          ],
+          "yaw": -25.4
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "dp": true,
+        "cap": 35,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "changeWeight": 1,
+        "fps": 240,
+        "loop": false
+      },
+      "wrist": {
+        "dp": true,
+        "cap": 45,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "fps": 240,
+        "loop": false
+      },
+      "lie": {
+        "holdFrom": 48
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.9439,
+      "origin": "mixamo"
+    },
+    {
+      "clip": "aren-knockdown-forward",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/fall-flat-hit-back.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/fall-flat-hit-back.fbx"
+          },
+          "ticks": [
+            0,
+            90
+          ],
+          "keys": [
+            [
+              0,
+              0.25
+            ],
+            [
+              30,
+              1
+            ],
+            [
+              48,
+              1.95
+            ],
+            [
+              90,
+              1.95
+            ]
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "dp": true,
+        "cap": 35,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "changeWeight": 1,
+        "fps": 240,
+        "loop": false
+      },
+      "wrist": {
+        "dp": true,
+        "cap": 45,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "fps": 240,
+        "loop": false
+      },
+      "lie": {
+        "holdFrom": 48
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.3196,
+      "origin": "mixamo"
+    },
+    {
+      "clip": "aren-getup",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/getting-up-back.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-back.fbx"
+          },
+          "mirror": true,
+          "ticks": [
+            0,
+            66
+          ],
+          "keys": [
+            [
+              0,
+              3.05
+            ],
+            [
+              8,
+              3.3
+            ],
+            [
+              26,
+              4.3
+            ],
+            [
+              42,
+              5
+            ],
+            [
+              58,
+              5.85
+            ],
+            [
+              66,
+              5.95
+            ]
+          ],
+          "yaw": -25.4
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "dp": true,
+        "cap": 50,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "changeWeight": 1,
+        "fps": 240,
+        "refine": {
+          "arm": 10,
+          "wrist": 15,
+          "margin": 0.03,
+          "floor": 0.03
+        },
+        "loop": false
+      },
+      "wrist": {
+        "dp": true,
+        "cap": 75,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "fps": 240,
+        "loop": false
+      },
+      "getup": {
+        "from": "aren-knockdown",
+        "blend": 8,
+        "travel": [
+          26,
+          56
+        ],
+        "idleFrom": 50
+      },
+      "origin": "mixamo"
+    },
+    {
+      "clip": "aren-getup-forward",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/getting-up-stomach.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "ticks": [
+            0,
+            30
+          ],
+          "keys": [
+            [
+              0,
+              2.35
+            ],
+            [
+              8,
+              2.45
+            ],
+            [
+              28,
+              3.2
+            ]
+          ],
+          "yaw": 9.7
+        },
+        {
+          "source": {
+            "donor": "mixamo:asset-source/mixamo/reactions/getting-up-stomach.fbx",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "ticks": [
+            28,
+            66
+          ],
+          "keys": [
+            [
+              28,
+              4.2
+            ],
+            [
+              54,
+              5.4
+            ],
+            [
+              66,
+              5.6
+            ]
+          ],
+          "yaw": 9.7
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "dp": true,
+        "cap": 35,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "changeWeight": 1,
+        "fps": 240,
+        "loop": false
+      },
+      "wrist": {
+        "dp": true,
+        "cap": 45,
+        "axes": 10,
+        "margin": 0.012,
+        "floor": 0.03,
+        "fps": 240,
+        "loop": false
+      },
+      "getup": {
+        "from": "aren-knockdown-forward",
+        "blend": 8,
+        "travel": [
+          8,
+          46
+        ],
+        "idleFrom": 50
+      },
+      "origin": "mixamo"
     }
   ]
 }

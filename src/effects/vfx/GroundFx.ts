@@ -34,6 +34,7 @@ uniform float uAperture;
 uniform float uProgress;
 uniform float uIntensity;
 uniform float uAlpha;
+uniform float uTell;
 uniform float uSeed;
 uniform vec3 uColorA;
 uniform vec3 uColorB;
@@ -84,6 +85,11 @@ float pattern(vec2 q, vec2 p) {
     return clamp(n * 0.55 + 0.6 * veins * veins * veins * veins * veins * veins + 0.4 * smoothstep(0.86, 0.98, ridges(q * 2.2)), 0.0, 1.0);
   }
   if (uElement == 2) return clamp(fbm(q * 1.4 + vec2(uTime * 0.22, -uTime * 0.17)) * 0.7 + bubbles(q, uTime), 0.0, 1.0);
+  if (uElement == 14) {
+    // Water: moving concentric ripples, unlike ice's static fractured veins.
+    float wave = sin(length(p) * 10.0 - uTime * 6.0 + fbm(q * 0.8) * 2.0);
+    return clamp(0.3 + 0.55 * pow(max(0.0, wave), 3.0) + 0.2 * fbm(q + uTime * 0.3), 0.0, 1.0);
+  }
   if (uElement == 3) return smoothstep(0.45, 0.9, noise(vec2(q.x * 2.6, q.y * 0.5 - uTime * 3.2)));
   if (uElement == 4 || uElement == 5) return max(smoothstep(0.84, 0.97, ridges(q * 1.4)), fbm(q * 0.9) * 0.45);
   if (uElement == 7) {
@@ -142,6 +148,17 @@ void main() {
     if (uElement == 2) base = mix(uColorA * 0.6, uColorB * 0.45, bubbles(q, uTime));
     color = base * (reveal * (0.25 + 0.55 * tex) + front * 0.55) * uIntensity;
     alpha = mask * uAlpha * (0.2 + 0.6 * tex) * max(reveal, front) * 0.5;
+    if (uTell > 0.0) {
+      // Contrast-aware tell (maps over dark ground): a more even, denser body fill plus a broken rim just inside the hazard's edge, so
+      // the whole marked ground reads even where the additive fill has little to add to. The rim never leaves the footprint (d < 1).
+      float lift = clamp(uTell, 0.0, 1.0);
+      float cover = max(reveal, front);
+      float evenTex = mix(tex, 1.0, 0.5 * lift);
+      alpha = max(alpha, mask * uAlpha * (0.2 + 0.6 * evenTex) * cover * 0.5 * (1.0 + 2.0 * lift));
+      float rim = gauss((d - 0.86) / 0.06) * (0.5 + 0.5 * noise(q * 3.0 + uSeed)) * (0.3 + 0.7 * smoothstep(0.0, 0.6, uProgress)) * uAlpha * (1.0 - step(0.999, d));
+      color = mix(color, uColorHot * (0.7 + 0.7 * uTell), clamp(rim, 0.0, 1.0));
+      alpha = max(alpha, rim * 0.8);
+    }
   } else if (uMode == 1) {
     float x = (d - uProgress) / 0.075;
     float fade = 1.0 - uProgress;
@@ -188,7 +205,7 @@ void main() {
 
 type GroundUniforms = {
   uTime: IUniform<number>; uMode: IUniform<number>; uElement: IUniform<number>; uShape: IUniform<number>; uFillAxis: IUniform<number>;
-  uHalf: IUniform<Vector2>; uRound: IUniform<number>; uAperture: IUniform<number>; uProgress: IUniform<number>; uIntensity: IUniform<number>; uAlpha: IUniform<number>;
+  uHalf: IUniform<Vector2>; uRound: IUniform<number>; uAperture: IUniform<number>; uProgress: IUniform<number>; uIntensity: IUniform<number>; uAlpha: IUniform<number>; uTell: IUniform<number>;
   uSeed: IUniform<number>; uBounds: IUniform<Vector4>; uColorA: IUniform<Color>; uColorB: IUniform<Color>; uColorHot: IUniform<Color>; uGlow: IUniform<Color>;
 };
 
@@ -213,6 +230,8 @@ export class GroundFx {
   private readonly geometry = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
   private readonly slots: GroundSlot[] = [];
   private readonly pools: Record<PoolName, GroundSlot[]> = { surface: [], shock: [], decal: [] };
+  /** `standard` = leave the kits' authored `tell` value alone; `high` raises its floor and lifts the ceiling so fill slots remain readable on light ground without changing footprints, deadlines, or strobe frequency. */
+  private telegraphIntensity: 'standard' | 'high' = 'standard';
 
   constructor() {
     this.group.name = 'vfx-ground';
@@ -244,15 +263,32 @@ export class GroundFx {
     u.uBounds.value.set(footprint.minX, footprint.maxX, footprint.minZ, footprint.maxZ);
     u.uColorA.value.copy(palette.a); u.uColorB.value.copy(palette.b); u.uColorHot.value.copy(palette.hot); u.uGlow.value.copy(PALETTE[glow].hot);
     u.uSeed.value = (owner * 0.6180339 + time * 0.37) % 1;
-    u.uProgress.value = 0; u.uIntensity.value = peak; u.uAlpha.value = slot.auto ? 0 : 1; u.uTime.value = time;
+    u.uProgress.value = 0; u.uIntensity.value = peak; u.uAlpha.value = slot.auto ? 0 : 1; u.uTell.value = 0; u.uTime.value = time;
     mesh.visible = true;
     return slot;
   }
 
-  /** Manual drive for fill/burn slots owned by a live cue. */
-  drive(slot: GroundSlot, progress: number, intensity: number, alpha: number): void {
+  /** Manual drive for fill/burn slots owned by a live cue. `tell` (0..1, default 0) turns on the contrast-aware fill for ground that is dark under additive light. */
+  drive(slot: GroundSlot, progress: number, intensity: number, alpha: number, tell = 0): void {
     slot.uniforms.uProgress.value = progress; slot.uniforms.uIntensity.value = intensity; slot.uniforms.uAlpha.value = alpha;
+    // Only anticipation-style fills (kind 'fill') get the accessibility `telegraphIntensity` lift. Burn, shock and decal keep their authored `tell`.
+    slot.uniforms.uTell.value = slot.kind === 'fill' ? this.adjustedTell(tell) : tell;
   }
+
+  /**
+   * Maps the kit-authored `tell` through the current accessibility `telegraphIntensity`:
+   * `standard` passes through unchanged; `high` lifts the floor (so light-ground fills, which the kits
+   * author at `tell = 0`, gain the contrast-aware fill) and tightens the dark-ground ceiling so the
+   * lift never bleeds into a white-out. Never overwrites non-fill slots.
+   */
+  private adjustedTell(tell: number): number {
+    if (this.telegraphIntensity !== 'high') return Math.max(0, Math.min(1, tell));
+    const clamped = Math.max(0, Math.min(1, tell));
+    return Math.max(0, Math.min(0.95, 0.4 + clamped * 0.6875));
+  }
+
+  /** Routes the accessibility `telegraphIntensity` setting to this layer; live fill slots take the new lift on their next `drive()`. */
+  setTelegraphIntensity(intensity: 'standard' | 'high'): void { this.telegraphIntensity = intensity; }
 
   release(slot: GroundSlot): void { slot.active = false; slot.owner = -1; slot.mesh.visible = false; }
 
@@ -296,7 +332,7 @@ export class GroundFx {
     for (let i = 0; i < count; i++) {
       const uniforms: GroundUniforms = {
         uTime: { value: 0 }, uMode: { value: 0 }, uElement: { value: 0 }, uShape: { value: 0 }, uFillAxis: { value: 0 },
-        uHalf: { value: new Vector2(1, 1) }, uRound: { value: 4 }, uAperture: { value: 0 }, uProgress: { value: 0 }, uIntensity: { value: 1 }, uAlpha: { value: 0 },
+        uHalf: { value: new Vector2(1, 1) }, uRound: { value: 4 }, uAperture: { value: 0 }, uProgress: { value: 0 }, uIntensity: { value: 1 }, uAlpha: { value: 0 }, uTell: { value: 0 },
         uSeed: { value: 0 }, uBounds: { value: new Vector4(-0.5, 0.5, -0.5, 0.5) },
         uColorA: { value: new Color() }, uColorB: { value: new Color() }, uColorHot: { value: new Color() }, uGlow: { value: new Color() },
       };

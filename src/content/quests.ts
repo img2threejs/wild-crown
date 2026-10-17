@@ -9,6 +9,7 @@ import {
   REGION_IDS,
   REGIONAL_OBLIGATION_IDS,
 } from "../../packages/campaign/src/index.js";
+import { SIDE_QUEST_DELIVERIES } from "./side-quests.js";
 
 const objective = (
   questId: string,
@@ -55,28 +56,28 @@ const mainSeeds: QuestSeed[] = [
         "fallen-scout",
         "tend-vara",
         "Tend to Vara",
-        "Care for the injured scout before asking her to guide you.",
+        "Care for the injured scout at the waterfall basin before asking her to guide you.",
         "rescue",
-        ["tend:vara"],
-        ["vara"],
+        ["tend:canopy-vara"],
+        ["canopy-vara"],
       ),
       objective(
         "fallen-scout",
         "mark-threat",
         "Mark a visible threat",
-        "Use Bird Mark on a threat in Aren’s sight.",
+        "Command Vara with the companion wheel to mark the thornback howler in your sight.",
         "interact",
         ["semantic:bird-mark"],
-        ["poacher-scout"],
+        ["canopy-howler"],
       ),
       objective(
         "fallen-scout",
         "answer-warning",
-        "Answer an off-screen warning",
-        "Use Vara’s warning to face the approaching danger.",
+        "Answer Vara's warning",
+        "When Vara warns of danger behind you, turn to face the threat.",
         "interact",
         ["semantic:warning-response"],
-        ["vara"],
+        ["canopy-vara"],
       ),
     ],
     dialogue: ["fallen-scout-open", "fallen-scout-close"],
@@ -87,34 +88,34 @@ const mainSeeds: QuestSeed[] = [
     region: "whispering-canopy",
     chapter: 1,
     description:
-      "Recover the stolen fragment by reading Koro’s route across canopy and ground.",
+      "Chase the thief across the root stair and the vine bridges until you find the trail of the fragment he carried away.",
     objectives: [
       objective(
         "thief-in-the-branches",
         "vine-route",
         "Follow the vine route",
-        "Traverse the real vine route between ground and canopy.",
+        "Climb the root stair and cross the vine bridge over the gorge.",
         "traversal",
-        ["traversal:vine-route"],
+        ["interaction:canopy-vine-route"],
         ["canopy-vine-route"],
       ),
       objective(
         "thief-in-the-branches",
         "vault-branch",
-        "Vault the fallen branch",
-        "Use the staff vault at the marked branch affordance.",
+        "Vault the fallen boulder",
+        "Jump or vault the boulder on the fig ledge, or walk around it, and mark the far side.",
         "traversal",
-        ["traversal:canopy-vault"],
+        ["interaction:canopy-vault"],
         ["canopy-vault"],
       ),
       objective(
         "thief-in-the-branches",
-        "canopy-fragment",
-        "Recover the Canopy fragment",
-        "Receive the fragment Koro carried away.",
-        "collect",
-        ["fragment:heartroot-canopy"],
-        ["heartroot-canopy"],
+        "koro-trail",
+        "Find Koro's trail",
+        "Read the scratches on the roost's edge where the fragment thief crossed toward the temple.",
+        "investigate",
+        ["interaction:koro-trail"],
+        ["koro-trail"],
       ),
     ],
     dialogue: ["branches-open", "branches-close"],
@@ -125,13 +126,13 @@ const mainSeeds: QuestSeed[] = [
     region: "whispering-canopy",
     chapter: 1,
     description:
-      "Repair poisoned water, free trapped monkeys and broker a seed-sharing accord.",
+      "Repair poisoned water, free trapped monkeys, broker a seed-sharing accord and cleanse the thorn that drives Koro.",
     objectives: [
       objective(
         "empty-orchard",
         "water-flow",
         "Restore the water flow",
-        "Repair the waterwheel so the orchard receives clean water.",
+        "Strike the jam out of the orchard waterwheel so clean water reaches the trees.",
         "ecology",
         ["ecology:canopy-waterwheel"],
         ["canopy-waterwheel"],
@@ -140,16 +141,16 @@ const mainSeeds: QuestSeed[] = [
         "empty-orchard",
         "monkey-rescue",
         "Rescue trapped monkeys",
-        "Open the trap and escort the monkeys to safety.",
+        "Open the traps in the roost's seed alcove.",
         "rescue",
-        ["rescue:monkey-rescue"],
+        ["interaction:monkey-rescue"],
         ["monkey-rescue"],
       ),
       objective(
         "empty-orchard",
         "share-seeds",
         "Bring seeds from the birds",
-        "Carry the seed baskets between the two communities.",
+        "Carry the birds' seed baskets from the alcove to the orchard.",
         "interact",
         ["interaction:orchard-seeds"],
         ["orchard-seeds"],
@@ -158,7 +159,7 @@ const mainSeeds: QuestSeed[] = [
         "empty-orchard",
         "koro-thorn",
         "Find the Black Sap thorn",
-        "Inspect Koro’s shoulder; the thorn explains the rage but not the drought.",
+        "Inspect Koro's shoulder; the thorn explains the rage but not the drought.",
         "investigate",
         ["investigate:koro-thorn"],
         ["koro-thorn"],
@@ -171,6 +172,33 @@ const mainSeeds: QuestSeed[] = [
         "encounter",
         ["encounter:encounter-koro"],
         ["koro"],
+      ),
+      objective(
+        "empty-orchard",
+        "canopy-fragment",
+        "Receive the Canopy fragment",
+        "Take the fragment Koro carried, now that he is himself again.",
+        "collect",
+        ["fragment:heartroot-canopy"],
+        ["heartroot-canopy"],
+      ),
+      objective(
+        "empty-orchard",
+        "koro-pact",
+        "Seal the pact with Koro",
+        "Choose the Bond or the Dominion of the pact. The choice is permanent.",
+        "choice",
+        ["choice:koro-pact"],
+        ["koro-pact"],
+      ),
+      objective(
+        "empty-orchard",
+        "restore-canopy",
+        "Wake the orchard",
+        "Cleanse the last sap-sick seed bed with the shared seed once water, monkeys, seeds and Koro are settled.",
+        "ecology",
+        ["restoration:whispering-canopy"],
+        ["canopy-restoration"],
       ),
     ],
     consequences: ["canopy_water_seed_accord"],
@@ -187,7 +215,7 @@ const mainSeeds: QuestSeed[] = [
         "tracks-without-blood",
         "broken-bamboo",
         "Inspect the broken bamboo and traps",
-        "Compare snapped stems, crushed traps and the direction of travel.",
+        "Compare snapped stems, the crushed jaw trap and the direction of travel on the west path.",
         "investigate",
         ["investigate:bamboo-tracks"],
         ["bamboo-tracks"],
@@ -196,18 +224,18 @@ const mainSeeds: QuestSeed[] = [
         "tracks-without-blood",
         "tali-trail",
         "Follow Tali’s fur",
-        "Traverse the safe side of the trail rather than walking through the snare lane.",
+        "Take the long clear path north of the snare lane; the short lane is lined with armed traps.",
         "traversal",
-        ["traversal:tali-trail"],
+        ["interaction:tali-trail"],
         ["tali-trail"],
       ),
       objective(
         "tracks-without-blood",
         "camp-scent",
         "Trace the hunters’ scent",
-        "Locate the camp without attacking the first silhouette.",
+        "Reach the overlook above the camp without attacking the first silhouette.",
         "investigate",
-        ["investigate:camp-scent"],
+        ["investigate:hunter-camp"],
         ["hunter-camp"],
       ),
     ],
@@ -219,22 +247,22 @@ const mainSeeds: QuestSeed[] = [
     region: "blood-bamboo-valley",
     chapter: 2,
     description:
-      "Disable the camp, nonlethally subdue its hunters and rescue Tali.",
+      "Disable the camp, nonlethally subdue its three hunters and rescue Tali.",
     objectives: [
       objective(
         "the-ash-hunters",
         "camp-approach",
         "Reach the camp approach",
-        "Use the traversable concealed route.",
+        "Study the camp from cover before anyone sees you.",
         "traversal",
-        ["traversal:camp-approach"],
+        ["interaction:camp-approach"],
         ["camp-approach"],
       ),
       objective(
         "the-ash-hunters",
         "disable-camp",
         "Disable the traps and signal rig",
-        "Stop the camp from endangering the escape route.",
+        "Strike the extraction rig's controls with a heavy attack to stop every trap in the valley.",
         "interact",
         ["interaction:camp-disable"],
         ["hunter-camp"],
@@ -243,7 +271,7 @@ const mainSeeds: QuestSeed[] = [
         "the-ash-hunters",
         "subdue-hunters",
         "Subdue the hunters nonlethally",
-        "Use restraints and disarms; lethal combat is not available.",
+        "Take down both spear hunters and the net thrower; no one dies.",
         "encounter",
         ["encounter:camp-hunters"],
         ["hunter-melee-west", "hunter-melee-east", "hunter-ranged"],
@@ -254,7 +282,7 @@ const mainSeeds: QuestSeed[] = [
         "Rescue Tali safely",
         "Open the cage, protect the cub and let her leave with a safe path.",
         "rescue",
-        ["rescue:tali"],
+        ["rescue:tali:tali-cage"],
         ["tali"],
       ),
     ],
@@ -266,43 +294,34 @@ const mainSeeds: QuestSeed[] = [
     region: "blood-bamboo-valley",
     chapter: 2,
     description:
-      "Protect Tali, read Asha’s attack patterns and cleanse the corruption amplifying her fear.",
+      "Protect Tali, read Asha’s attack patterns, cleanse the corruption amplifying her fear and cleanse the source that fed the snares.",
     objectives: [
       objective(
         "a-mothers-roar",
         "follow-tali",
         "Follow Tali into the bamboo",
-        "Read Tali’s chosen path to the refuge.",
+        "Take the clear southern arc, not the trap diagonal, to the den’s edge.",
         "traversal",
-        ["traversal:tali-refuge"],
+        ["interaction:tali-refuge"],
         ["tali-refuge"],
       ),
       objective(
         "a-mothers-roar",
         "protect-tali",
         "Protect Tali during the encounter",
-        "Keep the cub in the announced safe shelter through Asha’s attack.",
+        "Keep the cub in the shelter, outside Asha’s charge lane, through the Bamboo Charge.",
         "rescue",
-        ["rescue:tali-safe"],
+        ["rescue:tali:tali-shelter"],
         ["tali"],
       ),
       objective(
         "a-mothers-roar",
         "asha-phase",
         "Survive Asha’s phases",
-        "Read and counter the pounce, charge and ground wave.",
+        "Read and counter the stalking pounce, the corruption rage and the wave.",
         "encounter",
-        ["encounter:asha-phase-clear"],
+        ["encounter:mother-roar"],
         ["asha"],
-      ),
-      objective(
-        "a-mothers-roar",
-        "snare-source",
-        "Neutralize the snare source",
-        "Remove the supply source, not only the snares beside the trail.",
-        "ecology",
-        ["ecology:snare-source"],
-        ["snare-source"],
       ),
       objective(
         "a-mothers-roar",
@@ -321,6 +340,24 @@ const mainSeeds: QuestSeed[] = [
         "collect",
         ["fragment:heartroot-fang"],
         ["heartroot-fang"],
+      ),
+      objective(
+        "a-mothers-roar",
+        "asha-pact",
+        "Seal the pact with Asha",
+        "Choose the Bond or the Dominion of the pact. The choice is permanent.",
+        "choice",
+        ["choice:asha-pact"],
+        ["asha-pact"],
+      ),
+      objective(
+        "a-mothers-roar",
+        "snare-source",
+        "Neutralize the snare source",
+        "Cleanse the Black Sap source behind the snares, not only the snares beside the trail.",
+        "ecology",
+        ["restoration:blood-bamboo-valley"],
+        ["snare-source"],
       ),
     ],
     consequences: ["bamboo_tali_safe", "bamboo_snare_source"],
@@ -399,15 +436,6 @@ const mainSeeds: QuestSeed[] = [
         ["rescue:pack-scouts"],
         ["pack-scouts"],
       ),
-      objective(
-        "two-packs",
-        "leadership",
-        "Resolve leadership after hearing both positions",
-        "Choose Ruun, Luma, or Dominion.",
-        "choice",
-        ["choice:pack-leadership"],
-        ["pack-leadership"],
-      ),
     ],
     dialogue: ["two-packs-open"],
   },
@@ -443,16 +471,16 @@ const mainSeeds: QuestSeed[] = [
         "Counter the howl",
         "Use the marked timing gap; companions are optional.",
         "encounter",
-        ["encounter:ruun-phase-clear"],
+        ["encounter:encounter-ruun"],
         ["ruun"],
       ),
       objective(
         "the-alpha-below",
         "settlement",
         "Resolve the pack settlement",
-        "Honor the leadership decision already made by the pack.",
+        "After cleansing Ruun, let the pack choose Ruun or Luma, or impose Dominion.",
         "choice",
-        ["choice:pack-resolution"],
+        ["choice:pack-leadership"],
         ["pack-settlement"],
       ),
       objective(
@@ -601,10 +629,10 @@ const mainSeeds: QuestSeed[] = [
         "the-mire-maw",
         "restore-river",
         "Restore the river and receive Shadow",
-        "Commit the change after the source is neutralized.",
+        "Restore the river after neutralizing its source, then receive the Shadow fragment from Nyra.",
         "ecology",
-        ["restoration:mistveil-basin"],
-        ["mistveil-basin"],
+        ["restoration:mistveil-basin", "fragment:heartroot-shadow"],
+        ["mistveil-restoration", "heartroot-shadow"],
       ),
     ],
     consequences: ["mistveil_river_source"],
@@ -710,7 +738,7 @@ const mainSeeds: QuestSeed[] = [
         "Break the signal anchor and counter the roar",
         "A player-only counter always exists.",
         "encounter",
-        ["encounter:solkar-phase-clear"],
+        ["encounter:encounter-solkar"],
         ["solkar"],
       ),
       objective(
@@ -743,22 +771,25 @@ const optionalSeeds: readonly [
   string,
   string,
   string,
+  readonly string[],
 ][] = [
   [
     "the-empty-nest",
     "The Empty Nest",
     "whispering-canopy",
     "Rebuild the Heartroot branch and guide the displaced birds to a safe roost.",
-    "interaction:nest-branch",
+    "ecology:nest-branch",
     "Birds return to the orchard and add a scout perch.",
+    ["hub:bird-roost"],
   ],
   [
     "the-last-cub",
     "The Last Cub",
     "blood-bamboo-valley",
     "Protect the nursery and escort its young along a snare-free route; this does not repeat Tali’s rescue.",
-    "rescue:nursery-escort",
-    "The nursery route becomes safe and Asha can commit to the Wild March.",
+    "rescue:nursery-cub",
+    "The nursery cub remains safe at the sheltered hollow.",
+    ["side:nursery-safe"],
   ],
   [
     "a-pack-divided",
@@ -767,14 +798,16 @@ const optionalSeeds: readonly [
     "Coordinate a shared hunt between generations without crossing the rival den.",
     "coordinate:shared-hunt",
     "The pack gains a cooperative patrol.",
+    ["side:shared-hunt"],
   ],
   [
     "the-silent-hunter",
     "The Silent Hunter",
     "mistveil-basin",
     "Trace the panther conflict and mark a protected corridor rather than forcing a confrontation.",
-    "investigate:protected-corridor",
+    "coordinate:protected-corridor",
     "The hidden route opens and the counter lesson becomes available.",
+    ["side:protected-corridor", "mistveil_nyra_hidden_route"],
   ],
   [
     "a-king-without-subjects",
@@ -783,22 +816,25 @@ const optionalSeeds: readonly [
     "Let Solkar hear one voluntary refusal and answer it without a command.",
     "choice:solkar-listens",
     "Supports voluntary Crown settlement; exile uses council mediation.",
+    ["side:crown-refusal"],
   ],
   [
     "river-of-black-sap",
     "River of Black Sap",
     "mistveil-basin",
-    "Choose a fast dam release that floods one low route or a slower repair that keeps it open.",
-    "choice:river-route",
+    "Cleanse the tributary filter after the irreversible river-route decision is settled.",
+    "ecology:tributary-filter",
     "Terrain and the travel route change with the chosen repair.",
+    ["side:river-cleared"],
   ],
   [
     "the-hunters-remorse",
     "The Hunter’s Remorse",
     "mistveil-basin",
     "If Marek was cleansed, ask him to dismantle the line; otherwise use the field ledger and do it yourself.",
-    "interaction:trap-line-neutralized",
+    "ecology:trap-line-neutralized",
     "Marek can help but is never required for Hollow access.",
+    ["side:trap-line-cleared"],
   ],
   [
     "seeds-between-branches",
@@ -807,6 +843,7 @@ const optionalSeeds: readonly [
     "Carry seed baskets in the requested order so neither bird nor monkey stores are exhausted.",
     "ecology:seed-exchange",
     "Seed nursery and orchard resources balance.",
+    ["hub:seed-nursery"],
   ],
   [
     "the-broken-snare-trail",
@@ -815,6 +852,7 @@ const optionalSeeds: readonly [
     "Follow visible traps to their supply source and disable the source, not just the loops on the route.",
     "ecology:snare-supply",
     "Safe traversal replaces the trap-laden shortcut.",
+    ["side:snare-supply-cleared"],
   ],
   [
     "winter-stores",
@@ -823,6 +861,7 @@ const optionalSeeds: readonly [
     "Move supplies to a wind-sheltered cache before coordinating both pack patrols.",
     "ecology:winter-cache",
     "A sheltered cache supports the return march.",
+    ["side:winter-cache"],
   ],
   [
     "the-last-crossing",
@@ -831,14 +870,16 @@ const optionalSeeds: readonly [
     "Open the migration corridor only after the herd can cross outside the lion hunting ground.",
     "traversal:herd-crossing",
     "Migration route and encounter approach change.",
+    ["side:herd-passage"],
   ],
   [
     "roots-we-share",
     "Roots We Share",
-    "the-grove",
-    "Move the water map and training markers so the Refuge retains Grove services.",
-    "coordinate:refuge-services",
-    "The services remain available after Chapter 6.",
+    "refuge",
+    "Organize the relocated water and training stations, then plant a shared garden.",
+    "coordinate:shared-refuge-stations",
+    "A shared garden and spring take root beside the relocated services.",
+    ["hub:refuge-garden"],
   ],
 ];
 
@@ -863,7 +904,7 @@ const returnSeeds: readonly [
     "A Path for the Young",
     "blood-bamboo-valley",
     "Escort Tali and the nursery through the remaining snare corridor; Asha’s formation follows the completed obligation.",
-    "rescue:nursery-return",
+    "rescue:tali:nursery-return",
     "Tali and Asha’s coalition formations change.",
   ],
   [
@@ -969,14 +1010,14 @@ const prologue = quest({
       "Hear the night of a thousand roars",
       "Observe fleeing animals and locate the sound beneath Greenwake.",
       "investigate",
-      ["semantic:prologue-roars"],
+      ["semantic:greenwake-roars"],
       ["greenwake-roars"],
     ),
     objective(
       "prologue",
       "tend-vara",
       "Tend to Vara",
-      "Reach the fallen hornbill and tend the wing that brought Sky.",
+      "Reach the fallen harpy eagle and tend the wing that brought Sky.",
       "rescue",
       ["tend:vara"],
       ["vara"],
@@ -994,7 +1035,7 @@ const prologue = quest({
       "prologue",
       "take-staff",
       "Receive the Warden Staff",
-      "Accept Yara’s staff and use it to open the settlement gate.",
+      "Accept Yara’s staff and learn its first interaction.",
       "interact",
       ["interaction:warden-staff"],
       ["warden-staff"],
@@ -1007,6 +1048,15 @@ const prologue = quest({
       "encounter",
       ["encounter:greenwake-boar"],
       ["corrupted-boar"],
+    ),
+    objective(
+      "prologue",
+      "open-gate",
+      "Open the settlement gate",
+      "With the boar cleansed, use the Warden Staff on the ridge gate to open the way to the forest exit.",
+      "interact",
+      ["interaction:greenwake-gate"],
+      ["greenwake-gate"],
     ),
   ],
 });
@@ -1025,7 +1075,7 @@ const fall = quest({
       "Protect Tali during possession",
       "Move her to cover before the announced possession pulse.",
       "rescue",
-      ["rescue:tali"],
+      ["encounter:encounter-fall"],
       ["tali"],
     ),
     objective(
@@ -1145,34 +1195,43 @@ const orun = quest({
 });
 const mainQuests = mainSeeds.map(quest);
 const optionalQuests = optionalSeeds.map(
-  ([id, title, region, description, event, callback]) =>
-    buildExtraQuest(
-      id,
-      title,
-      region,
-      region === "whispering-canopy"
-        ? 1
-        : region === "blood-bamboo-valley"
-          ? 2
-          : region === "moonpine-ridge"
-            ? 3
-            : region === "mistveil-basin"
-              ? 4
-              : region === "sunmane-expanse"
-                ? 5
-                : 6,
-      description,
-      event,
-      callback,
-      true,
-      [id + "-opening", id + "-resolution"],
-    ),
+  ([id, title, region, description, event, callback, consequences]) => {
+    const built = buildExtraQuest(
+      id, title, region,
+      region === "whispering-canopy" ? 1 : region === "blood-bamboo-valley" ? 2
+        : region === "moonpine-ridge" ? 3 : region === "mistveil-basin" ? 4 : region === "sunmane-expanse" ? 5 : 6,
+      description, event, callback, true, [id + "-opening", id + "-resolution"], consequences,
+    );
+    const objectives: ObjectiveDefinition[] = built.objectives.map(item => ({
+      ...item, targetIds: [item.id === id + ":action" ? id + "-action" : id + "-evidence"],
+    }));
+    if (id === "river-of-black-sap") objectives.splice(1, 0, objective(
+      id, "river-route", "Settle the river route", "Honor the irreversible choice before treating the tributary.",
+      "choice", ["choice:river-route"], ["river-route"],
+    ));
+    const deliveries = (SIDE_QUEST_DELIVERIES[region] ?? []).filter(delivery => delivery.questId === id);
+    objectives.splice(1, 0, ...deliveries.map((delivery, index) => objective(
+      id, delivery.id,
+      id === "winter-stores" ? "Carry supplies to the winter shelter" : index === 0 ? "Carry the birds' seed basket" : "Carry the monkeys' seed basket",
+      "Pick up the basket and carry it to the marked station. Leaving the region before delivery returns it to its starting point.",
+      "interact", [delivery.movedFactId], [delivery.id],
+    )));
+    if (id === "winter-stores") objectives.splice(objectives.length - 1, 0, objective(
+      id, "shared-patrol", "Coordinate the two generations",
+      "Complete A Pack Divided so both generations can support the winter cache.",
+      "coordinate", ["coordinate:shared-hunt"], ["a-pack-divided-action"],
+    ));
+    return { ...built, objectives };
+  },
 );
 const returnQuests = returnSeeds.map(
   ([id, title, region, description, event, callback]) =>
     buildExtraQuest(id, title, region, 7, description, event, callback, false, [
       id + "-opening",
       id + "-resolution",
+    ], [
+      // Each return beat commits a real consequence fact so routes and formation consumers see it.
+      "return:" + id + ":committed",
     ]),
 );
 export const QUESTS: readonly QuestDefinition[] = [
@@ -1198,6 +1257,42 @@ const factionChoice = (
 export const CAMPAIGN_CHOICES: Readonly<
   Record<string, readonly ChoiceDefinition[]>
 > = {
+  "koro-pact": [
+    {
+      id: "bond",
+      title: "Bond: a respectful pact",
+      description:
+        "Koro joins you as a willing friend and his people share the orchard. Your Bond with Koro grows. Nothing is taken from him, and he can leave if the pact is broken. This choice is permanent.",
+      effects: ["pact:koro:bond"],
+      irreversible: true,
+    },
+    {
+      id: "dominion",
+      title: "Dominion: command Koro",
+      description:
+        "Koro joins because you command him. His special move is stronger and the possession risk is shown on his portrait. The Dominion is written into this journey's history and can never be undone, and it closes the Living Pact ending. Koro is unharmed and stays alive. This choice is permanent.",
+      effects: ["pact:koro:dominion"],
+      irreversible: true,
+    },
+  ],
+  "asha-pact": [
+    {
+      id: "bond",
+      title: "Bond: a respectful pact",
+      description:
+        "Asha and Tali stay together under your protection, and Asha walks beside you by choice. Your Bond with Asha grows. Nothing is taken from her. This choice is permanent.",
+      effects: ["pact:asha:bond"],
+      irreversible: true,
+    },
+    {
+      id: "dominion",
+      title: "Dominion: command Asha",
+      description:
+        "Asha follows your command and her special move is stronger; the possession risk is shown on her portrait. The Dominion is written into this journey's history and can never be undone, and it closes the Living Pact ending. Asha and Tali are unharmed and stay together. This choice is permanent.",
+      effects: ["pact:asha:dominion"],
+      irreversible: true,
+    },
+  ],
   "pack-leadership": [
     factionChoice(
       "ruun",
@@ -1374,6 +1469,12 @@ export const CAMPAIGN_CHOICES: Readonly<
       "Listen without command",
       "Let a voluntary refusal stand without changing the answer.",
       ["solkar-heard-refusal"],
+    ),
+    factionChoice(
+      "council-mediation",
+      "Mediate through the council",
+      "Let the voluntary council hear the refusal without recalling an absent or exiled Solkar.",
+      ["council-heard-refusal"],
     ),
   ],
   "crown-council": [

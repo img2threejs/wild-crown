@@ -7,6 +7,7 @@ import { Footprint } from './footprint.js';
 import { PALETTE, UMBRAL_RIM, UMBRAL_SMOKE, type VfxElement } from './palette.js';
 import type { BeamSlot } from './RibbonFx.js';
 import { emitPetalRing, emitPetalSwirl } from './PetalFx.js';
+import { BAMBOO_AURAS } from './BambooKits.js';
 import { implode } from './hero-fx.js';
 import { emitStormFeather, VENOM } from './CanopyKits.js';
 import { GROVE_AURAS } from './GroveKits.js';
@@ -29,11 +30,11 @@ const TETHER_ACTION = /^(aren-root-tether|yara-binding-vines)$/;
 const AIR_STEP_PROGRESS = 0.38;
 const AIR_STEP_GAP = 0.1;
 const GRAVITY = 9.8;
-export type AuraTheme = 'ember' | 'frost' | 'earth' | 'howler' | 'storm' | 'toxic';
+export type AuraTheme = 'ember' | 'frost' | 'earth' | 'howler' | 'storm' | 'toxic' | 'heartlight';
 const AURAS: Readonly<Record<string, AuraTheme>> = {
   'corrupted-boar': 'ember', 'greenwake-sap-stalker': 'frost', 'greenwake-root-rammer': 'earth',
   'canopy-howler': 'howler', 'canopy-hornbill': 'storm', 'canopy-mire-viper': 'toxic',
-  ...GROVE_AURAS, ...MOONPINE_AURAS, ...MISTVEIL_AURAS,
+  ...GROVE_AURAS, ...MOONPINE_AURAS, ...MISTVEIL_AURAS, ...BAMBOO_AURAS,
 };
 
 interface PlayerState {
@@ -89,7 +90,8 @@ export class ActorVfx {
     for (const actor of actors) {
       if (actor.id === 'aren' || (!player && actor.allegiance === 'player')) player = actor;
       const theme = AURAS[actor.id];
-      if (theme && actor.visible && !actor.downed) this.aura(actor, theme, dt);
+      // A story boss's corruption aura ends with the cleanse: only a hostile, uncleansed body wears it.
+      if (theme && actor.visible && !actor.downed && (!BAMBOO_AURAS[actor.id] || (actor.allegiance === 'hostile' && actor.chapterStatus !== 'cleansed' && actor.chapterStatus !== 'reunion'))) this.aura(actor, theme, dt);
     }
     if (player && player.visible && !player.downed) this.updatePlayer(player, dt);
     else this.releaseTether();
@@ -365,7 +367,7 @@ export class ActorVfx {
     this.rootPosition(actor, this.position);
     const body = root ? this.bodies.get(root) : DEFAULT_BODY;
     let acc = this.auraAcc.get(actor.id);
-    if (!acc) { acc = new Float64Array(4); this.auraAcc.set(actor.id, acc); }
+    if (!acc) { acc = new Float64Array(5); this.auraAcc.set(actor.id, acc); }
     const boost = this.isCharging(actor.id) ? 3 : 1, scale = dt * boost * (vfx.reducedEffects ? 0.35 : 1);
     const p = this.position, r = body.radius, h = body.height, owner = ACTOR_VFX_OWNER;
     if (theme === 'ember') {
@@ -400,6 +402,15 @@ export class ActorVfx {
       for (let n = this.auraDue(acc, 1, 6 * scale); n > 0; n--) this.drip(p.x + vfx.range(-r, r) * 0.6, p.y + h * vfx.range(0.3, 0.7), p.z + vfx.range(-r, r) * 0.6, 'poison');
       for (let n = this.auraDue(acc, 2, 4 * scale); n > 0; n--) vfx.bubbles(p.x, p.y, p.z, 1, r, owner, 'poison');
       for (let n = this.auraDue(acc, 3, 3 * scale); n > 0; n--) vfx.glow(p.x + vfx.range(-r, r), p.y + h * vfx.range(0.2, 0.9), p.z + vfx.range(-r, r), 0.1, 0.8, 'poison', 0.5, owner, 0.25);
+    } else if (theme === 'heartlight') {
+      // Hollowheart: the howler's grit and weeping sap, and the cracked heart-light in the chest: a warm amber glow that breathes (and flares while it charges) and embers lifting off it.
+      for (let n = this.auraDue(acc, 0, 4 * scale); n > 0; n--) vfx.smoke(p.x, p.y, p.z, 1, r, 0.12, 0.9, 1.2, VFX_COLORS.dust, 0.28, owner, 0.3);
+      for (let n = this.auraDue(acc, 1, 4 * scale); n > 0; n--) this.drip(p.x + vfx.range(-r, r) * 0.6, p.y + h * vfx.range(0.3, 0.7), p.z + vfx.range(-r, r) * 0.6, 'sap');
+      const hx = p.x + actor.facing.x * r * 0.5, hz = p.z + actor.facing.z * r * 0.5, hy = p.y + h * 0.62;
+      for (let n = this.auraDue(acc, 2, 6 * dt * (vfx.reducedEffects ? 0.6 : 1) * (1 + (boost - 1) * 0.25)); n > 0; n--) vfx.glow(hx, hy, hz, h * 0.3, 0.9, 'fire', 0.3 * Math.min(boost, 1.5), owner, 0);
+      for (let n = this.auraDue(acc, 3, 5 * scale); n > 0; n--) vfx.embers(hx, hy, hz, 1, r * 0.35, 0.9, -0.5, owner);
+      // A wide, very faint amber backlight of the heart-light round the body (low alpha, amber, never white): it lifts the guardian's silhouette off the dark sap-mud floor without veiling it.
+      for (let n = this.auraDue(acc, 4, 2 * dt * (vfx.reducedEffects ? 0.6 : 1)); n > 0; n--) vfx.glow(p.x, p.y + h * 0.35, p.z, h * 1.3, 1.2, 'fire', 0.028, owner, 0);
     } else {
       for (let n = this.auraDue(acc, 0, 5 * scale); n > 0; n--) vfx.smoke(p.x, p.y, p.z, 1, r, 0.15, 0.9, 1.2, VFX_COLORS.dust, 0.28, owner, 0.3);
       for (let n = this.auraDue(acc, 1, 2.5 * scale); n > 0; n--) vfx.leaves(p.x, p.y + h * 0.5, p.z, 1, r, 0, 0, owner);

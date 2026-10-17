@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-sunmane-stone-terrace",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "c2851644-8802-4b21-807b-e4934d5136d1"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00932,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-sunmane-stone-terrace-model-01/tripo-out/prop-sunmane-stone-terrace-model-c2851644/model.glb",
+      "sha256": "5bdc12e8c211238c1264f3f58d136385eb9c7c7c5414ffb17844d34cf038ae54"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-sunmane-stone-terrace-runtime-01/prop-sunmane-stone-terrace.glb",
+    "sha256": "fc1108a8201e6113f98c8c985cc00c47fbc8a2bc6f42ca769a574034e7f382af",
+    "bytes": 2816212,
+    "vertices": 18002,
+    "triangles": 17998,
+    "boundsMin": [
+      -0.48447,
+      -0.08924,
+      -0.49195
+    ],
+    "boundsMax": [
+      0.48815,
+      0.0893,
+      0.49284
+    ],
+    "worldBoundsMin": [
+      -0.48447,
+      -0.08924,
+      -0.49195
+    ],
+    "worldBoundsMax": [
+      0.48815,
+      0.0893,
+      0.49284
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 8277776,
+      "toBytes": 909913
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 2056495,
+      "toBytes": 690602
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 4920728,
+      "toBytes": 421498
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1931278,
+      "trianglesAfter": 17998,
+      "relativeError": 0.0017298023449257016
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 1032383,
+      "verticesAfter": 18002
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

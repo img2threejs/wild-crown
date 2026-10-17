@@ -12,11 +12,11 @@ import type { WardenFx } from './WardenFx.js';
 const UP = new Vector3(0, 1, 0);
 const VIOLET: Tint = { hot: PALETTE.umbral.hot, body: PALETTE.umbral.b };
 const CRIMSON: Tint = UMBRAL_RIM;
-/** Slash look of the three iai steps: leading-edge tilt (rad), blade bank (rad) and whether a second, mirrored blade crosses the first (an X cut). */
-const IAI_STYLE: Readonly<Record<string, { readonly tilt: number; readonly roll: number; readonly cross: boolean }>> = {
-  'vesper-iai-1': { tilt: 0.12, roll: 0, cross: false },
-  'vesper-iai-2': { tilt: 0.55, roll: 0.7, cross: false },
-  'vesper-iai-3': { tilt: 0.3, roll: -0.6, cross: true },
+/** Distinct cut planes and body heights, not three copies of a chest-high X flash. */
+const IAI_STYLE: Readonly<Record<string, { readonly tilt: number; readonly roll: number; readonly height: number }>> = {
+  'vesper-iai-1': { tilt: 0.08, roll: 0, height: 0.85 },
+  'vesper-iai-2': { tilt: -0.35, roll: 0.7, height: 1.2 },
+  'vesper-iai-3': { tilt: 0.6, roll: -1.05, height: 1.35 },
 };
 const CAGE_CRESCENTS = 6;
 const REQUIEM_MARK_SPAN = 1.7;
@@ -112,31 +112,31 @@ export class UmbralCues {
     if (!at) return;
     const ticks = cue.durationTicks ?? 6;
     this.openTrail(kit, ticks + 4);
-    const yaw = cue.footprint?.angleRadians ?? (w ? headingOf(w.player.facing.x, w.player.facing.z) : 0), dx = Math.sin(yaw), dz = Math.cos(yaw), y = at.y + 1.05;
+    const yaw = cue.footprint?.angleRadians ?? (w ? headingOf(w.player.facing.x, w.player.facing.z) : 0), dx = Math.sin(yaw), dz = Math.cos(yaw);
     if (kit === 'umbral-cuts') { this.cage(owner, at.x, at.y, at.z, ticks); return; }
     const reach = Math.max(1.2, cue.footprint?.length ?? 2.6), sector = Math.min(Math.PI * 1.2, cue.footprint?.sectorRadians ?? 2.44);
-    const style = IAI_STYLE[action] ?? IAI_STYLE['vesper-iai-1']!;
-    const scale = Math.min(4.4, 2 * reach * Math.sin(Math.min(sector, 2.8) / 2)) / CRESCENT_CHORD, life = (ticks + 10) / 60;
+    const style = IAI_STYLE[action] ?? IAI_STYLE['vesper-iai-1']!, y = at.y + style.height;
+    const scale = Math.min(4.4, 2 * reach * Math.sin(Math.min(sector, 2.8) / 2)) / CRESCENT_CHORD, life = (ticks + 7) / 60;
     const apexX = at.x + dx * reach * 0.82, apexZ = at.z + dz * reach * 0.82;
-    this.crescent(owner, apexX, y, apexZ, yaw, style.tilt, style.roll, scale, 0.2, 1.4, life);
-    if (style.cross) this.crescent(owner, apexX, y, apexZ, yaw, style.tilt, -style.roll, scale * 0.9, 0.2, 1.3, life);
-    for (let side = -1; side <= 1; side += 2) {
-      const h = yaw + side * sector * 0.5;
-      vfx.smoke(at.x + Math.sin(h) * reach * 0.8, y - 0.1, at.z + Math.cos(h) * reach * 0.8, 2, 0.15, 0.5, 0.7, 0.6, UMBRAL_SMOKE, 0.5, owner, 0.4);
+    this.crescent(owner, apexX, y, apexZ, yaw, style.tilt, style.roll, scale, 0.12, 1.15, life);
+    // A dark wake gives the razor a readable edge without bleaching the body silhouette.
+    for (let i = -2; i <= 2; i++) {
+      const h = yaw + i * sector * 0.22;
+      vfx.smoke(at.x + Math.sin(h) * reach * 0.68, y - 0.18, at.z + Math.cos(h) * reach * 0.68, 1, 0.08, 0.34, 0.52, 0.48, UMBRAL_SMOKE, 0.68, owner, 0.28);
     }
-    directedSparks(vfx, owner, apexX, y, apexZ, dx, 0.1, dz, 8, 6, 0.35, CRIMSON);
-    vfx.lights.pulse(apexX, y, apexZ, PALETTE.umbral.hot, UMBRAL_IMPACT[kit].light, 5, 0.18, vfx.time, owner);
+    directedSparks(vfx, owner, apexX, y, apexZ, dx, 0.1, dz, 5, 7, 0.18, CRIMSON);
+    vfx.lights.pulse(apexX, y, apexZ, PALETTE.umbral.hot, UMBRAL_IMPACT[kit].light, 4, 0.12, vfx.time, owner);
   }
 
-  /** Thousand Cuts: six vertical crescents bulging inward around the target, each banked a little differently so they criss-cross like a cage. */
+  /** A dark enclosure with separated cutting planes; no opening flash obscures the seven native strikes. */
   private cage(owner: number, x: number, y: number, z: number, ticks: number): void {
     const vfx = this.vfx, life = Math.max(0.3, (ticks + 6) / 60), radius = 1.25, start = vfx.random() * Math.PI * 2;
     for (let i = 0; i < CAGE_CRESCENTS; i++) {
       const angle = start + (i / CAGE_CRESCENTS) * Math.PI * 2;
-      this.crescent(owner, x + Math.sin(angle) * radius, y + 1, z + Math.cos(angle) * radius, angle + Math.PI, 0, Math.PI / 2 + (i % 2 ? 0.45 : -0.45), 1.05, 0.18, 1.3, life);
+      this.crescent(owner, x + Math.sin(angle) * radius, y + 0.65 + (i % 3) * 0.32, z + Math.cos(angle) * radius, angle + Math.PI, 0, Math.PI / 2 + (i % 2 ? 0.45 : -0.45), 1.05, 0.09, 0.85, life);
+      vfx.smoke(x + Math.sin(angle) * radius, y + 0.45, z + Math.cos(angle) * radius, 1, 0.1, 0.4, 0.65, life, UMBRAL_SMOKE, 0.55, owner, 0.18);
     }
-    vfx.flash(x, y + 1, z, 1.6, 'umbral', owner, 0.18);
-    tintSparks(vfx, owner, x, y + 1, z, 14, 4, CRIMSON, 0.2);
+    tintSparks(vfx, owner, x, y + 1, z, 6, 3, CRIMSON, 0.2);
     this.shock(owner, x, y + 0.05, z, 1.5, 0.4, 0);
   }
 
@@ -381,12 +381,19 @@ export class UmbralCues {
         break;
       case 'umbral-requiem':
         // Requiem slashes are cheap crimson ticks; a heavy final contact (the detonation) bursts wide.
-        if (intensity >= 1.5) this.detonation(owner, at.x, at.y, at.z, cue.targetId);
+        if (intensity >= 1.5) { this.detonation(owner, at.x, at.y, at.z, cue.targetId); return; }
         else { cutSprite(vfx, owner, at.x, at.y, at.z, dz, 0.4, -dx, 1.6, 0.14, CRIMSON); tintSparks(vfx, owner, at.x, at.y, at.z, 8, 5, CRIMSON, 0.3); }
         break;
       case 'umbral-cuts':
         cutSprite(vfx, owner, at.x, at.y, at.z, dz, vfx.range(-0.6, 0.6), -dx, 1.5, 0.12, VIOLET);
         tintSparks(vfx, owner, at.x, at.y, at.z, 6, 4.5, CRIMSON, 0.3);
+        if (intensity >= 1.5) {
+          implode(vfx, owner, at.x, at.y, at.z, 6, 1.1, 0.45, UMBRAL_SMOKE, 0.72);
+          this.crescent(owner, at.x, at.y, at.z, headingOf(dx, dz), 0.2, -0.7, 1.4, 0.12, 1.5, 0.3);
+          this.shock(owner, at.x, at.y - 0.9, at.z, 1.6, 0.35, 0);
+          this.feedback('umbral-rift', cue.targetId, at.x, at.y, at.z, owner);
+          return;
+        }
         break;
       default:
         // Iai: a razor slit across the contact (aligned to the swing plane), violet sparks and a crimson glint.
@@ -409,7 +416,11 @@ export class UmbralCues {
     const cue = slot.cue, w = this.warden, vfx = this.vfx, owner = slot.owner, at = cue.position ?? w?.player.position;
     if (!at) return;
     if (cue.kind === 'judgement-mark') {
-      if (cue.phase === 'hit') { this.detonation(owner, at.x, at.y, at.z, cue.targetId); return; }
+      if (cue.phase === 'hit') {
+        this.ledger.record(cue.worldTick, cue.actionId ?? '', owner, at.x, at.z, cue.targetId ?? '');
+        this.detonation(owner, at.x, at.y, at.z, cue.targetId);
+        return;
+      }
       this.requiemMark(slot, at);
       return;
     }
@@ -417,11 +428,11 @@ export class UmbralCues {
       this.a.set(at.x, at.y + 0.05, at.z);
       slot.sigil = w?.sigils.spawn(owner, 'ground', vfx.time, this.a, UP, 3, Math.max(1 / 60, (cue.durationTicks ?? 12) / 60), 1.1, 'umbral');
       slot.tracked = true;
-      vfx.gather(at.x, at.y + 1, at.z, 30, 1.8, 'umbral', owner);
-      vfx.smoke(at.x, at.y + 0.2, at.z, 14, 1.8, 0.7, 1.2, 1, UMBRAL_SMOKE, 0.5, owner, 0.6);
+      implode(vfx, owner, at.x, at.y + 0.85, at.z, 12, 2.1, 0.55, UMBRAL_SMOKE, 0.75);
+      vfx.gather(at.x, at.y + 1, at.z, 14, 1.8, 'umbral', owner);
+      vfx.smoke(at.x, at.y + 0.15, at.z, 8, 0.8, 0.65, 1.1, 0.7, UMBRAL_SMOKE, 0.68, owner, 0.25);
     } else if (cue.phase === 'commit') {
-      vfx.flash(at.x, at.y + 1, at.z, 2.6, 'umbral', owner, 0.22);
-      tintSparks(vfx, owner, at.x, at.y + 1, at.z, 18, 6, CRIMSON, 0.2);
+      starFlash(vfx, owner, at.x, at.y + 1.25, at.z, 0.7, 0.12, CRIMSON);
     } else this.detonation(owner, at.x, at.y, at.z, cue.targetId);
   }
 
@@ -440,13 +451,15 @@ export class UmbralCues {
   /** The Requiem detonation: a crimson flash and ring, a spray of crimson sparks, black smoke and shadow blades bursting out of the ground. */
   private detonation(owner: number, x: number, y: number, z: number, targetId: string | undefined): void {
     const vfx = this.vfx, ground = y - 0.9;
-    starFlash(vfx, owner, x, y, z, 2.4, 0.22, CRIMSON);
-    vfx.flash(x, y, z, 3, 'umbral', owner, 0.26);
-    tintSparks(vfx, owner, x, y, z, 34, 9, CRIMSON, 0.3);
-    tintSparks(vfx, owner, x, y, z, 14, 6, VIOLET, 0.3);
-    vfx.smoke(x, y - 0.3, z, 10, 0.7, 0.9, 1.3, 1, UMBRAL_SMOKE, 0.6, owner, 1.6);
-    this.shock(owner, x, ground, z, 2.6, 0.5, 0);
-    this.shock(owner, x, ground, z, 1.5, 0.4, 0.08);
+    // One release after the quiet hold: a low black crown and thin crimson axes, not a white bloom ball.
+    starFlash(vfx, owner, x, y, z, 1.8, 0.16, CRIMSON);
+    cutSprite(vfx, owner, x, y, z, 1, 0.5, 0, 3.8, 0.22, CRIMSON);
+    cutSprite(vfx, owner, x, y, z, -1, 0.5, 0, 3.8, 0.22, CRIMSON);
+    vfx.flash(x, y, z, 2.1, 'umbral', owner, 0.16);
+    tintSparks(vfx, owner, x, y, z, 22, 10, CRIMSON, 0.12);
+    vfx.smoke(x, y - 0.45, z, 12, 0.4, 0.7, 1.3, 0.95, UMBRAL_SMOKE, 0.75, owner, 0.8);
+    this.shock(owner, x, ground, z, 2.8, 0.55, 0);
+    this.shock(owner, x, ground, z, 1.5, 0.4, 0.12);
     const start = vfx.random() * Math.PI * 2, count = vfx.reducedEffects ? 4 : 8;
     for (let i = 0; i < count; i++) {
       const angle = start + (i / count) * Math.PI * 2;

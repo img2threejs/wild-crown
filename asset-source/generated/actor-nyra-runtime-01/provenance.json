@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-nyra",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "fd818336-b979-4070-be66-112c058a2152",
+    "decimate": "3cd27eb2-b6b9-4a59-9a05-31485f691a82",
+    "rig": "ed043464-0230-4df6-9ebd-5885209e9064",
+    "animA": "9142eab0-50a8-4926-92c2-6b332338ee6d"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-nyra-anim-a-01/tripo-out/actor-nyra-anim-a-01-9142eab0/model.glb",
+      "sha256": "1df56b0a3ac5d08bb49cbc3832b7adea1779ec4bf57f4268d4402d16d4e7ce42"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra.glb",
+    "sha256": "f76b58940927ad4bd215c7e1c128a9b5b8cf652cb63ca7251cb9471e231e9ecb",
+    "bytes": 4892364,
+    "vertices": 23162,
+    "triangles": 23964,
+    "boundsMin": [
+      -0.49016,
+      0,
+      -0.13525
+    ],
+    "boundsMax": [
+      0.49016,
+      0.49687,
+      0.13525
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 11
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 2230095,
+      "toBytes": 910213
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 2972501,
+      "toBytes": 1038653
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17247220,
+      "toBytes": 1564116
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

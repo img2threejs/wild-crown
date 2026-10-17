@@ -80,6 +80,8 @@ export interface SigilSlot {
 /** Back-ease overshoot constant for the spawn pop (≈ 10 % overshoot). */
 const OVERSHOOT = 1.70158;
 
+/** Readability limits of a sigil disc near combatants: it never grows past this radius (m) and no stroke or core is lit beyond these levels, so it cannot saturate to a white disc over Aren and his target. */
+const SIGIL_RADIUS_MAX = 1.1, SIGIL_INTENSITY_MAX = 1.5, SIGIL_FLASH_MAX = 0.3;
 /**
  * Pooled rune magic circles. One draw call per visible sigil: a single quad whose shader rotates three
  * layers of one procedural texture in opposite directions. Time is the authoritative world clock.
@@ -122,7 +124,7 @@ export class SigilFx {
     let slot = this.slots.find(candidate => !candidate.active);
     if (!slot) { slot = this.slots[0]!; for (const candidate of this.slots) if (candidate.start < slot.start) slot = candidate; }
     slot.active = true; slot.owner = owner; slot.mode = mode; slot.start = time; slot.ramp = ramp; slot.finishedAt = Infinity; slot.fadeSeconds = 0.3;
-    slot.radius = radius; slot.intensity = intensity; slot.seed = (owner * 0.6180339) % 1;
+    slot.radius = Math.min(radius, SIGIL_RADIUS_MAX); slot.intensity = intensity; slot.seed = (owner * 0.6180339) % 1;
     const palette = PALETTE[element], u = slot.uniforms;
     u.uTex.value = element === 'heartroot' ? (this.heartrootTexture ??= createHeartrootRuneTexture())
       : element === 'umbral' ? (this.umbralTexture ??= createUmbralRuneTexture())
@@ -184,10 +186,10 @@ export class SigilFx {
       const direction = slot.mode === 'ground' ? 0.6 : 1;
       u.uAngles.value.set(slot.seed * 6.28 + age * 0.9 * speed * direction, -age * 1.5 * speed * direction, age * 2.4 * speed * direction);
       const charge = 0.55 + 0.9 * pre + (sustained ? 0.55 * Math.min(1, Math.max(0, age - 0.6) / 1.4) + 0.06 * Math.sin(age * 18) : 0);
-      u.uIntensity.value = slot.intensity * (charge + 0.9 * flare + (slot.finishedAt !== Infinity ? 0.25 * Math.sin(age * 44) : 0));
+      u.uIntensity.value = Math.min(SIGIL_INTENSITY_MAX, slot.intensity * (charge + 0.9 * flare + (slot.finishedAt !== Infinity ? 0.25 * Math.sin(age * 44) : 0)));
       // The finish flare brightens the strokes via uIntensity; a centre flash at that intensity would bloom the
       // disc (which sits in front of Aren's chest) into an opaque white blob, so only a faint core remains.
-      u.uFlash.value = Math.max(0, 1 - age / 0.16) + flare * 0.2;
+      u.uFlash.value = Math.min(SIGIL_FLASH_MAX, Math.max(0, 1 - age / 0.16) + flare * 0.2);
       u.uAlpha.value = Math.min(1, age / 0.05) * fade;
     }
   }

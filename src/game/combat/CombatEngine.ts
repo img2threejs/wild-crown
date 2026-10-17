@@ -1,12 +1,15 @@
-import type { ActionId, ActorId, ActorSnapshot, AttackId, CampaignSnapshot, CombatSnapshot, CombatObstacleSnapshot, EncounterStatusSnapshot, PlayerSkillSnapshot, CompanionId, InputFrame, InteractionDefinition, MovableObjectSnapshot, RegionColliderDefinition, RegionDefinition, RegionMovableObjectDefinition, RegionId, RegionRouteDefinition, Vec3, WorldEvent } from '../contracts.js';
+import type { ActionId, ActorId, ActorSnapshot, AttackId, CampaignSnapshot, CombatReactionKind, CombatReactionSnapshot, CombatSnapshot, CombatObstacleSnapshot, EncounterStatusSnapshot, GameSettings, PlayerSkillSnapshot, CompanionId, InputFrame, InteractionDefinition, MovableObjectSnapshot, RegionColliderDefinition, RegionDefinition, RegionMovableObjectDefinition, RegionId, RegionRouteDefinition, Vec3, WorldEvent } from '../contracts.js';
+import type { DodgePracticeSnapshot, RegionEntityDefinition } from '../contracts.js';
 import type { FragmentId } from '../../../packages/campaign/src/index.js';
 import type { CueCancellationReason, StoryCue } from '../../effects/story-cues.js';
 import { ACTORS, INTERACTIONS, REGIONS } from '../../content/campaign.js';
-import { COMPANION_ROSTER, type CompanionCommand, type CompanionRosterState, companionCommand, configureCompanionSlots, configureCompanions, createCompanionState, stepCompanions } from '../companions/CompanionSystem.js';
+import { HUB_REGION_IDS, HUB_UPGRADES } from '../../content/hub.js';
+import { MAREK_ASSISTANCE, NURSERY_ESCORT, PACK_PATROL_ACTOR_IDS, SHARED_HUNT_ROUTE } from '../../content/side-quests.js';
+import { COMPANION_ROSTER, type CompanionCommand, type CompanionRosterState, companionActor, companionOwnerMultiplier, commandAvailability as companionAvailability, commandCompanion as commitCompanionCommand, commandTargets as companionTargets, companionSignal, configureCompanionProgress, configureCompanion, configureCompanions, createCompanionState, failCompanionJob, markSnapshot, normalizeCompanionState, shiftCompanionClocks, stepCompanions, targetLabel as companionTargetLabel, tryGuardBlock } from '../companions/CompanionSystem.js';
 import { ATTACKS, BOSS_ENCOUNTERS, WILDLIFE_ENCOUNTERS, type AttackDefinition, type AttackElement, type BossEncounterDefinition } from './content.js';
-import { ATTACK_TURN_RATE_MAX, CAST_FACING_TOLERANCE, CAST_RANGE_MARGIN, MONSTER_PROFILES, ROAR_TICKS, STUCK_TICKS, TRIAL_ENGAGE_RANGE, TRIAL_DISENGAGE_RANGE, clampStepToArena, createMonsterMotion, getWildlifePressure, scaleWildlifeAttack, steerMonster, turnTranslationScale, wrapAngle, type WildlifePressureTier, type MonsterMotionState, type MonsterProfile } from './WildlifePressure.js';
+import { ATTACK_TURN_RATE_MAX, CAST_FACING_TOLERANCE, MONSTER_ACCEL, MONSTER_DECEL, CAST_RANGE_MARGIN, MONSTER_PROFILES, ROAR_TICKS, STUCK_TICKS, TRIAL_ENGAGE_RANGE, TRIAL_DISENGAGE_RANGE, TURN_LEAD_TICKS, clampStepToArena, createMonsterMotion, getWildlifePressure, scaleWildlifeAttack, steerMonster, turnTranslationScale, wrapAngle, type WildlifePressureTier, type MonsterMotionState, type MonsterProfile } from './WildlifePressure.js';
 import { EVASION_PROFILES, type EvasionDirection, type EvasionProfile, type EvasionProfileId, type HazardDefinition } from './evasion.js';
-import { arenaFromRegion, distance2, facingFrom, groundHeightAt, isAerialCirclePathClear, isCirclePathClear, isSupportedCapsulePose, moveAerialCircle, moveCircle, pointInSector, vec, type CombatArena, type Rect } from './geometry.js';
+import { arenaFromRegion, distance2, facingFrom, findEdgeDrop, groundHeightAt, isAerialCirclePathClear, isCirclePathClear, isSupportedCapsulePose, landingHeightsAt, moveAerialCircle, moveCircle, nearestSolidContact, pointInSector, restingHeightAt, stepFall, vec, type CombatArena, type FallStep, type Rect, type SolidContact, type SupportField } from './geometry.js';
 import { CHAIN_EARLY_TICKS, CHAIN_LATE_TICKS, CRESCENT_WAVE, HIT_STOP_FULL_TICKS, HIT_STOP_TICKS, JUDGEMENT, JUDGEMENT_INSTINCT, LIGHT_ASSIST_RANGE, LIGHT_LOCK_MARGIN_TICKS, LIGHT_STEPS, MAX_MANA, MANA_PER_METRE, PLAYER_MAX_VITALITY, PLAYER_SKILLS, SIGIL, THUNDER_CLEAVE, playerSkillId, targetedStrike, type PlayerSkillId } from './PlayerSkills.js';
 import { rotateY, segmentDistanceXZ, turnTowards, yawOf, type DeferredRelease, type HitStopState, type LiveJudgementMark, type LivePlayerProjectile, type PendingLightning, type PlayerCast, type PlayerSwing } from './PlayerArsenal.js';
 import { createCombatTrialState, combatTrialSetFor, type CombatTrialDefinition, type CombatTrialSet, type CombatTrialState } from './CombatTrials.js';
@@ -17,11 +20,25 @@ import type { HeroMarkSnapshot } from '../contracts.js';
 import { HERO_COMBAT } from './HeroProfiles.js';
 import type { HeroKit, KitActionSpec, KitCancelInput, KitHost, KitProjectileSpec, KitStrike } from './kits/KitHost.js';
 import { createKit } from './kits/registry.js';
+import { AREN_HITS, BOSS_POISE, MASS, POISE_REGEN_DELAY, POISE_REGEN_TICKS, REACTION_RANK, REACTION_TICKS, STUN_DAMAGE_MULTIPLIER, WALL_IMPACT_POISE, YARA_HITS, beginReaction, buildOf, defaultHit, easeOutCubic, getupPlan, hit, isCommitted, knockdownLiePlan, launchLift, monsterAttackHit, planHostileReaction, planPlayerReaction, reactionStrength, stunPlan, type ActorBuild, type HitSpec, type ReactionPlan, type ReactionState } from './reactions.js';
+import { FALL_ENCOUNTER_ID, FALL_ESCAPE_INTERACTION_ID, FALL_ESCAPE_SURFACE_ID, FALL_ORUN_SEALED, FALL_PILLAR_INTERACTION_ID, FALL_POSSESSED_ATTACKS, FALL_POSSESSION_ATTACK_ID, FALL_ROOT_ATTACK_ID, FALL_TALI_ARRIVAL_RADIUS, FALL_TALI_RESCUE_INTERACTION_ID, FALL_TALI_SHELTER_NODE_ID, FALL_TALI_STRIDE, resolvePossessionBreakTicks } from './FallProtection.js';
+import type { ChapterRuntimeDefinition, ChapterSpatialIntent, CommandAvailability, CompanionCommandRequest, CompanionProgress, CompanionTarget, FieldCommand } from '../contracts.js';
+import { ENCOUNTER_RESETTABLE_OBJECT_IDS, TRAP, TRAP_DISARM_FACT } from './ActOneBossContent.js';
+import { acceptsTether, applyTether, chapterStatusOf, cleanseBlock, initSequence, onObjectSettled, settleBoss, startSequenceAttack, updateSequence, type ChapterHost } from './ActOneSequences.js';
+import { createChapterCombatState, resolveChapterTriggers, trapSnapshots, trapArmed, trapsFromRegion, updateChapterIntents, type ChapterCombatState, type FallState, type OrunState } from './ChapterCombat.js';
+import { appendCue, emitWorldEvent as emitWorldEventTo, pushEvent } from './EngineEffects.js';
+import { liveAttackOf as liveAttackIn, monsterAttackProgress as monsterAttackIn, reactToCompanionHit } from './HitReactions.js';
+import { movableObjectOccupied, movableObjectPathClear, pointInPolygonXZ } from './MovableObjects.js';
+import { actorCollisionBody, isAerialSpecies, isLargeSpecies } from './ActorBody.js';
+import { ORUN_ENCOUNTER_ID, ORUN_SKY_ECHO_IDS, ORUN_TUNING, ORUN_VINE_ROUTE } from './OrunBossContent.js';
+import { createOrunState, enterOrunPhase, noteOrunCoreStrike, noteOrunHazardDamage, noteOrunPressure, onOrunCleansed, onOrunInterrupted, onOrunPossessionEnded, orunCleanseBlock, orunEvadesStrike, orunGraspResisted, orunSnapshot, orunVineRoute, resetOrunForCheckpoint, updateOrun, type OrunHost } from './OrunPhases.js';
 
 export const FIXED_STEP_SECONDS = 1 / 60;
 const MAX_CATCH_UP_TICKS = 8;
 const MAX_HOSTILES = 6;
 const MAX_GROUNDED_LARGE = 2;
+/** Ruun, Ghor and Solkar accept their final Cleanse only once ordinary damage has worn their ferocity down to this. */
+const LATER_BOSS_CLEANSE_FEROCITY = 25;
 const MAX_TOTAL_LARGE=2;
 /** A region that hosts combat trials may hold as many large monsters as it has trials. */
 const MAX_TRIAL_REGION_LARGE = 3;
@@ -32,15 +49,38 @@ const PLAYER_JUMP_BOOST_APEX = 2.1;
 const PLAYER_JUMP_ANTICIPATION_TICKS = 7;
 const PLAYER_JUMP_FLIGHT_TICKS = 42;
 const PLAYER_JUMP_LANDING_TICKS = 10;
+const PLAYER_MAX_DROP = 3;
+const PLAYER_FALL_GRAVITY = 24;
 const PLAYER_MOVE_ACCEL_TICKS = 7;
 const PLAYER_MOVE_DECEL_TICKS = 6;
+/** Player heading turns at most this fast (rad/s) while steering; attacks, dodges and aim assist still set the heading outright. */
+const PLAYER_TURN_RATE = 16;
+/** Pivot: from this remaining heading error (rad) the target speed and the build-up of speed along the new heading fall smoothly toward `1 - PLAYER_PIVOT_SLOWDOWN` at a full reversal; braking is never slowed. The body turns before it launches the other way (gentler than the monsters' turn-in-place). */
+const PLAYER_PIVOT_START = 0.5;
+const PLAYER_PIVOT_SLOWDOWN = 0.9;
+const PLAYER_PIVOT_ACCEL_FLOOR = 0.3;
+/** Locomotion clip by actual planar speed, as a multiple of the hero's walk speed: run is entered above the first and left below the second. */
+const PLAYER_RUN_ENTER = 1.16;
+const PLAYER_RUN_EXIT = 1.05;
 const PERFECT_DODGE_EFFECTS={worldTimeScale:0.25,slowMotionTicks:12,maxSlowMotionTicks:18,instinctGain:20,petRecoveryReductionTicks:18,playerRecoveryReductionTicks:12,weakPointDurationTicks:36,weakPointDamageMultiplier:1.5,counterWindowTicks:36} as const;
+/** Four extra simulation ticks the player keeps invulnerable when the perfect-dodge window is set to "wide". Captured at dodge start. */
+const PERFECT_DODGE_WIDE_BONUS_TICKS = 4;
+/** Lock-On acquisition: 360° cone out to the existing melee/ranged acquisition range so the action always has a candidate. */
+const EXPLICIT_LIMITS = { range: SIGIL.homingRange, coneDegrees: 360 } as const;
 /** Trial monsters keep their centre this far inside their arena circle. */
 const TRIAL_ARENA_INSET=0.5;
 /** A chained second attack is dropped if the monster cannot start it within this many ticks of the first one's active window ending. */
 const CHAIN_PATIENCE_TICKS=90;
-/** Non-interrupting monster flinch after a player hit, in world ticks. */
-const HIT_REACT_TICKS = 12;
+/** Aren's magnetism: metres he steps towards the assisted target over each melee windup, and the gap kept between the bodies. */
+const LIGHT_LUNGE=[0.5,0.5,0.8,1.2] as const;
+const HEAVY_LUNGE=0.9;
+const CHARGED_LUNGE=1.2;
+const LUNGE_CONTACT_GAP=0.35;
+/** Bodies closer than this fraction of their summed radii are pushed apart, at most this many metres per tick. */
+const SEPARATION_FRACTION=0.9;
+const SEPARATION_MAX_STEP=0.04;
+/** A wall slam ends a knockback after this many more ticks. */
+const WALL_SETTLE_TICKS=6;
 /** A held charge never outlasts this many ticks (matches the Charged Heavy hold). */
 const MAX_HOLD_TICKS = 3600;
 /** Crescent-wave wall probe radius and the vertical slack of its body check. */
@@ -87,11 +127,26 @@ export interface CombatActor extends ActorSnapshot {
   recoveringUntil: number; invulnerableUntil: number; staggerUntil: number; possessedUntil: number; weakPointUntil?:number; possessionInstanceId?:string; possessionSourceId?:ActorId; actionStartedTick: number; actionEndsTick: number;
   /** Combat-trial monsters only: serializable locomotion state on the world-tick clock. */
   motion?: MonsterMotionState;
-  /** World tick at which the non-interrupting hit flinch ends (12 world ticks after the last player hit). */
-  hitReactUntil?: number;
+  /** Physical reaction in progress (see reactions.ts); times are on the actor's own clock. Absent when none. */
+  reactionState?: ReactionState;
+  /** Reactions started on this actor so far; the next reaction takes serial + 1. */
+  reactionSerial?: number;
+  /** Accumulated poise damage of a hostile, its last-hit world tick and how many times it has been broken (boss poise phases). */
+  poiseMeter?: number;
+  poiseHitAt?: number;
+  poiseBreaks?: number;
+  /** Never displaced, reacted, stunned, pushed apart or given a poise bar: a fixed set-piece or test dummy. */
+  anchored?: true;
   /** World tick until which a trial monster moves at `crippleFactor` of its speed (Sakda's Tempest Stomp). */
   crippleUntil?: number;
   crippleFactor?: number;
+  /** Sable's independent movement debuff; never extends or multiplies a hero's stronger slow. */
+  supportSlow?: { factor: number; untilWorldTick: number; sourceId: ActorId };
+  companionControlReadyAt?: number;
+  /** Vara's timed mark on a hostile (world ticks); `extended` latches the once-per-mark exposure extension. */
+  markState?: { sourceId: ActorId; untilWorldTick: number; extended: boolean };
+  /** A finite attention override: until `untilWorldTick` the hostile aims its attacks at `sourceId` (Koro's distraction). */
+  attention?: { sourceId: ActorId; untilWorldTick: number };
 }
 export interface LiveHazard extends HazardDefinition {
   id: string; attackId: AttackId; sourceId: ActorId; startTick: number; activeFrom: number; activeUntil: number;
@@ -105,11 +160,13 @@ export interface LiveHazard extends HazardDefinition {
 }
 export interface LiveTelegraph { id: string; attackId: AttackId; sourceId: ActorId; targetPosition: Vec3; phase: 'windup'|'commit'|'active'|'recovery'; remainingTicks: number; cue: string }
 /** One confirmed player hit on a hostile; `stagger` picks how the target's current attack reacts. */
-interface PlayerStrike { action: string; clip: ActionId; damage: number; stopTicks: number; element: AttackElement; stagger: 'interrupt' | 'idle' | 'none'; instinct: number; counter: boolean }
+interface PlayerStrike { action: string; clip: ActionId; damage: number; stopTicks: number; element: AttackElement; stagger: 'interrupt' | 'idle' | 'none'; instinct: number; counter: boolean; direction?: Vec3; /** Weight, poise damage and knockback; derived from the damage when absent. */ hit?: HitSpec }
 export interface CombatEvent { id: string; tick: number; kind: 'cue'|'damage'|'perfect-dodge'|'counter-open'|'action'|'companion'|'traversal'|'world'|'attack-interrupted'; actorId?: ActorId; targetId?: ActorId; actionId?: string; attackId?: AttackId; message: string; worldEvent?: WorldEvent; damage?: { readonly targetId: ActorId; readonly amount: number; readonly position: Vec3; readonly worldTick: number } }
-export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; wildlifeCombat?:WildlifeCombatState; playerSlow?:PlayerSlow; combatTrial?:CombatTrialState; }
+export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; skillReadyAt?: Partial<Record<PlayerSkillId, number>>; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; wildlifeCombat?:WildlifeCombatState; playerSlow?:PlayerSlow; combatTrial?:CombatTrialState; chapter?: ChapterCombatState; }
 export interface PlayerResources { vitality: number; maxVitality: number; instinct: number; mana: number; maxMana: number; }
 export interface PendingImpact { activeAt: number; activeUntil: number; target: ActorId; action: string; range: number; radius: number; damage: number; interrupt: boolean; counter:boolean; startVitality: number; resolved: boolean; interactionId?:string; interactionPosition?:Vec3; }
+/** A companion (Vara) damage strike queued by applyStormTalonStrike; the engine applies it this tick via applyHostileDamage. */
+export interface PendingCompanionStrike { sourceId: ActorId; targetId: ActorId; damage: number; poise: number; knockback: number; dirX: number; dirZ: number; attackId: string; }
 export interface LiveMovableObject extends MovableObjectSnapshot {
   authored: RegionMovableObjectDefinition;
   startedAtWorldTick?: number;
@@ -122,12 +179,18 @@ export interface EngineState {
   schemaVersion: 3; tick: number; worldTick:number; worldTimeScale:number; timePolicy:CombatSnapshot['worldClock']['policy']; slowMotionRemainingTicks:number; slowMotionElapsedTicks:number; accumulator: number; regionId: RegionId; runId: string; encounterId?: string; encounter: BossEncounterDefinition | null; worldFacts: Readonly<Record<string,boolean|number|string>>;
   actors: CombatActor[]; playerId: ActorId; player: PlayerResources; targetId?: ActorId; arena: CombatArena; hazards: LiveHazard[]; telegraphs: LiveTelegraph[];
   heroId: HeroId;
+  /** Accepted skill deadlines on the simulation clock; family variants share the selected cast's deadline. */
+  skillReadyAt: Partial<Record<PlayerSkillId, number>>;
   movableObjects: LiveMovableObject[];
   sceneColliders: readonly RegionColliderDefinition[];
   combatObstacles: CombatObstacleSnapshot[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
   actionId: string; actionUntil: number; actionRecoveryUntil: number; actionCancelable: boolean; counterUntil: number; lastAttackTick: number; attackSelectionWorldOffset: number; heavyChargeStartTick: number | null; lastResolvedActionId?:string; lastResolvedTargetId?:ActorId; lastResolvedActionTick?:number; lightIndex?:number; bufferedAction?:{action:string;targetId?:ActorId;expiresTick:number};
-  companionState: CompanionRosterState; companionSlots: { combat?: CompanionId; utility?: CompanionId; scout?: 'vara' };
+  companionState: CompanionRosterState;
+  /** Chapter combat: spatial triggers and their intents, camp traps and the active boss cleanse sequence. */
+  chapter: ChapterCombatState;
+  /** Committed boss body movement (Act I charges and leaps), swept against the arena on the world clock. */
+  bossLunges: BossLunge[];
   eventSequence: number; rewardEmitted: boolean; checkpoint: EncounterCheckpoint | null; traversalGates: TraversalGate[]; pendingImpact?: PendingImpact; presentationCues: StoryCue[];
   traversal?: LiveTraversal;
   playerJump?: PlayerJumpState;
@@ -146,6 +209,8 @@ export interface EngineState {
   pendingLightning?: PendingLightning;
   hitStop?: HitStopState;
   deferredRelease?: DeferredRelease;
+  /** Companion (Vara) damage strikes to be applied this tick; drained after the companion step. */
+  pendingCompanionStrikes: PendingCompanionStrike[];
   /** Monotonic id source for sigils, projectiles and marks. */
   arsenalSequence: number;
   /** Plain-JSON state of the active hero kit (`KitHost.kitState`); emptied on region load, checkpoint reset and death. */
@@ -156,6 +221,8 @@ export interface EngineState {
   evasion?: EvasionProfile;
   /** Kit cancel window of the running action (absolute simulation tick): the listed inputs are routed to the kit from `fromTick` even during lock/recovery. */
   kitCancel?: { fromTick: number; into: KitCancelInput[] };
+  /** Aren's melee magnetism: steps towards the assisted target until `toTick` (simulation ticks), stopping at contact. */
+  lunge?: { fromTick: number; toTick: number; metres: number; done: number; targetId: ActorId };
 }
 /** The player timers a lifted kit cancel window saved, restored when the routed input started nothing. */
 interface KitCancelLift {
@@ -179,44 +246,138 @@ export interface PlayerJumpState {
   boostQueued?: boolean;
   steering: Vec3;
   anticipationFrom?: Vec3;
+  /** Present only during an unpowered fall off a support or an interrupted landing arc. */
+  fallVelocityY?: number;
+  /** At most one Mist Blink per airtime; neither it nor an aerial attack renews the flight deadline. */
+  airDashUsed?: boolean;
+  airDash?: { direction: Vec3; until: number; speed: number };
 }
 export type EngineStateSeed = Partial<Omit<EngineState, 'schemaVersion'>> & { schemaVersion?: 1 | 2 | 3 };
 export interface TraversalGate { id:string; routeId:string; from:Vec3; to:Vec3; anchors:readonly Vec3[]; fromRegion:RegionId; toRegion:RegionId; width:number; rise:number; unlocked:boolean; unlockFact?:string; traversalEvent:string; colliderIds:readonly string[]; traversalActionId:ActionId; traversal?:RegionRouteDefinition['traversal'] }
 interface LiveTraversal { gate:TraversalGate; points:Vec3[]; lengths:number[]; length:number; segment:number; segmentDistance:number; startedAtWorldTick:number; lastSafePose:Vec3; lastSafeFacing:Vec3; standingHeight:number; }
-export interface EncounterStart { encounterId:string; regionId:RegionId; runId:string; playerPosition?:Vec3; bossPosition?:Vec3; companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'}; actors?:readonly CombatActor[]; worldFacts?:Readonly<Record<string,boolean|number|string>>;}
-export interface RegionLoadInput { regionId:RegionId;runId:string;presentActorIds:readonly string[];regionDefinition?:RegionDefinition;playerPosition?:Vec3;companionSlots?:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'};chapter?:number;wardenCall?:boolean;bond?:number;dominionUsed?:boolean;worldFacts?:Readonly<Record<string,boolean|number|string>>; }
+export interface EncounterStart { encounterId:string; regionId:RegionId; runId:string; playerPosition?:Vec3; bossPosition?:Vec3; companionId?:CompanionId; actors?:readonly CombatActor[]; worldFacts?:Readonly<Record<string,boolean|number|string>>;}
+export interface RegionLoadInput {
+  regionId:RegionId;runId:string;presentActorIds:readonly string[];regionDefinition?:RegionDefinition;
+  /** The safe spawn: the hero's authored start or the chapter checkpoint position. */
+  playerPosition?:Vec3;
+  /** Replace emission history when adopting a saved branch; omission preserves ordinary same-run travel. */
+  eventKeys?:Iterable<string>;
+  companionId?:CompanionId;chapter?:number;wardenCall?:boolean;bond?:number;dominionUsed?:boolean;worldFacts?:Readonly<Record<string,boolean|number|string>>;
+  /** The chapter segment's checkpoints and encounter entries; the engine turns them into edge-triggered spatial intents. */
+  chapterRuntime?:ChapterRuntimeDefinition;
+  /** Per-companion Bond/Dominion progression; absent keeps every slotted companion recruited (trials, legacy). */
+  companionProgress?:Readonly<Record<CompanionId,CompanionProgress>>;
+}
+export interface BossLunge { hazardId:string; sourceId:ActorId; kind:'charge'|'step'; dirX:number; dirZ:number; travel:number; fromTick:number; toTick:number; done:number; landed:boolean; }
 export interface AttackImpact { targetId: ActorId; damage: number; avoided: boolean; interrupt: boolean; }
 
 export class CombatEngine {
   private state: EngineState;
   /** Scratch step for trial-monster arena clamping. */
   private readonly monsterStep = { dx: 0, dz: 0 };
+  private readonly jumpLandings: number[] = [];
+  private readonly fallStep: FallStep = { x: 0, y: 0, z: 0, landed: false };
+  private readonly solidContact:SolidContact={position:vec(0,0,0),normal:vec(0,1,0),kind:'solid',surfaceId:''};
   private kit?: HeroKit;
   /** True while the current player update runs with a lifted kit cancel window (a hold-started charge must then abandon the kit's action). */
   private kitCancelLift = false;
   /** Per-region trial difficulty ramp, rebuilt when the loaded trial set changes (derived data, never serialized). */
   private rampCache?: { set: CombatTrialSet; ramp: readonly TrialDifficulty[] };
   private readonly kitHost: KitHost = this.createKitHost();
+  /** The region definition a caller handed to `loadRegion` instead of the canonical `REGIONS` (tests, candidate content); never serialized. */
+  private loadedRegion?: RegionDefinition;
+  private readonly chapterHost: ChapterHost = this.createChapterHost();
+  private readonly orunHost: OrunHost = this.createOrunHost();
+  private dodgeTraining?: { active: boolean; center: Vec3; startedAt: number; lastStrike: number; attempts: number; dodged: number; phase: DodgePracticeSnapshot['phase'] };
+  private nurseryEscortActive = false;
+  private nurseryTrail: Vec3[] = [];
+  private carriedDeliveryId?: string;
+  private readonly deliveryArrivals = new Set<string>();
+  private readonly patrolSteps = new Map<string, { index: number; direction: number }>();
+  private marekAssistance?: { index: number; until?: number };
+  /**
+   * Player accessibility preferences (autoTargetAssist, perfectDodgeWindow, lockOnMode). Owned outside the
+   * serialized EngineState so loadRegion / restore / reset / resetToCheckpoint keep the values, but a fresh run
+   * does not carry over implicit-target state.
+   */
+  private accessibility: Pick<GameSettings, 'autoTargetAssist' | 'perfectDodgeWindow' | 'lockOnMode'> = {
+    autoTargetAssist: 'subtle',
+    perfectDodgeWindow: 'standard',
+    lockOnMode: 'toggle',
+  };
+  /** Current explicit lock state (player-pressed). `undefined` when not actively held/toggled. The implicit `targetId` lives on EngineState. */
+  private explicitLock?: { targetId: ActorId; startedTick: number };
   constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); this.syncKit(); this.refreshCombatSolids(); this.cancelTraversal(); }
   startNewRun(runId: string): void {
+    this.resetSideQuestActivities();
+    this.dodgeTraining = undefined;
     this.state = createEngineState();
     this.state.runId = runId;
+    this.explicitLock = undefined;
     this.syncKit();
+  }
+  /**
+   * Apply persisted accessibility preferences. Survives loadRegion, restore, resetToCheckpoint and
+   * startNewRun (we only release the player-held lock). Defaults match `DEFAULT_GAME_SETTINGS`; pass
+   * `undefined` to mean "use the existing value for that key".
+   *
+   * Flipping autoTargetAssist to off clears any stale implicit target the engine or a kit seeded earlier —
+   * implicit acquisition is disabled, but an explicit lock and caller-selected targets (combat input,
+   * interactions, hero-kit helpers) remain authoritative.
+   * Flipping lockOnMode always releases the held lock because hold/toggle state is incompatible.
+   */
+  setAccessibilitySettings(settings: Pick<GameSettings, 'autoTargetAssist' | 'perfectDodgeWindow' | 'lockOnMode'>): void {
+    const next: typeof this.accessibility = {
+      autoTargetAssist: settings.autoTargetAssist ?? this.accessibility.autoTargetAssist,
+      perfectDodgeWindow: settings.perfectDodgeWindow ?? this.accessibility.perfectDodgeWindow,
+      lockOnMode: settings.lockOnMode ?? this.accessibility.lockOnMode,
+    };
+    const assistChanged = next.autoTargetAssist !== this.accessibility.autoTargetAssist;
+    const modeChanged = next.lockOnMode !== this.accessibility.lockOnMode;
+    this.accessibility = next;
+    if (assistChanged && next.autoTargetAssist === 'off' && this.explicitLock === undefined) {
+      this.state.targetId = undefined;
+    }
+    if (modeChanged && this.explicitLock !== undefined) {
+      this.explicitLock = undefined;
+      this.state.targetId = undefined;
+    }
   }
   setPlayerHero(heroId: HeroId): void {
     if (this.state.encounter) throw new Error('Choose a hero before starting an encounter.');
     const hero = heroById(heroId), player = this.playerActor();
     if (!player) throw new Error('Load a region before choosing a hero.');
-    const profile = HERO_COMBAT[heroId], resources = this.state.player;
     this.state.heroId = heroId;
     player.renderVariantId = hero.variantAssetId;
-    // A new health pool starts full; choosing the same hero again keeps the current health.
-    if (resources.maxVitality !== profile.maxVitality) { resources.maxVitality = profile.maxVitality; resources.vitality = profile.maxVitality; }
-    player.maxVitality = resources.maxVitality;
-    player.vitality = resources.vitality;
+    this.applyHubUpgrades(true);
     this.syncKit();
     this.resetArsenal();
     this.state.checkpoint = this.captureEncounterCheckpoint();
+  }
+
+  private applyHubUpgrades(refillChangedVitality: boolean): void {
+    let vitality = HERO_COMBAT[this.state.heroId].maxVitality, mana = MAX_MANA;
+    for (const upgrade of HUB_UPGRADES) {
+      if (this.state.worldFacts[upgrade.fact] !== true) continue;
+      vitality += upgrade.vitalityBonus;
+      mana += upgrade.manaBonus;
+    }
+    const resources = this.state.player;
+    if (resources.maxVitality !== vitality) {
+      resources.vitality = refillChangedVitality ? vitality : Math.min(resources.vitality, vitality);
+      resources.maxVitality = vitality;
+    }
+    resources.maxMana = mana;
+    resources.mana = Math.min(resources.mana, mana);
+    const player = this.playerActor();
+    if (player) { player.maxVitality = vitality; player.vitality = resources.vitality; }
+  }
+
+  private counterWindowBonus(): number {
+    let bonus = 0;
+    for (const upgrade of HUB_UPGRADES)
+      if (this.state.worldFacts[upgrade.fact] === true) bonus += upgrade.counterWindowBonusTicks;
+    return bonus;
   }
 
   private playerClip(action: string): ActionId {
@@ -253,14 +414,22 @@ export class CombatEngine {
   private kitSoftTarget(range: number, coneDegrees: number): CombatActor | undefined {
     const s = this.state, player = this.playerActor();
     if (!player) return undefined;
-    const locked = s.targetId === undefined ? undefined : this.actorForId(s.targetId);
-    if (locked && this.isPlayerHostileTarget(locked) && distance2(player.position, locked.position) <= range) return locked;
+    const assist = this.accessibility.autoTargetAssist;
+    // Only an explicit player lock may bypass the cone and assist preference; implicit targets from a previous
+    // acquisition must still obey the caller's authored cone and the assist setting.
+    if (this.explicitLock) {
+      const locked = this.actorForId(this.explicitLock.targetId);
+      if (locked && this.isPlayerHostileTarget(locked) && distance2(player.position, locked.position) <= range) return locked;
+    }
+    if (assist === 'off') return undefined;
     let best: CombatActor | undefined, bestDistance = Infinity;
     for (const actor of s.actors) {
       if (!this.isPlayerHostileTarget(actor)) continue;
       const distance = distance2(player.position, actor.position);
       if (distance >= bestDistance || distance > range) continue;
-      if (coneDegrees < 360 && !pointInSector(actor.position, player.position, player.facing, range, coneDegrees)) continue;
+      // Strong broadens acquisition within the existing targeting range; subtle keeps the caller's authored cone.
+      const effectiveCone = assist === 'strong' ? 360 : coneDegrees;
+      if (effectiveCone < 360 && !pointInSector(actor.position, player.position, player.facing, range, effectiveCone)) continue;
       best = actor; bestDistance = distance;
     }
     return best;
@@ -300,13 +469,9 @@ export class CombatEngine {
     return projectile.id;
   }
   private kitDisplaceMonster(actor: CombatActor, direction: Vec3, metres: number): number {
-    const dx = direction.x * metres, dz = direction.z * metres;
-    const definition = this.state.combatTrial ? this.trials().find(trial => trial.monsterId === actor.id) : undefined;
-    if (definition) return this.stepMonster(actor, definition, dx, dz, FIXED_STEP_SECONDS, false);
-    const next = moveCircle(this.state.arena, actor.position, vec(dx, 0, dz), actor.radius, actor.collisionHeight);
-    const moved = distance2(actor.position, next);
-    actor.position = vec(next.x, next.y, next.z);
-    actor.sockets = { ...actor.sockets, root: copy(actor.position), head: vec(next.x, next.y + 1.5, next.z) };
+    const moved = this.displaceActor(actor, direction.x * metres, direction.z * metres);
+    // A slide a wall cut short is a wall impact.
+    if (metres > 0.05 && moved < metres * 0.5) this.queueWallImpact(actor, direction.x, direction.z, 1, 'knockdown');
     return moved;
   }
   private createKitHost(): KitHost {
@@ -320,6 +485,7 @@ export class CombatEngine {
       get resources() { return engine.state.player; },
       get actors() { return engine.state.actors; },
       get targetId() { return engine.state.targetId; },
+      get airborne() { return engine.isPlayerAirborne(); },
       kitState: <S extends object>(create: () => S): S => {
         const store = engine.state.kit;
         // `for…in` never allocates a key array; an empty store means the kit has not initialised yet.
@@ -344,7 +510,11 @@ export class CombatEngine {
       isWindingUp: actor => engine.state.telegraphs.some(telegraph => telegraph.sourceId === actor.id && (telegraph.phase === 'windup' || telegraph.phase === 'commit')),
       beginAction: spec => engine.kitBeginAction(spec),
       setPhase: phase => { engine.playerActor()!.phase = phase; },
-      setPlayerPosition: position => { engine.playerActor()!.position = copy(position); },
+      setPlayerPosition: position => {
+        const player=engine.playerActor()!,jump=engine.state.playerJump;
+        if(jump){const delta=sub(position,player.position);jump.from=add(jump.from,delta);jump.to=add(jump.to,delta);}
+        player.position=copy(position);
+      },
       setPlayerFacing: facing => { engine.playerActor()!.facing = copy(facing); },
       setPlayerVelocity: velocity => { engine.playerActor()!.velocity = copy(velocity); },
       setUntargetableUntil: tick => { engine.state.untargetableUntil = tick > engine.state.tick ? tick : undefined; },
@@ -380,9 +550,98 @@ export class CombatEngine {
     };
   }
 
+  private resetSideQuestActivities(): void {
+    this.carriedDeliveryId = undefined;
+    this.deliveryArrivals.clear();
+    this.patrolSteps.clear();
+    this.marekAssistance = undefined;
+    this.nurseryEscortActive = false;
+    this.nurseryTrail.length = 0;
+  }
+
+  private movableObjectSnapshots(): MovableObjectSnapshot[] {
+    const snapshots: MovableObjectSnapshot[] = this.state.movableObjects.map(object => ({
+      objectId: object.objectId, position: copy(object.position), phase: object.phase,
+      ...(object.rotationY === undefined ? {} : { rotationY: object.rotationY }),
+    }));
+    const player = this.playerActor();
+    for (const delivery of this.regionOf(this.state.regionId)?.deliveries ?? []) {
+      const settled = this.state.worldFacts[delivery.movedFactId] === true || this.deliveryArrivals.has(delivery.id);
+      const carried = !settled && this.carriedDeliveryId === delivery.id && player !== undefined;
+      snapshots.push({
+        objectId: delivery.id, phase: settled ? 'settled' : carried ? 'in-flight' : 'resting',
+        position: carried ? vec(player.position.x + player.facing.x * .55, player.position.y + .65, player.position.z + player.facing.z * .55)
+          : copy(settled ? delivery.to : delivery.from),
+        ...(carried ? { rotationY: yawOf(player.facing) } : {}),
+      });
+    }
+    return snapshots;
+  }
+
+  dodgePracticeBlock(): string | null {
+    if (!HUB_REGION_IDS.some(id => id === this.state.regionId) || this.state.combatTrial)
+      return 'Dodge practice is available at the Grove or Refuge training post.';
+    if (this.playerIsDown() || this.state.chapter.fall || (this.state.encounter && !this.state.rewardEmitted))
+      return 'Finish the encounter before practicing.';
+    const targetId = this.state.regionId === 'the-grove' ? 'grove-training' : 'refuge-training';
+    const target = this.regionOf(this.state.regionId)?.entities.find(entity => entity.interactionId === targetId);
+    const player = this.playerActor();
+    if (!target || !player || distance2(player.position, target.position) > 3.5 || Math.abs(player.position.y - target.position.y) > 2)
+      return 'Walk to the training post to begin.';
+    return null;
+  }
+
+  startDodgePractice(): void {
+    if (this.dodgeTraining?.active) return;
+    const reason = this.dodgePracticeBlock();
+    if (reason) throw new Error(reason);
+    const targetId = this.state.regionId === 'the-grove' ? 'grove-training' : 'refuge-training';
+    const center = this.regionOf(this.state.regionId)!.entities.find(entity => entity.interactionId === targetId)!.position;
+    this.dodgeTraining = { active: true, center: copy(center), startedAt: this.state.worldTick, lastStrike: -1, attempts: 0, dodged: 0, phase: 'idle' };
+  }
+
+  stopDodgePractice(): void {
+    if (!this.dodgeTraining?.active) return;
+    this.dodgeTraining.active = false;
+    this.dodgeTraining.phase = 'idle';
+    this.queuePresentationCue({ kind: 'cancel', phase: 'resolve', scopeId: 'hub-dodge-practice', cancellationReason: 'skip' });
+  }
+
+  private updateDodgePractice(): void {
+    const practice = this.dodgeTraining;
+    if (!practice?.active) return;
+    const player = this.playerActor();
+    if (!player || this.playerIsDown() || this.state.chapter.fall || (this.state.encounter && !this.state.rewardEmitted)
+      || distance2(player.position, practice.center) > 8 || Math.abs(player.position.y - practice.center.y) > 2) {
+      this.stopDodgePractice();
+      return;
+    }
+    const elapsed = this.state.worldTick - practice.startedAt;
+    const cycle = Math.floor(elapsed / 132), age = elapsed % 132;
+    const phase = age < 60 ? 'warning' : age < 72 ? 'strike' : 'recovery';
+    if (phase !== practice.phase) {
+      practice.phase = phase;
+      if (phase !== 'recovery') this.queuePresentationCue({
+        kind: phase === 'warning' ? 'anticipation' : 'active',
+        phase: phase === 'warning' ? 'anticipation' : 'active',
+        scopeId: 'hub-dodge-practice', position: practice.center, shape: 'ring',
+        footprint: { width: 8, length: 8 }, durationTicks: phase === 'warning' ? 60 : 12,
+        element: 'heartroot', priority: 'essential',
+      });
+    }
+    if (age >= 60 && practice.lastStrike !== cycle) {
+      practice.lastStrike = cycle;
+      practice.attempts++;
+      const evasion = this.state.evasion?.id === this.state.actionId ? this.state.evasion : EVASION_PROFILES[this.state.actionId as EvasionProfileId];
+      if (evasion && this.state.tick < player.invulnerableUntil) practice.dodged++;
+    }
+  }
+
   loadRegion(input:RegionLoadInput):void{
     const region=input.regionDefinition??REGIONS.find(candidate=>candidate.id===input.regionId);
     if(!region)throw new Error(`Unknown authored region: ${input.regionId}`);
+    this.resetSideQuestActivities();
+    this.dodgeTraining = undefined;
     if (input.regionId !== this.state.regionId) this.state.sceneColliders = [];
     const presence=new Set(input.presentActorIds);
     const entry=input.playerPosition??region.entrances[0]?.from??region.navigation.nodes[0]?.position;
@@ -392,28 +651,28 @@ export class CombatEngine {
     const playerGround=groundHeightAt(arena,entry.x,entry.z,entry.y);
     const playerPosition=vec(entry.x,playerGround??entry.y,entry.z);
     const actors=[makeActor('aren','human','player',playerPosition,false,false,100)];
-    const slots=input.companionSlots??{};
-    for(const id of [slots.combat,slots.utility,slots.scout])if(id&&region.entities.filter(entity=>entity.actorId===id&&presence.has(entity.id)).length!==1)throw new Error('Party companion '+id+' must resolve to one explicitly present region instance');
+    const companionId=input.companionId;
+    const traveling=region.entities.filter(entity=>presence.has(entity.id)&&entity.id.includes('__party_'));
+    if(traveling.length>1||traveling.some(entity=>entity.actorId!==companionId))throw new Error('Only one equipped traveling companion may enter a region.');
+    if(companionId){
+      const id=companionId;
+      const placements=region.entities.filter(entity=>entity.actorId===id&&presence.has(entity.id));
+      if(!placements.some(entity=>entity.id.includes('__party_'))&&placements.length!==1)throw new Error('Party companion '+id+' must resolve to one explicitly present region instance');
+    }
     for(const instanceId of presence){
       if(instanceId==='aren')continue;
       const entity=region.entities.find(candidate=>candidate.id===instanceId);
       if(!entity)throw new Error('Actor '+instanceId+' has no explicitly present placement in region '+region.id);
-      const archetypeId=entity.actorId??(instanceId as ActorId);
-      const definition=ACTORS[archetypeId];
-      if(!definition)throw new Error('No authored actor definition for '+archetypeId);
-      const requested=entity.position;
-      const elevation=groundHeightAt(arena,requested.x,requested.z,requested.y)??requested.y;
-      const large=isLargeSpecies(definition.species);
-      const actor=makeActor(instanceId as ActorId,definition.species,definition.allegiance,vec(requested.x,elevation,requested.z),large,definition.species==='hornbill',100,archetypeId);
-      actor.visible=entity?.visibleWhen===undefined||input.worldFacts?.[entity.visibleWhen]===true;
-      actors.push(actor);
+      actors.push(actorFromPlacement(entity, arena, input.worldFacts));
     }
+    if(input.eventKeys)this.state.seenWorldKeys=Array.from(input.eventKeys);
+    else if(input.runId!==this.state.runId)this.state.seenWorldKeys=[];
     this.state.regionId=region.id;
     this.state.runId=input.runId;
     this.state.timePolicy='normal';this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=1;this.state.accumulator=0;
     this.state.worldFacts=structuredClone(input.worldFacts??{});
     this.state.movableObjects=region.movableObjects.map(definition=>{
-      const settled=input.worldFacts?.[definition.movedFactId]===true;
+      const settled=input.worldFacts?.[definition.movedFactId]===true&&!ENCOUNTER_RESETTABLE_OBJECT_IDS.includes(definition.id);
       return {objectId:definition.id,position:copy(settled?definition.to:definition.from),phase:settled?'settled':'resting',authored:structuredClone(definition)};
     });
     this.state.encounterId=undefined;
@@ -421,19 +680,35 @@ export class CombatEngine {
     this.state.arena=arena;
     this.state.combatObstacles = [];
     this.refreshCombatSolids();
+    // A region load is a fresh attempt (checkpoint retry, Continue/Load after a defeat): never start it with a dead hero, or the
+    // first frame re-reports the defeat and the retry loops forever. Living travel keeps its current health.
+    if(this.state.player.vitality<=0)this.state.player.vitality=this.state.player.maxVitality;
     this.state.actors=actors;this.syncPlayerActorVitality();
     this.state.playerId='aren';
-    this.state.targetId=actors.find(actor=>actor.allegiance==='hostile'&&actor.visible)?.id;
-    this.state.companionSlots={...slots};
+    // World replacement always releases the held lock; same actor ID in a new world is not the same lock.
+    this.explicitLock = undefined;
+    // Implicit initial target: only seed when autoTargetAssist is not "off".
+    if (this.accessibility.autoTargetAssist !== 'off') {
+      this.state.targetId=actors.find(actor=>actor.allegiance==='hostile'&&actor.visible)?.id;
+    } else {
+      this.state.targetId = undefined;
+    }
     const previousCompanions=this.state.companionState;
     const chapter=input.chapter??previousCompanions.chapter;
     const wardenCall=input.wardenCall??previousCompanions.wardenCall;
     const bond=input.bond??previousCompanions.bond;
     const dominionUsed=input.dominionUsed??previousCompanions.dominionUsed;
-    this.state.companionState=createCompanionState(slots,chapter);
+    this.state.companionState=createCompanionState(companionId,chapter);
+    this.state.companionState.supportReadyAt = { ...previousCompanions.supportReadyAt };
     this.state.companionState.wardenCall=wardenCall;this.state.companionState.bond=bond;this.state.companionState.dominionUsed=dominionUsed;
     configureCompanions(this.state,{chapter,wardenCall,bond,dominionUsed,navNodes:region.navigation.nodes});
+    if(input.companionProgress)configureCompanionProgress(this.state,input.companionProgress);
     this.setTraversalGates(region.traversalArcs,input.worldFacts??{});
+    this.loadedRegion=input.regionDefinition;
+    this.state.chapter=createChapterCombatState();
+    this.state.chapter.traps=trapsFromRegion(region);
+    if(input.chapterRuntime)this.state.chapter.triggers=resolveChapterTriggers(input.chapterRuntime,region);
+    this.state.bossLunges=[];
     this.state.phaseIndex=0;
     this.state.phaseLatch=0;
     this.state.phaseActionFlags=[];
@@ -453,10 +728,11 @@ export class CombatEngine {
     this.enforceCaps();
   }
   startEncounter(input:EncounterStart):void{
+    const companionId=input.companionId??this.state.companionState.companionId;
     const definition=BOSS_ENCOUNTERS[input.encounterId]??WILDLIFE_ENCOUNTERS[input.encounterId];
     if(!definition)throw new Error(`Unknown authored encounter: ${input.encounterId}`);
     if(definition.regionId!==input.regionId)throw new Error(`Encounter ${input.encounterId} does not belong to ${input.regionId}`);
-    const region=REGIONS.find(candidate=>candidate.id===input.regionId);
+    const region=this.regionOf(input.regionId);
     if(!region)throw new Error(`Unknown authored region: ${input.regionId}`);
     this.cancelTraversal();
     this.setTimePolicy('normal');
@@ -464,8 +740,8 @@ export class CombatEngine {
     if(input.actors)this.state.actors=input.actors.map(cloneActor);
     else if(mustLoadRegion){
       const placedActors=[...definition.actorIds,...(definition.supportActorIds??[])].filter(id=>id!=='aren'&&region.entities.some(entity=>entity.id===id));
-      const presentActorIds=[...new Set<ActorId>([...placedActors,...[input.companionSlots?.combat,input.companionSlots?.utility,input.companionSlots?.scout].filter((id):id is CompanionId=>id!==undefined)])];
-      this.loadRegion({regionId:input.regionId,runId:input.runId,presentActorIds,playerPosition:input.playerPosition,companionSlots:input.companionSlots,worldFacts:input.worldFacts});
+      const presentActorIds=[...new Set<ActorId>([...placedActors,...(companionId?[companionId]:[])])];
+      this.loadRegion({regionId:input.regionId,runId:input.runId,presentActorIds,playerPosition:input.playerPosition,companionId,worldFacts:input.worldFacts,regionDefinition:this.loadedRegion?.id===input.regionId?this.loadedRegion:undefined});
     }
     this.state.regionId=region.id;
     this.state.runId=input.runId;
@@ -491,7 +767,7 @@ export class CombatEngine {
       if(!placement||!source)throw new Error(`Boss ${bossId} has no authored actor placement in ${region.id}`);
       const position=input.bossPosition??placement.position;
       const floor=groundHeightAt(this.state.arena,position.x,position.z,position.y)??position.y;
-      boss=makeActor(bossId,source.species,'hostile',vec(position.x,floor,position.z),definition.largeActors.includes(bossId),source.species==='hornbill',100,archetypeId);
+      boss=makeActor(bossId,source.species,'hostile',vec(position.x,floor,position.z),definition.largeActors.includes(bossId),isAerialSpecies(source.species),100,archetypeId);
       this.state.actors.push(boss);
     }
     for(const actorId of definition.actorIds){
@@ -504,7 +780,7 @@ export class CombatEngine {
         if(!placement||!source)throw new Error(`Encounter ${input.encounterId} has no authored placement for ${actorId}`);
         const requested=placement.position;
         const floor=groundHeightAt(this.state.arena,requested.x,requested.z,requested.y)??requested.y;
-        participant=makeActor(actorId,source.species,'hostile',vec(requested.x,floor,requested.z),definition.largeActors.includes(actorId),source.species==='hornbill',100,archetypeId);
+        participant=makeActor(actorId,source.species,'hostile',vec(requested.x,floor,requested.z),definition.largeActors.includes(actorId),isAerialSpecies(source.species),100,archetypeId);
         this.state.actors.push(participant);
       }
       participant.allegiance='hostile';participant.downed=false;participant.vitality=participant.maxVitality;participant.ferocity=participant.species==='human'?undefined:100;participant.recoveringUntil=0;
@@ -515,19 +791,25 @@ export class CombatEngine {
     boss.cleansedCoreIds=[];
     boss.corruption=boss.corruptionCoreIds?.length?100:60;
     boss.large=definition.largeActors.includes(boss.id);
+    if(definition.cleanseOnly&&companionId===bossId&&companionActor(this.state,bossId)===boss)throw new Error(`${bossId} is the hostile boss of ${input.encounterId} and cannot be enlisted as an ally`);
     this.state.encounterId=input.encounterId;
     this.state.encounter=structuredClone(definition);
-    this.state.companionSlots={...input.companionSlots};
+    this.state.chapter.sequence=initSequence(definition,region);
+    this.state.bossLunges=[];
+    for(const objectId of ENCOUNTER_RESETTABLE_OBJECT_IDS)this.resetMovableObject(objectId);
+    const taliShelter=this.state.chapter.sequence?.shelter;
+    const tali=taliShelter&&this.state.actors.find(actor=>actor.id==='tali');
+    if(tali&&taliShelter){tali.position=vec(taliShelter.x,groundHeightAt(this.state.arena,taliShelter.x,taliShelter.z,taliShelter.y)??taliShelter.y,taliShelter.z);tali.allegiance='ally';tali.downed=false;tali.visible=true;}
     const previous=this.state.companionState;
-    const companions=createCompanionState(this.state.companionSlots,previous.chapter);
+    const companions=createCompanionState(companionId,previous.chapter);
+    companions.supportReadyAt = { ...previous.supportReadyAt };
     companions.wardenCall=previous.wardenCall;
     companions.bond=previous.bond;
     companions.dominionUsed=previous.dominionUsed;
+    companions.progress=previous.progress;
     companions.navNodes=structuredClone(region.navigation.nodes);
     this.state.companionState=companions;
-    for(const id of [this.state.companionSlots.combat,this.state.companionSlots.utility,this.state.companionSlots.scout]){
-      if(id&&!this.actorForId(id))throw new Error('Selected companion '+id+' is absent; encounter startup will not summon it');
-    }
+    if(companionId&&!companionActor(this.state,companionId))throw new Error('Selected companion '+companionId+' is absent; encounter startup will not summon it');
     this.enforceCaps();
     this.state.phaseIndex=0;
     this.state.phaseLatch=0;
@@ -537,6 +819,9 @@ export class CombatEngine {
     this.state.telegraphs=[];
     this.state.pendingImpact=undefined;
     this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.state.lightIndex=0;this.state.actionId='idle';this.state.actionUntil=this.state.tick;this.state.actionRecoveryUntil=0;this.state.actionCancelable=false;this.resetArsenal();
+    this.state.chapter.fall=undefined;
+    if(input.encounterId===FALL_ENCOUNTER_ID)this.startFall(region);
+    this.state.chapter.orun=input.encounterId===ORUN_ENCOUNTER_ID?this.startOrun(region):undefined;
     this.state.events=[];
     this.state.worldEvents=[];
     this.state.presentationCues=[];
@@ -544,24 +829,60 @@ export class CombatEngine {
     this.state.wildlifeCombat=undefined;this.state.playerSlow=undefined;
     this.state.combatTrial=undefined;
     this.refreshCombatSolids();
-    this.state.targetId=bossId;
+    // World replacement always releases the held lock.
+    this.explicitLock = undefined;
+    // Boss assignment is implicit; honour the player preference (off = no implicit seed).
+    if (this.accessibility.autoTargetAssist !== 'off') this.state.targetId = bossId;
+    else this.state.targetId = undefined;
     this.state.checkpoint=this.captureEncounterCheckpoint();
     const initialPhase=this.state.encounter.phases[0];
     if(initialPhase)this.emitPhaseEvent(initialPhase.id,0,'entered');
   }
-  setCompanionSlots(slots:{combat?:CompanionId;utility?:CompanionId;scout?:'vara'},presentActorIds:readonly string[]):boolean{
-    const present=new Set(presentActorIds);
-    const region=REGIONS.find(candidate=>candidate.id===this.state.regionId);
-    if(!region)return false;
-    for(const id of [slots.combat,slots.utility,slots.scout])if(id&&(region.entities.filter(entity=>entity.actorId===id&&present.has(entity.id)).length!==1||!this.actorForId(id)))return false;
-    return configureCompanionSlots(this.state,slots);
+  setCompanion(companionId:CompanionId|undefined,presentActorIds:readonly string[]):boolean{
+    const actor=companionId?companionActor(this.state,companionId):undefined;
+    if(companionId&&(!actor||!presentActorIds.includes(actor.id)))return false;
+    if(!configureCompanion(this.state,companionId))return false;
+    for(const member of this.state.actors)if(member.id.includes('__party_')&&member.archetypeId!==companionId)member.visible=false;
+    return true;
+  }
+
+  /** Swap only traveling ally instances; the live encounter, hero, hazards and story actors are untouched. */
+  prepareCompanionParty(region:RegionDefinition,companionId?:CompanionId):()=>void{
+    if(region.id!==this.state.regionId)throw new Error('Party placement belongs to a different region.');
+    if(companionId!==undefined&&!COMPANION_ROSTER.some(companion=>companion.id===companionId))throw new Error('Unknown companion.');
+    const additions=region.entities.filter(entity=>entity.kind==='actor'&&entity.id.includes('__party_'));
+    if(additions.length!==(companionId?1:0)||additions.some(entity=>entity.actorId!==companionId))throw new Error('The selected companion needs exactly one traveling instance.');
+    const actors=this.state.actors.filter(actor=>!actor.id.includes('__party_'));
+    for(const entity of additions){
+      const previous=this.state.actors.find(actor=>actor.id===entity.id&&actor.archetypeId===entity.actorId);
+      actors.push(previous??actorFromPlacement(entity,this.state.arena,this.state.worldFacts));
+    }
+    if(companionId){
+      const id=companionId,actor=companionActor({actors},id);
+      if(!actor||!actor.visible||actor.downed||actor.possessed||actor.possessedUntil>this.state.worldTick||this.state.companionState.slots[id]?.possessed)throw new Error('Selected party is not ready.');
+    }
+    return ()=>{
+      if(this.state.companionState.companionId!==companionId)configureCompanion(this.state);
+      this.state.actors=actors;
+      configureCompanion(this.state,companionId);
+      this.loadedRegion=region;
+    };
   }
   setCameraBasis(basis:CameraBasis):void{this.state.arena.cameraBasis=basis;}
   syncWorldFacts(facts:Readonly<Record<string,boolean|number|string>>):void{
+    const upgradesChanged = HUB_UPGRADES.some(upgrade => facts[upgrade.fact] !== undefined && facts[upgrade.fact] !== this.state.worldFacts[upgrade.fact]);
     this.state.worldFacts={...this.state.worldFacts,...structuredClone(facts)};
-    const region=REGIONS.find(candidate=>candidate.id===this.state.regionId);
+    if (upgradesChanged) this.applyHubUpgrades(false);
+    const region=this.regionOf(this.state.regionId);
     if(!region)return;
     this.setTraversalGates(region.traversalArcs,this.state.worldFacts);
+    // Earned ambient wildlife can arrive during this scene; canonical companions and leaders never spawn here.
+    if (!this.state.combatTrial) for (const entity of region.entities) {
+      const definition = entity.actorId ? ACTORS[entity.actorId] : undefined;
+      if (definition?.role !== 'wild' || definition.combatRole !== 'noncombat' || entity.visibleWhen === undefined
+        || this.state.worldFacts[entity.visibleWhen] !== true || this.state.actors.some(actor => actor.id === entity.id)) continue;
+      this.state.actors.push(actorFromPlacement(entity, this.state.arena, this.state.worldFacts));
+    }
     for(const actor of this.state.actors){
       const placement=region.entities.find(entity=>entity.id===actor.id)??region.entities.find(entity=>entity.actorId===actor.id);
       if(placement?.visibleWhen!==undefined)actor.visible=this.state.worldFacts[placement.visibleWhen]===true;
@@ -569,29 +890,72 @@ export class CombatEngine {
   }
   setTraversalGates(routes:readonly RegionRouteDefinition[],worldFacts:Readonly<Record<string,boolean|number|string>>={}):void{
     this.state.traversalGates=routes.map(route=>({id:route.id,routeId:route.id,from:copy(route.from),to:copy(route.to),anchors:structuredClone(route.anchors),fromRegion:this.state.regionId,toRegion:route.destinationRegionId,width:route.traversal?.startRadius??2,rise:Math.abs(route.to.y-route.from.y),unlocked:route.unlockFact===undefined||worldFacts[route.unlockFact]===true,unlockFact:route.unlockFact,traversalEvent:route.traversalEvent,colliderIds:structuredClone(route.colliderIds),traversalActionId:route.traversalActionId,traversal:route.traversal?{...route.traversal}:undefined}));
+    // Koro's Canopy vine exists only while the live aspect holds it: an engine-owned swing route, not an authored world route.
+    const vine=orunVineRoute(this.state);
+    if(vine)this.state.traversalGates.push({id:ORUN_VINE_ROUTE.id,routeId:ORUN_VINE_ROUTE.id,from:copy(vine.from),to:copy(vine.to),anchors:vine.anchors.map(copy),fromRegion:this.state.regionId,toRegion:this.state.regionId,width:ORUN_TUNING.canopySwingStartRadius,rise:Math.abs(vine.to.y-vine.from.y),unlocked:true,traversalEvent:ORUN_VINE_ROUTE.traversalEvent,colliderIds:[],traversalActionId:ACTION_CLIPS.swing!,traversal:{kind:ORUN_VINE_ROUTE.kind,durationTicks:ORUN_TUNING.canopySwingTicks,startRadius:ORUN_TUNING.canopySwingStartRadius}});
   }
-  commandCompanion(companionId:CompanionId,command:CompanionCommand,targetId?:ActorId):boolean{
+  /** Commits one field command; call between fixed steps. A rejected command spends nothing. */
+  commandCompanion(request:CompanionCommandRequest):boolean{
     if(this.playerIsDown())return false;
-    const companion=this.actorForId(companionId);
-    if(companion?.possessed&&(command==='ask'||command==='signal')&&!this.state.companionState.wardenCall&&this.state.companionState.bond>=10){
+    return commitCompanionCommand(this.state,request);
+  }
+  /** Read-only exact acceptance result of `commandCompanion` (no tokens are reserved). */
+  commandAvailability(request:CompanionCommandRequest):CommandAvailability{
+    if(this.playerIsDown())return {available:false,reason:'Downed',readyAtWorldTick:this.state.worldTick,tokenCost:0};
+    return companionAvailability(this.state,request);
+  }
+  /** Valid, stably ordered targets of one command; every entry would be accepted by `commandCompanion`. */
+  commandTargets(companionId:CompanionId,command:FieldCommand):readonly CompanionTarget[]{return this.playerIsDown()?[]:companionTargets(this.state,companionId,command);}
+  targetLabel(target:CompanionTarget):string{return companionTargetLabel(this.state,target);}
+  /** Narrative relationship tuning is independent of unlocked party access. */
+  configureCompanionProgress(progress:Readonly<Record<CompanionId,CompanionProgress>>):void{configureCompanionProgress(this.state,progress);}
+  /** Drains the spatial intents queued since the last call (edge-triggered: one per entered checkpoint/entry trigger). */
+  consumeChapterIntents():readonly ChapterSpatialIntent[]{
+    const intents=this.state.chapter.intents;
+    if(!intents.length)return intents;
+    this.state.chapter.intents=[];
+    return intents;
+  }
+  /**
+   * Replaces the chapter spatial triggers against the currently loaded region without touching combat, actors, sequence
+   * state or the player's position. Used by the Director when a same-region segment transition re-arms checkpoints and
+   * encounter entries (Prologue → Greenwake, Canopy → Bamboo prep, Bamboo return → Grove) without reloading the region.
+   * `undefined` clears every trigger; any pre-armed `inside` ids are dropped so the player must re-enter to fire again.
+   */
+  configureChapterRuntime(definition: ChapterRuntimeDefinition | undefined): void {
+    const chapter = this.state.chapter;
+    chapter.triggers = definition && this.loadedRegion ? resolveChapterTriggers(definition, this.loadedRegion) : [];
+    chapter.inside = [];
+    chapter.intents = [];
+  }
+  /** The later-act Ask/Signal abilities, separate from the eight field verbs; also breaks a possession hold. */
+  private signalCompanion(companionId:CompanionId,targetId?:ActorId):boolean{
+    if(this.playerIsDown())return false;
+    const companion=companionActor(this.state,companionId);
+    if(companion?.possessed&&!this.state.companionState.wardenCall&&this.state.companionState.bond>=10){
       this.breakPossession(companion);
       return true;
     }
-    if(companionId==='koro'&&command==='special'){
-      if(!targetId)return false;
-      const object=this.state.movableObjects.find(candidate=>candidate.objectId===targetId);
-      const interaction=object&&INTERACTIONS.find(candidate=>candidate.id===object.authored.koroInteractionId);
-      if(!companion||!object||!interaction||!this.canStartMovableObjectMove(object,interaction,companion))return false;
-      if(!companionCommand(this.state,companionId,command,targetId))return false;
-      return this.startMovableObjectMove(object,interaction,companion);
-    }
-    return companionCommand(this.state,companionId,command,targetId);
+    return companionSignal(this.state,companionId,targetId);
+  }
+  private regionOf(id:RegionId):RegionDefinition|undefined{return this.loadedRegion?.id===id?this.loadedRegion:REGIONS.find(candidate=>candidate.id===id);}
+  /**
+   * True once a non-repeatable interaction has emitted its world event in this run, committed or still awaiting commit
+   * (keys are restored from the campaign on load and released when the campaign rejects the event). Such an interaction
+   * can never resolve again, so it must not be offered. Covers every success type, not only semantic interactions.
+   */
+  interactionSpent(interactionId:string):boolean{
+    const interaction=INTERACTIONS.find(candidate=>candidate.id===interactionId);
+    return !!interaction&&!interaction.repeatable&&this.state.seenWorldKeys.includes(this.interactionEventId(interaction));
   }
   resolveInteraction(interactionId:string,targetId:string,choiceOptionId?:string):boolean{
     if(this.playerIsDown())return false;
     if(this.state.traversal)return false;
     const interaction=INTERACTIONS.find(candidate=>candidate.id===interactionId);
     if(!interaction||interaction.regionId!==this.state.regionId)return false;
+    // The pillar brace and Tali's shelter run are beats of the live Fall only, never of an earlier Grove visit.
+    const fall=this.state.chapter.fall;
+    if((interaction.id===FALL_PILLAR_INTERACTION_ID||interaction.id===FALL_TALI_RESCUE_INTERACTION_ID)&&(!fall||fall.escaped))return false;
     const actor=this.interactionTargetActor(interaction,targetId);
     const hasAuthoredActor=this.state.actors.some(candidate=>candidate.id===interaction.targetId||candidate.archetypeId===interaction.targetId);
     if(targetId!==interaction.targetId&&!actor)return false;
@@ -610,6 +974,38 @@ export class CombatEngine {
     }
     if(interaction.actionId&&!this.interactionMechanicSatisfied(interaction,actor))return false;
     const success=interaction.success;
+    if (interactionId === MAREK_ASSISTANCE.interactionId) {
+      if (this.marekAssistance || this.state.worldFacts['side:trap-line-cleared'] === true) return false;
+      this.marekAssistance = { index: 0 };
+      this.emit('cue', 'Marek will follow the ledger and dismantle the trap supply.', 'marek');
+      return true;
+    }
+    if (success.type === 'carry-object') {
+      const delivery = this.regionOf(this.state.regionId)?.deliveries?.find(item => item.id === success.objectId);
+      if (!delivery || targetId !== delivery.id || this.state.worldFacts[delivery.movedFactId] === true
+        || this.deliveryArrivals.has(delivery.id) || delivery.requiredFacts.some(fact => this.state.worldFacts[fact] !== true)) return false;
+      if (success.phase === 'pick-up') {
+        if (this.carriedDeliveryId || interaction.id !== delivery.pickupInteractionId) return false;
+        this.carriedDeliveryId = delivery.id;
+        this.emit('cue', 'Supplies picked up. Carry them to the delivery marker.', player.id);
+        return true;
+      }
+      if (this.carriedDeliveryId !== delivery.id || interaction.id !== delivery.deliveryInteractionId) return false;
+      const eventId = this.interactionEventId(interaction);
+      if (!this.emitWorldEvent({ type: 'semantic-interaction', eventId, idempotencyKey: eventId, actorId: player.id, interactionId: interaction.id, kind: 'move-object', targetId: delivery.id, position: copy(player.position) })) return false;
+      this.deliveryArrivals.add(delivery.id);
+      this.carriedDeliveryId = undefined;
+      return true;
+    }
+    if (interactionId === NURSERY_ESCORT.interactionId && success.type === 'rescue') {
+      if (this.state.worldFacts['side:nursery-safe'] === true) return false;
+      if (!this.nurseryEscortActive) {
+        this.nurseryEscortActive = true;
+        this.nurseryTrail.length = 0;
+        this.queuePresentationCue({ kind: 'shelter', phase: 'sustain', position: NURSERY_ESCORT.to, footprint: { width: 3, length: 3 }, durationTicks: 180, priority: 'essential' });
+      }
+      return true;
+    }
     if(success.type==='object-move'){
       const object=this.state.movableObjects.find(candidate=>candidate.objectId===success.objectId);
       if(!object||targetId!==success.objectId||interaction.targetId!==success.objectId||interaction.id!==object.authored.playerInteractionId||interaction.playerActionId!=='staff-heavy'||this.koroAssignedToParty()||!this.hasRecentHeavyImpact(success.objectId))return false;
@@ -623,13 +1019,23 @@ export class CombatEngine {
       const eventId=this.interactionEventId(interaction);
       const signalActor=success.kind==='signal'?interaction.requiresActors.map(id=>this.actorForId(id)).find((candidate):candidate is CombatActor=>!!candidate&&candidate.visible&&!candidate.downed&&!candidate.possessed):undefined;
       const eventActor=signalActor??player;
-      return this.emitWorldEvent({type:'semantic-interaction',eventId,idempotencyKey:eventId,actorId:eventActor.id,interactionId:interaction.id,kind:success.kind,targetId:success.targetId,position:copy(eventActor.position),facts:choiceOptionId?{choiceOptionId}:undefined});
+      const emitted=this.emitWorldEvent({type:'semantic-interaction',eventId,idempotencyKey:eventId,actorId:eventActor.id,interactionId:interaction.id,kind:success.kind,targetId:success.targetId,position:copy(eventActor.position),facts:choiceOptionId?{choiceOptionId}:undefined});
+      if(emitted&&fall&&interaction.id===FALL_PILLAR_INTERACTION_ID)fall.pillarBraced=true;
+      return emitted;
     }
     if(success.type==='rescue'){
       const rescueTarget=this.actorForId(success.targetId as ActorId);
       const freed=this.state.worldFacts[`${interactionId}:freed`]===true;
       if(!rescueTarget&&!freed)return false;
-      if(success.targetId==='tali'&&(!rescueTarget||this.state.worldFacts.taliInBamboo!==true))return false;
+      if(success.targetId==='tali'&&!rescueTarget)return false;
+      if(fall&&interaction.id===FALL_TALI_RESCUE_INTERACTION_ID){
+        // Aren sends Tali to cover; the safe rescue is emitted only when she physically reaches the authored shelter.
+        if(fall.tali!=='waiting'||!rescueTarget||rescueTarget.downed||this.hasActiveThreatNear(rescueTarget.position))return false;
+        fall.tali='moving';
+        this.emit('cue','Tali runs for the shelter between the lookouts.',player.id,rescueTarget.id);
+        return true;
+      }
+      if(success.targetId==='tali'&&this.state.worldFacts.taliInBamboo!==true)return false;
       const safe=success.targetId==='tali'?this.isTaliSafe(rescueTarget!.position):!!rescueTarget?.downed&&!rescueTarget.possessed&&!this.hasActiveThreatNear(rescueTarget.position);
       if(!safe)return false;
       const eventId=this.interactionEventId(interaction);
@@ -650,6 +1056,10 @@ export class CombatEngine {
     }
     if(success.type==='choice'){
       if(!choiceOptionId||!success.optionIds.includes(choiceOptionId))return false;
+      if (success.choiceId === 'solkar-listens' && choiceOptionId === 'listen') {
+        const solkar = this.actorForId('solkar');
+        if (!solkar?.visible || solkar.downed || solkar.possessed || solkar.allegiance === 'hostile') return false;
+      }
       const factionScoped=success.choiceId==='faction-covenant'||success.choiceId==='chapter-seven-commitment';
       const eventId=this.interactionEventId(interaction)+(factionScoped?':'+choiceOptionId.replace(/^decline-/,''):'');
       return this.emitWorldEvent({type:'choice',eventId,idempotencyKey:eventId,choiceId:success.choiceId,optionId:choiceOptionId});
@@ -664,11 +1074,10 @@ export class CombatEngine {
     if(!request||request.kind!=='restart-checkpoint'||request.reason!=='tali-safety'||!checkpoint)return false;
     if(checkpoint.runId!==snapshot.runId||checkpoint.checkpointId!==request.checkpointId)return false;
     const party=checkpoint.progress.party;
-    const presentActorIds=[...new Set<ActorId>(['aren',...checkpoint.encounterReset.actorIds,party.combat,party.utility,party.scout].filter((id):id is ActorId=>id!==undefined))];
-    this.loadRegion({regionId:checkpoint.safeSpawn.regionId,runId:checkpoint.runId,presentActorIds,playerPosition:checkpoint.safeSpawn.position,companionSlots:party,chapter:checkpoint.progress.chapter,worldFacts:checkpoint.progress.worldFacts});
-    this.state.seenWorldKeys=[...checkpoint.progress.eventKeys];
+    const presentActorIds=[...new Set<ActorId>(['aren',...checkpoint.encounterReset.actorIds,party.companionId].filter((id):id is ActorId=>id!==undefined))];
+    this.loadRegion({regionId:checkpoint.safeSpawn.regionId,runId:checkpoint.runId,presentActorIds,playerPosition:checkpoint.safeSpawn.position,companionId:party.companionId,chapter:checkpoint.progress.chapter,worldFacts:checkpoint.progress.worldFacts,eventKeys:checkpoint.progress.eventKeys});
     const encounterId=checkpoint.encounterReset.encounterId;
-    if(encounterId)this.startEncounter({encounterId,regionId:checkpoint.safeSpawn.regionId,runId:checkpoint.runId,playerPosition:checkpoint.safeSpawn.position,companionSlots:party});
+    if(encounterId)this.startEncounter({encounterId,regionId:checkpoint.safeSpawn.regionId,runId:checkpoint.runId,playerPosition:checkpoint.safeSpawn.position,companionId:party.companionId});
     return true;
   }
   useAbility(kind: 'root-tether'|'ferocity'|'corruption'|'cleanse'|'ask'|'signal', targetId?: ActorId): boolean {
@@ -677,8 +1086,8 @@ export class CombatEngine {
       case 'ferocity': return this.startPlayerAction('ferocity', targetId);
       case 'corruption': return this.startPlayerAction('corruption', targetId);
       case 'cleanse': return this.startPlayerAction('cleanse', targetId);
-      case 'ask': return this.commandCompanionForInput(targetId, 'ask');
-      case 'signal': return this.commandCompanionForInput(targetId, 'signal');
+      case 'ask': return this.commandCompanionForInput(targetId);
+      case 'signal': return this.commandCompanionForInput(targetId);
     }
   }
   step(input: CombatInput, deltaSeconds = FIXED_STEP_SECONDS, basis?: CameraBasis): number {
@@ -691,7 +1100,7 @@ export class CombatEngine {
     }
     return steps;
   }
-  fixedStep(input: CombatInput = { tick: this.state.tick+1, move: vec(0,0,0), dodgePressed:false, lightPressed:false, heavyPressed:false, heavyHeld:false, heavyReleased:false, interactPressed:false }): void {
+  fixedStep(input: CombatInput = { tick: this.state.tick+1, move: vec(0,0,0), dodgePressed:false, lightPressed:false, heavyPressed:false, heavyHeld:false, heavyReleased:false, interactPressed:false, lockOnPressed:false, lockOnHeld:false }): void {
     if(this.state.timePolicy==='paused')return;
     const firstEvent=this.state.events.length;
     const playerWasAlive=this.state.player.vitality>0;
@@ -707,11 +1116,20 @@ export class CombatEngine {
     const wasTraversing=this.state.traversal!==undefined;
     if(this.playerIsDown())this.endPlayerCombat();else {this.updateActors(worldScale);this.updateHazards();}
     if(!this.playerIsDown()){
+      updateSequence(this.chapterHost);
       this.updateBossAI();
+      this.updateBossLunges();
       if(wasTraversing)this.updateTraversal(worldScale);else this.updatePlayer(input);
       this.updateArsenal(worldScale,input);
+      this.updateLunge();
+      // Companions act before the reaction update so a support hit's reaction starts (and cancels the attack) this very tick.
       stepCompanions(this.state);
+      this.processCompanionObjectRequests();
+      this.drainCompanionStrikes();
+      this.updateReactions();
+      this.separateBodies();
       this.updateMovableObjects();
+      this.updateChapterWorld();
       this.updatePhase();
       this.updateCombatTrial();
     }
@@ -730,7 +1148,7 @@ export class CombatEngine {
   snapshot(): CombatSnapshot {
     const currentPhase=this.state.encounter?.phases[this.state.phaseIndex];
     const actors=this.state.actors.map(actor=>{
-      const variantId=actor.id===this.state.encounter?.bossId?currentPhase?.actorVariantId:undefined;
+      const variantId=actor.id===this.state.encounter?.bossId&&actor.allegiance==='hostile'?currentPhase?.actorVariantId:undefined;
       // Trial monsters render their own playtest asset instead of the shared archetype default.
       const trialAssetId=this.state.combatTrial?this.trials().find(trial=>trial.monsterId===actor.id)?.monsterAssetId:undefined;
       const renderVariantId=variantId??actor.renderVariantId??trialAssetId??ACTORS[actor.archetypeId]?.assetId;
@@ -739,39 +1157,73 @@ export class CombatEngine {
       const motion=actor.motion;
       const jump=actor.id===this.state.playerId?this.state.playerJump:undefined;
       const landingAt=jump?jump.flightStartedAtTick+jump.flightTicks:0;
-      const peakAt=jump?jump.flightStartedAtTick+jump.flightTicks*(.5+(jump.to.y-jump.from.y)/(8*jump.apex)):0;
-      const jumpPhase:ActorSnapshot['jumpPhase']=!jump?undefined:this.state.tick<=jump.airStartedAtTick?'takeoff':this.state.tick<peakAt?'rising':this.state.tick<landingAt?'falling':'landing';
-      const jumpPhaseProgress=!jump?undefined:Math.max(0,Math.min(1,jumpPhase==='takeoff'?(this.state.tick-jump.startedAtTick)/Math.max(1,jump.airStartedAtTick-jump.startedAtTick):jumpPhase==='rising'?(this.state.tick-jump.airStartedAtTick)/Math.max(1,peakAt-jump.airStartedAtTick):jumpPhase==='falling'?(this.state.tick-peakAt)/Math.max(1,landingAt-peakAt):(this.state.tick-landingAt)/PLAYER_JUMP_LANDING_TICKS));
+      const falling=jump?.fallVelocityY!==undefined;
+      const peakAt=jump?jump.flightStartedAtTick+jump.flightTicks*(.5+(jump.to.y-jump.from.y)/(8*Math.max(jump.apex,1e-6))):0;
+      const jumpPhase:ActorSnapshot['jumpPhase']=!jump?undefined:falling?'falling':this.state.tick<=jump.airStartedAtTick?'takeoff':this.state.tick<peakAt?'rising':this.state.tick<landingAt?'falling':'landing';
+      const jumpPhaseProgress=!jump?undefined:Math.max(0,Math.min(1,falling?(this.state.tick-jump.startedAtTick)/PLAYER_JUMP_FLIGHT_TICKS:jumpPhase==='takeoff'?(this.state.tick-jump.startedAtTick)/Math.max(1,jump.airStartedAtTick-jump.startedAtTick):jumpPhase==='rising'?(this.state.tick-jump.airStartedAtTick)/Math.max(1,peakAt-jump.airStartedAtTick):jumpPhase==='falling'?(this.state.tick-peakAt)/Math.max(1,landingAt-peakAt):(this.state.tick-landingAt)/PLAYER_JUMP_LANDING_TICKS));
       return {id:actor.id,archetypeId:actor.archetypeId,species:actor.species,allegiance:actor.allegiance,position:copy(actor.position),velocity:copy(actor.velocity),facing:copy(actor.facing),actionId:actor.actionId,phase:actor.phase,normalizedTime:attack?.time??actor.normalizedTime,vitality:actor.vitality,maxVitality:actor.maxVitality,ferocity:actor.ferocity,corruption:actor.corruption,targetId:actor.targetId,renderVariantId,sockets:structuredClone(actor.sockets),interactionRequirements:structuredClone(actor.interactionRequirements),visible:actor.visible,downed:actor.downed,possessed:actor.possessed,weakPointExposed,
         ...this.heroMarksOf(actor),
         ...(attack?{attackPhase:attack.phase,attackPhaseProgress:attack.progress}:{}),
         jumpPhase,jumpPhaseProgress,jumpBoosted:jump?.boosted,
         ...(motion&&motion.yawRate!==0?{yawRate:motion.yawRate}:{}),
         ...(motion&&this.state.worldTick<motion.roarUntil?{roarProgress:(this.state.worldTick-motion.roarFrom)/Math.max(1,motion.roarUntil-motion.roarFrom)}:{}),
-        ...(actor.hitReactUntil!==undefined&&this.state.worldTick<actor.hitReactUntil?{hitReact:Math.min(1,Math.max(0,1-(actor.hitReactUntil-this.state.worldTick)/HIT_REACT_TICKS))}:{})};
+        ...this.reactionSnapshotOf(actor),
+        ...this.chapterSnapshotOf(actor)};
     });
     const boss=this.currentBoss();
     return {
       actors,
-      movableObjects:this.state.movableObjects.map(object=>({objectId:object.objectId,position:copy(object.position),phase:object.phase,...(object.rotationY===undefined?{}:{rotationY:object.rotationY})})),
+      movableObjects:this.movableObjectSnapshots(),
       combatObstacles: structuredClone(this.state.combatObstacles),
       worldClock:{simulationTick:this.state.tick,worldTick:this.state.worldTick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS,timeScale:this.state.worldTimeScale,policy:this.state.timePolicy},
       player:{heroId:this.state.heroId,vitality:this.state.player.vitality,maxVitality:this.state.player.maxVitality,instinct:this.state.player.instinct,mana:this.state.player.mana,maxMana:this.state.player.maxMana,...this.playerSnapshotExtras()},
       skills:this.playerSkills(),
       encounterStatus:this.encounterStatus(),
+      ...(this.dodgeTraining ? { dodgePractice: { active: this.dodgeTraining.active, attempts: this.dodgeTraining.attempts, dodged: this.dodgeTraining.dodged, phase: this.dodgeTraining.phase } } : {}),
+      nurseryEscortActive: this.nurseryEscortActive,
       ...(this.state.combatTrial ? { trialGates:this.trials().map((trial,index)=>({id:trial.id,collider:trial.gate,open:this.state.combatTrial!.index>index})) } : {}),
       ...(this.state.playerProjectiles.length?{playerProjectiles:this.state.playerProjectiles.map(projectile=>({id:projectile.id,kind:projectile.kind,ownerId:projectile.ownerId,position:copy(projectile.position),direction:copy(projectile.direction),speed:projectile.speed,radius:projectile.radius,ageTicks:projectile.ageTicks,lifeTicks:projectile.lifeTicks,...(projectile.targetId?{targetId:projectile.targetId}:{})}))}:{}),
       ...(this.state.judgementMarks.length?{judgementMarks:this.state.judgementMarks.map(mark=>({id:mark.id,position:copy(mark.position),angleRadians:mark.angleRadians,createdAtTick:mark.createdAtTick,detonateAtTick:mark.detonateAtTick}))}:{}),
       ...(this.state.hitStop?{hitStop:{remainingTicks:this.state.hitStop.remainingTicks,strength:this.state.hitStop.strength}}:{}),
+      ...orunSnapshot(this.state),
       encounterId:this.state.encounterId,
       boss:boss?{actorId:boss.id,phaseId:currentPhase?.id??'resolved',phaseIndex:this.state.phaseIndex,ferocity:boss.ferocity??0,maxFerocity:100,corruption:boss.corruption??0,exposed:this.state.worldTick<boss.staggerUntil||this.state.worldTick<(boss.weakPointUntil??0),...(boss.corruptionCoreIds?{corruptionCores:boss.corruptionCoreIds.map(id=>({id,cleansed:boss.cleansedCoreIds?.includes(id)??false}))}:{})}:undefined,
-      telegraphs:this.state.telegraphs.map(telegraph=>({id:telegraph.id,attackId:telegraph.attackId,sourceId:telegraph.sourceId,targetPosition:copy(telegraph.targetPosition),phase:telegraph.phase,remainingTicks:telegraph.remainingTicks})),
+      telegraphs:this.state.telegraphs.map(telegraph=>{
+        const hazard=telegraph.id?this.state.hazards.find(h=>h.id===telegraph.id):undefined;
+        return {
+          id:telegraph.id,
+          attackId:telegraph.attackId,
+          sourceId:telegraph.sourceId,
+          targetPosition:copy(telegraph.targetPosition),
+          phase:telegraph.phase,
+          remainingTicks:telegraph.remainingTicks,
+          ...(hazard?.targetActorId!==undefined?{targetActorId:hazard.targetActorId}:{}),
+        };
+      }),
       hazards:this.state.hazards.map(hazard=>({id:hazard.id,kind:hazard.kind==='cone'?'area':hazard.kind,bounds:{min:copy(hazard.bounds.min),max:copy(hazard.bounds.max)},active:this.state.worldTick>=hazard.activeFrom&&this.state.worldTick<hazard.activeUntil})),
-      targetId:this.state.targetId,events:structuredClone(this.state.worldEvents),
+      ...(this.state.chapter.traps.length?{traps:trapSnapshots(this.state)}:{}),
+      targetId:this.state.targetId,
+      ...(this.state.targetId===undefined?{}:{lockStatus:this.explicitLock!==undefined?'explicit':'implicit'}),
+      events:structuredClone(this.state.worldEvents),
     };
   }
   serialize(): string { return JSON.stringify(this.state); }
-  restore(serialized: string): void { this.cancelTraversal(); this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed); this.syncKit(); this.refreshCombatSolids(); this.cancelTraversal(); this.state.presentationCues=[]; for(const hazard of this.state.hazards){hazard.activePresentationEmitted=false;hazard.warningPresentationEmitted=false;} this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'}); if(this.state.sigilCharge)this.queueSigilCue(this.state.sigilCharge.scopeId,'sustain',SIGIL.chargeSustainTicks,1); }
+  restore(serialized: string): void {
+    this.resetSideQuestActivities();
+    this.dodgeTraining = undefined;
+    this.cancelTraversal();
+    this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed);
+    this.syncKit();
+    this.refreshCombatSolids();
+    this.cancelTraversal();
+    this.state.presentationCues=[];
+    for(const hazard of this.state.hazards){hazard.activePresentationEmitted=false;hazard.warningPresentationEmitted=false;}
+    // World replacement always releases the held lock; same actor ID in a restored checkpoint is not the same lock.
+    this.explicitLock = undefined;
+    if (this.state.targetId !== undefined && this.accessibility.autoTargetAssist === 'off') this.state.targetId = undefined;
+    this.queuePresentationCue({kind:'cancel',phase:'resolve',cancellationReason:'load'});
+    if(this.state.sigilCharge) this.queueSigilCue(this.state.sigilCharge.scopeId, 'sustain', SIGIL.chargeSustainTicks, 1);
+  }
   consumeEvents(): CombatEvent[] { const events = structuredClone(this.state.events); this.state.events.length=0; return events; }
   consumeWorldEvents(): WorldEvent[] { const events = structuredClone(this.state.worldEvents); this.state.worldEvents.length=0; return events; }
   /** Release only an uncommitted choice emission after the Director permanently rejects it. */
@@ -783,15 +1235,24 @@ export class CombatEngine {
   queuePresentationCue(cue:Omit<StoryCue,'instanceId'|'tick'|'worldTick'|'worldTimeSeconds'>):StoryCue{
     const heroCue=(this.state.heroId==='yara'||this.kit!==undefined)&&cue.actorId===this.state.playerId&&(cue.kind==='cleanse'||cue.kind==='tether');
     const normalized=structuredClone(heroCue?{...cue,element:this.heroElement(),actionId:this.playerClip(cue.kind==='cleanse'?'cleanse':'root_tether')}:cue);
-    const instanceId=this.state.runId+':'+(this.state.encounterId??'free')+':cue:'+this.state.tick+':'+(++this.state.eventSequence);
-    const event:StoryCue={...normalized,instanceId,tick:this.state.tick,worldTick:this.state.worldTick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS};
-    this.state.presentationCues.push(event);
+    const event=appendCue(this.state,normalized);
+    if(event.actorId===this.state.playerId){
+      if(event.kind==='slash'&&event.phase==='active'&&event.actionId==='sakda-tempest'&&event.position){
+        this.queueSurfaceContact(event.position,vec(0,-1,0),.05,event.actionId,event.intensity??1,event.scopeId);
+      }
+      else if(event.kind==='slash'&&event.phase==='active')this.queueMeleeSurfaceContact(event);
+      else if((event.kind==='root-eruption'&&event.phase==='active'||event.kind==='lightning'&&(event.phase==='active'||event.phase==='hit')||event.kind==='bloom'&&event.phase==='hit')&&event.position){
+        this.queueSurfaceContact(event.position,vec(0,-1,0),.05,event.actionId,event.intensity??1,event.scopeId);
+      }
+    }
     return structuredClone(event);
   }
   private captureEncounterCheckpoint(): EncounterCheckpoint {
-    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState), wildlifeCombat:structuredClone(this.state.wildlifeCombat), playerSlow:structuredClone(this.state.playerSlow), combatTrial:structuredClone(this.state.combatTrial) };
+    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), skillReadyAt:{...this.state.skillReadyAt}, phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState), wildlifeCombat:structuredClone(this.state.wildlifeCombat), playerSlow:structuredClone(this.state.playerSlow), combatTrial:structuredClone(this.state.combatTrial), chapter:structuredClone(this.state.chapter) };
   }
   resetToCheckpoint(): void {
+    this.resetSideQuestActivities();
+    this.explicitLock = undefined;
     const traversalSafePose=this.state.traversal?copy(this.state.traversal.lastSafePose):undefined;
     this.cancelTraversal();
     const checkpoint = this.state.checkpoint;
@@ -806,6 +1267,10 @@ export class CombatEngine {
       actor.staggerUntil=shiftDeadline(actor.staggerUntil,worldOffset);
       actor.possessedUntil=shiftDeadline(actor.possessedUntil,worldOffset);
       if(actor.weakPointUntil!==undefined)actor.weakPointUntil=shiftDeadline(actor.weakPointUntil,worldOffset);
+      if(actor.markState)actor.markState.untilWorldTick=shiftDeadline(actor.markState.untilWorldTick,worldOffset);
+      if(actor.attention)actor.attention.untilWorldTick=shiftDeadline(actor.attention.untilWorldTick,worldOffset);
+      if(actor.supportSlow)actor.supportSlow.untilWorldTick=shiftDeadline(actor.supportSlow.untilWorldTick,worldOffset);
+      if(actor.companionControlReadyAt)actor.companionControlReadyAt=shiftDeadline(actor.companionControlReadyAt,worldOffset);
       if(actor.id!==this.state.playerId&&actor.actionEndsTick>0){
         actor.actionStartedTick+=worldOffset;
         actor.actionEndsTick+=worldOffset;
@@ -820,7 +1285,16 @@ export class CombatEngine {
     this.state.phaseLatch = checkpoint.phaseLatch;
     this.state.phaseActionFlags = [...checkpoint.phaseActionFlags];
     this.state.rewardEmitted = checkpoint.rewardEmitted;
-    this.state.companionState = structuredClone(checkpoint.companions);
+    this.state.companionState = normalizeCompanionState(structuredClone(checkpoint.companions));
+    shiftCompanionClocks(this.state.companionState,worldOffset);
+    this.state.chapter = checkpoint.chapter?structuredClone(checkpoint.chapter):createChapterCombatState();
+    this.state.chapter.intents = [];
+    this.syncFallEvidence();
+    const restoredSequence = this.state.chapter.sequence;
+    if(restoredSequence)restoredSequence.until=shiftDeadline(restoredSequence.until,worldOffset);
+    resetOrunForCheckpoint(this.state,worldOffset);
+    this.state.bossLunges = [];
+    for(const objectId of ENCOUNTER_RESETTABLE_OBJECT_IDS)this.resetMovableObject(objectId);
     this.state.wildlifeCombat=structuredClone(checkpoint.wildlifeCombat);
     this.state.playerSlow=checkpoint.playerSlow?{...checkpoint.playerSlow,untilWorldTick:shiftDeadline(checkpoint.playerSlow.untilWorldTick,worldOffset)}:undefined;
     this.state.combatTrial=structuredClone(checkpoint.combatTrial);
@@ -831,6 +1305,7 @@ export class CombatEngine {
     this.state.events = [];
     this.state.worldEvents = [];
     this.state.bufferedAction=undefined;this.state.heavyChargeStartTick=null;this.state.lightIndex=0;this.state.pendingImpact=undefined;this.state.actionCancelable=false;this.resetArsenal();
+    this.state.skillReadyAt={...checkpoint.skillReadyAt};
     this.state.presentationCues = [];
     this.state.playerJump=undefined;
     if(traversalSafePose){const player=this.playerActor();if(player)player.position=traversalSafePose;}
@@ -857,23 +1332,100 @@ export class CombatEngine {
 
   /** Monster attack phase derived from its newest live hazard; `time` is the composite normalized clip time (windup .5, commit .12, active .24, recovery .14). */
   private monsterAttackProgress(actor: CombatActor): { phase: NonNullable<ActorSnapshot['attackPhase']>; progress: number; time: number } | undefined {
-    if (actor.id === this.state.playerId) return undefined;
-    const hazard = this.liveAttackOf(actor);
-    if (!hazard) return undefined;
-    const windupEnd = hazard.windupUntil ?? hazard.activeFrom;
-    const castEnd = hazard.castUntil ?? hazard.activeUntil;
-    const recoveryEnd = hazard.recoveryUntil ?? castEnd;
-    const tick = this.state.worldTick;
-    if (tick < windupEnd) { const progress = Math.max(0, tick - hazard.startTick) / Math.max(1, windupEnd - hazard.startTick); return { phase: 'windup', progress, time: 0.5 * progress }; }
-    if (tick < hazard.activeFrom) { const progress = (tick - windupEnd) / Math.max(1, hazard.activeFrom - windupEnd); return { phase: 'commit', progress, time: 0.5 + 0.12 * progress }; }
-    if (tick < castEnd) { const progress = (tick - hazard.activeFrom) / Math.max(1, castEnd - hazard.activeFrom); return { phase: 'active', progress, time: 0.62 + 0.24 * progress }; }
-    const progress = Math.min(1, (tick - castEnd) / Math.max(1, recoveryEnd - castEnd));
-    return { phase: 'recovery', progress, time: Math.min(1, 0.86 + 0.14 * progress) };
+    return monsterAttackIn(this.state, actor);
   }
-  setSceneColliders(colliders: readonly RegionColliderDefinition[]): void {
+  // ---- Act I chapter combat ---------------------------------------------------------------------------------------
+  private createChapterHost(): ChapterHost {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the host exposes live getters over the engine's current state
+    const engine = this;
+    return {
+      get state() { return engine.state; },
+      emit: (kind, message, actorId, targetId) => engine.emit(kind, message, actorId, targetId),
+      emitWorldEvent: event => engine.emitWorldEvent(event),
+      queueCue: cue => { engine.queuePresentationCue(cue); },
+      beginAttack: (source, def, aim) => engine.beginAttack(source, def, aim),
+      cancelLiveAttack: (source, action) => { engine.cancelLiveAttack(source, action); },
+      clearBossThreats: () => engine.clearBossThreats(),
+      resetMovableObject: objectId => engine.resetMovableObject(objectId),
+    };
+  }
+  /** Cancels every live hazard, telegraph, lunge and combat obstacle with interrupt cues (a phase change, a settled boss, a lost Tali). */
+  private clearBossThreats(): void {
+    for (const hazard of this.state.hazards) this.queuePresentationCue({ kind: 'cancel', phase: 'resolve', scopeId: hazard.id, cancellationReason: 'interrupt' });
+    this.state.hazards = [];
+    this.state.telegraphs = this.state.telegraphs.filter(telegraph => telegraph.sourceId === this.state.playerId);
+    this.state.bossLunges = [];
+    this.clearCombatObstacles();
+  }
+  /** Returns an encounter-resettable movable object to rest (the shrine bundle on every encounter start, retry and failed exposure). */
+  private resetMovableObject(objectId: string): void {
+    const object = this.state.movableObjects.find(candidate => candidate.objectId === objectId);
+    if (!object) return;
+    object.phase = 'resting';
+    object.position = copy(object.authored.from);
+    delete object.startedAtWorldTick; delete object.actorId; delete object.interactionId;
+  }
+  /** Chapter presentation status plus the companion job/guard of one actor. */
+  private chapterSnapshotOf(actor: CombatActor): Pick<ActorSnapshot, 'mark' | 'job' | 'guard' | 'chapterStatus'> {
+    const out: { mark?: ActorSnapshot['mark']; job?: ActorSnapshot['job']; guard?: ActorSnapshot['guard']; chapterStatus?: ActorSnapshot['chapterStatus'] } = {};
+    if (actor.markState) out.mark = markSnapshot(this.state, actor);
+    const slot = this.state.companionState.slots[actor.archetypeId as CompanionId];
+    if (slot && companionActor(this.state,slot.companionId) === actor) {
+      if (slot.job) out.job = { command: slot.job.command, ...(slot.targetId ? { targetId: slot.targetId } : {}), remainingTicks: Math.max(0, Math.ceil(slot.job.endsAt - this.state.worldTick)) };
+      if (slot.guard) out.guard = { protecteeId: slot.guard.protecteeId, hazardId: slot.guard.hazardId, state: slot.guard.state, remainingTicks: Math.max(0, Math.ceil(slot.guard.until - this.state.worldTick)) };
+    }
+    const status = chapterStatusOf(this.state, actor);
+    if (status) out.chapterStatus = status;
+    return out;
+  }
+  /** Spatial triggers and camp traps; runs after every body has moved this tick. */
+  private updateChapterWorld(): void {
+    this.updateDodgePractice();
+    this.updateNurseryEscort();
+    this.updatePackPatrol();
+    this.updateMarekAssistance();
+    const player = this.playerActor();
+    updateChapterIntents(this.state, player);
+    const fall = this.state.chapter.fall;
+    if (fall) this.updateFallWorld(fall);
+    else this.updateTaliPlay();
+    if (!player || !this.state.chapter.traps.length) return;
+    for (const trap of this.state.chapter.traps) {
+      if (!trapArmed(this.state, trap) || distance2(player.position, trap.position) > trap.radius + player.radius || this.isPlayerAirborne() || Math.abs(player.position.y - trap.position.y) > 1.2) continue;
+      trap.sprung = true;
+      trap.revealed = true;
+      this.hurtPlayer(TRAP.damage, trap.id, 'The trap snaps shut on the hero.', trap.position);
+    }
+  }
+  /** Environmental damage to the hero with the same i-frame, untargetable and reaction rules as a monster hit. */
+  private hurtPlayer(amount: number, sourceId: ActorId, cue: string, from: Vec3): void {
+    const player = this.playerActor();
+    if (!player || this.playerIsDown() || this.judgementInvulnerable() || this.isUntargetable() || this.reactionInvulnerable(player) || this.state.tick < player.invulnerableUntil) return;
+    const before = this.state.player.vitality;
+    this.state.player.vitality = Math.max(0, before - (this.kit?.absorbDamage?.(amount) ?? amount));
+    const loss = before - this.state.player.vitality;
+    if (loss > 0) this.emit('damage', cue, player.id, sourceId, undefined, undefined, { targetId: player.id, amount: loss, position: copy(player.position), worldTick: this.state.worldTick });
+    const push = facingFrom(sub(player.position, from));
+    this.applyPlayerReaction(defaultHit(amount), push.x, push.z);
+    if (this.playerIsDown()) this.endPlayerCombat();
+  }
+  /** Koro object moves the companion system queued once its companion reached the object: the engine owns the transaction. */
+  private processCompanionObjectRequests(): void {
+    const requests = this.state.companionState.objectRequests;
+    if (!requests.length) return;
+    this.state.companionState.objectRequests = [];
+    for (const request of requests) {
+      const object = this.state.movableObjects.find(candidate => candidate.objectId === request.objectId);
+      const interaction = object && INTERACTIONS.find(candidate => candidate.id === request.interactionId);
+      const actor = this.actorForId(request.actorId);
+      if (!object || !interaction || !actor || !this.canStartMovableObjectMove(object, interaction, actor) || !this.startMovableObjectMove(object, interaction, actor)) failCompanionJob(this.state, request.actorId);
+    }
+  }
+  setSceneColliders(colliders: readonly RegionColliderDefinition[], supports: readonly SupportField[] = []): void {
     const previous = this.state.sceneColliders;
     this.state.arena.colliders = this.state.arena.colliders.filter(collider => !previous.some(solid => solid.id === collider.id));
     this.state.sceneColliders = colliders.slice();
+    this.state.arena.supports = supports.slice();
     this.refreshCombatSolids();
   }
 
@@ -922,7 +1474,10 @@ export class CombatEngine {
     if(!source?.visible)return;
     if(!source.downed||source.vitality!==0){
       trial.status=distance2(source.position,player.position)<=12?'fighting':'approach';
-      if(trial.status==='fighting')this.state.targetId=source.id;
+      // Implicit trial target; honour "off" unless the player has an explicit lock.
+      if(trial.status==='fighting'&&(this.accessibility.autoTargetAssist!=='off'||this.explicitLock!==undefined)){
+        this.state.targetId=source.id;
+      }
       return;
     }
     trial.index++;
@@ -953,7 +1508,19 @@ export class CombatEngine {
       }),trial:{stage:Math.min(trial.index+1,trials.length),totalStages:trials.length,status:trial.status,complete,boss:ramp[Math.min(trial.index,trials.length-1)]!.boss,level:ramp[Math.min(trial.index,trials.length-1)]!.level}};
     }
     const phase=encounter.phases[this.state.phaseIndex];
-    return {title:phase?.id.replaceAll('-',' ')??'Encounter',monsters:encounter.actorIds.filter(id=>id!==this.state.playerId).map(id=>{
+    // Only Ferocity-driven encounters (updatePhase) get a step. The Fall and Hollow advance from their own story beats, and
+    // Koro/Asha follow authored cleanse sequences (thorn and cub windows) that a generic instruction would misdescribe.
+    const driven=phase&&!encounter.sequence&&!this.state.chapter.fall&&!this.state.chapter.orun&&this.state.encounterId!==ORUN_ENCOUNTER_ID;
+    const flags=this.state.phaseActionFlags;
+    const required=phase?.requiredAction&&phase.requiredAction!=='none'?phase.requiredAction:undefined;
+    const finalStand=this.state.phaseIndex>=encounter.phases.length-1&&(encounter.cleanseOnly||required==='cleanse');
+    const step:EncounterStatusSnapshot['step']=!driven?undefined
+      :required&&!flags.includes(required)?{action:required,done:false}
+      :finalStand?{action:'cleanse',done:this.state.rewardEmitted}
+      :required?{action:required,done:true}
+      :{action:'wear-down',done:false};
+    const endsWithCleanse=Boolean(driven&&(encounter.cleanseOnly||encounter.phases.some(candidate=>candidate.requiredAction==='cleanse')));
+    return {title:phase?.id.replaceAll('-',' ')??'Encounter',step,...(endsWithCleanse?{endsWithCleanse}:{}),monsters:encounter.actorIds.filter(id=>id!==this.state.playerId).map(id=>{
       const actor=this.state.actors.find(candidate=>candidate.id===id);
       return {id,name:id.replaceAll('-',' '),skills:(phase?.attackIds??[]).filter(attack=>ATTACKS[attack]?.bossId===id).map(attackName),active:!this.state.rewardEmitted,cleared:this.state.rewardEmitted,vitality:actor?.vitality,maxVitality:actor?.maxVitality};
     })};
@@ -963,11 +1530,18 @@ export class CombatEngine {
     if(this.playerIsDown()||!player)return 'Downed';
     if(this.state.timePolicy==='paused')return 'Paused';
     if(this.state.traversal)return 'Traversing';
+    const cooldown=this.cooldownRemaining(id);
+    if(cooldown>0)return `Cooldown ${Math.ceil(cooldown/60)}s`;
     if(id==='jump'&&this.state.playerJump){
       const jump=this.state.playerJump;
       if(jump.boosted)return 'Boost used';
       if(this.state.tick>=jump.flightStartedAtTick+jump.flightTicks)return 'Landing';
       return this.state.player.mana<PLAYER_SKILLS.jump.manaCost?'Need '+PLAYER_SKILLS.jump.manaCost+' mana':'';
+    }
+    if(this.state.heroId==='vesper'&&this.isPlayerAirborne()&&(id==='dive'||id==='light'||id==='sigil_bolt')){
+      if(id==='dive'&&this.state.playerJump?.airDashUsed)return 'Air dash used';
+      if(this.airActionPlaying()&&!(id==='light'&&this.lightChainOpen()))return 'Recovering';
+      return this.state.player.mana<PLAYER_SKILLS[id].manaCost?'Need '+PLAYER_SKILLS[id].manaCost+' mana':'';
     }
     if(id==='heavy'&&this.state.heavyChargeStartTick!==null&&!counter)return 'Charging — release';
     const sigil=id==='sigil_bolt'||id==='sigil_barrage';
@@ -983,12 +1557,17 @@ export class CombatEngine {
     const target=targetId&&this.actorForId(targetId);
     if(!target||!target.visible||target.downed||id!=='cleanse'&&target.allegiance!=='hostile'&&!target.possessed)return 'No target';
     if(id==='cleanse'&&(target.corruption??0)<=0&&!target.possessed)return 'No corruption';
-    if(id==='root_tether'&&!this.state.telegraphs.some(telegraph=>telegraph.sourceId===target.id&&(telegraph.phase==='windup'||telegraph.phase==='commit')))return 'Wait for windup';
+    if(id==='cleanse'){const sealed=this.cleanseBlockFor(target);if(sealed)return sealed;}
+    if(id==='root_tether'&&!acceptsTether(this.state,target)&&!this.state.telegraphs.some(telegraph=>telegraph.sourceId===target.id&&(telegraph.phase==='windup'||telegraph.phase==='commit')))return 'Wait for windup';
     return '';
   }
   private playerSkills():readonly PlayerSkillSnapshot[]{
     const target=this.state.targetId&&this.actorForId(this.state.targetId);
-    const contextual:PlayerSkillId=(target&&((target.corruption??0)>0||target.possessed)&&(this.snapshotBossExposed(target)))?'cleanse':'root_tether';
+    const encounter=this.state.encounter;
+    const finalCleanse=target&&encounter?.cleanseOnly&&!encounter.sequence&&target.id===encounter.bossId
+      &&!this.state.chapter.orun&&!this.state.chapter.fall&&this.cleanseBlockFor(target)===null;
+    const contextual:PlayerSkillId=(target&&((target.corruption??0)>0||target.possessed)
+      &&(this.snapshotBossExposed(target)||finalCleanse))?'cleanse':'root_tether';
     const charging=this.state.heavyChargeStartTick!==null;
     const heavy:PlayerSkillId=charging&&this.state.tick-this.state.heavyChargeStartTick!>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy';
     const sigilCharge=this.state.sigilCharge;
@@ -1004,10 +1583,20 @@ export class CombatEngine {
   private snapshotBossExposed(target:CombatActor):boolean{
     return this.state.worldTick<target.staggerUntil||this.state.worldTick<(target.weakPointUntil??0);
   }
+  private cooldownRemaining(id:PlayerSkillId):number{
+    return Math.max(0,(this.state.skillReadyAt[id]??0)-this.state.tick);
+  }
   private spendMana(id:PlayerSkillId):boolean{
     const cost=PLAYER_SKILLS[id].manaCost;
-    if(this.state.player.mana<cost)return false;
+    if(this.cooldownRemaining(id)>0||this.state.player.mana<cost)return false;
     this.state.player.mana-=cost;
+    const ticks=PLAYER_SKILLS[id].cooldownTicks;
+    if(ticks>0){
+      const readyAt=this.state.tick+ticks;
+      this.state.skillReadyAt[id]=readyAt;
+      if(id==='heavy'||id==='charged_heavy'){this.state.skillReadyAt.heavy=readyAt;this.state.skillReadyAt.charged_heavy=readyAt;}
+      if(id==='sigil_bolt'||id==='sigil_barrage'){this.state.skillReadyAt.sigil_bolt=readyAt;this.state.skillReadyAt.sigil_barrage=readyAt;}
+    }
     return true;
   }
 
@@ -1044,11 +1633,14 @@ export class CombatEngine {
   private spawnCombatObstacles(hazard: LiveHazard, attack: AttackDefinition | undefined): void {
     if (attack?.element !== 'ice' && !/root|sap|stomp|march|seismic|trample|thorn|charge/.test(hazard.attackId)) return;
     const kind = attack?.element === 'ice' ? 'ice' : 'roots';
-    // Opposing flanks, not a ring: the central 1.46m escape corridor always remains open.
+    // Keep the player escape corridor and the charging caster's swept body clear of its own flanks.
+    const flankOffset = attack?.lunge?.kind === 'charge' && this.state.bossLunges.some(lunge => lunge.hazardId === hazard.id)
+      ? Math.max(1.15, (this.actorForId(hazard.sourceId)?.radius ?? 0.42) + 0.42 + 0.12)
+      : 1.15;
     for (const side of [-1, 1]) {
       if (this.state.combatObstacles.length >= 8) break;
-      const x = hazard.target.x + hazard.direction.z * side * 1.15;
-      const z = hazard.target.z - hazard.direction.x * side * 1.15;
+      const x = hazard.target.x + hazard.direction.z * side * flankOffset;
+      const z = hazard.target.z - hazard.direction.x * side * flankOffset;
       const y = groundHeightAt(this.state.arena, x, z, hazard.target.y);
       if (y === null) continue;
       const foot = vec(x, y, z);
@@ -1070,6 +1662,14 @@ export class CombatEngine {
     return 1;
   }
   get companions(): CompanionRosterState { return structuredClone(this.state.companionState); }
+  /** Read without cloning a frame: an open panel does not make an engaged fight safe for replacement. */
+  get companionChangeBlocked(): boolean {
+    const state = this.state;
+    if (state.combatTrial) return state.combatTrial.status === 'fighting';
+    if (state.encounter && !state.rewardEmitted) return true;
+    for (const actor of state.actors) if (actor.visible && !actor.downed && actor.allegiance === 'hostile' && (actor.motion?.engaged || actor.targetId === state.playerId || this.liveAttackOf(actor))) return true;
+    return false;
+  }
   private updateActors(worldScale:number):void{
     for(const actor of this.state.actors){
       if(actor.id===this.state.playerId&&this.state.traversal)continue;
@@ -1091,6 +1691,333 @@ export class CombatEngine {
       }
     }
   }
+
+  // ---- Chapter 6 Fall of the Grove ------------------------------------------------------------------------------------
+  /** Fresh Fall state at encounter start: the protection branch from the present party, Tali at her placement, authored sources checked. */
+  private startFall(region:RegionDefinition):void{
+    if(!region.navigation.nodes.some(node=>node.id===FALL_TALI_SHELTER_NODE_ID))throw new Error(`${FALL_ENCOUNTER_ID} needs the authored nav node ${FALL_TALI_SHELTER_NODE_ID} in ${region.id}`);
+    if(!this.state.arena.surfaces.some(surface=>surface.id===FALL_ESCAPE_SURFACE_ID&&surface.walkable))throw new Error(`${FALL_ENCOUNTER_ID} needs the authored escape surface ${FALL_ESCAPE_SURFACE_ID} in ${region.id}`);
+    let tali=this.actorForId('tali' as ActorId);
+    if(!tali){
+      const placement=region.entities.find(entity=>entity.actorId==='tali');
+      const definition=ACTORS.tali;
+      if(!placement||!definition)throw new Error(`${FALL_ENCOUNTER_ID} needs Tali's authored placement in ${region.id}`);
+      const floor=groundHeightAt(this.state.arena,placement.position.x,placement.position.z,placement.position.y)??placement.position.y;
+      tali=makeActor(placement.id as ActorId,definition.species,definition.allegiance,vec(placement.position.x,floor,placement.position.z),false,false,100,'tali' as ActorId);
+      this.state.actors.push(tali);
+    }
+    tali.visible=true;tali.downed=false;tali.possessed=false;tali.allegiance='ally';
+    // The first party slot holding a recruit Orun can seize; the party projection may place it under a suffixed instance id.
+    let ally:CombatActor|undefined;
+    for(const id of [this.state.companionState.companionId]){
+      const actor=id&&FALL_POSSESSED_ATTACKS[id]?companionActor(this.state,id):undefined;
+      if(actor?.visible&&!actor.downed){ally=actor;break;}
+    }
+    this.state.chapter.fall=ally
+      ?{branch:'possession',allyId:ally.archetypeId as CompanionId,allyActorId:ally.id,protected:false,tali:'waiting',pillarBraced:false,escaped:false}
+      :{branch:'player-only',protected:false,tali:'waiting',pillarBraced:false,escaped:false};
+    this.syncFallEvidence();
+  }
+  /**
+   * Re-derives the Fall latches from this run's committed world events (idempotent keys only the live Fall emits), so an
+   * encounter restart or checkpoint retry never asks for a beat whose event can no longer be emitted.
+   */
+  private syncFallEvidence():void{
+    const fall=this.state.chapter.fall;
+    if(!fall)return;
+    const seen=this.state.seenWorldKeys;
+    if(!fall.protected&&seen.includes(`${this.state.runId}:${FALL_ENCOUNTER_ID}:phase:0:cleared`)){fall.protected=true;this.state.phaseIndex=1;this.state.phaseLatch=1;this.state.phaseActionFlags=[];}
+    const pillar=INTERACTIONS.find(interaction=>interaction.id===FALL_PILLAR_INTERACTION_ID);
+    if(pillar&&seen.includes(this.interactionEventId(pillar)))fall.pillarBraced=true;
+    const rescue=INTERACTIONS.find(interaction=>interaction.id===FALL_TALI_RESCUE_INTERACTION_ID);
+    const tali=this.actorForId('tali' as ActorId);
+    const shelter=this.regionOf(this.state.regionId)?.navigation.nodes.find(node=>node.id===FALL_TALI_SHELTER_NODE_ID)?.position;
+    if(rescue&&seen.includes(this.interactionEventId(rescue))&&tali&&shelter){
+      fall.tali='sheltered';
+      tali.position=vec(shelter.x,groundHeightAt(this.state.arena,shelter.x,shelter.z,shelter.y)??shelter.y,shelter.z);
+      tali.velocity=vec(0,0,0);
+    }
+  }
+  /** A recruit Orun holds attacks Aren with its own authored move whenever it is free to (the Fall and the Hollow share this hold). */
+  private driveHeldAlly(ally:CombatActor):void{
+    const attack=FALL_POSSESSED_ATTACKS[ally.archetypeId as CompanionId];
+    const def=attack?ATTACKS[attack]:undefined;
+    const busy=this.state.worldTick<ally.recoveringUntil||this.state.worldTick<ally.staggerUntil||(ally.reactionState!==undefined&&ally.reactionState.kind!=='flinch')||this.state.telegraphs.some(telegraph=>telegraph.sourceId===ally.id);
+    if(def&&!busy)this.beginAttack(ally,def);
+  }
+
+  // ---- Chapter 8 Heartroot Hollow -------------------------------------------------------------------------------------
+  /** Fresh Hollow duel at encounter start: the Sky echoes stand hidden and neutral at their authored roosts, driven only by the duel. */
+  private startOrun(region:RegionDefinition):OrunState{
+    for(const echoId of ORUN_SKY_ECHO_IDS){
+      const placement=region.entities.find(entity=>entity.id===echoId);
+      const archetypeId=placement?.actorId;
+      const definition=archetypeId?ACTORS[archetypeId]:undefined;
+      if(!placement||!archetypeId||!definition)throw new Error(`${ORUN_ENCOUNTER_ID} needs the authored Sky echo ${echoId} in ${region.id}`);
+      let echo=this.state.actors.find(actor=>actor.id===echoId);
+      const floor=groundHeightAt(this.state.arena,placement.position.x,placement.position.z,placement.position.y)??placement.position.y;
+      if(!echo){echo=makeActor(echoId,definition.species,'neutral',vec(placement.position.x,floor,placement.position.z),false,isAerialSpecies(definition.species),100,archetypeId);this.state.actors.push(echo);}
+      echo.position=vec(placement.position.x,floor,placement.position.z);echo.visible=false;echo.allegiance='neutral';echo.downed=false;
+    }
+    return createOrunState();
+  }
+  private createOrunHost():OrunHost{
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the host exposes live getters over the engine's current state
+    const engine=this;
+    return {
+      get state(){return engine.state;},
+      emit:(kind,message,actorId,targetId)=>engine.emit(kind,message,actorId,targetId),
+      queueCue:cue=>{engine.queuePresentationCue(cue);},
+      beginAttack:(source,def,aim,variant,target)=>engine.beginAttack(source,def,aim,variant,target),
+      displaceActor:(actor,dx,dz)=>engine.displaceActor(actor,dx,dz),
+      advancePhase:()=>{const boss=engine.currentBoss();if(boss){engine.enterNextPhase(boss);enterOrunPhase(engine.state);}},
+      driveHeldAlly:ally=>engine.driveHeldAlly(ally),
+      refreshTraversalGates:()=>{const region=engine.regionOf(engine.state.regionId);if(region)engine.setTraversalGates(region.traversalArcs,engine.state.worldFacts);},
+      echoHome:echoId=>{
+        const placement=engine.regionOf(engine.state.regionId)?.entities.find(entity=>entity.id===echoId);
+        return placement?vec(placement.position.x,groundHeightAt(engine.state.arena,placement.position.x,placement.position.z,placement.position.y)??placement.position.y,placement.position.z):undefined;
+      },
+    };
+  }
+  /** Why a Cleanse on `target` must wait (every boss's causal gate), or null when it may land now. Shared by the skill preflight and the impact. */
+  private cleanseBlockFor(target:CombatActor):string|null{
+    const sequenced=cleanseBlock(this.state,target);
+    if(sequenced)return sequenced;
+    const encounter=this.state.encounter;
+    if(!encounter||target.id!==encounter.bossId)return null;
+    if(this.state.chapter.fall)return FALL_ORUN_SEALED;
+    // A restored Hollow duel without its sequence state (an incompatible save) fails closed: the duel never resolves from it.
+    if(this.state.chapter.orun||this.state.encounterId===ORUN_ENCOUNTER_ID)return this.state.chapter.orun?orunCleanseBlock(this.state,target):'The Hollow duel must restart from its checkpoint.';
+    if(!encounter.cleanseOnly||encounter.sequence||this.state.rewardEmitted)return null;
+    // Ruun, Ghor and Solkar: only their final stand, its required action and a worn-down ferocity open the Cleanse.
+    const name=target.archetypeId.replaceAll('-',' ');
+    if(this.state.phaseIndex<encounter.phases.length-1)return `Corruption is sealed: ${name} has not reached the final stand.`;
+    const required=encounter.phases[this.state.phaseIndex]?.requiredAction;
+    if(required&&required!=='none'&&required!=='cleanse'&&!this.state.phaseActionFlags.includes(required))return `Corruption is sealed: ${required==='tether'?'tether':'counter'} ${name} in the final stand first.`;
+    if((target.ferocity??0)>LATER_BOSS_CLEANSE_FEROCITY)return `Corruption is sealed: wear ${name} down further first.`;
+    return null;
+  }
+  /** Orun's part of the Fall: seize the recruit (or turn his roots on Aren), drive the held ally's own move, and end protection only on a real break or answer. */
+  private updateFallProtection(fall:FallState):void{
+    if(fall.protected)return;
+    const orun=this.currentBoss();
+    if(!orun||!orun.visible||orun.downed)return;
+    if(fall.branch==='possession'){
+      const ally=this.state.actors.find(actor=>actor.id===fall.allyActorId);
+      if(fall.possessionId){
+        // Held until a timed Cleanse, a Perfect Dodge of its attack or the Bond-timed escape runs `breakPossession`.
+        if(!ally?.possessed){this.completeFallProtection(fall);return;}
+        this.driveHeldAlly(ally);
+        return;
+      }
+      if(!ally?.visible||ally.downed){
+        // The recruit left before Orun's grasp landed: nothing stands between Orun and Aren.
+        fall.branch='player-only';delete fall.allyId;delete fall.allyActorId;
+      }
+    }
+    if(fall.rootSurgeId){
+      const surge=this.state.hazards.find(hazard=>hazard.id===fall.rootSurgeId);
+      if(surge&&this.state.worldTick<surge.activeUntil&&!this.state.phaseActionFlags.includes('counter'))return;
+      // Answered when the surge closed without touching Aren (evaded, guarded or interrupted) or Aren landed a counter.
+      if(this.state.phaseActionFlags.includes('counter')||surge&&!surge.hitIds.includes(this.state.playerId)){this.completeFallProtection(fall);return;}
+      delete fall.rootSurgeId;
+    }
+    if(this.state.worldTick<orun.recoveringUntil||this.state.telegraphs.some(telegraph=>telegraph.sourceId===orun.id))return;
+    const def=ATTACKS[fall.branch==='possession'?FALL_POSSESSION_ATTACK_ID:FALL_ROOT_ATTACK_ID];
+    const hazard=def&&this.beginAttack(orun,def);
+    if(!hazard)return;
+    this.state.lastAttackTick=this.state.worldTick;
+    if(fall.branch==='player-only')fall.rootSurgeId=hazard.id;
+  }
+  /** Phase 0 is over: every live hostile attack and hazard is cleared, the canonical phase-cleared event is emitted and the escape phase opens. */
+  private completeFallProtection(fall:FallState):void{
+    const encounter=this.state.encounter;
+    if(!encounter)return;
+    fall.protected=true;
+    this.clearBossThreats();
+    for(const actor of [this.currentBoss(),this.state.actors.find(candidate=>candidate.id===fall.allyActorId)]){
+      if(!actor)continue;
+      actor.recoveringUntil=Math.min(actor.recoveringUntil,this.state.worldTick);actor.phase='idle';actor.actionEndsTick=0;actor.normalizedTime=0;
+      actor.actionId=(ACTION_CLIPS[`${actor.archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!) as ActionId;
+    }
+    this.emitPhaseEvent(encounter.phases[0]!.id,0,'cleared');
+    this.state.phaseIndex=1;this.state.phaseLatch=1;this.state.phaseActionFlags=[];
+    const next=encounter.phases[1];
+    if(next)this.emitPhaseEvent(next.id,1,'entered');
+    this.emit('cue','The Grove is collapsing: send Tali to the lookout shelter, brace the pillar, then reach the lookout pad.',encounter.bossId);
+  }
+  /** Tali's walk to her shelter, the safe rescue on arrival, and the one-time escape once protection, Tali and the pillar all hold. */
+  private updateFallWorld(fall:FallState):void{
+    if(fall.escaped)return;
+    if(fall.tali==='moving')this.walkTaliToShelter(fall);
+    if(!fall.protected||fall.tali!=='sheltered'||!fall.pillarBraced)return;
+    const player=this.playerActor();
+    const surface=this.state.arena.surfaces.find(candidate=>candidate.id===FALL_ESCAPE_SURFACE_ID);
+    if(!player||!surface||this.state.traversal||this.isPlayerAirborne()||!pointInPolygonXZ(player.position,surface.points))return;
+    fall.escaped=true;
+    this.clearBossThreats();
+    const eventId=`${this.state.runId}:${FALL_ENCOUNTER_ID}:collapse-escape`;
+    this.emitWorldEvent({type:'semantic-interaction',eventId,idempotencyKey:eventId,actorId:player.id,interactionId:FALL_ESCAPE_INTERACTION_ID,kind:'coordinate',targetId:FALL_ESCAPE_INTERACTION_ID,position:copy(player.position)});
+    const orun=this.currentBoss();
+    if(!orun)return;
+    this.resolveEncounter('escaped',orun);
+    // Orun takes the Heartroot Core and vanishes as the Grove falls.
+    orun.visible=false;
+  }
+  private updateMarekAssistance(): void {
+    const task = this.marekAssistance;
+    if (!task || this.state.regionId !== 'mistveil-basin' || this.state.combatTrial) return;
+    const marek = this.actorForId('marek');
+    if (!marek?.visible || marek.downed || marek.possessed || this.state.worldFacts.marekPresent !== true) {
+      this.marekAssistance = undefined;
+      return;
+    }
+    marek.velocity = vec(0, 0, 0);
+    if (this.state.worldFacts['side:trap-line-cleared'] === true) { this.marekAssistance = undefined; return; }
+    const dt = FIXED_STEP_SECONDS * this.state.worldTimeScale;
+    if (dt <= 0 || this.hasActiveThreatNear(marek.position)) return;
+    if (task.until !== undefined) {
+      if (this.state.worldTick < task.until) return;
+      const interaction = INTERACTIONS.find(item => item.id === MAREK_ASSISTANCE.interactionId)!;
+      const eventId = this.interactionEventId(interaction);
+      this.emitWorldEvent({ type: 'semantic-interaction', eventId, idempotencyKey: eventId, actorId: 'marek', interactionId: interaction.id, kind: 'break', targetId: 'trap-line-neutralized', position: copy(marek.position) });
+      this.marekAssistance = undefined;
+      return;
+    }
+    let target = MAREK_ASSISTANCE.path[task.index]!;
+    if (distance2(marek.position, target) < .15) {
+      if (task.index === MAREK_ASSISTANCE.path.length - 1) {
+        task.until = this.state.worldTick + 120;
+        marek.facing = facingFrom(vec(-4, 0, 2));
+        marek.actionId = 'npc-talk-point'; marek.phase = 'active'; marek.normalizedTime = 0;
+        marek.actionStartedTick = this.state.worldTick; marek.actionEndsTick = task.until;
+        return;
+      }
+      target = MAREK_ASSISTANCE.path[++task.index]!;
+    }
+    const dx = target.x - marek.position.x, dz = target.z - marek.position.z, distance = Math.hypot(dx, dz);
+    if (distance <= 0) return;
+    const step = Math.min(distance, dt * 2);
+    const next = moveCircle(this.state.arena, marek.position, vec(dx / distance * step, 0, dz / distance * step), marek.radius, marek.collisionHeight);
+    marek.velocity = vec((next.x - marek.position.x) / dt, 0, (next.z - marek.position.z) / dt);
+    marek.facing = facingFrom(vec(dx, 0, dz)); marek.position = next;
+    marek.sockets = { ...marek.sockets, root: copy(next), head: vec(next.x, next.y + marek.collisionHeight, next.z) };
+  }
+
+  private updatePackPatrol(): void {
+    if (this.state.combatTrial || this.state.regionId !== 'moonpine-ridge' || this.state.worldFacts['side:shared-hunt'] !== true) return;
+    const dt = FIXED_STEP_SECONDS * this.state.worldTimeScale;
+    if (dt <= 0) return;
+    for (const id of PACK_PATROL_ACTOR_IDS) {
+      const actor = this.actorForId(id);
+      if (!actor?.visible || actor.downed || actor.possessed) continue;
+      actor.velocity = vec(0, 0, 0);
+      if (this.hasActiveThreatNear(actor.position)) continue;
+      let progress = this.patrolSteps.get(id);
+      if (!progress) {
+        let index = 0, nearest = Infinity;
+        for (let i = 0; i < SHARED_HUNT_ROUTE.anchors.length; i++) {
+          const distance = distance2(actor.position, SHARED_HUNT_ROUTE.anchors[i]!);
+          if (distance < nearest) { nearest = distance; index = i; }
+        }
+        progress = { index, direction: 1 };
+        this.patrolSteps.set(id, progress);
+      }
+      let target = SHARED_HUNT_ROUTE.anchors[progress.index]!;
+      if (distance2(actor.position, target) < .15) {
+        if (progress.index === SHARED_HUNT_ROUTE.anchors.length - 1) progress.direction = -1;
+        else if (progress.index === 0) progress.direction = 1;
+        progress.index += progress.direction;
+        target = SHARED_HUNT_ROUTE.anchors[progress.index]!;
+      }
+      const dx = target.x - actor.position.x, dz = target.z - actor.position.z, distance = Math.hypot(dx, dz);
+      if (distance <= 0) continue;
+      const step = Math.min(distance, dt * 1.8);
+      const next = moveCircle(this.state.arena, actor.position, vec(dx / distance * step, 0, dz / distance * step), actor.radius, actor.collisionHeight);
+      actor.velocity = vec((next.x - actor.position.x) / dt, 0, (next.z - actor.position.z) / dt);
+      actor.facing = facingFrom(vec(dx, 0, dz));
+      actor.position = next;
+      actor.sockets = { ...actor.sockets, root: copy(next), head: vec(next.x, next.y + actor.collisionHeight, next.z) };
+    }
+  }
+
+  private updateNurseryEscort(): void {
+    if (!this.nurseryEscortActive || this.state.regionId !== NURSERY_ESCORT.regionId) return;
+    const cub = this.actorForId(NURSERY_ESCORT.actorId), player = this.playerActor();
+    if (!cub?.visible || !player || this.playerIsDown() || cub.downed || cub.possessed) return;
+    cub.velocity = vec(0, 0, 0);
+    if (distance2(cub.position, player.position) > 10 || this.hasActiveThreatNear(cub.position) || this.hasActiveThreatNear(player.position)) return;
+    if (distance2(cub.position, NURSERY_ESCORT.to) <= NURSERY_ESCORT.arrivalRadiusMeters
+      && distance2(player.position, NURSERY_ESCORT.to) <= 4) {
+      const interaction = INTERACTIONS.find(candidate => candidate.id === NURSERY_ESCORT.interactionId)!;
+      const eventId = this.interactionEventId(interaction);
+      this.emitWorldEvent({ type: 'rescue', eventId, idempotencyKey: eventId, targetId: NURSERY_ESCORT.actorId, locationId: 'nursery-shelter', safe: true });
+      this.nurseryEscortActive = false;
+      this.nurseryTrail.length = 0;
+      return;
+    }
+    const last = this.nurseryTrail.at(-1);
+    if (!last || distance2(last, player.position) >= 0.75) {
+      this.nurseryTrail.push(copy(player.position));
+      if (this.nurseryTrail.length > 64) this.nurseryTrail.shift();
+    }
+    while (this.nurseryTrail[0] && distance2(cub.position, this.nurseryTrail[0]) < 0.4) this.nurseryTrail.shift();
+    const target = this.nurseryTrail[0];
+    if (!target || distance2(cub.position, player.position) < 1.2) return;
+    const dx = target.x - cub.position.x, dz = target.z - cub.position.z, distance = Math.hypot(dx, dz);
+    const dt = FIXED_STEP_SECONDS * this.state.worldTimeScale;
+    if (distance <= 0 || dt <= 0) return;
+    const step = Math.min(distance, dt * 2.4);
+    const next = moveCircle(this.state.arena, cub.position, vec(dx / distance * step, 0, dz / distance * step), cub.radius, cub.collisionHeight);
+    cub.velocity = vec((next.x - cub.position.x) / dt, 0, (next.z - cub.position.z) / dt);
+    cub.facing = facingFrom(vec(dx, 0, dz));
+    cub.position = next;
+    cub.sockets = { ...cub.sockets, root: copy(next), head: vec(next.x, next.y + cub.collisionHeight, next.z) };
+  }
+
+  /** Peaceful, collision-checked play; the Fall owns Tali as soon as that encounter starts. */
+  private updateTaliPlay(): void {
+    if (this.state.regionId !== 'the-grove' || this.state.worldFacts.taliInGrove !== true || this.state.combatTrial) return;
+    const tali = this.actorForId('tali');
+    if (!tali?.visible || tali.downed || tali.possessed) return;
+    const phase = Math.floor(this.state.worldTick / 180) % 4;
+    const x = phase === 0 || phase === 3 ? 10 : 14, z = phase < 2 ? 10 : 14;
+    const dx = x - tali.position.x, dz = z - tali.position.z, distance = Math.hypot(dx, dz);
+    const dt = FIXED_STEP_SECONDS * this.state.worldTimeScale;
+    if (distance < 0.1 || dt <= 0) { tali.velocity = vec(0, 0, 0); return; }
+    const step = Math.min(distance, dt * 1.2);
+    const next = moveCircle(this.state.arena, tali.position, vec(dx / distance * step, 0, dz / distance * step), tali.radius, tali.collisionHeight);
+    tali.velocity = vec((next.x - tali.position.x) / dt, 0, (next.z - tali.position.z) / dt);
+    tali.facing = facingFrom(vec(dx, 0, dz));
+    tali.position = next;
+    tali.sockets = { ...tali.sockets, root: copy(next), head: vec(next.x, next.y + tali.collisionHeight, next.z) };
+  }
+
+  private walkTaliToShelter(fall:FallState):void{
+    const tali=this.actorForId('tali' as ActorId);
+    const shelter=this.regionOf(this.state.regionId)?.navigation.nodes.find(node=>node.id===FALL_TALI_SHELTER_NODE_ID)?.position;
+    if(!tali||!shelter)return;
+    const dx=shelter.x-tali.position.x,dz=shelter.z-tali.position.z,remaining=Math.hypot(dx,dz);
+    if(remaining>FALL_TALI_ARRIVAL_RADIUS){
+      const dt=FIXED_STEP_SECONDS*this.state.worldTimeScale;
+      if(dt<=0)return;
+      const step=Math.min(remaining,FALL_TALI_STRIDE*this.state.worldTimeScale);
+      const next=moveCircle(this.state.arena,tali.position,vec(dx/remaining*step,0,dz/remaining*step),tali.radius,tali.collisionHeight);
+      tali.velocity=vec((next.x-tali.position.x)/dt,0,(next.z-tali.position.z)/dt);
+      tali.facing=facingFrom(vec(dx,0,dz));
+      tali.position=next;
+      tali.sockets={...tali.sockets,root:copy(next),head:vec(next.x,next.y+tali.collisionHeight,next.z)};
+      if(Math.hypot(shelter.x-next.x,shelter.z-next.z)>FALL_TALI_ARRIVAL_RADIUS)return;
+    }
+    tali.velocity=vec(0,0,0);
+    // She stays in cover until no live attack threatens the shelter; only then is the rescue safe.
+    if(this.hasActiveThreatNear(tali.position))return;
+    const rescue=INTERACTIONS.find(interaction=>interaction.id===FALL_TALI_RESCUE_INTERACTION_ID);
+    if(!rescue)return;
+    const eventId=this.interactionEventId(rescue);
+    this.emitWorldEvent({type:'rescue',eventId,idempotencyKey:eventId,targetId:tali.archetypeId,locationId:FALL_TALI_SHELTER_NODE_ID,safe:true});
+    fall.tali='sheltered';
+  }
   private updatePlayer(input: CombatInput): void {
     const lift = this.liftKitCancel(input);
     this.kitCancelLift = lift !== undefined;
@@ -1109,6 +2036,7 @@ export class CombatEngine {
       rangedPressed: input.rangedPressed && into.includes('ranged'), rangedHeld: input.rangedHeld && into.includes('ranged'), rangedReleased: input.rangedReleased && into.includes('ranged'),
       tetherPressed: input.tetherPressed && into.includes('tether'),
       ultimatePressed: input.ultimatePressed && into.includes('ultimate'),
+      lockOnPressed: input.lockOnPressed, lockOnHeld: input.lockOnHeld,
       interactPressed: false,
     };
   }
@@ -1139,12 +2067,35 @@ export class CombatEngine {
     if(!player)return;
     if(player.downed||this.state.player.vitality<=0)return;
     if(this.state.deferredRelease)input=this.applyDeferredRelease(input);
+    const reaction=player.reactionState;
+    if(reaction&&reaction.kind!=='flinch'&&!this.isPlayerAirborne()){
+      // Struck down: no input but a dodge once the reaction allows it; the reaction itself keeps moving the body.
+      const cancelable=reaction.kind==='getup'||reaction.kind==='knockdown'&&this.state.tick-reaction.startedAt>=REACTION_TICKS.playerCancelFrom;
+      if(input.dodgePressed&&cancelable){
+        this.state.actionCancelable=true;
+        if(this.tryDodge(player,input,input.dodgeDirection))player.reactionState=undefined;
+        else this.state.actionCancelable=false;
+      }
+      return;
+    }
     if(this.state.playerJump){
+      if(this.state.actionId==='idle')this.resumeJumpAction(player);
+      const aerialAction=this.airActionPlaying(),phase=player.phase;
       this.updatePlayerJump(player,input);
-      if(this.state.playerJump)return;
+      if(aerialAction)player.phase=phase;
+      if(this.state.playerJump){
+        if(this.state.heroId==='vesper'&&this.isPlayerAirborne())this.updateVesperAirInput(player,input);
+        return;
+      }
     }
     if(input.interactPressed&&input.traversalId){this.traverse(input.traversalId);return;}
     if(input.targetCycle)this.cycleTarget(input.targetCycle);
+    this.updateLockOn(input);
+    // A fresh attack or skill goes where the stick points even while the steering heading is still turning towards it.
+    if((this.state.tick>=this.state.actionUntil||this.lightChainOpen())&&(input.lightPressed||input.heavyPressed||input.rangedPressed||input.ultimatePressed||input.tetherPressed||input.ferocityPressed||input.corruptionPressed||input.cleansePressed)){
+      const aim=this.motionDesired(input);
+      if(Math.hypot(aim.x,aim.z)>.001)player.facing=normalize(aim);
+    }
     if(input.dodgePressed&&this.tryDodge(player,input,input.dodgeDirection))return;
     if(input.jumpPressed&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.heavyChargeStartTick===null&&!this.state.sigilCharge&&this.startPlayerJump(player,input))return;
     if(this.state.counterUntil>this.state.tick&&(input.lightPressed||input.heavyPressed&&!input.heavyHeld)){
@@ -1158,7 +2109,7 @@ export class CombatEngine {
     const staticTarget=focusedInteraction&&input.interactionTargetId===focusedInteraction.targetId&&!this.state.actors.some(actor=>actor.id===focusedInteraction.targetId||actor.archetypeId===focusedInteraction.targetId);
     const focusedActionId=focusedInteraction?.playerActionId??focusedInteraction?.actionId;
     if(staticTarget&&focusedActionId==='staff-heavy'&&input.heavyPressed&&!input.heavyHeld){
-      if(focusedInteraction?.playerActionId==='staff-heavy')this.startPlayerObjectHeavyAction(focusedInteraction,'heavy',input.interactTargetId);
+      if(focusedInteraction?.playerActionId==='staff-heavy')this.startPlayerObjectHeavyAction(focusedInteraction,'heavy',input.interactionTargetId);
       else this.startInteractionAction(focusedInteraction,'heavy');
       return;
     }
@@ -1174,7 +2125,7 @@ export class CombatEngine {
       if(this.startBufferedAction(player,queued,input))return;
     }
     if(this.state.tick<this.state.actionRecoveryUntil&&this.state.actionRecoveryUntil-this.state.tick<=8)this.bufferAttackInput(input);
-    if(input.heavyPressed&&input.heavyHeld&&this.state.heavyChargeStartTick===null&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.player.mana>=PLAYER_SKILLS.heavy.manaCost){
+    if(input.heavyPressed&&input.heavyHeld&&this.state.heavyChargeStartTick===null&&this.state.tick>=this.state.actionRecoveryUntil&&this.cooldownRemaining('heavy')===0&&this.state.player.mana>=PLAYER_SKILLS.heavy.manaCost){
       this.state.heavyChargeStartTick=this.state.tick;
       if(this.kitCancelLift)this.kit?.cancel();
       this.state.actionId='charged-heavy-charge';
@@ -1197,7 +2148,7 @@ export class CombatEngine {
       this.state.actionRecoveryUntil=this.state.tick;
       player.actionId=ACTION_CLIPS.idle!;player.actionEndsTick=0;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.phase='idle';
       if(staticTarget&&focusedActionId==='staff-heavy'){
-        if(focusedInteraction?.playerActionId==='staff-heavy')this.startPlayerObjectHeavyAction(focusedInteraction,heldTicks>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy',input.interactTargetId);
+        if(focusedInteraction?.playerActionId==='staff-heavy')this.startPlayerObjectHeavyAction(focusedInteraction,heldTicks>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy',input.interactionTargetId);
         else this.startInteractionAction(focusedInteraction,heldTicks>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy');
       }
       else this.startPlayerAction(heldTicks>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy',this.state.targetId);
@@ -1218,10 +2169,11 @@ export class CombatEngine {
       // Recovery still owns the finite clip/combat deadlines, not a movement lock.
       if(!finiteDodgePlaying||Math.hypot(input.move.x,input.move.z)>.001)this.applyPlayerMotion(player,input);
       else player.velocity=vec(0,0,0);
+      if(this.state.playerJump)return;
       const moving=Math.hypot(player.velocity.x,player.velocity.z)>.01;
       if(!finiteDodgePlaying){
         if(moving){
-          player.actionId=input.sprintHeld?ACTION_CLIPS.run!:ACTION_CLIPS.walk!;
+          player.actionId=this.playerGait(player);
           if(player.actionEndsTick!==0){player.actionStartedTick=this.state.tick;player.actionEndsTick=0;player.normalizedTime=0;}
           player.phase='idle';
         }else if(player.actionEndsTick===0||player.normalizedTime>=1){
@@ -1235,8 +2187,8 @@ export class CombatEngine {
         else if(input.tetherPressed)this.startPlayerAction('root_tether',this.state.targetId);
         else if(input.ferocityPressed)this.startPlayerAction('ferocity',this.state.targetId);
         else if(input.corruptionPressed)this.startPlayerAction('corruption',this.state.targetId);
-        else if(input.cleansePressed)this.startPlayerAction('cleanse',input.interactTargetId??this.state.targetId);
-        else if(input.command)this.commandCompanion(input.command.companionId,input.command.command,input.command.targetId);
+        else if(input.cleansePressed)this.startPlayerAction('cleanse',input.interactionTargetId??this.state.targetId);
+        else if(input.command)this.runInputCommand(input.command);
       }
     }
   }
@@ -1249,36 +2201,154 @@ export class CombatEngine {
     return vec(x/divisor,0,z/divisor);
   }
 
+  /** Walk or run from the measured planar speed; the run clip is kept until the speed falls clearly below the entry threshold. */
+  private playerGait(player:CombatActor):ActionId{
+    const walkSpeed=HERO_COMBAT[this.state.heroId].walkSpeed,speed=Math.hypot(player.velocity.x,player.velocity.z);
+    const running=player.actionId===ACTION_CLIPS.run;
+    return speed>walkSpeed*(running?PLAYER_RUN_EXIT:PLAYER_RUN_ENTER)?ACTION_CLIPS.run!:ACTION_CLIPS.walk!;
+  }
+
   private applyPlayerMotion(player:CombatActor,input:CombatInput):void{
     const desired=this.motionDesired(input);
     const hasInput=Math.hypot(desired.x,desired.z)>.001;
-    const hero=HERO_COMBAT[this.state.heroId],speed=(input.sprintHeld?hero.runSpeed:hero.walkSpeed)*(this.state.playerSlow?.factor??1)*(this.kit?.moveSpeedScale?.()??1);
+    // Heading turns at a bounded rate; what is still left after this tick's turn slows a player who is already moving (a reversal reads as a pivot).
+    let nextFacing:Vec3|undefined,pivot=1;
+    if(hasInput){
+      const current=Math.atan2(player.facing.x,player.facing.z),error=wrapAngle(Math.atan2(desired.x,desired.z)-current),limit=PLAYER_TURN_RATE*FIXED_STEP_SECONDS;
+      if(Math.abs(error)<=limit)nextFacing=normalize(desired);
+      else{const angle=current+Math.sign(error)*limit;nextFacing=vec(Math.sin(angle),0,Math.cos(angle));}
+      const remaining=Math.max(0,Math.abs(error)-limit),t=Math.max(0,Math.min(1,(remaining-PLAYER_PIVOT_START)/(Math.PI-PLAYER_PIVOT_START)));
+      pivot=1-PLAYER_PIVOT_SLOWDOWN*t;
+    }
+    const hero=HERO_COMBAT[this.state.heroId],speed=(input.sprintHeld?hero.runSpeed:hero.walkSpeed)*(this.state.playerSlow?.factor??1)*(this.kit?.moveSpeedScale?.()??1)*companionOwnerMultiplier(this.state,'haste')*pivot;
     const targetX=desired.x*speed,targetZ=desired.z*speed;
     const dx=targetX-player.velocity.x,dz=targetZ-player.velocity.z;
     const change=Math.hypot(dx,dz);
-    const maxChange=(hasInput?hero.runSpeed/PLAYER_MOVE_ACCEL_TICKS:hero.runSpeed/PLAYER_MOVE_DECEL_TICKS);
+    const braking=player.velocity.x*targetX+player.velocity.z*targetZ<0;
+    const maxChange=(hasInput?hero.runSpeed/PLAYER_MOVE_ACCEL_TICKS*(braking?1:Math.max(PLAYER_PIVOT_ACCEL_FLOOR,pivot)):hero.runSpeed/PLAYER_MOVE_DECEL_TICKS);
     const blend=change>maxChange?maxChange/change:1;
     const vx=player.velocity.x+dx*blend,vz=player.velocity.z+dz*blend;
     const previous=player.position;
-    player.position=moveCircle(this.state.arena,previous,vec(vx*FIXED_STEP_SECONDS,0,vz*FIXED_STEP_SECONDS),PLAYER_RADIUS,player.collisionHeight);
+    const delta=vec(vx*FIXED_STEP_SECONDS,0,vz*FIXED_STEP_SECONDS);
+    player.position=moveCircle(this.state.arena,previous,delta,PLAYER_RADIUS,player.collisionHeight);
+    if(distance2(previous,player.position)+1e-5<Math.hypot(delta.x,delta.z)){
+      const drop=findEdgeDrop(this.state.arena,previous,delta,PLAYER_RADIUS,player.collisionHeight,PLAYER_MAX_DROP);
+      if(drop){
+        player.position=moveAerialCircle(this.state.arena,drop.edge,vec(previous.x+delta.x-drop.edge.x,0,previous.z+delta.z-drop.edge.z),PLAYER_RADIUS,player.collisionHeight);
+        this.startPlayerFall(player,vec(vx,0,vz),drop.landing);
+      }
+    }
+    if(!this.state.playerJump&&restingHeightAt(this.state.arena,player.position.x,player.position.z,player.position.y,player.position.y-.02,PLAYER_RADIUS,player.collisionHeight)===null){
+      const lower=restingHeightAt(this.state.arena,player.position.x,player.position.z,player.position.y,player.position.y-PLAYER_MAX_DROP);
+      if(lower!==null)this.startPlayerFall(player,vec(vx,0,vz),vec(player.position.x,lower,player.position.z));
+    }
     player.velocity=scale(sub(player.position,previous),1/FIXED_STEP_SECONDS);
     if(hasInput)this.state.player.mana=Math.min(this.state.player.maxMana,this.state.player.mana+distance2(previous,player.position)*MANA_PER_METRE);
-    if(hasInput)player.facing=normalize(desired);
+    if(nextFacing)player.facing=nextFacing;
+  }
+
+  private isPlayerAirborne():boolean{
+    const jump=this.state.playerJump;
+    return !!jump&&(jump.fallVelocityY!==undefined||this.state.tick>jump.airStartedAtTick&&this.state.tick<jump.flightStartedAtTick+jump.flightTicks);
+  }
+  private airActionPlaying():boolean{
+    return this.state.actionId!=='jump'&&this.state.actionId!=='idle'&&this.state.tick<this.state.actionRecoveryUntil;
+  }
+  private resumeJumpAction(player:CombatActor):void{
+    const jump=this.state.playerJump!;
+    this.state.actionId='jump';
+    this.state.actionUntil=jump.fallVelocityY!==undefined?this.state.tick+PLAYER_JUMP_LANDING_TICKS+1:jump.flightStartedAtTick+jump.flightTicks+PLAYER_JUMP_LANDING_TICKS;
+    this.state.actionRecoveryUntil=this.state.actionUntil;
+    this.state.actionCancelable=false;
+    player.actionId=ACTION_CLIPS.jump!;player.actionStartedTick=jump.startedAtTick;player.actionEndsTick=this.state.actionUntil;
+  }
+  /** Vesper can cut or throw kunai while gravity continues; ground-targeted teleports remain grounded skills. */
+  private updateVesperAirInput(player:CombatActor,input:CombatInput):void{
+    if(this.airActionPlaying()&&!this.lightChainOpen())return;
+    if(input.dodgePressed&&!this.state.playerJump!.airDashUsed){this.startVesperAirDash(player,input);return;}
+    if(input.lightPressed)this.kit?.startLight(this.nextLightStep(),this.lightChainOpen(),false);
+    else if(input.rangedPressed)this.kit?.startRanged(false);
+  }
+  private startVesperAirDash(player:CombatActor,input:CombatInput):boolean{
+    const jump=this.state.playerJump!,dodge=this.kit?.dodge;
+    if(!dodge||this.cooldownRemaining('dive')>0||this.state.player.mana<PLAYER_SKILLS.dive.manaCost)return false;
+    const desired=this.motionDesired(input),direction=facingFrom(Math.hypot(desired.x,desired.z)>.001?desired:player.facing);
+    const remaining=jump.flightStartedAtTick+jump.flightTicks-this.state.tick;
+    const fraction=Math.max(0,Math.min(1,(this.state.tick-jump.flightStartedAtTick)/jump.flightTicks));
+    const speed=dodge.distance/(dodge.durationTicks*FIXED_STEP_SECONDS);
+    const candidate:PlayerJumpState={...jump,from:copy(player.position),flightStartedAtTick:this.state.tick,flightTicks:Math.max(1,remaining),apex:jump.apex*(1-fraction)**2,steering:scale(direction,speed),anticipationFrom:undefined,airDashUsed:true,airDash:{direction,until:this.state.tick+dodge.durationTicks,speed}};
+    const landing=this.planJumpLanding(candidate,player.collisionHeight);
+    if(!landing||distance2(player.position,landing)<.05||!this.spendMana('dive'))return false;
+    candidate.to=landing;
+    candidate.airDash!.speed=Math.min(speed,distance2(player.position,landing)/(dodge.durationTicks*FIXED_STEP_SECONDS));
+    // An unpowered fall retains its velocity and gravity; a blink never adds upward velocity.
+    this.state.playerJump=candidate;
+    this.cancelPlayerAttackState();
+    this.state.actionId='dive';this.state.actionUntil=this.state.tick+dodge.durationTicks;
+    this.state.actionRecoveryUntil=this.state.actionUntil+dodge.recoveryTicks;this.state.actionCancelable=false;
+    player.actionId=dodge.clip;player.actionStartedTick=this.state.tick;player.actionEndsTick=this.state.actionRecoveryUntil;player.normalizedTime=0;player.phase='active';player.facing=direction;
+    player.invulnerableUntil=this.state.tick+dodge.iframes;
+    this.queuePresentationCue({kind:'blink',phase:'commit',actorId:player.id,position:copy(player.position),from:copy(player.position),to:copy(landing),durationTicks:dodge.durationTicks,actionId:dodge.clip,element:this.heroElement(),priority:'essential',shape:'trail'});
+    this.emit('action','Aerial Mist Blink.',player.id,undefined,'dive');
+    this.kit?.onDodge?.({from:candidate.from,to:landing,durationTicks:dodge.durationTicks});
+    this.kit?.onSharedSkill?.('dodge');
+    return true;
+  }
+
+  /** Falling never spends mana or invents a landing: each fixed step sweeps the actual capsule down to measured support. */
+  private startPlayerFall(player:CombatActor,steering:Vec3,landing=player.position):void{
+    const tick=this.state.tick,from=copy(player.position),previous=this.state.playerJump,aerialAction=this.airActionPlaying();
+    this.state.playerJump={startedAtTick:tick,origin:previous?.origin??from,from,to:copy(landing),flightStartedAtTick:tick,flightTicks:PLAYER_JUMP_FLIGHT_TICKS,apex:0,airStartedAtTick:tick-1,boosted:previous?.boosted??false,steering,fallVelocityY:Math.min(0,player.velocity.y),airDashUsed:previous?.airDashUsed,airDash:previous?.airDash};
+    if(aerialAction)return;
+    this.state.actionId='jump';
+    this.state.actionUntil=tick+PLAYER_JUMP_FLIGHT_TICKS+PLAYER_JUMP_LANDING_TICKS;
+    this.state.actionRecoveryUntil=this.state.actionUntil;
+    this.state.actionCancelable=false;
+    player.actionId=ACTION_CLIPS.jump!;player.actionStartedTick=tick;player.actionEndsTick=this.state.actionUntil;player.normalizedTime=0;player.phase='active';
+  }
+
+  private updatePlayerFall(player:CombatActor,input:CombatInput):void{
+    const jump=this.state.playerJump!,previous=player.position,steering=this.jumpSteering(input);
+    const horizontal=moveAerialCircle(this.state.arena,previous,scale(steering,FIXED_STEP_SECONDS),PLAYER_RADIUS,player.collisionHeight);
+    jump.fallVelocityY=Math.max(-20,jump.fallVelocityY!-PLAYER_FALL_GRAVITY*FIXED_STEP_SECONDS);
+    const contact=stepFall(this.state.arena,horizontal,jump.fallVelocityY*FIXED_STEP_SECONDS,PLAYER_RADIUS,player.collisionHeight,this.fallStep);
+    player.position=vec(contact.x,contact.y,contact.z);
+    player.velocity=scale(sub(player.position,previous),1/FIXED_STEP_SECONDS);
+    if(Math.hypot(steering.x,steering.z)>.001)player.facing=normalize(steering);
+    if(!this.airActionPlaying()){
+      this.state.actionUntil=this.state.tick+PLAYER_JUMP_LANDING_TICKS+(contact.landed?0:1);
+      this.state.actionRecoveryUntil=this.state.actionUntil;
+      player.actionEndsTick=this.state.actionUntil;
+    }
+    if(contact.landed){
+      jump.fallVelocityY=undefined;
+      jump.from=copy(player.position);jump.to=copy(player.position);
+      jump.flightStartedAtTick=this.state.tick-1;jump.flightTicks=1;jump.apex=0;
+      jump.airStartedAtTick=this.state.tick-1;
+      player.phase='recovery';
+    }else player.phase='active';
   }
 
   private updatePlayerJump(player:CombatActor,input:CombatInput):void{
     let jump=this.state.playerJump!;
+    if(jump.fallVelocityY!==undefined){this.updatePlayerFall(player,input);return;}
+    if(this.state.tick>jump.flightStartedAtTick+jump.flightTicks&&restingHeightAt(this.state.arena,player.position.x,player.position.z,player.position.y,player.position.y-.02,PLAYER_RADIUS,player.collisionHeight)===null){
+      this.startPlayerFall(player,jump.steering);
+      this.updatePlayerFall(player,input);
+      return;
+    }
     if(input.jumpPressed&&this.state.tick>jump.startedAtTick&&this.state.tick<=jump.airStartedAtTick&&!jump.boosted)jump.boostQueued=true;
-    if(this.state.tick>=this.state.actionUntil){
+    if(this.state.tick>=jump.flightStartedAtTick+jump.flightTicks+PLAYER_JUMP_LANDING_TICKS){
       this.state.playerJump=undefined;
-      this.finishAction();
+      if(!this.airActionPlaying())this.finishAction();
       // updatePlayer owns this tick's grounded step; never integrate twice.
       return;
     }
     let landingAt=jump.flightStartedAtTick+jump.flightTicks;
     if(this.state.tick>landingAt){
-      if(Math.hypot(input.move.x,input.move.z)>.001)this.applyPlayerMotion(player,input);
+      if(!this.airActionPlaying()&&Math.hypot(input.move.x,input.move.z)>.001)this.applyPlayerMotion(player,input);
       else player.velocity=vec(0,0,0);
+      if(this.state.playerJump?.fallVelocityY!==undefined)return;
       player.phase='recovery';
       return;
     }
@@ -1299,9 +2369,11 @@ export class CombatEngine {
           landingAt=jump.flightStartedAtTick+jump.flightTicks;
           if(boost){
             this.spendMana('jump');
-            this.state.actionUntil=landingAt+PLAYER_JUMP_LANDING_TICKS;
-            this.state.actionRecoveryUntil=this.state.actionUntil;
-            player.actionEndsTick=this.state.actionUntil;
+            if(!this.airActionPlaying()){
+              this.state.actionUntil=landingAt+PLAYER_JUMP_LANDING_TICKS;
+              this.state.actionRecoveryUntil=this.state.actionUntil;
+              player.actionEndsTick=this.state.actionUntil;
+            }
           }
           if(Math.hypot(steering.x,steering.z)>.001)player.facing=normalize(steering);
         }
@@ -1325,31 +2397,34 @@ export class CombatEngine {
   }
 
   private jumpSteering(input:CombatInput):Vec3{
+    const dash=this.state.playerJump?.airDash;
+    if(dash&&this.state.tick<dash.until)return scale(dash.direction,dash.speed);
     const hero=HERO_COMBAT[this.state.heroId];
-    return scale(this.motionDesired(input),(input.sprintHeld?hero.runSpeed:hero.walkSpeed)*(this.state.playerSlow?.factor??1)*(this.kit?.moveSpeedScale?.()??1));
+    return scale(this.motionDesired(input),(input.sprintHeld?hero.runSpeed:hero.walkSpeed)*(this.state.playerSlow?.factor??1)*(this.kit?.moveSpeedScale?.()??1)*companionOwnerMultiplier(this.state,'haste'));
   }
 
   /** Every accepted trajectory has a swept clear arc and a supported landing; a blocked input shortens travel, never teleports. */
   private planJumpLanding(jump:PlayerJumpState,collisionHeight:number):Vec3|undefined{
     const desired=add(jump.from,scale(jump.steering,jump.flightTicks*FIXED_STEP_SECONDS));
-    const maximum=jump.boosted?PLAYER_JUMP_BOOST_MAX_DISTANCE:PLAYER_JUMP_MAX_DISTANCE;
+    const maximum=(jump.boosted?PLAYER_JUMP_BOOST_MAX_DISTANCE:PLAYER_JUMP_MAX_DISTANCE)+(jump.airDashUsed?(this.kit?.dodge?.distance??0):0);
     const reach=distance2(jump.origin,desired);
     const target=reach>maximum?vec(jump.origin.x+(desired.x-jump.origin.x)*maximum/reach,desired.y,jump.origin.z+(desired.z-jump.origin.z)*maximum/reach):desired;
     const candidates=Math.max(1,Math.ceil(distance2(jump.from,target)/.1));
+    const query={fromY:jump.from.y,maxRise:jump.origin.y+(jump.boosted?PLAYER_JUMP_BOOST_APEX:PLAYER_JUMP_APEX)-jump.from.y,maxDrop:jump.from.y-jump.origin.y+PLAYER_MAX_DROP,radius:PLAYER_RADIUS,height:collisionHeight};
     for(let index=candidates;index>=0;index--){
       const progress=index/candidates;
       const x=jump.from.x+(target.x-jump.from.x)*progress,z=jump.from.z+(target.z-jump.from.z)*progress;
-      const y=groundHeightAt(this.state.arena,x,z,jump.origin.y);
-      if(y===null||Math.abs(y-jump.origin.y)>.45)continue;
-      const to=vec(x,y,z);
-      if(!isSupportedCapsulePose(this.state.arena,to,PLAYER_RADIUS,collisionHeight))continue;
-      let previous=jump.from,clear=true;
-      for(let tick=1;tick<=jump.flightTicks;tick++){
-        const point=jumpPosition(jump.from,to,tick,jump.flightTicks,jump.apex);
-        if(!isAerialCirclePathClear(this.state.arena,previous,point,PLAYER_RADIUS,collisionHeight)){clear=false;break;}
-        previous=point;
+      const count=landingHeightsAt(this.state.arena,x,z,query,this.jumpLandings);
+      for(let layer=0;layer<count;layer++){
+        const to=vec(x,this.jumpLandings[layer]!,z);
+        let previous=jump.from,clear=true;
+        for(let tick=1;tick<=jump.flightTicks;tick++){
+          const point=jumpPosition(jump.from,to,tick,jump.flightTicks,jump.apex);
+          if(!isAerialCirclePathClear(this.state.arena,previous,point,PLAYER_RADIUS,collisionHeight)){clear=false;break;}
+          previous=point;
+        }
+        if(clear)return to;
       }
-      if(clear)return to;
     }
     return undefined;
   }
@@ -1365,12 +2440,12 @@ export class CombatEngine {
     if(!this.spendMana(playerSkillId(action)))return false;
     const range=action==='charged_heavy'?2.8:2.5;
     const radius=action==='charged_heavy'?1.15:1;
-    const duration=action==='charged_heavy'?58:45;
-    const activeAt=this.state.tick+(action==='charged_heavy'?36:20);
+    const timing=targetedStrike(action),duration=timing.ticks;
+    const activeAt=this.state.tick+timing.activeAt;
     const attackId=('aren-'+action) as AttackId;
     const target=object.objectId as ActorId;
-    this.state.targetId=target;this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.tick+duration+18;player.phase='anticipation';player.targetId=target;
+    this.state.targetId=target;this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+timing.recoveryTicks;this.state.actionCancelable=false;
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.actionRecoveryUntil;player.phase='anticipation';player.targetId=target;
     const cue='Aren draws the staff back toward the loose snare.';
     const id=this.state.runId+':'+this.state.tick+':'+interaction.id+':'+action;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(object.position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -1391,12 +2466,12 @@ export class CombatEngine {
     const position=entity?.position;
     if(!position||distance2(player.position,position)>interaction.radiusMeters)return false;
     if(!this.spendMana(playerSkillId(action)))return false;
-    const duration=action==='charged_heavy'?58:action==='heavy'?45:90;
-    const activeAt=this.state.tick+(action==='charged_heavy'?36:action==='heavy'?20:35);
+    const timing=targetedStrike(action),duration=timing.ticks;
+    const activeAt=this.state.tick+timing.activeAt;
     const attackId=`aren-${action}` as AttackId;
     this.state.targetId=interaction.targetId as ActorId;
-    this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+18;this.state.actionCancelable=false;
-    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.tick+duration+18;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
+    this.state.actionId=action;this.state.actionUntil=this.state.tick+duration;this.state.actionRecoveryUntil=this.state.actionUntil+timing.recoveryTicks;this.state.actionCancelable=false;
+    player.actionId=ACTION_CLIPS[action]!;player.actionStartedTick=this.state.tick;player.normalizedTime=0;player.actionEndsTick=this.state.actionRecoveryUntil;player.phase='anticipation';player.targetId=this.state.targetId;player.facing=facingFrom(sub(position,player.position));
     const cue=action==='cleanse'?'Root light gathers around the world mechanism.':'Aren draws back the staff for a heavy strike.';
     const id=`${this.state.runId}:${this.state.tick}:${interaction.id}:${action}`;
     this.state.telegraphs.push({id,attackId,sourceId:player.id,targetPosition:copy(position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -1440,7 +2515,7 @@ export class CombatEngine {
   private tryDodge(player: CombatActor,input:CombatInput,dodgeDirection?:EvasionDirection): boolean {
     if(this.playerIsDown()||this.state.traversal)return false;
     if(this.state.tick<this.state.actionUntil&&(!this.state.actionCancelable||EVASION_PROFILES[this.state.actionId as EvasionProfileId]))return false;
-    if(!this.spendMana('dive')){this.emit('cue','Dive needs 25 mana. Walk or run to restore mana.',player.id);return false;}
+    if(!this.spendMana('dive')){this.emit('cue',this.cooldownRemaining('dive')>0?'Dive is cooling down.':'Dive needs 25 mana. Walk or run to restore mana.',player.id);return false;}
     const start=copy(player.position);
     const basis=this.state.arena.cameraBasis;
     const {profile:baseProfile,travelVector,side}=dodgeDirection!==undefined?this.selectAuthoredDodge(player,dodgeDirection,basis):this.selectDefaultDive(player,input,basis);
@@ -1461,12 +2536,20 @@ export class CombatEngine {
     player.actionEndsTick=this.state.tick+profile.durationTicks+profile.recoveryTicks;
     player.actionId=(ACTION_CLIPS[profile.id]??ACTION_CLIPS.stumble_recovery!) as ActionId;
     player.phase='start';
-    player.invulnerableUntil=this.state.tick+profile.iframes;
+    // Capture the wide perfect-dodge bonus at dodge start so a mid-action settings change cannot retroactively
+    // shorten this action's i-frames. Standard stays as authored; "wide" extends the effective i-frames by 4
+    // simulation ticks (the same interval that drives actual hazard intersection below).
+    const wideBonus=this.accessibility.perfectDodgeWindow==='wide'?PERFECT_DODGE_WIDE_BONUS_TICKS:0;
+    const effectiveIframes=Math.min(profile.iframes+wideBonus,profile.durationTicks);
+    player.invulnerableUntil=this.state.tick+effectiveIframes;
     this.state.actionId=profile.id;
     this.state.actionUntil=this.state.tick+profile.durationTicks;
     this.state.actionRecoveryUntil=this.state.tick+profile.durationTicks+profile.recoveryTicks;
     this.state.actionCancelable=true;
     this.state.evasion=kitDodge?profile:undefined;
+    // The captured effective iframes live on player.invulnerableUntil; advanceEvasion, the hazard intersection
+    // (via findThreatenedHazard(effectiveIframes)) and the phase bound all read the same captured value. We do
+    // not copy the kit profile just to stash timing — invulnerableUntil is the authoritative source.
     this.state.kitCancel=kitDodge?.cancel?{fromTick:this.state.tick+kitDodge.cancel.fromTick,into:[...kitDodge.cancel.into]}:undefined;
     // Predict the destination along the chosen travel direction for perfect-dodge threat tests
     // (no actual teleport — the position is only used to evaluate whether the dive would clear
@@ -1475,7 +2558,7 @@ export class CombatEngine {
     if(kitDodge){predicted=start;for(let elapsed=0;elapsed<profile.durationTicks;elapsed++)predicted=this.evasionStep(predicted,player.facing,profile,elapsed,true);}
     else predicted=moveCircle(this.state.arena,start,scale(travelVector,profile.distance),PLAYER_RADIUS,profile.collisionHeight??player.collisionHeight);
     if(this.state.heroId==='yara'||kitDodge?.blinkCue)this.queuePresentationCue({kind:'blink',phase:'commit',actorId:player.id,position:copy(start),from:copy(start),to:copy(predicted),durationTicks:profile.durationTicks,element:this.heroElement(),...(kitDodge?{actionId:kitDodge.clip}:{}),priority:'essential',shape:'trail'});
-    const threatened=this.findThreatenedHazard(start,{...player,position:predicted},profile.id);
+    const threatened=this.findThreatenedHazard(start,{...player,position:predicted},profile.id,effectiveIframes);
     if(threatened){
       const key=threatened.sourceId+':'+threatened.attackId+':'+threatened.startTick+':'+threatened.hitGroup;
       if(!this.state.perfectDodgeKeys.includes(key)){
@@ -1486,10 +2569,10 @@ export class CombatEngine {
         this.state.slowMotionRemainingTicks+=Math.max(0,extension);
         this.state.worldTimeScale=this.effectiveWorldTimeScale();
         this.state.player.instinct=Math.min(100,this.state.player.instinct+PERFECT_DODGE_EFFECTS.instinctGain);
-        this.state.counterUntil=this.state.tick+PERFECT_DODGE_EFFECTS.counterWindowTicks;
+        this.state.counterUntil=this.state.tick+PERFECT_DODGE_EFFECTS.counterWindowTicks+this.counterWindowBonus();
         const recoveryReduction=Math.min(PERFECT_DODGE_EFFECTS.playerRecoveryReductionTicks,Math.max(0,this.state.actionRecoveryUntil-this.state.tick));
         this.state.actionRecoveryUntil-=recoveryReduction;
-        const companionId=this.state.companionState.combat??this.state.companionState.utility;
+        const companionId=this.state.companionState.companionId;
         const companionSlot=companionId?this.state.companionState.slots[companionId]:undefined;
         if(companionSlot)companionSlot.readyAt=Math.max(this.state.tick,companionSlot.readyAt-PERFECT_DODGE_EFFECTS.petRecoveryReductionTicks);
         const weakPointTarget=this.state.actors.find(actor=>actor.id===threatened.sourceId);
@@ -1543,13 +2626,18 @@ export class CombatEngine {
     const previous=player.position;
     player.position=this.evasionStep(previous,player.facing,profile,elapsed,this.state.evasion===profile);
     player.velocity=scale(sub(player.position,previous),1/FIXED_STEP_SECONDS);
-    player.phase=elapsed<profile.iframes?'active':'recovery';
+    // Phase bound comes from the captured invulnerability deadline (wide-aware, set at dodge start) so the
+    // i-frame window stays consistent with the actual hazard intersection, regardless of who set the profile.
+    player.phase=this.state.tick<player.invulnerableUntil?'active':'recovery';
   }
-  private findThreatenedHazard(start:Vec3,player:CombatActor,profile:EvasionProfileId):LiveHazard|undefined{
+  private findThreatenedHazard(start:Vec3,player:CombatActor,profile:EvasionProfileId,effectiveIframes:number):LiveHazard|undefined{
     const initial={...player,position:start};
     return this.state.hazards.find(h=>{
       const threatened=hazardThreatens(h,initial);
-      const iframes=EVASION_PROFILES[profile].iframes;
+      // The caller passes the effective i-frames computed at dodge start (already wide-adjusted, already
+      // bounded by the active profile's durationTicks; this is the same interval that drives phase /
+      // invulnerability, so wide mid-action setting changes cannot retime this intersection).
+      const iframes=effectiveIframes;
       const key=h.sourceId+':'+h.attackId+':'+h.startTick+':'+h.hitGroup;
       const grantsEffect=!this.state.perfectDodgeKeys.includes(key);
       const remainingSlowTicks=this.state.timePolicy==='perfect-dodge-slow'?this.state.slowMotionRemainingTicks:0;
@@ -1575,17 +2663,45 @@ export class CombatEngine {
     if(!player||!spec||player.downed||this.playerIsDown()||s.traversal)return false;
     if(!counter&&!chain&&s.tick<s.actionRecoveryUntil)return false;
     if(this.kit)return this.kit.startLight(step,chain,counter);
-    const target=s.targetId===undefined?undefined:this.actorForId(s.targetId);
-    if(target&&target.allegiance==='hostile'&&target.visible&&!target.downed&&distance2(target.position,player.position)<=LIGHT_ASSIST_RANGE)player.facing=facingFrom(sub(target.position,player.position));
+    // Pick the actor the player is actually swinging at: explicit lock wins; otherwise the implicit target
+    // when assist is on; otherwise (strong) the nearest valid hostile in melee reach for broadened acquisition.
+    const target=this.meleeAssistTarget(LIGHT_ASSIST_RANGE);
+    if(target)player.facing=facingFrom(sub(target.position,player.position));
     const action=`light_${step}`;
     s.lightIndex=step;s.lightChainFrom=s.tick+spec.ticks-CHAIN_EARLY_TICKS;s.lightChainUntil=s.tick+spec.ticks+CHAIN_LATE_TICKS;
     s.actionId=action;s.actionUntil=s.tick+spec.ticks-LIGHT_LOCK_MARGIN_TICKS;s.actionRecoveryUntil=s.tick+spec.ticks;s.actionCancelable=false;
     s.pendingImpact=undefined;s.cast=undefined;
     s.swing={step:step as PlayerSwing['step'],startedTick:s.tick,hitIds:[],counter,waveSpawned:false,slashed:false,baseFacing:copy(player.facing)};
     player.actionId=this.playerClip(action);player.actionStartedTick=s.tick;player.normalizedTime=0;player.actionEndsTick=s.tick+spec.ticks;
-    player.phase='anticipation';player.targetId=s.targetId;player.velocity=vec(0,0,0);
-    this.emit('cue',`Aren prepares ${action.replaceAll('_',' ')}.`,player.id,s.targetId,action,`aren-${action}` as AttackId);
+    player.phase='anticipation';player.targetId=target?.id;player.velocity=vec(0,0,0);
+    if(s.heroId!=='yara')this.beginLunge(LIGHT_LUNGE[step-1]!,spec.activeFrom,target?.id);
+    this.emit('cue',`Aren prepares ${action.replaceAll('_',' ')}.`,player.id,target?.id,action,`aren-${action}` as AttackId);
     return true;
+  }
+  /** Returns the actor the player should melee-assist: explicit lock first; otherwise the implicit target only when
+   * autoTargetAssist is on; otherwise (strong) the nearest valid hostile in `range` for broadened acquisition. Off
+   * without an explicit lock returns undefined so the swing never snaps or lunges at an implicit target. */
+  private meleeAssistTarget(range:number):CombatActor|undefined{
+    const s=this.state,player=this.playerActor();
+    if(!player)return undefined;
+    const assist=this.accessibility.autoTargetAssist;
+    const explicit=this.explicitLock?this.actorForId(this.explicitLock.targetId):undefined;
+    if(explicit&&this.isPlayerHostileTarget(explicit)&&distance2(explicit.position,player.position)<=range)return explicit;
+    const implicit=s.targetId===undefined?undefined:this.actorForId(s.targetId);
+    if(implicit&&this.isPlayerHostileTarget(implicit)&&distance2(implicit.position,player.position)<=range){
+      if(assist!=='off')return implicit;
+    }
+    if(assist==='strong'){
+      let best:CombatActor|undefined,bestDistance=Infinity;
+      for(const actor of s.actors){
+        if(!this.isPlayerHostileTarget(actor))continue;
+        const distance=distance2(actor.position,player.position);
+        if(distance>=bestDistance||distance>range)continue;
+        best=actor;bestDistance=distance;
+      }
+      return best;
+    }
+    return undefined;
   }
   /** Sector hits, the light_3 spin and the crescent wave of the swing in progress; every tick count is from the swing's first tick. */
   private updateSwing(player:CombatActor):void{
@@ -1620,7 +2736,7 @@ export class CombatEngine {
         if(distance>spec.reach+actor.radius)continue;
         if(!full&&distance>1e-6&&(dx*player.facing.x+dz*player.facing.z)/distance<halfArc)continue;
         swing.hitIds.push(actor.id);
-        this.strikeHostile(actor,{action,clip:ACTION_CLIPS[action]!,damage:spec.damage,stopTicks:spec.hitStopTicks,element:'arcane',stagger:'interrupt',instinct:8,counter:swing.counter});
+        this.strikeHostile(actor,{action,clip:ACTION_CLIPS[action]!,damage:spec.damage,stopTicks:spec.hitStopTicks,element:'arcane',stagger:'interrupt',instinct:8,counter:swing.counter,hit:AREN_HITS[action]});
       }
     }
     if(elapsed>Math.max(spec.activeTo,spec.spin?.to??0))s.swing=undefined;
@@ -1649,35 +2765,85 @@ export class CombatEngine {
   private strikeHostile(target:CombatActor,incoming:PlayerStrike):number{
     const s=this.state,player=this.playerActor();
     if(!player)return 0;
-    if(s.combatTrial&&this.trials()[s.combatTrial.index]?.monsterId!==target.id)return 0;
+    if(this.gateTargetDamage(target))return 0;
+    // The Last Warden slips a blow that reaches him idle (Perfect Dodge); a counter strike always lands.
+    if(orunEvadesStrike(s,target,incoming.counter))return 0;
     const modified=this.kit?.modifyStrike?.(target,incoming),strike:PlayerStrike=modified?{...modified,counter:incoming.counter}:incoming;
-    const before=target.vitality??100;
-    const damage=target.weakPointUntil!==undefined&&target.weakPointUntil>s.worldTick?Math.ceil(strike.damage*PERFECT_DODGE_EFFECTS.weakPointDamageMultiplier):strike.damage;
-    target.vitality=Math.max(0,before-damage);
-    const loss=Math.max(0,before-target.vitality);
-    const payload=loss>0?{targetId:target.id,amount:loss,position:copy(target.position),worldTick:s.worldTick}:undefined;
-    if(target.ferocity!==undefined)target.ferocity=Math.max(0,target.ferocity-damage);
-    if(strike.counter)this.markPhaseAction('counter');
+    const exposed=target.weakPointUntil!==undefined&&target.weakPointUntil>s.worldTick?PERFECT_DODGE_EFFECTS.weakPointDamageMultiplier:1,dazed=target.reactionState?.kind==='stun'?STUN_DAMAGE_MULTIPLIER:1;
+    const damage=(exposed>1||dazed>1?Math.ceil(strike.damage*Math.max(exposed,dazed)):strike.damage)*companionOwnerMultiplier(s,'power');
+    const loss=this.applyHostileDamage(target,damage,player.id,strike.action,`aren-${strike.action}` as AttackId);
+    if(loss===null)return 0;
+    if(strike.counter){this.markPhaseAction('counter');noteOrunPressure(s,target);}
+    noteOrunCoreStrike(s,target);
     if(strike.instinct>0)s.player.instinct=Math.min(100,s.player.instinct+strike.instinct);
-    const attackId=`aren-${strike.action}` as AttackId;
-    if(strike.stagger==='interrupt')this.interruptAttack(target,strike.action);
+    if(strike.stagger==='interrupt'){if(!(this.isBossActor(target)&&this.isArmoured(target)))this.interruptAttack(target,strike.action);}
     else if(strike.stagger==='idle'&&!this.liveAttackOf(target)&&this.state.worldTick>=target.staggerUntil)target.staggerUntil=s.worldTick+SIGIL.staggerTicks;
-    if(target.vitality===0||!s.combatTrial&&target.ferocity===0){
+    const offset=sub(target.position,player.position);
+    const direction=incoming.direction?normalize3(incoming.direction):distance2(target.position,player.position)>1e-6?facingFrom(offset):player.facing;
+    const radial=facingFrom(direction);
+    const position=vec(target.position.x-radial.x*target.radius,target.position.y+target.collisionHeight*.55,target.position.z-radial.z*target.radius);
+    this.queuePresentationCue({kind:'hit',phase:'hit',actorId:player.id,targetId:target.id,position,to:add(position,direction),contact:{kind:'actor',normal:vec(-radial.x,0,-radial.z),surfaceId:target.id},scopeId:s.encounterId,attackId:`aren-${strike.action}` as AttackId,actionId:strike.clip,confirmedDamage:loss,intensity:loss/12,element:strike.element,priority:'essential',shape:'burst'});
+    this.startHitStop(strike.stopTicks);
+    if(!target.downed)this.applyHitReaction(target,strike.hit??defaultHit(strike.damage),radial);
+    this.kit?.afterStrike?.(target,strike,loss);
+    return loss;
+  }
+
+  /** True when the target cannot receive damage this tick (downed, dead, wrong trial stage, or in a reaction i-frame). */
+  private gateTargetDamage(target:CombatActor):boolean{
+    const s=this.state;
+    if(target.downed||(target.vitality??100)<=0)return true;
+    if(s.combatTrial&&this.trials()[s.combatTrial.index]?.monsterId!==target.id)return true;
+    if(this.reactionInvulnerable(target))return true;
+    return false;
+  }
+
+  /**
+   * Apply vitality loss, ferocity, downed flag and the encounter resolution for a confirmed hostile hit.
+   * Used by both player strikes (after Orun evasion, kit modify, and exposed/dazed multipliers) and companion strikes
+   * (Vara's Storm Talon) routed through `pendingCompanionStrikes`. Emits the 'damage' event with the supplied sourceId and
+   * returns the vitality actually lost (or 0 when the hit was counted but the target was already at floor 1 as a
+   * cleanse-only boss). Returns `null` when the hit was rejected by the gate (downed, dead, wrong trial, i-frame): the
+   * caller must treat a `null` return as "nothing happened, do not run the post-strike pipeline". Cleanse-only bosses
+   * (Koro/Asha/Orun in the Fall) are worn down to 1 and never downed.
+   */
+  private applyHostileDamage(target:CombatActor,damage:number,sourceId:ActorId,label:string,attackId:AttackId):number|null{
+    const s=this.state;
+    if(this.gateTargetDamage(target))return null;
+    const before=target.vitality??100;
+    const sparing=this.isSparedForCleanse(target)||target.possessed&&(this.state.chapter.fall!==undefined||this.state.chapter.orun!==undefined);
+    target.vitality=Math.max(sparing?1:0,before-damage);
+    const loss=Math.max(0,before-target.vitality);
+    if(loss<=0&&!sparing)return null;
+    if(target.ferocity!==undefined)target.ferocity=Math.max(0,target.ferocity-damage);
+    if(!sparing&&(target.vitality===0||!s.combatTrial&&target.ferocity===0)){
       target.downed=true;
       target.allegiance='neutral';
       const participants=s.encounter?.actorIds.filter(id=>id!==s.playerId)??[];
       if(participants.length>0&&participants.every(id=>{const actor=s.actors.find(candidate=>candidate.id===id);return !!actor&&(actor.downed||actor.allegiance!=='hostile');}))this.resolveEncounter('subdued',target);
     }
-    this.emit('damage',`${strike.action.replaceAll('_',' ')} connects.`,player.id,target.id,strike.action,attackId,payload);
-    const direction=facingFrom(sub(target.position,player.position));
-    const position=vec(target.position.x-direction.x*0.4,target.position.y+0.9,target.position.z-direction.z*0.4);
-    this.queuePresentationCue({kind:'hit',phase:'hit',actorId:player.id,targetId:target.id,position,to:vec(position.x+direction.x,position.y,position.z+direction.z),scopeId:s.encounterId,attackId,actionId:strike.clip,intensity:damage/12,element:strike.element,priority:'essential',shape:'burst'});
-    if(damage>0){
-      this.startHitStop(strike.stopTicks);
-      if(!target.downed&&this.monsterAttackProgress(target)?.phase!=='active')target.hitReactUntil=s.worldTick+HIT_REACT_TICKS;
-    }
-    this.kit?.afterStrike?.(target,strike,loss);
+    const payload=loss>0?{targetId:target.id,amount:loss,position:copy(target.position),worldTick:s.worldTick}:undefined;
+    this.emit('damage',`${label.replaceAll('_',' ')} connects.`,sourceId,target.id,label,attackId,payload);
     return loss;
+  }
+
+  /**
+   * Drain queued companion strikes (Vara's Storm Talon) into the same damage + reaction pipeline as player strikes:
+   * applyHostileDamage gates the target and updates vitality/ferocity/downed + emits the 'damage' event, then
+   * reactToCompanionHit triggers the poise/stagger reaction under the same super-armour rules the player enjoys.
+   * Acknowledged-by-sparing strikes still go through the reaction so the visual cues fire.
+   */
+  private drainCompanionStrikes():void{
+    const queue=this.state.pendingCompanionStrikes;
+    if(!queue||queue.length===0)return;
+    const drained=queue.splice(0,queue.length);
+    for(const strike of drained){
+      const target=this.state.actors.find(candidate=>candidate.id===strike.targetId);
+      if(!target)continue;
+      const loss=this.applyHostileDamage(target,strike.damage,strike.sourceId,strike.attackId,strike.attackId as AttackId);
+      if(loss===null)continue;
+      reactToCompanionHit(this.state,target,hit('light',strike.poise,strike.knockback),strike.dirX,strike.dirZ);
+    }
   }
   /** Overlapping hit-stops take the longest remaining freeze; they never stack. */
   private startHitStop(ticks:number):void{
@@ -1700,10 +2866,12 @@ export class CombatEngine {
   private shiftPlayerClocks():void{
     const s=this.state,player=this.playerActor();
     if(s.actionUntil>0)s.actionUntil++;
+    if(s.lunge){s.lunge.fromTick++;s.lunge.toTick++;}
     if(s.actionRecoveryUntil>0)s.actionRecoveryUntil++;
     if(s.counterUntil>0)s.counterUntil++;
     if(s.untargetableUntil!==undefined)s.untargetableUntil++;
     if(s.kitCancel)s.kitCancel.fromTick++;
+    for(const id in s.skillReadyAt){const skill=id as PlayerSkillId;if(s.skillReadyAt[skill]!>=s.tick)s.skillReadyAt[skill]!++;}
     this.kit?.onHitStop?.();
     if(s.heavyChargeStartTick!==null)s.heavyChargeStartTick++;
     if(s.sigilCharge)s.sigilCharge.startedTick++;
@@ -1712,16 +2880,15 @@ export class CombatEngine {
     if(s.lightChainFrom!==undefined)s.lightChainFrom++;
     if(s.lightChainUntil!==undefined)s.lightChainUntil++;
     if(s.pendingImpact){s.pendingImpact.activeAt++;s.pendingImpact.activeUntil++;}
-    if(s.playerJump){s.playerJump.startedAtTick++;s.playerJump.flightStartedAtTick++;s.playerJump.airStartedAtTick++;}
+    if(s.playerJump){s.playerJump.startedAtTick++;s.playerJump.flightStartedAtTick++;s.playerJump.airStartedAtTick++;if(s.playerJump.airDash)s.playerJump.airDash.until++;}
     if(s.swing)s.swing.startedTick++;
     if(s.cast)s.cast.startedTick++;
     if(s.pendingLightning)s.pendingLightning.atTick++;
     for(const mark of s.judgementMarks){mark.createdAtTick++;mark.detonateAtTick++;}
-    for(const slot of Object.values(s.companionState.slots))if(slot&&slot.readyAt>0)slot.readyAt++;
-    if(s.companionState.tokens.nextAt>0)s.companionState.tokens.nextAt++;
     if(!player)return;
     if(player.actionEndsTick>0){player.actionStartedTick++;player.actionEndsTick++;}
     if(player.invulnerableUntil>0)player.invulnerableUntil++;
+    if(player.reactionState)player.reactionState.startedAt++;
   }
   private applyDeferredRelease(input:CombatInput):CombatInput{
     const deferred=this.state.deferredRelease!;
@@ -1754,11 +2921,23 @@ export class CombatEngine {
   private chestOf(actor:CombatActor):Vec3{return vec(actor.position.x,actor.position.y+actor.collisionHeight*0.55,actor.position.z);}
   /** Nearest visible hostile inside the homing range and cone of `facing`; undefined fires straight. */
   private softTarget(origin:Vec3,facing:Vec3):CombatActor|undefined{
+    const s=this.state,player=this.playerActor();
+    if(!player)return undefined;
+    // Only an explicit player lock may bypass the cone and assist preference; implicit targets from a previous
+    // acquisition (including restored ones) must still obey the authored cone and the assist setting.
+    if(this.explicitLock){
+      const locked=this.actorForId(this.explicitLock.targetId);
+      if(locked&&this.isPlayerHostileTarget(locked)&&distance2(locked.position,origin)<=SIGIL.homingRange)return locked;
+    }
+    if(this.accessibility.autoTargetAssist==='off')return undefined;
+    const cone=this.accessibility.autoTargetAssist==='strong'?360:SIGIL.homingConeDegrees;
     let best:CombatActor|undefined,bestDistance=Infinity;
-    for(const actor of this.state.actors){
-      if(!this.isPlayerHostileTarget(actor)||!pointInSector(actor.position,origin,facing,SIGIL.homingRange,SIGIL.homingConeDegrees))continue;
-      const distance=distance2(origin,actor.position);
-      if(distance<bestDistance){best=actor;bestDistance=distance;}
+    for(const actor of s.actors){
+      if(!this.isPlayerHostileTarget(actor))continue;
+      const distance=distance2(actor.position,origin);
+      if(distance>=bestDistance||distance>SIGIL.homingRange)continue;
+      if(cone<360&&!pointInSector(actor.position,origin,facing,SIGIL.homingRange,cone))continue;
+      best=actor;bestDistance=distance;
     }
     return best;
   }
@@ -1771,7 +2950,7 @@ export class CombatEngine {
   }
   private startRanged(player:CombatActor,input:CombatInput):boolean{
     const s=this.state;
-    if(this.playerIsDown()||s.traversal||s.sigilCharge||s.tick<s.actionRecoveryUntil)return false;
+    if(this.playerIsDown()||s.traversal||s.sigilCharge||s.tick<s.actionRecoveryUntil||this.cooldownRemaining('sigil_bolt')>0)return false;
     if(s.player.mana<SIGIL.boltMana){this.emit('cue','Sigil Bolt needs 15 mana. Walk or run to restore mana.',player.id);return false;}
     if(!input.rangedHeld||input.rangedReleased)return this.startSigilCast(player,'bolt');
     if(this.kitCancelLift)this.kit?.cancel();
@@ -1846,7 +3025,7 @@ export class CombatEngine {
       if(!this.isPlayerHostileTarget(actor)||distance2(position,actor.position)>radius+actor.radius)continue;
       const origin=vec(position.x,position.y+.8,position.z);
       if(this.projectileWallHit(origin,this.chestOf(actor),.05))continue;
-      this.strikeHostile(actor,{action:clip,clip:clip as ActionId,damage,stopTicks:0,element:'heartroot',stagger:'idle',instinct:clip==='yara-heartroot-bloom'?0:4,counter:false});
+      this.strikeHostile(actor,{action:clip,clip:clip as ActionId,damage,stopTicks:0,element:'heartroot',stagger:'idle',instinct:clip==='yara-heartroot-bloom'?0:4,counter:false,hit:yaraBurstHit(clip,damage)});
     }
   }
 
@@ -1858,7 +3037,7 @@ export class CombatEngine {
       if(!this.isPlayerHostileTarget(actor)||segmentDistanceXZ(from,to,actor.position).distance>width/2+actor.radius)continue;
       if(Math.abs(this.chestOf(actor).y-from.y)>actor.collisionHeight/2+width/2)continue;
       if(this.projectileWallHit(from,this.chestOf(actor),.05))continue;
-      this.strikeHostile(actor,{action:beam?'sigil_bolt':'heavy',clip:player.actionId,damage,stopTicks:0,element:'heartroot',stagger:beam?'idle':'interrupt',instinct:6,counter:false});
+      this.strikeHostile(actor,{action:beam?'sigil_bolt':'heavy',clip:player.actionId,damage,stopTicks:0,element:'heartroot',stagger:beam?'idle':'interrupt',instinct:6,counter:false,hit:beam?YARA_HITS.sap_lance:YARA_HITS.root_spike});
     }
   }
 
@@ -1904,7 +3083,7 @@ export class CombatEngine {
       }
     }
     player.phase=elapsed<(bolt?SIGIL.boltLaunchTick:HEARTROOT.stormLaunches[0]!)?'anticipation':'recovery';
-    if(elapsed>=(bolt?SIGIL.boltTicks:60))s.cast=undefined;
+    if(elapsed>=(bolt?SIGIL.boltTicks:HEARTROOT.stormTicks))s.cast=undefined;
   }
 
   private startSigilCast(player:CombatActor,kind:'bolt'|'barrage'):boolean{
@@ -1913,9 +3092,9 @@ export class CombatEngine {
     if(!this.spendMana(skill))return false;
     const target=this.softTarget(player.position,player.facing);
     if(target)player.facing=facingFrom(sub(target.position,player.position));
-    const total=bolt?SIGIL.boltTicks:s.heroId==='yara'?60:SIGIL.barrageTicks;
+    const total=bolt?SIGIL.boltTicks:s.heroId==='yara'?HEARTROOT.stormTicks:SIGIL.barrageTicks;
     s.lightIndex=0;s.pendingImpact=undefined;s.swing=undefined;
-    s.actionId=skill;s.actionUntil=s.tick+(bolt?SIGIL.boltLockTicks:s.heroId==='yara'?50:SIGIL.barrageLockTicks);s.actionRecoveryUntil=s.tick+total;s.actionCancelable=false;
+    s.actionId=skill;s.actionUntil=s.tick+(bolt?SIGIL.boltLockTicks:s.heroId==='yara'?HEARTROOT.stormLockTicks:SIGIL.barrageLockTicks);s.actionRecoveryUntil=s.tick+total;s.actionCancelable=false;
     player.actionId=this.playerClip(skill);player.actionStartedTick=s.tick;player.normalizedTime=0;player.actionEndsTick=s.tick+total;player.phase='anticipation';player.velocity=vec(0,0,0);
     s.cast={kind,startedTick:s.tick,progress:0,stage:0};
     this.queueSigilCue(`sigil:${++s.arsenalSequence}`,'anticipation',bolt?SIGIL.boltLaunchTick:SIGIL.barrageLaunchTicks[0]!,bolt?1:1.6);
@@ -1998,7 +3177,7 @@ export class CombatEngine {
         projectile.position=impact;
         if(projectile.callbackId)this.kit?.onProjectileHit?.(projectile,first,impact);
         else if(projectile.kind==='bloom-seed')this.heartrootBurst(impact,HEARTROOT.seedRadius,projectile.damage,'yara-thornshot-3');
-        else this.strikeHostile(first,{action:projectile.kind==='sigil-bolt'?'sigil_bolt':'light',clip:impactAction,damage:projectile.damage,stopTicks:SIGIL.hitStopTicks,element:projectile.kind==='sigil-bolt'?'arcane':'heartroot',stagger:'idle',instinct:SIGIL.instinct,counter:false});
+        else this.strikeHostile(first,{action:projectile.kind==='sigil-bolt'?'sigil_bolt':'light',clip:impactAction,damage:projectile.damage,stopTicks:SIGIL.hitStopTicks,element:projectile.kind==='sigil-bolt'?'arcane':'heartroot',stagger:'idle',instinct:SIGIL.instinct,counter:false,direction:projectile.direction,hit:projectile.kind==='sigil-bolt'?AREN_HITS.sigil_bolt:projectile.kind==='storm-seed'?YARA_HITS.storm_seed:YARA_HITS.thorn_bolt});
         return false;
       }
     }else{
@@ -2009,7 +3188,7 @@ export class CombatEngine {
         projectile.hitIds.push(actor.id);
         this.queueProjectileImpact(projectile,vec(from.x+(end.x-from.x)*t,from.y+(end.y-from.y)*t,from.z+(end.z-from.z)*t),actor.id,1);
         if(projectile.callbackId)this.kit?.onProjectileHit?.(projectile,actor,vec(from.x+(end.x-from.x)*t,from.y+(end.y-from.y)*t,from.z+(end.z-from.z)*t));
-        else this.strikeHostile(actor,{action:'crescent_wave',clip:impactAction,damage:projectile.damage,stopTicks:CRESCENT_WAVE.hitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false});
+        else this.strikeHostile(actor,{action:'crescent_wave',clip:impactAction,damage:projectile.damage,stopTicks:CRESCENT_WAVE.hitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false,direction:projectile.direction,hit:AREN_HITS.crescent_wave});
       }
     }
     if(wall){this.queueProjectileImpact(projectile,wall,undefined,0.6);finished=true;}
@@ -2018,9 +3197,9 @@ export class CombatEngine {
     if(projectile.kind==='bloom-seed'&&(finished||projectile.ageTicks>=projectile.lifeTicks))this.heartrootBurst(end,HEARTROOT.seedRadius,projectile.damage,'yara-thornshot-3');
     return !finished&&projectile.ageTicks<projectile.lifeTicks;
   }
-  /** First blocking point along from→to (arena bounds, colliders, closed trial gates, combat obstacles), or undefined when clear. Projectiles fly at a fixed height, so the terrain surface is deliberately left out. */
+  /** First swept physical contact, including raised terrain and measured native props; expiry is not a collision. */
   private projectileWallHit(from:Vec3,to:Vec3,radius:number):Vec3|undefined{
-    const arena:CombatArena={...this.state.arena,surfaces:[]},height=radius*2;
+    const arena=this.state.arena,height=radius*2;
     const clear=(t:number)=>isAerialCirclePathClear(arena,vec(from.x,from.y-radius,from.z),vec(from.x+(to.x-from.x)*t,from.y+(to.y-from.y)*t-radius,from.z+(to.z-from.z)*t),radius,height);
     if(clear(1))return undefined;
     let low=0,high=1;
@@ -2042,7 +3221,26 @@ export class CombatEngine {
     return length>1e-9?Math.min(1,Math.max(0,along/length)):0;
   }
   private queueProjectileImpact(projectile:LivePlayerProjectile,position:Vec3,targetId:ActorId|undefined,intensity:number):void{
-    this.queuePresentationCue({kind:'projectile-impact',phase:'hit',actorId:projectile.ownerId,...(targetId?{targetId}:{}),scopeId:projectile.id,position:copy(position),actionId:(projectile.actionId??projectile.kind) as ActionId,intensity,element:this.heroElement(),priority:'essential',shape:'burst'});
+    if(!targetId&&this.queueSurfaceContact(position,projectile.direction,projectile.kind==='crescent-wave'?WAVE_PROBE_RADIUS:projectile.radius,(projectile.actionId??projectile.kind) as ActionId,intensity,projectile.id))return;
+    this.queuePresentationCue({kind:'projectile-impact',phase:'hit',actorId:projectile.ownerId,...(targetId?{targetId}:{}),scopeId:projectile.id,position:copy(position),to:add(position,projectile.direction),actionId:(projectile.actionId??projectile.kind) as ActionId,intensity,element:this.heroElement(),priority:'essential',shape:'burst'});
+  }
+  private queueSurfaceContact(point:Vec3,direction:Vec3,radius:number,actionId:ActionId|undefined,intensity:number,scopeId?:string):boolean{
+    const contact=this.solidContact;
+    if(!nearestSolidContact(this.state.arena,point,radius,contact))return false;
+    this.queuePresentationCue({kind:'projectile-impact',phase:'hit',actorId:this.state.playerId,position:copy(contact.position),to:add(contact.position,direction),contact:{kind:contact.kind,normal:copy(contact.normal),surfaceId:contact.surfaceId},actionId,scopeId,intensity,element:this.heroElement(),durationTicks:48,priority:'essential',shape:'burst'});
+    return true;
+  }
+  private queueMeleeSurfaceContact(cue:StoryCue):void{
+    const player=this.playerActor();
+    if(!player||!cue.footprint)return;
+    const from=this.chestOf(player),reach=cue.footprint.length;
+    const aperture=Math.min(Math.PI*.8,(cue.footprint.sectorRadians??1.2)*.4);
+    for(let ray=0;ray<3;ray++){
+      const angle=ray===0?0:ray===1?aperture:-aperture;
+      const direction=rotateY(player.facing,angle),to=add(from,scale(direction,reach));
+      const hit=this.projectileWallHit(from,to,.12);
+      if(hit&&this.queueSurfaceContact(hit,direction,.12,cue.actionId,cue.intensity??1,cue.scopeId))return;
+    }
   }
   private updatePendingLightning():void{
     const s=this.state,pending=s.pendingLightning,player=this.playerActor();
@@ -2051,15 +3249,16 @@ export class CombatEngine {
     this.queuePresentationCue({kind:'lightning',phase:'active',actorId:player.id,position:copy(pending.position),footprint:{width:THUNDER_CLEAVE.radius*2,length:THUNDER_CLEAVE.radius*2},durationTicks:THUNDER_CLEAVE.cueTicks,intensity:2,element:'lightning',priority:'essential',shape:'burst'});
     for(const actor of s.actors){
       if(!this.isPlayerHostileTarget(actor)||distance2(pending.position,actor.position)>THUNDER_CLEAVE.radius+actor.radius)continue;
-      this.strikeHostile(actor,{action:'thunder_cleave',clip:ACTION_CLIPS.charged_heavy!,damage:THUNDER_CLEAVE.damage,stopTicks:THUNDER_CLEAVE.hitStopTicks,element:'lightning',stagger:'none',instinct:0,counter:false});
+      this.strikeHostile(actor,{action:'thunder_cleave',clip:ACTION_CLIPS.charged_heavy!,damage:THUNDER_CLEAVE.damage,stopTicks:THUNDER_CLEAVE.hitStopTicks,element:'lightning',stagger:'none',instinct:0,counter:false,hit:AREN_HITS.thunder_cleave});
     }
   }
   // ---- Warden's Judgement ---------------------------------------------------------------------------------------
   private startJudgement(player:CombatActor):boolean{
     const s=this.state;
-    if(this.playerIsDown()||s.traversal||s.sigilCharge||s.tick<s.actionRecoveryUntil)return false;
+    if(this.playerIsDown()||s.traversal||s.sigilCharge||s.tick<s.actionRecoveryUntil||this.cooldownRemaining('judgement')>0)return false;
     if(s.player.instinct<JUDGEMENT_INSTINCT){this.emit('cue','Warden’s Judgement needs full Instinct.',player.id);return false;}
-    if(this.kit){if(!this.kit.startUltimate())return false;s.player.instinct=0;return true;}
+    if(this.kit){if(!this.kit.startUltimate())return false;this.spendMana('judgement');s.player.instinct=0;return true;}
+    if(!this.spendMana('judgement'))return false;
     s.player.instinct=0;
     if(s.heroId==='yara')return this.startHeartrootCast(player,'heartroot-bloom',HEARTROOT.bloomTicks);
     const target=this.judgementTarget(player);
@@ -2131,7 +3330,7 @@ export class CombatEngine {
       this.queuePresentationCue({kind:'judgement-mark',phase:'hit',actorId:s.playerId,scopeId:mark.id,position:copy(mark.position),footprint:{width:JUDGEMENT.markRadius,length:JUDGEMENT.markRadius,angleRadians:mark.angleRadians},intensity:1.2,element:'arcane',priority:'essential',shape:'burst'});
       for(const actor of s.actors){
         if(!this.isPlayerHostileTarget(actor)||distance2(mark.position,actor.position)>JUDGEMENT.markRadius+actor.radius)continue;
-        this.strikeHostile(actor,{action:'judgement',clip:ACTION_CLIPS.judgement!,damage:JUDGEMENT.markDamage,stopTicks:JUDGEMENT.detonationHitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false});
+        this.strikeHostile(actor,{action:'judgement',clip:ACTION_CLIPS.judgement!,damage:JUDGEMENT.markDamage,stopTicks:JUDGEMENT.detonationHitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false,hit:AREN_HITS.judgement});
       }
     }
     marks.length=kept;
@@ -2145,10 +3344,12 @@ export class CombatEngine {
   }
   private resetArsenal():void{
     const s=this.state;
+    s.skillReadyAt={};
     s.lightIndex=0;s.lightChainFrom=undefined;s.lightChainUntil=undefined;s.swing=undefined;s.cast=undefined;s.sigilCharge=undefined;
     s.kit={};s.untargetableUntil=undefined;s.evasion=undefined;s.kitCancel=undefined;this.kit?.reset();
     s.playerProjectiles=[];s.judgementMarks=[];s.pendingLightning=undefined;s.hitStop=undefined;s.deferredRelease=undefined;
-    for(const actor of s.actors)actor.hitReactUntil=undefined;
+    s.lunge=undefined;
+    for(const actor of s.actors){actor.reactionState=undefined;actor.poiseMeter=undefined;actor.poiseBreaks=undefined;actor.poiseHitAt=undefined;}
   }
   private startPlayerAction(action:string,targetId?:ActorId,counter=false):boolean{
     const player=this.playerActor();
@@ -2168,28 +3369,30 @@ export class CombatEngine {
     if(action==='cleanse'&&(target.corruption??0)<=0&&!target.possessed)return false;
     if(action==='root_tether'){
       const telegraph=this.state.telegraphs.find(item=>item.sourceId===target.id&&(item.phase==='windup'||item.phase==='commit'));
-      if(!telegraph)return false;
+      if(!telegraph&&!acceptsTether(this.state,target))return false;
     }
     if(this.kit&&action==='root_tether'){
       if(!this.spendMana('root_tether'))return false;
       this.state.targetId=target.id;
-      return this.kit.startTether(target);
+      const accepted=this.kit.startTether(target);
+      if(!accepted)delete this.state.skillReadyAt.root_tether;
+      return accepted;
     }
     if(!this.spendMana(playerSkillId(action)))return false;
     this.state.targetId=target.id;this.state.lightIndex=0;
-    const duration=action==='charged_heavy'?58:action==='heavy'?45:action==='cleanse'?90:action==='root_tether'?36:42;
+    const attack=targetedStrike(action),duration=attack.ticks;
+    if(this.state.heroId==='aren'&&(action==='heavy'||action==='charged_heavy'))this.beginLunge(action==='heavy'?HEAVY_LUNGE:CHARGED_LUNGE,attack.activeAt,target.id);
     this.state.actionId=action;
     this.state.actionUntil=this.state.tick+duration;
-    this.state.actionRecoveryUntil=this.state.actionUntil+18;
+    this.state.actionRecoveryUntil=this.state.actionUntil+attack.recoveryTicks;
     this.state.actionCancelable=false;
     player.actionId=this.playerClip(action)??`aren-${action}` as ActionId;
     player.actionStartedTick=this.state.tick;player.normalizedTime=0;
-    player.actionEndsTick=this.state.tick+duration+18;
+    player.actionEndsTick=this.state.actionRecoveryUntil;
     player.phase='anticipation';
     player.targetId=target.id;
     player.facing=facingFrom(sub(target.position,player.position));
-    const attack=targetedStrike(action);
-    const activeAt=this.state.tick+(action==='charged_heavy'?36:action==='heavy'?20:action==='cleanse'?35:12);
+    const activeAt=this.state.tick+attack.activeAt;
     const attackId=`aren-${action}` as AttackId;
     const cue=action==='cleanse'?'Root light gathers around the target.':'Staff draws back before the strike.';
     this.state.telegraphs.push({id:`${this.state.runId}:${this.state.tick}:${action}`,attackId,sourceId:player.id,targetPosition:copy(target.position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
@@ -2198,11 +3401,206 @@ export class CombatEngine {
     if(action==='cleanse')this.kit?.onSharedSkill?.('cleanse');
     return true;
   }
-  private applyHazardPush(actor:CombatActor,direction:Vec3,meters:number):void{
-    const jump=actor.id===this.state.playerId?this.state.playerJump:undefined;
+  // ---- Physical reactions -------------------------------------------------------------------------------------------
+  /** The clock an actor's own reaction runs on: simulation ticks for the player, world ticks for everyone else. */
+  private reactionNow(actor:CombatActor):number{return actor.id===this.state.playerId?this.state.tick:this.state.worldTick;}
+  private isBossActor(actor:CombatActor):boolean{
+    if(this.state.combatTrial)return this.trialDifficultyOf(actor.id)?.boss===true;
+    const encounter=this.state.encounter;
+    return !!encounter&&encounter.encounterFamily!=='wildlife'&&encounter.bossId===actor.id;
+  }
+  /** Mass is keyed by the placed instance id: the Greenwake stalker and rammer share the boar archetype but are different bodies. */
+  private buildOfActor(actor:CombatActor):ActorBuild{return buildOf(actor.id,actor.radius,this.isBossActor(actor),actor.poiseBreaks??0);}
+  /** Super-armour: a monster ignores physical reactions while its attack is committed (bosses from the commit, everyone else in the active swing). */
+  private isArmoured(actor:CombatActor):boolean{
+    const attack=this.monsterAttackProgress(actor);
+    return attack!==undefined&&(attack.phase==='active'||attack.phase==='commit'&&this.isBossActor(actor));
+  }
+  /** The first ticks of a get-up are untouchable. */
+  private reactionInvulnerable(actor:CombatActor):boolean{
+    const r=actor.reactionState;
+    return r!==undefined&&r.kind==='getup'&&this.reactionNow(actor)-r.startedAt<REACTION_TICKS.getupIframes;
+  }
+  /** A confirmed player blow on a hostile: poise damage first, then the reaction its weight and the victim's mass call for. */
+  private applyHitReaction(target:CombatActor,spec:HitSpec,dir:Vec3):void{
+    if(target.anchored||spec.inert)return;
+    const build=this.buildOfActor(target),committed=target.reactionState!==undefined&&isCommitted(target.reactionState.kind),armoured=this.isArmoured(target);
+    const broken=!committed&&this.addPoise(target,build,spec.stun?build.boss?build.poiseMax*BOSS_POISE.controlFraction:build.poiseMax:spec.poise);
+    const strength=reactionStrength(spec.weight,spec.poise,build.poiseMax);
+    const plan=planHostileReaction(spec,build.mass,strength,armoured);
+    if(broken&&!armoured){
+      // A control hit always stuns. Otherwise a fall (knockdown, launch) outranks the daze and spends the bar.
+      if(!spec.stun&&plan&&REACTION_RANK[plan.kind]>REACTION_RANK.stun){
+        this.queueReactionCue('poise-break',target,plan.kind,strength,dir.x,dir.z);
+        target.poiseBreaks=(target.poiseBreaks??0)+1;target.poiseMeter=0;
+        this.startReaction(target,plan,dir.x,dir.z);
+      }else this.startStun(target,build,strength,dir.x,dir.z);
+      return;
+    }
+    // A boss loses an attack to a poise break or an authored interrupt, never to a plain stagger.
+    if(plan)this.startReaction(target,build.boss&&plan.kind!=='flinch'?{...plan,cancelsAttack:false}:plan,dir.x,dir.z);
+  }
+  /** Adds poise damage; true when the bar is now full. */
+  private addPoise(actor:CombatActor,build:ActorBuild,amount:number):boolean{
+    const meter=Math.min(build.poiseMax,(actor.poiseMeter??0)+amount);
+    actor.poiseMeter=meter;actor.poiseHitAt=this.state.worldTick;
+    return meter>=build.poiseMax-1e-9;
+  }
+  private startStun(actor:CombatActor,build:ActorBuild,strength:number,dirX:number,dirZ:number):void{
+    this.queueReactionCue('poise-break',actor,'stun',strength,dirX,dirZ);
+    actor.poiseBreaks=(actor.poiseBreaks??0)+1;
+    this.startReaction(actor,stunPlan(strength,build.stunTicks),dirX,dirZ);
+  }
+  /** Poise upkeep outside heavy reactions: a bar that filled while the monster was armoured breaks the moment the armour drops; otherwise it regenerates. */
+  private updatePoise(actor:CombatActor):void{
+    const meter=actor.poiseMeter;
+    if(!meter||actor.id===this.state.playerId||actor.anchored)return;
+    const build=this.buildOfActor(actor);
+    if(meter>=build.poiseMax-1e-9){
+      if(!actor.downed&&!this.isArmoured(actor))this.startStun(actor,build,1,-actor.facing.x,-actor.facing.z);
+      return;
+    }
+    if(this.state.worldTick-(actor.poiseHitAt??0)>=POISE_REGEN_DELAY)actor.poiseMeter=Math.max(0,meter-build.poiseMax/POISE_REGEN_TICKS*this.state.worldTimeScale);
+  }
+  /** What a monster attack does to the hero it hit: the attack's weight against the hero's weight class. */
+  private applyPlayerReaction(spec:HitSpec,dirX:number,dirZ:number):void{
+    const player=this.playerActor();
+    if(!player||spec.inert)return;
+    const plan=planPlayerReaction(spec,HERO_COMBAT[this.state.heroId].mass,this.isPlayerAirborne());
+    if(plan)this.startReaction(player,plan,dirX,dirZ);
+  }
+  /** Push direction of a hazard hit: radial from a slam's centre, the lane direction for sweeps, waves and cones. */
+  private hazardPushDirection(actor:CombatActor,hazard:LiveHazard):Vec3{
+    if(hazard.kind==='strike'||hazard.kind==='area'||hazard.kind==='projectile'){
+      const dx=actor.position.x-hazard.target.x,dz=actor.position.z-hazard.target.z,distance=Math.hypot(dx,dz);
+      if(distance>0.25)return vec(dx/distance,0,dz/distance);
+    }
+    return normalize(hazard.direction);
+  }
+  /** Starts `plan` unless the actor is committed to (or already in) a heavier reaction; true when it took. */
+  private startReaction(actor:CombatActor,plan:ReactionPlan,dirX:number,dirZ:number):boolean{
+    const current=actor.reactionState;
+    if(current&&(isCommitted(current.kind)||REACTION_RANK[current.kind]>REACTION_RANK[plan.kind]))return false;
+    beginReaction(actor,plan,dirX,dirZ,this.reactionNow(actor),actor.id===this.state.playerId);
+    this.announceReaction(actor);
+    return true;
+  }
+  /** The side effects of a new reaction: the victim's attack is dropped, the hero's actions are locked, and the start cue goes out. */
+  private announceReaction(actor:CombatActor):void{
+    const r=actor.reactionState!;
+    r.pending=false;
+    if(actor.id===this.state.playerId){if(r.kind!=='flinch'&&!this.isPlayerAirborne())this.lockPlayerForReaction(actor,r);}
+    else if(r.cancelsAttack&&this.cancelLiveAttack(actor,'reaction'))onOrunInterrupted(this.orunHost,actor);
+    this.queueReactionCue(r.kind==='getup'?'getup':'reaction-start',actor,r.kind,r.strength,r.dirX,r.dirZ);
+  }
+  /** A struck hero drops whatever he was doing and cannot act until the reaction ends (a dodge may cancel the lie and the get-up). */
+  private lockPlayerForReaction(player:CombatActor,r:ReactionState):void{
+    const s=this.state;
+    if(s.actionId!=='reaction'){
+      this.cancelPlayerAttackState();
+      s.pendingImpact=undefined;s.bufferedAction=undefined;s.heavyChargeStartTick=null;s.lunge=undefined;s.evasion=undefined;s.playerJump=undefined;
+    }
+    const end=r.startedAt+r.durationTicks;
+    s.actionId='reaction';s.actionUntil=end;s.actionRecoveryUntil=end;s.actionCancelable=false;s.kitCancel=undefined;
+    player.actionId=ACTION_CLIPS.idle!;player.actionStartedTick=s.tick;player.actionEndsTick=0;player.normalizedTime=0;player.phase='recovery';
+    player.velocity=vec(0,0,0);
+  }
+  private queueReactionCue(kind:'reaction-start'|'wall-impact'|'poise-break'|'getup',actor:CombatActor,reactionKind:CombatReactionKind,strength:number,dirX:number,dirZ:number,contact?:StoryCue['contact']):void{
+    const position=copy(actor.position);
+    this.queuePresentationCue({kind,phase:'hit',actorId:actor.id,targetId:actor.id,scopeId:`${actor.id}:reaction:${actor.reactionSerial??0}`,position,to:vec(position.x+dirX,position.y,position.z+dirZ),reactionKind,intensity:strength,...(contact?{contact}:{}),priority:'essential',shape:'burst'});
+  }
+  private queueWallImpact(actor:CombatActor,dirX:number,dirZ:number,strength:number,reactionKind:CombatReactionKind):void{
+    const length=Math.hypot(dirX,dirZ)||1,ux=dirX/length,uz=dirZ/length;
+    const probe=vec(actor.position.x+ux*actor.radius,actor.position.y+actor.collisionHeight*.4,actor.position.z+uz*actor.radius);
+    const touched=nearestSolidContact(this.state.arena,probe,.3,this.solidContact);
+    this.queueReactionCue('wall-impact',actor,reactionKind,strength,dirX,dirZ,{kind:touched?this.solidContact.kind:'solid',normal:touched?copy(this.solidContact.normal):vec(-ux,0,-uz),...(touched?{surfaceId:this.solidContact.surfaceId}:{})});
+  }
+  /** Drops the monster's telegraphed attack cleanly: hazard closed, presentation cancelled, roots and lunge released. Returns the cancelled telegraph. */
+  private cancelLiveAttack(source:CombatActor,action:string):LiveTelegraph|undefined{
+    const motion=source.motion;
+    if(motion){motion.lunge=undefined;this.endRoar(source,motion);}
+    const tele=this.state.telegraphs.find(t=>t.sourceId===source.id);
+    if(!tele)return undefined;
+    const hazard=this.state.hazards.find(h=>h.id===tele.id);
+    if(hazard){hazard.activeUntil=this.state.worldTick;hazard.castUntil=this.state.worldTick;hazard.recoveryUntil=this.state.worldTick;}
+    this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:tele.id,cancellationReason:'interrupt'});
+    this.clearCombatObstacles(source.id);
+    this.state.telegraphs=this.state.telegraphs.filter(t=>t.id!==tele.id);
+    this.emit('attack-interrupted',tele.attackId+' interrupted before its active window.',this.state.playerId,source.id,action,tele.attackId);
+    return tele;
+  }
+  private updateReactions():void{
+    const s=this.state;
+    for(const actor of s.actors){
+      const r=actor.reactionState;
+      if(!r){this.updatePoise(actor);continue;}
+      if(r.pending)this.announceReaction(actor);
+      const elapsed=Math.max(0,this.reactionNow(actor)-r.startedAt),isPlayer=actor.id===s.playerId;
+      let moved=0;
+      if(r.travel-r.moved>1e-6&&r.moveTicks>0){
+        const want=r.travel*easeOutCubic(elapsed/r.moveTicks)-r.moved;
+        if(want>1e-6){
+          moved=this.displaceActor(actor,r.dirX*want,r.dirZ*want);
+          r.moved+=moved;
+          if(want>0.02&&moved<want*0.5)this.reactionHitWall(actor,r,elapsed);
+        }
+      }
+      if(actor.reactionState!==r)continue;
+      if(moved>0){
+        const dt=FIXED_STEP_SECONDS*(isPlayer?1:Math.max(s.worldTimeScale,1e-6));
+        actor.velocity=vec(r.dirX*moved/dt,0,r.dirZ*moved/dt);
+      }else if(!isPlayer&&(actor.velocity.x!==0||actor.velocity.z!==0))actor.velocity=vec(0,0,0);
+      if(elapsed>=r.durationTicks)this.finishReaction(actor,r);
+      else if(!isCommitted(r.kind))this.updatePoise(actor);
+    }
+  }
+  /** A slide that a wall cut short: the travel ends, a wall-impact cue goes out, knockbacks settle early and a hostile takes poise damage. */
+  private reactionHitWall(actor:CombatActor,r:ReactionState,elapsed:number):void{
+    r.travel=r.moved;
+    this.queueWallImpact(actor,r.dirX,r.dirZ,r.strength,r.kind);
+    if(r.kind==='knockback'||r.kind==='stagger')r.durationTicks=Math.min(r.durationTicks,elapsed+WALL_SETTLE_TICKS);
+    if(actor.id===this.state.playerId||actor.anchored||isCommitted(r.kind))return;
+    const build=this.buildOfActor(actor);
+    if(this.addPoise(actor,build,WALL_IMPACT_POISE)&&!this.isArmoured(actor))this.startStun(actor,build,r.strength,r.dirX,r.dirZ);
+  }
+  /** Launch lands into the knockdown lie, the lie into the get-up; a stun releases the poise bar. */
+  private finishReaction(actor:CombatActor,r:ReactionState):void{
+    const end=r.startedAt+r.durationTicks;
+    actor.reactionState=undefined;
+    let next:ReactionPlan|undefined;
+    if(r.kind==='launch')next=knockdownLiePlan(r.strength);
+    else if(r.kind==='knockdown'&&!actor.downed)next=getupPlan(r.strength);
+    else if(r.kind==='stun')actor.poiseMeter=0;
+    if(!next)return;
+    beginReaction(actor,next,r.dirX,r.dirZ,end,actor.id===this.state.playerId);
+    this.announceReaction(actor);
+  }
+  private reactionSnapshotOf(actor:CombatActor):Pick<ActorSnapshot,'reaction'|'poise'>{
+    const out:{reaction?:CombatReactionSnapshot;poise?:number}={},r=actor.reactionState;
+    let progress=0;
+    if(r){
+      progress=Math.min(1,Math.max(0,(this.reactionNow(actor)-r.startedAt)/Math.max(1,r.durationTicks)));
+      out.reaction={kind:r.kind,direction:vec(r.dirX,0,r.dirZ),side:r.side,strength:r.strength,progress,durationTicks:r.durationTicks,serial:r.serial,...(r.kind==='launch'?{lift:launchLift(r.lift,progress)}:{})};
+    }
+    if(actor.id!==this.state.playerId&&actor.allegiance==='hostile'&&!actor.anchored)out.poise=r?.kind==='stun'?1-progress:actor.poiseMeter?Math.min(1,actor.poiseMeter/this.buildOfActor(actor).poiseMax):0;
+    return out;
+  }
+  /** One swept displacement (a reaction, a separation push or a kit slide); returns the metres actually moved. */
+  private displaceActor(actor:CombatActor,dx:number,dz:number):number{
+    if(Math.abs(dx)+Math.abs(dz)<1e-9)return 0;
+    if(actor.id===this.state.playerId)return this.displacePlayer(actor,vec(dx,0,dz));
+    const definition=this.state.combatTrial?this.trials().find(trial=>trial.monsterId===actor.id):undefined;
+    if(definition)return this.stepMonster(actor,definition,dx,dz,FIXED_STEP_SECONDS,false);
+    const next=moveCircle(this.state.arena,actor.position,vec(dx,0,dz),actor.radius,actor.collisionHeight);
+    const moved=distance2(actor.position,next);
+    actor.position=vec(next.x,next.y,next.z);
+    actor.sockets={...actor.sockets,root:copy(actor.position),head:vec(next.x,next.y+1.5,next.z)};
+    return moved;
+  }
+  private displacePlayer(actor:CombatActor,delta:Vec3):number{
+    const jump=this.state.playerJump;
     const committed=jump&&this.state.tick<=jump.flightStartedAtTick+jump.flightTicks;
     const airborne=committed&&this.state.tick>jump.airStartedAtTick;
-    const delta=scale(direction,meters);
     const position=airborne
       ?moveAerialCircle(this.state.arena,actor.position,delta,actor.radius,actor.collisionHeight)
       :moveCircle(this.state.arena,actor.position,delta,actor.radius,actor.collisionHeight);
@@ -2211,7 +3609,7 @@ export class CombatEngine {
       const from=add(jump.from,offset),to=add(jump.to,offset);
       const anticipationFrom=jump.anticipationFrom?add(jump.anticipationFrom,offset):undefined;
       // A push must not invalidate the committed landing or pull the next sample backward.
-      if(!isSupportedCapsulePose(this.state.arena,to,actor.radius,actor.collisionHeight))return;
+      if(!isSupportedCapsulePose(this.state.arena,to,actor.radius,actor.collisionHeight))return 0;
       let prior=position;
       for(let tick=this.state.tick;tick<=jump.flightStartedAtTick+jump.flightTicks;tick++){
         const elapsed=tick-jump.startedAtTick;
@@ -2223,13 +3621,69 @@ export class CombatEngine {
         const clear=anticipation
           ?isCirclePathClear(this.state.arena,prior,point,actor.radius,actor.collisionHeight)
           :isAerialCirclePathClear(this.state.arena,prior,point,actor.radius,actor.collisionHeight);
-        if(!clear)return;
+        if(!clear)return 0;
         prior=point;
       }
       jump.from=from;jump.to=to;jump.origin=add(jump.origin,offset);
       if(anticipationFrom)jump.anticipationFrom=anticipationFrom;
-    }
+    }else if(!isSupportedCapsulePose(this.state.arena,position,actor.radius,actor.collisionHeight))return 0;
+    const moved=distance2(actor.position,position);
     actor.position=position;
+    return moved;
+  }
+  /** Soft, deterministic body separation: overlapping hostiles (and the hero against a hostile) ease apart, lighter bodies yielding more. Committed or reacting bodies are never pushed. */
+  private separateBodies():void{
+    const s=this.state,actors=s.actors,count=actors.length;
+    for(let i=0;i<count;i++){
+      const a=actors[i]!;
+      if(!this.hasBody(a))continue;
+      for(let j=i+1;j<count;j++){
+        const b=actors[j]!;
+        if(!this.hasBody(b))continue;
+        const dx=b.position.x-a.position.x,dz=b.position.z-a.position.z,min=(a.radius+b.radius)*SEPARATION_FRACTION,d2=dx*dx+dz*dz;
+        if(d2>=min*min||Math.abs(a.position.y-b.position.y)>1.5||!this.isSeparable(a)&&!this.isSeparable(b))continue;
+        const distance=Math.sqrt(d2),angle=(i*7+j)*2.399963229728653;
+        const ux=distance>1e-6?dx/distance:Math.sin(angle),uz=distance>1e-6?dz/distance:Math.cos(angle);
+        const push=Math.min(min-distance,SEPARATION_MAX_STEP);
+        const wa=this.isSeparable(a)?this.separationYield(a):0,wb=this.isSeparable(b)?this.separationYield(b):0,total=wa+wb;
+        if(wa>0)this.displaceActor(a,-ux*push*wa/total,-uz*push*wa/total);
+        if(wb>0)this.displaceActor(b,ux*push*wb/total,uz*push*wb/total);
+      }
+    }
+  }
+  private hasBody(actor:CombatActor):boolean{return actor.visible&&!actor.downed&&!actor.anchored&&(actor.id===this.state.playerId||actor.allegiance==='hostile');}
+  private isSeparable(actor:CombatActor):boolean{
+    const s=this.state;
+    if(actor.anchored||actor.reactionState)return false;
+    if(actor.id===s.playerId)return !s.traversal&&!s.playerJump&&s.tick>=s.actionRecoveryUntil;
+    const attack=this.monsterAttackProgress(actor);
+    return !(attack&&(attack.phase==='commit'||attack.phase==='active'))&&!(actor.motion?.lunge&&!actor.motion.lunge.landed);
+  }
+  private separationYield(actor:CombatActor):number{
+    return MASS[actor.id===this.state.playerId?HERO_COMBAT[this.state.heroId].mass:this.buildOfActor(actor).mass].factor;
+  }
+  /** Aren's magnetism: over the windup he steps up to `metres` towards the assisted target; only a target already within assist range pulls him. */
+  private beginLunge(metres:number,windupTicks:number,targetId:ActorId|undefined):void{
+    const s=this.state,player=this.playerActor();
+    s.lunge=undefined;
+    const target=targetId===undefined?undefined:this.actorForId(targetId);
+    if(!player||!target||windupTicks<=0||!this.isPlayerHostileTarget(target)||distance2(target.position,player.position)>LIGHT_ASSIST_RANGE)return;
+    s.lunge={fromTick:s.tick,toTick:s.tick+windupTicks,metres,done:0,targetId:target.id};
+  }
+  private updateLunge():void{
+    const s=this.state,lunge=s.lunge,player=this.playerActor();
+    if(!lunge||!player)return;
+    const target=this.actorForId(lunge.targetId);
+    if(s.tick>=lunge.toTick||!target||!this.isPlayerHostileTarget(target)||s.actionId==='reaction'||s.playerJump||s.traversal){s.lunge=undefined;return;}
+    const u=Math.min(1,(s.tick+1-lunge.fromTick)/(lunge.toTick-lunge.fromTick)),eased=u*u*(3-2*u);
+    const dx=target.position.x-player.position.x,dz=target.position.z-player.position.z,distance=Math.hypot(dx,dz);
+    const step=Math.min(lunge.metres*eased-lunge.done,distance-(target.radius+PLAYER_RADIUS+LUNGE_CONTACT_GAP));
+    if(step<=1e-5||distance<1e-6)return;
+    const next=moveCircle(s.arena,player.position,vec(dx/distance*step,0,dz/distance*step),PLAYER_RADIUS,player.collisionHeight);
+    if(!isSupportedCapsulePose(s.arena,next,PLAYER_RADIUS,player.collisionHeight))return;
+    const moved=distance2(player.position,next);
+    player.position=next;lunge.done+=moved;
+    player.velocity=vec(dx/distance*moved/FIXED_STEP_SECONDS,0,dz/distance*moved/FIXED_STEP_SECONDS);
   }
   private updateHazards():void{
     if(this.playerIsDown()){this.endPlayerCombat();return;}
@@ -2254,14 +3708,23 @@ export class CombatEngine {
         if(!hazardThreatens(hazard,actor))continue;
         if(actor.id===this.state.playerId&&(this.judgementInvulnerable()||this.isUntargetable()))continue;
         const profileId=actor.id==='aren'?this.state.actionId as EvasionProfileId:'stumble_recovery';
-        if((actor.id===this.state.playerId?this.state.tick:this.state.worldTick)<actor.invulnerableUntil&&avoids(profileId,hazard))continue;
+        if(this.reactionInvulnerable(actor)||(actor.id===this.state.playerId?this.state.tick:this.state.worldTick)<actor.invulnerableUntil&&avoids(profileId,hazard))continue;
+        if(actor.id===this.state.playerId&&tryGuardBlock(this.state,hazard,actor))continue;
         if(!hazard.hitIds.includes(actor.id))hazard.hitIds.push(actor.id);
         if(hitInterval)(hazard.nextHitAt??={})[actor.id]=this.state.worldTick+hitInterval;
         if(targetClass==='companion'&&hazard.attackId==='orun-crown-possession'){
           const phaseId=this.state.encounter?.phases[this.state.phaseIndex]?.id??'unknown';
-          actor.possessed=true;actor.allegiance='hostile';actor.possessedUntil=this.state.worldTick+180;actor.targetId=this.state.playerId;actor.possessionInstanceId=hazard.id;actor.possessionSourceId=hazard.sourceId;
+          // Bond is keyed by the canonical companion id (a projected party instance carries a suffixed instance id).
+          const bond=this.state.companionState.progress?.[actor.archetypeId as CompanionId]?.bondLevel??this.state.companionState.bond;
+          const fall=this.state.chapter.fall;
+          if(fall&&actor.id===fall.allyActorId)fall.possessionId=hazard.id;
+          // Hollow phase 3: Bond resists the Crown outright; Dominion lets it hold. The Fall always holds for the Bond-timed break.
+          const resisted=orunGraspResisted(this.state,actor);
+          const breakTicks = resolvePossessionBreakTicks(bond);
+          actor.possessed=true;actor.allegiance='hostile';actor.possessedUntil=this.state.worldTick+breakTicks;actor.targetId=this.state.playerId;actor.possessionInstanceId=hazard.id;actor.possessionSourceId=hazard.sourceId;
           const eventId=`${this.state.runId}:${this.state.encounterId}:possession:${hazard.id}:began`;
           this.emitWorldEvent({type:'possession',eventId,idempotencyKey:eventId,actorId:hazard.sourceId,targetId:actor.id,phaseId,state:'began',simulationTick:this.state.tick});
+          if(resisted){this.breakPossession(actor,true);continue;}
           this.emit('companion','Orun’s Crown holds the companion briefly; cleanse or coordinate a break before the hold ends.',hazard.sourceId,actor.id,'possession',hazard.attackId);
           this.queuePresentationCue({kind:'possession',phase:'hit',actorId:hazard.sourceId,targetId:actor.id,position:copy(actor.position),scopeId:this.state.encounterId,durationTicks:180,priority:'essential',shape:'pulse'});
           continue;
@@ -2280,10 +3743,12 @@ export class CombatEngine {
         const hazardActualLoss=Math.max(0,hazardPreDamage-(actor.id===this.state.playerId?this.state.player.vitality:(actor.vitality??100)));
         const hazardPayload=hazardActualLoss>0?{targetId:actor.id,amount:hazardActualLoss,position:copy(actor.position),worldTick:this.state.worldTick}:undefined;
         if(actor.id===this.state.playerId&&this.state.traversal)this.cancelTraversal();
-        if(attack?.onHit?.pushMeters)this.applyHazardPush(actor,hazard.direction,attack.onHit.pushMeters);
-        this.emit('damage',hazard.cue,actor.id,hazard.sourceId,undefined,hazard.attackId,hazardPayload);
-        if(attack?.element||!this.isWildlifeSource(hazard.sourceId)||!this.wildlifeImpactKind(hazard.attackId)){
-          this.queuePresentationCue({kind:'hit',phase:'hit',element:attack?.element,actorId:hazard.sourceId,targetId:actor.id,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),durationTicks:Math.max(1,Math.min(attack?.element?18:Infinity,hazard.activeUntil-this.state.worldTick)),priority:'essential'});
+        if(actor.id===this.state.playerId){const push=this.hazardPushDirection(actor,hazard);this.applyPlayerReaction(attack?monsterAttackHit(attack):defaultHit(hazard.damage),push.x,push.z);}
+        if(hazardActualLoss>0)this.emit('damage',hazard.cue,actor.id,hazard.sourceId,undefined,hazard.attackId,hazardPayload);
+        if(hazardActualLoss>0&&actor.id===this.state.playerId)noteOrunHazardDamage(this.state,hazard.id);
+        if(hazardActualLoss>0&&(attack?.element||!this.isWildlifeSource(hazard.sourceId)||!this.wildlifeImpactKind(hazard.attackId))){
+          const position=vec(actor.position.x-hazard.direction.x*actor.radius,actor.position.y+actor.collisionHeight*.55,actor.position.z-hazard.direction.z*actor.radius);
+          this.queuePresentationCue({kind:'hit',phase:'hit',element:attack?.element,actorId:hazard.sourceId,targetId:actor.id,scopeId:hazard.id,attackId:hazard.attackId,...hazardPresentation(hazard),position,to:vec(position.x+hazard.direction.x,position.y,position.z+hazard.direction.z),confirmedDamage:hazardActualLoss,durationTicks:Math.max(1,Math.min(attack?.element?18:Infinity,hazard.activeUntil-this.state.worldTick)),priority:'essential'});
         }
         if(this.playerIsDown()){this.endPlayerCombat();return;}
       }
@@ -2365,6 +3830,8 @@ export class CombatEngine {
         return;
       }
       if((target.corruption??0)<=0)return;
+      const sealed=this.cleanseBlockFor(target);
+      if(sealed){this.emit('cue',sealed,player.id,target.id,'cleanse');return;}
       const coreIds=target.corruptionCoreIds;
       if(coreIds?.length){
         const cleansed=target.cleansedCoreIds??[];
@@ -2377,7 +3844,13 @@ export class CombatEngine {
       this.emit('world','Corruption eased; environmental repair and trust remain separate.',player.id,target.id,'cleanse');
       const required=this.state.encounter?.phases[this.state.phaseIndex]?.requiredAction;
       if(target.corruption===0||required==='cleanse')this.markPhaseAction('cleanse');
-      if(target.corruption===0&&target.id===this.state.encounter?.bossId)this.resolveEncounter('cleansed',target);
+      if(this.state.chapter.orun)onOrunCleansed(this.orunHost,target);
+      if(target.corruption===0&&target.id===this.state.encounter?.bossId){
+        if(this.state.chapter.sequence)settleBoss(this.chapterHost,target);
+        this.resolveEncounter('cleansed',target);
+        // The duel is over: no threat remains and Orun stands for the Director's crown choice, no longer a target.
+        if(this.state.chapter.orun){this.clearBossThreats();target.allegiance='neutral';target.reactionState=undefined;}
+      }
       this.queuePresentationCue({kind:'cleanse',phase:'resolve',actionId:'aren-cleanse' as ActionId,actorId:player.id,targetId:target.id,position:copy(target.position),scopeId:this.state.encounterId,intensity:target.corruption===0?1:.55,priority:'essential',shape:'pulse'});
       return;
     }
@@ -2390,7 +3863,7 @@ export class CombatEngine {
       return;
     }
     this.recordResolvedAction(p.action,target.id);
-    this.strikeHostile(target,{action:p.action,clip:(ACTION_CLIPS[p.action]??'aren-hit') as ActionId,damage:p.damage,stopTicks:p.action==='charged_heavy'?HIT_STOP_TICKS.charged:HIT_STOP_TICKS.heavy,element:'arcane',stagger:p.interrupt?'interrupt':'none',instinct:0,counter:p.counter});
+    this.strikeHostile(target,{action:p.action,clip:(ACTION_CLIPS[p.action]??'aren-hit') as ActionId,damage:p.damage,stopTicks:p.action==='charged_heavy'?HIT_STOP_TICKS.charged:HIT_STOP_TICKS.heavy,element:'arcane',stagger:p.interrupt?'interrupt':'none',instinct:0,counter:p.counter,hit:AREN_HITS[p.action]});
   }
   private queueHeavySlash(player:CombatActor,p:PendingImpact):void{
     const charged=p.action==='charged_heavy';
@@ -2405,6 +3878,9 @@ export class CombatEngine {
     if(this.playerIsDown())return;
     const encounter=this.state.encounter;
     if(!encounter||this.state.rewardEmitted)return;
+    if(this.state.chapter.fall){this.updateFallProtection(this.state.chapter.fall);return;}
+    // The Hollow duel runs only its live sequence; an incompatible restored state without it holds still instead of the generic rotation.
+    if(this.state.chapter.orun||this.state.encounterId===ORUN_ENCOUNTER_ID){if(this.state.chapter.orun)updateOrun(this.orunHost);return;}
     const phase=encounter.phases[this.state.phaseIndex];
     if(!phase)return;
     if(encounter.encounterFamily==='wildlife'){this.updateWildlifeAI(encounter,phase.attackIds);return;}
@@ -2413,6 +3889,9 @@ export class CombatEngine {
       if(sourceId===this.state.playerId)continue;
       const source=this.state.actors.find(actor=>actor.id===sourceId&&actor.visible&&actor.allegiance==='hostile');
       if(!source||source.downed||this.state.worldTick<source.recoveringUntil||this.state.telegraphs.some(telegraph=>telegraph.sourceId===source.id))continue;
+      const sequenced=encounter.sequence?startSequenceAttack(this.chapterHost,source):'default';
+      if(sequenced==='hold')continue;
+      if(sequenced==='started'){this.state.lastAttackTick=this.state.worldTick;continue;}
       const attackIds=phase.attackIds.filter(id=>ATTACKS[id]?.bossId===source.id);
       if(!attackIds.length)continue;
       const attackIndex=Math.floor(selectorTick/120)%attackIds.length;
@@ -2533,7 +4012,8 @@ export class CombatEngine {
       if(!actor||!profile)continue;
       const motion=actor.motion??=createMonsterMotion(index*7919+13);
       actor.velocity=vec(0,0,0);motion.yawRate=0;
-      if(dt<=0||actor.downed||!actor.visible||index!==trial.index||actor.allegiance!=='hostile')continue;
+      if(dt<=0)continue;
+      if(actor.downed||!actor.visible||index!==trial.index||actor.allegiance!=='hostile'){motion.speed=0;continue;}
       this.driveTrialMonster(actor,motion,profile,definition,player,pressure,dt,this.trialRamp()[index]!.speedScale);
     }
   }
@@ -2550,8 +4030,10 @@ export class CombatEngine {
       }
     }else if(distance>TRIAL_DISENGAGE_RANGE)motion.engaged=false;
     else if(!hazard&&pressure.tier>motion.roarTier&&tick>=motion.roarUntil&&tick>=actor.staggerUntil){motion.roarTier=pressure.tier;this.startRoar(actor,motion,pressure.tier,toPlayer);}
-    if(tick<actor.staggerUntil){motion.lunge=undefined;this.endRoar(actor,motion);return;}
+    if(tick<actor.staggerUntil){motion.lunge=undefined;motion.speed=0;this.endRoar(actor,motion);return;}
     if(hazard){
+      // A cast plants the body: the stride that brought it here is dropped, only the turn continues.
+      motion.speed=0;
       const heading=Math.atan2(hazard.direction.x,hazard.direction.z);
       if(tick<(hazard.windupUntil??hazard.activeFrom))this.moveMonster(actor,motion,profile,definition,heading,0,dt);
       else if(tick<hazard.activeFrom){
@@ -2566,21 +4048,16 @@ export class CombatEngine {
     }
     motion.lunge=undefined;
     if(tick<motion.roarUntil){this.moveMonster(actor,motion,profile,definition,toPlayer,0,dt);return;}
-    if(!motion.engaged)return;
+    if(!motion.engaged){motion.speed=0;return;}
     const blocked=motion.blockedTicks>=STUCK_TICKS;
     if(blocked)motion.blockedTicks=0;
-    const steer=steerMonster(profile,motion,{distance,toPlayer,fromCenterX:actor.position.x-definition.arena.center.x,fromCenterZ:actor.position.z-definition.arena.center.z,arenaRadius:definition.arena.radius,squareUp:tick>=motion.nextCastAt&&tick>=actor.recoveringUntil,worldTick:tick,blocked});
-    this.moveMonster(actor,motion,profile,definition,steer.heading,steer.speed*speedScale*(actor.crippleUntil!==undefined&&tick<actor.crippleUntil?actor.crippleFactor??1:1),dt);
+    const steer=steerMonster(profile,motion,{distance,toPlayer,fromCenterX:actor.position.x-definition.arena.center.x,fromCenterZ:actor.position.z-definition.arena.center.z,arenaRadius:definition.arena.radius,squareUp:tick>=motion.nextCastAt-TURN_LEAD_TICKS&&tick>=actor.recoveringUntil-TURN_LEAD_TICKS,worldTick:tick,blocked});
+    const heroSlow=actor.crippleUntil!==undefined&&tick<actor.crippleUntil?actor.crippleFactor??1:1;
+    const supportSlow=actor.supportSlow&&tick<actor.supportSlow.untilWorldTick?actor.supportSlow.factor:1;
+    this.moveMonster(actor,motion,profile,definition,steer.heading,steer.speed*speedScale*Math.min(heroSlow,supportSlow),dt);
   }
   /** The newest hazard of `actor` that has not finished its recovery. */
-  private liveAttackOf(actor:CombatActor):LiveHazard|undefined{
-    let latest:LiveHazard|undefined;
-    for(const hazard of this.state.hazards){
-      if(hazard.sourceId!==actor.id||this.state.worldTick>=(hazard.recoveryUntil??hazard.activeUntil))continue;
-      if(!latest||hazard.startTick>latest.startTick)latest=hazard;
-    }
-    return latest;
-  }
+  private liveAttackOf(actor:CombatActor):LiveHazard|undefined{return liveAttackIn(this.state,actor);}
   /** Turns at the profile's yaw rate, then walks along the new facing, slowing to a pivot when the heading error is large. */
   private moveMonster(actor:CombatActor,motion:MonsterMotionState,profile:MonsterProfile,definition:CombatTrialDefinition,heading:number,speed:number,dt:number,yawLimit=profile.yawRate):void{
     const current=Math.atan2(actor.facing.x,actor.facing.z);
@@ -2589,7 +4066,10 @@ export class CombatEngine {
     const angle=current+applied;
     actor.facing=vec(Math.sin(angle),0,Math.cos(angle));
     motion.yawRate=applied/dt;
-    const step=speed>0?speed*turnTranslationScale(error-applied)*dt:0;
+    // The pivot scale lowers the target, so a monster brakes into a turn instead of stopping the tick its heading error passes the limit.
+    const wanted=speed>0?speed*turnTranslationScale(error-applied):0,ramp=(wanted>motion.speed?MONSTER_ACCEL:MONSTER_DECEL)*dt;
+    motion.speed=wanted>motion.speed?Math.min(wanted,motion.speed+ramp):Math.max(wanted,motion.speed-ramp);
+    const step=motion.speed*dt;
     if(step<=0)return;
     const moved=this.stepMonster(actor,definition,actor.facing.x*step,actor.facing.z*step,dt,false);
     motion.blockedTicks=moved<step*0.33?motion.blockedTicks+1:0;
@@ -2639,21 +4119,37 @@ export class CombatEngine {
     motion.roarUntil=0;
     this.queuePresentationCue({kind:'cancel',phase:'resolve',actorId:actor.id,scopeId:actor.id+':roar',cancellationReason:'interrupt'});
   }
-  private beginAttack(source:CombatActor,def:AttackDefinition):LiveHazard|undefined{
+  private beginAttack(source:CombatActor,def:AttackDefinition,aimOverride?:Vec3,variant?:string,companionTarget?:CombatActor):LiveHazard|undefined{
     if(this.playerIsDown())return undefined;
     if(def.targetClass!=='companion'&&this.isUntargetable())return undefined;
-    const target=def.targetClass==='companion'?this.selectedCompanion():this.playerActor();
+    // A distracted hostile aims at its distraction (Koro) until the attention override expires.
+    const distraction=def.targetClass!=='companion'&&source.attention&&this.state.worldTick<source.attention.untilWorldTick?this.actorForId(source.attention.sourceId):undefined;
+    // In the Fall, Orun's grasp reaches only the recruit the sequence chose, never Vara or another slot.
+    const fall=this.state.chapter.fall;
+    const companion=def.targetClass!=='companion'?undefined:fall?this.state.actors.find(actor=>actor.id===fall.allyActorId&&actor.visible&&!actor.downed&&!actor.possessed):companionTarget??this.selectedCompanion();
+    const target=def.targetClass==='companion'?companion:(distraction??this.playerActor());
     if(!target)return undefined;
     const trial=this.state.combatTrial;
-    const id=`${source.id}:${def.id}:${this.state.tick}`;
-    const aim=vec(target.position.x,def.element?(groundHeightAt(this.state.arena,target.position.x,target.position.z,target.position.y)??target.position.y):target.position.y,target.position.z);
+    // Act I bosses move their bodies: committed lanes start at the caster and charges are swept against the arena.
+    const bossBody=!trial&&this.state.encounter!==null&&this.state.encounter.encounterFamily!=='wildlife';
+    const id=`${source.id}:${def.id}:${this.state.tick}${variant?`:${variant}`:''}`;
+    let aimPoint=aimOverride??target.position;
+    if(def.reach!==undefined){
+      // Melee reach: a slam or kick lands near the caster's body, never centred on a distant target.
+      const dx=aimPoint.x-source.position.x,dz=aimPoint.z-source.position.z,distance=Math.hypot(dx,dz);
+      if(distance<1e-3)aimPoint=vec(source.position.x+source.facing.x*def.reach,aimPoint.y,source.position.z+source.facing.z*def.reach);
+      else if(distance>def.reach)aimPoint=vec(source.position.x+dx/distance*def.reach,aimPoint.y,source.position.z+dz/distance*def.reach);
+    }
+    const aim=vec(aimPoint.x,def.element?(groundHeightAt(this.state.arena,aimPoint.x,aimPoint.z,aimPoint.y)??aimPoint.y):aimPoint.y,aimPoint.z);
     const origin=copy(source.position);
     const direction=facingFrom(sub(aim,origin));
     const shape=structuredClone(def.hazard);
-    // Trial monsters cast lanes from their own body, long enough to cover the aimed position.
+    // Trial monsters and Act I bosses cast lanes from their own body, long enough to cover the aimed position; a charge lane stops at the first wall.
     let anchor=aim;
-    if(trial&&def.laneFromSource){
+    let clear=Infinity;
+    if((trial||bossBody)&&def.laneFromSource){
       shape.depth=Math.min(shape.depth+2,Math.max(shape.depth,distance2(origin,aim)+1.5));
+      if(bossBody&&def.lunge?.kind==='charge'){clear=this.sweepClearance(source,direction,shape.depth);shape.depth=Math.min(shape.depth,clear+source.radius+0.4);}
       anchor=vec(origin.x+direction.x*shape.depth/2,aim.y,origin.z+direction.z*shape.depth/2);
     }
     const cone=shape.kind==='cone',disk=shape.kind==='strike'||shape.kind==='projectile',longAxis=shape.kind==='sweep'||shape.kind==='wave';
@@ -2689,6 +4185,12 @@ export class CombatEngine {
         if(travel>0.05)source.motion.lunge={hazardId:id,kind:lunge.kind,dirX:direction.x,dirZ:direction.z,travel,fromTick:charge?h.activeFrom:h.windupUntil,toTick:charge?h.castUntil:h.activeFrom,done:0,landed:false};
       }
     }
+    const bodyLunge=bossBody?def.lunge:undefined;
+    if(bodyLunge){
+      const charge=bodyLunge.kind==='charge';
+      const travel=bodyLunge.kind==='charge'?Math.min(Math.max(2,shape.depth-1),clear):Math.min(bodyLunge.meters,Math.max(0,distance2(origin,aim)-(source.radius+0.8)),this.sweepClearance(source,direction,bodyLunge.meters));
+      if(travel>0.05)this.state.bossLunges.push({hazardId:id,sourceId:source.id,kind:bodyLunge.kind,dirX:direction.x,dirZ:direction.z,travel,fromTick:charge?h.activeFrom:h.windupUntil,toTick:charge?h.castUntil:h.activeFrom,done:0,landed:false});
+    }
     source.actionId=ACTION_CLIPS[`boss:${def.id}`]!;
     source.phase='anticipation';
     source.targetId=target.id;
@@ -2699,28 +4201,94 @@ export class CombatEngine {
     source.actionEndsTick=source.recoveringUntil;
     return h;
   }
+  /** How far `source` can travel along `direction` (up to `maxDistance`) before a collider stops its body; swept, never a teleport. */
+  private sweepClearance(source:CombatActor,direction:Vec3,maxDistance:number):number{
+    const end=(distance:number)=>vec(source.position.x+direction.x*distance,source.position.y,source.position.z+direction.z*distance);
+    if(isCirclePathClear(this.state.arena,source.position,end(maxDistance),source.radius,source.collisionHeight))return maxDistance;
+    let low=0,high=maxDistance;
+    for(let i=0;i<10;i++){
+      const mid=(low+high)/2;
+      if(isCirclePathClear(this.state.arena,source.position,end(mid),source.radius,source.collisionHeight))low=mid;else high=mid;
+    }
+    return low;
+  }
+  /**
+   * The boss of an encounter that must end in a Cleanse (cleanse-only bosses, and story Ferocity-driven encounters with a
+   * required `cleanse` phase such as the Greenwake boar) is worn down to 1 and never downed by damage until the reward:
+   * downing it would leave the required Tether/Cleanse with no target and strand the story. Local combat trials reuse
+   * the same encounter but clear a stage by defeating its monster, so they keep the plain damage rule.
+   */
+  private isSparedForCleanse(actor:CombatActor):boolean{
+    const encounter=this.state.encounter;
+    if(!encounter||encounter.bossId!==actor.id||this.state.rewardEmitted)return false;
+    if(encounter.cleanseOnly===true)return true;
+    return !this.state.combatTrial&&encounter.phases.some(phase=>phase.requiredAction==='cleanse');
+  }
+  /** Committed Act I body movement: swept each world tick; a blocked charge ends in a wall impact and poise damage, an interrupt drops stale movement. */
+  private updateBossLunges():void{
+    const lunges=this.state.bossLunges;
+    if(!lunges.length)return;
+    const dt=FIXED_STEP_SECONDS*Math.max(this.state.worldTimeScale,1e-6);
+    for(let index=lunges.length-1;index>=0;index--){
+      const lunge=lunges[index]!;
+      const actor=this.state.actors.find(candidate=>candidate.id===lunge.sourceId);
+      const alive=actor&&!actor.downed&&this.state.telegraphs.some(telegraph=>telegraph.id===lunge.hazardId)&&!(actor.reactionState&&actor.reactionState.kind!=='flinch');
+      if(!alive||lunge.landed){if(actor)actor.velocity=vec(0,0,0);lunges.splice(index,1);continue;}
+      const tick=this.state.worldTick;
+      if(tick<lunge.fromTick)continue;
+      const u=Math.min(1,(tick-lunge.fromTick)/Math.max(1e-6,lunge.toTick-lunge.fromTick));
+      const want=lunge.travel*(lunge.kind==='charge'?u:u*u*(3-2*u))-lunge.done;
+      let blocked=false;
+      if(want>1e-3){
+        const moved=this.displaceActor(actor,lunge.dirX*want,lunge.dirZ*want);
+        lunge.done+=moved;
+        blocked=moved<want*0.5;
+        actor.velocity=vec(lunge.dirX*moved/dt,0,lunge.dirZ*moved/dt);
+      }
+      if(!blocked&&u<1)continue;
+      actor.velocity=vec(0,0,0);
+      this.queuePresentationCue({kind:'landing',phase:'landing',actorId:actor.id,targetId:this.state.playerId,scopeId:lunge.hazardId,position:copy(actor.position),footprint:{width:3.2,length:3.2},shape:'ring',durationTicks:24,intensity:lunge.kind==='charge'?1:0.5,priority:'essential'});
+      if(blocked&&lunge.kind==='charge'){
+        this.queueWallImpact(actor,lunge.dirX,lunge.dirZ,1,'stagger');
+        this.addPoise(actor,this.buildOfActor(actor),WALL_IMPACT_POISE);
+      }
+      lunges.splice(index,1);
+    }
+  }
   private interruptAttack(source:CombatActor,action:string):boolean{
+    if(action==='root_tether'&&acceptsTether(this.state,source)){
+      if(!applyTether(this.chapterHost,source))return false;
+      this.markPhaseAction('tether');
+      return true;
+    }
     const tele=this.state.telegraphs.find(t=>t.sourceId===source.id);if(!tele)return false;
     const def=ATTACKS[tele.attackId];if(def?.interruptibleBy.length&&!def.interruptibleBy.includes(action as never))return false;
-    const hazard=this.state.hazards.find(h=>h.id===tele.id);
-    if(hazard){hazard.activeUntil=this.state.worldTick;hazard.castUntil=this.state.worldTick;hazard.recoveryUntil=this.state.worldTick;}
-    if(source.motion)source.motion.lunge=undefined;
-    this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:tele.id,cancellationReason:'interrupt'});
-    this.clearCombatObstacles(source.id);
-    this.state.telegraphs=this.state.telegraphs.filter(t=>t.id!==tele.id);source.phase='recovery';source.actionId=(source.id+'-stagger') as ActionId;source.normalizedTime=0;source.actionStartedTick=this.state.worldTick;source.staggerUntil=this.state.worldTick+42;source.recoveringUntil=source.staggerUntil;source.actionEndsTick=source.recoveringUntil;this.emit('attack-interrupted',tele.attackId+' interrupted before its active window.',this.state.playerId,source.id,action,tele.attackId);return true;
+    this.cancelLiveAttack(source,action);
+    source.phase='recovery';source.actionId=(source.id+'-stagger') as ActionId;source.normalizedTime=0;source.actionStartedTick=this.state.worldTick;source.staggerUntil=this.state.worldTick+42;source.recoveringUntil=source.staggerUntil;source.actionEndsTick=source.recoveringUntil;
+    const striker=this.playerActor();
+    if(!source.anchored&&striker){const away=facingFrom(sub(source.position,striker.position));this.startReaction(source,{kind:'stagger',strength:0.6,travel:0,moveTicks:0,durationTicks:42,lift:0,cancelsAttack:false},away.x,away.z);}
+    onOrunInterrupted(this.orunHost,source);
+    return true;
   }
   private markPhaseAction(action:string):void{
     if(!this.state.phaseActionFlags.includes(action))this.state.phaseActionFlags.push(action);
   }
   private updatePhase():void{
-    if(this.state.combatTrial)return;
+    // The Fall and the Hollow duel advance their phases from their own causal beats, never from Orun's ferocity.
+    if(this.state.combatTrial||this.state.chapter.fall||this.state.chapter.orun||this.state.encounterId===ORUN_ENCOUNTER_ID)return;
     const boss=this.currentBoss();if(!boss||!this.state.encounter)return;
     const expected=Math.min(this.state.encounter.phases.length-1,Math.floor((100-(boss.ferocity??100))/Math.max(1,100/this.state.encounter.phases.length)));
     if(expected<=this.state.phaseIndex)return;
     const phase=this.state.encounter.phases[this.state.phaseIndex];
     const required=phase?.requiredAction;
     if(required&&required!=='none'&&!this.state.phaseActionFlags.includes(required))return;
-    const completed=this.state.encounter.phases[this.state.phaseIndex];
+    this.enterNextPhase(boss);
+  }
+  /** Clears the current phase (canonical `cleared` event), drops every live threat and enters the next phase (`entered` event). */
+  private enterNextPhase(boss:CombatActor):void{
+    const encounter=this.state.encounter;
+    if(!encounter)return;
+    const completed=encounter.phases[this.state.phaseIndex];
     if(completed)this.emitPhaseEvent(completed.id,this.state.phaseIndex,'cleared');
     const next=this.state.phaseIndex+1;
     this.state.phaseIndex=next;
@@ -2728,9 +4296,11 @@ export class CombatEngine {
     this.state.phaseActionFlags=[];
     for(const hazard of this.state.hazards)this.queuePresentationCue({kind:'cancel',phase:'resolve',scopeId:hazard.id,cancellationReason:'interrupt'});
     this.state.hazards=[];
+    this.state.bossLunges=[];
     this.clearCombatObstacles();
     this.state.telegraphs=[];
-    const nextPhase=this.state.encounter.phases[next];
+    if(encounter.sequence||this.state.chapter.orun){boss.recoveringUntil=Math.min(boss.recoveringUntil,this.state.worldTick);boss.phase='idle';boss.actionEndsTick=0;boss.actionId=(ACTION_CLIPS[`${boss.archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!) as ActionId;}
+    const nextPhase=encounter.phases[next];
     if(nextPhase)this.emitPhaseEvent(nextPhase.id,next,'entered');
     this.emit('cue',`Boss phase changed: ${nextPhase?.id}.`,boss.id);
     this.queuePresentationCue({kind:'phase',phase:'resolve',actorId:boss.id,targetId:this.state.playerId,position:copy(boss.position),scopeId:this.state.encounterId,priority:'essential',shape:'pulse'});
@@ -2755,10 +4325,6 @@ export class CombatEngine {
     const actorIds=this.state.encounter?.actorIds.filter(id=>id!==this.state.playerId)??[actor.id];
     const event:WorldEvent={type:'encounter-resolved',eventId,idempotencyKey:eventId,encounterId:this.state.encounterId??'unknown',resolution,actorIds};
     this.emitWorldEvent(event);
-    if(resolution==='cleansed'){
-      const restoration:WorldEvent={type:'restoration',eventId:`${eventId}:restoration`,idempotencyKey:`${eventId}:restoration`,regionId:this.state.regionId,state:'restored',causeId:this.state.encounterId??'encounter'};
-      this.emitWorldEvent(restoration);
-    }
   }
   private playerIsDown():boolean{
     const player=this.playerActor();
@@ -2806,7 +4372,9 @@ export class CombatEngine {
     const height=authored.kind==='slide' ? .65 : player.collisionHeight;
     let prior=gate.from;
     for(const point of [...gate.anchors,gate.to]){
-      if(!isAerialCirclePathClear(this.state.arena,prior,point,player.radius,height))return false;
+      if (authored.kind === 'walk') {
+        if (!isCirclePathClear(this.state.arena, prior, point, player.radius, height)) return false;
+      } else if(!isAerialCirclePathClear(this.state.arena,prior,point,player.radius,height))return false;
       prior=point;
     }
     return true;
@@ -2839,8 +4407,12 @@ export class CombatEngine {
       const distance=Math.min(remaining,segmentLength-traversal.segmentDistance);
       const from=traversal.points[traversal.segment]!,to=traversal.points[traversal.segment+1]!;
       const ratio=Math.min(1,(traversal.segmentDistance+distance)/segmentLength);
-      const point=segmentLength-traversal.segmentDistance-distance<1e-8?copy(to):vec(from.x+(to.x-from.x)*ratio,from.y+(to.y-from.y)*ratio,from.z+(to.z-from.z)*ratio);
-      if(!isAerialCirclePathClear(this.state.arena,player.position,point,player.radius,player.collisionHeight)){this.cancelTraversal();return;}
+      let point=segmentLength-traversal.segmentDistance-distance<1e-8?copy(to):vec(from.x+(to.x-from.x)*ratio,from.y+(to.y-from.y)*ratio,from.z+(to.z-from.z)*ratio);
+      if (traversal.gate.traversal!.kind === 'walk') {
+        const moved = moveCircle(this.state.arena, player.position, vec(point.x - player.position.x, 0, point.z - player.position.z), player.radius, player.collisionHeight);
+        if (distance2(moved, point) > 1e-6) { this.cancelTraversal(); return; }
+        point = moved;
+      } else if(!isAerialCirclePathClear(this.state.arena,player.position,point,player.radius,player.collisionHeight)){this.cancelTraversal();return;}
       player.position=point;traversal.segmentDistance+=distance;remaining-=distance;
       if(isSupportedCapsulePose(this.state.arena,point,player.radius,traversal.standingHeight)){traversal.lastSafePose=copy(point);traversal.lastSafeFacing=copy(player.facing);}
       if(segmentLength-traversal.segmentDistance<1e-8){traversal.segment++;traversal.segmentDistance=0;}
@@ -2853,6 +4425,11 @@ export class CombatEngine {
     this.state.traversal=undefined;player.collisionHeight=traversal.standingHeight;player.velocity=vec(0,0,0);player.phase='recovery';player.normalizedTime=1;
     this.finishAction();
     this.emit('traversal',`Traversal ${traversal.gate.id} completed.`,player.id,undefined,traversal.gate.id);
+    if (traversal.gate.traversal?.kind === 'walk' && !this.state.combatTrial) {
+      const gate = traversal.gate;
+      const eventId = `${this.state.runId}:traversal:${gate.id}`;
+      this.emitWorldEvent({ type: 'traversal', eventId, idempotencyKey: eventId, routeId: gate.traversalEvent, landmarkId: gate.id, fromRegion: gate.fromRegion, toRegion: gate.toRegion });
+    }
   }
   private cancelTraversal():void{
     const traversal=this.state.traversal;if(!traversal)return;
@@ -2862,14 +4439,65 @@ export class CombatEngine {
     this.state.playerJump=undefined;
     this.finishAction();
   }
-  private cycleTarget(direction:-1|1):void{const candidates=this.state.actors.filter(a=>a.allegiance==='hostile'&&a.visible&&!a.downed).sort((a,b)=>distance2(this.playerActor()?.position??vec(0,0,0),a.position)-distance2(this.playerActor()?.position??vec(0,0,0),b.position));if(!candidates.length)return;let i=candidates.findIndex(a=>a.id===this.state.targetId);i=(i+direction+candidates.length)%candidates.length;const player=this.playerActor();const next=candidates[i]!;if(player&&dot(facingFrom(sub(next.position,player.position)),player.facing)<-.2)return;this.state.targetId=next.id;}
-  private selectedCompanion():CombatActor|undefined{
-    for(const id of [this.state.companionSlots.combat,this.state.companionSlots.utility,this.state.companionSlots.scout]){
-      if(!id)continue;
-      const actor=this.actorForId(id);
-      if(actor?.visible&&!actor.downed&&!actor.possessed)return actor;
+  private cycleTarget(direction:-1|1):void{const candidates=this.state.actors.filter(a=>a.allegiance==='hostile'&&a.visible&&!a.downed).sort((a,b)=>distance2(this.playerActor()?.position??vec(0,0,0),a.position)-distance2(this.playerActor()?.position??vec(0,0,0),b.position));if(!candidates.length)return;let i=candidates.findIndex(a=>a.id===this.state.targetId);i=(i+direction+candidates.length)%candidates.length;const player=this.playerActor();const next=candidates[i]!;if(player&&dot(facingFrom(sub(next.position,player.position)),player.facing)<-.2)return;this.state.targetId=next.id; if (this.explicitLock) this.explicitLock = { targetId: next.id, startedTick: this.state.tick };}
+  /**
+   * Process the Lock-On action (default T / Gamepad Button 16).
+   * Hold mode: the lock is acquired on press and released on release; an invalid / absent / downed / out-of-range
+   * target clears the lock automatically. Toggle mode: each press flips the lock; release edges are ignored.
+   * The lock takes priority over the implicit `state.targetId` once held; clearing the lock also clears
+   * `state.targetId` so no other consumer reads a target the player has dropped.
+   */
+  private updateLockOn(input:CombatInput):void{
+    const player=this.playerActor();
+    const pressed=!!input.lockOnPressed;
+    const held=!!input.lockOnHeld;
+    const mode=this.accessibility.lockOnMode;
+    // Drop a held lock whose target is gone, downed, hidden, out of range, or no longer a valid player hostile.
+    if(this.explicitLock){
+      const actor=this.actorForId(this.explicitLock.targetId);
+      if(!actor||!this.isPlayerHostileTarget(actor)||distance2(actor.position,player?.position??vec(0,0,0))>EXPLICIT_LIMITS.range){
+        this.explicitLock=undefined;
+        this.state.targetId=undefined;
+      }else if(this.state.targetId!==this.explicitLock.targetId){
+        // Re-assert the lock target if another simulation path (trial, kit helper, interaction) overwrote it;
+        // explicit locks always own state.targetId until the player releases or the target is invalidated.
+        this.state.targetId=this.explicitLock.targetId;
+      }
     }
-    return undefined;
+    if(mode==='hold'){
+      if(pressed&&!player)return;
+      if(pressed&&this.explicitLock===undefined){
+        let best:CombatActor|undefined,bestDistance=Infinity;
+        for(const actor of this.state.actors){
+          if(!this.isPlayerHostileTarget(actor))continue;
+          const distance=distance2(player!.position,actor.position);
+          if(distance>=bestDistance||distance>EXPLICIT_LIMITS.range)continue;
+          best=actor;bestDistance=distance;
+        }
+        if(best){this.explicitLock={targetId:best.id,startedTick:this.state.tick};this.state.targetId=best.id;}
+      }else if(!held&&this.explicitLock){
+        this.explicitLock=undefined;
+        this.state.targetId=undefined;
+      }
+      return;
+    }
+    // Toggle: a press flips the lock.
+    if(!pressed)return;
+    if(this.explicitLock){this.explicitLock=undefined;this.state.targetId=undefined;return;}
+    if(!player)return;
+    let best:CombatActor|undefined,bestDistance=Infinity;
+    for(const actor of this.state.actors){
+      if(!this.isPlayerHostileTarget(actor))continue;
+      const distance=distance2(player.position,actor.position);
+      if(distance>=bestDistance||distance>EXPLICIT_LIMITS.range)continue;
+      best=actor;bestDistance=distance;
+    }
+    if(best){this.explicitLock={targetId:best.id,startedTick:this.state.tick};this.state.targetId=best.id;}
+  }
+  private selectedCompanion():CombatActor|undefined{
+    const id=this.state.companionState.companionId;
+    const actor=id?companionActor(this.state,id):undefined;
+    return actor?.visible&&!actor.downed&&!actor.possessed&&actor.possessedUntil<=this.state.worldTick?actor:undefined;
   }
   private currentBoss():CombatActor|undefined{
     const id=this.state.combatTrial?this.trials()[this.state.combatTrial.index]?.monsterId:this.state.encounter?.bossId;
@@ -2902,7 +4530,7 @@ export class CombatEngine {
         return undefined;
     }
   }
-  private emit(kind:CombatEvent['kind'],message:string,actorId?:ActorId,targetId?:ActorId,actionId?:string,attackId?:AttackId,damage?:CombatEvent['damage']):void{const id=`${this.state.runId}:combat:${this.state.tick}:${++this.state.eventSequence}`;this.state.events.push({id,tick:this.state.tick,kind,message,actorId,targetId,actionId,attackId,damage});}
+  private emit(kind:CombatEvent['kind'],message:string,actorId?:ActorId,targetId?:ActorId,actionId?:string,attackId?:AttackId,damage?:CombatEvent['damage']):void{pushEvent(this.state,kind,message,actorId,targetId,actionId,attackId,damage);}
   private recordResolvedAction(actionId:string,targetId:ActorId):void{this.state.lastResolvedActionId=actionId;this.state.lastResolvedTargetId=targetId;this.state.lastResolvedActionTick=this.state.tick;}
   private actorForId(id:ActorId):CombatActor|undefined{
     const exact=this.state.actors.find(actor=>actor.id===id);
@@ -2916,43 +4544,25 @@ export class CombatEngine {
     return match;
   }
 
-  private koroAssignedToParty():boolean{return this.state.companionSlots.combat==='koro'||this.state.companionSlots.utility==='koro';}
+  private koroAssignedToParty():boolean{return this.state.companionState.companionId==='koro';}
   private hasRecentHeavyImpact(targetId:string):boolean{
     const tick=this.state.lastResolvedActionTick;
     return (this.state.lastResolvedActionId==='heavy'||this.state.lastResolvedActionId==='charged_heavy')&&this.state.lastResolvedTargetId===targetId&&tick!==undefined&&this.state.tick>=tick&&this.state.tick-tick<=12;
   }
   private canStartMovableObjectMove(object:LiveMovableObject,interaction:InteractionDefinition,actor:CombatActor):boolean{
     const definition=object.authored;
-    if(object.phase!=='resting'||this.state.worldFacts[definition.movedFactId]===true||definition.requiredFacts.some(fact=>this.state.worldFacts[fact]!==true)||interaction.requiresFacts.some(fact=>this.state.worldFacts[fact]!==true))return false;
+    const resettable=ENCOUNTER_RESETTABLE_OBJECT_IDS.includes(object.objectId);
+    // Encounter-resettable objects (the shrine bundle) never treat their moved fact as permanent, and only move while their sequence is live.
+    if(resettable&&this.state.chapter.sequence?.step!=='danger')return false;
+    if(object.phase!=='resting'||(!resettable&&this.state.worldFacts[definition.movedFactId]===true)||definition.requiredFacts.some(fact=>this.state.worldFacts[fact]!==true)||interaction.requiresFacts.some(fact=>this.state.worldFacts[fact]!==true))return false;
     if(interaction.regionId!==this.state.regionId||interaction.targetId!==object.objectId||interaction.success.type!=='object-move'||interaction.success.objectId!==object.objectId||distance2(object.position,definition.from)>.02)return false;
     if(!actor.visible||actor.downed||actor.possessed||distance2(actor.position,object.position)>interaction.radiusMeters)return false;
     if(interaction.requiresActors.some(id=>{const required=this.actorForId(id);return !required||!required.visible||required.downed||required.possessed;}))return false;
     const commandGate=interaction.requiresCompanionCommand;
-    const koroAction=actor.archetypeId===definition.requiredCompanionId&&definition.requiredCompanionId==='koro'&&interaction.id===definition.koroInteractionId&&this.state.companionSlots.utility==='koro'&&commandGate?.companionId==='koro'&&commandGate.slot==='utility'&&commandGate.command==='special';
+    const commandActor=companionActor(this.state,'koro');
+    const koroAction=actor===commandActor&&actor.archetypeId===definition.requiredCompanionId&&definition.requiredCompanionId==='koro'&&interaction.id===definition.koroInteractionId&&this.state.companionState.companionId==='koro'&&commandGate?.companionId==='koro'&&commandGate.command==='special';
     const playerAction=actor.id===this.state.playerId&&interaction.id===definition.playerInteractionId&&interaction.playerActionId==='staff-heavy'&&!this.koroAssignedToParty()&&this.hasRecentHeavyImpact(object.objectId);
-    return (koroAction||playerAction)&&this.movableObjectPathClear(object,actor.id);
-  }
-  private movableObjectPathClear(object:LiveMovableObject,initiatorId:ActorId):boolean{
-    const definition=object.authored;
-    const surface=this.state.arena.surfaces.find(candidate=>candidate.id===definition.supportSurfaceId&&candidate.walkable);
-    if(!surface||!pointInPolygonXZ(definition.from,surface.points)||!pointInPolygonXZ(definition.to,surface.points))return false;
-    let previous=copy(definition.from);
-    for(let index=1;index<=definition.animationTicks;index++){
-      const progress=index/definition.animationTicks;
-      const desired=vec(definition.from.x+(definition.to.x-definition.from.x)*progress,definition.from.y+(definition.to.y-definition.from.y)*progress,definition.from.z+(definition.to.z-definition.from.z)*progress);
-      const swept=moveCircle(this.state.arena,previous,sub(desired,previous),definition.radiusMeters,.3);
-      if(distance2(swept,desired)>.02||Math.abs(swept.y-desired.y)>.12||!pointInPolygonXZ(swept,surface.points)||this.movableObjectOccupied(object,swept,initiatorId))return false;
-      previous=swept;
-    }
-    return true;
-  }
-  private movableObjectOccupied(object:LiveMovableObject,position:Vec3,initiatorId:ActorId):boolean{
-    const definition=object.authored;
-    for(const actor of this.state.actors){
-      if(!actor.visible||actor.id===initiatorId||actor.id===definition.effect.targetActorInstanceId||distance2(actor.position,definition.from)<=definition.radiusMeters)continue;
-      if(distance2(actor.position,position)<definition.radiusMeters+actor.radius)return true;
-    }
-    return false;
+    return (koroAction||playerAction)&&movableObjectPathClear(this.state,object,actor.id);
   }
   private startMovableObjectMove(object:LiveMovableObject,interaction:InteractionDefinition,actor:CombatActor):boolean{
     object.phase='in-flight';object.position=copy(object.authored.from);object.startedAtWorldTick=this.state.worldTick;object.interactionId=interaction.id;object.actorId=actor.id;
@@ -2969,7 +4579,7 @@ export class CombatEngine {
       const desired=vec(definition.from.x+(definition.to.x-definition.from.x)*progress,definition.from.y+(definition.to.y-definition.from.y)*progress,definition.from.z+(definition.to.z-definition.from.z)*progress);
       const surface=this.state.arena.surfaces.find(candidate=>candidate.id===definition.supportSurfaceId&&candidate.walkable);
       const swept=moveCircle(this.state.arena,object.position,sub(desired,object.position),definition.radiusMeters,.3);
-      if(!surface||distance2(swept,desired)>.02||Math.abs(swept.y-desired.y)>.12||!pointInPolygonXZ(swept,surface.points)||this.movableObjectOccupied(object,swept,actorId)){
+      if(!surface||distance2(swept,desired)>.02||Math.abs(swept.y-desired.y)>.12||!pointInPolygonXZ(swept,surface.points)||movableObjectOccupied(this.state,object,swept,actorId)){
         object.phase='resting';object.position=copy(definition.from);delete object.startedAtWorldTick;delete object.actorId;delete object.interactionId;continue;
       }
       object.position=progress>=1?copy(definition.to):copy(swept);
@@ -2989,6 +4599,7 @@ export class CombatEngine {
       }
       const eventId=this.state.runId+':object-moved:'+object.objectId;
       this.emitWorldEvent({type:'object-moved',eventId,idempotencyKey:eventId,regionId:this.state.regionId,objectId:object.objectId,interactionId:object.interactionId,actorId,from:copy(definition.from),to:copy(definition.to)});
+      onObjectSettled(this.chapterHost,object.objectId);
     }
   }
 
@@ -3007,7 +4618,8 @@ export class CombatEngine {
       const success=interaction.success;
       if(interaction.kind==='choose'&&success.type==='choice')return true;
       if(success.type==='rescue'){
-        if(success.targetId==='tali')return target?.archetypeId==='tali'&&this.isTaliSafe(target.position);
+        // The Fall's shelter run checks Tali's own safety in the rescue branch; the Bamboo rescue needs the disabled camp.
+        if(success.targetId==='tali')return target?.archetypeId==='tali'&&(interaction.id===FALL_TALI_RESCUE_INTERACTION_ID||this.isTaliSafe(target.position));
         const rescueTarget=this.actorForId(success.targetId as ActorId);
         return this.state.worldFacts[interaction.id+':freed']===true||!!rescueTarget?.downed;
       }
@@ -3018,20 +4630,14 @@ export class CombatEngine {
     if(tick===undefined||this.state.tick-tick<0||this.state.tick-tick>12||!this.interactionTargetIdMatches(interaction,this.state.lastResolvedTargetId))return false;
     if(interaction.actionId==='cleanse-pulse'){
       if(this.state.lastResolvedActionId!=='cleanse')return false;
-      if(interaction.success.type==='restoration')return true;
+      if(interaction.success.type==='restoration'||(!target&&interaction.success.type==='semantic-interaction'&&interaction.success.kind==='restore'))return true;
       return (target?.corruption??1)<=0;
     }
     if(interaction.actionId==='staff-heavy')return this.state.lastResolvedActionId==='heavy'||this.state.lastResolvedActionId==='charged_heavy';
     return false;
   }
   private interactionEventId(interaction:InteractionDefinition):string{return `${this.state.runId}:interaction:${interaction.id}${interaction.repeatable?`:${this.state.tick}`:''}`;}
-  private emitWorldEvent(worldEvent:WorldEvent):boolean{
-    if(this.state.seenWorldKeys.includes(worldEvent.idempotencyKey))return false;
-    this.state.seenWorldKeys.push(worldEvent.idempotencyKey);
-    this.state.events.push({id:worldEvent.eventId,tick:this.state.tick,kind:'world',message:`World event: ${worldEvent.type}.`,worldEvent});
-    this.state.worldEvents.push(structuredClone(worldEvent));
-    return true;
-  }
+  private emitWorldEvent(worldEvent:WorldEvent):boolean{return emitWorldEventTo(this.state,worldEvent);}
   private isTaliSafe(position:Vec3):boolean{
     const campDisable=INTERACTIONS.find(interaction=>interaction.id==='camp-disable');
     if(!campDisable||this.state.worldFacts.taliInBamboo!==true)return false;
@@ -3045,7 +4651,12 @@ export class CombatEngine {
     return this.state.hazards.some(hazard=>this.state.worldTick<hazard.activeUntil&&hazardThreatens(hazard,probe))||this.state.telegraphs.some(telegraph=>(telegraph.phase==='windup'||telegraph.phase==='commit')&&distance2(position,telegraph.targetPosition)<=Math.max(ATTACKS[telegraph.attackId]?.hazard.width??0,ATTACKS[telegraph.attackId]?.hazard.depth??0)/2+1);
   }
   private finishAction():void{this.state.actionId='idle';this.state.actionUntil=this.state.tick;this.state.actionRecoveryUntil=0;this.state.actionCancelable=false;this.state.kitCancel=undefined;}
-  private commandCompanionForInput(targetId:ActorId|undefined,command:CompanionCommand):boolean{const actor=this.state.companionSlots.combat??this.state.companionSlots.utility;if(!actor)return false;return this.commandCompanion(actor,command,targetId);}
+  private commandCompanionForInput(targetId:ActorId|undefined):boolean{const id=this.state.companionState.companionId;return id?this.signalCompanion(id,targetId):false;}
+  /** An input-frame command: field verbs target an actor instance; later-act Ask/Signal stay separate abilities. */
+  private runInputCommand(command:NonNullable<CombatInput['command']>):void{
+    if(command.command==='ask'||command.command==='signal'){this.signalCompanion(command.companionId,command.targetId);return;}
+    this.commandCompanion({companionId:command.companionId,command:command.command,...(command.targetId?{target:{kind:'actor',instanceId:command.targetId}}:{})});
+  }
   private breakPossession(actor:CombatActor,escaped=false):void{
     const instance=actor.possessionInstanceId;
     const source=actor.possessionSourceId;
@@ -3057,10 +4668,11 @@ export class CombatEngine {
     }
     actor.possessed=false;actor.allegiance='ally';actor.possessedUntil=0;actor.possessionInstanceId=undefined;actor.possessionSourceId=undefined;actor.staggerUntil=this.state.worldTick+24;
     this.emit('attack-interrupted',escaped?'Orun’s hold releases the companion; they escape unharmed.':'Orun’s hold breaks. Your companion is safe.',actor.id,source??('orun' as ActorId),'possession-break');
+    onOrunPossessionEnded(this.orunHost,actor);
   }
   private enforceCaps():void{
     const hostiles=this.state.actors.filter(actor=>actor.allegiance==='hostile');
-    const large=this.state.actors.filter(actor=>actor.large);
+    const large=this.state.actors.filter(actor=>actor.large&&!actor.id.includes('__party_'));
     const groundedLarge=large.filter(actor=>!actor.aerial);
     const aerialLarge=large.filter(actor=>actor.aerial);
     const trialRegion=combatTrialSetFor(this.state.regionId)!==undefined;
@@ -3079,12 +4691,13 @@ export function createEngineState():EngineState{
     schemaVersion:3,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
     actors:[player],playerId:'aren',heroId:'aren',player:{vitality:PLAYER_MAX_VITALITY,maxVitality:PLAYER_MAX_VITALITY,instinct:0,mana:MAX_MANA,maxMana:MAX_MANA},
     movableObjects:[],
+    skillReadyAt:{},
     sceneColliders:[],combatObstacles:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,12,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
     hazards:[],telegraphs:[],events:[],worldEvents:[],seenWorldKeys:[],perfectDodgeKeys:[],phaseIndex:0,phaseLatch:0,phaseActionFlags:[],
     actionId:'idle',actionUntil:0,actionRecoveryUntil:0,actionCancelable:false,counterUntil:0,lastAttackTick:0,attackSelectionWorldOffset:0,heavyChargeStartTick:null,
-    companionState:createCompanionState({}),companionSlots:{},eventSequence:0,rewardEmitted:false,checkpoint:null,traversalGates:[],presentationCues:[],
-    playerProjectiles:[],judgementMarks:[],arsenalSequence:0,kit:{},
+    companionState:createCompanionState(),chapter:createChapterCombatState(),bossLunges:[],eventSequence:0,rewardEmitted:false,checkpoint:null,traversalGates:[],presentationCues:[],
+    playerProjectiles:[],judgementMarks:[],pendingCompanionStrikes:[],arsenalSequence:0,kit:{},
   };
 }
 export function hydrateEngineState(seed:EngineStateSeed):EngineState{
@@ -3101,11 +4714,13 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   if(state.timePolicy==='perfect-dodge-slow'&&state.slowMotionRemainingTicks<=0)state.timePolicy='normal';
   state.playerProjectiles=seed.playerProjectiles??[];
   state.judgementMarks=seed.judgementMarks??[];
+  state.pendingCompanionStrikes=seed.pendingCompanionStrikes??[];
   state.arsenalSequence=seed.arsenalSequence??0;
   if(state.hitStop&&!(state.hitStop.remainingTicks>0))state.hitStop=undefined;
   state.worldTimeScale=state.timePolicy==='paused'||state.hitStop?0:state.timePolicy==='perfect-dodge-slow'?PERFECT_DODGE_EFFECTS.worldTimeScale:1;
   state.actors=(seed.actors??base.actors).map(cloneActor);
   state.player=hydratePlayerResources(seed.player);
+  state.skillReadyAt={...seed.skillReadyAt};
   state.arena={...base.arena,...seed.arena};
   state.sceneColliders=structuredClone(seed.sceneColliders??[]);
   state.combatObstacles=structuredClone(seed.combatObstacles??[]);
@@ -3124,11 +4739,21 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
     delete (migrated as typeof migrated & {startedAtTick?:number}).startedAtTick;
     return migrated;
   });
+  state.companionState=normalizeCompanionState(state.companionState);
+  delete (state as EngineState & Record<string,unknown>).companionSlots;
+  for(const actor of state.actors)if(actor.id.includes('__party_')&&actor.archetypeId!==state.companionState.companionId)actor.visible=false;
+  state.chapter={...createChapterCombatState(),...state.chapter};
+  if (state.chapter.traps.some(trap => trap.disarmFact === undefined))
+    state.chapter.traps = state.chapter.traps.map(trap => trap.disarmFact === undefined ? { ...trap, disarmFact: TRAP_DISARM_FACT } : trap);
+  state.bossLunges=seed.bossLunges??[];
   if(state.checkpoint){
     state.checkpoint.player=hydratePlayerResources(state.checkpoint.player);
     state.checkpoint.worldTick=state.checkpoint.worldTick??state.checkpoint.tick;
     state.checkpoint.lastAttackTick=state.checkpoint.lastAttackTick??state.checkpoint.tick;
     state.checkpoint.counterUntil=state.checkpoint.counterUntil??0;
+    if(state.checkpoint.companions)state.checkpoint.companions=normalizeCompanionState(state.checkpoint.companions);
+    if (state.checkpoint.chapter?.traps.some(trap => trap.disarmFact === undefined))
+      state.checkpoint.chapter.traps = state.checkpoint.chapter.traps.map(trap => trap.disarmFact === undefined ? { ...trap, disarmFact: TRAP_DISARM_FACT } : trap);
   }
   if(legacyPlayerActionClock){
     migrateLegacyPlayerActionClock(state.actors,state.playerId,state.tick);
@@ -3146,22 +4771,32 @@ function migrateLegacyPlayerActionClock(actors:readonly CombatActor[],playerId:A
     actor.actionEndsTick=actor.actionStartedTick+duration;
   }
 }
+function actorFromPlacement(entity: RegionEntityDefinition, arena: CombatArena, facts: Readonly<Record<string, boolean | number | string>> | undefined): CombatActor {
+  const archetypeId = entity.actorId ?? entity.id;
+  const definition = ACTORS[archetypeId];
+  if (!definition) throw new Error('No authored actor definition for ' + archetypeId);
+  const requested = archetypeId === NURSERY_ESCORT.actorId && facts?.['side:nursery-safe'] === true ? NURSERY_ESCORT.to : entity.position;
+  const elevation = groundHeightAt(arena, requested.x, requested.z, requested.y) ?? requested.y;
+  const actor = makeActor(entity.id, definition.species, definition.allegiance, vec(requested.x, elevation, requested.z),
+    isLargeSpecies(definition.species), isAerialSpecies(definition.species), 100, archetypeId);
+  if (entity.id.includes('__party_')) actor.allegiance = 'ally';
+  // Heartroot shadow echoes exist only inside the Sky aspect, never through a visibility fact.
+  const echo = ORUN_SKY_ECHO_IDS.includes(entity.id);
+  actor.visible = !echo && (entity.visibleWhen === undefined || facts?.[entity.visibleWhen] === true);
+  if (echo) actor.allegiance = 'neutral';
+  // A placement may author a registered variant model (Greenwake's three monsters, Bamboo's camp hunters); the renderer only
+  // shows the model the snapshot names, so dropping it here would leave the actor simulated but invisible.
+  if (entity.assetId && entity.assetId !== definition.assetId) actor.renderVariantId = entity.assetId;
+  return actor;
+}
+
 export function makeActor(id:ActorId,species:string,allegiance:CombatActor['allegiance'],position:Vec3,large:boolean,aerial:boolean,vitality:number,archetypeId:ActorId=id):CombatActor{
   const idle=ACTION_CLIPS[`${archetypeId}-idle`]??ACTION_CLIPS['actor-idle']!;
-  const collisionHeight=large?2.4:aerial?0.8:species==='macaque'?1:1.6;
-  return {id,archetypeId,species,allegiance,position:copy(position),velocity:vec(0,0,0),facing:vec(0,0,-1),actionId:(id==='aren'?ACTION_CLIPS.idle:idle) as ActionId,phase:'idle',normalizedTime:0,vitality,ferocity:id==='aren'||species==='human'?undefined:100,corruption:undefined,targetId:undefined,sockets:{root:copy(position),head:vec(position.x,position.y+1.5,position.z)},interactionRequirements:[],visible:true,downed:false,possessed:false,radius:large?1.1:.42,collisionHeight,maxVitality:vitality,large,aerial,corruptionCoreIds:undefined,cleansedCoreIds:[],recoveringUntil:0,invulnerableUntil:0,staggerUntil:0,possessedUntil:0,actionStartedTick:0,actionEndsTick:0};
+  const body=actorCollisionBody(species,large,aerial);
+  return {id,archetypeId,species,allegiance,position:copy(position),velocity:vec(0,0,0),facing:vec(0,0,-1),actionId:(id==='aren'?ACTION_CLIPS.idle:idle) as ActionId,phase:'idle',normalizedTime:0,vitality,ferocity:id==='aren'||species==='human'?undefined:100,corruption:undefined,targetId:undefined,sockets:{root:copy(position),head:vec(position.x,position.y+1.5,position.z)},interactionRequirements:[],visible:true,downed:false,possessed:false,radius:body.radius,collisionHeight:body.height,maxVitality:vitality,large,aerial,corruptionCoreIds:undefined,cleansedCoreIds:[],recoveringUntil:0,invulnerableUntil:0,staggerUntil:0,possessedUntil:0,actionStartedTick:0,actionEndsTick:0};
 }
 function cloneActor(a:CombatActor):CombatActor{return structuredClone(a);}
 function copy(v:Vec3):Vec3{return{x:v.x,y:v.y,z:v.z};}
-function pointInPolygonXZ(point:Vec3,points:readonly Vec3[]):boolean{
-  if(points.length<3)return false;
-  let inside=false;
-  for(let i=0,j=points.length-1;i<points.length;j=i++){
-    const a=points[i]!,b=points[j]!;
-    if((a.z>point.z)!==(b.z>point.z)&&point.x<(b.x-a.x)*(point.z-a.z)/(b.z-a.z)+a.x)inside=!inside;
-  }
-  return inside;
-}
 function sub(a:Vec3,b:Vec3):Vec3{return{x:a.x-b.x,y:a.y-b.y,z:a.z-b.z};}
 function scale(v:Vec3,s:number):Vec3{return{x:v.x*s,y:v.y*s,z:v.z*s};}
 function dot(a:Vec3,b:Vec3):number{return a.x*b.x+a.y*b.y+a.z*b.z;}
@@ -3191,6 +4826,12 @@ function profileVector(id:EvasionProfileId,direction:EvasionDirection,facing:Vec
 }
 function normalize(v:Vec3):Vec3{const n=Math.hypot(v.x,v.z)||1;return{x:v.x/n,y:0,z:v.z/n};}
 function normalize3(v:Vec3):Vec3{const n=Math.hypot(v.x,v.y,v.z)||1;return{x:v.x/n,y:v.y/n,z:v.z/n};}
+/** Yara's burst spells: the root eruption and the bloom pulse break poise, meteors and seed bursts only chip it. */
+function yaraBurstHit(clip:string,damage:number):HitSpec{
+  if(clip==='yara-root-eruption')return YARA_HITS.root_eruption!;
+  if(clip==='yara-heartroot-bloom')return damage>=HEARTROOT.bloomPulseDamage?YARA_HITS.bloom_pulse!:YARA_HITS.bloom_meteor!;
+  return YARA_HITS.seed_burst!;
+}
 /** Smooth distance progress with zero velocity at both action boundaries. */
 function evasionDistanceProgress(t:number):number{
   const u=Math.max(0,Math.min(1,t));
@@ -3236,7 +4877,6 @@ function storyShape(kind:HazardDefinition['kind']):NonNullable<StoryCue['shape']
     case 'strike':case 'projectile':return 'burst';
   }
 }
-function isLargeSpecies(species:string):boolean{return species==='tiger'||species==='lion'||species==='boar'||species==='crocodile';}
 function hazardPresentation(h:LiveHazard):Pick<StoryCue,'position'|'from'|'to'|'footprint'|'shape'>{
   const cone=h.kind==='cone',disk=h.kind==='strike'||h.kind==='projectile';
   const radius=h.range??h.depth;

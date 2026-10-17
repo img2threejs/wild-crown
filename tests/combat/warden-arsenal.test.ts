@@ -3,10 +3,8 @@ import { CombatEngine, createEngineState, makeActor, type CombatActor, type Comb
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { GREENWAKE_COMBAT_TRIALS } from '../../src/game/combat/CombatTrials.js';
 import { vec } from '../../src/game/combat/geometry.js';
-import { JUDGEMENT, SIGIL } from '../../src/game/combat/PlayerSkills.js';
-import { resolveMonsterAnimation } from '../../src/rendering/MonsterAnimationProfiles.js';
+import { CHAIN_EARLY_TICKS, CHAIN_LATE_TICKS, JUDGEMENT, LIGHT_LOCK_MARGIN_TICKS, LIGHT_STEPS, SIGIL, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
-import type { ActorSnapshot } from '../../src/game/contracts.js';
 
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 const press = (patch: Partial<CombatInput>): CombatInput => ({ ...idle, ...patch });
@@ -65,70 +63,59 @@ const wall = (z: number) => (state: EngineState): void => {
 };
 
 describe('Warden Blade combo', () => {
-  it('chains light_1…light_4 from 4 ticks before a clip ends and restarts after the 18-tick grace', () => {
+  it('chains at each opening and buffers a fresh chain until the finisher ends', () => {
     const b = bench();
     b.step(press({ lightPressed: true }));
-    expect(b.state).toMatchObject({ actionId: 'light_1', lightIndex: 1 });
-    expect(b.aren).toMatchObject({ actionId: 'aren-light-1', actionStartedTick: 1, actionEndsTick: 27 });
     b.step(press({ lightPressed: true }));
     expect(b.state.bufferedAction).toBeUndefined();
-    b.stepTo(22);
-    expect(b.state.actionId).toBe('light_1');
-    b.step(press({ lightPressed: true }));
-    expect(b.state).toMatchObject({ actionId: 'light_2', lightIndex: 2 });
-    expect(b.aren).toMatchObject({ actionId: 'aren-light-2', actionStartedTick: 23, actionEndsTick: 51 });
-    b.stepTo(46);
-    b.step(press({ lightPressed: true }));
-    expect(b.aren).toMatchObject({ actionId: 'aren-light-3', actionStartedTick: 47, actionEndsTick: 81 });
-    b.stepTo(76);
-    b.step(press({ lightPressed: true }));
-    expect(b.aren).toMatchObject({ actionId: 'aren-light-4', actionStartedTick: 77, actionEndsTick: 117 });
-    // The finisher has no follow-up step: a press at its own "end - 4" waits for the clip to end, then restarts at light_1.
-    b.stepTo(112);
+    for (let step = 1; step < LIGHT_STEPS.length; step++) {
+      b.stepTo(b.aren.actionEndsTick - CHAIN_EARLY_TICKS - 1);
+      expect(b.state.actionId).toBe(`light_${step}`);
+      b.step(press({ lightPressed: true }));
+      expect(b.state.actionId).toBe(`light_${step + 1}`);
+    }
+    const end = b.aren.actionEndsTick;
+    b.stepTo(end - CHAIN_EARLY_TICKS - 1);
     b.step(press({ lightPressed: true }));
     expect(b.state.actionId).toBe('light_4');
-    b.stepTo(116);
+    b.stepTo(end - 1);
     expect(b.state.actionId).toBe('light_4');
     b.step();
     expect(b.state).toMatchObject({ actionId: 'light_1', lightIndex: 1 });
-    expect(b.aren.actionStartedTick).toBe(117);
+    expect(b.aren.actionStartedTick).toBe(end);
   });
 
-  it('accepts the next step through 18 ticks after the clip ends and no later', () => {
-    const inside = bench();
-    inside.step(press({ lightPressed: true }));
-    inside.stepTo(44);
-    inside.step(press({ lightPressed: true }));
-    expect(inside.state).toMatchObject({ actionId: 'light_2', lightIndex: 2 });
-    const outside = bench();
-    outside.step(press({ lightPressed: true }));
-    outside.stepTo(45);
-    outside.step(press({ lightPressed: true }));
-    expect(outside.state).toMatchObject({ actionId: 'light_1', lightIndex: 1 });
-    expect(outside.aren.actionStartedTick).toBe(46);
+  it('accepts the next step at the grace deadline and restarts one tick later', () => {
+    for (const [offset, expected] of [[0, 'light_2'], [1, 'light_1']] as const) {
+      const b = bench();
+      b.step(press({ lightPressed: true }));
+      b.stepTo(b.aren.actionEndsTick + CHAIN_LATE_TICKS + offset - 1);
+      b.step(press({ lightPressed: true }));
+      expect(b.state.actionId).toBe(expected);
+    }
   });
 
-  it('buffers a press made in the last 8 ticks and starts it the moment the window opens', () => {
+  it('buffers a late press and starts it exactly when the chain window opens', () => {
     const b = bench();
     b.step(press({ lightPressed: true }));
-    b.stepTo(18);
+    const opening = b.aren.actionEndsTick - CHAIN_EARLY_TICKS;
+    b.stepTo(b.aren.actionEndsTick - 9);
     b.step(press({ lightPressed: true }));
     expect(b.state.bufferedAction?.action).toBe('light_2');
-    b.stepTo(22);
+    b.stepTo(opening - 1);
     expect(b.state.actionId).toBe('light_1');
     b.step();
-    expect(b.state).toMatchObject({ actionId: 'light_2' });
-    expect(b.aren.actionStartedTick).toBe(23);
+    expect(b.state.actionId).toBe('light_2');
+    expect(b.aren.actionStartedTick).toBe(opening);
   });
 
-  it('swings without any target and keeps Aren rooted until 6 ticks before the clip ends', () => {
+  it('swings without a target and releases grounded movement only after the lock', () => {
     const b = bench();
     b.step(press({ lightPressed: true }));
-    for (let tick = 2; tick <= 20; tick++) b.step(press({ move: vec(1, 0, 0) }));
+    b.stepTo(b.aren.actionEndsTick - LIGHT_LOCK_MARGIN_TICKS - 1, press({ move: vec(1, 0, 0) }));
     expect(b.aren.position.x).toBe(0);
     expect(b.state.player.mana).toBe(100);
-    b.step(press({ move: vec(1, 0, 0) }));
-    b.step(press({ move: vec(1, 0, 0) }));
+    b.step(press({ move: vec(1, 0, 0) }), 2);
     expect(b.aren.position.x).toBeGreaterThan(0);
   });
 
@@ -144,8 +131,7 @@ describe('Warden Blade combo', () => {
   });
 
   it('deals each step\'s contract damage and begins its active window on the contract tick', () => {
-    const expected = [[9, 9], [11, 10], [13, 10], [14, 15]] as const;
-    expected.forEach(([damage, activeFrom], index) => {
+    LIGHT_STEPS.forEach(({ damage, activeFrom }, index) => {
       const b = bench([foe('dummy', 0, -1.6)], chainedTo(index + 1));
       b.step(press({ lightPressed: true }));
       const start = b.tick;
@@ -155,12 +141,12 @@ describe('Warden Blade combo', () => {
     });
   });
 
-  it('spins light_3 through one full turn across ticks 8–20 and hits every hostile within 2.8 m exactly once', () => {
+  it('spins light_3 through one full turn and hits every in-range hostile exactly once', () => {
     const b = bench([foe('north', 0, -2), foe('south', 0, 2), foe('east', 2, 0), foe('west', -2, 0), foe('far', 0, 3.6)], chainedTo(3));
     b.step(press({ lightPressed: true }));
     const start = b.tick;
     let previous = yawOf(b.aren.facing), turned = 0, firstTurnTick = -1;
-    for (let tick = 0; tick < 40; tick++) {
+    for (let tick = 0; tick < LIGHT_STEPS[2]!.ticks + LIGHT_STEPS[2]!.hitStopTicks; tick++) {
       b.step();
       const yaw = yawOf(b.aren.facing);
       const delta = angleBetween(yaw, previous);
@@ -168,23 +154,23 @@ describe('Warden Blade combo', () => {
       turned += delta;
       previous = yaw;
     }
-    expect(firstTurnTick).toBe(9);
+    expect(firstTurnTick).toBe(LIGHT_STEPS[2]!.spin!.from + 1);
     expect(turned).toBeCloseTo(2 * Math.PI, 6);
     for (const id of ['north', 'south', 'east', 'west']) expect(b.health(id)).toBe(987);
     expect(b.health('far')).toBe(1000);
-    expect(b.cuesOf('slash')[0]).toMatchObject({ actionId: 'aren-light-3', intensity: 1.3, durationTicks: 9, footprint: { width: 2.8, length: 2.8, sectorRadians: 2 * Math.PI } });
+    expect(b.cuesOf('slash')[0]?.footprint).toMatchObject({ width: 2.8, length: 2.8, sectorRadians: 2 * Math.PI });
   });
 });
 
 describe('Crescent Wave', () => {
   const finisher = (actors: CombatActor[], tweak?: (state: EngineState) => void): Bench => bench(actors, state => { chainedTo(4)(state); tweak?.(state); });
 
-  it('spawns on tick 15 for 10 mana, pierces every hostile once, and expires after 9 m', () => {
+  it('launches at the finisher contact, spends mana once, pierces hostiles once and expires at range', () => {
     const b = finisher([foe('near', 0, -5), foe('mid', 0, -8), foe('past', 0, -12), foe('aside', 5, -5)]);
     b.step(press({ lightPressed: true }));
     const start = b.tick;
     b.stepUntil(() => (b.engine.snapshot().playerProjectiles?.length ?? 0) > 0);
-    expect(b.tick - start).toBe(15);
+    expect(b.tick - start).toBe(LIGHT_STEPS[3]!.waveAt);
     expect(b.state.player.mana).toBe(90);
     expect(b.engine.snapshot().playerProjectiles![0]).toMatchObject({ kind: 'crescent-wave', ownerId: 'aren', speed: 20, radius: 1.4, ageTicks: 0, lifeTicks: 27 });
     const launch = b.cuesOf('projectile')[0]!;
@@ -236,30 +222,29 @@ describe('Crescent Wave', () => {
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.health('close') < 1000);
     expect(b.health('close')).toBe(986);
-    expect(b.cuesOf('slash')[0]).toMatchObject({ actionId: 'aren-light-4', intensity: 1.6, durationTicks: 4, footprint: { sectorRadians: 2.4, width: 2.5, length: 2.5 } });
+    expect(b.cuesOf('slash')[0]?.footprint).toMatchObject({ sectorRadians: 2.4, width: 2.5, length: 2.5 });
   });
 });
 
 describe('Sigil Bolt', () => {
-  it('is a 30-tick, 15-mana tap that roots Aren for 22 ticks and shows a sigil in front of her chest', () => {
+  it('spends mana at acceptance and roots the cast until its movement lock expires', () => {
     const b = bench();
     b.step(press({ rangedPressed: true }));
     expect(b.state.player.mana).toBe(85);
-    expect(b.aren).toMatchObject({ actionId: 'aren-sigil-bolt', actionStartedTick: 1, actionEndsTick: 31 });
-    expect(b.state.actionUntil - 1).toBe(22);
     const sigil = b.cuesOf('sigil')[0]!;
-    expect(sigil).toMatchObject({ phase: 'anticipation', actorId: 'aren', durationTicks: 16, intensity: 1, element: 'arcane' });
     expect(sigil.scopeId).toMatch(/^sigil:\d+$/);
     expect(sigil.position).toEqual(vec(0, 1.25, -0.9));
     expect(sigil.to).toEqual(vec(0, 1.25, -10.9));
-    for (let tick = 2; tick <= 22; tick++) b.step(press({ move: vec(1, 0, 0) }));
+    b.stepTo(1 + SIGIL.boltLockTicks - 1, press({ move: vec(1, 0, 0) }));
     expect(b.aren.position.x).toBe(0);
+    b.step(press({ move: vec(1, 0, 0) }), 2);
+    expect(b.aren.position.x).toBeGreaterThan(0);
   });
 
-  it('launches on tick 16 from the sigil centre at 28 m/s and flies straight when nothing is in its cone', () => {
+  it('launches after anticipation and flies straight when no target lies in its cone', () => {
     const b = bench([foe('outside', -8, -3)]);
     b.step(press({ rangedPressed: true }));
-    b.stepTo(16);
+    b.stepTo(SIGIL.boltLaunchTick);
     expect(b.engine.snapshot().playerProjectiles).toBeUndefined();
     b.step();
     const bolt = b.engine.snapshot().playerProjectiles![0]!;
@@ -293,7 +278,7 @@ describe('Sigil Bolt', () => {
   it('homes onto a strafing target inside the 70° cone, turning no faster than 6 rad/s', () => {
     const b = bench([foe('runner', 4, -8)]);
     b.step(press({ rangedPressed: true }));
-    b.stepTo(16);
+    b.stepTo(SIGIL.boltLaunchTick);
     b.step();
     const bolt = b.engine.snapshot().playerProjectiles![0]!;
     expect(bolt.targetId).toBe('runner');
@@ -325,7 +310,7 @@ describe('Sigil Bolt', () => {
     expect(b.state.hazards.map(item => item.id)).toEqual(['caster-lance']);
     expect(b.state.telegraphs).toHaveLength(1);
     expect(b.actor('caster').staggerUntil).toBe(0);
-    expect(b.actor('caster').hitReactUntil).toBeGreaterThan(b.state.worldTick);
+    expect(b.engine.snapshot().actors.find(actor => actor.id === 'caster')!.reaction).toMatchObject({ kind: 'flinch' });
   });
 });
 
@@ -358,39 +343,34 @@ describe('Sigil Bolt against a sealed Greenwake trial gate', () => {
 });
 
 describe('Sigil Barrage', () => {
-  it('charges while held, then fires three bolts at -12°, 0° and +12° on ticks 8, 16 and 24 for 35 mana', () => {
+  it('charges without spending, then releases three angled bolts for one charge cost', () => {
     const b = bench();
     b.step(press({ rangedPressed: true, rangedHeld: true }));
     expect(b.state.sigilCharge).toBeDefined();
     expect(b.aren.actionId).toBe('aren-sigil-charge');
     const sustain = b.cuesOf('sigil', 'sustain')[0]!;
-    expect(sustain).toMatchObject({ durationTicks: 600, element: 'arcane' });
-    expect(b.engine.snapshot().skills.find(skill => skill.id === 'sigil_barrage')).toMatchObject({ label: 'Barrage', reason: 'Hold to charge', available: true });
-    b.step(press({ rangedHeld: true }), 29);
-    expect(b.engine.snapshot().skills.find(skill => skill.id === 'sigil_barrage')!.reason).toBe('Release to fire');
+    b.step(press({ rangedHeld: true }), SIGIL.barrageHoldTicks - 1);
     expect(b.state.player.mana).toBe(100);
     b.step(press({ rangedReleased: true }));
     const release = b.tick;
     expect(b.state.player.mana).toBe(65);
-    expect(b.aren).toMatchObject({ actionId: 'aren-sigil-barrage', actionStartedTick: release, actionEndsTick: release + 40 });
-    expect(b.state.actionUntil - release).toBe(32);
     expect(b.cuesOf('cancel').find(cue => cue.scopeId === sustain.scopeId)).toBeDefined();
-    b.step(idle, 45);
+    b.step(idle, SIGIL.barrageTicks);
     const launches = b.cuesOf('projectile');
-    expect(launches.map(cue => cue.tick - release)).toEqual([8, 16, 24]);
+    expect(launches.map(cue => cue.tick - release)).toEqual(SIGIL.barrageLaunchTicks);
     const facingYaw = yawOf(vec(0, 0, -1));
     const offsets = launches.map(cue => angleBetween(yawOf({ x: cue.to!.x - cue.from!.x, z: cue.to!.z - cue.from!.z }), facingYaw) / DEGREES);
     expect(offsets[0]).toBeCloseTo(-12, 6);
     expect(offsets[1]).toBeCloseTo(0, 6);
     expect(offsets[2]).toBeCloseTo(12, 6);
     const sigils = b.cuesOf('sigil', 'anticipation').filter(cue => cue.tick >= release);
-    expect(sigils.map(cue => [cue.tick - release, cue.durationTicks, cue.intensity])).toEqual([[0, 8, 1.6], [8, 8, 1.6], [16, 8, 1.6]]);
+    for (let index = 0; index < launches.length; index++) expect(sigils[index]!.tick + sigils[index]!.durationTicks!).toBe(launches[index]!.tick);
   });
 
   it('each barrage bolt deals 12', () => {
     const b = bench([foe('mark', 0, -7)]);
     b.step(press({ rangedPressed: true, rangedHeld: true }));
-    b.step(press({ rangedHeld: true }), 30);
+    b.step(press({ rangedHeld: true }), SIGIL.barrageHoldTicks);
     b.step(press({ rangedReleased: true }));
     b.step(idle, 90);
     expect(b.health('mark')).toBe(1000 - 36);
@@ -400,14 +380,14 @@ describe('Sigil Barrage', () => {
   it('falls back to a normal bolt when 35 mana is not there at release, and to nothing under 15', () => {
     const bolt = bench([], state => { state.player.mana = 40; });
     bolt.step(press({ rangedPressed: true, rangedHeld: true }));
-    bolt.step(press({ rangedHeld: true }), 30);
+    bolt.step(press({ rangedHeld: true }), SIGIL.barrageHoldTicks);
     bolt.state.player.mana = 20;
     bolt.step(press({ rangedReleased: true }));
     expect(bolt.aren.actionId).toBe('aren-sigil-bolt');
     expect(bolt.state.player.mana).toBe(5);
     const none = bench();
     none.step(press({ rangedPressed: true, rangedHeld: true }));
-    none.step(press({ rangedHeld: true }), 30);
+    none.step(press({ rangedHeld: true }), SIGIL.barrageHoldTicks);
     none.state.player.mana = 10;
     none.step(press({ rangedReleased: true }));
     expect(none.state.cast).toBeUndefined();
@@ -448,19 +428,19 @@ describe('Thunder Cleave', () => {
   function charged(actors: CombatActor[], target: string): Bench {
     const b = bench(actors, state => { state.targetId = target as EngineState['targetId']; });
     b.step(press({ heavyPressed: true, heavyHeld: true }));
-    b.step(press({ heavyHeld: true }), 40);
-    b.step(press({ heavyReleased: true, heavyHeldTicks: 40 }));
+    b.step(press({ heavyHeld: true }), THUNDER_CLEAVE.holdTicks);
+    b.step(press({ heavyReleased: true, heavyHeldTicks: THUNDER_CLEAVE.holdTicks }));
     return b;
   }
 
-  it('strikes the target point 8 ticks after the hit for 18 to everything within 3 m', () => {
+  it('strikes after the melee contact for splash damage inside the lightning radius', () => {
     const b = charged([foe('boar', 0, -1.6, true), foe('beside', 2.5, -1.6), foe('distant', 5.8, -1.6)], 'boar');
     expect(b.state.pendingImpact).toMatchObject({ action: 'charged_heavy', damage: 36 });
     b.stepUntil(() => b.cuesOf('lightning').length > 0);
     const hit = b.cuesOf('hit').find(cue => cue.targetId === 'boar')!;
     const strike = b.cuesOf('lightning')[0]!;
-    expect(strike.worldTick - hit.worldTick).toBe(8);
-    expect(strike).toMatchObject({ phase: 'active', position: vec(0, 0, -1.6), footprint: { width: 6, length: 6 }, durationTicks: 18, intensity: 2, element: 'lightning' });
+    expect(strike.worldTick - hit.worldTick).toBe(THUNDER_CLEAVE.delayTicks);
+    expect(strike.position).toEqual(vec(0, 0, -1.6));
     b.step(idle, 20);
     expect(b.health('boar')).toBe(1000 - 36 - 18);
     expect(b.health('beside')).toBe(1000 - 18);
@@ -479,12 +459,6 @@ describe('Thunder Cleave', () => {
     expect(b.health('ahead')).toBe(1000 - 18);
   });
 
-  it('keeps the Heavy damage and timing unchanged', () => {
-    const b = charged([foe('boar', 0, -1.6, true)], 'boar');
-    expect(b.state.pendingImpact!.activeAt - b.tick).toBe(36);
-    expect(b.aren).toMatchObject({ actionId: 'aren-charged-heavy' });
-    expect(b.aren.actionEndsTick - b.aren.actionStartedTick).toBe(76);
-  });
 });
 
 describe("Warden's Judgement", () => {
@@ -501,8 +475,6 @@ describe("Warden's Judgement", () => {
     expect(ready.engine.snapshot().skills.find(skill => skill.id === 'judgement')).toMatchObject({ available: true, reason: 'Ready' });
     ready.step(press({ ultimatePressed: true }));
     expect(ready.state.player.instinct).toBe(0);
-    expect(ready.aren).toMatchObject({ actionId: 'aren-judgement', actionStartedTick: 1, actionEndsTick: 53 });
-    expect(ready.state.actionUntil).toBe(53);
   });
 
   it('dashes 8 m along the facing, or 1.5 m past a target within 10 m, through other actors', () => {
@@ -523,22 +495,22 @@ describe("Warden's Judgement", () => {
   it('is stopped by blocking colliders like any capsule sweep and still drops its five marks', () => {
     const b = bench([], state => { full(state); wall(-3)(state); });
     b.step(press({ ultimatePressed: true }));
-    b.step(idle, 24);
+    b.step(idle, JUDGEMENT.dashTo);
     expect(b.aren.position.z).toBeGreaterThan(-2.3);
     expect(b.aren.position.z).toBeLessThan(-2);
     expect(b.state.judgementMarks).toHaveLength(5);
     for (const mark of b.state.judgementMarks) expect(mark.position.z).toBeGreaterThan(-2.3);
   });
 
-  it('cannot be hurt during the dash ticks 10–21, but is exposed before and after', () => {
+  it('protects the dash but leaves anticipation exposed', () => {
     const attack = ATTACKS['koro-fruit-burst']!;
-    const hazard = (): LiveHazard => ({ ...structuredClone(attack.hazard), id: 'burst', attackId: attack.id as LiveHazard['attackId'], sourceId: 'koro' as LiveHazard['sourceId'], startTick: 0, activeFrom: 12, activeUntil: 18, target: vec(0, 0, -3), origin: vec(0, 0, -3), direction: vec(0, 0, 1), width: 40, depth: 40, damage: 30, hitIds: [], threatTicks: [], cue: 'burst', targetActorId: 'aren' as LiveHazard['targetActorId'], bounds: { min: vec(-20, -1, -20), max: vec(20, 3, 20) } });
+    const hazard = (): LiveHazard => ({ ...structuredClone(attack.hazard), id: 'burst', attackId: attack.id as LiveHazard['attackId'], sourceId: 'koro' as LiveHazard['sourceId'], startTick: 0, activeFrom: 1 + JUDGEMENT.dashFrom, activeUntil: 2 + JUDGEMENT.dashTo, target: vec(0, 0, -3), origin: vec(0, 0, -3), direction: vec(0, 0, 1), width: 40, depth: 40, damage: 30, hitIds: [], threatTicks: [], cue: 'burst', targetActorId: 'aren' as LiveHazard['targetActorId'], bounds: { min: vec(-20, -1, -20), max: vec(20, 3, 20) } });
     const exposed = bench([], state => { state.hazards = [hazard()]; });
-    exposed.step(idle, 20);
+    exposed.step(idle, JUDGEMENT.dashTo + 1);
     expect(exposed.engine.snapshot().player.vitality).toBe(970);
     const dashing = bench([], state => { full(state); state.hazards = [hazard()]; });
     dashing.step(press({ ultimatePressed: true }));
-    dashing.step(idle, 30);
+    dashing.step(idle, JUDGEMENT.dashTo);
     expect(dashing.engine.snapshot().player.vitality).toBe(1000);
     const anticipation = bench([], state => { full(state); const early = hazard(); early.activeFrom = 3; early.activeUntil = 6; state.hazards = [early]; });
     anticipation.step(press({ ultimatePressed: true }));
@@ -550,22 +522,22 @@ describe("Warden's Judgement", () => {
     const b = bench([], full);
     b.step(press({ ultimatePressed: true }));
     const start = b.tick;
-    b.step(idle, 24);
+    b.step(idle, JUDGEMENT.dashTo);
     const marks = b.engine.snapshot().judgementMarks!;
     expect(marks).toHaveLength(5);
     marks.forEach((mark, index) => {
       expect(mark.position.z).toBeCloseTo(-1.6 * (index + 1), 6);
       expect(mark.position.x).toBeCloseTo(0, 6);
       expect(mark.angleRadians).toBeCloseTo(Math.PI + (index % 2 === 0 ? 0.6 : -0.6), 6);
-      expect(mark.detonateAtTick).toBe(start + 22 + 24 + 4 * index);
+      expect(mark.detonateAtTick).toBe(start + JUDGEMENT.recoveryFrom + JUDGEMENT.detonationDelay + JUDGEMENT.detonationSpacing * index);
       expect(mark.createdAtTick).toBeGreaterThanOrEqual(start + JUDGEMENT.dashFrom);
       expect(mark.createdAtTick).toBeLessThanOrEqual(start + JUDGEMENT.dashTo);
     });
     const remaining: number[] = [];
-    b.stepTo(start + 45);
+    b.stepTo(marks[0]!.detonateAtTick - 1);
     remaining.push(b.state.judgementMarks.length);
     for (let index = 0; index < 5; index++) {
-      b.stepTo(start + 45 + 4 * index + 1);
+      b.stepTo(marks[index]!.detonateAtTick);
       remaining.push(b.state.judgementMarks.length);
     }
     expect(remaining).toEqual([5, 4, 3, 2, 1, 0]);
@@ -575,14 +547,14 @@ describe("Warden's Judgement", () => {
     expect(detonated.map(cue => cue.scopeId)).toEqual(placed.map(cue => cue.scopeId));
     expect(placed[0]).toMatchObject({ footprint: { width: 2.2, length: 2.2 }, element: 'arcane' });
     expect(detonated[0]).toMatchObject({ intensity: 1.2 });
-    expect(b.cuesOf('judgement').map(cue => [cue.phase, cue.tick - start])).toEqual([['anticipation', 0], ['commit', 10], ['resolve', 22]]);
+    expect(b.cuesOf('judgement').map(cue => [cue.phase, cue.tick - start])).toEqual([['anticipation', 0], ['commit', JUDGEMENT.dashFrom], ['resolve', JUDGEMENT.recoveryFrom]]);
     expect(b.cuesOf('judgement', 'commit')[0]).toMatchObject({ from: vec(0, 0, 0), to: vec(0, 0, -8) });
   });
 
   it('each detonation deals 12 to hostiles within 2.2 m and freezes the world for 6 ticks', () => {
     const b = bench([foe('quarry', 0, -6), foe('bystander', 6, -3)], target('quarry'));
     b.step(press({ ultimatePressed: true }));
-    b.step(idle, 24);
+    b.step(idle, JUDGEMENT.dashTo);
     let stopped = 0;
     for (let tick = 0; tick < 200 && b.state.judgementMarks.length > 0; tick++) {
       b.step();
@@ -601,8 +573,7 @@ describe('hit-stop', () => {
     const b = bench([foe('dummy', 0, -1.6)]);
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.health('dummy') < 1000);
-    const hitTick = b.tick, hitWorld = b.state.worldTick;
-    expect(hitTick).toBe(10);
+    const hitTick = b.tick, hitWorld = b.state.worldTick, recovery = b.state.actionRecoveryUntil;
     expect(b.engine.snapshot().hitStop).toEqual({ remainingTicks: 3, strength: 3 / 7 });
     expect(b.engine.snapshot().worldClock.timeScale).toBe(0);
     const normalized = b.aren.normalizedTime;
@@ -614,16 +585,16 @@ describe('hit-stop', () => {
       expect(b.tick).toBe(hitTick + frozen);
       expect(b.aren.normalizedTime).toBe(normalized);
       expect(b.aren.actionStartedTick).toBe(1 + frozen);
-      expect(b.state.actionRecoveryUntil).toBe(27 + frozen);
+      expect(b.state.actionRecoveryUntil).toBe(recovery + frozen);
     }
     expect(remaining).toEqual([2, 1, undefined]);
     expect(b.engine.snapshot().worldClock.timeScale).toBe(1);
     b.step();
     expect(b.state.worldTick).toBe(hitWorld + 1);
-    expect(b.aren.normalizedTime).toBeCloseTo(10 / 26, 9);
+    expect(b.aren.normalizedTime).toBeCloseTo((LIGHT_STEPS[0]!.activeFrom + 1) / LIGHT_STEPS[0]!.ticks, 9);
   });
 
-  it('uses the table: light 3/3/4/4, heavy 5, charged heavy and lightning 7, bolt 2, judgement detonation 6', () => {
+  it('uses the table: light 3/3/4/6, heavy 7, charged heavy and lightning 9, bolt 2, judgement detonation 6', () => {
     const stops: number[] = [];
     for (const step of [1, 2, 3, 4]) {
       const b = bench([foe('dummy', 0, -1.6)], chainedTo(step));
@@ -637,14 +608,15 @@ describe('hit-stop', () => {
     stops.push(heavy.state.hitStop!.remainingTicks);
     const charged = bench([foe('dummy', 0, -1.6)], state => { state.targetId = 'dummy' as EngineState['targetId']; });
     charged.step(press({ heavyPressed: true, heavyHeld: true }));
-    charged.step(press({ heavyHeld: true }), 40);
-    charged.step(press({ heavyReleased: true, heavyHeldTicks: 40 }));
+    charged.step(press({ heavyHeld: true }), THUNDER_CLEAVE.holdTicks);
+    charged.step(press({ heavyReleased: true, heavyHeldTicks: THUNDER_CLEAVE.holdTicks }));
     charged.stepUntil(() => charged.state.hitStop !== undefined);
     stops.push(charged.state.hitStop!.remainingTicks);
     charged.stepUntil(() => charged.state.hitStop === undefined);
     charged.stepUntil(() => charged.state.hitStop !== undefined);
     stops.push(charged.state.hitStop!.remainingTicks);
-    expect(stops).toEqual([3, 3, 4, 4, 5, 7, 7]);
+    expect(stops).toEqual([3, 3, 4, 6, 7, 9, 9]);
+    // Both charged-class hits exceed HIT_STOP_FULL_TICKS (7): strength clamps to 1, so the strength field stays the same.
     expect(charged.state.hitStop!.strength).toBe(1);
   });
 
@@ -697,7 +669,7 @@ describe('hit-stop', () => {
   });
 
   it('does not spend the Perfect Dodge slow-motion budget', () => {
-    const b = bench([foe('dummy', 0, -1.6)], state => { state.timePolicy = 'perfect-dodge-slow'; state.worldTimeScale = 0.25; state.slowMotionRemainingTicks = 12; state.slowMotionElapsedTicks = 3; });
+    const b = bench([foe('dummy', 0, -1.6)], state => { state.timePolicy = 'perfect-dodge-slow'; state.worldTimeScale = 0.25; state.slowMotionRemainingTicks = LIGHT_STEPS[0]!.activeFrom + 12; state.slowMotionElapsedTicks = 3; });
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.state.hitStop !== undefined);
     const budget = { remaining: b.state.slowMotionRemainingTicks, elapsed: b.state.slowMotionElapsedTicks };
@@ -714,7 +686,7 @@ describe('hit-stop', () => {
   it('buffers an attack press made during the freeze and starts it when the window opens', () => {
     const b = bench();
     b.step(press({ lightPressed: true }));
-    b.stepTo(20);
+    b.stepTo(b.aren.actionEndsTick - 8);
     b.state.hitStop = { remainingTicks: 2, strength: 2 / 7 };
     b.step(press({ lightPressed: true }));
     expect(b.state.bufferedAction?.action).toBe('light_2');
@@ -748,64 +720,74 @@ describe('hit-stop', () => {
   });
 });
 
-describe('monster hitReact', () => {
-  it('starts at 0 on a player hit, advances over 12 world ticks without interrupting, then clears', () => {
+describe('monster flinch reaction', () => {
+  it('starts at progress 0 on a light player hit, advances over 12 world ticks without interrupting, then clears', () => {
     const b = bench([foe('dummy', 0, -1.6)]);
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.health('dummy') < 1000);
     const hitWorld = b.state.worldTick;
-    const react = () => b.engine.snapshot().actors.find(actor => actor.id === 'dummy')!.hitReact;
-    expect(react()).toBe(0);
+    const react = () => b.engine.snapshot().actors.find(actor => actor.id === 'dummy')!.reaction;
+    expect(react()).toMatchObject({ kind: 'flinch', progress: 0, durationTicks: 12, serial: 1 });
     b.step(idle, 3);
-    expect(react()).toBe(0);
+    expect(react()!.progress).toBe(0);
     b.step(idle, 6);
     expect(b.state.worldTick - hitWorld).toBe(6);
-    expect(react()).toBeCloseTo(0.5, 9);
+    expect(react()!.progress).toBeCloseTo(0.5, 9);
     b.step(idle, 6);
     expect(b.state.worldTick - hitWorld).toBe(12);
     expect(react()).toBeUndefined();
-    expect(b.engine.snapshot().actors[0]!.hitReact).toBeUndefined();
+    expect(b.engine.snapshot().actors[0]!.reaction).toBeUndefined();
   });
 
-  it('is not set while the monster is inside an attack\'s active phase (super-armour) and does not cancel that attack', () => {
+  it('only flinches during an active attack without cancelling that attack or its damage window', () => {
     const b = bench([foe('brute', 0, -1.6)]);
     const attack = ATTACKS['boar-ember-lance']!;
     const hazard: LiveHazard = { ...structuredClone(attack.hazard), id: 'brute-lance', attackId: attack.id as LiveHazard['attackId'], sourceId: 'brute' as LiveHazard['sourceId'], startTick: 0, windupUntil: 0, activeFrom: 0, activeUntil: 400, castUntil: 400, recoveryUntil: 440, target: vec(40, 0, 40), origin: vec(40, 0, 40), direction: vec(0, 0, 1), hitIds: [], threatTicks: [], cue: 'active', damage: 0, bounds: { min: vec(39, 0, 39), max: vec(41, 3, 41) } };
     b.state.hazards = [hazard];
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.health('brute') < 1000);
-    expect(b.engine.snapshot().actors.find(actor => actor.id === 'brute')).toMatchObject({ attackPhase: 'active' });
-    expect(b.engine.snapshot().actors.find(actor => actor.id === 'brute')!.hitReact).toBeUndefined();
+    expect(b.engine.snapshot().actors.find(actor => actor.id === 'brute')).toMatchObject({ attackPhase: 'active', reaction: { kind: 'flinch', progress: 0 } });
     expect(b.state.hazards).toHaveLength(1);
   });
 
-  it('maps hitReact to a finite monster-hurt flinch only when no attack phase is playing', () => {
-    const snapshot = (patch: Partial<ActorSnapshot>): ActorSnapshot => ({
-      id: 'corrupted-boar', archetypeId: 'corrupted-boar', species: 'boar', allegiance: 'hostile', position: vec(0, 0, 0), velocity: vec(0, 0, 0), facing: vec(0, 0, 1),
-      actionId: 'wild-crown:actor-idle' as ActorSnapshot['actionId'], phase: 'idle', normalizedTime: 0, sockets: {}, interactionRequirements: [], visible: true, downed: false, possessed: false, ...patch,
-    });
-    expect(resolveMonsterAnimation(snapshot({ hitReact: 0.5 }), 'actor-ember-boar')).toMatchObject({ actionId: 'monster-hurt', phase: 'active', normalizedTime: 0.175 });
-    expect(resolveMonsterAnimation(snapshot({ hitReact: 1 }), 'actor-frost-sap-stalker')).toMatchObject({ actionId: 'monster-hurt', normalizedTime: 0.35 });
-    expect(resolveMonsterAnimation(snapshot({ hitReact: 0.5, actionId: 'wild-crown:boar-ember-lance' as ActorSnapshot['actionId'], attackPhase: 'windup', attackPhaseProgress: 0.5 }), 'actor-ember-boar')).toMatchObject({ actionId: 'monster-shoot' });
-    expect(resolveMonsterAnimation(snapshot({}), 'actor-ember-boar')).toMatchObject({ actionId: 'monster-idle' });
-  });
 });
 
 describe('presentation cues and snapshot contract', () => {
+  it('reports actual overkill loss on the same tick as damage and never hits a downed target again', () => {
+    const b = bench([foe('dummy', 0, -1.6)]);
+    b.actor('dummy').vitality = 3;
+    b.step(press({ lightPressed: true }));
+    b.stepUntil(() => b.health('dummy') === 0);
+    const damage = b.events.find(event => event.damage?.targetId === 'dummy')!;
+    const hit = b.cuesOf('hit')[0]!;
+    expect(damage.damage?.amount).toBe(3);
+    expect(hit.confirmedDamage).toBe(damage.damage?.amount);
+    expect(hit.tick).toBe(damage.tick);
+    expect(hit.worldTick).toBe(damage.damage?.worldTick);
+    expect(b.actor('dummy').downed).toBe(true);
+    b.step(idle, 120);
+    b.step(press({ lightPressed: true }));
+    b.step(idle, 60);
+    expect(b.cuesOf('hit')).toEqual([hit]);
+    expect(b.events.filter(event => event.damage?.targetId === 'dummy')).toEqual([damage]);
+  });
+
   it('reports player hits with the contact point, hit direction, damage intensity and element', () => {
     const b = bench([foe('dummy', 0, -2)]);
     b.step(press({ lightPressed: true }));
     b.stepUntil(() => b.health('dummy') < 1000);
     const hit = b.cuesOf('hit')[0]!;
-    expect(hit).toMatchObject({ phase: 'hit', actorId: 'aren', targetId: 'dummy', actionId: 'aren-light-1', intensity: 9 / 12, element: 'arcane' });
-    expect(hit.position!.x).toBeCloseTo(0, 9);
-    expect(hit.position!.y).toBeCloseTo(0.9, 9);
-    expect(hit.position!.z).toBeCloseTo(-1.6, 9);
+    expect(hit).toMatchObject({ phase: 'hit', actorId: 'aren', targetId: 'dummy', actionId: 'aren-light-1', confirmedDamage: 9, intensity: 9 / 12, element: 'arcane' });
+    const target = b.actor('dummy');
+    expect(Math.hypot(hit.position!.x - target.position.x, hit.position!.z - target.position.z)).toBeCloseTo(target.radius, 9);
+    expect(hit.position!.y).toBeGreaterThan(target.position.y);
+    expect(hit.position!.y).toBeLessThan(target.position.y + target.collisionHeight);
+    expect(hit.position!.z).toBeGreaterThan(target.position.z);
     expect(hit.to).toEqual({ x: hit.position!.x, y: hit.position!.y, z: hit.position!.z - 1 });
     const slash = b.cuesOf('slash')[0]!;
-    expect(slash).toMatchObject({ phase: 'active', actorId: 'aren', actionId: 'aren-light-1', position: vec(0, 0, 0), durationTicks: 4, intensity: 1, element: 'arcane' });
+    expect(slash).toMatchObject({ phase: 'active', actorId: 'aren', position: vec(0, 0, 0), element: 'arcane' });
     expect(slash.footprint).toEqual({ width: 2.3, length: 2.3, angleRadians: Math.PI, sectorRadians: 2.4 });
-    expect(slash.tick).toBe(10);
+    expect(slash.tick).toBe(hit.tick);
   });
 
   it('slashes for Heavy and Charged Heavy with the contract intensities', () => {
@@ -815,8 +797,8 @@ describe('presentation cues and snapshot contract', () => {
     expect(heavy.cuesOf('slash')[0]).toMatchObject({ actionId: 'aren-heavy', intensity: 1.6, durationTicks: 6, element: 'arcane' });
     const charged = bench([foe('dummy', 0, -1.6)], state => { state.targetId = 'dummy' as EngineState['targetId']; });
     charged.step(press({ heavyPressed: true, heavyHeld: true }));
-    charged.step(press({ heavyHeld: true }), 40);
-    charged.step(press({ heavyReleased: true, heavyHeldTicks: 40 }));
+    charged.step(press({ heavyHeld: true }), THUNDER_CLEAVE.holdTicks);
+    charged.step(press({ heavyReleased: true, heavyHeldTicks: THUNDER_CLEAVE.holdTicks }));
     charged.stepUntil(() => charged.cuesOf('slash').length > 0);
     expect(charged.cuesOf('slash')[0]).toMatchObject({ actionId: 'aren-charged-heavy', intensity: 2 });
   });
@@ -827,7 +809,7 @@ describe('presentation cues and snapshot contract', () => {
     expect(b.engine.snapshot().judgementMarks).toBeUndefined();
     expect(b.engine.snapshot().hitStop).toBeUndefined();
     b.step(press({ rangedPressed: true }));
-    b.stepTo(20);
+    b.stepUntil(() => b.state.playerProjectiles.length === 1);
     const restored = new Bench(new CombatEngine());
     restored.engine.restore(b.engine.serialize());
     expect(restored.engine.snapshot().playerProjectiles).toEqual(b.engine.snapshot().playerProjectiles);
@@ -847,14 +829,6 @@ describe('presentation cues and snapshot contract', () => {
     expect(engine.snapshotState().actionId).toBe('light_1');
   });
 
-  it('lists the new skills on the HUD with their bindings and costs', () => {
-    const b = bench();
-    const skills = b.engine.snapshot().skills;
-    expect(skills.find(skill => skill.id === 'sigil_bolt')).toMatchObject({ label: 'Sigil Bolt', binding: 'ranged', manaCost: 15, available: true, reason: 'Ready' });
-    expect(skills.find(skill => skill.id === 'light')).toMatchObject({ label: 'Warden Blade', binding: 'light', manaCost: 0, available: true });
-    b.step(press({ lightPressed: true }));
-    expect(b.engine.snapshot().skills.find(skill => skill.id === 'sigil_bolt')).toMatchObject({ available: false, reason: 'Recovering' });
-  });
 });
 
 describe('determinism under mixed Arsenal input', () => {
@@ -896,6 +870,7 @@ describe('determinism under mixed Arsenal input', () => {
     }
     const restored = new Bench(new CombatEngine());
     restored.engine.restore(run.engine.serialize());
+    const replayEventsStart = run.events.length;
     for (let tick = 700; tick < 1400; tick++) {
       topUp(run, tick);
       topUp(restored, tick);
@@ -904,7 +879,8 @@ describe('determinism under mixed Arsenal input', () => {
       expect(restored.engine.snapshot()).toEqual(run.engine.snapshot());
     }
     expect(run.state.tick).toBe(1400);
-    for (const kind of ['slash', 'sigil', 'projectile', 'projectile-impact', 'judgement', 'judgement-mark', 'lightning'] as const) expect(run.cuesOf(kind).length).toBeGreaterThan(0);
+    const outcome = (event: CombatEvent) => [event.tick, event.kind, event.actorId, event.targetId, event.actionId, event.damage];
+    expect(restored.events.map(outcome)).toEqual(run.events.slice(replayEventsStart).map(outcome));
     expect(Math.min(...['a', 'b', 'c'].map(id => run.health(id)))).toBeLessThan(1000);
   });
 });

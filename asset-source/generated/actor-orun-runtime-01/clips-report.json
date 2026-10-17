@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-orun",
+  "method": "heading-aligned world-rest Warden retarget and authored lateral cartwheel",
+  "input": {
+    "path": "asset-source/generated/actor-orun-runtime-01/actor-orun.glb",
+    "sha256": "13705313fa5eed4ffdfc2a216c05573a44d8b85851e4f8203e1b01545bc365c6"
+  },
+  "donor": {
+    "path": "asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+    "sha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
+    "yawAlignmentRadians": 1.632666
+  },
+  "output": {
+    "path": "asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+    "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+    "bytes": 6745644
+  },
+  "castSocketBone": "mixamorig:Head",
+  "suggestedCoordinateTransformForward": {
+    "x": 0.9980866950683684,
+    "y": 0,
+    "z": -0.06183000183973729
+  },
+  "rig": {
+    "joints": 23,
+    "headTipJoint": "mixamorig:Head"
+  },
+  "floorUnits": -2.573796570596122e-7,
+  "slots": {
+    "monster-idle": {
+      "clip": "monster-idle",
+      "source": "idle.001",
+      "seconds": 3,
+      "frames": 91,
+      "loop": true
+    },
+    "monster-walk": {
+      "clip": "monster-walk",
+      "source": "walk.001",
+      "seconds": 1.2,
+      "frames": 37,
+      "loop": true,
+      "plantingSpeedUnits": 1.098185509613112
+    },
+    "monster-run": {
+      "clip": "monster-run",
+      "source": "run.001",
+      "seconds": 0.6,
+      "frames": 19,
+      "loop": true,
+      "plantingSpeedUnits": 4.288191262531944
+    },
+    "monster-slash": {
+      "clip": "monster-slash",
+      "source": "aren-light-1",
+      "seconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "contactNormalizedTime": 0.45
+    },
+    "monster-shoot": {
+      "clip": "monster-shoot",
+      "source": "aren-charged-heavy",
+      "seconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "contactNormalizedTime": 0.5
+    },
+    "monster-jump": {
+      "clip": "monster-jump",
+      "source": "One long jump.001",
+      "seconds": 1.6,
+      "frames": 49,
+      "loop": false
+    },
+    "monster-hurt": {
+      "clip": "monster-hurt",
+      "source": "aren-stagger",
+      "seconds": 0.7,
+      "frames": 22,
+      "loop": false
+    },
+    "monster-turn": {
+      "clip": "monster-turn",
+      "source": "walk.001",
+      "seconds": 1,
+      "frames": 31,
+      "loop": true
+    },
+    "monster-dive": {
+      "clip": "monster-dive",
+      "source": "dive.001",
+      "seconds": 1,
+      "frames": 31,
+      "loop": false
+    },
+    "monster-roar": {
+      "clip": "monster-roar",
+      "source": "aren-cleanse",
+      "seconds": 2,
+      "frames": 61,
+      "loop": false
+    },
+    "monster-death": {
+      "clip": "monster-death",
+      "source": "defeat_03.001",
+      "seconds": 1.6,
+      "frames": 49,
+      "loop": false
+    },
+    "monster-spawn": {
+      "clip": "monster-spawn",
+      "source": "defeat_03.001",
+      "seconds": 1.4,
+      "frames": 43,
+      "loop": false
+    },
+    "orun-root-tether": {
+      "clip": "orun-root-tether",
+      "source": "aren-root-tether",
+      "seconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "contactNormalizedTime": 0.5
+    },
+    "orun-back-handspring": {
+      "clip": "orun-back-handspring",
+      "source": "aren-back-handspring",
+      "seconds": 1,
+      "frames": 31,
+      "loop": false
+    },
+    "orun-cartwheel-counter": {
+      "clip": "orun-cartwheel-counter",
+      "source": "authored lateral hand-supported rotation",
+      "seconds": 1.6,
+      "frames": 49,
+      "loop": false
+    }
+  }
+}

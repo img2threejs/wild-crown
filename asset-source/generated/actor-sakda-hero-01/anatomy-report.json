@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+  "outputHash": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5",
   "scale": 1.84,
   "kickLimits": {
     "raisedFrom": "JOINT_LIMITS",
@@ -917,6 +917,267 @@
         "p999": 1.46151,
         "max": 2.59107,
         "worstBone": "LeftArm"
+      }
+    },
+    "aren-knockdown": {
+      "origin": "mixamo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 135.4,
+      "peakTwist": 47.2,
+      "corrections": {
+        "mixamorig:Neck": 13.76,
+        "mixamorig:LeftLeg": 19.08,
+        "mixamorig:RightUpLeg": 3.27,
+        "mixamorig:RightLeg": 1.15
+      },
+      "motionQuality": {
+        "sampledFrames": 91,
+        "lowestSole": -0.001984,
+        "bothWristsAboveHead": 0.045226,
+        "minimumWristAboveJaw": -0.245254,
+        "minimumGroundedStanceWidthMetres": 0.345044,
+        "seamRotationRadians": 1.524046,
+        "seamPositionMetres": 0.806952,
+        "maximumJointStepDegreesPerTick": 38.026962
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick30": 0.209,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.37,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 4,
+          "maxCorrectionDegrees": 19.08
+        },
+        "floor": {
+          "liftMinMetres": -0.0125,
+          "liftMaxMetres": 0.1286
+        },
+        "groundContactTick": 16,
+        "pelvisMetresAtContactTick": 0.243,
+        "pelvisMetresMaxFromContactOn": 0.293,
+        "pelvisMetresInLie": 0.21,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": 0.572,
+          "side": 0.17
+        }
+      },
+      "deformation": {
+        "p99": 0.75658,
+        "p999": 1.21509,
+        "max": 2.63573,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-knockdown-forward": {
+      "origin": "mixamo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 106.9,
+      "peakTwist": 88.8,
+      "corrections": {
+        "mixamorig:Neck": 0,
+        "mixamorig:LeftLeg": 3.06
+      },
+      "motionQuality": {
+        "sampledFrames": 91,
+        "lowestSole": -0.002009,
+        "bothWristsAboveHead": 0.114837,
+        "minimumWristAboveJaw": -0.308846,
+        "minimumGroundedStanceWidthMetres": 0.449025,
+        "seamRotationRadians": 1.537525,
+        "seamPositionMetres": 0.870835,
+        "maximumJointStepDegreesPerTick": 53.753127
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick30": 0.218,
+        "lyingFacing": -0.97,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.37,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 1,
+          "maxCorrectionDegrees": 3.06
+        },
+        "floor": {
+          "liftMinMetres": -0.0514,
+          "liftMaxMetres": 0.0529
+        },
+        "groundContactTick": 27,
+        "pelvisMetresAtContactTick": 0.235,
+        "pelvisMetresMaxFromContactOn": 0.266,
+        "pelvisMetresInLie": 0.144,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": -0.574,
+          "side": -0.026
+        }
+      },
+      "deformation": {
+        "p99": 0.91953,
+        "p999": 1.4524,
+        "max": 2.9447,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-getup": {
+      "origin": "mixamo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 148.5,
+      "peakTwist": 135.4,
+      "corrections": {
+        "mixamorig:Spine": 20.77,
+        "mixamorig:LeftArm": 2.39,
+        "mixamorig:LeftHand": 10.53,
+        "mixamorig:RightArm": 1.95,
+        "mixamorig:RightHand": 7.54,
+        "mixamorig:LeftUpLeg": 12.97,
+        "mixamorig:LeftLeg": 4.21,
+        "mixamorig:LeftFoot": 0.06,
+        "mixamorig:RightUpLeg": 0.11,
+        "mixamorig:RightLeg": 8.62
+      },
+      "motionQuality": {
+        "sampledFrames": 67,
+        "lowestSole": -0.00136,
+        "bothWristsAboveHead": 0.130004,
+        "minimumWristAboveJaw": -0.268849,
+        "minimumGroundedStanceWidthMetres": 0.400534,
+        "seamRotationRadians": 2.01574,
+        "seamPositionMetres": 0.907785,
+        "maximumJointStepDegreesPerTick": 33.632187
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick30": 0.633,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.37,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.597,
+        "jointGuard": {
+          "jointsCorrected": 10,
+          "maxCorrectionDegrees": 20.77
+        },
+        "floor": {
+          "liftMinMetres": -0.0183,
+          "liftMaxMetres": 0.1365
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 31.738,
+        "sourceTimeScale": [
+          {
+            "take": "kip-up",
+            "fromSeconds": 0.27,
+            "toSeconds": 1.8,
+            "fastestKeyedStretch": 1.8
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 0.96707,
+        "p999": 1.5645,
+        "max": 2.71098,
+        "worstBone": "LeftArm"
+      }
+    },
+    "aren-getup-forward": {
+      "origin": "mixamo",
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 116.2,
+      "peakTwist": 71.4,
+      "corrections": {
+        "mixamorig:Spine": 1.8
+      },
+      "motionQuality": {
+        "sampledFrames": 67,
+        "lowestSole": -0.001993,
+        "bothWristsAboveHead": -0.096789,
+        "minimumWristAboveJaw": -0.30686,
+        "minimumGroundedStanceWidthMetres": 0.327053,
+        "seamRotationRadians": 1.73724,
+        "seamPositionMetres": 0.917383,
+        "maximumJointStepDegreesPerTick": 67.270194
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick30": 0.65,
+        "lyingFacing": -0.97,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.37,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.575,
+        "jointGuard": {
+          "jointsCorrected": 1,
+          "maxCorrectionDegrees": 1.8
+        },
+        "floor": {
+          "liftMinMetres": -0.028,
+          "liftMaxMetres": 0.1159
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 9.298,
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 2.35,
+            "toSeconds": 3.2,
+            "fastestKeyedStretch": 2.25
+          },
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 4.2,
+            "toSeconds": 5.6,
+            "fastestKeyedStretch": 2.77
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 0.73846,
+        "p999": 1.33,
+        "max": 1.99476,
+        "worstBone": "LeftUpLeg"
       }
     }
   }

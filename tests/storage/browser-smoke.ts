@@ -2,6 +2,7 @@ import { createCheckpoint, createNewRun, REGION_IDS, recordLeaderDominion } from
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
 import { DEFAULT_GAME_SETTINGS, DEFAULT_GAMEPAD_BINDINGS, DEFAULT_KEYBOARD_BINDINGS } from "../../src/game/contracts.js";
 import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope } from "../../src/game/storage/SaveRepository.js";
+import { autosaveSlotId } from "../../src/game/campaign/session.js";
 import { REGIONS } from "../../src/content/campaign.js";
 
 // Parent-only native browser exercise. Never opens or writes the production database.
@@ -24,6 +25,20 @@ const factory = new Proxy(nativeFactory, {
 });
 const repository = new SaveRepository(factory);
 const otherRepository = new SaveRepository(factory);
+const candidateDatabaseName = `${databaseName}-candidate`;
+const requestedNames: string[] = [];
+const candidateFactory = new Proxy(nativeFactory, {
+  get(target, property) {
+    if (property === "open") return (name: string, version: number) => {
+      requestedNames.push(name);
+      const request = target.open(candidateDatabaseName, version);
+      request.addEventListener("success", () => handles.add(request.result));
+      return request;
+    };
+    const value: unknown = Reflect.get(target, property, target);
+    return typeof value === "function" ? value.bind(target) : value;
+  },
+});
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
@@ -612,6 +627,110 @@ async function run(): Promise<void> {
       equal((await repository.loadSlot("historic-metadata-choice")).progress!.eventLog.at(-1), historicChoice, "valid optional metadata was rewritten");
     });
 
+    const nativeRows = async (name: string): Promise<{ slots: unknown[]; runs: unknown[] }> => {
+      const database = await request(nativeFactory.open(name, 2));
+      handles.add(database);
+      try {
+        if (!database.objectStoreNames.contains("slots") || !database.objectStoreNames.contains("runs")) return { slots: [], runs: [] };
+        const transaction = database.transaction(["slots", "runs"], "readonly");
+        const completed = done(transaction);
+        const [slots, runs] = await Promise.all([request(transaction.objectStore("slots").getAll()), request(transaction.objectStore("runs").getAll())]);
+        await completed;
+        return { slots, runs };
+      } finally { database.close(); }
+    };
+
+    await check("native candidate-chapter scope: distinct database, identical run ids isolated, autosave survives close/reopen", async () => {
+      const candidateRepository = () => new SaveRepository(candidateFactory, { scope: "candidate-chapters" });
+      const sky = { type: "fragment", eventId: "scope-sky", idempotencyKey: "scope:sky", fragmentId: "heartroot-sky", sourceId: "vara" } as const;
+      const productionDirector = new CampaignDirector({ saves: repository, runId: "scope-shared-run" });
+      await productionDirector.processEvent(sky);
+      const productionRows = await nativeRows(databaseName);
+      const candidateDirector = new CampaignDirector({ saves: candidateRepository(), runId: "scope-shared-run" });
+      candidateDirector.startChapterRun({ runId: "scope-shared-run", heroId: "sakda", saveScope: "candidate-chapters" });
+      await candidateDirector.autosave();
+      await candidateDirector.processEvent({ type: "encounter-resolved", eventId: "scope-dominion", idempotencyKey: "scope:dominion", encounterId: "encounter-koro", resolution: "dominated", actorIds: ["koro"] });
+      assert(requestedNames.includes("wild-crown-candidate-chapter-saves"), "candidate repository did not open its own database name");
+      equal(await nativeRows(databaseName), productionRows, "candidate writes touched the production database");
+      const candidateStored = await nativeRows(candidateDatabaseName);
+      assert(candidateStored.slots.length === 1 && candidateStored.runs.length === 1, "candidate database did not receive exactly its autosave slot and ledger");
+      const reopened = candidateRepository();
+      const slots = await reopened.listSlots();
+      assert(slots.length === 1 && slots[0]!.autosave && slots[0]!.scope === "candidate-chapters" && slots[0]!.heroId === "sakda", "candidate slot summary is wrong");
+      const restarted = new CampaignDirector({ saves: reopened, runId: "scope-title" });
+      const loaded = await restarted.load(slots[0]!.slotId);
+      assert(loaded.session.heroId === "sakda" && loaded.session.saveScope === "candidate-chapters", "candidate session metadata did not survive reopen");
+      equal(loaded.campaign.dominionHistory.map((event) => event.leaderId), ["koro"], "candidate Dominion ledger lost on reopen");
+      const exported = await repository.exportSlot("adopt-a");
+      const before = await nativeRows(candidateDatabaseName);
+      await rejected(reopened.importSave(exported), "scope-mismatch");
+      await rejected(reopened.commitImported("cross-scope", "Cross scope", JSON.parse(exported) as GameSaveEnvelope, 0, "greenwake"), "scope-mismatch");
+      equal(await nativeRows(candidateDatabaseName), before, "a cross-scope import mutated the candidate database");
+      reopened.close();
+    });
+
+    await check("native schema-1 slot migrates on read, keeps its raw original and is rewritten as schema 2 only by an explicit save", async () => {
+      const legacyRun = "native-schema-1";
+      const { companions: _companions, ...legacyWorld } = structuredClone(createNewRun(legacyRun).world);
+      void _companions;
+      const greenwakeRegion = REGIONS.find((region) => region.id === "greenwake")!;
+      const node = greenwakeRegion.navigation.nodes[0]!;
+      const legacySlot = {
+        slotId: "native-v1", label: "Legacy", runId: legacyRun, kind: "campaign", updatedAt: 5, chapter: 0, regionId: "greenwake",
+        envelope: {
+          format: "wild-crown-save", schemaVersion: 1, kind: "campaign", runId: legacyRun,
+          campaign: { schemaVersion: 1, runId: legacyRun, world: legacyWorld, dominionHistory: [{ sequence: 1, leaderId: "koro" }] },
+          checkpoint: { kind: "campaign-checkpoint", schemaVersion: 1, runId: legacyRun, world: legacyWorld },
+          progress: {
+            chapter: 0, regionId: "greenwake", activeQuestIds: ["prologue"], completedQuestIds: [], completedObjectiveIds: [], trackedObjectiveId: null,
+            party: { scout: "vara" }, choices: {}, worldFacts: { chapter: 0 }, ending: null, eventLog: [], eventKeys: [], revision: 1,
+            safeSpawn: { regionId: "greenwake", position: { ...node.position }, routeId: node.id, cameraAnchorId: greenwakeRegion.cameraAnchors[0]!.id },
+          },
+          eventKeys: [], savedAt: 1,
+        },
+      };
+      const database = await rawDatabase();
+      const transaction = database.transaction("slots", "readwrite");
+      const completed = done(transaction);
+      transaction.objectStore("slots").put(legacySlot);
+      await completed;
+      database.close();
+      const before = await rawRecords();
+      const envelope = await repository.loadSlot("native-v1");
+      assert(envelope.schemaVersion === 2 && envelope.scope === "production", "schema-1 slot was not upgraded in memory");
+      assert(envelope.progress!.session.heroId === "aren" && envelope.progress!.session.resume.layoutRevision === 0, "legacy session defaults are wrong");
+      equal(await rawRecords(), before, "reading a schema-1 slot rewrote the stored record");
+      assert((JSON.parse(await repository.exportRawSlot("native-v1")) as { envelope: { schemaVersion: number } }).envelope.schemaVersion === 1, "raw schema-1 recovery export changed");
+      const director = new CampaignDirector({ saves: repository, runId: "native-v1-title" });
+      await director.load("native-v1");
+      await director.save("native-v1", "Rewritten as schema 2");
+      assert((JSON.parse(await repository.exportRawSlot("native-v1")) as { envelope: { schemaVersion: number } }).envelope.schemaVersion === 2, "explicit save did not write schema 2");
+    });
+
+    await check("native autosave: slot+ledger commit atomically, abort leaves both untouched, retry commits once", async () => {
+      const director = new CampaignDirector({ saves: repository, runId: "native-atomic-run" });
+      await director.processEvent({ type: "fragment", eventId: "atomic-sky", idempotencyKey: "atomic:sky", fragmentId: "heartroot-sky", sourceId: "vara" });
+      const before = await rawRecords();
+      const published = director.snapshot();
+      const event = { type: "encounter-resolved", eventId: "atomic-dominion", idempotencyKey: "atomic:dominion", encounterId: "encounter-koro", resolution: "dominated", actorIds: ["koro"] } as const;
+      IDBObjectStore.prototype.put = function (...args: Parameters<IDBObjectStore["put"]>) {
+        if (this.transaction.db.name === databaseName && this.name === "runs") throw new DOMException("synthetic fault after the slot write", "QuotaExceededError");
+        return quotaPut.apply(this, args);
+      };
+      try { await rejected(director.processEvent(event), "quota"); }
+      finally { IDBObjectStore.prototype.put = quotaPut; }
+      equal(await rawRecords(), before, "a failed autosave partially committed the slot or ledger");
+      equal(director.snapshot(), published, "a failed autosave published state");
+      await director.processEvent(event);
+      const committed = await rawRecords();
+      await director.processEvent(event);
+      equal(await rawRecords(), committed, "a duplicate of a committed event wrote again");
+      repository.close();
+      const restarted = new CampaignDirector({ saves: repository, runId: "native-atomic-title" });
+      const loaded = await restarted.load(autosaveSlotId("native-atomic-run"));
+      equal(loaded.campaign.dominionHistory.map((entry) => entry.leaderId), ["koro"], "the committed event did not survive a reopen");
+    });
+
     await check("versionchange close, native open failure and successful reconnect", async () => {
       otherRepository.close();
       const newer = await rawDatabase(3);
@@ -630,7 +749,11 @@ async function run(): Promise<void> {
     repository.close();
     otherRepository.close();
     for (const handle of handles) handle.close();
-    try { await request(nativeFactory.deleteDatabase(databaseName)); cleanup = true; }
+    try {
+      await request(nativeFactory.deleteDatabase(databaseName));
+      await request(nativeFactory.deleteDatabase(candidateDatabaseName));
+      cleanup = true;
+    }
     catch (error) { failure ??= `Cleanup failed: ${String(error)}`; }
     const report = { databaseName, startedAt, endedAt: new Date().toISOString(), checks, cleanup,
       result: failure === null ? "pass" : "fail", failure,

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-council-envoy",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "a302656e-4c78-4489-8ff8-757d4ff503f0",
+    "decimate": "99493dc2-e9ff-4069-8349-3dd9fd820375",
+    "rig": "ffb63eca-c530-421b-811e-d7045cbfa175",
+    "animA": "0d582108-4b2e-4e54-a8cc-d9e3aeaad140"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-council-envoy-anim-a-01/tripo-out/actor-council-envoy-anim-a-01-0d582108/model.glb",
+      "sha256": "1a67f4f3e1c3a7fd1b74efd9f448de7e4dc51ba0d48e781fb2be98b724bb9df3"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy.glb",
+    "sha256": "b88370b92f4dcaf8ffc93c8083faf301a2cc65d0f7afe76a53340816bda9f412",
+    "bytes": 5728488,
+    "vertices": 23203,
+    "triangles": 22512,
+    "boundsMin": [
+      -0.19277,
+      0,
+      -0.43638
+    ],
+    "boundsMax": [
+      0.19277,
+      0.98018,
+      0.43638
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 20
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 2611344,
+      "toBytes": 1073538
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4743639,
+      "toBytes": 1606959
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16532200,
+      "toBytes": 1663739
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

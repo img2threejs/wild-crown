@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-asha",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "8df75891-1004-4ece-96ed-267ef114f5e2",
+    "decimate": "94d95b07-0f28-47ab-9b56-8654f97cec0a",
+    "rig": "25e44787-7323-42e9-9244-8f50476bd92e",
+    "animA": "dfea888a-7b24-4ea9-bb28-60b954c9aa9c"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-asha-anim-a-01/tripo-out/actor-asha-anim-a-01-dfea888a/model.glb",
+      "sha256": "c8685c1755cd08ebbd6199f62dab0b2c14aa0dc5b5cfe663e79e52c21ee22bb7"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-asha-runtime-01/actor-asha.glb",
+    "sha256": "c7047b4bd499749ba51cab2393f33a8cc76fb05c453b2ab7c197afe42f3e535e",
+    "bytes": 6627272,
+    "vertices": 24251,
+    "triangles": 22750,
+    "boundsMin": [
+      -0.4906,
+      0,
+      -0.13537
+    ],
+    "boundsMax": [
+      0.4906,
+      0.57797,
+      0.13537
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 13
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3207333,
+      "toBytes": 1322363
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 7408179,
+      "toBytes": 2096058
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16286687,
+      "toBytes": 1777438
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, makeActor, type CombatInput, type EngineState, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { vec } from '../../src/game/combat/geometry.js';
-import { SIGIL } from '../../src/game/combat/PlayerSkills.js';
+import { LIGHT_STEPS, SIGIL, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
 import { HEARTROOT } from '../../src/game/combat/HeartrootSkills.js';
 import { HERO_COMBAT } from '../../src/game/combat/HeroProfiles.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
@@ -62,7 +62,7 @@ describe('Heartroot spell behavior', () => {
     const b = bench(), attack = ATTACKS['koro-fruit-burst']!;
     const hazard: LiveHazard = {
       ...structuredClone(attack.hazard), id: 'burst', attackId: attack.id,
-      sourceId: 'koro', targetActorId: 'aren', startTick: 0, activeFrom: 3, activeUntil: 200,
+      sourceId: 'koro', targetActorId: 'aren', startTick: 0, activeFrom: 3, activeUntil: HEARTROOT.bloomTicks + 30,
       target: vec(0, 0, 0), origin: vec(0, 0, 0), direction: vec(0, 0, 1),
       width: 40, depth: 40, damage: 30, hitIds: [], threatTicks: [], cue: 'burst',
       bounds: { min: vec(-20, -1, -20), max: vec(20, 3, 20) },
@@ -79,7 +79,7 @@ describe('Heartroot spell behavior', () => {
   it('fires homing thorns at range without applying a melee swing', () => {
     const b = bench([[0, 7]]);
     b.step({ lightPressed: true });
-    b.step({}, 9);
+    b.step({}, LIGHT_STEPS[0]!.activeFrom);
     expect(b.health(0)).toBe(1000);
     expect(b.state.playerProjectiles[0]?.kind).toBe('thorn-bolt');
     b.step({}, 70);
@@ -111,7 +111,7 @@ describe('Heartroot spell behavior', () => {
     const b = bench();
     b.step({ rangedPressed: true, rangedHeld: true });
     b.step({ rangedHeld: true }, SIGIL.barrageHoldTicks);
-    b.step({ rangedReleased: true }); b.step({}, 65);
+    b.step({ rangedReleased: true }); b.step({}, HEARTROOT.stormTicks);
     expect(b.cues.filter(cue => cue.kind === 'projectile' && cue.actionId === 'storm-seed')).toHaveLength(6);
     expect(b.state.player.mana).toBe(100 - SIGIL.barrageMana);
   });
@@ -130,8 +130,8 @@ describe('Heartroot spell behavior', () => {
     expect(lane.health(0)).toBe(1000 - HEARTROOT.spikeDamage);
     expect(lane.health(1)).toBe(1000);
     const disk = bench([[0, 7], [2, 7], [5, 7]]);
-    disk.step({ heavyPressed: true, heavyHeld: true }); disk.step({ heavyHeld: true }, 50);
-    disk.step({ heavyReleased: true, heavyHeldTicks: 50 }); disk.step({}, 90);
+    disk.step({ heavyPressed: true, heavyHeld: true }); disk.step({ heavyHeld: true }, THUNDER_CLEAVE.holdTicks);
+    disk.step({ heavyReleased: true, heavyHeldTicks: THUNDER_CLEAVE.holdTicks }); disk.step({}, HEARTROOT.eruptionTicks);
     expect(disk.health(0)).toBe(1000 - HEARTROOT.eruptionDamage);
     expect(disk.health(1)).toBe(1000 - HEARTROOT.eruptionDamage);
     expect(disk.health(2)).toBe(1000);

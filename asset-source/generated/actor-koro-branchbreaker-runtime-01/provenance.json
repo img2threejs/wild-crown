@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-koro-branchbreaker",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "45a79510-d0f7-4986-8052-2eb73bab3281",
+    "decimate": "ce619f7c-12e4-4d0d-aa78-8651966efdb3",
+    "rig": "15e53325-7461-4f54-b742-b62955e793cc",
+    "animA": "8aae186f-8eea-451e-bac2-176cad10b9fe"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-koro-branchbreaker-anim-a-01/tripo-out/actor-koro-branchbreaker-anim-a-8aae186f/model.glb",
+      "sha256": "58d63dab19415f55d4e001d21d52266d45a286ef4dc6e88863430db71eb7e9c5"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker.glb",
+    "sha256": "7384e3d7844cfdf9532ef0866394177bc1eaad90d89866321d6942be6accaca8",
+    "bytes": 7682836,
+    "vertices": 33479,
+    "triangles": 27540,
+    "boundsMin": [
+      -0.21024,
+      0,
+      -0.40416
+    ],
+    "boundsMax": [
+      0.21024,
+      0.98113,
+      0.40416
+    ]
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 123
+    },
+    {
+      "name": "pitch_baseball",
+      "durationSeconds": 3.8,
+      "channels": 123
+    },
+    {
+      "name": "run",
+      "durationSeconds": 1.2666666666666666,
+      "channels": 123
+    },
+    {
+      "name": "slash",
+      "durationSeconds": 6.6,
+      "channels": 123
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 123
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3359542,
+      "toBytes": 1321834
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5054417,
+      "toBytes": 1810661
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19652379,
+      "toBytes": 2153431
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

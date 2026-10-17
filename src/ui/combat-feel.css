@@ -1,0 +1,55 @@
+/*
+ * Combat-feel overrides for combat-feedback UI that lives on top of the gameplay scene:
+ *   - damage-number size / colour tiers keyed off the vitality lost (small / normal / heavy / crit-gold)
+ *   - the pop-in scale keyframe each label runs once at spawn (animation property is set on the element)
+ *   - the boss-intro title card (Barlow Condensed uppercase name, Alegreya italic epithet, route-colour rule line)
+ *   - reduced-motion static fallbacks for both
+ * These are presentation-only overrides; they do not move simulation state.
+ */
+
+.wc-damage-number {
+  /* Per-frame defaults (color, font size, weight) live in game-ui.css; this file only overrides them per tier. */
+}
+
+/* Tier overrides: small = quiet chip, heavy = larger + warm, crit-gold = largest + warm gold. */
+.wc-damage-number--small {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: rgba(239, 232, 214, 0.62);
+  text-shadow: 0 1px 2px rgba(4, 6, 3, .65);
+}
+.wc-damage-number--heavy {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #f3c98a;
+  text-shadow: 0 0 6px rgba(243, 201, 138, .55), 0 1px 3px rgba(4, 6, 3, .7);
+}
+.wc-damage-number--crit {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffd87a;
+  text-shadow: 0 0 10px rgba(255, 216, 122, .7), 0 0 24px rgba(255, 184, 76, .35), 0 2px 4px rgba(4, 6, 3, .75);
+}
+
+/* The pop-in keyframe runs once per spawn: 0.55 → 1.05 → 1.0 over 240 ms. It animates ONLY the individual `scale`
+ * property: DamageNumbers positions the label with an inline `transform` and fades it with inline `opacity` every
+ * frame, and an animation on either of those (fill: both) would override them — the label would sit at the overlay's
+ * top-left corner and never fade. `scale` composes with `transform` instead of replacing it. */
+@keyframes wc-damage-pop-in {
+  0%   { scale: 0.55; }
+  60%  { scale: 1.05; }
+  100% { scale: 1; }
+}
+
+/* Reduced motion: no pop-in, no extra rise. The damage number itself already loses the rise in DamageNumbers.update
+ * when reducedMotion is on; the keyframe would still play once unless we cancel it here. */
+.wc-reduced-motion .wc-damage-number,
+.wc-reduced-motion .wc-damage-number--small,
+.wc-reduced-motion .wc-damage-number--heavy,
+.wc-reduced-motion .wc-damage-number--crit {
+  animation: none !important;
+  text-shadow: 0 1px 3px rgba(4, 6, 3, .7);
+}

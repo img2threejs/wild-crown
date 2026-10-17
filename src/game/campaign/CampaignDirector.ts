@@ -1,34 +1,47 @@
 import {
+  awardCompanionBond,
   createCheckpoint,
   createNewRun,
   createShowcaseReplay,
   collectFragment,
+  FRAGMENT_IDS,
   evaluateEnding,
   importCheckpoint,
   recordLeaderDominion,
+  recruitCompanion,
   REGION_IDS,
   REGIONAL_OBLIGATION_IDS,
+  RESPECTFUL_PACT_BOND,
+  setCompanionStoryFlag,
   setCrownCouncilRepresentation,
   setPackLeader,
   type CampaignState,
   type CheckpointSnapshot,
   type FactionId,
-  type FragmentId,
   type LeaderId,
   type RegionId as CanonRegionId,
   type RestorationState,
 } from "../../../packages/campaign/src/index.js";
 import type {
   CampaignDirectorAPI,
-  ActorId,
   CampaignProgressCheckpoint,
   CampaignSafeCheckpoint,
   CampaignSafeSpawn,
   CampaignSnapshot,
+  ChapterCheckpointDefinition,
+  ChapterResumeState,
+  ChapterRuntimeDefinition,
+  ChapterSegmentId,
+  ChapterSessionMetadata,
+  ChoiceDefinition,
   CompanionId,
+  CompanionRelationshipRule,
+  DialogueBeat,
+  LayoutRevisionMigration,
   ObjectiveId,
+  QuestId,
   RegionId,
-  RegionDefinition,
+  SaveScope,
   WorldEvent,
 } from "../contracts.js";
 import {
@@ -44,12 +57,29 @@ import {
   emptyWorldFacts,
   restorationStateFromFacts,
 } from "../../content/campaign.js";
-import { CHAPTERS } from "../../content/story.js";
+import { CHAPTERS, STORY_DIALOGUE } from "../../content/story.js";
+import { isCueBeatAuthored, NARRATIVE_CUES } from "../../content/narrative-cues.js";
+import { HUB_REGION_IDS, HUB_UPGRADES } from "../../content/hub.js";
+import { DEFAULT_HERO_ID, isHeroId, type HeroId } from "../heroes.js";
+import { DEFAULT_HERO_COMPANIONS, isCompanionId, isCompanionParty } from "../companions/CompanionLoadout.js";
 import {
   SaveRepository,
   SaveRepositoryError,
   type CampaignProgressRecord,
 } from "../storage/SaveRepository.js";
+import { PACT_OPTION_IDS, pactForChoice, pendingPactChoice, RECRUITMENT_RULES } from "./authority.js";
+import { eventMatches } from "./events.js";
+import { hasSafeWalkSurface, liesOnSurface, resolveSafeNode, samePosition } from "./safeSpawn.js";
+import {
+  arrivalCheckpointId,
+  createResumeState,
+  createSessionMetadata,
+  deriveSegmentId,
+  findSegmentDefinition,
+  isChapterSessionMetadata,
+  migrateSafeCheckpoint,
+  sessionContentProblem,
+} from "./session.js";
 
 import { BOSS_ENCOUNTERS, WILDLIFE_ENCOUNTERS } from "../combat/content.js";
 
@@ -58,6 +88,16 @@ const ENCOUNTER_DEFINITIONS = [...Object.values(BOSS_ENCOUNTERS), ...Object.valu
 export interface CampaignDirectorOptions {
   saves?: SaveRepository;
   runId?: string;
+  /** Persistence scope; must equal `saves.scope` when a repository is supplied. Defaults to the repository's scope, else production. */
+  saveScope?: SaveScope;
+  /** Authored chapter runtime definitions (checkpoints, encounter entries, exit requirements); defaults to the repository's. */
+  chapters?: readonly ChapterRuntimeDefinition[];
+  /** Explicit old-layout → new-layout safe-spawn mappings; defaults to the repository's. */
+  layoutMigrations?: readonly LayoutRevisionMigration[];
+  /** Authored one-shot Bond/recruitment awards keyed to accepted events. */
+  relationshipRules?: readonly CompanionRelationshipRule[];
+  /** Choice presentation catalog; defaults to the authored campaign choices. Pact option ids are fixed by the Director. */
+  choices?: Readonly<Record<string, readonly ChoiceDefinition[]>>;
 }
 
 /** An authored choice is permanently invalid, not a failed durable write to retry. */
@@ -101,6 +141,42 @@ const LEADER_IDS: readonly LeaderId[] = [
   "solkar",
 ];
 
+type StoryResume = Pick<
+  ChapterResumeState,
+  "checkpointId" | "activeEncounterId" | "requiredBeatQueue" | "dialogue" | "completedBeatIds" | "pendingChoiceId"
+>;
+const emptyStory = (): StoryResume => ({
+  checkpointId: null,
+  activeEncounterId: null,
+  requiredBeatQueue: [],
+  dialogue: null,
+  completedBeatIds: [],
+  pendingChoiceId: null,
+});
+const cloneStory = (story: StoryResume): StoryResume => ({
+  ...story,
+  requiredBeatQueue: [...story.requiredBeatQueue],
+  dialogue: story.dialogue ? { ...story.dialogue } : null,
+  completedBeatIds: [...story.completedBeatIds],
+});
+/** Extracts the Director-owned resume fields; segment and layout revision are derived from progress and content. */
+const storyFromResume = (resume: ChapterResumeState): StoryResume => cloneStory({
+  checkpointId: resume.checkpointId,
+  activeEncounterId: resume.activeEncounterId,
+  requiredBeatQueue: resume.requiredBeatQueue,
+  dialogue: resume.dialogue,
+  completedBeatIds: resume.completedBeatIds,
+  pendingChoiceId: resume.pendingChoiceId,
+});
+
+/** A queued operation was discarded because a new run replaced the journey it was issued for. */
+export class CampaignSupersededError extends Error {
+  constructor() {
+    super("The journey changed before this operation ran.");
+    this.name = "CampaignSupersededError";
+  }
+}
+
 const createId = (): string =>
   globalThis.crypto?.randomUUID?.() ??
   "run-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
@@ -141,7 +217,7 @@ function isCampaignSafeCheckpoint(
   const reset = data.encounterReset as Record<string, unknown> | null;
   if (
     data.kind !== "campaign-safe-checkpoint" ||
-    data.schemaVersion !== 1 ||
+    data.schemaVersion !== 3 ||
     typeof data.runId !== "string" ||
     typeof data.checkpointId !== "string" ||
     !progress ||
@@ -151,6 +227,7 @@ function isCampaignSafeCheckpoint(
     return false;
   return (
     Number.isInteger(progress.chapter) &&
+    isCompanionParty(progress.party) &&
     typeof progress.regionId === "string" &&
     Array.isArray(progress.activeQuestIds) &&
     progress.activeQuestIds.every((id) => typeof id === "string") &&
@@ -162,6 +239,7 @@ function isCampaignSafeCheckpoint(
     Array.isArray(progress.eventKeys) &&
     progress.eventKeys.every((key) => typeof key === "string") &&
     Number.isInteger(progress.revision) &&
+    isChapterSessionMetadata(progress.session) &&
     typeof spawn.regionId === "string" &&
     typeof spawn.routeId === "string" &&
     typeof spawn.cameraAnchorId === "string" &&
@@ -173,188 +251,6 @@ function isCampaignSafeCheckpoint(
   );
 }
 
-function eventMatches(requirement: string, event: WorldEvent): boolean {
-  if (requirement.includes("|")) {
-    return requirement
-      .split("|")
-      .some((alternative) => eventMatches(alternative, event));
-  }
-  const [kind, target, option] = requirement.split(":");
-  switch (event.type) {
-    case "semantic-interaction":
-      return (
-        (kind === "tend" &&
-          event.kind === "tend" &&
-          event.targetId === target) ||
-        (kind === "semantic" &&
-          (event.interactionId === target || event.targetId === target)) ||
-        (kind === "interaction" && event.interactionId === target) ||
-        (kind === "investigate" &&
-          event.kind === "inspect" &&
-          event.targetId === target) ||
-        (kind === "ecology" &&
-          ["repair", "restore", "cleanse", "coordinate", "break"].includes(
-            event.kind,
-          ) &&
-          event.targetId === target) ||
-        (kind === "coordinate" &&
-          event.kind === "coordinate" &&
-          event.targetId === target)
-      );
-    case "encounter-phase":
-      return (
-        kind === "encounter" &&
-        event.phaseId === target &&
-        event.state === "cleared"
-      );
-    case "encounter-resolved": {
-      let expectedParticipants: readonly ActorId[] | undefined;
-      if (target !== undefined) {
-        for (const region of REGIONS) {
-          expectedParticipants = region.encounterParticipants[target];
-          if (expectedParticipants) break;
-        }
-      }
-      return (
-        kind === "encounter" &&
-        event.encounterId === target &&
-        (event.resolution === "cleansed" ||
-          (target === "camp-hunters" && event.resolution === "subdued")) &&
-        (!expectedParticipants ||
-          expectedParticipants.every((actorId) => event.actorIds.includes(actorId)))
-      );
-    }
-    case "rescue":
-      return (
-        (kind === "rescue" && event.targetId === target && event.safe) ||
-        (kind === "tend" && event.targetId === target && event.safe)
-      );
-    case "restoration":
-      return (
-        kind === "restoration" &&
-        event.regionId === target &&
-        event.state === "restored"
-      );
-    case "fragment":
-      return kind === "fragment" && event.fragmentId === target;
-    case "choice":
-      return (
-        kind === "choice" &&
-        event.choiceId === target &&
-        (!option || event.optionId === option)
-      );
-    case "traversal":
-      return kind === "traversal" && event.routeId === target;
-    case "chapter-transition":
-      return kind === "chapter" && event.toChapter === Number(target);
-    default:
-      return false;
-  }
-}
-
-type AuthoredSurface = RegionDefinition["ground"]["surfaces"][number];
-type AuthoredCollider = RegionDefinition["ground"]["colliders"][number];
-
-function surfaceHeightAt(
-  position: CampaignSafeSpawn["position"],
-  surface: AuthoredSurface,
-): number | undefined {
-  const points = surface.points;
-  if (!surface.walkable || points.length < 3) return undefined;
-
-  let inside = false;
-  for (let index = 0, previous = points.length - 1; index < points.length; previous = index++) {
-    const a = points[previous]!;
-    const b = points[index]!;
-    const cross = (position.x - a.x) * (b.z - a.z) - (position.z - a.z) * (b.x - a.x);
-    if (Math.abs(cross) < 1e-5 &&
-      position.x >= Math.min(a.x, b.x) - 1e-5 && position.x <= Math.max(a.x, b.x) + 1e-5 &&
-      position.z >= Math.min(a.z, b.z) - 1e-5 && position.z <= Math.max(a.z, b.z) + 1e-5) {
-      inside = true;
-      break;
-    }
-    if ((a.z > position.z) !== (b.z > position.z) &&
-      position.x < ((b.x - a.x) * (position.z - a.z)) / (b.z - a.z) + a.x) {
-      inside = !inside;
-    }
-  }
-  if (!inside) return undefined;
-
-  const origin = points[0]!;
-  for (let index = 1; index < points.length - 1; index += 1) {
-    const b = points[index]!;
-    const c = points[index + 1]!;
-    const denominator = (b.x - origin.x) * (c.z - origin.z) - (c.x - origin.x) * (b.z - origin.z);
-    if (Math.abs(denominator) < 1e-8) continue;
-    const alongB = ((position.x - origin.x) * (c.z - origin.z) - (c.x - origin.x) * (position.z - origin.z)) / denominator;
-    const alongC = ((b.x - origin.x) * (position.z - origin.z) - (position.x - origin.x) * (b.z - origin.z)) / denominator;
-    const alongOrigin = 1 - alongB - alongC;
-    if (alongB >= -1e-4 && alongC >= -1e-4 && alongOrigin >= -1e-4) {
-      return alongOrigin * origin.y + alongB * b.y + alongC * c.y;
-    }
-  }
-  return undefined;
-}
-
-function colliderContainsSpawnPoint(
-  position: CampaignSafeSpawn["position"],
-  collider: AuthoredCollider,
-): boolean {
-  if (collider.kind === "box") {
-    const half = collider.halfExtents;
-    return !!half &&
-      Math.abs(position.x - collider.from.x) < half.x &&
-      Math.abs(position.y - collider.from.y) < half.y &&
-      Math.abs(position.z - collider.from.z) < half.z;
-  }
-  if (collider.radius === undefined) return false;
-  const end = collider.to ?? collider.from;
-  const delta = { x: end.x - collider.from.x, y: end.y - collider.from.y, z: end.z - collider.from.z };
-  const lengthSquared = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
-  const along = lengthSquared === 0 ? 0 : Math.max(0, Math.min(1, (
-    (position.x - collider.from.x) * delta.x +
-    (position.y - collider.from.y) * delta.y +
-    (position.z - collider.from.z) * delta.z
-  ) / lengthSquared));
-  const x = collider.from.x + along * delta.x - position.x;
-  const y = collider.from.y + along * delta.y - position.y;
-  const z = collider.from.z + along * delta.z - position.z;
-  return x * x + y * y + z * z < collider.radius * collider.radius;
-}
-
-function hasSafeWalkSurface(
-  region: RegionDefinition,
-  position: CampaignSafeSpawn["position"],
-): boolean {
-  for (const surface of region.ground.surfaces) {
-    const elevation = surfaceHeightAt(position, surface);
-    if (elevation === undefined || Math.abs(position.y - elevation) > 0.35) continue;
-    const obstructed = region.ground.colliders.some((collider) =>
-      collider.id !== surface.colliderId &&
-      (collider.blocksMovement || collider.blocksCamera) &&
-      colliderContainsSpawnPoint(position, collider),
-    );
-    if (!obstructed) return true;
-  }
-  return false;
-}
-
-function samePosition(
-  first: CampaignSafeSpawn["position"],
-  second: CampaignSafeSpawn["position"],
-): boolean {
-  return first.x === second.x && first.y === second.y && first.z === second.z;
-}
-
-function liesOnSurface(
-  region: RegionDefinition,
-  position: CampaignSafeSpawn["position"],
-  surfaceId: string,
-): boolean {
-  const surface = region.ground.surfaces.find((item) => item.id === surfaceId);
-  const height = surface && surfaceHeightAt(position, surface);
-  return height !== undefined && Math.abs(position.y - height) <= 0.35;
-}
 function factsWithMovableObjectDefaults(
   facts: Readonly<Record<string, boolean | number | string>>,
 ): Record<string, boolean | number | string> {
@@ -448,6 +344,11 @@ function normalizeRestorationFacts(
   }
 }
 
+interface QuestMarks {
+  active: string[];
+  completedQuests: string[];
+  completedObjectives: string[];
+}
 interface DirectorRollbackState {
   campaign: CampaignState;
   region: RegionId;
@@ -458,7 +359,7 @@ interface DirectorRollbackState {
   completedQuestIds: string[];
   completedObjectiveIds: string[];
   trackedObjectiveId: ObjectiveId | null;
-  party: { combat?: CompanionId; utility?: CompanionId; scout: "vara" };
+  party: CampaignSnapshot["party"];
   endingId: CampaignSnapshot["ending"];
   checkpoint: CheckpointSnapshot | null;
   lastSafeCheckpoint: CampaignSafeCheckpoint | null;
@@ -468,15 +369,17 @@ interface DirectorRollbackState {
   eventKeys: Set<string>;
   eventLog: WorldEvent[];
   revision: number;
+  story: StoryResume;
 }
 export class CampaignDirector implements CampaignDirectorAPI {
-  private campaign: CampaignState;
-  private runId: string;
+  private campaign!: CampaignState;
+  private runId = "";
+  private heroId: HeroId = DEFAULT_HERO_ID;
   private region: RegionId = "greenwake";
   private chapter = 0;
   private replay = false;
   private revision = 0;
-  private facts: Record<string, boolean | number | string>;
+  private facts: Record<string, boolean | number | string> = {};
   private choices: Record<string, string> = {};
   private activeQuestIds: string[] = [];
   private completedQuestIds: string[] = [];
@@ -484,34 +387,48 @@ export class CampaignDirector implements CampaignDirectorAPI {
   private trackedObjectiveId: ObjectiveId | null = null;
   private recoveryRequest: CampaignSnapshot["recoveryRequest"] = null;
   private lastEvent: WorldEvent | null = null;
-  private party: {
-    combat?: CompanionId;
-    utility?: CompanionId;
-    scout: "vara";
-  } = { scout: "vara" };
+  private party: CampaignSnapshot["party"] = {};
   private endingId: CampaignSnapshot["ending"] = null;
   private checkpoint: CheckpointSnapshot | null = null;
   private lastSafeCheckpoint: CampaignSafeCheckpoint | null = null;
   private safeSpawn!: CampaignSafeSpawn;
+  private story: StoryResume = emptyStory();
+  /** Incremented when a new run/showcase supersedes the journey, so queued operations never touch the new run. */
+  private epoch = 0;
   private eventQueue: Promise<void> = Promise.resolve();
   private eventKeys = new Set<string>();
   private eventLog: WorldEvent[] = [];
   private listeners = new Set<(snapshot: CampaignSnapshot) => void>();
   private readonly saves?: SaveRepository;
+  private readonly scope: SaveScope;
+  private readonly chapters: readonly ChapterRuntimeDefinition[];
+  private readonly layoutMigrations: readonly LayoutRevisionMigration[];
+  private readonly relationshipRules: readonly CompanionRelationshipRule[];
+  private readonly choiceCatalog: Readonly<Record<string, readonly ChoiceDefinition[]>>;
   constructor(options: CampaignDirectorOptions = {}) {
-    this.runId = options.runId ?? createId();
-    this.campaign = createNewRun(this.runId);
-    this.facts = emptyWorldFacts(this.campaign);
-    this.facts.prologueStarted = true;
     this.saves = options.saves;
-    this.activeQuestIds = ["prologue"];
-    this.checkpoint = createCheckpoint(this.campaign);
-    this.safeSpawn = this.safeSpawnFor("greenwake");
-    this.lastSafeCheckpoint = this.createSafeCheckpoint();
+    const scope = options.saveScope ?? options.saves?.scope ?? "production";
+    if (options.saves && options.saves.scope !== scope) {
+      throw new Error("The save repository scope does not match the Director's save scope.");
+    }
+    this.scope = scope;
+    // The repository validates every persisted checkpoint against the same definitions, so it is the single source of truth.
+    if (options.saves && ((options.chapters !== undefined && options.chapters !== options.saves.chapters) ||
+      (options.layoutMigrations !== undefined && options.layoutMigrations !== options.saves.layoutMigrations))) {
+      throw new Error("Configure chapter definitions and layout migrations on the SaveRepository; the Director reads them from it.");
+    }
+    this.chapters = options.saves?.chapters ?? options.chapters ?? [];
+    this.layoutMigrations = options.saves?.layoutMigrations ?? options.layoutMigrations ?? [];
+    this.relationshipRules = options.relationshipRules ?? [];
+    this.choiceCatalog = options.choices ?? CAMPAIGN_CHOICES;
+    this.resetRun(options.runId ?? createId(), DEFAULT_HERO_ID);
   }
 
-  startNewRun(runId = createId()): CampaignSnapshot {
+  private resetRun(runId: string, heroId: HeroId, companionId = DEFAULT_HERO_COMPANIONS[heroId]): void {
+    if (!isHeroId(heroId) || !isCompanionId(companionId)) throw new Error("Unknown hero or companion.");
+    this.epoch += 1;
     this.runId = runId;
+    this.heroId = heroId;
     this.campaign = createNewRun(runId);
     this.region = "greenwake";
     this.chapter = 0;
@@ -525,21 +442,44 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.completedObjectiveIds = [];
     this.trackedObjectiveId = null;
     this.recoveryRequest = null;
-    this.party = { scout: "vara" };
+    this.lastEvent = null;
+    this.party = { companionId };
     this.endingId = null;
-    this.eventKeys.clear();
+    this.eventKeys = new Set();
     this.eventLog = [];
+    this.story = emptyStory();
     this.checkpoint = createCheckpoint(this.campaign);
     this.safeSpawn = this.safeSpawnFor("greenwake");
+    this.enqueueActivationCues(this.activeQuestIds);
+    this.normalizeStory();
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
+  }
+
+  startChapterRun(input: { runId: string; heroId: HeroId; companionId?: CompanionId; saveScope: SaveScope }): CampaignSnapshot {
+    if (input.saveScope !== this.scope) throw new Error("The run's save scope must match the Director's repository scope.");
+    if (!isHeroId(input.heroId)) throw new Error("Unknown hero.");
+    this.resetRun(input.runId, input.heroId, input.companionId);
     return this.publish();
   }
 
-  startShowcase(runId = "showcase-" + createId(), regionId: ShowcaseRegionId = "whispering-canopy"): CampaignSnapshot {
+  startNewRun(runId = createId(), heroId: HeroId = DEFAULT_HERO_ID, companionId = DEFAULT_HERO_COMPANIONS[heroId]): CampaignSnapshot {
+    this.resetRun(runId, heroId, companionId);
+    return this.publish();
+  }
+
+  startShowcase(runId = "showcase-" + createId(), regionId: ShowcaseRegionId = "whispering-canopy", loadout?: { heroId: HeroId; companionId: CompanionId }): CampaignSnapshot {
+    const heroId = loadout?.heroId ?? DEFAULT_HERO_ID;
+    const companionId = loadout?.companionId ?? DEFAULT_HERO_COMPANIONS[heroId];
+    if (!isHeroId(heroId) || !isCompanionId(companionId)) throw new Error("Unknown hero or companion.");
     const showcase = SHOWCASE_STARTS[regionId];
     const replayState = createShowcaseReplay();
+    this.epoch += 1;
     this.runId = runId;
-    this.campaign = { ...createNewRun(runId), world: replayState.world };
+    this.heroId = heroId;
+    this.campaign = recruitCompanion(
+      recruitCompanion({ ...createNewRun(runId), world: replayState.world }, "vara"),
+      "koro",
+    );
     this.region = regionId;
     this.chapter = showcase.chapter;
     this.replay = true;
@@ -551,12 +491,15 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.completedObjectiveIds = [];
     this.trackedObjectiveId = null;
     this.recoveryRequest = null;
-    this.party = { scout: "vara", utility: "koro" };
+    this.lastEvent = null;
+    this.party = { companionId };
     this.endingId = null;
-    this.eventKeys.clear();
+    this.eventKeys = new Set();
     this.eventLog = [];
+    this.story = emptyStory();
     this.checkpoint = createCheckpoint(this.campaign);
     this.safeSpawn = this.safeSpawnFor(regionId);
+    this.normalizeStory();
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
     return this.publish();
   }
@@ -586,7 +529,14 @@ export class CampaignDirector implements CampaignDirectorAPI {
       fragments: [...this.campaign.world.fragments],
       factions: structuredClone(this.campaign.world.factions),
       party: structuredClone(this.party),
-      worldFacts: structuredClone(this.facts),
+      // `groveFallPending` is a derived availability fact, not an earned quest fact: chapter 6 is active and the Refuge
+      // has not yet opened. Authoritative producers (UI prompts, encounter triggers) read this from the snapshot rather
+      // than inferring it from chapter alone; the value mirrors `this.region === "the-grove" && this.chapter === 6 &&
+      // this.facts.refugeOpen !== true` and resets to false as soon as the Fall completes.
+      worldFacts: {
+        ...structuredClone(this.facts),
+        groveFallPending: this.chapter === 6 && this.region === "the-grove" && this.facts.refugeOpen !== true,
+      },
       lastSafeCheckpoint: this.lastSafeCheckpoint
         ? structuredClone(this.lastSafeCheckpoint)
         : null,
@@ -594,6 +544,9 @@ export class CampaignDirector implements CampaignDirectorAPI {
       ending: this.endingId,
       endingEvaluation: evaluateEnding(this.campaign),
       revision: this.revision,
+      session: this.sessionMetadata(),
+      segmentId: deriveSegmentId(this.chapter, this.region, this.completedQuestIds, this.completedObjectiveIds, this.story.completedBeatIds),
+      companions: structuredClone(this.campaign.world.companions),
     };
   }
 
@@ -603,13 +556,22 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return () => this.listeners.delete(listener);
   }
 
-  processEvent(event: WorldEvent): Promise<CampaignSnapshot> {
-    const operation = this.eventQueue.then(() => this.applyWorldEvent(event));
-    this.eventQueue = operation.then(
+  /** Runs `operation` after every earlier write; a new run/showcase supersedes operations queued for the previous journey. */
+  private serialize<T>(operation: () => Promise<T>): Promise<T> {
+    const epoch = this.epoch;
+    const run = this.eventQueue.then(() => {
+      if (epoch !== this.epoch) throw new CampaignSupersededError();
+      return operation();
+    });
+    this.eventQueue = run.then(
       () => undefined,
       () => undefined,
     );
-    return operation;
+    return run;
+  }
+
+  processEvent(event: WorldEvent): Promise<CampaignSnapshot> {
+    return this.serialize(() => this.applyBatch([event]));
   }
 
   /** Query the current accepted event ledger without copying checkpoint metadata. */
@@ -617,15 +579,367 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return this.eventKeys.has(idempotencyKey);
   }
 
-  private async applyWorldEvent(event: WorldEvent): Promise<CampaignSnapshot> {
-    if (!event.idempotencyKey.trim())
-      throw new Error("World event requires a non-empty idempotencyKey.");
+  committedEventKeys(): IterableIterator<string> {
+    return this.eventKeys.values();
+  }
+
+  /** Persists the current committed progress to the run's autosave slot, serialized with event writes. */
+  autosave(): Promise<void> {
+    return this.serialize(() => this.persistAutosave());
+  }
+
+  /** The authored definition of the current story segment, or undefined outside authored chapters. */
+  chapterDefinition(): ChapterRuntimeDefinition | undefined {
+    return findSegmentDefinition(this.chapters, deriveSegmentId(this.chapter, this.region, this.completedQuestIds, this.completedObjectiveIds, this.story.completedBeatIds));
+  }
+
+  private async persistAutosave(): Promise<void> {
+    if (!this.saves || this.replay) return;
+    await this.saves.saveAutosave(
+      createCheckpoint(this.campaign),
+      this.campaign,
+      this.chapter,
+      this.region,
+      [...this.eventKeys],
+      this.progressRecord(),
+    );
+  }
+
+  /**
+   * One atomic write of slot + run ledger (a single IndexedDB transaction). A failure restores the previous in-memory
+   * state and publishes nothing, so a failed durable write never awards progress.
+   */
+  private async commit(rollback: DirectorRollbackState, epoch: number): Promise<void> {
+    try {
+      await this.persistAutosave();
+    } catch (error) {
+      if (epoch === this.epoch) this.restoreRollbackState(rollback);
+      if (error instanceof SaveRepositoryError) throw error;
+      throw new SaveRepositoryError(
+        "transaction",
+        "The story progress could not be committed to the save.",
+      );
+    }
+    if (epoch !== this.epoch) throw new CampaignSupersededError();
+  }
+
+  private assertCampaignRun(): void {
+    if (this.replay) throw new Error("Replay runs have no chapter progression.");
+  }
+
+  private questMarks(): QuestMarks {
+    return {
+      active: [...this.activeQuestIds],
+      completedQuests: [...this.completedQuestIds],
+      completedObjectives: [...this.completedObjectiveIds],
+    };
+  }
+
+  private enqueueBeat(beatId: string): void {
+    if (!isCueBeatAuthored(beatId)) return;
     if (
-      event.type === "choice" &&
-      this.validateChoice(event.choiceId, event.optionId, this.campaign)
-    ) return this.snapshot();
-    if (this.eventKeys.has(event.idempotencyKey)) return this.snapshot();
+      this.story.completedBeatIds.includes(beatId) ||
+      this.story.requiredBeatQueue.includes(beatId) ||
+      this.story.dialogue?.beatId === beatId
+    ) return;
+    this.story.requiredBeatQueue = [...this.story.requiredBeatQueue, beatId];
+  }
+
+  private enqueueActivationCues(questIds: readonly string[]): void {
+    for (const questId of questIds) {
+      const beat = NARRATIVE_CUES[questId]?.onActivate;
+      if (beat) this.enqueueBeat(beat);
+    }
+  }
+
+  /** Keeps checkpoint and active-encounter ids consistent with the segment derived from current progress. */
+  private normalizeStory(): void {
+    const definition = this.chapterDefinition();
+    if (!definition) return;
+    const known = this.story.checkpointId !== null &&
+      definition.checkpoints.some((item) => item.id === this.story.checkpointId && item.regionId === this.region);
+    if (!known) this.story.checkpointId = arrivalCheckpointId(definition, this.safeSpawn?.routeId, this.facts);
+    if (
+      this.story.activeEncounterId !== null &&
+      !definition.encounterEntries.some((entry) => entry.encounterId === this.story.activeEncounterId)
+    ) {
+      this.story.activeEncounterId = null;
+    }
+  }
+
+  private sessionMetadata(): ChapterSessionMetadata {
+    return createSessionMetadata(this.scope, this.heroId, createResumeState({
+      chapter: this.chapter,
+      regionId: this.region,
+      completedQuestIds: this.completedQuestIds,
+      completedObjectiveIds: this.completedObjectiveIds,
+      chapters: this.chapters,
+      facts: this.facts,
+      carry: cloneStory(this.story),
+    }));
+  }
+
+  private encounterResolved(encounterId: string): boolean {
+    return this.eventLog.some((event) =>
+      event.type === "encounter-resolved" && event.encounterId === encounterId && event.resolution !== "escaped");
+  }
+
+  private isObjectiveActive(objectiveId: string): boolean {
+    return this.activeQuestIds.some((questId) =>
+      this.objectivesFor(questId).some((objective) => objective.id === objectiveId && !this.completedObjectiveIds.includes(objective.id)));
+  }
+
+  /** Exit requirement grammar: fact | quest:<id> | objective:<id> | choice:<id>[:<option>] | beat:<id>. */
+  private requirementMet(requirement: string): boolean {
+    const [kind, target, option] = requirement.split(":");
+    switch (kind) {
+      case "quest": return this.completedQuestIds.includes(target ?? "");
+      case "objective": return this.completedObjectiveIds.includes(requirement.slice("objective:".length) as ObjectiveId);
+      case "choice": return target !== undefined && this.choices[target] !== undefined && (option === undefined || this.choices[target] === option);
+      case "beat": return this.story.completedBeatIds.includes(target ?? "");
+      default: return this.facts[requirement] === true;
+    }
+  }
+
+  /**
+   * Recruitment and authored Bond awards are derived from the committed event log, never from presentation or producer tags.
+   * Each rule applies once (recruitment is idempotent; relationship rules mark `relationship:<id>`).
+   */
+  private applyRelationshipAuthority(): void {
+    let state = this.campaign;
+    const matched = (requirement: string): boolean => this.eventLog.some((event) => eventMatches(requirement, event));
+    for (const rule of RECRUITMENT_RULES) {
+      if (!state.world.companions[rule.companionId].recruited && matched(rule.requiredEvent)) {
+        state = recruitCompanion(state, rule.companionId);
+      }
+    }
+    for (const rule of this.relationshipRules) {
+      const key = "relationship:" + rule.id;
+      if (this.facts[key] === true || !matched(rule.requiredEvent)) continue;
+      if (rule.recruit) state = recruitCompanion(state, rule.companionId);
+      if (rule.bond !== undefined) {
+        if (!state.world.companions[rule.companionId].recruited) continue;
+        state = awardCompanionBond(state, rule.companionId, rule.bond);
+      }
+      if (rule.storyFlag) state = setCompanionStoryFlag(state, rule.companionId, rule.storyFlag);
+      this.facts[key] = true;
+    }
+    this.campaign = state;
+  }
+
+  private refreshSafeCheckpoint(): void {
+    this.checkpoint = createCheckpoint(this.campaign);
+    this.lastSafeCheckpoint = this.createSafeCheckpoint();
+  }
+
+  private async applyBatch(events: readonly WorldEvent[]): Promise<CampaignSnapshot> {
+    for (const event of events) {
+      if (!event.idempotencyKey.trim())
+        throw new Error("World event requires a non-empty idempotencyKey.");
+    }
     const rollback = this.rollbackState();
+    const epoch = this.epoch;
+    let applied: WorldEvent | null = null;
+    try {
+      for (const event of events) {
+        if (
+          event.type === "choice" &&
+          this.validateChoice(event.choiceId, event.optionId, this.campaign)
+        ) continue;
+        if (this.eventKeys.has(event.idempotencyKey)) continue;
+        this.reduceEvent(event);
+        applied = event;
+      }
+    } catch (error) {
+      this.restoreRollbackState(rollback);
+      throw error;
+    }
+    if (!applied) return this.snapshot();
+    await this.commit(rollback, epoch);
+    this.lastEvent = structuredClone(applied);
+    return this.publish();
+  }
+
+  reachCheckpoint(checkpointId: string): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      this.assertCampaignRun();
+      const checkpoint = this.chapterDefinition()?.checkpoints.find((item) => item.id === checkpointId);
+      if (!checkpoint) throw new Error("Unknown chapter checkpoint for the current story segment.");
+      if (checkpoint.regionId !== this.region) throw new Error("This checkpoint belongs to a different region.");
+      // A reached checkpoint never regresses the respawn point when the player backtracks through its radius.
+      if (this.facts["checkpoint:" + checkpointId] === true) return this.snapshot();
+      return this.commitCheckpoint(checkpoint, null);
+    });
+  }
+
+  beginChapterEncounter(encounterId: string, checkpointId: string): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      this.assertCampaignRun();
+      const definition = this.chapterDefinition();
+      const entry = definition?.encounterEntries.find((item) => item.encounterId === encounterId && item.checkpointId === checkpointId);
+      const checkpoint = definition?.checkpoints.find((item) => item.id === checkpointId);
+      if (!entry || !checkpoint) throw new Error("Unknown chapter encounter entry.");
+      if (entry.regionId !== this.region || checkpoint.regionId !== this.region) throw new Error("This encounter belongs to a different region.");
+      if (checkpoint.encounterId !== null && checkpoint.encounterId !== encounterId) throw new Error("The checkpoint does not reset this encounter.");
+      if (this.encounterResolved(encounterId)) throw new Error("This encounter is already resolved.");
+      if (!this.isObjectiveActive(entry.objectiveId)) throw new Error("The encounter's objective is not active.");
+      if (entry.requiresFacts.some((fact) => this.facts[fact] !== true)) throw new Error("Encounter prerequisites are not met.");
+      if (this.story.activeEncounterId === encounterId && this.story.checkpointId === checkpointId) return this.snapshot();
+      return this.commitCheckpoint(checkpoint, encounterId);
+    });
+  }
+
+  /** Commits an authored checkpoint (and optional active-encounter intent) as the safe spawn, atomically with its save. */
+  private async commitCheckpoint(checkpoint: ChapterCheckpointDefinition, encounterId: string | null): Promise<CampaignSnapshot> {
+    if (checkpoint.requiresFacts.some((fact) => this.facts[fact] !== true)) throw new Error("Checkpoint prerequisites are not met.");
+    const region = REGIONS.find((item) => item.id === checkpoint.regionId);
+    if (!region?.cameraAnchors.some((anchor) => anchor.id === checkpoint.cameraAnchorId)) {
+      throw new Error("Checkpoint camera anchor is not authored.");
+    }
+    const spawn = resolveSafeNode(region, checkpoint.nodeId, this.facts, checkpoint.cameraAnchorId);
+    if (!spawn) throw new Error("Checkpoint node is not a safe authored position.");
+    const rollback = this.rollbackState();
+    const epoch = this.epoch;
+    this.facts["checkpoint:" + checkpoint.id] = true;
+    this.story.checkpointId = checkpoint.id;
+    if (encounterId !== null) this.story.activeEncounterId = encounterId;
+    this.safeSpawn = spawn;
+    this.revision += 1;
+    this.refreshSafeCheckpoint();
+    await this.commit(rollback, epoch);
+    return this.publish();
+  }
+
+  advanceChapter(input: { exitId: string; requestId: string }): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      this.assertCampaignRun();
+      if (!input.requestId.trim()) throw new Error("A chapter transition requires a request id.");
+      // One key set per transition request: a retry of this request is idempotent, a later return journey is a new request.
+      const requestKey = "transition:" + input.requestId;
+      if (this.eventKeys.has(requestKey + ":travel")) return this.snapshot();
+      const definition = this.chapterDefinition();
+      if (!definition) throw new Error("No authored chapter transition exists from this story segment.");
+      const source = REGIONS.find((item) => item.id === this.region);
+      const exit = source?.exits.find((route) => route.id === input.exitId);
+      if (!exit) throw new Error("The requested exit is not authored in the current region.");
+      const destination = REGIONS.find((item) => item.id === exit.destinationRegionId);
+      const entrance = destination?.entrances.find(
+        (route) => route.traversalEvent === exit.traversalEvent && route.destinationRegionId === exit.destinationRegionId,
+      );
+      if (!destination || !entrance) throw new Error("The exit has no authored destination entrance.");
+      const unmet = definition.exitRequirements.filter((requirement) => !this.requirementMet(requirement));
+      if (unmet.length) throw new Error("Chapter exit requirements are not met: " + unmet.join(", "));
+      if (this.story.pendingChoiceId !== null) throw new Error("A required story choice must be resolved before leaving.");
+      for (const route of [exit, entrance]) {
+        if (route.unlockFact && this.facts[route.unlockFact] !== true) throw new Error("The selected route has not been discovered.");
+      }
+      const destinationChapter = this.chapterFor(destination.id);
+      const events: WorldEvent[] = [];
+      if (destinationChapter > this.chapter) {
+        events.push({
+          type: "chapter-transition",
+          eventId: createId(),
+          idempotencyKey: requestKey + ":chapter",
+          fromChapter: this.chapter,
+          toChapter: destinationChapter,
+          triggerId: exit.id,
+        });
+      }
+      events.push({
+        type: "traversal",
+        eventId: createId(),
+        idempotencyKey: requestKey + ":travel",
+        routeId: entrance.traversalEvent,
+        fromRegion: this.region,
+        toRegion: destination.id,
+        landmarkId: entrance.id,
+      });
+      return this.applyBatch(events);
+    });
+  }
+
+  /** Destination chapter of a region: authored definition first (a hub preserves the current chapter), then the legacy mapping. */
+  private chapterFor(regionId: RegionId): number {
+    if (regionId === "the-grove") {
+      // The Grove preserves the current chapter for ordinary visits, but a return to the Grove after Sunmane / Moonpine /
+      // Mistveil completion enters chapter 6 (the Fall of the Grove). The fallback of the authored `grove-fall` segment
+      // names chapter 6 explicitly.
+      const groveFall = this.chapters.find((item) => item.segmentId === "grove-fall");
+      const sunmaneResolution = this.choices["sunmane-resolution"];
+      const allFragments = FRAGMENT_IDS.every(fragment => this.campaign.world.fragments.includes(fragment));
+      const triggered = Boolean(sunmaneResolution) && allFragments && groveFall !== undefined;
+      if (triggered) return Math.max(this.chapter, groveFall.chapter);
+      return this.chapter;
+    }
+    // Prefer the return segment when current chapter is at or above 7: a return journey to a previously visited region
+    // never moves the chapter backwards. Return segments carry the same chapter as the chapter the player is in.
+    if (this.chapter >= 7) {
+      const returnSegment = this.chapters.find(
+        (item) => item.regionId === regionId && item.segmentId.startsWith("return-"),
+      );
+      if (returnSegment) return Math.max(returnSegment.chapter, this.chapter);
+      if (regionId === "refuge") return Math.max(7, this.chapter);
+    }
+    const authored = this.chapters.find(
+      (item) => item.regionId === regionId && item.segmentId !== "grove" && item.segmentId !== "prologue" && !item.segmentId.startsWith("return-"),
+    );
+    if (authored) return authored.chapter;
+    return REGION_CHAPTER[regionId] ?? this.chapter;
+  }
+
+  advanceStory(input: { beatId: string; lineIndex: number; skip: boolean }): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      const { beatId, lineIndex, skip } = input;
+      if (!Number.isInteger(lineIndex) || lineIndex < 0) throw new Error("Dialogue line index must be a non-negative integer.");
+      const beat = STORY_DIALOGUE[beatId];
+      if (!beat) throw new Error("Unknown dialogue beat.");
+      if (this.story.completedBeatIds.includes(beatId)) return this.snapshot();
+      const current = this.story.dialogue?.beatId === beatId ? this.story.dialogue : null;
+      if (!current && this.story.requiredBeatQueue[0] !== beatId) {
+        throw new Error("This dialogue beat is not the required beat.");
+      }
+      const expected = current?.lineIndex ?? 0;
+      if (!skip) {
+        if (lineIndex < expected) return this.snapshot();
+        if (lineIndex > expected || lineIndex >= beat.lines.length) throw new Error("Dialogue lines must be acknowledged in order.");
+      }
+      const rollback = this.rollbackState();
+      const epoch = this.epoch;
+      if (skip || lineIndex >= beat.lines.length - 1) {
+        this.completeBeat(beatId, skip);
+      } else {
+        this.story.dialogue = { beatId, lineIndex: lineIndex + 1 };
+      }
+      this.normalizeStory();
+      this.revision += 1;
+      await this.commit(rollback, epoch);
+      return this.publish();
+    });
+  }
+
+  /** Acknowledges a beat. Chained `next` beats follow in order, or are all acknowledged on skip; a pending choice is never cleared. */
+  private completeBeat(beatId: string, skip: boolean): void {
+    const completed = new Set(this.story.completedBeatIds);
+    let nextBeat: string | undefined = beatId;
+    this.story.dialogue = null;
+    while (nextBeat !== undefined) {
+      const beat: DialogueBeat | undefined = STORY_DIALOGUE[nextBeat];
+      completed.add(nextBeat);
+      this.story.requiredBeatQueue = this.story.requiredBeatQueue.filter((id) => id !== nextBeat);
+      const following: string | undefined = beat?.next && STORY_DIALOGUE[beat.next] && !completed.has(beat.next) ? beat.next : undefined;
+      if (following !== undefined && !skip) {
+        this.story.requiredBeatQueue = [following, ...this.story.requiredBeatQueue.filter((id) => id !== following)];
+        this.story.dialogue = { beatId: following, lineIndex: 0 };
+        break;
+      }
+      nextBeat = following;
+    }
+    this.story.completedBeatIds = [...completed];
+  }
+
+  /** Reduces one accepted event into in-memory state; throws before any mutation when the event is invalid. */
+  private reduceEvent(event: WorldEvent): void {
+    const before = this.questMarks();
     let nextCampaign = structuredClone(this.campaign);
     const nextFacts = { ...this.facts };
     const nextChoices = { ...this.choices };
@@ -677,15 +991,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
         if (event.interactionId === movable.koroInteractionId) {
           const actor = region.entities.find((entity) => entity.id === event.actorId);
           const command = interaction.requiresCompanionCommand;
+          const travelingCompanion = event.actorId === `${movable.requiredCompanionId}__party_companion`;
           if (
             !command || command.companionId !== movable.requiredCompanionId ||
-            command.slot !== "utility" || command.command !== "special" ||
+            command.command !== "special" ||
             !interaction.requiresActors.includes(movable.requiredCompanionId) ||
             interaction.inputHint !== "ability" ||
-            this.party.utility !== movable.requiredCompanionId ||
-            actor?.kind !== "actor" || actor.actorId !== movable.requiredCompanionId
+            this.party.companionId !== movable.requiredCompanionId ||
+            !(travelingCompanion || actor?.kind === "actor" && actor.actorId === movable.requiredCompanionId)
           ) {
-            throw new Error("Moved object event requires the assigned utility companion special.");
+            throw new Error("Moved object event requires the equipped companion special.");
           }
         } else if (event.interactionId === movable.playerInteractionId) {
           if (
@@ -693,8 +1008,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
             interaction.inputHint !== "heavy" ||
             interaction.activation !== "press-release" ||
             event.actorId !== "aren" ||
-            this.party.combat === movable.requiredCompanionId ||
-            this.party.utility === movable.requiredCompanionId
+            this.party.companionId === movable.requiredCompanionId
           ) {
             throw new Error("Moved object fallback requires an absent Koro and the staff-heavy player action.");
           }
@@ -711,19 +1025,65 @@ export class CampaignDirector implements CampaignDirectorAPI {
         nextFacts["interaction:" + event.interactionId] = true;
         if (
           event.interactionId === "nyra-reveal-hidden-route" &&
-          event.actorId === "nyra" &&
+          (event.actorId === "nyra" || this.party.companionId === "nyra" && event.actorId === "nyra__party_companion") &&
           event.kind === "signal" &&
           event.targetId === "mistveil-hidden-route"
         ) {
           nextFacts.mistveil_nyra_hidden_route = true;
         }
+        // Earned Fall completion: gameplay author and emit this semantic interaction only after the current Fall's
+        // three required beats committed in order: protection phase cleared (a possessed recruit's hold broken, OR Aren
+        // evading Orun's orun-root-surge), Tali physically arrives at the grove-tali-shelter nav node, and Aren braces
+        // the pillar. We do NOT trust interactionId alone as phase authority: the event log is the canonical source
+        // of current-Fall truth, and we explicitly do NOT accept Act II's bamboo_tali_safe obligation or the global
+        // taliSafe fact, both earned in Bamboo before the Fall ever began.
         if (
           this.chapter === 6 &&
+          this.region === "the-grove" &&
+          event.interactionId === "grove-collapse-escape" &&
+          event.actorId === "aren" &&
+          event.kind === "coordinate" &&
+          event.targetId === "grove-collapse-escape"
+        ) {
+          const taliRescued = this.eventLog.some((entry) =>
+            entry.type === "rescue" &&
+            entry.targetId === "tali" &&
+            entry.safe === true &&
+            entry.locationId === "grove-tali-shelter"
+          );
+          const pillarBraced = nextFacts["interaction:grove-pillar"] === true
+            || this.facts["interaction:grove-pillar"] === true;
+          // Protection-phase completion: encounterPhase:encounter-fall:0:cleared is written by the existing
+          // encounter-phase reducer (no new fact shape, no new reducer case). It is emitted exactly once per current
+          // Fall after the protection branch completes (possessed recruit hold broken, or Aren evaded / countered
+          // Orun's orun-root-surge).
+          const protectionPhaseComplete = nextFacts["encounterPhase:encounter-fall:0:cleared"] === true
+            || this.facts["encounterPhase:encounter-fall:0:cleared"] === true;
+          if (!taliRescued || !pillarBraced || !protectionPhaseComplete) {
+            throw new Error(
+              "grove-collapse-escape requires current-Fall Tali safe at grove-tali-shelter, pillar bracing, and " +
+              "encounterPhase:encounter-fall:0:cleared (protection branch). All three beats must be present in " +
+              "the current run's event log."
+            );
+          }
+          nextFacts.wardenCall = false;
+          nextFacts.askSignal = false;
+          nextFacts.refugeOpen = true;
+        }
+        if (
           event.interactionId === "warden-call" &&
           event.actorId === "aren" &&
           event.kind === "signal" &&
           event.targetId === "warden-call"
         ) {
+          // Warden-call availability mirrors `groveFallPending`: chapter 6 in the Grove with the Refuge still locked.
+          // Pre-Grove entries or post-Fall calls (when the Refuge is open) are rejected here so the player cannot
+          // re-issue a coercive Call after the earned collapse-escape already severed it.
+          if (this.chapter !== 6 || this.region !== "the-grove" || this.facts.refugeOpen === true) {
+            throw new Error(
+              "warden-call is only available during the Fall of the Grove, before the Refuge opens.",
+            );
+          }
           nextFacts.wardenCall = true;
           nextFacts.askSignal = false;
         }
@@ -772,8 +1132,20 @@ export class CampaignDirector implements CampaignDirectorAPI {
         break;
       case "rescue":
         nextFacts["rescued:" + event.targetId] = event.safe;
+        // Location-scoped fact: a rescue at a specific authored location. This is what checkpoint/segment/exit
+        // requirements reference when the rescue must be at the right place (Grove Tali shelter vs Bamboo Tali cage vs
+        // a return-journey Tali safe corridor). Global `rescued:<target>` is too coarse: it stays true from any earlier
+        // rescue in any region and would silently satisfy later checkpoints in unrelated regions.
+        if (event.locationId) {
+          nextFacts["rescued:" + event.targetId + ":" + event.locationId] = event.safe;
+        }
         if (event.targetId === "tali" && event.safe) {
-          nextFacts.bamboo_tali_safe = true;
+          // Bamboo Act II obligation: only set when the rescue happens in the Bamboo region. A current-Fall Tali
+          // rescue at grove-tali-shelter does not retroactively satisfy Act II's bamboo_tali_safe obligation; the Act II
+          // Bamboo rescue and the chapter 6 current-Fall rescue are distinct narrative beats.
+          if (event.locationId === "tali-cage" || event.locationId === "tali-shelter") {
+            nextFacts.bamboo_tali_safe = true;
+          }
           nextFacts.taliSafe = true;
           nextFacts.taliNeedsRescue = false;
           nextFacts.taliCageOpen = true;
@@ -829,15 +1201,25 @@ export class CampaignDirector implements CampaignDirectorAPI {
         break;
       case "choice": {
         nextChoices[event.choiceId] = event.optionId;
+        nextFacts["choice:" + event.choiceId] = true;
         // Authored choice and domain identity own history, never producer labels.
-        const leaderId = event.choiceId === "sunmane-resolution"
-          ? nextCampaign.world.factions.crown.leaderId ?? undefined
-          : event.choiceId === "pack-leadership"
-            ? event.optionId.endsWith("luma") ? "luma" : "ruun"
-            : undefined;
+        const pact = pactForChoice(event.choiceId);
+        const leaderId = pact
+          ? pact.leaderId
+          : event.choiceId === "sunmane-resolution"
+            ? nextCampaign.world.factions.crown.leaderId ?? undefined
+            : event.choiceId === "pack-leadership"
+              ? event.optionId.endsWith("luma") ? "luma" : "ruun"
+              : undefined;
         if (event.optionId.includes("dominion") && leaderId) {
           nextCampaign = recordLeaderDominion(nextCampaign, leaderId);
           nextFacts["dominion:" + leaderId] = true;
+        }
+        if (pact) {
+          if (event.optionId === "bond") {
+            nextCampaign = awardCompanionBond(nextCampaign, pact.companionId, RESPECTFUL_PACT_BOND);
+          }
+          nextFacts["pact:" + pact.choiceId] = event.optionId;
         }
         nextCampaign = this.applyChoice(
           nextCampaign,
@@ -850,8 +1232,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
           nextFacts.solkarPresent = false;
           nextFacts["solkar-exiled"] = true;
           nextFacts.crownCouncilAvailable = true;
-          if (nextParty.combat === "solkar") delete nextParty.combat;
-          if (nextParty.utility === "solkar") delete nextParty.utility;
+          if (nextParty.companionId === "solkar") delete nextParty.companionId;
         }
         if (event.choiceId === "final-ending") {
           // validateChoice already checked the encounter and package predicate.
@@ -869,14 +1250,46 @@ export class CampaignDirector implements CampaignDirectorAPI {
         const targetRegion = REGIONS.find(
           (region) => region.id === event.toRegion,
         );
+        const sourceRegion = REGIONS.find(
+          (region) => region.id === event.fromRegion,
+        );
+        // An authored local arc is intra-region traversal: it changes no region, chapter or safe spawn.
+        const localArc = event.fromRegion === event.toRegion && event.fromRegion === this.region
+          ? sourceRegion?.traversalArcs.find(
+            (arc) =>
+              arc.traversalEvent === event.routeId &&
+              arc.id === event.landmarkId &&
+              arc.destinationRegionId === event.toRegion,
+          )
+          : undefined;
+        if (localArc) {
+          if (localArc.unlockFact && nextFacts[localArc.unlockFact] !== true) {
+            throw new Error("The authored local route has not been discovered.");
+          }
+          nextFacts["traversed:" + event.routeId] = true;
+          break;
+        }
+        const localMarker = event.fromRegion === this.region && event.toRegion === this.region
+          ? INTERACTIONS.find(definition => {
+            const result = definition.success;
+            return definition.regionId === this.region && result.type === "traversal" &&
+              result.routeId === event.routeId && result.fromRegion === event.fromRegion &&
+              result.toRegion === event.toRegion && result.landmarkId === event.landmarkId &&
+              sourceRegion?.entities.some(entity => entity.interactionId === definition.id);
+          })
+          : undefined;
+        if (localMarker) {
+          if (localMarker.requiresFacts.some(fact => nextFacts[fact] !== true)) {
+            throw new Error("The authored traversal marker is not available.");
+          }
+          nextFacts["traversed:" + event.routeId] = true;
+          break;
+        }
         const targetEntrance = targetRegion?.entrances.find(
           (route) =>
             route.traversalEvent === event.routeId &&
             route.destinationRegionId === event.toRegion &&
             route.id === event.landmarkId,
-        );
-        const sourceRegion = REGIONS.find(
-          (region) => region.id === event.fromRegion,
         );
         const sourceExit = sourceRegion?.exits.find(
           (route) =>
@@ -906,7 +1319,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
         break;
       }
       case "chapter-transition":
-        if (event.toChapter !== nextChapter + 1 || event.toChapter > 8) {
+        if (pendingPactChoice(this.eventLog, nextChoices) !== null) {
+          throw new Error("A required story choice must be resolved before the chapter transition.");
+        }
+        if (event.toChapter < nextChapter + 1 || event.toChapter > 8) {
           throw new Error("Invalid campaign chapter transition.");
         }
         if (
@@ -931,28 +1347,15 @@ export class CampaignDirector implements CampaignDirectorAPI {
         }
         nextChapter = event.toChapter;
         nextFacts.chapter = nextChapter;
-        if (nextChapter === 6) {
-          nextFacts.wardenCall = false;
-          nextFacts.askSignal = false;
-          nextFacts.refugeOpen = true;
-        }
-        if (nextChapter === 8) {
-          nextRegion = "heartroot-hollow";
-          nextSafeSpawn = this.safeSpawnFor("heartroot-hollow");
-        }
+        // Note: chapter-transition to chapter 6 (grove-fall) does NOT open the Refuge nor reset the Warden Call. The
+        // Refuge opens only after the player actually completes the Fall sequence — Tali safety, pillar bracing and a
+        // successful grove-collapse-escape semantic interaction — which gameplay author and emits. The Ask/Signal
+        // choice becomes available after the Call is severed by that same completion event, never on chapter entry.
         break;
     }
     const nextKeys = new Set(this.eventKeys);
     nextKeys.add(event.idempotencyKey);
     const nextEventLog = [...this.eventLog, cloneEvent(event)];
-    const dominionDelta = nextCampaign.dominionHistory.filter(
-      (item) =>
-        !this.campaign.dominionHistory.some(
-          (prior) =>
-            prior.sequence === item.sequence &&
-            prior.leaderId === item.leaderId,
-        ),
-    );
     this.campaign = {
       ...nextCampaign,
       dominionHistory: mergeHistory(
@@ -960,24 +1363,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
         nextCampaign.dominionHistory,
       ),
     };
-    const completedObjectives = [...this.completedObjectiveIds];
-    for (const questId of this.activeQuestIds) {
-      for (const objective of this.objectivesFor(questId)) {
-        if (
-          !completedObjectives.includes(objective.id) &&
-          objective.requiredEvents.every((requirement) =>
-            nextEventLog.some((prior) => eventMatches(requirement, prior)),
-          )
-        ) {
-          completedObjectives.push(objective.id);
-        }
-      }
-    }
     this.facts = nextFacts;
     this.choices = nextChoices;
     this.region = nextRegion;
     this.chapter = nextChapter;
-    this.completedObjectiveIds = completedObjectives;
     this.endingId = nextEnding;
     this.party = nextParty;
     this.eventKeys = nextKeys;
@@ -988,6 +1377,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
     if (event.type === "chapter-transition")
       this.ensureChapterQuest(nextChapter);
     normalizeRestorationFacts(this.campaign, this.facts);
+    this.applyRelationshipAuthority();
+    this.syncStoryState(before, event);
     this.revision += 1;
     const checkpointEvent =
       event.type === "object-moved" ||
@@ -1001,24 +1392,28 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.checkpoint = createCheckpoint(this.campaign);
       this.lastSafeCheckpoint = this.createSafeCheckpoint();
     }
+  }
 
-    try {
-      await this.saves?.appendRunLedger(
-        this.runId,
-        dominionDelta,
-        [event.idempotencyKey],
-        this.replay ? "showcase-replay" : "campaign",
-      );
-    } catch (error) {
-      this.restoreRollbackState(rollback);
-      if (error instanceof SaveRepositoryError) throw error;
-      throw new SaveRepositoryError(
-        "transaction",
-        "The story event could not be committed to the run ledger.",
-      );
+  /** Required-beat entitlement, pending ceremony choice, encounter bookkeeping and checkpoint ids follow committed state only. */
+  private syncStoryState(before: QuestMarks, event: WorldEvent): void {
+    for (const objectiveId of this.completedObjectiveIds) {
+      if (before.completedObjectives.includes(objectiveId)) continue;
+      const owner = [...this.activeQuestIds, ...this.completedQuestIds].find((questId) =>
+        this.objectivesFor(questId).some((objective) => objective.id === objectiveId));
+      const cue = owner ? NARRATIVE_CUES[owner]?.onObjective?.find((item) => item.objectiveId === objectiveId) : undefined;
+      if (cue) this.enqueueBeat(cue.beatId);
     }
-    this.lastEvent = structuredClone(event);
-    return this.publish();
+    for (const questId of this.completedQuestIds) {
+      if (before.completedQuests.includes(questId)) continue;
+      const beat = NARRATIVE_CUES[questId]?.onComplete;
+      if (beat) this.enqueueBeat(beat);
+    }
+    this.enqueueActivationCues(this.activeQuestIds.filter((questId) => !before.active.includes(questId)));
+    this.story.pendingChoiceId = pendingPactChoice(this.eventLog, this.choices);
+    if (event.type === "encounter-resolved" && event.resolution !== "escaped" && this.story.activeEncounterId === event.encounterId) {
+      this.story.activeEncounterId = null;
+    }
+    this.normalizeStory();
   }
 
   choose(choiceId: string, optionId: string): Promise<CampaignSnapshot> {
@@ -1043,82 +1438,76 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return this.publish();
   }
 
-  acceptQuest(questId: import("../contracts.js").QuestId): CampaignSnapshot {
-    const quest = QUESTS.find((item) => item.id === questId);
-    if (!quest || !quest.optional)
-      throw new Error("Only authored optional quests can be accepted.");
-    if (quest.chapter > this.chapter)
-      throw new Error("This quest is not unlocked yet.");
-    for (const requirement of quest.prerequisites) {
-      if (
-        requirement.startsWith("region:") &&
-        this.region !== requirement.slice(7) &&
-        !this.facts["visited:" + requirement.slice(7)]
-      ) {
+  acceptQuest(questId: QuestId): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      this.assertCampaignRun();
+      const quest = QUESTS.find((item) => item.id === questId);
+      if (!quest || !quest.optional)
+        throw new Error("Only authored optional quests can be accepted.");
+      if (this.activeQuestIds.includes(quest.id) || this.completedQuestIds.includes(quest.id))
+        return this.snapshot();
+      if (quest.chapter > this.chapter)
+        throw new Error("This quest is not unlocked yet.");
+      if (this.region !== quest.region && this.facts["visited:" + quest.region] !== true)
         throw new Error("Travel to this region before accepting its quest.");
+      for (const requirement of quest.prerequisites) {
+        if (requirement.startsWith("quest:") && !this.completedQuestIds.includes(requirement.slice(6)))
+          throw new Error("A prerequisite quest is incomplete.");
+        if (requirement.startsWith("region:") && this.region !== requirement.slice(7) && this.facts["visited:" + requirement.slice(7)] !== true)
+          throw new Error("Travel to this region before accepting its quest.");
       }
-      if (
-        requirement.startsWith("quest:") &&
-        !this.completedQuestIds.includes(requirement.slice(6))
-      ) {
-        throw new Error("A prerequisite quest is incomplete.");
-      }
-    }
-    if (
-      !this.activeQuestIds.includes(quest.id) &&
-      !this.completedQuestIds.includes(quest.id)
-    ) {
+      const rollback = this.rollbackState(), epoch = this.epoch;
       this.activeQuestIds.push(quest.id);
-    }
-    this.revision += 1;
-    return this.publish();
+      this.facts["quest:" + quest.id + ":accepted"] = true;
+      this.enqueueActivationCues([quest.id]);
+      this.updateQuestProgress();
+      if (this.completedQuestIds.includes(quest.id)) {
+        const beat = NARRATIVE_CUES[quest.id]?.onComplete;
+        if (beat) this.enqueueBeat(beat);
+      }
+      this.normalizeStory();
+      this.revision += 1;
+      this.refreshSafeCheckpoint();
+      await this.commit(rollback, epoch);
+      return this.publish();
+    });
   }
-  selectParty(
-    slot: "combat" | "utility" | "scout",
-    companionId: CompanionId,
-  ): CampaignSnapshot {
-    if (slot === "scout" && companionId !== "vara")
-      throw new Error("Vara is the only scout companion.");
-    if (slot !== "scout" && companionId === "vara")
-      throw new Error("Vara occupies the aerial scout role.");
-    if (
-      companionId === "solkar" &&
-      (this.campaign.world.factions.crown.leaderStatus === "exiled" ||
-        this.choices["sunmane-resolution"] !== "bond")
-    ) {
-      throw new Error(
-        "Solkar is selectable only after the voluntary alliance and cannot return after exile.",
-      );
-    }
-    const fragmentByCompanion: Record<CompanionId, FragmentId> = {
-      vara: "heartroot-sky",
-      koro: "heartroot-canopy",
-      asha: "heartroot-fang",
-      sable: "heartroot-pack",
-      nyra: "heartroot-shadow",
-      solkar: "heartroot-crown",
-    };
-    if (
-      !this.campaign.world.fragments.includes(fragmentByCompanion[companionId])
-    ) {
-      throw new Error(
-        "This companion is not unlocked in the current campaign.",
-      );
-    }
-    const party = { ...this.party };
-    if (slot === "scout") {
-      party.scout = "vara";
-    } else if (slot === "combat") {
-      if (party.utility === companionId)
-        throw new Error("A companion cannot occupy both ground-party slots.");
-      party.combat = companionId;
-    } else {
-      if (party.combat === companionId)
-        throw new Error("A companion cannot occupy both ground-party slots.");
-      party.utility = companionId;
-    }
-    this.party = party;
-    return this.publish();
+
+  learnUpgrade(upgradeId: string): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      this.assertCampaignRun();
+      if (!HUB_REGION_IDS.some(id => id === this.region))
+        throw new Error("Train at the Grove or Refuge to learn an upgrade.");
+      const upgrade = HUB_UPGRADES.find(item => item.id === upgradeId);
+      if (!upgrade) throw new Error("Unknown hub upgrade.");
+      if (this.facts[upgrade.fact] === true) return this.snapshot();
+      if (!this.completedQuestIds.includes(upgrade.requiredQuestId) ||
+          (upgrade.requiredFact !== null && this.facts[upgrade.requiredFact] !== true))
+        throw new Error(upgrade.requirement);
+      const rollback = this.rollbackState(), epoch = this.epoch;
+      this.facts[upgrade.fact] = true;
+      this.revision += 1;
+      this.refreshSafeCheckpoint();
+      await this.commit(rollback, epoch);
+      return this.publish();
+    });
+  }
+  selectParty(companionId: CompanionId): Promise<CampaignSnapshot> {
+    return this.serialize(async () => {
+      if (!isCompanionId(companionId)) throw new Error("Unknown companion.");
+      if (this.story.activeEncounterId !== null)
+        throw new Error("The companion cannot change during an active encounter.");
+      if (companionId === "solkar" && this.campaign.world.factions.crown.leaderStatus === "exiled")
+        throw new Error("Solkar cannot return after your exile decision.");
+      const party = { companionId };
+      const rollback = this.rollbackState();
+      const epoch = this.epoch;
+      this.party = party;
+      this.revision += 1;
+      this.refreshSafeCheckpoint();
+      await this.commit(rollback, epoch);
+      return this.publish();
+    });
   }
 
   async travel(
@@ -1159,16 +1548,37 @@ export class CampaignDirector implements CampaignDirectorAPI {
     if (entrance.unlockFact && this.facts[entrance.unlockFact] !== true) {
       throw new Error("The selected route has not been discovered.");
     }
+    // One key per transition request: a return journey to a previously visited region is a new request, never a consumed key.
+    const priorJourneys = this.eventLog.filter(
+      (event) =>
+        event.type === "traversal" &&
+        event.fromRegion === this.region &&
+        event.toRegion === regionId &&
+        event.landmarkId === entrance.id,
+    ).length;
     return this.processEvent({
       type: "traversal",
       eventId: createId(),
       idempotencyKey:
-        "travel:" + this.region + ":" + regionId + ":" + entrance.id,
+        "travel:" + this.region + ":" + regionId + ":" + entrance.id + ":" + priorJourneys,
       routeId: entrance.traversalEvent,
       fromRegion: this.region,
       toRegion: regionId,
       landmarkId: entrance.id,
     });
+  }
+
+  /**
+   * Test seam used by durable regression tests and inventory reports: a pure traversal that records the journey but
+   * does not require a live encounter or active pact. Travels through an authored chapter exit (with its unlock fact)
+   * and never raises on a return to a previously visited region. The Director's own `travel` is preferred for gameplay.
+   */
+  async travelThroughSegmentExit(segmentId: ChapterSegmentId, requestId: string): Promise<CampaignSnapshot> {
+    const definition = this.chapters.find((item) => item.segmentId === segmentId);
+    if (!definition) throw new Error("No authored chapter segment: " + segmentId);
+    const exit = REGIONS.find((item) => item.id === definition.regionId)?.exits[0];
+    if (!exit) throw new Error("The authored chapter segment has no exit route: " + segmentId);
+    return this.advanceChapter({ exitId: exit.id, requestId });
   }
 
   async captureCheckpoint(): Promise<CampaignSafeCheckpoint> {
@@ -1179,29 +1589,54 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return structuredClone(this.lastSafeCheckpoint);
   }
 
-  async restoreCheckpoint(input: unknown): Promise<boolean> {
-    if (
-      this.replay ||
-      !isCampaignSafeCheckpoint(input) ||
-      input.runId !== this.runId ||
-      input.worldCheckpoint.runId !== this.runId
-    ) {
-      return false;
-    }
-    const runHistory = this.campaign.dominionHistory;
-    const imported = importCheckpoint(this.campaign, input.worldCheckpoint);
-    if (imported.accepted === false) return false;
-    this.campaign = {
-      ...imported.state,
-      dominionHistory: mergeHistory(runHistory, imported.state.dominionHistory),
-    };
-    this.restoreProgress(input.progress);
-    this.safeSpawn = structuredClone(input.safeSpawn);
-    this.checkpoint = createCheckpoint(this.campaign);
-    this.lastSafeCheckpoint = structuredClone(input);
-    this.recoveryRequest = null;
-    this.publish();
-    return true;
+  restoreCheckpoint(input: unknown): Promise<boolean> {
+    return this.serialize(async () => {
+      if (this.replay) return false;
+      let migrated: CampaignSafeCheckpoint | "future" | null;
+      try {
+        migrated = migrateSafeCheckpoint(input, {
+          scope: this.scope,
+          chapters: this.chapters,
+          layoutMigrations: this.layoutMigrations,
+          heroId: this.heroId,
+        });
+      } catch {
+        return false;
+      }
+      if (
+        migrated === null ||
+        migrated === "future" ||
+        !isCampaignSafeCheckpoint(migrated) ||
+        migrated.runId !== this.runId ||
+        migrated.worldCheckpoint.runId !== this.runId ||
+        migrated.progress.session.saveScope !== this.scope ||
+        migrated.progress.session.heroId !== this.heroId ||
+        sessionContentProblem(migrated.progress.session, migrated.progress.regionId, this.chapters) !== null
+      ) {
+        return false;
+      }
+      const checkpoint = migrated;
+      const runHistory = this.campaign.dominionHistory;
+      const imported = importCheckpoint(this.campaign, checkpoint.worldCheckpoint);
+      if (imported.accepted === false) return false;
+      const rollback = this.rollbackState();
+      const epoch = this.epoch;
+      this.campaign = {
+        ...imported.state,
+        dominionHistory: mergeHistory(runHistory, imported.state.dominionHistory),
+      };
+      this.restoreProgress(checkpoint.progress);
+      this.safeSpawn = structuredClone(checkpoint.safeSpawn);
+      this.checkpoint = createCheckpoint(this.campaign);
+      this.lastSafeCheckpoint = structuredClone(checkpoint);
+      this.recoveryRequest = null;
+      this.story.pendingChoiceId = pendingPactChoice(this.eventLog, this.choices);
+      this.normalizeStory();
+      // The stored autosave must not keep progress newer than the restored safe boundary.
+      await this.commit(rollback, epoch);
+      this.publish();
+      return true;
+    });
   }
 
   ending() {
@@ -1266,7 +1701,15 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return this.saves.exportSlot(slotId);
   }
 
-  async importSave(
+  importSave(
+    input: string,
+    slotId: string,
+    label: string,
+  ): Promise<CampaignSnapshot> {
+    return this.serialize(() => this.importSaveNow(input, slotId, label));
+  }
+
+  private async importSaveNow(
     input: string,
     slotId: string,
     label: string,
@@ -1301,7 +1744,11 @@ export class CampaignDirector implements CampaignDirectorAPI {
     return this.publish();
   }
 
-  async load(slotId: string): Promise<CampaignSnapshot> {
+  load(slotId: string): Promise<CampaignSnapshot> {
+    return this.serialize(() => this.loadNow(slotId));
+  }
+
+  private async loadNow(slotId: string): Promise<CampaignSnapshot> {
     if (!this.saves)
       throw new SaveRepositoryError(
         "unavailable",
@@ -1331,6 +1778,9 @@ export class CampaignDirector implements CampaignDirectorAPI {
     fallbackRegionId: string,
   ): void {
     validateLoadedHistory(progress);
+    if (progress && progress.session.saveScope !== this.scope) {
+      throw new SaveRepositoryError("scope-mismatch", "The save belongs to a different persistence scope and was not loaded.");
+    }
     // Validate legacy metadata and resolve an authored fallback before replacing
     // any live state; a rejected load must leave the current journey intact.
     const fallbackRegion = REGIONS.find((item) => item.id === fallbackRegionId);
@@ -1345,6 +1795,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.checkpoint = checkpoint;
     this.eventKeys = new Set(eventKeys);
     if (progress) {
+      this.heroId = progress.session.heroId;
+      this.story = storyFromResume(progress.session.resume);
       this.chapter = progress.chapter;
       this.region = progress.regionId as RegionId;
       this.activeQuestIds = [...progress.activeQuestIds];
@@ -1369,6 +1821,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.safeSpawn = nextSafeSpawn;
       this.revision = progress.revision ?? 0;
     } else {
+      this.heroId = DEFAULT_HERO_ID;
+      this.story = emptyStory();
       const region = fallbackRegion!;
       this.chapter = fallbackChapter;
       this.region = region.id;
@@ -1384,7 +1838,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.activeQuestIds = firstQuest ? [firstQuest] : [];
       this.completedObjectiveIds = [];
       this.trackedObjectiveId = null;
-      this.party = { scout: "vara" };
+      this.party = { companionId: DEFAULT_HERO_COMPANIONS[this.heroId] };
       this.choices = {};
       this.facts = emptyWorldFacts(campaign);
       this.facts.chapter = fallbackChapter;
@@ -1408,12 +1862,15 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.facts.solkarPresent = false;
       this.facts["solkar-exiled"] = true;
       this.facts.crownCouncilAvailable = true;
-      if (this.party.combat === "solkar") delete this.party.combat;
-      if (this.party.utility === "solkar") delete this.party.utility;
+      if (this.party.companionId === "solkar") delete this.party.companionId;
     }
-    this.facts.refugeOpen = this.chapter >= 6;
+    // Preserve the persisted `refugeOpen` (and `wardenCall`/`askSignal`) from the load. The Director never infers them
+    // from chapter alone; gameplay author and emit the earned `grove-collapse-escape` semantic interaction that flips
+    // the bit transactionally, and save/import carries it forward.
     this.recoveryRequest = null;
     this.lastEvent = null;
+    this.story.pendingChoiceId = pendingPactChoice(this.eventLog, this.choices);
+    this.normalizeStory();
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
   }
 
@@ -1428,11 +1885,13 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.choices = { ...progress.choices };
     this.facts = factsWithRestorationDefaults(progress.worldFacts);
     normalizeRestorationFacts(this.campaign, this.facts);
-    this.facts.refugeOpen = this.chapter >= 6;
+    // Preserve the persisted `refugeOpen` (and `wardenCall`/`askSignal`) from the checkpoint. Save/restore never
+    // reopens the Refuge based on chapter number; the bit was set by the earned `grove-collapse-escape` event.
     this.endingId = progress.ending;
     this.eventLog = progress.eventLog.map((event) => structuredClone(event));
     this.eventKeys = new Set(progress.eventKeys);
     this.revision = progress.revision;
+    this.story = storyFromResume(progress.session.resume);
     this.recoveryRequest = null;
     this.lastEvent = null;
   }
@@ -1442,22 +1901,23 @@ export class CampaignDirector implements CampaignDirectorAPI {
       campaign: this.campaign,
       region: this.region,
       chapter: this.chapter,
-      facts: this.facts,
-      choices: this.choices,
-      activeQuestIds: this.activeQuestIds,
-      completedQuestIds: this.completedQuestIds,
-      completedObjectiveIds: this.completedObjectiveIds,
+      facts: { ...this.facts },
+      choices: { ...this.choices },
+      activeQuestIds: [...this.activeQuestIds],
+      completedQuestIds: [...this.completedQuestIds],
+      completedObjectiveIds: [...this.completedObjectiveIds],
       trackedObjectiveId: this.trackedObjectiveId,
-      party: this.party,
+      party: { ...this.party },
       endingId: this.endingId,
       checkpoint: this.checkpoint,
       lastSafeCheckpoint: this.lastSafeCheckpoint,
       safeSpawn: this.safeSpawn,
       recoveryRequest: this.recoveryRequest,
       lastEvent: this.lastEvent,
-      eventKeys: this.eventKeys,
-      eventLog: this.eventLog,
+      eventKeys: new Set(this.eventKeys),
+      eventLog: [...this.eventLog],
       revision: this.revision,
+      story: cloneStory(this.story),
     };
   }
 
@@ -1465,22 +1925,23 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.campaign = rollback.campaign;
     this.region = rollback.region;
     this.chapter = rollback.chapter;
-    this.facts = rollback.facts;
-    this.choices = rollback.choices;
-    this.activeQuestIds = rollback.activeQuestIds;
-    this.completedQuestIds = rollback.completedQuestIds;
-    this.completedObjectiveIds = rollback.completedObjectiveIds;
+    this.facts = { ...rollback.facts };
+    this.choices = { ...rollback.choices };
+    this.activeQuestIds = [...rollback.activeQuestIds];
+    this.completedQuestIds = [...rollback.completedQuestIds];
+    this.completedObjectiveIds = [...rollback.completedObjectiveIds];
     this.trackedObjectiveId = rollback.trackedObjectiveId;
-    this.party = rollback.party;
+    this.party = { ...rollback.party };
     this.endingId = rollback.endingId;
     this.checkpoint = rollback.checkpoint;
     this.lastSafeCheckpoint = rollback.lastSafeCheckpoint;
     this.safeSpawn = rollback.safeSpawn;
     this.recoveryRequest = rollback.recoveryRequest;
     this.lastEvent = rollback.lastEvent;
-    this.eventKeys = rollback.eventKeys;
-    this.eventLog = rollback.eventLog;
+    this.eventKeys = new Set(rollback.eventKeys);
+    this.eventLog = [...rollback.eventLog];
     this.revision = rollback.revision;
+    this.story = cloneStory(rollback.story);
   }
 
   private progressRecord(): CampaignProgressRecord {
@@ -1499,6 +1960,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       eventKeys: [...this.eventKeys],
       revision: this.revision,
       safeSpawn: structuredClone(this.safeSpawn),
+      session: this.sessionMetadata(),
     };
   }
 
@@ -1517,12 +1979,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
       eventLog: this.eventLog.map((event) => structuredClone(event)),
       eventKeys: [...this.eventKeys],
       revision: this.revision,
+      session: this.sessionMetadata(),
     };
   }
 
   private createSafeCheckpoint(): CampaignSafeCheckpoint {
-    let encounter: (typeof ENCOUNTER_DEFINITIONS)[number] | undefined;
-    for (const questId of this.activeQuestIds) {
+    // The authored active encounter wins; otherwise derive the unresolved encounter of an active objective in this region.
+    let encounter: (typeof ENCOUNTER_DEFINITIONS)[number] | undefined = this.story.activeEncounterId
+      ? ENCOUNTER_DEFINITIONS.find((definition) => definition.id === this.story.activeEncounterId)
+      : undefined;
+    for (const questId of encounter ? [] : this.activeQuestIds) {
       const quest = QUESTS.find((item) => item.id === questId);
       for (const objective of quest?.objectives ?? []) {
         if (objective.mechanic !== "encounter" || this.completedObjectiveIds.includes(objective.id)) continue;
@@ -1539,12 +2005,13 @@ export class CampaignDirector implements CampaignDirectorAPI {
       if (encounter) break;
     }
     const region = REGIONS.find((item) => item.id === this.region)!;
-    const actorIds = encounter
-      ? region.encounterParticipants[encounter.id] ?? encounter.actorIds.filter((id) => id !== "aren")
+    const encounterId = this.story.activeEncounterId ?? encounter?.id ?? null;
+    const actorIds = encounterId
+      ? region.encounterParticipants[encounterId] ?? encounter?.actorIds.filter((id) => id !== "aren") ?? []
       : [];
     return {
       kind: "campaign-safe-checkpoint",
-      schemaVersion: 1,
+      schemaVersion: 3,
       runId: this.runId,
       checkpointId: this.runId + ":safe:" + this.revision,
       worldCheckpoint: createCheckpoint(this.campaign),
@@ -1552,7 +2019,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       safeSpawn: structuredClone(this.safeSpawn),
       encounterReset: {
         policy: "restart-from-entry",
-        encounterId: encounter?.id ?? null,
+        encounterId,
         actorIds: [...actorIds],
       },
     };
@@ -1606,9 +2073,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
   }
 
   private updateQuestProgress(): void {
-    for (const questId of [...this.activeQuestIds]) {
+    const pending = [...this.activeQuestIds];
+    for (const questId of pending) {
       const quest = QUESTS.find((item) => item.id === questId);
       const objectives = quest?.objectives ?? [];
+      for (const objective of objectives) {
+        if (!this.completedObjectiveIds.includes(objective.id) &&
+          objective.requiredEvents.every(requirement => this.eventLog.some(event => eventMatches(requirement, event)))) {
+          this.completedObjectiveIds.push(objective.id);
+        }
+      }
       if (
         !objectives.length ||
         !objectives
@@ -1634,8 +2108,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
             !this.completedQuestIds.includes(id),
         );
       });
-      if (nextQuestId && !this.activeQuestIds.includes(nextQuestId))
+      if (nextQuestId && !this.activeQuestIds.includes(nextQuestId)) {
         this.activeQuestIds.push(nextQuestId);
+        pending.push(nextQuestId);
+      }
     }
   }
 
@@ -1678,6 +2154,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
       };
       applyRestorationBooleans(this.facts, "mistveil-basin", "restored");
       this.facts.mistveil_restored = true;
+    }
+    if (questId === "river-of-black-sap") {
+      this.facts["side:river-flood-detour"] = this.choices["river-route"] === "break-dam";
+      this.facts["side:river-bank-open"] = this.choices["river-route"] === "repair";
     }
     if (questId === "orun-the-hollow-king") {
       this.campaign = {
@@ -1845,7 +2325,14 @@ export class CampaignDirector implements CampaignDirectorAPI {
         },
       };
     }
-    if (choice === "wild-march-formation") facts.wildMarchFormed = true;
+    if (choice === "wild-march-formation") {
+      facts.wildMarchFormed = true;
+      // Derive the Hollow route unlock fact from the authorized formation choice. The Wild March forms the coalition
+      // route with whichever factions agreed to march (the others may decline without blocking formation), so Hollow
+      // opens only after the player has chosen the formation option. We do not open Hollow based on chapter number
+      // alone; the route-side unlockFact gate (`hollow-opening`) holds the path closed until this fact flips.
+      facts["hollow-opening"] = true;
+    }
     if (choice === "river-route") facts["riverRoute:" + option] = true;
     if (choice === "marek-fate") {
       campaign = {
@@ -1870,8 +2357,11 @@ export class CampaignDirector implements CampaignDirectorAPI {
     optionId: string,
     campaign: CampaignState,
   ): boolean {
-    const options = CAMPAIGN_CHOICES[choiceId];
-    if (!options || !options.some((option) => option.id === optionId))
+    const pact = pactForChoice(choiceId);
+    const optionIds: readonly string[] | undefined = pact
+      ? PACT_OPTION_IDS
+      : this.choiceCatalog[choiceId]?.map((option) => option.id);
+    if (!optionIds || !optionIds.includes(optionId))
       throw new CampaignChoiceRejectedError(choiceId, optionId, "Unknown campaign choice or option.");
     // Most choices settle one outcome. These two are authored once per faction.
     const factionScoped =
@@ -1892,6 +2382,23 @@ export class CampaignDirector implements CampaignDirectorAPI {
         throw new CampaignChoiceRejectedError(choiceId, optionId, "This campaign choice already has a committed resolution.");
       return true;
     }
+    if (choiceId === "solkar-listens") {
+      if (this.facts["quest:a-king-without-subjects:accepted"] !== true
+        || this.facts["interaction:a-king-without-subjects-evidence"] !== true
+        || this.choices["sunmane-resolution"] === undefined)
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "Examine the refusal after settling Sunmane's governance.");
+      const crown = campaign.world.factions.crown;
+      if (optionId === "listen" && (crown.leaderId !== "solkar" || crown.leaderStatus !== "active" || this.facts.solkarPresent === false))
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "Absent or exiled Solkar cannot hear the refusal; use council mediation.");
+    }
+    if (pact) {
+      if (this.chapter !== pact.chapter)
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "This pact is only decided in its own chapter.");
+      if (!this.eventLog.some((event) => event.type === "encounter-resolved" && eventMatches("encounter:" + pact.encounterId, event)))
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "The pact is not available until the guardian has been cleansed.");
+      if (!campaign.world.companions[pact.companionId].recruited)
+        throw new CampaignChoiceRejectedError(choiceId, optionId, "The pact requires a recruited companion.");
+    }
     if (
       choiceId === "sunmane-resolution" &&
       campaign.world.factions.crown.leaderStatus === "exiled" &&
@@ -1902,8 +2409,13 @@ export class CampaignDirector implements CampaignDirectorAPI {
      if (choiceId === "chapter-six-response") {
        if (this.chapter !== 6)
          throw new CampaignChoiceRejectedError(choiceId, optionId, "Ask or Signal is only available in Chapter 6.");
-       if (this.facts.wardenCall !== true)
-         throw new CampaignChoiceRejectedError(choiceId, optionId, "The Warden Call must happen before Ask or Signal.");
+       // The Fall must be completed in fact, not just by chapter entry. Gameplay author and emit
+       // `grove-collapse-escape` after possessed-ally protection, Tali safety, and pillar resolution; that event
+       // transactionally sets `refugeOpen=true` and `wardenCall=false`. Until then the player cannot decide between
+       // Ask and Signal (the Call is still on, there is nothing voluntary to choose yet).
+       const fallCompleted = this.facts.refugeOpen === true && this.facts.wardenCall === false;
+       if (!fallCompleted)
+         throw new CampaignChoiceRejectedError(choiceId, optionId, "The Warden Call must be severed by completing the Grove before Ask or Signal.");
      }
     if (
       choiceId === "final-ending" &&
@@ -1942,6 +2454,9 @@ export class CampaignDirector implements CampaignDirectorAPI {
       throw new CampaignChoiceRejectedError(choiceId, optionId, "Sunmane governance is only decided in Chapter 5.");
     if (choiceId === "pack-leadership" && this.chapter !== 3)
       throw new CampaignChoiceRejectedError(choiceId, optionId, "Pack leadership is only decided in Chapter 3.");
+    const guardian = choiceId === "pack-leadership" ? "encounter-ruun" : choiceId === "sunmane-resolution" ? "encounter-solkar" : undefined;
+    if (guardian && !this.eventLog.some(event => event.type === "encounter-resolved" && event.encounterId === guardian && event.resolution === "cleansed"))
+      throw new CampaignChoiceRejectedError(choiceId, optionId, "The guardian must be cleansed before deciding regional leadership.");
     if (choiceId === "marek-fate" && this.chapter !== 4)
       throw new CampaignChoiceRejectedError(choiceId, optionId, "Marek’s fate is only decided in Chapter 4.");
     if (choiceId === "chapter-seven-commitment" && this.chapter !== 7)

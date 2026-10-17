@@ -3,7 +3,8 @@ import type { CombatActor, CombatInput } from '../CombatEngine.js';
 import { PLAYER_SKILLS } from '../PlayerSkills.js';
 import { yawOf } from '../PlayerArsenal.js';
 import type { LivePlayerProjectile } from '../PlayerArsenal.js';
-import { SAKDA, SAKDA_CLIPS, SAKDA_LABELS } from '../SakdaSkills.js';
+import { SAKDA, SAKDA_CLIPS, SAKDA_HITS, SAKDA_LABELS } from '../SakdaSkills.js';
+import type { HitSpec } from '../reactions.js';
 import type { HeroKit, KitCue, KitFactory, KitHost, KitPlayerExtras, KitStagger, KitStrike } from './KitHost.js';
 
 /**
@@ -67,7 +68,7 @@ const STRIKE_REACH = CONTACT_GAP + 0.9;
 /** Tiger's Wrath kick reach: the soft-target margin beyond its 2 m dash. */
 const WRATH_REACH = 2.6;
 /** Frames of the active pose after a J strike (ring excluded). */
-const ACTIVE_HOLD = 4;
+const ACTIVE_HOLD = 6;
 /** Peak height (m) of the Flying Knee arc. */
 const KNEE_ARC_HEIGHT = 1.4;
 /** Shortest Flying Knee leap worth taking when the target is further away; a shorter clear path rejects the skill. */
@@ -75,7 +76,7 @@ const MIN_LEAP = 0.5;
 /** Distance (m) between the leap's desired and swept end point beyond which the sweep counts as blocked. */
 const BLOCK_EPSILON = 0.05;
 /** Ticks over which Tiger's Wrath slides its target. */
-const SLIDE_TICKS = 6;
+const SLIDE_TICKS = 9;
 /** Largest single knockback increment, so a fast slide cannot skip over a hostile or a wall. */
 const SLIDE_SUBSTEP = 0.5;
 const FULL_RING = Math.PI * 2;
@@ -119,8 +120,8 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     }
     return undefined;
   };
-  const strike = (action: string, clip: string, damage: number, stagger: KitStagger, stopTicks: number, instinct: number): KitStrike =>
-    ({ action, clip: clipOf(clip), damage, element: 'ember', stagger, stopTicks, instinct });
+  const strike = (action: string, clip: string, damage: number, stagger: KitStagger, stopTicks: number, instinct: number, hit?: HitSpec): KitStrike =>
+    ({ action, clip: clipOf(clip), damage, element: 'ember', stagger, stopTicks, instinct, ...(hit ? { hit } : {}) });
   const cue = (partial: Omit<KitCue, 'actorId' | 'element' | 'priority'>): void =>
     host.queueCue({ actorId: host.player.id, element: 'ember', priority: 'essential', ...partial });
   /** Whether Sakda, standing where he actually is now, can land a single-target hit on `target` (reach, visibility, walls). */
@@ -225,6 +226,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
   const updateLimb = (s: SakdaState, a: SakdaAction, elapsed: number): void => {
     const spec = SAKDA.limbs.steps[a.step - 1]!, clip = `light_${a.step}`;
     if (spec.stepMetres !== undefined && elapsed < a.activeAt) approach(actorFor(a.targetId), spec.stepMetres / a.activeAt);
+    else if (spec.lungeMetres !== undefined && elapsed < a.activeAt) { const lunged = actorFor(a.targetId); if (lunged) approach(lunged, spec.lungeMetres / a.activeAt); }
     const ringTicks = spec.ring?.ticks ?? 0;
     host.setPhase(elapsed < a.activeAt ? 'anticipation' : elapsed < a.activeAt + Math.max(ACTIVE_HOLD, ringTicks) ? 'active' : 'recovery');
     if (elapsed < a.activeAt) return;
@@ -234,10 +236,10 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
       const arc = spec.arcDegrees ?? 120;
       slashCue(clip, spec.reach, arc, ACTIVE_HOLD + 2, 0.8 + a.step * 0.15);
       if (spec.ring) cue({ kind: 'slash', phase: 'active', actionId: clipOf(clip), position: { ...host.player.position }, footprint: { width: spec.ring.radius * 2, length: spec.ring.radius * 2, sectorRadians: FULL_RING }, durationTicks: spec.ring.ticks, intensity: 1.2, shape: 'ring' });
-      struck += host.strikeCone(host.player.position, host.player.facing, spec.reach, arc, strike(clip, clip, spec.damage, 'none', a.step === 4 ? 5 : 3, 8), a.hitIds);
+      struck += host.strikeCone(host.player.position, host.player.facing, spec.reach, arc, strike(clip, clip, spec.damage, 'none', a.step === 4 ? 5 : 3, 8, SAKDA_HITS.limbs[a.step - 1]), a.hitIds);
     }
     // The ember ring is its own strike with its own hit tracking: a target the kick hit takes the ring too.
-    if (spec.ring && elapsed < a.activeAt + spec.ring.ticks) struck += host.strikeDisk(host.player.position, spec.ring.radius, strike(clip, clip, spec.ring.damage, 'none', 2, 4), a.ringHitIds);
+    if (spec.ring && elapsed < a.activeAt + spec.ring.ticks) struck += host.strikeDisk(host.player.position, spec.ring.radius, strike(clip, clip, spec.ring.damage, 'none', 2, 4, SAKDA_HITS.ring), a.ringHitIds);
     // A Flurry charge and its mana refund are spent on the swing's first successful contact, never on a miss.
     if (struck > 0 && !a.manaDone) {
       a.manaDone = true;
@@ -316,7 +318,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     const before = target.vitality ?? 100, missing = Math.max(0, (target.maxVitality ?? before) - before);
     const bonus = Math.min(spec.missingHealthCap, Math.round(missing * spec.missingHealthRatio));
     clearEcho(s, target.id);
-    host.strikeHostile(target, strike('sigil_barrage', 'sigil_recast', spec.damage + bonus, 'idle', 6, 8));
+    host.strikeHostile(target, strike('sigil_barrage', 'sigil_recast', spec.damage + bonus, 'idle', 6, 8, SAKDA_HITS.resonate));
   };
 
   // ---- L hold: Hundred Elbows ---------------------------------------------------------------------------------------
@@ -341,13 +343,13 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     while (a.done < spec.hitAt.length && elapsed >= spec.hitAt[a.done]!) {
       a.done++;
       slashCue('sigil_barrage', 2.4, 100, 6, 0.7);
-      host.strikeCone(host.player.position, host.player.facing, 2.4, 100, strike('sigil_barrage', 'sigil_barrage', spec.hitDamage, 'none', 2, 3));
+      host.strikeCone(host.player.position, host.player.facing, 2.4, 100, strike('sigil_barrage', 'sigil_barrage', spec.hitDamage, 'none', 2, 3, SAKDA_HITS.elbow));
     }
     if (a.done === spec.hitAt.length && elapsed >= spec.uppercutAt) {
       a.done++;
       slashCue('sigil_barrage', 2.6, 120, ACTIVE_HOLD + 6, 1.6);
       const struck: ActorId[] = [];
-      host.strikeCone(host.player.position, host.player.facing, 2.6, 120, strike('sigil_barrage', 'sigil_barrage', spec.uppercutDamage, 'none', 5, 8), struck);
+      host.strikeCone(host.player.position, host.player.facing, 2.6, 120, strike('sigil_barrage', 'sigil_barrage', spec.uppercutDamage, 'none', 5, 8, SAKDA_HITS.uppercut), struck);
       for (const id of struck) { const hit = actorFor(id); if (hit) host.interruptMonster(hit, 'charged_heavy'); }
     }
   };
@@ -369,7 +371,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     if (elapsed < spec.activeAt || a.done > 0) return;
     a.done = 1;
     cue({ kind: 'slash', phase: 'active', actionId: clipOf('heavy'), position: { ...host.player.position }, footprint: { width: spec.radius * 2, length: spec.radius * 2, sectorRadians: FULL_RING }, durationTicks: 14, intensity: 1.5, shape: 'ring' });
-    host.strikeDisk(host.player.position, spec.radius, strike('heavy', 'heavy', spec.damage, 'interrupt', 6, 8), a.hitIds);
+    host.strikeDisk(host.player.position, spec.radius, strike('heavy', 'heavy', spec.damage, 'interrupt', 6, 8, SAKDA_HITS.stomp), a.hitIds);
     for (const id of a.hitIds) { const hit = actorFor(id); if (hit) host.crippleMonster(hit, spec.crippleSpeedFactor, spec.crippleTicks); }
   };
 
@@ -464,10 +466,10 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     if (target) {
       // The knee only hurts the target when it actually connects from where Sakda landed; a missed target also skips the ring.
       a.hitIds.push(target.id);
-      if (connects(target, STRIKE_REACH)) host.strikeHostile(target, strike('charged_heavy', 'charged_heavy', spec.damage, 'interrupt', 7, 10));
+      if (connects(target, STRIKE_REACH)) host.strikeHostile(target, strike('charged_heavy', 'charged_heavy', spec.damage, 'interrupt', 7, 10, SAKDA_HITS.flyingKnee));
       else missCue('Flying Knee missed.', target, 'charged_heavy');
     }
-    host.strikeDisk(host.player.position, spec.ringRadius, strike('charged_heavy', 'charged_heavy', spec.ringDamage, 'interrupt', 4, 4), a.hitIds);
+    host.strikeDisk(host.player.position, spec.ringRadius, strike('charged_heavy', 'charged_heavy', spec.ringDamage, 'interrupt', 4, 4, SAKDA_HITS.kneeRing), a.hitIds);
   };
 
   // ---- Q: Iron Clinch ---------------------------------------------------------------------------------------------------
@@ -499,7 +501,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     slashCue('root_tether', 2.2, 120, ACTIVE_HOLD + 2, 1.2);
     if (!target) return;
     faceTarget(target);
-    if (connects(target, STRIKE_REACH)) host.strikeHostile(target, strike('root_tether', 'root_tether', spec.damage, 'interrupt', 5, 8));
+    if (connects(target, STRIKE_REACH)) host.strikeHostile(target, strike('root_tether', 'root_tether', spec.damage, 'interrupt', 5, 8, SAKDA_HITS.clinch));
     else missCue('Iron Clinch missed.', target, 'root_tether');
   };
 
@@ -526,7 +528,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     while (share > 1e-6) {
       const step = Math.min(SLIDE_SUBSTEP, share), moved = host.displaceMonster(target, direction, step);
       a.slid += moved; share -= step;
-      host.strikeDisk(target.position, target.radius, strike('judgement', 'judgement', spec.slideDamage, 'none', 2, 0), a.hitIds);
+      host.strikeDisk(target.position, target.radius, strike('judgement', 'judgement', spec.slideDamage, 'none', 2, 0, SAKDA_HITS.wrathSlide), a.hitIds);
       if (moved < step * 0.5) { a.slid = spec.knockback; break; }
     }
   };
@@ -547,7 +549,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
       const direction = flat(host.player.position, target.position);
       a.slideDir = facingOf(direction.length > 0 ? direction : { x: host.player.facing.x, z: host.player.facing.z });
       a.hitIds.push(target.id);
-      host.strikeHostile(target, strike('judgement', 'judgement', spec.damage, 'none', 7, 0));
+      host.strikeHostile(target, strike('judgement', 'judgement', spec.damage, 'none', 7, 0, SAKDA_HITS.wrath));
       if (target.downed) return;
       host.interruptMonster(target, 'charged_heavy');
       host.staggerMonster(target, spec.staggerTicks);
@@ -636,7 +638,7 @@ export const createSakdaKit: KitFactory = (host: KitHost): HeroKit => {
     },
     onProjectileHit(projectile: LivePlayerProjectile, target: CombatActor): void {
       if (projectile.callbackId !== 'echo-wave') return;
-      host.strikeHostile(target, strike('sigil_bolt', 'sigil_bolt', projectile.damage, 'idle', 2, 4));
+      host.strikeHostile(target, { ...strike('sigil_bolt', 'sigil_bolt', projectile.damage, 'idle', 2, 4, SAKDA_HITS.echo), direction: projectile.direction });
       if (!target.downed) setEcho(state(), target.id, host.worldTick + SAKDA.echoWave.markTicks);
     },
   };

@@ -2,20 +2,30 @@ import { Vector3, type Camera } from 'three';
 import type { WorldClockSnapshot } from '../game/contracts.js';
 import type { CombatEvent } from '../game/combat/CombatEngine.js';
 import { ScreenVignette } from '../effects/vfx/ScreenVignette.js';
+import './combat-feel.css';
 
 /** Producer-owned vitality-loss payload (optional on CombatEvent). */
 type DamagePayload = NonNullable<CombatEvent['damage']>;
 
 const POOL = 32;
 const LIFETIME_TICKS = 48;
-const ANCHOR_HEIGHT = 1.7;
+/** Mid-body anchor (m above the hit position): numbers rise beside the target, below its nameplate (head socket + 0.55 m). */
+const ANCHOR_HEIGHT = 1.0;
 const RISE_HEIGHT = 0.7;
-const SPREAD_BUDGET = 64;
+/** Screen-space side offset (px) that keeps the number off the target's silhouette, plus a small per-hit stagger. */
+const SIDE_OFFSET = 64;
+const SIDE_STAGGER = 14;
 const DEDUP_LIMIT = 128;
 
 const OWNER_CLASS = 'wc-damage-numbers';
 const LABEL_CLASS = 'wc-damage-number';
 const PLAYER_MODIFIER = 'wc-damage-number--player';
+/** Damage thresholds (vitality lost per hit) for the four size/colour tiers the number picks from at spawn. */
+const TIER_SMALL_MAX = 6;
+const TIER_HEAVY_MIN = 18;
+/** Step "critical hit" — extra big gold (typically a backstab, mark-strike or finisher). */
+const TIER_CRIT_MIN = 28;
+const TIER_CLASSES = ['wc-damage-number--small', 'wc-damage-number--heavy', 'wc-damage-number--crit'] as const;
 const PLAYER_ID = 'aren';
 
 interface Slot {
@@ -95,21 +105,30 @@ export class DamageNumbers {
         slot.element.textContent = '';
         delete slot.element.dataset['targetId'];
         delete slot.element.dataset['amount'];
+        delete slot.element.dataset['tier'];
+        slot.element.style.animation = '';
+        for (const cls of TIER_CLASSES) slot.element.classList.remove(cls);
         continue;
       }
       const t = age / LIFETIME_TICKS;
       this.scratch.copy(slot.anchor);
       if (!reducedMotion) this.scratch.y += t * RISE_HEIGHT;
       this.scratch.project(camera);
+      // Hide when the anchor projects to non-finite NDC, behind the camera, or outside the visible frame (with a
+      // small margin so a label half off an edge still reads). Hidden labels are parked off the overlay.
+      const hideX = 1.05, hideY = 1.05;
       const hide =
         !Number.isFinite(this.scratch.x) ||
         !Number.isFinite(this.scratch.y) ||
         !Number.isFinite(this.scratch.z) ||
         this.scratch.z < -1 || this.scratch.z > 1 ||
-        this.scratch.x < -1.05 || this.scratch.x > 1.05 ||
-        this.scratch.y < -1.05 || this.scratch.y > 1.05;
+        this.scratch.x < -hideX || this.scratch.x > hideX ||
+        this.scratch.y < -hideY || this.scratch.y > hideY;
       if (hide) {
         slot.element.style.opacity = '0';
+        // Move the label off the overlay entirely so an unfavourable projection can never default to (0, 0)
+        // (the overlay's anchor) on the next valid frame.
+        slot.element.style.transform = 'translate(-9999px,-9999px)';
         continue;
       }
       const sx = (this.scratch.x * 0.5 + 0.5) * width + slot.spread;
@@ -128,6 +147,9 @@ export class DamageNumbers {
       slot.element.textContent = '';
       delete slot.element.dataset['targetId'];
       delete slot.element.dataset['amount'];
+      delete slot.element.dataset['tier'];
+      slot.element.style.animation = '';
+      for (const cls of TIER_CLASSES) slot.element.classList.remove(cls);
     }
     this.recentIds.length = 0;
     this.seenIds.clear();
@@ -162,11 +184,20 @@ export class DamageNumbers {
     slot.order = ++this.sequence;
     slot.active = true;
     const seed = (damage.worldTick * 131 + index * 17) % 7;
-    slot.spread = ((seed - 3) / 3) * (SPREAD_BUDGET / 2);
+    slot.spread = (seed % 2 === 0 ? 1 : -1) * (SIDE_OFFSET + (seed % 3) * SIDE_STAGGER);
     const el = slot.element;
     el.textContent = `-${damage.amount}`;
     el.dataset['targetId'] = damage.targetId;
     el.dataset['amount'] = String(damage.amount);
     el.classList.toggle(PLAYER_MODIFIER, damage.targetId === PLAYER_ID);
+    // Tier class: small (≤6), normal (default), heavy (≥18), crit-gold (≥28). combat-feel.css styles size + colour.
+    for (const cls of TIER_CLASSES) el.classList.remove(cls);
+    if (damage.amount >= TIER_CRIT_MIN) el.classList.add('wc-damage-number--crit');
+    else if (damage.amount >= TIER_HEAVY_MIN) el.classList.add('wc-damage-number--heavy');
+    else if (damage.amount <= TIER_SMALL_MAX) el.classList.add('wc-damage-number--small');
+    // Short pop-in scale keyframe on each spawn (240 ms). The per-frame transform write still wins on each tick;
+    // the animation adds a scale multiplier that interpolates from the visual origin (-50%, -100%).
+    el.style.animation = 'wc-damage-pop-in 240ms cubic-bezier(.2,.8,.4,1) both';
+    el.dataset['tier'] = damage.amount >= TIER_CRIT_MIN ? 'crit' : damage.amount >= TIER_HEAVY_MIN ? 'heavy' : damage.amount <= TIER_SMALL_MAX ? 'small' : 'normal';
   }
 }

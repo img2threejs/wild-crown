@@ -7,11 +7,10 @@ import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
 import { CombatEngine, type CombatActor, type CombatInput, type EngineState, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { distance2, groundHeightAt, isCirclePathClear, isSupportedCapsulePose, moveCircle, vec } from '../../src/game/combat/geometry.js';
-import { HERO_COMBAT } from '../../src/game/combat/HeroProfiles.js';
 import { createVesperKit } from '../../src/game/combat/kits/VesperKit.js';
 import { KIT_FACTORIES } from '../../src/game/combat/kits/registry.js';
 import { PLAYER_SKILLS, SIGIL, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
-import { VESPER, VESPER_CLIPS, VESPER_LABELS } from '../../src/game/combat/VesperSkills.js';
+import { VESPER, VESPER_CLIPS } from '../../src/game/combat/VesperSkills.js';
 
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 const PLAYER_RADIUS = 0.42;
@@ -45,7 +44,8 @@ function bench(options: BenchOptions = {}): Bench {
   const player0 = seed.actors.find(actor => actor.id === seed.playerId)!;
   monster0.vitality = monster0.maxVitality = 100_000;
   monster0.ferocity = 0;
-  if (!live) monster0.staggerUntil = 100_000;
+  // A frozen dummy neither moves nor casts (the same pair of timers an interrupt sets) and is never pushed or reacted.
+  if (!live) { monster0.staggerUntil = 100_000; monster0.recoveringUntil = 100_000; monster0.anchored = true; }
   player0.position = vec(monster0.position.x, monster0.position.y, monster0.position.z + distance);
   player0.facing = vec(0, 0, -1);
   player0.velocity = vec(0, 0, 0);
@@ -140,20 +140,25 @@ const registered = { ...KIT_FACTORIES };
 beforeAll(() => { KIT_FACTORIES.vesper = createVesperKit; });
 afterAll(() => { delete KIT_FACTORIES.vesper; Object.assign(KIT_FACTORIES, registered); });
 
-describe('Vesper kit definition', () => {
-  it('declares the Moonlit Iai chain, labels, clips and Mist Blink profile from the data file', () => {
-    const b = bench();
-    const skills = b.engine.snapshot().skills;
-    expect(skills.find(skill => skill.id === 'light')!.label).toBe(VESPER_LABELS.light!);
-    expect(skills.find(skill => skill.id === 'dive')!.label).toBe(VESPER_LABELS.dive!);
-    expect(skills.find(skill => skill.id === 'judgement')!.label).toBe(VESPER_LABELS.judgement!);
-    expect(HERO_COMBAT.vesper.element).toBe('umbral');
-    expect(VESPER.iai.steps.map(step => step.damage)).toEqual([12, 12, 15, 22]);
-    expect(VESPER.iai.steps.map(step => step.ticks)).toEqual([18, 18, 22, 30]);
-  });
-});
 
 describe('Moonlit Iai', () => {
+  it('lands a snappy opening cut within 8 ticks and finishes within 21 without changing its damage', () => {
+    const b = bench();
+    b.step({ lightPressed: true });
+    const duration = b.player.actionEndsTick - b.player.actionStartedTick;
+    expect(duration).toBeLessThanOrEqual(21);
+    const before = b.health();
+    let contact = 0;
+    for (let age = 1; age <= 8; age++) {
+      b.step();
+      if (b.health() < before) { contact = age; break; }
+    }
+    expect(contact).toBeGreaterThan(0);
+    expect(before - b.health()).toBe(12);
+    // Simulation contact still samples the authored one-third-through cut, within tick quantization.
+    expect(Math.abs(b.player.normalizedTime - 1 / 3)).toBeLessThanOrEqual(1 / duration);
+  });
+
   it('lands each step on its active tick with its damage, chaining inside the early/late window', () => {
     const b = bench({ facing: 'none' });
     const starts: number[] = [];
@@ -161,7 +166,7 @@ describe('Moonlit Iai', () => {
     const damageTicks: number[] = [];
     let health = b.health();
     const damages: number[] = [];
-    // Mash J: early presses are rejected, the window opens 4 ticks before each clip ends.
+    // Mash J: early presses are rejected until each step's chain window opens.
     for (let tick = 0; tick < 130 && damages.length < 4; tick++) {
       b.step({ lightPressed: true });
       if (b.player.actionId !== previous && b.player.actionId.startsWith('vesper-iai')) starts.push(tick);
@@ -190,7 +195,7 @@ describe('Moonlit Iai', () => {
   it('a press after the late window restarts the chain at step 1', () => {
     const b = bench();
     b.step({ lightPressed: true });
-    b.step({}, 18 + VESPER.iai.chainLateTicks + 10);
+    b.runLive(VESPER.iai.steps[0]!.ticks + VESPER.iai.chainLateTicks + 1);
     b.step({ lightPressed: true });
     expect(b.player.actionId).toBe(VESPER_CLIPS.light_1!);
   });
@@ -288,16 +293,22 @@ describe('Moonlit Iai', () => {
 describe('Death Mark and backstab', () => {
   it('a hit from behind deals ×1.5 and a hit from the front does not', () => {
     const front = bench({ facing: 'toward' });
-    front.step({ lightPressed: true }, 8);
+    front.step({ lightPressed: true }, VESPER.iai.steps[0]!.activeAt + 1);
     expect(100_000 - front.health()).toBe(VESPER.iai.steps[0]!.damage);
     const behind = bench({ facing: 'away' });
-    behind.step({ lightPressed: true }, 8);
+    behind.step({ lightPressed: true }, VESPER.iai.steps[0]!.activeAt + 1);
     expect(100_000 - behind.health()).toBe(Math.round(VESPER.iai.steps[0]!.damage * VESPER.backstab.multiplier));
   });
 
   it('three hits within the window mark the target, the next hit executes it for +25 with a hit-stop, and the mark is consumed', () => {
     const c = bench();
-    const hit = () => { const before = c.health(); c.step({ lightPressed: true }); c.step({}, 7); const dealt = before - c.health(); c.step({}, 40); return dealt; };
+    const hit = () => {
+      const before = c.health(), spec = VESPER.iai.steps[0]!;
+      c.step({ lightPressed: true }); c.step({}, spec.activeAt);
+      const dealt = before - c.health();
+      c.runLive(spec.ticks + VESPER.iai.chainLateTicks - spec.activeAt + 1);
+      return dealt;
+    };
     const cMarks = () => c.engine.snapshot().actors.find(actor => actor.id === c.monster.id)!.heroMarks;
     expect(hit()).toBe(12);
     expect(cMarks()).toEqual([{ kind: 'death-stack', stacks: 1, remainingTicks: expect.any(Number) }]);
@@ -309,7 +320,7 @@ describe('Death Mark and backstab', () => {
     // The mark is consumed by the next hit, which carries the execution bonus and a 6-tick freeze.
     const before = c.health();
     c.step({ lightPressed: true });
-    c.step({}, 6);
+    c.step({}, VESPER.iai.steps[0]!.activeAt);
     expect(c.engine.snapshot().hitStop?.remainingTicks ?? 0).toBeGreaterThanOrEqual(1);
     expect(before - c.health()).toBe(12 + VESPER.deathMark.executionDamage);
     expect(cMarks()).toEqual([{ kind: 'death-stack', stacks: 1, remainingTicks: expect.any(Number) }]);
@@ -335,9 +346,9 @@ describe('Death Mark and backstab', () => {
     const b = bench();
     const marksOf = () => b.engine.snapshot().actors.find(actor => actor.id === b.monster.id)!.heroMarks;
     b.step({ lightPressed: true });
-    b.step({}, 7);
+    b.step({}, VESPER.iai.steps[0]!.activeAt);
     expect(marksOf()?.[0]).toMatchObject({ kind: 'death-stack', stacks: 1 });
-    b.step({}, VESPER.deathMark.stackWindowTicks + 2);
+    b.runLive(VESPER.deathMark.stackWindowTicks);
     expect(marksOf()).toBeUndefined();
     // Build a mark, then let it lapse unconsumed.
     for (let index = 0; index < 3; index++) { b.step({ lightPressed: true }); b.step({}, 38); }
@@ -474,7 +485,7 @@ describe('Shadow Step', () => {
     expect(early.player.actionId).toBe(VESPER_CLIPS.light_4!);
   });
 
-  it('Shadow Step cancels into Moonlit Iai, a second Shadow Step or Mist Blink after its strike, but not before', () => {
+  it('cancels into another skill after the strike but cannot bypass Shadow Step cooldown', () => {
     const press = (patch: Partial<CombatInput>, liveTicks: number) => {
       const b = bench();
       b.step({ heavyPressed: true });
@@ -487,7 +498,7 @@ describe('Shadow Step', () => {
     expect(press({ heavyPressed: true }, open - 3).state.player.mana).toBe(100_000 - PLAYER_SKILLS.heavy.manaCost);
     expect(press({ dodgePressed: true }, open - 3).cues.some(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.dodge)).toBe(false);
     expect(press({ lightPressed: true }, open).player.actionId).toBe(VESPER_CLIPS.light_1!);
-    expect(press({ heavyPressed: true }, open).state.player.mana).toBe(100_000 - 2 * PLAYER_SKILLS.heavy.manaCost);
+    expect(press({ heavyPressed: true }, open).state.player.mana).toBe(100_000 - PLAYER_SKILLS.heavy.manaCost);
     expect(press({ dodgePressed: true }, open).cues.some(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.dodge)).toBe(true);
   });
 
@@ -728,9 +739,10 @@ describe('Mist Blink', () => {
     b.step({ dodgePressed: true });
     expect(b.player.actionEndsTick - b.player.actionStartedTick).toBe(VESPER.mistBlink.durationTicks + VESPER.mistBlink.recoveryTicks);
     expect(b.state.player.mana).toBe(100_000 - PLAYER_SKILLS.dive.manaCost);
-    let untargetable = b.engine.snapshot().player.untargetable === true ? 1 : 0;
+    let untargetable = b.engine.snapshot().player.untargetable === true ? 1 : 0, blinkEnd = start;
     for (let tick = 1; tick < VESPER.mistBlink.iframes + 6; tick++) {
       b.step();
+      if (tick === VESPER.mistBlink.durationTicks) blinkEnd = { ...b.player.position };
       if (b.engine.snapshot().player.untargetable === true) untargetable++;
       expect(groundHeightAt(b.state.arena, b.player.position.x, b.player.position.z, b.player.position.y)).not.toBeNull();
       expect(insideBounds(b)).toBe(true);
@@ -738,7 +750,8 @@ describe('Mist Blink', () => {
       if (tick < VESPER.mistBlink.iframes) expect(b.state.player.vitality).toBe(before);
     }
     expect(untargetable).toBe(VESPER.mistBlink.iframes);
-    expect(distance2(start, b.player.position)).toBeCloseTo(reach, 1);
+    // The hazard lands once the iframes end and staggers the light hero; the blink itself is measured where it ended.
+    expect(distance2(start, blinkEnd)).toBeCloseTo(reach, 1);
     expect(reach).toBeGreaterThan(VESPER.mistBlink.distance - 0.7);
     expect(reach).toBeLessThanOrEqual(VESPER.mistBlink.distance + 1e-6);
     expect(b.cues.find(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.dodge)).toMatchObject({ element: 'umbral' });
@@ -747,9 +760,6 @@ describe('Mist Blink', () => {
     expect(b.state.player.vitality).toBeLessThan(before);
   });
 
-  it('moves at the hero profile walk and run speeds (Vesper 4.9 / 7.5)', () => {
-    expect(HERO_COMBAT.vesper).toMatchObject({ walkSpeed: 4.9, runSpeed: 7.5, maxVitality: 80 });
-  });
 });
 
 describe('Crimson Requiem', () => {

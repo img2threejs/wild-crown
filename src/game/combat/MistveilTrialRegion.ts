@@ -1,6 +1,7 @@
 import { v } from '../../content/levels/schema.js';
 import type { GroundSurfaceDefinition, RegionColliderDefinition, RegionDefinition, RegionEntityDefinition, RegionRouteDefinition, Vec3, WorldAssetPlacement } from '../contracts.js';
 import { buildMistveilBoundaryPlacements } from '../../world/MistveilBoundary.js';
+import { clusterBoundaryDressing } from '../../world/clusteredBoundaryDressing.js';
 import { MISTVEIL_COMBAT_TRIALS, MISTVEIL_TRIAL_SET } from './MistveilContent.js';
 
 /** Walk-surface id prefix of the Mistveil playtest variant; `biomeProfileFor` selects the Mistveil biome by it. */
@@ -122,9 +123,9 @@ const prop = (id: string, assetId: string, position: Vec3, rotationY: number, sc
   ({ id, assetId, position, placement: 'ground', rotationY, scale });
 
 /**
- * Authored set dressing, all off the walk-mesh: great root trees standing either side of the causeway (north trees on the
- * camera-far side), reed clumps and bank rocks round the arrival bank, Marek's rig and filter drum on the dry ground between
- * the pad and the Black Sap river, and the root cavern's mouth beyond the landing.
+ * Authored set dressing: great root trees stand either side of the causeway, reeds frame the arrival bank, and low rocks
+ * offer jumpable crowns at the combat clearings. Marek's rig and filter drum stand between the pad and the Black Sap river,
+ * with the root cavern's mouth beyond the landing.
  */
 const AUTHORED_PROPS: readonly WorldAssetPlacement[] = [
   prop('mistveil-trial-tree-0', 'prop-mistveil-root-tree', v(-17, 0, -26), 0.4),
@@ -136,8 +137,8 @@ const AUTHORED_PROPS: readonly WorldAssetPlacement[] = [
   prop('mistveil-trial-reeds-1', 'prop-mistveil-reed-cluster', v(-38, 0, -30), 1.9),
   prop('mistveil-trial-reeds-2', 'prop-mistveil-reed-cluster', v(-58, 0, -28), 4.0),
   prop('mistveil-trial-reeds-3', 'prop-mistveil-reed-cluster', v(-54, 0, -2), 2.6),
-  prop('mistveil-trial-rock-0', 'prop-mire-bank-rock', v(-72, 0, -32), 0.8),
-  prop('mistveil-trial-rock-1', 'prop-mire-bank-rock', v(-45, 0, -31), 2.4),
+  prop('mistveil-trial-rock-0', 'prop-mire-bank-rock', v(12, 0, -23.5), 0.8, v(.7, .7, .7)),
+  prop('mistveil-trial-rock-1', 'prop-mire-bank-rock', v(-45, 0, -23.5), 2.4, v(.7, .7, .7)),
   prop('mistveil-trial-rig', 'prop-hunter-extraction-rig', v(41, 0, -32), 0.6),
   prop('mistveil-trial-drum', 'prop-black-sap-filter-drum', v(49, 0, -31), 1.4),
   prop('mistveil-trial-cavern-mouth', 'prop-root-cavern-mouth', v(107, 0, -16), -Math.PI / 2),
@@ -152,7 +153,7 @@ const FOOTPRINT_RADIUS: Readonly<Record<string, number>> = {
   'prop-mire-bank-rock': ROCK_FOOTPRINT_RADIUS,
 };
 /** Plan-view circles of the authored set dressing, handed to the boundary builder as keep-clear obstacles. */
-const AUTHORED_FOOTPRINTS = AUTHORED_PROPS.map(placement => ({ x: placement.position.x, z: placement.position.z, radius: FOOTPRINT_RADIUS[placement.assetId]! }));
+const AUTHORED_FOOTPRINTS = AUTHORED_PROPS.map(placement => ({ x: placement.position.x, z: placement.position.z, radius: placement.assetId === 'prop-mire-bank-rock' ? 1.5 : FOOTPRINT_RADIUS[placement.assetId]! }));
 
 /** Bounds of the playtest variant: the walk-mesh, the river and the pools, with the camera-far wetland behind them. */
 const BOUNDS: RegionDefinition['bounds'] = { min: v(-88, -8, -66), max: v(122, 14, 22) };
@@ -172,6 +173,7 @@ export function createMistveilTrialRegion(authored: RegionDefinition): RegionDef
     bounds: BOUNDS,
     props: AUTHORED_PROPS,
     movableObjects: [],
+    fieldTraps: [],
     ground: {
       y: 0, profile: 'basin', navGraphId: 'mistveil-trial-nav',
       surfaces: WALK_SURFACES.map(entry => entry.surface), colliders: WALK_SURFACES.map(entry => entry.collider),
@@ -188,7 +190,7 @@ export function createMistveilTrialRegion(authored: RegionDefinition): RegionDef
   const boundary = buildMistveilBoundaryPlacements(base, {
     gates: MISTVEIL_COMBAT_TRIALS.map(trial => trial.gate), arenas: MISTVEIL_COMBAT_TRIALS.map(trial => trial.arena), obstacles: AUTHORED_FOOTPRINTS,
   });
-  const props = [...AUTHORED_PROPS, ...boundary];
+  const props = [...AUTHORED_PROPS, ...clusterBoundaryDressing(boundary)];
   const assetIds = [...new Set([...entities.flatMap(entity => entity.assetId ? [entity.assetId] : []), ...props.map(placement => placement.assetId)])];
   return { ...base, props, assetIds };
 }

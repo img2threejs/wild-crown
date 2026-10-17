@@ -1,0 +1,13 @@
+{
+  "method": "Actual airborne kunai collision against the closed Howler gate. Paused world clock; close-up diagnostic camera; visible-versus-hidden residue framebuffer comparison, unchanged real scene and contact.",
+  "changedPixels": 6629,
+  "peakChannelDifference": 50,
+  "bounds": {
+    "minX": 667,
+    "minY": 384,
+    "maxX": 771,
+    "maxY": 517
+  },
+  "age": 1.7750000000000004,
+  "glError": 0
+}

@@ -57,6 +57,8 @@ interface Tile {
   readonly mesh: Mesh<InstancedBufferGeometry, MeshLambertMaterial>;
   readonly position: InstancedBufferAttribute;
   readonly params: InstancedBufferAttribute;
+  /** Blight 0..1 per clump (wilted, dark blades), 0 for biomes without a blight. */
+  readonly blight: InstancedBufferAttribute;
   /** Cumulative instance counts per rank bucket; bucketEnd[RANK_BUCKETS - 1] is the tile's clump count. */
   readonly bucketEnd: Uint16Array;
   cellX: number;
@@ -115,6 +117,7 @@ export class GroundGrass {
   private readonly sortPosition = new Float32Array(GRASS_MAX_CLUMPS_PER_TILE * 4);
   private readonly sortParams = new Float32Array(GRASS_MAX_CLUMPS_PER_TILE * 4);
   private readonly sortBucket = new Uint8Array(GRASS_MAX_CLUMPS_PER_TILE);
+  private readonly sortBlight = new Float32Array(GRASS_MAX_CLUMPS_PER_TILE);
   private readonly bucketCursor = new Uint16Array(RANK_BUCKETS);
   private disposed = false;
 
@@ -135,8 +138,10 @@ export class GroundGrass {
       geometry.setAttribute('normal', this.base.getAttribute('normal'));
       const position = new InstancedBufferAttribute(new Float32Array(GRASS_MAX_CLUMPS_PER_TILE * 4), 4).setUsage(DynamicDrawUsage);
       const params = new InstancedBufferAttribute(new Float32Array(GRASS_MAX_CLUMPS_PER_TILE * 4), 4).setUsage(DynamicDrawUsage);
+      const blight = new InstancedBufferAttribute(new Float32Array(GRASS_MAX_CLUMPS_PER_TILE), 1).setUsage(DynamicDrawUsage);
       geometry.setAttribute('iPos', position);
       geometry.setAttribute('iParams', params);
+      geometry.setAttribute('iBlight', blight);
       geometry.instanceCount = 0;
       geometry.boundingSphere = new Sphere();
       const mesh = new Mesh(geometry, this.material);
@@ -146,7 +151,7 @@ export class GroundGrass {
       mesh.frustumCulled = true;
       mesh.visible = false;
       this.group.add(mesh);
-      this.tiles.push({ mesh, position, params, bucketEnd: new Uint16Array(RANK_BUCKETS), cellX: 0, cellZ: 0, filled: false });
+      this.tiles.push({ mesh, position, params, blight, bucketEnd: new Uint16Array(RANK_BUCKETS), cellX: 0, cellZ: 0, filled: false });
     }
   }
 
@@ -279,6 +284,7 @@ export class GroundGrass {
         const mask = sampleMask(this.mask, x, z, this.scratch);
         if (hash3(i, j, key, SEED + 2) >= grassDensity(mask, x, z, this.understory)) continue;
         const patch = valueNoise(x * 0.16, z * 0.16, SEED + 9);
+        const blight = this.grass.blight ? this.grass.blight.amount(x, z) : 0;
         const rank = hash3(i, j, key, SEED + 7);
         const offset = count * 4;
         position[offset] = x;
@@ -287,10 +293,11 @@ export class GroundGrass {
         position[offset + 3] = hash3(i, j, key, SEED + 3) * Math.PI * 2;
         // Berm tufts grow tall (up to 1.7x) and ignore the shortening applied on the trail and across wide walkable interiors.
         const trodden = Math.max(mask.walk, 0.75 * mask.interior);
-        params[offset] = (0.62 + 0.7 * hash3(i, j, key, SEED + 4)) * (0.8 + 0.5 * patch) * (1 - 0.55 * trodden * (1 - mask.edge)) * (1 + 0.7 * mask.edge) * this.grass.heightScale;
+        params[offset] = (0.62 + 0.7 * hash3(i, j, key, SEED + 4)) * (0.8 + 0.5 * patch) * (1 - 0.55 * trodden * (1 - mask.edge)) * (1 + 0.7 * mask.edge) * this.grass.heightScale * (1 - (this.grass.blight?.shrink ?? 0) * blight);
         params[offset + 1] = 0.8 + 0.5 * hash3(i, j, key, SEED + 5);
         params[offset + 2] = smoothstep(0.35, 0.75, patch * 0.8 + 0.2 * hash3(i, j, key, SEED + 6));
         params[offset + 3] = rank;
+        this.sortBlight[count] = blight;
         const bucket = Math.min(RANK_BUCKETS - 1, Math.floor(rank * RANK_BUCKETS));
         bucketOf[count] = bucket;
         cursor[bucket]!++;
@@ -307,8 +314,10 @@ export class GroundGrass {
     }
     const targetPosition = tile.position.array as Float32Array;
     const targetParams = tile.params.array as Float32Array;
+    const targetBlight = tile.blight.array as Float32Array;
     for (let index = 0; index < count; index++) {
-      const slot = cursor[bucketOf[index]!]!++ * 4;
+      const target = cursor[bucketOf[index]!]!++;
+      const slot = target * 4;
       const source = index * 4;
       targetPosition[slot] = position[source]!;
       targetPosition[slot + 1] = position[source + 1]!;
@@ -318,9 +327,11 @@ export class GroundGrass {
       targetParams[slot + 1] = params[source + 1]!;
       targetParams[slot + 2] = params[source + 2]!;
       targetParams[slot + 3] = params[source + 3]!;
+      targetBlight[target] = this.sortBlight[index]!;
     }
     tile.position.needsUpdate = true;
     tile.params.needsUpdate = true;
+    tile.blight.needsUpdate = true;
     const sphere = tile.mesh.geometry.boundingSphere!;
     sphere.center.set(x0 + GRASS_TILE / 2, 0.4, z0 + GRASS_TILE / 2);
     sphere.radius = GRASS_TILE * Math.SQRT1_2 + 1;
@@ -334,16 +345,21 @@ export class GroundGrass {
     shader.uniforms.uTip = { value: new Color(this.grass.tip) };
     shader.uniforms.uBaseDry = { value: new Color(this.grass.baseDry) };
     shader.uniforms.uTipDry = { value: new Color(this.grass.tipDry) };
+    shader.uniforms.uBaseBlight = { value: new Color(this.grass.blight?.base ?? this.grass.base) };
+    shader.uniforms.uTipBlight = { value: new Color(this.grass.blight?.tip ?? this.grass.tip) };
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', `#include <common>
 attribute vec4 iPos;
 attribute vec4 iParams;
+attribute float iBlight;
 uniform float uWindTime;
 uniform vec4 uFade;
 uniform vec3 uBase;
 uniform vec3 uTip;
 uniform vec3 uBaseDry;
 uniform vec3 uTipDry;
+uniform vec3 uBaseBlight;
+uniform vec3 uTipBlight;
 varying vec3 vGrass;`)
       .replace('#include <begin_vertex>', `
 float t = position.y * ${(1 / this.grass.bladeHeight).toFixed(4)};
@@ -356,8 +372,11 @@ vec3 transformed = vec3(position.x * iParams.y, position.y * hgt, position.z * i
 transformed.xz = vec2(yc * transformed.x - ys * transformed.z, ys * transformed.x + yc * transformed.z);
 float sway = (0.1 + 0.07 * sin(uWindTime * 1.5 + iPos.x * 0.19 + iPos.z * 0.13 + iParams.w * 4.0)) * hgt * t;
 transformed.xz += vec2(0.86, 0.5) * sway;
+// Blighted blades droop: they lean away along their own heading, more towards the tip.
+transformed.xz += vec2(ys, -yc) * iBlight * hgt * t * 0.5;
 transformed += iPos.xyz;
-vGrass = mix(mix(uBase, uBaseDry, iParams.z), mix(uTip, uTipDry, iParams.z), t) * (0.78 + 0.44 * iParams.w) * (0.45 + 0.55 * t);`);
+vec3 healthy = mix(mix(uBase, uBaseDry, iParams.z), mix(uTip, uTipDry, iParams.z), t);
+vGrass = mix(healthy, mix(uBaseBlight, uTipBlight, t), iBlight) * (0.78 + 0.44 * iParams.w) * (0.45 + 0.55 * t);`);
     // Blades are lit by their up-facing normals from both sides; do not flip them on back faces.
     shader.fragmentShader = withCheapShadows(shader.fragmentShader, 'hard')
       .replace('#include <common>', `#include <common>

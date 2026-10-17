@@ -1,4 +1,4 @@
-import type { RegionDefinition } from '../contracts.js';
+import type { RegionDefinition, WorldAssetPlacement } from '../contracts.js';
 import { buildGreenwakeBoundaryPlacements, distanceToWalkMesh, greenwakeFootprint } from '../../world/GreenwakeBoundary.js';
 import { createCanopyTrialRegion } from './CanopyTrialRegion.js';
 import { createGroveTrialRegion } from './GroveTrialRegion.js';
@@ -15,9 +15,11 @@ const ROUTE_OBSTACLE_TREE = 'greenwake-corridor-tree-cluster-visual';
  * touches the walk-mesh or a boundary prop are dropped so nothing overhangs the path.
  */
 function createGreenwakeTrialRegion(region: RegionDefinition): RegionDefinition {
+  const jumpRock: WorldAssetPlacement = { id: 'greenwake-trial-jump-rock', assetId: 'prop-mire-bank-rock', position: { x: 10, y: 0, z: -6 }, rotationY: 2.4, scale: { x: .7, y: .7, z: .7 }, placement: 'ground' };
   // Everything that stays in place (all non-tree props with a ground footprint, and the collider-paired tree) is kept clear.
   const obstacles = region.props.filter(prop => prop.placement === 'ground' && (prop.assetId !== 'prop-erya-edge-tree' || prop.id === ROUTE_OBSTACLE_TREE))
     .flatMap(prop => greenwakeFootprint(prop.assetId, prop.position, prop.rotationY, prop.scale));
+  obstacles.push({ x: jumpRock.position.x, z: jumpRock.position.z, radius: 1.5 });
   const boundary = buildGreenwakeBoundaryPlacements(region, { gates: GREENWAKE_COMBAT_TRIALS.map(stage => stage.gate), arenas: GREENWAKE_COMBAT_TRIALS.map(stage => stage.arena), obstacles });
   const dressed = boundary.flatMap(placement => greenwakeFootprint(placement.assetId, placement.position, placement.rotationY, placement.scale));
   const props = region.props.filter(prop => {
@@ -30,10 +32,10 @@ function createGreenwakeTrialRegion(region: RegionDefinition): RegionDefinition 
     const stage = GREENWAKE_COMBAT_TRIALS.find(trial => trial.monsterId === entity.id);
     return stage ? { ...entity, assetId: stage.monsterAssetId } : entity;
   });
-  return { ...region, props: [...props, ...boundary], entities };
+  return { ...region, props: [...props, jumpRock, ...boundary], assetIds: [...region.assetIds, jumpRock.assetId], entities };
 }
 
-/** The playtest variant of an authored region (Greenwake, the Whispering Canopy and the story maps after it); any other region is returned unchanged. */
+/** Projects supported sealed layouts and removes chapter field traps and the selected hero's NPC counterpart. */
 export function createCombatTrialRegion(region: RegionDefinition, heroId: HeroId = 'aren'): RegionDefinition {
   const trial = region.id === 'greenwake' ? createGreenwakeTrialRegion(region)
     : region.id === 'whispering-canopy' ? createCanopyTrialRegion(region)
@@ -41,5 +43,7 @@ export function createCombatTrialRegion(region: RegionDefinition, heroId: HeroId
     : region.id === 'moonpine-ridge' ? createMoonpineTrialRegion(region)
     : region.id === 'mistveil-basin' ? createMistveilTrialRegion(region) : region;
   const npcActorId = heroById(heroId).npcActorId;
-  return npcActorId ? { ...trial, entities: trial.entities.filter(entity => entity.actorId !== npcActorId) } : trial;
+  return npcActorId || trial.fieldTraps?.length
+    ? { ...trial, fieldTraps: [], entities: npcActorId ? trial.entities.filter(entity => entity.actorId !== npcActorId) : trial.entities }
+    : trial;
 }

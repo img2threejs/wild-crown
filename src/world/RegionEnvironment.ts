@@ -1,7 +1,8 @@
 import { AmbientLight, BufferAttribute, BufferGeometry, Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshStandardMaterial, Scene, Vector3 } from 'three';
 import type { EnvironmentRecipeDefinition, GroundSurfaceDefinition, RegionDefinition, RegionId, Vec3 } from '../game/contracts';
+import { AtmosphericSky, DEFAULT_SKY } from './AtmosphericSky';
 import { biomeProfileFor } from './Biomes';
-import type { BiomeProfile, GroundFeature } from './BiomeProfile';
+import type { BiomeProfile, GroundFeature, HeightFogProfile, RegionGradeProfile, SkyProfile } from './BiomeProfile';
 import { GREENWAKE_BIOME } from './GreenwakeBiome';
 import { GroundUnderstory } from './GroundUnderstory';
 import { RegionGround } from './RegionGround';
@@ -20,6 +21,7 @@ const STYLES: Record<string, BiomeStyle> = {
   'heartroot-hollow': { sky: 0x596d72, fog: 0x758b7e, ground: 0x34453d, grass: 0x687c52, stone: 0x74776c, water: 0x4b7474, sun: 0xe5bf88, ambient: 0x91aa9f },
 };
 const PARTIAL_RESTORATION_TINT = new Color(0xd9cd9d);
+const CLEARED_MISTVEIL_WATER = { shallow: 0x518d83, deep: 0x183f43, sky: 0x8baeb5, sun: 0xdce5d3, foam: 0xb6d4c6 };
 /** Boundary rocks anchor to the lowest ground within this share of their footprint radius, then sink by ROCK_SINK of that radius. */
 const ROCK_ANCHOR_SHARE = 0.6;
 const ROCK_SINK = 0.18;
@@ -45,6 +47,14 @@ export class RegionEnvironment {
   private shadowOrigin: Vector3 = new Vector3();
   /** Fixed light position relative to the focused player (profiled regions). */
   private readonly sunOffset = new Vector3();
+  /** Sky dome (gradient + sun + drifting clouds) attached under `this.group`; the dome positions itself to follow focus. */
+  skyDome: AtmosphericSky | undefined;
+  /** Cached per-region mood that the post-processing chain needs (grade, height fog, shafts). */
+  readonly mood: { sky: SkyProfile; heightFog: HeightFogProfile | undefined; grade: RegionGradeProfile | undefined; lightShafts: number };
+  /** Tracks the current reduced-effects setting so `update()` can pass it to the sky dome without re-querying. */
+  private reducedEffects = false;
+  /** Latest focus position passed to `update()`; the post-processing bridge uses it for sun projection. */
+  private readonly lastFocus = new Vector3();
   private disposed = false;
 
   constructor(readonly region: RegionDefinition, readonly recipe: EnvironmentRecipeDefinition) {
@@ -53,9 +63,10 @@ export class RegionEnvironment {
     this.style = STYLES[region.id] ?? STYLES.greenwake!;
     this.sun = this.buildAtmosphere();
     const profile = this.profile;
+    let sunDirection: Vector3 | undefined;
     if (profile) {
       this.ground = new RegionGround(region, profile);
-      const sunDirection = this.sun.position.clone().sub(this.sun.target.position).normalize();
+      sunDirection = this.sun.position.clone().sub(this.sun.target.position).normalize();
       this.ground.water.setSunDirection(sunDirection);
       this.group.add(this.ground.group);
       const rocks = profile.boundaryRocks;
@@ -74,6 +85,18 @@ export class RegionEnvironment {
         this.group.add(feature.group);
       }
     }
+    // Mood + sky dome are owned by every region (profiled and generic), so the post-processing chain has the per-region
+    // values to feed even when the region has no biome profile (the literal-color regions reuse DEFAULT_SKY).
+    const skyProfile: SkyProfile = profile?.atmosphere.sky ?? DEFAULT_SKY;
+    this.mood = {
+      sky: skyProfile,
+      heightFog: profile?.atmosphere.heightFog,
+      grade: profile?.atmosphere.grade,
+      lightShafts: profile?.atmosphere.lightShafts ?? 0,
+    };
+    this.skyDome = new AtmosphericSky({ fallback: skyProfile });
+    if (sunDirection) this.skyDome.setSunDirection(sunDirection);
+    this.group.add(this.skyDome.mesh);
     this.ready = this.ground?.ready ?? Promise.resolve();
     for (const surface of region.ground.surfaces) this.buildSurface(surface);
   }
@@ -98,6 +121,12 @@ export class RegionEnvironment {
   syncWorldFacts(facts: Readonly<Record<string, boolean>>): void {
     const restored = facts[this.recipe.restorationFacts.restored] === true;
     const partial = !restored && facts[this.recipe.restorationFacts.partial] === true;
+    if (this.region.id === 'mistveil-basin' && this.ground && this.profile) {
+      this.ground.water.setWaterway(
+        facts['side:river-cleared'] === true ? CLEARED_MISTVEIL_WATER : this.profile.water.palette,
+        facts['riverRoute:break-dam'] === true ? 0.35 : 0,
+      );
+    }
     for (const [material, baseColor] of this.baseSurfaceColors) {
       if (restored) material.color.copy(baseColor).lerp(PARTIAL_RESTORATION_TINT, 0.1);
       else if (partial) material.color.copy(baseColor).lerp(PARTIAL_RESTORATION_TINT, 0.2);
@@ -107,29 +136,39 @@ export class RegionEnvironment {
 
   /**
    * Fewer particles and no light shafts for the Reduced Motion / Reduced Effects settings (ground, water and vegetation are
-   * unaffected; the water and foliage animation still follows the world clock).
+   * unaffected; the water and foliage animation still follows the world clock). The sky dome's cloud drift freezes and the
+   * god-rays pass is disabled (PostFX owns that toggle); the colour grade still applies under reduced effects (cheap).
    */
   setReducedEffects(reduced: boolean): void {
+    this.reducedEffects = reduced;
     for (const feature of this.features) feature.setReducedEffects(reduced);
   }
 
   /**
    * Per-frame update. The bounded sun-shadow volume of a profiled region tracks the focused player (light direction
    * preserved); grass streams around the focus and all wind sway, water flow and canopy features read the same world
-   * clock so they stay in sync with the renderer.
+   * clock so they stay in sync with the renderer. The sky dome follows the focus so the player never sees its inner edge.
    */
   update(worldTimeSeconds: number, focus?: Readonly<Vec3>): void {
     if (this.disposed) return;
+    if (focus) {
+      this.lastFocus.set(focus.x, focus.y, focus.z);
+      this.skyDome?.update(worldTimeSeconds, this.lastFocus, this.reducedEffects);
+    }
     this.understory?.update(worldTimeSeconds, focus);
     this.ground?.update(worldTimeSeconds);
     for (const feature of this.features) feature.update(worldTimeSeconds, focus);
     if (this.profile && this.sun.castShadow) this.updateBoundedShadow(focus);
   }
 
+  /** Last focus position the per-frame update sampled (player root or proxy). Used by the post-processing bridge. */
+  getLastFocus(): Vector3 { return this.lastFocus; }
+
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
     this.group.removeFromParent();
+    this.skyDome?.dispose();
     for (const geometry of this.ownedGeometries) geometry.dispose();
     for (const material of this.ownedMaterials) material.dispose();
     this.ownedGeometries.length = 0;
@@ -198,6 +237,10 @@ export class RegionEnvironment {
     sun.shadow.camera.right = radius;
     sun.shadow.camera.top = radius;
     sun.shadow.camera.bottom = -radius;
+    // Match the profiled-light shadow bias so the generic fallback does not acne / leak on shallow character geometry
+    // (notably the actors' black robes) when the same scene is rendered without a biome profile.
+    sun.shadow.bias = -0.0004;
+    sun.shadow.normalBias = 0.04;
     this.group.add(sun);
     const fill = new AmbientLight(this.style.ambient, 0.3);
     fill.name = 'regional-color-fill';

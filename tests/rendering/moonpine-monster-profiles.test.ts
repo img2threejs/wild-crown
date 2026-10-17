@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'bun:test';
-import { MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation } from '../../src/rendering/MonsterAnimationProfiles.js';
+import { MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation, resolveMonsterHitOverlay } from '../../src/rendering/MonsterAnimationProfiles.js';
 import { MOONPINE_ATTACK_PLANS, MOONPINE_HOVER, MOONPINE_LOCOMOTION } from '../../src/rendering/MoonpineMonsterProfiles.js';
 import type { MonsterAttackPlan } from '../../src/rendering/MonsterAnimationPlan.js';
+import { flinchAt } from './reaction-fixtures.js';
 import { MOONPINE_COMBAT_TRIALS } from '../../src/game/combat/MoonpineContent.js';
 import type { ActorSnapshot } from '../../src/game/contracts.js';
 
@@ -93,7 +94,9 @@ describe('moonpine monster clip plans', () => {
       expect(resolveMonsterAnimation(monster({ id, velocity: { x: 6, y: 0, z: 0 } }), asset)).toMatchObject({ actionId: 'monster-run' });
       expect(resolveMonsterAnimation(monster({ id, yawRate: 1.5 }), asset)).toMatchObject({ actionId: 'monster-turn' });
       expect(resolveMonsterAnimation(monster({ id, roarProgress: 0.5 }), asset)).toMatchObject({ actionId: 'monster-roar', phase: 'active', normalizedTime: (ROAR_CLIP_WINDOW.from + ROAR_CLIP_WINDOW.to) / 2 });
-      expect(resolveMonsterAnimation(monster({ id, hitReact: 0.4 }), asset)).toMatchObject({ actionId: 'monster-hurt' });
+      // A hit reaction is a native hurt overlay; the base clip keeps playing.
+      expect(resolveMonsterAnimation(monster({ id, reaction: flinchAt(0.4) }), asset)).toMatchObject({ actionId: 'monster-idle' });
+      expect(resolveMonsterHitOverlay(monster({ id, reaction: flinchAt(0.4) }), asset)).toMatchObject({ actionId: 'monster-hurt' });
       expect(resolveMonsterAnimation(monster({ id, downed: true }), asset)).toMatchObject({ actionId: 'monster-hurt', phase: 'active', normalizedTime: MONSTER_HURT_HOLD_TIME });
       expect(resolveMonsterAnimation(monster({ id, weakPointExposed: true }), asset)).toMatchObject({ actionId: 'monster-hurt', phase: 'active', normalizedTime: MONSTER_HURT_HOLD_TIME });
     }

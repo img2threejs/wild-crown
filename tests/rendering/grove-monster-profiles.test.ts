@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'bun:test';
 import {
-  MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation,
+  MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation, resolveMonsterHitOverlay,
 } from '../../src/rendering/MonsterAnimationProfiles.js';
 import { GROVE_ATTACK_PLANS, GROVE_HOVER, GROVE_LOCOMOTION } from '../../src/rendering/GroveMonsterProfiles.js';
+import { MONSTER_PROFILES } from '../../src/game/combat/WildlifePressure.js';
 import type { MonsterAttackPlan } from '../../src/rendering/MonsterAnimationPlan.js';
+import { flinchAt } from './reaction-fixtures.js';
 import type { ActorSnapshot } from '../../src/game/contracts.js';
 
 const PHASES = ['windup', 'commit', 'active', 'recovery'] as const;
-const ROOTLING = 'actor-grove-rootling', KORO = 'actor-koro';
+const ROOTLING = 'actor-grove-rootling', BLIGHTED = 'actor-grove-blighted-rootling', GUARDIAN = 'actor-grove-hollowheart', KORO = 'actor-koro';
 
 function monster(partial: Partial<ActorSnapshot> = {}): ActorSnapshot {
   return {
@@ -38,7 +40,12 @@ describe('grove monster clip plans', () => {
 
   it('lands the visible strike on the active window: the clip pose at the active start is the strike pose', () => {
     // shoot expels ~0.5 (the seed leaves in commit and lands as active opens); dive strikes ~0.4; slash strikes ~0.45.
-    const strikeStart: Readonly<Record<string, number>> = { 'sprig-seed-toss': 0.68, 'sprig-ground-ripple': 0.38, 'sprig-petal-sweep': 0.45 };
+    const strikeStart: Readonly<Record<string, number>> = {
+      'sprig-seed-toss': 0.68, 'sprig-ground-ripple': 0.38, 'sprig-petal-sweep': 0.45,
+      // The blighted rootling plays the same three clip plans; the guardian's leap lands at 0.7, its sweep strikes at 0.45, its hurl expels at 0.68 and the heart bursts on the roar's held beat (0.45).
+      'blighted-seed-lob': 0.68, 'blighted-ground-pulse': 0.38, 'blighted-lash-sweep': 0.45,
+      'hollowheart-leap-smash': 0.7, 'hollowheart-antler-sweep': 0.45, 'hollowheart-ichor-hurl': 0.68, 'hollowheart-heartlight-burst': 0.45,
+    };
     for (const [attackId, expected] of Object.entries(strikeStart)) {
       const active = resolveMonsterAnimation(attacking(attackId, 'active', 0), ROOTLING);
       expect(active, attackId).toBeDefined();
@@ -60,13 +67,25 @@ describe('grove monster clip plans', () => {
 });
 
 describe('grove locomotion', () => {
-  it('has a locomotion entry for both Grove actors (without one a monster never animates)', () => {
-    expect(Object.keys(GROVE_LOCOMOTION).sort()).toEqual([ROOTLING, KORO].sort());
-    for (const asset of [ROOTLING, KORO]) {
+  it('has a locomotion entry for every Grove actor asset (without one a monster never animates)', () => {
+    expect(Object.keys(GROVE_LOCOMOTION).sort()).toEqual([ROOTLING, BLIGHTED, GUARDIAN, KORO].sort());
+    for (const asset of [ROOTLING, BLIGHTED, GUARDIAN, KORO]) {
       expect(resolveMonsterAnimation(monster({ archetypeId: asset }), asset)).toMatchObject({ actionId: 'monster-idle', phase: 'idle' });
       expect(GROVE_LOCOMOTION[asset]!.walkRef).toBeGreaterThan(0);
       expect(GROVE_LOCOMOTION[asset]!.runRef).toBeGreaterThan(GROVE_LOCOMOTION[asset]!.walkRef);
     }
+  });
+
+  it('puts each run threshold between its AI profile\'s circle and advance speeds: the twin runs whenever it circles, the guardian only when it advances', () => {
+    const speeds = (id: string) => [MONSTER_PROFILES[id]!.circleSpeed, MONSTER_PROFILES[id]!.advanceSpeed] as const;
+    const [twinCircle, twinAdvance] = speeds('grove-blighted'), [guardCircle, guardAdvance] = speeds('grove-hollowheart');
+    expect(GROVE_LOCOMOTION[BLIGHTED]!.runThreshold).toBeLessThan(twinCircle);
+    expect(GROVE_LOCOMOTION[BLIGHTED]!.runRef).toBe(twinAdvance);
+    expect(GROVE_LOCOMOTION[GUARDIAN]!.runThreshold).toBeGreaterThan(guardCircle);
+    expect(GROVE_LOCOMOTION[GUARDIAN]!.runThreshold).toBeLessThan(guardAdvance);
+    expect(resolveMonsterAnimation(monster({ velocity: { x: twinCircle, y: 0, z: 0 } }), BLIGHTED)!.actionId).toBe('monster-run');
+    expect(resolveMonsterAnimation(monster({ velocity: { x: guardCircle, y: 0, z: 0 } }), GUARDIAN)!.actionId).toBe('monster-walk');
+    expect(resolveMonsterAnimation(monster({ velocity: { x: guardAdvance, y: 0, z: 0 } }), GUARDIAN)!.actionId).toBe('monster-run');
   });
 
   it('uses the shared slot logic for the sprig: walk, run, turn, roar, hurt and idle', () => {
@@ -74,7 +93,9 @@ describe('grove locomotion', () => {
     expect(resolveMonsterAnimation(monster({ velocity: { x: 2.3, y: 0, z: 0 } }), ROOTLING)).toMatchObject({ actionId: 'monster-run' });
     expect(resolveMonsterAnimation(monster({ yawRate: 1.5 }), ROOTLING)).toMatchObject({ actionId: 'monster-turn' });
     expect(resolveMonsterAnimation(monster({ roarProgress: 0.5 }), ROOTLING)).toMatchObject({ actionId: 'monster-roar', phase: 'active', normalizedTime: (ROAR_CLIP_WINDOW.from + ROAR_CLIP_WINDOW.to) / 2 });
-    expect(resolveMonsterAnimation(monster({ hitReact: 0.4 }), ROOTLING)).toMatchObject({ actionId: 'monster-hurt' });
+    // A hit reaction is a native hurt overlay; the base clip keeps playing.
+    expect(resolveMonsterAnimation(monster({ reaction: flinchAt(0.4) }), ROOTLING)).toMatchObject({ actionId: 'monster-idle' });
+    expect(resolveMonsterHitOverlay(monster({ reaction: flinchAt(0.4) }), ROOTLING)).toMatchObject({ actionId: 'monster-hurt' });
     expect(resolveMonsterAnimation(monster({ downed: true }), ROOTLING)).toMatchObject({ actionId: 'monster-hurt', phase: 'active', normalizedTime: MONSTER_HURT_HOLD_TIME });
     // The run threshold sits below the AI profile's advance speed (2.2 m/s) and above its circle speed (1.5 m/s).
     expect(GROVE_LOCOMOTION[ROOTLING]!.runThreshold).toBeLessThan(2.2);

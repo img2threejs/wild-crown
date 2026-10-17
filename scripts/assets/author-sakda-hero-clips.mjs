@@ -23,6 +23,8 @@ import { loadMixamoDonor } from './mixamo-import.mjs';
  * through GLTFLoader to measure its runtime joint name. `--preview-crops` splits existing previews into readable panels without changing projection.
  * Nothing under asset-source/playtests/ is touched: the entry is only emitted as `manifest-entry.json`. The Mixamo FBX never ship: only the retargeted
  * clips end up in the hero GLB.
+ * Knockdown / get-up (aren-knockdown, aren-knockdown-forward, aren-getup, aren-getup-forward): shared Mixamo reaction takes, see `lieClip` and the brief; `--lie-timeline=m:<take>`
+ * and `--probe=<take>:<from>:<to>` are authoring aids for them.
  */
 const args = process.argv.slice(2);
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -59,6 +61,9 @@ const tooling = { mixamoImportFbxProof: { task: 'e9c57a60-591f-4317-9d91-7677547
 /** Mixamo FBX donors (asset-source/mixamo/sakda/<name>.fbx; catalogue ids and hashes in asset-source/mixamo/provenance.json). */
 const MIXAMO_FILES = ['fight-idle-guard-up', 'jab-cross-medium', 'elbow-uppercut', 'elbow-cross', 'muay-thai-knee', 'roundhouse-rear', 'flying-knee-punch', 'stomp-hard',
   'boxing-step-forward-long'];
+/** Shared Mixamo reaction donors (asset-source/mixamo/reactions/<name>.fbx, hero "shared-reactions" in the provenance): the fall, lie and get-up takes. */
+const REACTION_FILES = ['knocked-out-back', 'falling-back', 'flying-back', 'react-backward', 'getting-up-back', 'stand-up-back', 'kip-up',
+  'fall-flat-hit-back', 'knocked-down-stomach', 'react-forward', 'getting-up-stomach', 'stand-up-stomach', 'getting-up-knocked'];
 const output = 'asset-source/generated/actor-sakda-hero-01';
 /** Sakda stands 0.979 rig units tall; ×1.84 gives the 1.80 m hero (Aren and Yara use 1.7 for their 1.0-unit bodies). */
 const RIG_SCALE = 1.84;
@@ -101,6 +106,18 @@ function hipsTravel(target, frames, count) {
   const hips = target.index.get('mixamorig:Hips'), low = new Vector3(Infinity, Infinity, Infinity), high = new Vector3(-Infinity, -Infinity, -Infinity), p = new Vector3();
   for (let k = 0; k < count; k += 1) { p.setFromMatrixPosition(target.poseFrame(frames, k)[hips]); low.min(p); high.max(p); }
   return { horizontal: Math.hypot(high.x - low.x, high.z - low.z), vertical: high.y - low.y };
+}
+
+/**
+ * The torso's own frame from one posed skeleton (independent of any rest convention): `up` = Hips → Neck, `right` = LeftArm → RightArm, `forward` = up × right
+ * (the rig faces +X with +Y up and its right +Z, so a standing hero has forward = +X). `forward.y > 0.7` is lying on the back (the chest faces the sky),
+ * `< -0.7` on the stomach. `axis` is the heading of Hips → Head in the floor plane (degrees, 0 = +X forward, + toward -Z), the direction a lying body points to.
+ */
+function torsoFrame(target, world) {
+  const at = (name) => new Vector3().setFromMatrixPosition(world[target.index.get(`mixamorig:${name}`)]);
+  const hips = at('Hips'), up = at('Neck').sub(hips).normalize(), right = at('RightArm').sub(at('LeftArm')).normalize(), forward = new Vector3().crossVectors(up, right).normalize();
+  const head = at('Head').sub(hips);
+  return { up, right, forward, axis: Math.atan2(-head.z, head.x) / DEG, horizontalHead: Math.hypot(head.x, head.z) };
 }
 
 /** In-place (shared-toolkit clips): the hips keep their first-frame horizontal position and their vertical excursion is compressed to at most `maxVertical`. */
@@ -257,19 +274,21 @@ function offsetHips(target, frames, count, offset) {
  * The soles of the native mesh: every 4th vertex whose dominant skin weight is a Foot or ToeBase bone, with what is needed to CPU-skin them. `lowest`
  * gives the lowest skinned sole height of one frame; `rest` is the bind pose's (the floor).
  */
-function soleKit(target, glb) {
+function soleKit(target, glb, { stride = 4, all = false } = {}) {
   const { json, bin } = glb, primitive = json.meshes[0].primitives[0], read = (id) => readAccessorAny(json, bin, id);
   const positions = read(primitive.attributes.POSITION), joints = read(primitive.attributes.JOINTS_0), weights = read(primitive.attributes.WEIGHTS_0), inverseBind = read(json.skins[0].inverseBindMatrices);
   const skinJoints = json.skins[0].joints, soles = [];
-  for (let v = 0; v < positions.length / 3; v += 4) {
+  for (let v = 0; v < positions.length / 3; v += stride) {
     let best = 0;
     for (let s = 1; s < 4; s += 1) if (weights[v * 4 + s] > weights[v * 4 + best]) best = s;
-    if (/Foot|ToeBase/.test(target.names[skinJoints[joints[v * 4 + best]]])) soles.push(v);
+    if (all || /Foot|ToeBase/.test(target.names[skinJoints[joints[v * 4 + best]]])) soles.push(v);
   }
   const matrices = skinJoints.map(() => new Matrix4()), inverse = new Matrix4();
+  let lowestVertex = -1;
   const lowestOf = (world, coordinates = false) => {
     skinJoints.forEach((node, j) => matrices[j].multiplyMatrices(world[node], inverse.fromArray(inverseBind, j * 16)));
     let lowest = Infinity;
+    lowestVertex = -1;
     const vertices = coordinates ? new Float64Array(soles.length * 3) : undefined;
     let index = 0;
     for (const v of soles) {
@@ -284,12 +303,13 @@ function soleKit(target, glb) {
           z += w * (e[2] * positions[v * 3] + e[6] * positions[v * 3 + 1] + e[10] * positions[v * 3 + 2] + e[14]);
         }
       }
-      lowest = Math.min(lowest, y);
+      if (y < lowest) { lowest = y; lowestVertex = v; }
       if (vertices) { vertices[index++] = x; vertices[index++] = y; vertices[index++] = z; }
     }
     return vertices ?? lowest;
   };
-  return { rest: lowestOf(target.restWorld), lowest: (frames, k) => lowestOf(target.poseFrame(frames, k)),
+  const dominantBone = (v) => { let best = 0; for (let s = 1; s < 4; s += 1) if (weights[v * 4 + s] > weights[v * 4 + best]) best = s; return target.names[skinJoints[joints[v * 4 + best]]].replace('mixamorig:', ''); };
+  return { rest: lowestOf(target.restWorld), lowest: (frames, k) => lowestOf(target.poseFrame(frames, k)), lowestBone: (frames, k) => { lowestOf(target.poseFrame(frames, k)); return dominantBone(lowestVertex); },
     vertices: (frames, k) => lowestOf(target.poseFrame(frames, k), true) };
 }
 
@@ -334,6 +354,7 @@ function buildMotionClip(spec, target, rigs) {
     offsetHips(target, frames, count, (k, p) => [start.x - p.x, 0, start.z - p.z]);
   }
   if (spec.lift) { const lift = timeWarp(spec.lift); offsetHips(target, frames, count, (k) => [0, lift(k), 0]); }
+  if (spec.travel) spec.travelScale = Math.round(limitTravel(target, frames, count, spec.travel.maxMetres) * 1e4) / 1e4;
   return { spec, frames, times: Float32Array.from({ length: count }, (_, k) => k / TICKS_PER_SECOND), count, duration: totalTicks / TICKS_PER_SECOND, keys: [], contact: undefined, totalTicks, jointNodes: [...target.joints], aim: undefined, guard: {} };
 }
 
@@ -399,6 +420,174 @@ function motionQuality(target, clip, soles) {
     seamRotationRadians: round(seamRotation), seamPositionMetres: round(seamPosition * RIG_SCALE),
     maximumJointStepDegreesPerTick: round(maximumJointStep / DEG / (clip.totalTicks / (clip.count - 1))),
   };
+}
+
+/* ------------------------------------------------------------------ knockdown / get-up (Mixamo reaction takes) */
+
+const hipsWorld = (target, frames, k) => new Vector3().setFromMatrixPosition(target.poseFrame(frames, k)[target.index.get('mixamorig:Hips')]);
+const wrapDegrees = (degrees) => ((((degrees + 180) % 360) + 360) % 360) - 180;
+/** A skinned vertex within this height of the floor counts as touching it (rig units; 3 cm). */
+const FLOOR_CONTACT = 0.03 / RIG_SCALE;
+/** The lowest skinned vertex may dip this far below the floor at most (rig units; 3.7 mm, inside the brief's 1 cm). */
+const FLOOR_MARGIN = 0.002;
+
+/**
+ * Limits the Hips' horizontal travel (from the clip's first frame, which stands at the rest XZ) to `maxMetres` by scaling the whole donor displacement
+ * uniformly: the donor's direction is kept and a held frame stays held. The vertical Hips motion is not touched. Returns the scale applied.
+ */
+function limitTravel(target, frames, count, maxMetres) {
+  const first = hipsWorld(target, frames, 0), offsets = [];
+  let peak = 0;
+  for (let k = 0; k < count; k += 1) { const p = hipsWorld(target, frames, k); offsets.push([p.x - first.x, p.z - first.z]); peak = Math.max(peak, Math.hypot(p.x - first.x, p.z - first.z)); }
+  const scale = Math.min(1, maxMetres / RIG_SCALE / peak);
+  offsetHips(target, frames, count, (k) => [offsets[k][0] * (scale - 1), 0, offsets[k][1] * (scale - 1)]);
+  return scale;
+}
+
+/**
+ * Floor contact of a lying clip, frame by frame, through the Hips height alone (every rotation and the horizontal travel stay the donor's): the lowest skinned
+ * vertex of the WHOLE mesh is lifted out of the floor wherever it dips below it, and lowered onto it wherever it is within 3 cm of it (a body resting there)
+ * or the torso is flat on the floor. In between (the fall, the flight of a kip-up) the donor's own height is kept, the lift is smoothed so the Hips do not
+ * jerk, and the no-penetration lift is re-applied last. Frames from `holdFrom` on rest exactly on the floor and are identical to each other; `pinFirst` / `pinLast`
+ * keep the height of frame 0 / the last frame (a seam to the neighbouring clip). Returns the lift range in metres.
+ */
+function floorCorrect(target, frames, count, kit, { holdFrom = count, pinFirst = false, pinLast = false } = {}) {
+  const hips = target.index.get('mixamorig:Hips'), low = [], flat = [];
+  for (let k = 0; k < count; k += 1) {
+    const world = target.poseFrame(frames, k);
+    low.push(kit.lowest(frames, k) - kit.rest);
+    flat.push(Math.abs(torsoFrame(target, world).forward.y) > 0.7 && (world[hips].elements[13] - low[k]) < 0.3 / RIG_SCALE);
+  }
+  const seated = (k) => k >= holdFrom || flat[k] || low[k] < FLOOR_CONTACT;
+  const pinned = (k) => (pinFirst && k === 0) || (pinLast && k === count - 1);
+  let lift = low.map((l, k) => (seated(k) && !pinned(k) ? -l : 0));
+  const smoothed = Math.min(holdFrom, count);
+  for (let pass = 0; pass < 3; pass += 1) {
+    const next = lift.slice();
+    for (let k = 0; k < smoothed; k += 1) if (!pinned(k)) next[k] = (lift[Math.max(0, k - 1)] + 2 * lift[k] + lift[Math.min(count - 1, k + 1)]) / 4;
+    lift = next;
+  }
+  lift = lift.map((value, k) => {
+    if (pinned(k)) return 0;
+    if (k >= holdFrom || flat[k]) return -low[k];
+    return Math.max(value, -FLOOR_MARGIN - low[k]);
+  });
+  offsetHips(target, frames, count, (k) => [0, lift[k], 0]);
+  const metres = (value) => Math.round(value * RIG_SCALE * 1e4) / 1e4;
+  return { liftMinMetres: metres(Math.min(...lift)), liftMaxMetres: metres(Math.max(...lift)) };
+}
+
+/** The first `count` ticks of the Hips' world XZ, and the standing XZ, in rig units. */
+const standingXZ = (target, idle) => hipsWorld(target, idle.frames, 0);
+
+/**
+ * A get-up (`spec.getup`): the rise of the Mixamo take(s) `spec.parts` on this rig, in four edits.
+ *  1. The take is turned about the vertical so its lie points the way the knockdown's held lie does (measured, not typed): no facing flip.
+ *  2. The Hips' horizontal path is one smooth slide over `travel` ticks from where the knockdown left them (up to 0.7 m from the standing XZ) onto the standing XZ;
+ *     their vertical motion stays the take's own.
+ *  3. Over `blend` ticks the knockdown's held lie (`knock`'s last frame, frame 0 of this clip) is cross-faded into the take's own lying frames (lying to lying).
+ *  4. (in `blendIdle`, after the floor) the last quarter is slerped into `aren-idle`'s first frame.
+ * The joint guard runs on the take alone, before step 3 (see below).
+ */
+function buildGetup(spec, target, rigs, knock, idle) {
+  const part = spec.parts[0], last = knock.count - 1, { blend, travel } = spec.getup;
+  const donor = rigs[part.source.donor], decoded = decodedOf(donor, part.source.animation);
+  const lie = retargetAligned(target, donor, decoded, 1, () => part.keys[0][1], { mirror: part.retarget.mirror });
+  const donorAxis = torsoFrame(target, target.poseFrame(lie, 0)).axis, knockAxis = torsoFrame(target, target.poseFrame(knock.frames, last)).axis;
+  const yaw = Math.round(wrapDegrees(knockAxis - donorAxis) * 10) / 10;
+  for (const each of spec.parts) each.retarget = { ...each.retarget, yaw };
+  const clip = buildMotionClip(spec, target, rigs), { frames, count } = clip;
+  // The soft joint guard is not idempotent (it compresses a pose inside its knee a second time), so the take is guarded BEFORE the knockdown's already guarded
+  // lie is blended in: frame 0 stays the knockdown's last frame exactly.
+  clip.corrections = guardJoints(target, frames, count, spec.limits);
+  const stand = standingXZ(target, idle), home = hipsWorld(target, knock.frames, last), [from, to] = travel;
+  offsetHips(target, frames, count, (k, p) => {
+    const ramp = smooth((k - from) / (to - from));
+    return [home.x + (stand.x - home.x) * ramp - p.x, 0, home.z + (stand.z - home.z) * ramp - p.z];
+  });
+  for (let k = 0; k < blend; k += 1) blendInto(frames, knock.frames, k, last, 1 - smooth(k / blend));
+  return clip;
+}
+
+/** The last quarter of a get-up (`from` = its first tick) slerps, whole body, into `aren-idle`'s first frame: the last frame IS that frame. */
+function blendIdle(target, frames, count, idle, from) {
+  for (let k = from; k < count; k += 1) blendInto(frames, idle.frames, k, 0, smooth((k - from) / (count - 1 - from)));
+}
+
+/** Largest rotation difference between two frames (degrees, over every rotation track) and the Hips' position difference (metres). */
+function frameDelta(target, framesA, ka, framesB, kb) {
+  const a = new Quaternion(), b = new Quaternion(), hips = target.index.get('mixamorig:Hips');
+  let rotation = 0;
+  framesA.rotations.forEach((track, node) => { if (track && framesB.rotations[node]) rotation = Math.max(rotation, a.fromArray(track, ka * 4).normalize().angleTo(b.fromArray(framesB.rotations[node], kb * 4).normalize())); });
+  const position = new Vector3().fromArray(framesA.positions[hips], ka * 3).distanceTo(new Vector3().fromArray(framesB.positions[hips], kb * 3));
+  return { rotationDegrees: rotation / DEG, hipsMillimetres: position * RIG_SCALE * 1e3 };
+}
+
+/** Largest per-tick rotation step (degrees) of any joint between ticks `from` and the last. */
+function maxJointStep(frames, count, from) {
+  const a = new Quaternion(), b = new Quaternion();
+  let worst = 0;
+  for (const track of frames.rotations) if (track) for (let k = Math.max(1, from); k < count; k += 1) worst = Math.max(worst, a.fromArray(track, (k - 1) * 4).normalize().angleTo(b.fromArray(track, k * 4).normalize()));
+  return worst / DEG;
+}
+
+/** The take's playback speed against real time: the mean over the whole rise, and the fastest stretch between two keys (a take played in two parts: per part). */
+function sourceTimeScale(spec) {
+  const parts = spec.parts.map((part) => {
+    const keys = part.resolvedKeys ?? part.keys, speeds = keys.slice(1).map(([tick, time], i) => (time - keys[i][1]) / ((tick - keys[i][0]) / TICKS_PER_SECOND)).filter((speed) => Number.isFinite(speed));
+    return { take: part.source.donor.slice(2), fromSeconds: keys[0][1], toSeconds: keys.at(-1)[1], fastestKeyedStretch: Math.round(Math.max(...speeds) * 100) / 100 };
+  });
+  return parts;
+}
+
+/**
+ * The measurements of the brief's acceptance list for one knockdown / get-up clip. Heights are of the Hips joint ("pelvis") in metres; floor clearances are of the
+ * lowest skinned vertex of the whole mesh above the floor, in centimetres; a frame "lies" when the torso is flat (|forward.y| > 0.7) and the pelvis is below 30 cm.
+ */
+function lieReport(spec, target, clip, kit, knock, idle, corrections) {
+  const hips = target.index.get('mixamorig:Hips'), stand = standingXZ(target, { frames: (idle ?? clip).frames }), rows = [];
+  for (let k = 0; k < clip.count; k += 1) {
+    const world = target.poseFrame(clip.frames, k), torso = torsoFrame(target, world), p = new Vector3().setFromMatrixPosition(world[hips]);
+    rows.push({ k, pelvis: p.y * RIG_SCALE, x: p.x, z: p.z, facing: torso.forward.y, lowest: (kit.lowest(clip.frames, k) - kit.rest) * RIG_SCALE * 100 });
+  }
+  const round = (value, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
+  const lying = rows.filter((row) => Math.abs(row.facing) > 0.7 && row.pelvis < 0.3);
+  const rest = target.restWorldPosition[hips];
+  const result = {
+    ticks: clip.totalTicks,
+    pelvisMetresAtTick30: round(rows[30].pelvis),
+    lyingFacing: round(rows[spec.lie ? spec.lie.holdFrom : 0].facing, 2),
+    floorLowestVertexCm: { overAllFrames: round(Math.min(...rows.map((row) => row.lowest)), 2), lyingFramesMin: round(Math.min(...lying.map((row) => row.lowest)), 2), lyingFramesMax: round(Math.max(...lying.map((row) => row.lowest)), 2) },
+    maxHipsHorizontalOffsetMetres: round(Math.max(...rows.map((row) => Math.hypot(row.x - rest.x, row.z - rest.z))) * RIG_SCALE),
+    jointGuard: { jointsCorrected: Object.values(corrections).filter((degrees) => degrees > 0).length, maxCorrectionDegrees: round(Math.max(0, ...Object.values(corrections)), 2) },
+    floor: spec.floor,
+  };
+  if (spec.lie) {
+    // Ground contact: the first tick at which the pelvis is at or below 25 cm and never again rises above 30 cm (a settle/bounce of a few centimetres is allowed).
+    const hold = spec.lie.holdFrom, groundTick = rows.findIndex((row, k) => row.pelvis <= 0.25 && rows.slice(k).every((later) => later.pelvis <= 0.3));
+    // "Every key identical": compared component by component on the stored (float32) tracks, not through an angle.
+    let maxRotation = 0, maxHips = 0;
+    const component = (tracks, size) => { let worst = 0; for (const track of tracks) if (track) for (let k = hold + 1; k < clip.count; k += 1) for (let c = 0; c < size; c += 1) worst = Math.max(worst, Math.abs(track[k * size + c] - track[hold * size + c])); return worst; };
+    maxRotation = component(clip.frames.rotations, 4); maxHips = component(clip.frames.positions, 3);
+    Object.assign(result, {
+      groundContactTick: groundTick,
+      pelvisMetresAtContactTick: round(rows[groundTick].pelvis),
+      pelvisMetresMaxFromContactOn: round(Math.max(...rows.slice(groundTick).map((row) => row.pelvis))),
+      pelvisMetresInLie: round(rows[hold].pelvis),
+      heldRange: { fromTick: hold, toTick: clip.count - 1, maxRotationComponentDelta: maxRotation, maxHipsComponentDelta: maxHips, identical: maxRotation === 0 && maxHips === 0 },
+      lieHipsOffsetFromStandingMetres: { back: round((rest.x - rows[hold].x) * RIG_SCALE), side: round((rows[hold].z - rest.z) * RIG_SCALE) },
+    });
+  }
+  if (spec.getup) {
+    Object.assign(result, {
+      seamFromKnockdown: Object.fromEntries(Object.entries(frameDelta(target, clip.frames, 0, knock.frames, knock.count - 1)).map(([key, value]) => [key, round(value, 4)])),
+      idleEnd: Object.fromEntries(Object.entries(frameDelta(target, clip.frames, clip.count - 1, idle.frames, 0)).map(([key, value]) => [key, round(value, 4)])),
+      endHipsXZOffsetFromStandingMillimetres: round(Math.hypot(rows.at(-1).x - stand.x, rows.at(-1).z - stand.z) * RIG_SCALE * 1e3, 3),
+      maxJointStepLastQuarterDegreesPerTick: round(maxJointStep(clip.frames, clip.count, Math.round((clip.count - 1) * 0.75)), 3),
+      sourceTimeScale: sourceTimeScale(spec),
+    });
+  }
+  return result;
 }
 
 /** Mirrors existing runtime root pinning and cadence (ActorAnimationDriver / AnimationController), plus the unchanged engine's steady forward motor. */
@@ -548,6 +737,18 @@ motion('sakda-cleanse', 90, 35, [tripo('f', 'bow', [[0, 1.7], [35, 2.5], [62, 3.
 // (the preset kicks toward the rig's left) and warped onto the tick.
 motion('sakda-tigers-wrath', 60, 24, [tripo('c', 'front_kick_02', [[0, 0.05], [24, peak(['RightFoot'], [0.7, 0.95])], [60, 1.4]], { retarget: { yaw: -83 } })],
   { strikes: [{ tick: 24, joints: ['RightFoot'] }] });
+// Knockdown and get-up (shared Mixamo reaction takes, retargeted like every other Mixamo clip of this hero; the contract is in the brief). Sakda is a barehanded
+// brawler: no weapon layer. The Hips keep the donor's vertical motion; only their horizontal travel is limited (`travel`: at most 0.62 m from the standing XZ).
+const reaction = (name, keys, extra = {}) => ({ source: { donor: `m:${name}`, animation: 'mixamo.com', file: `asset-source/mixamo/reactions/${name}.fbx` }, keys, retarget: {}, ticks: [0], ...extra });
+const lieClip = (clip, ticks, parts, extra) => specs.push({ clip, motion: true, sim: { totalTicks: ticks }, parts, limits: LOCOMOTION, origin: 'mixamo', ...extra });
+const HOLD_FROM = 48, TRAVEL_METRES = 0.62;
+lieClip('aren-knockdown', 90, [reaction('falling-back', [[0, 0.42], [18, 0.93], [30, 1.6], [HOLD_FROM, 1.85], [90, 1.85]])], { lie: { pose: 'back', holdFrom: HOLD_FROM }, travel: { maxMetres: TRAVEL_METRES } });
+lieClip('aren-knockdown-forward', 90, [reaction('fall-flat-hit-back', [[0, 0.25], [30, 1.0], [HOLD_FROM, 1.95], [90, 1.95]])], { lie: { pose: 'stomach', holdFrom: HOLD_FROM }, travel: { maxMetres: TRAVEL_METRES } });
+lieClip('aren-getup', 66, [reaction('kip-up', [[0, 0.27], [6, 0.27], [42, 1.35], [50, 1.55], [66, 1.8]])], { getup: { from: 'aren-knockdown', blend: 8, travel: [20, 40], idleFrom: 50 } });
+lieClip('aren-getup-forward', 66, [
+  reaction('getting-up-stomach', [[0, 2.35], [8, 2.45], [28, 3.2]]),
+  reaction('getting-up-stomach', [[28, 4.2], [54, 5.4], [66, 5.6]], { ticks: [28] }),
+], { getup: { from: 'aren-knockdown-forward', blend: 8, travel: [8, 46], idleFrom: 50 } });
 // Reference clip (never shipped): the unmodified native dive preset, part of the deformation ceiling.
 add('ref-dive', 'b', 'dive', 84, [0.15, 2.5], { airborne: true, limits: LOCOMOTION });
 const referenceSpecs = specs.splice(specs.findIndex((item) => item.clip.startsWith('ref-')), specs.length);
@@ -565,10 +766,16 @@ const rigs = { target: new Rig(baseGlb) };
 for (const [key, path] of Object.entries(sources)) rigs[key] = new Rig(parseGlb(await readFile(root + path)));
 const target = rigs.target;
 const soles = soleKit(target, baseGlb);
-// Mixamo donors: turned to the rig's heading and rest-aligned onto its A-pose by the loader.
+/** Every 3rd vertex of the whole mesh (not only the soles): the floor contact of the lying clips. Built on first use. */
+let wholeBody;
+const bodyKit = () => (wholeBody ??= soleKit(target, baseGlb, { stride: 3, all: true }));
+// Mixamo donors: turned to the rig's heading and rest-aligned onto its A-pose by the loader. Of the shared reaction takes only those a clip plays (and the one an
+// authoring aid asks for) are loaded.
 const mixamoSources = {};
-for (const name of MIXAMO_FILES) {
-  const file = `asset-source/mixamo/sakda/${name}.fbx`, donor = await loadMixamoDonor(file, { root, target });
+const usedReactions = new Set([...specs, ...referenceSpecs].flatMap((spec) => (spec.parts ?? []).map((part) => part.source.donor.slice(2))).filter((name) => REACTION_FILES.includes(name)));
+for (const aid of [option('lie-timeline')?.slice(2), option('probe')?.split(':')[0]]) if (aid) usedReactions.add(aid);
+for (const name of [...MIXAMO_FILES, ...REACTION_FILES.filter((item) => usedReactions.has(item))]) {
+  const file = `asset-source/mixamo/${REACTION_FILES.includes(name) ? 'reactions' : 'sakda'}/${name}.fbx`, donor = await loadMixamoDonor(file, { root, target });
   rigs[`m:${name}`] = donor.rig;
   mixamoSources[name] = { file, sha256: donor.sha256, durationSeconds: Math.round(donor.duration * 1e4) / 1e4, frames: donor.frames, facingDegrees: donor.facingDegrees };
 }
@@ -602,12 +809,47 @@ if (option('timeline')) {
   process.exit(0);
 }
 
+// Authoring aid for the knockdown / get-up sources: `--lie-timeline=m:<file>` prints, every 1/30 s on this rig, the Hips position in metres (x, height, z), the
+// forward axis of the Hips and the chest in world space (y > 0.7: on the back, y < -0.7: on the stomach, ≈ 0: upright), the head height, the lowest skinned vertex
+// above the floor (cm) and the lowest sole.
+if (option('lie-timeline')) {
+  const [, name] = option('lie-timeline').split(':'), donor = `m:${name}`, decoded = rigs[donor].decodeAnimation('mixamo.com'), n = Math.round(decoded.duration * 30) + 1;
+  const frames = retargetAligned(target, rigs[donor], decoded, n, (k) => decoded.duration * k / (n - 1)), body = soleKit(target, baseGlb, { stride: 3, all: true });
+  console.log(`${donor} ${decoded.duration.toFixed(3)} s · t hipsX hipsY hipsZ (m) hipsFwdY torsoFwdY lieAxis(deg) headY(m) lowestVertex(cm) lowestSole(cm)`);
+  for (let k = 0; k < n; k += 1) {
+    const world = target.poseFrame(frames, k), p = new Vector3().setFromMatrixPosition(world[target.index.get('mixamorig:Hips')]), head = new Vector3().setFromMatrixPosition(world[target.index.get('mixamorig:Head')]);
+    const hipsId = target.index.get('mixamorig:Hips'), hipsFwd = new Vector3(1, 0, 0).applyQuaternion(quaternionOf(world[hipsId]).multiply(target.restWorldQuaternion[hipsId].clone().invert())), torso = torsoFrame(target, world);
+    console.log((decoded.duration * k / (n - 1)).toFixed(2), (p.x * RIG_SCALE).toFixed(2), (p.y * RIG_SCALE).toFixed(2), (p.z * RIG_SCALE).toFixed(2), hipsFwd.y.toFixed(2), torso.forward.y.toFixed(2), torso.axis.toFixed(0),
+      (head.y * RIG_SCALE).toFixed(2), ((body.lowest(frames, k) - body.rest) * RIG_SCALE * 100).toFixed(1), body.lowestBone(frames, k), ((soles.lowest(frames, k) - soles.rest) * RIG_SCALE * 100).toFixed(1));
+  }
+  process.exit(0);
+}
+
+// Authoring aid: `--probe=<reaction take>:<from s>:<to s>[:ticks]` writes /tmp/sakda-probe.glb with that stretch of a reaction take on this rig (no guard, no floor
+// fix), `ticks` long (default: real time), as clip `probe` for `render-clip-preview.mjs`.
+if (option('probe')) {
+  const [name, from, to, ticks = String(Math.round((Number(to) - Number(from)) * TICKS_PER_SECOND))] = option('probe').split(':');
+  const probe = buildMotionClip({ clip: 'probe', motion: true, sim: { totalTicks: Number(ticks) }, parts: [reaction(name, [[0, Number(from)], [Number(ticks), Number(to)]])] }, target, rigs);
+  const glb = parseGlb(appendClips(base, [probe])), index = glb.json.nodes.length;
+  glb.json.nodes.push({ name: 'SakdaForward', rotation: [0, -Math.SQRT1_2, 0, Math.SQRT1_2], children: glb.json.scenes[0].nodes });
+  glb.json.scenes[0].nodes = [index];
+  await writeFile('/tmp/sakda-probe.glb', encodeGlb(glb.json, glb.bin));
+  process.exit(0);
+}
+
 const limitsName = (table) => (table === JOINT_LIMITS ? 'JOINT_LIMITS' : table === KICK_LIMITS ? 'KICK_LIMITS' : 'COMBAT_LIMITS');
 const restHipsX = target.restWorldPosition[target.index.get('mixamorig:Hips')].x;
-const clips = [], report = {};
-for (const spec of [...specs, ...referenceSpecs].filter((item) => (only ? only.includes(item.clip) : specs.includes(item)))) {
-  const clip = spec.motion ? buildMotionClip(spec, target, rigs) : buildClip(spec, rigs);
-  const limits = spec.limits ?? COMBAT_LIMITS;
+const report = {}, produced = new Map();
+const specOf = (name) => specs.find((item) => item.clip === name);
+/** Builds one clip (memoised: a get-up needs its knockdown and the idle, which are themselves clips of the set). */
+function produce(spec) {
+  if (!produced.has(spec.clip)) produced.set(spec.clip, makeClip(spec));
+  return produced.get(spec.clip);
+}
+function makeClip(spec) {
+  const lying = Boolean(spec.lie || spec.getup), limits = spec.limits ?? COMBAT_LIMITS;
+  const knock = spec.getup ? produce(specOf(spec.getup.from)) : undefined, idle = spec.getup ? produce(specOf('aren-idle')) : undefined;
+  const clip = spec.getup ? buildGetup(spec, target, rigs, knock, idle) : spec.motion ? buildMotionClip(spec, target, rigs) : buildClip(spec, rigs);
   if (!spec.motion) {
     if (spec.pin?.maxVertical !== undefined) pinHips(target, clip.frames, clip.count, spec.pin.maxVertical);
   }
@@ -615,10 +857,17 @@ for (const spec of [...specs, ...referenceSpecs].filter((item) => (only ? only.i
     const pre = jointExcursions(target, clip.frames, clip.count, limits);
     for (const [joint, e] of Object.entries(pre)) if (e.swing > 0.9 * limits[joint].swing || e.twist > 0.9 * limits[joint].twist) console.error(`pre-limit ${spec.clip} ${joint.replace('mixamorig:', '')} swing ${e.swing.toFixed(1)}/${limits[joint].swing} twist ${e.twist.toFixed(1)}/${limits[joint].twist}`);
   }
-  const corrections = spec.motion ? guardJoints(target, clip.frames, clip.count, limits) : limitJoints(target, clip.frames, clip.count, limits);
-  const shift = groundShift(soles, clip.frames, clip.count);
-  offsetHips(target, clip.frames, clip.count, () => [0, shift, 0]);
-  spec.groundShift = Math.round(shift * 1e4) / 1e4;
+  const corrections = spec.getup ? clip.corrections : spec.motion ? guardJoints(target, clip.frames, clip.count, limits) : limitJoints(target, clip.frames, clip.count, limits);
+  if (lying) {
+    // Lying clips keep their vertical Hips motion (the fall reaches the floor, the rise leaves it); only the lowest skinned vertex of the WHOLE mesh is held to the floor, frame by frame.
+    // A get-up is blended into the idle first (its last frame IS the idle's first), then grounded with both end frames pinned.
+    if (spec.getup) blendIdle(target, clip.frames, clip.count, idle, spec.getup.idleFrom);
+    spec.floor = floorCorrect(target, clip.frames, clip.count, bodyKit(), { holdFrom: spec.lie?.holdFrom, pinFirst: Boolean(spec.getup), pinLast: Boolean(spec.getup) });
+  } else {
+    const shift = groundShift(soles, clip.frames, clip.count);
+    offsetHips(target, clip.frames, clip.count, () => [0, shift, 0]);
+    spec.groundShift = Math.round(shift * 1e4) / 1e4;
+  }
   continuity(clip.frames, clip.count);
   if (spec.strikes) {
     spec.strikeReport = spec.strikes.map(({ tick, joints, metric }) => {
@@ -635,9 +884,11 @@ for (const spec of [...specs, ...referenceSpecs].filter((item) => (only ? only.i
     motionQuality: motionQuality(target, clip, soles),
     ...(spec.strikeReport ? { strikes: spec.strikeReport } : {}),
     ...(spec.pin ? { hipsTravel: (() => { const t = hipsTravel(target, clip.frames, clip.count); return { horizontalMetres: Math.round(t.horizontal * RIG_SCALE * 1e4) / 1e4, verticalMetres: Math.round(t.vertical * RIG_SCALE * 1e4) / 1e4 }; })() } : {}),
+    ...(lying ? { lie: lieReport(spec, target, clip, bodyKit(), knock, idle, corrections) } : {}),
   };
-  clips.push(clip);
+  return clip;
 }
+const clips = [...specs, ...referenceSpecs].filter((item) => (only ? only.includes(item.clip) : specs.includes(item))).map(produce);
 const animated = parseGlb(appendClips(base, clips));
 // Tripo's native biped motion faces +X. A scene-level child preserves bind/clip transforms while presenting the +Z forward convention used by the simulation.
 for (const scene of animated.json.scenes) {
@@ -721,6 +972,7 @@ const creditTotal = [credits, ...[discarded, tooling].map((table) => Object.from
 await writeFile(root + output + '/provenance.json', JSON.stringify({
   schemaVersion: 1, originalModelTask: MODEL_TASK, tasks, sources, presets, mixamo: mixamoSources, sourceHash: hash(base), outputHash: hash(bytes),
   operation: 'Captured whole-body motion on the native Sakda rig: Tripo presets and Mixamo FBX (Without Skin, 30 fps; heading/rest alignment by scripts/assets/mixamo-import.mjs). Edits: source windows/time warps, facing, in-place pinning, constant ground shift, lowered leap apex, measured gait-loop vertical root drift removal, loop seams, cross-fades between captured whole-body segments, whole-body mirror for alternating elbows, and the shared soft joint guard (KICK_LIMITS). Walk uses the stable native captured jog window 0.267–0.900 s at normal cadence for 4.4 m/s; run is its timing-only faster variant for 6.6 m/s. No IK, synthetic stance widening, partial-body replacement or hand-keyed poses. Native mesh retained; barehanded. Only manifest-entry.json is emitted; playtest manifests remain coordinator-owned.',
+  knockdownGetup: 'aren-knockdown / aren-knockdown-forward / aren-getup / aren-getup-forward: Mixamo "Falling Back Death" (falling-back), "Fall Flat Hit Back" (fall-flat-hit-back), "Kip Up" (kip-up) and "Getting Up From Stomach" (getting-up-stomach) of asset-source/mixamo/reactions (provenance.json, hero shared-reactions), retargeted like every other Mixamo clip of this hero (mixamo-import.mjs facing/rest alignment + world-space retarget). Edits: time warps of the take (the stomach get-up is played in two stretches cross-faded over 6 ticks, skipping its slow shuffle), the Hips horizontal travel limited (knockdowns: uniform scale to at most 0.62 m from the standing XZ; get-ups: one smooth slide back onto the standing XZ), the Hips vertical motion kept, the shared soft joint guard (JOINT_LIMITS) applied to each take before blending, the whole-mesh lowest vertex held to the floor through the Hips height alone, a lying-to-lying cross-fade from the knockdown held lie into the take, and a gradual slerp of the last quarter into aren-idle frame 0. No IK, no hand-keyed poses; Sakda is unarmed.',
   credits, discarded, tooling, creditTotal, evidenceStatus: 'blocked',
   clips: specs.map((spec) => ({ ...spec, limits: limitsName(spec.limits ?? COMBAT_LIMITS) })),
 }, null, 2) + '\n');
@@ -740,6 +992,7 @@ if (args.includes('--previews')) {
     ['echo-resonating', ['sakda-echo-wave', 'sakda-resonating-strike', 'sakda-elbow-charge', 'sakda-knee-charge']],
     ['elbows-tempest', ['sakda-hundred-elbows', 'sakda-tempest']],
     ['knee-clinch-wrath', ['sakda-flying-knee', 'sakda-iron-clinch', 'sakda-tigers-wrath']],
+    ['knockdown', ['aren-knockdown', 'aren-knockdown-forward', 'aren-getup', 'aren-getup-forward']],
   ];
   const sheets = groups.flatMap(([name, names]) => ['side', 'iso', 'front'].map((view) => [`${name}-${view}`, view, names, 12]));
   const queue = [...sheets];

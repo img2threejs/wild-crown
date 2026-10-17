@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, makeActor, type CombatInput, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { vec } from '../../src/game/combat/geometry.js';
+import { LIGHT_STEPS } from '../../src/game/combat/PlayerSkills.js';
 
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 const runRight: CombatInput = { ...idle, move: vec(1, 0, 0), sprintHeld: true };
@@ -174,7 +175,7 @@ describe('CombatEvent damage payload — Aren impact on hostile', () => {
     const impactPosition = { x: target.position.x, y: target.position.y, z: target.position.z };
     const vitalityBefore = target.vitality;
     engine.fixedStep({ ...idle, lightPressed: true });
-    for (let t = 0; t < 12; t++) engine.fixedStep(idle);
+    for (let t = 0; t < LIGHT_STEPS[0]!.activeFrom; t++) engine.fixedStep(idle);
     const events = engine.consumeEvents();
     const event = damageEventByTarget(events, 'corrupted-boar');
     expect(event).toBeDefined();
@@ -195,7 +196,7 @@ describe('CombatEvent damage payload — Aren impact on hostile', () => {
     const primed = new CombatEngine(seed);
     const vitalityBefore = boar.vitality;
     primed.fixedStep({ ...idle, lightPressed: true });
-    for (let t = 0; t < 12; t++) primed.fixedStep(idle);
+    for (let t = 0; t < LIGHT_STEPS[0]!.activeFrom; t++) primed.fixedStep(idle);
     const events = primed.consumeEvents();
     const event = damageEventByTarget(events, 'corrupted-boar');
     expect(event).toBeDefined();
@@ -215,7 +216,7 @@ describe('CombatEvent damage payload — Aren impact on hostile', () => {
     const primed = new CombatEngine(seed);
     const vitalityBefore = boar.vitality;
     primed.fixedStep({ ...idle, lightPressed: true });
-    for (let t = 0; t < 12; t++) primed.fixedStep(idle);
+    for (let t = 0; t < LIGHT_STEPS[0]!.activeFrom; t++) primed.fixedStep(idle);
     const events = primed.consumeEvents();
     const event = damageEventByTarget(events, 'corrupted-boar');
     expect(event).toBeDefined();

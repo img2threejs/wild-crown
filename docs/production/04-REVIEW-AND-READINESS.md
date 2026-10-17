@@ -1,6 +1,6 @@
 # Wild Crown — Review và trạng thái sẵn sàng
 
-Ngày: 2026-09-30. Đây là review tài liệu planning, không phải QA pass cho game.
+Ngày review planning baseline: 2026-09-30. Status cập nhật: **2026-10-14**. Các review/check bên dưới là lịch sử của deliverables planning, không phải QA pass hôm nay hoặc release acceptance.
 
 ## Deliverables
 
@@ -46,21 +46,23 @@ document local links and code fences valid.
 
 Kiểm tra chữ ký binary WebP thành công cho cả ba file; đã xem trực tiếp ảnh. JSON concept manifest parse được và trỏ tới file tồn tại. Đây là kiểm tra tài liệu/file, không chứng minh đồ họa 3D hay game performance.
 
-## Chưa thực hiện và không được diễn đạt như đã hoàn thành
+## Trạng thái implementation và phần chưa nghiệm thu — 2026-10-14
 
-- Chưa install/upgrade img2threejs 2.0.0/plugin toolchain trên máy.
-- Chưa live-call Tripo, chưa có production GLB/rig/clip của Wild Crown.
-- Chưa cấp Environment image consent hoặc Jev disclosure consent; chưa gọi TypeSafe.
-- Chưa qualification vegetation/mixed-scene support, chưa bổ sung bốn rig measurement producers.
-- Chưa code/build/run/deploy gameplay; chưa benchmark 60fps hoặc đo campaign 8–12h.
-- Người dùng đã duyệt bộ concept hiện hành trong `visual-review/`. Multi-view consistency, topology/rig evidence và runtime performance vẫn là technical gates sau approval, không cần hỏi lại concept đã chốt.
+| Phạm vi | Status / nguồn đã đối chiếu |
+|---|---|
+| Bốn hero | **Implemented local:** Aren, Yara, Vesper, Sakda; entry-only selection, retry giữ hero, distinct kits/native candidates. `src/game/heroes.ts`, [combat.md — Heroes](../features/combat.md#playable-heroes-profiles-and-the-kit-seam). |
+| Movement/resources | **Implemented local:** Space free-form jump/double jump/air-step (8 + 8 mana); F dodge 25 mana, không hai charge; cap 100, grounded input movement hồi 4 mana/mét. `src/game/combat/PlayerSkills.ts`, [combat.md](../features/combat.md). “Free” không phải zero mana. |
+| Năm map Trials | **Implemented local:** Greenwake Ember Boar/Frost Sap-Stalker/Root Rammer; Canopy Thornback Howler/Storm Hornbill/Mire Viper; Grove Heartroot Sprig/Blighted Rootling/Hollowheart; Moonpine Frostfang Tracker/Howl Scout/Ruun; Mistveil Bog Lurker/Lantern Heron/Ghor. `CombatTrials.ts`, `GroveContent.ts`, `MoonpineContent.ts`, `MistveilContent.ts` trong `src/game/combat/`. |
+| Local UI entry | **Implemented:** map intro với background load, region loading scene, skippable 4-second establishing shot; simulation paused, Reduced Motion bỏ sweep. [application.md](../features/application.md#map-intro-and-establishing-shot), [reference-ui.md](../features/reference-ui.md#map-intro-loading-scene-and-establishing-shot), `src/content/regionPresentation.ts`. |
+| Physical reactions | **Đã chốt / đang triển khai Phase 1:** flinch/stagger/knockback/knockdown/launch/stun/getup, poise break và directional presentation; không claim đã QA chung cho mọi combatant. [Bible §15.8](../WILD-CROWN-GAME-DESIGN-BIBLE-CODEX-CLI.md#158-physical-reactions-và-poise--đã-chốt-phase-1-đang-triển-khai), [remediation Phase 1](../../.opencode/plans/2026-10-14-full-remediation.md). |
+| Real chapters | **Planned integration Phases 2–3:** exploration/quests/dialogue/checkpoints/story boss/Cleanse→companion/Bond–Dominion/mid-chapter saves. Trials giữ riêng, không award campaign; Koro/Asha/Solkar/Orun thêm trên nền roster, story Ruun/Ghor vẫn giữ. Authored `src/content/story.ts` và chapter labels trong `src/app/StoryChapters.ts` chưa chứng minh campaign end-to-end. |
+| Asset/audio production | **Approved work, chưa acceptance:** Tripo Acts I–IV ceiling khoảng 3,000 credits, inspect/log từng paid step; CC0/CC-BY audio với per-file source/license/author/SHA-256. [Remediation §User decisions/Phase 4](../../.opencode/plans/2026-10-14-full-remediation.md). |
+| Release | **Blocked:** user duyệt asset acceptance list trước mọi `verified` flips; benchmark/reference hardware, gamepad/accessibility và native evidence/release gates vẫn phải đo/chạy thật. [release-validation.md](../features/release-validation.md), remediation Phase 5. |
 
 ## Readiness decision
 
-**Concept Map / UI / Characters đã approved. Toàn bộ nội dung game chuyển sang English theo yêu cầu người dùng.** Giữ art/layout; cập nhật chữ trên curated plates/contact sheets và English copy sources. Tripo đã sẵn có/được phép dùng. Chưa bắt đầu gameplay implementation hay production model generation trong lượt này.
+**Local Trials có implementation và candidate evidence; full game/release chưa sẵn sàng.** Không dùng claim ngày 2026-09-30 “chưa code/build/run gameplay” làm status hôm nay; cũng không dùng build/test/candidate smoke để tuyên bố production asset acceptance. Các test counts/browser observations trong feature docs là evidence checkpoint của chúng, không phải checks mới chạy trong lượt docs sync này.
 
-Các lựa chọn đã khóa: direct Tripo GLB, desktop web trước, historical Dominion ending lock; stylized cinematic; phi sát thương/không gore. Người dùng đã đồng ý năm correction: ba mảnh sau Asha, council đại diện Crown khi exile, provisional Koro trong slice, Call chuyển thành Ask/Signal, Chapter 7 coalition không tự cấp Living Pact.
+Concept Map/UI/Characters đã approved và player-facing content vẫn **English**; bản Bible tiếng Việt giữ engineering/story context. Các quyết định trước (direct Tripo GLB, desktop web, historical Dominion ending lock, stylized cinematic, phi sát thương/không gore và năm canon corrections) vẫn là baseline; design lock mới ngày 2026-10-14 được ghi tại [Bible §0.1/§38](../WILD-CROWN-GAME-DESIGN-BIBLE-CODEX-CLI.md) và [full remediation plan](../../.opencode/plans/2026-10-14-full-remediation.md).
 
-Prerequisite còn lại: duyệt production reference cụ thể sau chỉnh sửa (không hỏi lại art direction), các canon clarification ngoài năm điểm đã duyệt nếu cần, rights/quota, exact toolchain, reference hardware, native-GLB evidence, vegetation qualification và workspace consents. Chưa có quyền cấp consent thay người dùng hoặc phát sinh batch generation không giới hạn.
-
-Bước tiếp theo sau English cutover: D01–D06 và risk labs theo dependency đã đề xuất. Concept approval không được ghi nhầm thành rig/runtime pass. Dùng English copy catalog và narrative thay cho Vietnamese player-facing text trong tài liệu nguồn.
+Quyết định mới giữ bốn heroes, free jump, mana dodge và current monsters; thêm story bosses, làm real chapters và ưu tiên physical combat reactions. Gameplay/asset/audio work theo Phases 1–4; readiness gate theo Phase 5. Approval ngân sách không là quyền generation vô hạn hoặc tự cấp consent, và không thay thế list user approval cho từng accepted asset. Benchmark 60 FPS/8–12 giờ chưa được chứng minh trong status này.

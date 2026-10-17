@@ -5,7 +5,11 @@ import { VfxSystem } from './vfx/VfxSystem.js';
 import { CueKits, KitSlot, resolveKit, type ImpactSink, type SocketResolver } from './vfx/ElementKits.js';
 import { Footprint } from './vfx/footprint.js';
 import { PALETTE, type VfxElement } from './vfx/palette.js';
+import { ResidueFx } from './vfx/ResidueFx.js';
 import { WardenFx } from './vfx/WardenFx.js';
+import { HitImpactFx } from './vfx/HitImpactFx.js';
+import { ReactionFx } from './vfx/ReactionFx.js';
+import { CompanionFx } from './vfx/CompanionFx.js';
 
 export interface StoryEffectsOptions {
   readonly scene: THREE.Scene;
@@ -48,6 +52,12 @@ export class StoryEffects {
   readonly vfx: VfxSystem;
   /** Warden Arsenal: blade trail, sigils, projectiles, Thunder Cleave, Judgement, cleansed finish. */
   readonly warden: WardenFx;
+  /** Bounded persistent residue (scorch/runes on surfaces, body-tinted accent on actors). */
+  readonly residue: ResidueFx;
+  /** Combat-reaction presentation: slide / landing dust, wall debris, stun swirl, poise-break burst and reaction camera punch. */
+  readonly reactions: ReactionFx;
+  /** Companion field-verb feedback: Vara's mark and landing hint, Asha's guard, command rings, Tali's shelter. */
+  readonly companions: CompanionFx;
   private readonly kits: CueKits;
   private impact: ImpactSink | undefined;
   private readonly slots: EffectSlot[] = [];
@@ -68,14 +78,21 @@ export class StoryEffects {
     this.impact = options.impact;
     this.warden = new WardenFx(this.vfx, { resolveSocket: options.resolveSocket, resolveActorRoot: options.resolveActorRoot, impact: options.impact });
     this.vfx.addModule(this.warden);
+    this.residue = new ResidueFx(this.vfx, options.resolveActorRoot);
+    this.residue.setReducedEffects(options.reducedEffects ?? false);
+    this.vfx.addModule(this.residue);
+    this.reactions = new ReactionFx(this.vfx, options.resolveActorRoot, options.impact);
+    this.companions = new CompanionFx(this.vfx, options.resolveActorRoot, options.impact);
     this.kits = new CueKits(this.vfx, options.resolveSocket, options.impact, this.warden);
     const capacity = Math.max(CAPACITY_MIN, Math.min(CAPACITY_MAX, options.capacity ?? 48));
     for (let i = 0; i < capacity; i++) this.slots.push({ active: false, essential: false, priority: 0, startWorldTick: 0, durationTicks: 1, scopeId: undefined, instanceId: '', kit: new KitSlot() });
     options.scene.add(this.group);
   }
 
-  setReducedEffects(reduced: boolean): void { this.vfx.setReducedEffects(reduced); }
-  setImpactSink(impact: ImpactSink | undefined): void { this.impact = impact; this.kits.setImpactSink(impact); this.warden.setImpact(impact); }
+  setReducedEffects(reduced: boolean): void { this.vfx.setReducedEffects(reduced); this.residue.setReducedEffects(reduced); }
+  /** Routes the `telegraphIntensity` setting to the VfxSystem (and therefore `GroundFx`) so live and newly spawned anticipation tells reflect the player's choice. */
+  setTelegraphIntensity(intensity: 'standard' | 'high'): void { this.vfx.setTelegraphIntensity(intensity); }
+  setImpactSink(impact: ImpactSink | undefined): void { this.impact = impact; this.kits.setImpactSink(impact); this.warden.setImpact(impact); this.reactions.setImpactSink(impact); this.companions.setImpactSink(impact); }
 
   /** Player focus for proximity-scaled detonation shake; presentation only. */
   setFocus(position: Readonly<Vec3> | undefined): void {
@@ -96,6 +113,12 @@ export class StoryEffects {
     this.seen.add(cue.instanceId);
     this.seenOrder.push(cue.instanceId);
     if (this.seenOrder.length > SCOPE_MEMORY) this.seen.delete(this.seenOrder.shift()!);
+    // Reaction cues (start, wall impact, poise break, get-up) are drawn by ReactionFx on their own pooled emitters and never occupy a kit slot.
+    if (cue.kind === 'reaction-start' || cue.kind === 'wall-impact' || cue.kind === 'poise-break' || cue.kind === 'getup') return this.reactions.play(cue, this.ownerFor(cue.scopeId));
+    // Companion cues (Vara's mark, Asha's guard, a field command, Tali's shelter) are one-shot rings and bursts on their own pooled emitters, never a kit slot.
+    if (cue.kind === 'mark' || cue.kind === 'guard' || cue.kind === 'command' || cue.kind === 'shelter' || cue.kind === 'storm-talon') return this.companions.play(cue, this.ownerFor(cue.scopeId));
+    // A strike that dealt no damage (evaded, blocked, absorbed) gets no impact, from any hero kit.
+    if (cue.kind === 'hit' && HitImpactFx.suppressed(cue)) return false;
     const priority = cue.priority === 'essential' || ESSENTIAL[cue.kind] ? 3 : cue.priority === 'story' ? 2 : COSMETIC[cue.kind] ? 0 : 1;
     const slot = this.acquire(priority);
     if (!slot) return false;
@@ -112,6 +135,10 @@ export class StoryEffects {
     kit.end = cue.worldTick + slot.durationTicks;
     this.vfx.time = cue.worldTick / 60;
     this.kits.begin(kit, cue.worldTick);
+    // Persistent residue: only attach when the cue carries explicit contact metadata from the engine
+    // (actor hit with `confirmedDamage > 0`, or environment `projectile-impact` with contact proof).
+    // Cancellation through the same owner removes the residue with the rest of the scope.
+    if (cue.contact) this.residue.emit(cue, kit.owner);
     return true;
   }
 
@@ -133,18 +160,22 @@ export class StoryEffects {
       if (this.worldTick >= slot.startWorldTick + slot.durationTicks) { this.release(slot, true); continue; }
       this.kits.update(slot.kit, this.worldTick);
     }
+    this.companions.tick(worldClock.worldTick);
     this.vfx.update(this.vfx.time);
   }
 
   cancelScope(scopeId: string, _reason: CueCancellationReason): void {
     for (const slot of this.slots) if (slot.active && slot.scopeId === scopeId) this.release(slot, false);
     const owner = this.scopeOwners.get(scopeId);
+    this.companions.cancelScope(scopeId);
     if (owner !== undefined) { this.vfx.killOwner(owner); this.scopeOwners.delete(scopeId); }
   }
 
   cancelAll(reason: CueCancellationReason): void {
     for (const slot of this.slots) if (slot.active) this.release(slot, false);
     this.vfx.clear();
+    this.reactions.clear();
+    this.companions.clear();
     this.scopeOwners.clear();
     if (reason === 'death' || reason === 'unload' || reason === 'load') {
       this.seen.clear();
@@ -181,6 +212,7 @@ export class StoryEffects {
     if (this.destroyed) return;
     this.cancelAll('unload');
     this.destroyed = true;
+    this.companions.dispose();
     this.vfx.dispose();
     this.slots.length = 0;
     this.seen.clear();

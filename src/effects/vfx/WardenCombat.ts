@@ -100,7 +100,7 @@ export class WardenCombat {
       const previous = this.allegiance.get(actor.id);
       if (previous === 'hostile' && actor.allegiance !== 'hostile' && CLEANSE_ACTORS[actor.id] && actor.visible) this.cleanse(actor, time);
       this.allegiance.set(actor.id, actor.allegiance);
-      this.hitReact.set(actor.id, actor.hitReact ?? 0);
+      this.hitReact.set(actor.id, actor.reaction?.progress ?? 0);
     }
     if (!aren || !aren.visible || aren.downed) { player.valid = false; return; }
     const root = w.resolveSocket?.('aren', 'root');

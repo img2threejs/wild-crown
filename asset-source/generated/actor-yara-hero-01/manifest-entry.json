@@ -7,7 +7,7 @@
   "rigFamily": "biped",
   "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
+  "outputHash": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31",
   "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
   "coordinateTransform": {
     "forward": {
@@ -28,6 +28,10 @@
     "aren-hit": "aren-hit",
     "aren-cheer": "aren-cheer",
     "aren-defeat": "aren-defeat",
+    "aren-knockdown": "aren-knockdown",
+    "aren-knockdown-forward": "aren-knockdown-forward",
+    "aren-getup": "aren-getup",
+    "aren-getup-forward": "aren-getup-forward",
     "yara-thornshot-1": "yara-thornshot-1",
     "yara-thornshot-2": "yara-thornshot-2",
     "yara-thornshot-3": "yara-thornshot-3",
@@ -319,6 +323,134 @@
       ],
       "evidenceStatus": "verified"
     },
+    "aren-knockdown": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.0001968211872735992,
+            "y": -0.00913058128207922,
+            "z": 0.5100526213645935
+          }
+        },
+        {
+          "time": 0.75,
+          "position": {
+            "x": -0.07672006636857986,
+            "y": 0.3441104590892792,
+            "z": 0.1320057064294815
+          }
+        },
+        {
+          "time": 1.5,
+          "position": {
+            "x": -0.07617085427045822,
+            "y": 0.34430670738220215,
+            "z": 0.13233886659145355
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-knockdown-forward": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": 0.0001968211872735992,
+            "y": -0.00913058128207922,
+            "z": 0.511361300945282
+          }
+        },
+        {
+          "time": 0.75,
+          "position": {
+            "x": -0.04388658329844475,
+            "y": -0.3329811990261078,
+            "z": 0.16185572743415833
+          }
+        },
+        {
+          "time": 1.5,
+          "position": {
+            "x": -0.04523219168186188,
+            "y": -0.3328078091144562,
+            "z": 0.1658267229795456
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-getup": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": -0.07617085427045822,
+            "y": 0.34430670738220215,
+            "z": 0.13233886659145355
+          }
+        },
+        {
+          "time": 0.550000011920929,
+          "position": {
+            "x": -0.010886118747293949,
+            "y": 0.03962491452693939,
+            "z": 0.2605013847351074
+          }
+        },
+        {
+          "time": 1.100000023841858,
+          "position": {
+            "x": 0.0001968211872735992,
+            "y": -0.00913058128207922,
+            "z": 0.5040619969367981
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-getup-forward": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0,
+          "position": {
+            "x": -0.04523219168186188,
+            "y": -0.3328078091144562,
+            "z": 0.1658267229795456
+          }
+        },
+        {
+          "time": 0.550000011920929,
+          "position": {
+            "x": -0.012580798007547855,
+            "y": -0.09685087203979492,
+            "z": 0.3438928425312042
+          }
+        },
+        {
+          "time": 1.100000023841858,
+          "position": {
+            "x": 0.0001968211872735992,
+            "y": -0.00913058128207922,
+            "z": 0.5071961283683777
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
     "yara-thornshot-1": {
       "mode": "native-root-motion",
       "rootNodeName": "mixamorigHips",
@@ -328,23 +460,23 @@
           "time": 0,
           "position": {
             "x": 1.1849464742752502e-9,
-            "y": -0.07734350115060806,
+            "y": -0.09796744585037231,
             "z": 0.5613521933555603
           }
         },
         {
           "time": 0.20000000298023224,
           "position": {
-            "x": -0.0004496107576414943,
-            "y": -0.06605695933103561,
+            "x": 0.000331217102939263,
+            "y": -0.1032819077372551,
             "z": 0.5074383020401001
           }
         },
         {
           "time": 0.4333333373069763,
           "position": {
-            "x": -0.0006879705470055342,
-            "y": -0.06515903770923615,
+            "x": 0.000506809214130044,
+            "y": -0.10062075406312943,
             "z": 0.47885581851005554
           }
         }
@@ -615,24 +747,24 @@
         {
           "time": 0,
           "position": {
-            "x": -6.84177834386901e-8,
-            "y": -0.04805852472782135,
+            "x": 7.816970537533052e-8,
+            "y": -1.9468760115159967e-7,
             "z": 0.5109941959381104
           }
         },
         {
           "time": 0.4333333373069763,
           "position": {
-            "x": -0.037633880972862244,
-            "y": -0.5895106792449951,
-            "z": 0.4212305247783661
+            "x": -0.011876503936946392,
+            "y": 0.5749015808105469,
+            "z": 0.41647228598594666
           }
         },
         {
           "time": 0.8999999761581421,
           "position": {
-            "x": -0.039227914065122604,
-            "y": -0.5914251804351807,
+            "x": 0.006427145563066006,
+            "y": 0.5700517892837524,
             "z": 0.41865020990371704
           }
         }

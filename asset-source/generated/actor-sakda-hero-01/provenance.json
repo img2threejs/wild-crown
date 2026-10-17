@@ -127,11 +127,40 @@
       "durationSeconds": 1,
       "frames": 31,
       "facingDegrees": 90.75
+    },
+    "falling-back": {
+      "file": "asset-source/mixamo/reactions/falling-back.fbx",
+      "sha256": "248ab54bdab4fdfab8a1a1703c38618ffacafbaf90f9d7baeec0abcbef49b7d8",
+      "durationSeconds": 2.6,
+      "frames": 79,
+      "facingDegrees": 90.75
+    },
+    "kip-up": {
+      "file": "asset-source/mixamo/reactions/kip-up.fbx",
+      "sha256": "0352cb6e20635652502955535840a64e0aac1e178fa5a0ee82b210048be118fd",
+      "durationSeconds": 2.0333,
+      "frames": 62,
+      "facingDegrees": 90.75
+    },
+    "fall-flat-hit-back": {
+      "file": "asset-source/mixamo/reactions/fall-flat-hit-back.fbx",
+      "sha256": "02b583f08362f2cd97a29f1d37778a1c7b0081eced15a91ddd2dc64fa0b3412f",
+      "durationSeconds": 2.5333,
+      "frames": 77,
+      "facingDegrees": 90.75
+    },
+    "getting-up-stomach": {
+      "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx",
+      "sha256": "ead02bf768fb1d97870f820aa7b199bd199f702b59af36ea1cd6108f32250675",
+      "durationSeconds": 8.6,
+      "frames": 259,
+      "facingDegrees": 90.75
     }
   },
   "sourceHash": "2a272c69d06fc415c525fc7f03c901951408bf75159188d2b4cf48a273b9eda6",
-  "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+  "outputHash": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5",
   "operation": "Captured whole-body motion on the native Sakda rig: Tripo presets and Mixamo FBX (Without Skin, 30 fps; heading/rest alignment by scripts/assets/mixamo-import.mjs). Edits: source windows/time warps, facing, in-place pinning, constant ground shift, lowered leap apex, measured gait-loop vertical root drift removal, loop seams, cross-fades between captured whole-body segments, whole-body mirror for alternating elbows, and the shared soft joint guard (KICK_LIMITS). Walk uses the stable native captured jog window 0.267–0.900 s at normal cadence for 4.4 m/s; run is its timing-only faster variant for 6.6 m/s. No IK, synthetic stance widening, partial-body replacement or hand-keyed poses. Native mesh retained; barehanded. Only manifest-entry.json is emitted; playtest manifests remain coordinator-owned.",
+  "knockdownGetup": "aren-knockdown / aren-knockdown-forward / aren-getup / aren-getup-forward: Mixamo \"Falling Back Death\" (falling-back), \"Fall Flat Hit Back\" (fall-flat-hit-back), \"Kip Up\" (kip-up) and \"Getting Up From Stomach\" (getting-up-stomach) of asset-source/mixamo/reactions (provenance.json, hero shared-reactions), retargeted like every other Mixamo clip of this hero (mixamo-import.mjs facing/rest alignment + world-space retarget). Edits: time warps of the take (the stomach get-up is played in two stretches cross-faded over 6 ticks, skipping its slow shuffle), the Hips horizontal travel limited (knockdowns: uniform scale to at most 0.62 m from the standing XZ; get-ups: one smooth slide back onto the standing XZ), the Hips vertical motion kept, the shared soft joint guard (JOINT_LIMITS) applied to each take before blending, the whole-mesh lowest vertex held to the floor through the Hips height alone, a lying-to-lying cross-fade from the knockdown held lie into the take, and a gradual slerp of the last quarter into aren-idle frame 0. No IK, no hand-keyed poses; Sakda is unarmed.",
   "credits": {
     "concept": 15,
     "model": 70,
@@ -2159,6 +2188,341 @@
           "forwardMetres": 0.858
         }
       ]
+    },
+    {
+      "clip": "aren-knockdown",
+      "motion": true,
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:falling-back",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/falling-back.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.42
+            ],
+            [
+              18,
+              0.93
+            ],
+            [
+              30,
+              1.6
+            ],
+            [
+              48,
+              1.85
+            ],
+            [
+              90,
+              1.85
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.42
+            ],
+            [
+              18,
+              0.93
+            ],
+            [
+              30,
+              1.6
+            ],
+            [
+              48,
+              1.85
+            ],
+            [
+              90,
+              1.85
+            ]
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "origin": "mixamo",
+      "lie": {
+        "pose": "back",
+        "holdFrom": 48
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.67,
+      "floor": {
+        "liftMinMetres": -0.0125,
+        "liftMaxMetres": 0.1286
+      }
+    },
+    {
+      "clip": "aren-knockdown-forward",
+      "motion": true,
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:fall-flat-hit-back",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/fall-flat-hit-back.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.25
+            ],
+            [
+              30,
+              1
+            ],
+            [
+              48,
+              1.95
+            ],
+            [
+              90,
+              1.95
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.25
+            ],
+            [
+              30,
+              1
+            ],
+            [
+              48,
+              1.95
+            ],
+            [
+              90,
+              1.95
+            ]
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "origin": "mixamo",
+      "lie": {
+        "pose": "stomach",
+        "holdFrom": 48
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.2837,
+      "floor": {
+        "liftMinMetres": -0.0514,
+        "liftMaxMetres": 0.0529
+      }
+    },
+    {
+      "clip": "aren-getup",
+      "motion": true,
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:kip-up",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/kip-up.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.27
+            ],
+            [
+              6,
+              0.27
+            ],
+            [
+              42,
+              1.35
+            ],
+            [
+              50,
+              1.55
+            ],
+            [
+              66,
+              1.8
+            ]
+          ],
+          "retarget": {
+            "yaw": 14.9
+          },
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              0.27
+            ],
+            [
+              6,
+              0.27
+            ],
+            [
+              42,
+              1.35
+            ],
+            [
+              50,
+              1.55
+            ],
+            [
+              66,
+              1.8
+            ]
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "origin": "mixamo",
+      "getup": {
+        "from": "aren-knockdown",
+        "blend": 8,
+        "travel": [
+          20,
+          40
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "liftMinMetres": -0.0183,
+        "liftMaxMetres": 0.1365
+      }
+    },
+    {
+      "clip": "aren-getup-forward",
+      "motion": true,
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              0,
+              2.35
+            ],
+            [
+              8,
+              2.45
+            ],
+            [
+              28,
+              3.2
+            ]
+          ],
+          "retarget": {
+            "yaw": 9.8
+          },
+          "ticks": [
+            0
+          ],
+          "resolvedKeys": [
+            [
+              0,
+              2.35
+            ],
+            [
+              8,
+              2.45
+            ],
+            [
+              28,
+              3.2
+            ]
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              28,
+              4.2
+            ],
+            [
+              54,
+              5.4
+            ],
+            [
+              66,
+              5.6
+            ]
+          ],
+          "retarget": {
+            "yaw": 9.8
+          },
+          "ticks": [
+            28
+          ],
+          "resolvedKeys": [
+            [
+              28,
+              4.2
+            ],
+            [
+              54,
+              5.4
+            ],
+            [
+              66,
+              5.6
+            ]
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "origin": "mixamo",
+      "getup": {
+        "from": "aren-knockdown-forward",
+        "blend": 8,
+        "travel": [
+          8,
+          46
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "liftMinMetres": -0.028,
+        "liftMaxMetres": 0.1159
+      }
     }
   ]
 }

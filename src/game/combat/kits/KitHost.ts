@@ -4,6 +4,7 @@ import type { HeroId } from '../../heroes.js';
 import type { AttackElement } from '../content.js';
 import type { CombatActor, CombatInput, PlayerResources } from '../CombatEngine.js';
 import type { LivePlayerProjectile } from '../PlayerArsenal.js';
+import type { HitSpec } from '../reactions.js';
 import type { PlayerSkillId } from '../PlayerSkills.js';
 
 /**
@@ -36,6 +37,10 @@ export interface KitStrike {
   stopTicks: number;
   /** Instinct gained by the hit. */
   instinct: number;
+  /** Actual projectile travel direction, when the contact came from a projectile rather than the attacker's current position. */
+  direction?: Vec3;
+  /** Weight, poise damage and knockback of the blow (reactions.ts); derived from the damage when absent. */
+  hit?: HitSpec;
 }
 
 /** Inputs a cancel window can route to the kit while an action is still locked or recovering. */
@@ -126,6 +131,8 @@ export interface KitHost {
   readonly actors: readonly CombatActor[];
   /** Locked hostile, if any. */
   readonly targetId: ActorId | undefined;
+  /** The engine's actual airborne phase, excluding takeoff and supported landing recovery. */
+  readonly airborne: boolean;
 
   /** The kit's plain-JSON state object inside `EngineState`; `create()` initializes it the first time (empty object). */
   kitState<S extends object>(create: () => S): S;
@@ -169,7 +176,7 @@ export interface KitHost {
   setPlayerVelocity(velocity: Vec3): void;
   /** Player takes no hazard damage and cannot be targeted until this simulation tick (exclusive). Pass a past tick to clear. */
   setUntargetableUntil(tick: number): void;
-  /** Spends the shared mana cost of `skill`; false (and nothing spent) when short. */
+  /** Starts the shared skill cooldown and spends mana; false changes neither when unavailable. */
   spendMana(skill: PlayerSkillId): boolean;
   restoreMana(amount: number): void;
   addInstinct(amount: number): void;

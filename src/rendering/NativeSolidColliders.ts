@@ -1,12 +1,16 @@
-import { Box3, Matrix4, Quaternion, Vector3, type InstancedMesh } from 'three';
+import { Box3, Matrix4, Quaternion, Vector3, type InstancedMesh, type Mesh, type Object3D } from 'three';
 import type { RegionColliderDefinition, RegionDefinition, WorldAssetPlacement } from '../game/contracts.js';
-import { solidPropKind } from '../content/solid-props.js';
+import { solidPropKind, supportKind } from '../content/solid-props.js';
+import type { SupportField } from '../game/combat/geometry.js';
 import type { NativeStaticBatch } from './NativeAssetLoader.js';
+import { measureSupportField } from './NativeSupportFields.js';
 
 export interface NativeSolidCollider {
   readonly placementId: string;
   readonly collider: RegionColliderDefinition;
   readonly visibleWhen?: string;
+  /** Measured standable top of the placement's prop (decks and combat rocks); carried by the placement's first entry. */
+  readonly support?: SupportField;
 }
 const UP = new Vector3(0, 1, 0);
 
@@ -24,22 +28,34 @@ function clipPolygon(input: Vector3[], output: Vector3[], count: number, axis: '
 
 /** Native geometry is measured once. Simulation then sweeps the resulting world solids. */
 export function buildStaticPropColliders(batch: NativeStaticBatch, placements: readonly WorldAssetPlacement[], region: RegionDefinition): NativeSolidCollider[] {
+  return buildPropColliders(batch.root, placements, region, true);
+}
+
+/** Measure one articulated native part without merging its occupied space with a neighbouring part. */
+export function buildNativePropColliders(root: Object3D, placement: WorldAssetPlacement, region: RegionDefinition): NativeSolidCollider[] {
+  return buildPropColliders(root, [placement], region, false);
+}
+
+function buildPropColliders(root: Object3D, placements: readonly WorldAssetPlacement[], region: RegionDefinition, instanced: boolean): NativeSolidCollider[] {
   if (!placements.length) return [];
   const kind = solidPropKind(placements[0]!);
   if (kind === 'decoration') return [];
-  const meshes: { mesh: InstancedMesh; local: Matrix4 }[] = [];
+  const meshes: { mesh: Mesh; local: Matrix4 }[] = [];
   const position = new Vector3(), scale = new Vector3(), rotation = new Quaternion();
   const placementMatrix = (placement: WorldAssetPlacement) => new Matrix4().compose(
     position.set(placement.position.x, placement.position.y, placement.position.z),
     rotation.setFromAxisAngle(UP, placement.rotationY), scale.set(placement.scale.x, placement.scale.y, placement.scale.z));
   const inversePlacement = placementMatrix(placements[0]!).invert();
-  const point = new Vector3(), complete = new Box3();
-  batch.root.updateWorldMatrix(true, true);
-  batch.root.traverse(node => {
-    const mesh = node as InstancedMesh;
-    if (!mesh.isInstancedMesh) return;
-    const instance = new Matrix4(); mesh.getMatrixAt(0, instance);
-    const local = new Matrix4().multiplyMatrices(inversePlacement, mesh.matrixWorld).multiply(instance);
+  const point = new Vector3(), complete = new Box3(), instance = new Matrix4();
+  root.updateWorldMatrix(true, true);
+  root.traverse(node => {
+    const mesh = node as Mesh;
+    if (!mesh.isMesh || instanced && !(mesh as InstancedMesh).isInstancedMesh) return;
+    const local = new Matrix4().multiplyMatrices(inversePlacement, mesh.matrixWorld);
+    if (instanced) {
+      (mesh as InstancedMesh).getMatrixAt(0, instance);
+      local.multiply(instance);
+    }
     meshes.push({ mesh, local });
     const vertices = mesh.geometry.getAttribute('position');
     for (let i = 0; i < vertices.count; i++) complete.expandByPoint(point.fromBufferAttribute(vertices, i).applyMatrix4(local));
@@ -59,7 +75,7 @@ export function buildStaticPropColliders(batch: NativeStaticBatch, placements: r
     }
     if (!wood.isEmpty()) { wood.max.y = complete.max.y; parts.push(wood); }
   } else if (kind === 'platform') {
-    // Authored surfaces support the deck; only actual outer rail/post geometry blocks above it.
+    // The measured surface supports the deck; only actual outer rail/post geometry blocks above it.
     const narrow = complete.max.x - complete.min.x <= complete.max.z - complete.min.z ? 'x' : 'z';
     const middle = (complete.min[narrow] + complete.max[narrow]) / 2;
     const halfWidth = (complete.max[narrow] - complete.min[narrow]) / 2;
@@ -113,19 +129,35 @@ export function buildStaticPropColliders(batch: NativeStaticBatch, placements: r
   }
   const output: NativeSolidCollider[] = [];
   const worldBox = new Box3(), center = new Vector3(), size = new Vector3();
+  const supportMode = supportKind(placements[0]!);
   for (const placement of placements) {
-    if (region.movableObjects.some(object => object.id === placement.id)) continue;
+    if (region.movableObjects.some(object => object.id === placement.id) || region.deliveries?.some(object => object.id === placement.id)) continue;
     const matrix = placementMatrix(placement);
+    const field = supportMode === 'none' ? null : measureSupportField('native-support:' + placement.id, placement.id, supportMode,
+      meshes.map(({ mesh, local }) => ({ geometry: mesh.geometry, matrix: new Matrix4().multiplyMatrices(matrix, local) })));
+    // A measured rock top blocks through its field (real sides, real overhangs); its proxy box then only occludes the camera.
+    const blocksMovement = !(field && supportMode === 'top');
+    const entries: NativeSolidCollider[] = [];
     for (let i = 0; i < parts.length; i++) {
       worldBox.copy(parts[i]!).applyMatrix4(matrix);
       worldBox.getCenter(center); worldBox.getSize(size);
       if (size.x < 0.02 || size.z < 0.02 || size.y < 0.02) continue;
-      output.push({ placementId: placement.id, visibleWhen: placement.visibleWhen,
+      entries.push({ placementId: placement.id, visibleWhen: placement.visibleWhen,
         collider: { id: `native:${placement.id}:${i}`, kind: 'box',
           from: { x: center.x, y: center.y, z: center.z },
           halfExtents: { x: size.x / 2, y: size.y / 2, z: size.z / 2 },
-          blocksMovement: true, blocksCamera: true } });
+          blocksMovement, blocksCamera: true } });
     }
+    if (field) {
+      // The field travels with the placement's first entry; a deck without rails gets a non-blocking proxy to carry it.
+      const carrier: NativeSolidCollider = entries[0] ?? { placementId: placement.id, visibleWhen: placement.visibleWhen,
+        collider: { id: `native:${placement.id}:support`, kind: 'box',
+          from: { x: field.minX + field.cols * field.cell / 2, y: (field.minY + field.maxY) / 2, z: field.minZ + field.rows * field.cell / 2 },
+          halfExtents: { x: field.cols * field.cell / 2, y: Math.max(0.01, (field.maxY - field.minY) / 2), z: field.rows * field.cell / 2 },
+          blocksMovement: false, blocksCamera: false } };
+      entries[0] = { ...carrier, support: field };
+    }
+    output.push(...entries);
   }
   return output;
 }

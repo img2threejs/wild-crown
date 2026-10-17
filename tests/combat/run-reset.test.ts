@@ -23,7 +23,7 @@ describe('combat run initialization', () => {
 
     engine.startNewRun('new-run');
     engine.loadRegion({ regionId: 'greenwake', runId: 'new-run', presentActorIds: [] });
-    engine.startEncounter({ encounterId: 'greenwake-boar', regionId: 'greenwake', runId: 'new-run', companionSlots: {} });
+    engine.startEncounter({encounterId: 'greenwake-boar', regionId: 'greenwake', runId: 'new-run'});
 
     const before = engine.snapshot();
     const playerBefore = before.actors.find((actor) => actor.id === 'aren')!;
@@ -40,6 +40,25 @@ describe('combat run initialization', () => {
     expect(after.player.mana).toBeLessThan(before.player.mana);
     expect(playerAfter.downed).toBe(false);
     expect(playerAfter.position.x).toBeGreaterThan(playerBefore.position.x);
+  });
+
+  it('retrying the same run from its checkpoint revives the hero instead of re-reporting the defeat', () => {
+    const engine = new CombatEngine();
+    engine.loadRegion({ regionId: 'greenwake', runId: 'retry-run', presentActorIds: ['corrupted-boar'] });
+    engine.startEncounter({encounterId: 'greenwake-boar', regionId: 'greenwake', runId: 'retry-run'});
+    const defeated = JSON.parse(engine.serialize());
+    defeated.player.vitality = 0;
+    defeated.actors.find((actor: { id: string }) => actor.id === 'aren').downed = true;
+    engine.restore(JSON.stringify(defeated));
+
+    // The application's checkpoint retry: same run, region reload, encounter restart.
+    engine.loadRegion({ regionId: 'greenwake', runId: 'retry-run', presentActorIds: ['corrupted-boar'] });
+    engine.startEncounter({encounterId: 'greenwake-boar', regionId: 'greenwake', runId: 'retry-run'});
+    engine.fixedStep(idle);
+
+    expect(engine.snapshot().player.vitality).toBe(engine.snapshot().player.maxVitality);
+    expect(engine.snapshot().actors.find(actor => actor.id === 'aren')?.downed).toBe(false);
+    expect(engine.snapshot().skills.find(skill => skill.id === 'dive')?.reason).not.toBe('Downed');
   });
 
   it('preserves player resources and simulation time when loading another region in the same run', () => {

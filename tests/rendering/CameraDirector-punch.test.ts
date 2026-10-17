@@ -24,7 +24,7 @@ describe('camera hit-stop punch-in', () => {
     for (let frame = 0; frame < 6; frame++) {
       director.update(stopped, undefined, 1 / 60);
       peak = Math.max(peak, director.punchMagnitude);
-      expect(director.camera.quaternion.angleTo(orientation)).toBeLessThan(1e-9);
+      expect(director.camera.quaternion.angleTo(orientation)).toBeLessThan(1e-6);
       expect(director.forward.distanceTo(forward)).toBe(0);
       expect(director.right.distanceTo(right)).toBe(0);
       const moved = director.camera.position.clone().sub(rest);

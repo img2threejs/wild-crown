@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-tali",
+  "generator": "scripts/assets/repair-quadruped-hind-legs.mjs",
+  "reason": "Tripo rig v2.5 quadruped: the far-side hind leg has no (or only a lone) joint; the chain is completed so an IK gait can plant every foot.",
+  "input": {
+    "sha256": "7299d4ade301c11ef96fdcb90c2ee86fa7a13782000892aa4fd996069d0d83ec",
+    "bytes": 5422380
+  },
+  "output": {
+    "sha256": "15f34f4164d2e38d4c7580304f17d01a98509e78f8c4485551ee2304faabad70",
+    "bytes": 5425364
+  },
+  "plane": {
+    "axis": "x",
+    "at": -0.002
+  },
+  "chains": {
+    "HL": {
+      "joints": [
+        "tripo::1_Left_Limb_0",
+        "repair::HL_1",
+        "repair::HL_2",
+        "repair::HL_3",
+        "repair::HL_4"
+      ],
+      "createdJoints": [
+        "repair::HL_1",
+        "repair::HL_2",
+        "repair::HL_3",
+        "repair::HL_4"
+      ],
+      "verticesRebound": 2275,
+      "verticesMirrored": 2271,
+      "verticesByChainPosition": 4,
+      "verticesNearestJoint": [
+        0,
+        4,
+        0,
+        0,
+        0
+      ],
+      "largestOldShare": 1
+    }
+  }
+}

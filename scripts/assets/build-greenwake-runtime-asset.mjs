@@ -3,7 +3,7 @@
 // rig (identical bind pose required), optionally simplifies static triangle lists with
 // meshoptimizer, re-encodes embedded textures with macOS `sips` (JPEG for opaque maps), and
 // writes provenance with hashes and clip durations.
-// Usage: node scripts/assets/build-greenwake-runtime-asset.mjs <asset-id> [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>]
+// Usage: node scripts/assets/build-greenwake-runtime-asset.mjs <asset-id> [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>] [--base=model]
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -481,7 +481,10 @@ const rig = result('rig'), lod = result('decimate'), model = result('model');
 const anims = [];
 for (let code = 97; code <= 122 && result(`anim-${String.fromCharCode(code)}`); code++) anims.push(result(`anim-${String.fromCharCode(code)}`));
 // Rigged assets without retarget batches (authored-only clip sets) start from the bare rig output.
-const baseResult = anims[0] ?? rig ?? lod;
+// `--base=model` starts a static prop from the high-poly model output instead of the Tripo decimation (Tripo's decimator collapsed the Ash Hunters' camp:
+// its thin bamboo frames and tents came back as floating fragments); the local meshoptimizer pass then does the reduction.
+const baseResult = option('base') === 'model' ? model : anims[0] ?? rig ?? lod;
+if (option('base') !== undefined && option('base') !== 'model') throw new Error('--base must be "model"');
 if (!baseResult) throw new Error(`No Tripo outputs for ${asset}`);
 const basePath = resolve(ROOT, baseResult.output_dir, 'model.glb');
 let built = parse(readFileSync(basePath));

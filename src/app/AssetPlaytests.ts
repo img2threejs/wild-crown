@@ -40,7 +40,7 @@ export const GREENWAKE_PLAYTEST: AssetPlaytest = {
   id: 'greenwake', name: 'Greenwake', regionId: 'greenwake',
   manifestUrl: '/asset-source/playtests/greenwake.json', manifestLabel: 'Greenwake candidate asset playtest manifest',
   banner: banner('Greenwake'), thumbnailUrl: '/asset-source/ui/maps/greenwake.jpg',
-  trialSet: GREENWAKE_TRIAL_SET, exitRouteId: 'greenwake-grove-out', loadingLabel: 'Beginning the Greenwake encounter',
+  trialSet: GREENWAKE_TRIAL_SET, exitRouteId: 'greenwake-canopy-out', loadingLabel: 'Beginning the Greenwake encounter',
   stage: { exitName: 'Forest Exit', completeKicker: 'THE FOREST OPENS', completeCopy: 'You reached the Greenwake forest exit.' },
 };
 export const CANOPY_PLAYTEST: AssetPlaytest = {
@@ -54,8 +54,8 @@ export const GROVE_PLAYTEST: AssetPlaytest = {
   id: 'grove', name: 'The Grove', regionId: 'the-grove',
   manifestUrl: '/asset-source/playtests/grove.json', manifestLabel: 'The Grove candidate asset playtest manifest',
   banner: banner('The Grove'), thumbnailUrl: '/asset-source/ui/maps/the-grove.jpg',
-  trialSet: GROVE_TRIAL_SET, exitRouteId: 'grove-trial-exit', loadingLabel: 'Returning to the Grove', showcaseRegionId: 'the-grove',
-  stage: { exitName: 'Ridge Trail', completeKicker: 'THE SANCTUARY GROWS', completeCopy: 'You set out from the Grove toward Moonpine Ridge.' },
+  trialSet: GROVE_TRIAL_SET, exitRouteId: 'grove-trial-exit', loadingLabel: 'Defending the Grove', showcaseRegionId: 'the-grove',
+  stage: { exitName: 'Ridge Trail', completeKicker: 'THE SANCTUARY HOLDS', completeCopy: 'Hollowheart is free of the Black Sap and the Memory Pool runs clear. You set out from the Grove toward Moonpine Ridge.' },
 };
 export const MOONPINE_PLAYTEST: AssetPlaytest = {
   id: 'moonpine', name: 'Moonpine Ridge', regionId: 'moonpine-ridge',

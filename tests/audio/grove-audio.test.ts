@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import * as THREE from 'three';
 import type { AudioListener } from 'three';
 import { CANOPY_ATTACK_IDS, isCanopyCue } from '../../src/audio/CanopySounds.js';
-import { GROVE_ATTACK_IDS, GROVE_ROARS, groveLayers, isGroveCue } from '../../src/audio/GroveSounds.js';
+import { GROVE_ATTACK_IDS, GROVE_BLIGHT_ATTACK_IDS, GROVE_GUARDIAN_ATTACK_IDS, GROVE_ROARS, groveLayers, isGroveCue } from '../../src/audio/GroveSounds.js';
 import { WARDEN_MAX_LAYERS, WARDEN_MAX_LEVEL, WARDEN_MAX_SECONDS, isWardenCue, type SoundLayer } from '../../src/audio/WardenSounds.js';
 import { StoryPresentation } from '../../src/effects/StoryPresentation.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
@@ -101,7 +101,7 @@ describe('grove sound recipes', () => {
         for (const layer of layers) expect(layer.level, `${attackId}/${phase}`).toBeLessThanOrEqual(SOFT_LEVEL);
       }
     }
-    expect(GROVE_ROARS).toEqual({ 'grove-sprig': 'sprig' });
+    expect(GROVE_ROARS).toEqual({ 'grove-sprig': 'sprig', 'grove-blighted': 'blighted', 'grove-hollowheart': 'guardian' });
     for (const intensity of [0.4, 1, 1.5]) expectBudget(groveLayers(roarCue('grove-sprig', { intensity }))!, 'sprig chirr');
   });
 
@@ -146,6 +146,52 @@ describe('grove sound recipes', () => {
     // Deterministic per cue id: the same cue always sounds the same.
     const fixed = attackCue('sprig-seed-toss', 'active');
     expect(groveLayers(fixed)).toEqual(groveLayers(fixed));
+  });
+
+  it('registers a timbre for every blighted and guardian attack phase and every roar, inside the same budgets', () => {
+    expect([...GROVE_BLIGHT_ATTACK_IDS]).toEqual(['blighted-seed-lob', 'blighted-ground-pulse', 'blighted-lash-sweep']);
+    expect([...GROVE_GUARDIAN_ATTACK_IDS]).toEqual(['hollowheart-leap-smash', 'hollowheart-antler-sweep', 'hollowheart-ichor-hurl', 'hollowheart-heartlight-burst']);
+    for (const [attackId, actorId] of [...GROVE_BLIGHT_ATTACK_IDS.map(id => [id, 'grove-blighted'] as const), ...GROVE_GUARDIAN_ATTACK_IDS.map(id => [id, 'grove-hollowheart'] as const)]) {
+      expect(ATTACKS[attackId], attackId).toBeDefined();
+      for (const phase of PHASES) {
+        const cue = attackCue(attackId, phase, { actorId });
+        expect(isGroveCue(cue), `${attackId}/${phase}`).toBe(true);
+        expect(isWardenCue(cue)).toBe(false);
+        expect(isCanopyCue(cue)).toBe(false);
+        const layers = groveLayers(cue)!;
+        expectBudget(layers, `${attackId}/${phase}`);
+        for (const layer of layers) expect(layer.wave === 'sawtooth' || layer.wave === 'square', `${attackId}/${phase} stays woody`).toBe(false);
+      }
+    }
+    for (const actorId of ['grove-sprig', 'grove-blighted', 'grove-hollowheart']) for (const intensity of [0.4, 1, 1.5]) expectBudget(groveLayers(roarCue(actorId, { intensity }))!, `${actorId} roar`);
+  });
+
+  it('plays the blighted rootling a fifth lower over a sap drone and gives the guardian a heavier voice than the sprig', () => {
+    const twin = (attackId: string, blighted: string, phase: 'anticipation' | 'commit' | 'active' | 'hit') => {
+      const shared = { instanceId: `grove-twin:${attackId}:${phase}` };
+      return [groveLayers(attackCue(attackId, phase, shared))!, groveLayers(attackCue(blighted, phase, { ...shared, actorId: 'grove-blighted' }))!] as const;
+    };
+    for (const [sprig, blighted] of [['sprig-seed-toss', 'blighted-seed-lob'], ['sprig-ground-ripple', 'blighted-ground-pulse'], ['sprig-petal-sweep', 'blighted-lash-sweep']] as const) {
+      for (const phase of PHASES) {
+        const [gentle, dark] = twin(sprig, blighted, phase);
+        expect(dark.length, `${blighted}/${phase}`).toBe(gentle.length + 1);
+        const drone = dark[dark.length - 1]!;
+        expect(drone.wave).toBe('sine');
+        expect(drone.from! < 100 && drone.to! < drone.from!, 'a low falling sine drone').toBe(true);
+        const lowest = (layers: readonly SoundLayer[]) => Math.min(...tones(layers).slice(0, gentle.filter(layer => layer.source === 'tone').length).map(layer => layer.from!));
+        expect(lowest(dark), `${blighted}/${phase} sits below its sprig twin`).toBeLessThan(lowest(gentle));
+      }
+    }
+    // The guardian's loudest layer is well above the sprig's, and its groan is lower and longer than the sprig's chirr.
+    const peak = (layers: readonly SoundLayer[]) => Math.max(...layers.map(layer => layer.level));
+    const heavy = GROVE_GUARDIAN_ATTACK_IDS.map(id => peak(groveLayers(attackCue(id, 'active', { actorId: 'grove-hollowheart' }))!));
+    const gentle = GROVE_ATTACK_IDS.map(id => peak(groveLayers(attackCue(id, 'active'))!));
+    expect(Math.max(...heavy)).toBeGreaterThan(Math.max(...gentle));
+    const groan = groveLayers(roarCue('grove-hollowheart'))!, chirr = groveLayers(roarCue('grove-sprig'))!;
+    expect(Math.min(...tones(groan).map(layer => layer.from!))).toBeLessThan(Math.min(...tones(chirr).map(layer => layer.from!)));
+    expect(Math.max(...groan.map(layer => layer.delay + layer.length))).toBeGreaterThan(Math.max(...chirr.map(layer => layer.delay + layer.length)));
+    // Each guardian attack has its own timbre per phase.
+    for (const phase of PHASES) expect(new Set(GROVE_GUARDIAN_ATTACK_IDS.map(id => JSON.stringify(groveLayers(attackCue(id, phase, { actorId: 'grove-hollowheart', instanceId: `grove-distinct:${phase}` }))))).size).toBe(4);
   });
 });
 

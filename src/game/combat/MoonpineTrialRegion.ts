@@ -1,6 +1,7 @@
 import { v } from '../../content/levels/schema.js';
 import type { GroundSurfaceDefinition, RegionColliderDefinition, RegionDefinition, RegionEntityDefinition, RegionRouteDefinition, Vec3, WorldAssetPlacement } from '../contracts.js';
 import { buildMoonpineBoundaryPlacements } from '../../world/MoonpineBoundary.js';
+import { clusterBoundaryDressing } from '../../world/clusteredBoundaryDressing.js';
 import { MOONPINE_LAKE_MATERIAL, MOONPINE_SHELF } from '../../world/MoonpineTerrain.js';
 import { MOONPINE_CHAIN_ANCHORS, MOONPINE_COMBAT_TRIALS, MOONPINE_TRIAL_SET } from './MoonpineContent.js';
 
@@ -135,6 +136,7 @@ const HOLLOW_ROCKS: readonly Vec3[] = [v(-2, 0, -33.5), v(12, 0, -37.5), v(18, 0
 const AUTHORED_PROPS: readonly WorldAssetPlacement[] = [
   bridge('moonpine-trial-bridge', -14.6, -3.4, -22),
   prop('moonpine-trial-temple', 'prop-buried-wolf-temple', v(47, 4, -45), 'elevated', 0, v(1, 1, 1)),
+  prop('moonpine-trial-jump-rock', 'prop-mire-bank-rock', v(3, 0, -28), 'ground', 2.4, v(.7, .7, .7)),
   ...MOONPINE_CHAIN_ANCHORS.map((position, index) => prop('moonpine-trial-chain-anchor-' + index, 'prop-temple-chain-anchor', v(position.x, position.y, position.z), 'elevated', index * 1.7, v(1, 1, 1))),
   ...HOLLOW_ROCKS.map((position, index) => prop('moonpine-trial-rock-' + index, 'prop-snow-ridge-rock', position, 'ground', index * 2.1, v(1, 1, 1))),
   ...PINES.map((position, index) => prop('moonpine-trial-pine-' + index, 'prop-moonpine-tree', position, position.y === 0 ? 'ground' : 'elevated', index * 2.399, v(1, 1, 1))),
@@ -144,6 +146,7 @@ const AUTHORED_PROPS: readonly WorldAssetPlacement[] = [
 const FOOTPRINT_RADIUS: Readonly<Record<string, number>> = {
   'prop-moonpine-tree': PINE_FOOTPRINT_RADIUS, 'prop-buried-wolf-temple': TEMPLE_FOOTPRINT_RADIUS,
   'prop-snow-ridge-rock': ROCK_FOOTPRINT_RADIUS, 'prop-temple-chain-anchor': ANCHOR_FOOTPRINT_RADIUS,
+  'prop-mire-bank-rock': 1.5,
 };
 const AUTHORED_FOOTPRINTS = AUTHORED_PROPS.flatMap(placement => {
   const radius = FOOTPRINT_RADIUS[placement.assetId];
@@ -167,6 +170,7 @@ export function createMoonpineTrialRegion(authored: RegionDefinition): RegionDef
     ...authored,
     props: AUTHORED_PROPS,
     movableObjects: [],
+    deliveries: [],
     ground: {
       y: 0, profile: 'ridge', navGraphId: 'moonpine-trial-nav',
       surfaces: WALK_SURFACES.map(entry => entry.surface), colliders: WALK_SURFACES.map(entry => entry.collider),
@@ -183,7 +187,7 @@ export function createMoonpineTrialRegion(authored: RegionDefinition): RegionDef
   const boundary = buildMoonpineBoundaryPlacements(base, {
     gates: MOONPINE_COMBAT_TRIALS.map(trial => trial.gate), arenas: MOONPINE_COMBAT_TRIALS.map(trial => trial.arena), obstacles: AUTHORED_FOOTPRINTS,
   });
-  const props = [...AUTHORED_PROPS, ...boundary];
+  const props = [...AUTHORED_PROPS, ...clusterBoundaryDressing(boundary)];
   const assetIds = [...new Set([...entities.flatMap(entity => entity.assetId ? [entity.assetId] : []), ...props.map(placement => placement.assetId)])];
   return { ...base, props, assetIds };
 }

@@ -78,16 +78,14 @@ describe('canopy.json manifest', () => {
     for (const item of manifest) assert.equal(item.evidenceStatus, 'blocked', `${item.id} must stay evidence-blocked`);
   });
 
-  it('composes the environment from exactly the five region props', () => {
+  it('resolves environment components to native props', () => {
     const environment = entry('whispering-canopy-environment');
     assert.equal(environment.sourceType, 'composed-recipe');
     assert.equal(environment.kind, 'environment');
-    assert.deepEqual([...environment.componentAssetIds].sort(), [...REGION_PROPS].sort());
-  });
-
-  it('copies the shared Greenwake entries unchanged', async () => {
-    const greenwake = JSON.parse(await readFile(`${root}/asset-source/playtests/greenwake.json`, 'utf8'));
-    for (const id of ['actor-aren', 'actor-vara', 'prop-greenwake-root-gate', 'prop-warden-glaive']) assert.deepEqual(entry(id), greenwake.find(item => item.id === id), `${id} must match greenwake.json`);
+    for (const id of environment.componentAssetIds) {
+      assert.equal(entry(id).kind, 'prop');
+      assert.equal(entry(id).sourceType, 'native-glb');
+    }
   });
 
   it('every runtimeUrl resolves to a local GLB whose sha256 matches outputHash', async () => {

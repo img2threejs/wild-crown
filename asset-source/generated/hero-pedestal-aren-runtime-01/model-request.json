@@ -1,0 +1,13 @@
+{
+  "inputFile": "asset-source/generated/hero-pedestal-aren-runtime-01/reference/tripo-out/hero-pedestal-aren-reference-01-9097acd1/generated_image.png",
+  "inputTaskId": "9097acd1-5f93-42a2-897b-c9d2665d6a7e",
+  "parameters": {
+    "face_limit": 30000,
+    "geometry_quality": "detailed",
+    "texture_quality": "detailed",
+    "pbr": true
+  },
+  "estimatedCredits": 60,
+  "approval": "Explicit user approval for four image-to-3D jobs; total additional estimate 260 credits including four image edits. No paid retries.",
+  "command": "env PATH=/Users/hoainho/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin tripo make 'asset-source/generated/hero-pedestal-aren-runtime-01/reference/tripo-out/hero-pedestal-aren-reference-01-9097acd1/generated_image.png' -p face_limit=30000 -p geometry_quality=detailed -p texture_quality=detailed -p pbr=true --name hero-pedestal-aren-model-01 --out 'asset-source/generated/hero-pedestal-aren-runtime-01/tripo-out' --timeout 1200 --json --no-open"
+}

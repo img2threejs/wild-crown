@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import type { Mesh } from 'three';
+import { PerspectiveCamera, Vector3 } from 'three';
 import { REGIONS as AUTHORED_REGIONS } from '../../src/content/campaign.js';
 import { REGIONS as WORLD_REGIONS } from '../../src/content/world.js';
 import type { EnvironmentRecipeDefinition, GroundSurfaceDefinition, RegionDefinition } from '../../src/game/contracts.js';
@@ -16,12 +16,16 @@ import { GroundClutter } from '../../src/world/GroundClutter.js';
 import { bakeGroundMask, createMaskSample, sampleMask } from '../../src/world/GroundMask.js';
 import { buildTerrainMeshData, TerrainField } from '../../src/world/GroundTerrain.js';
 import { buildWaterData, GroundWater, WATER_RENDER_ORDER } from '../../src/world/GroundWater.js';
-import { GroveAtmosphere, FIREFLY_COUNT, PETAL_COUNT, POLLEN_COUNT } from '../../src/world/GroveAtmosphere.js';
+import { GroveAtmosphere, EMBER_COUNT, FIREFLY_COUNT, PETAL_COUNT, POLLEN_COUNT, SPORE_COUNT } from '../../src/world/GroveAtmosphere.js';
+import {
+  ARENA_CENTRE, ARENA_WALK_RADIUS, blightAt, blightGrade, HOLLOW_CENTRE, planBlight, sapMudAt, STONE_RING_RADIUS, stoneFootprints,
+} from '../../src/world/GroveBlight.js';
+import { buildDecalGeometry, buildDressingGeometry, buildWashGeometry, GroveBlightDressing } from '../../src/world/GroveBlightDressing.js';
 import { GROVE_BIOME } from '../../src/world/GroveBiome.js';
 import {
   buildGroveBoundaryPlacements, GROVE_BOUNDARY_ASSET_IDS, GROVE_BOUNDARY_CLEARANCE, GROVE_BOUNDARY_ROCK_ID_PREFIX, GROVE_EXIT_CLEAR_RADIUS, groveFootprint,
 } from '../../src/world/GroveBoundary.js';
-import { channelReach, GROVE_CARVE, GROVE_POND, GROVE_WATER, POND_MEAN_RADIUS, waterMargin } from '../../src/world/GrovePond.js';
+import { channelReach, GROVE_CARVE, GROVE_POND, GROVE_WATER, MEMORY_POOL, MEMORY_POOL_MEAN_RADIUS, POND_MEAN_RADIUS, waterMargin } from '../../src/world/GrovePond.js';
 import { groveBackdrop, HEARTROOT_MOUND } from '../../src/world/GroveTerrain.js';
 import { RegionEnvironment } from '../../src/world/RegionEnvironment.js';
 import { isBridgeDeckSurface, isFlatGroundSurface } from '../../src/world/WalkSurfaces.js';
@@ -47,7 +51,7 @@ function inside(surface: GroundSurfaceDefinition, x: number, z: number): boolean
 
 test('the grove playtest variant gets the grove biome; the authored region and other regions keep their look', () => {
   assert.equal(biomeProfileFor(region), GROVE_BIOME);
-  assert.equal(biomeProfileFor(authored), undefined);
+  assert.equal(biomeProfileFor(authored), GROVE_BIOME, 'the Act I hub shares the Trial layout and so its biome');
   assert.ok(region.ground.surfaces.every((surface) => surface.id.startsWith(GROVE_SURFACE_PREFIX)));
   assert.equal(biomeProfileFor((WORLD_REGIONS as RegionDefinition[]).find((candidate) => candidate.id === 'greenwake')!), GREENWAKE_BIOME);
   const canopy = createCombatTrialRegion((AUTHORED_REGIONS as RegionDefinition[]).find((candidate) => candidate.id === 'whispering-canopy')!);
@@ -56,8 +60,8 @@ test('the grove playtest variant gets the grove biome; the authored region and o
   assert.equal(GROVE_BIOME.id, 'the-grove');
 });
 
-test('grove terrain reproduces every walk surface within 2 cm, right up to the edges (all nine are flat y = 0 ground)', () => {
-  assert.equal(walkables.length, 9);
+test('grove terrain reproduces every walk surface within 2 cm, right up to the edges (all twelve are flat y = 0 ground)', () => {
+  assert.equal(walkables.length, 12);
   for (const surface of walkables) {
     assert.ok(isFlatGroundSurface(surface));
     assert.ok(!isBridgeDeckSurface(surface));
@@ -105,14 +109,14 @@ test('the young Heartroot stands on a low smooth mound well clear of the walk-me
   assert.ok(steepest <= 0.9, `steepest 1 m step is ${steepest} m`);
   // The swells stand 10 m or more behind the route (west and north), never in front of it.
   for (const surface of walkables) for (const point of surface.points) assert.equal(groveBackdrop(point.x, point.z), 0, `relief on the walkable corner (${point.x}, ${point.z})`);
-  for (const px of [-60, -56]) assert.ok(groveBackdrop(px, 0) > 1);
-  assert.ok(groveBackdrop(0, -75) > 1.5);
+  for (const px of [-74, -70]) assert.ok(groveBackdrop(px, 0) > 1);
+  assert.ok(groveBackdrop(0, -156) > 1.5);
   assert.equal(groveBackdrop(40, 56), 0);
   assert.equal(groveBackdrop(10, 50), 0);
 });
 
-test('the pond is a real carved pond: water level over a carved bed, outside the walk-mesh, with the whole water mesh off every walkable', () => {
-  assert.equal(GROVE_WATER.pools.length, 1);
+test('both pools are real carved pools: water level over a carved bed, outside the walk-mesh, with the whole water mesh off every walkable', () => {
+  assert.equal(GROVE_WATER.pools.length, 2);
   assert.equal(GROVE_WATER.strips.length, 0);
   assert.ok(GROVE_CARVE.waterLevel(GROVE_POND.x, GROVE_POND.z) === GROVE_POND.waterY);
   assert.equal(GROVE_CARVE.waterLevel(GROVE_POND.x + 30, GROVE_POND.z), -Infinity);
@@ -140,6 +144,17 @@ test('the pond is a real carved pond: water level over a carved bed, outside the
   }
   // The pond lies beside the Heartroot: north of the glade, between the mound and the north trail.
   assert.ok(GROVE_POND.x > HEARTROOT_MOUND.x + 8 && GROVE_POND.x < exit.x - 6);
+  // The Memory Pool lies just north of the boss arena, close enough to stand behind the guardian in the camera, and off every walkable.
+  assert.ok(GROVE_CARVE.waterLevel(MEMORY_POOL.x, MEMORY_POOL.z) === MEMORY_POOL.waterY);
+  assert.ok(field.sample(MEMORY_POOL.x, MEMORY_POOL.z) <= MEMORY_POOL.waterY - 0.3, `Memory Pool bed ${field.sample(MEMORY_POOL.x, MEMORY_POOL.z)}`);
+  assert.ok(waterMargin(MEMORY_POOL.x, MEMORY_POOL.z) < -MEMORY_POOL_MEAN_RADIUS + 0.01);
+  const guardian = GROVE_COMBAT_TRIALS[2]!;
+  assert.ok(MEMORY_POOL.z + MEMORY_POOL.radiusZ > guardian.arena.center.z - ARENA_WALK_RADIUS - 8, 'the pool lies within 8 m of the arena rim');
+  assert.ok(MEMORY_POOL.z - guardian.monsterPosition.z > -20, 'the pool stands within 20 m behind the guardian');
+  for (let angle = 0; angle < Math.PI * 2; angle += 0.1) {
+    const edge = { x: MEMORY_POOL.x + Math.cos(angle) * MEMORY_POOL.radiusX * 1.12, z: MEMORY_POOL.z + Math.sin(angle) * MEMORY_POOL.radiusZ * 1.12 };
+    assert.ok(distanceToWalkable(edge.x, edge.z) >= 0.8, `the Memory Pool reaches ${distanceToWalkable(edge.x, edge.z)} m from a walkable`);
+  }
 });
 
 test('water and particles render without depth writes, in one draw call, from the world clock; reduced effects thin them', () => {
@@ -154,11 +169,11 @@ test('water and particles render without depth writes, in one draw call, from th
     atmosphere.update(3, { x: 8, y: 0, z: 10 });
     assert.equal(water.mesh.material.uniforms.uTime!.value, 3);
     assert.equal(atmosphere.points.material.uniforms.uTime!.value, 3);
-    assert.equal(atmosphere.points.geometry.getAttribute('aKind').count, POLLEN_COUNT + FIREFLY_COUNT + PETAL_COUNT);
-    assert.ok(POLLEN_COUNT > 0 && FIREFLY_COUNT > 0 && PETAL_COUNT > 0);
+    assert.equal(atmosphere.points.geometry.getAttribute('aKind').count, POLLEN_COUNT + FIREFLY_COUNT + PETAL_COUNT + SPORE_COUNT + EMBER_COUNT);
+    assert.ok(POLLEN_COUNT > 0 && FIREFLY_COUNT > 0 && PETAL_COUNT > 0 && SPORE_COUNT > 0 && EMBER_COUNT > 0);
     assert.equal(atmosphere.points.material.depthWrite, false);
     const kinds = Array.from(atmosphere.data.particleKinds);
-    assert.deepEqual([0, 1, 2].map((kind) => kinds.filter((value) => value === kind).length), [POLLEN_COUNT, FIREFLY_COUNT, PETAL_COUNT]);
+    assert.deepEqual([0, 1, 2, 3, 4].map((kind) => kinds.filter((value) => value === kind).length), [POLLEN_COUNT, FIREFLY_COUNT, PETAL_COUNT, SPORE_COUNT, EMBER_COUNT]);
     // Deterministic seeds: the same data every build.
     assert.deepEqual(Array.from(new GroveAtmosphere({ region, field, sunDirection: water.mesh.position.clone() }).data.particleSeeds), Array.from(atmosphere.data.particleSeeds));
     atmosphere.setReducedEffects(false);
@@ -178,11 +193,15 @@ test('water and particles render without depth writes, in one draw call, from th
 
 test('boundary dressing: deterministic, decoration-only, >= 0.6 m from every walkable, off the water, camera-friendly, exactly the contract prop set', () => {
   const authoredProps = region.props.filter((prop) => !prop.id.startsWith(GROVE_BOUNDARY_ID_PREFIX));
-  const footprints: Readonly<Record<string, number>> = { 'prop-heartroot-trunk': 3, 'prop-refuge-shelter': 2.6, 'prop-grove-platform': 3, 'prop-training-post': 0.8, 'prop-water-basin': 2.6 };
+  const footprints: Readonly<Record<string, number>> = {
+    'prop-heartroot-trunk': 3, 'prop-refuge-shelter': 2.6, 'prop-grove-platform': 3, 'prop-training-post': 0.8, 'prop-water-basin': 2.6,
+    'prop-ancient-canopy-shrine': 6.5, 'prop-root-cavern-mouth': 4.6, 'prop-canopy-cliff-rock': 2.2, 'prop-mire-bank-rock': 1.8,
+  };
+  const radiusOf = (prop: (typeof authoredProps)[number]): number => footprints[prop.assetId]! * Math.max(prop.scale.x, prop.scale.z);
   const keepClear = {
     gates: GROVE_COMBAT_TRIALS.map((trial) => trial.gate),
     arenas: GROVE_COMBAT_TRIALS.map((trial) => trial.arena),
-    obstacles: authoredProps.map((prop) => ({ x: prop.position.x, z: prop.position.z, radius: footprints[prop.assetId]! })),
+    obstacles: [...authoredProps.map((prop) => ({ x: prop.position.x, z: prop.position.z, radius: radiusOf(prop) })), ...stoneFootprints()],
   };
   const placements = buildGroveBoundaryPlacements(region, keepClear);
   assert.equal(JSON.stringify(buildGroveBoundaryPlacements(region, keepClear)), JSON.stringify(placements), 'deterministic');
@@ -194,7 +213,8 @@ test('boundary dressing: deterministic, decoration-only, >= 0.6 m from every wal
   assert.deepEqual(new Set(placements.map((placement) => placement.assetId)), new Set(GROVE_BOUNDARY_ASSET_IDS));
   assert.deepEqual([...GROVE_BOUNDARY_ASSET_IDS].sort(), ['prop-canopy-fern-cluster', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster']);
   assert.deepEqual([...new Set(region.props.map((prop) => prop.assetId))].sort(), [
-    'prop-canopy-fern-cluster', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-grove-platform', 'prop-heartroot-trunk', 'prop-refuge-shelter', 'prop-training-post', 'prop-water-basin',
+    'prop-ancient-canopy-shrine', 'prop-canopy-cliff-rock', 'prop-canopy-fern-cluster', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-grove-platform',
+    'prop-heartroot-trunk', 'prop-mire-bank-rock', 'prop-refuge-shelter', 'prop-root-cavern-mouth', 'prop-training-post', 'prop-water-basin',
   ]);
   assert.ok(placements.some((placement) => placement.id.startsWith(GROVE_BOUNDARY_ROCK_ID_PREFIX)));
   assert.equal(GROVE_BIOME.boundaryRocks?.idPrefix, GROVE_BOUNDARY_ROCK_ID_PREFIX);
@@ -210,7 +230,11 @@ test('boundary dressing: deterministic, decoration-only, >= 0.6 m from every wal
     assert.ok(Math.hypot(circle.x - HEARTROOT_MOUND.x, circle.z - HEARTROOT_MOUND.z) >= HEARTROOT_MOUND.radius, `${placement.id} stands on the mound`);
     if (placement.assetId === 'prop-erya-edge-tree') assert.ok(outwardCameraDot(polygons, circle.x, circle.z) <= TREE_CAMERA_DOT, `${placement.id} on a camera-facing side`);
     if (placement.assetId === 'prop-canopy-fern-cluster') assert.ok(placement.scale.x <= 1.3 && placement.scale.y <= 1.7, 'ferns stay low');
-    for (const prop of authoredProps) assert.ok(Math.hypot(circle.x - prop.position.x, circle.z - prop.position.z) >= 0.6 * (circle.radius + footprints[prop.assetId]!) - 1e-9, `${placement.id} overlaps ${prop.id}`);
+    for (const prop of authoredProps) assert.ok(Math.hypot(circle.x - prop.position.x, circle.z - prop.position.z) >= 0.6 * (circle.radius + radiusOf(prop)) - 1e-9, `${placement.id} overlaps ${prop.id}`);
+    for (const stone of stoneFootprints()) assert.ok(Math.hypot(circle.x - stone.x, circle.z - stone.z) >= 0.6 * (circle.radius + stone.radius) - 1e-9, `${placement.id} overlaps a ring stone`);
+    // Inside the Black Sap the lush ferns and trees are withheld.
+    if (placement.assetId === 'prop-canopy-fern-cluster') assert.ok(blightAt(circle.x, circle.z) <= 0.15, `${placement.id} is a lush fern in the blight`);
+    if (placement.assetId === 'prop-erya-edge-tree') assert.ok(blightAt(circle.x, circle.z) <= 0.25, `${placement.id} is a lush tree in the blight`);
   }
   // Dressing frames the pond's bank, the Heartroot's foot and the route; there are trees, boulders and ferns.
   const near = (cx: number, cz: number, range: number) => placements.filter((placement) => Math.hypot(placement.position.x - cx, placement.position.z - cz) < range).length;
@@ -281,7 +305,7 @@ test('palette and light: warm late-afternoon meadow, golden-green layers, open f
   assert.equal(atmosphere.shadowMapSize <= 1536, true);
   assert.equal(terrain.summits.length, 0);
   assert.ok(terrain.maxMound <= 0.6 && terrain.maxDip >= -0.3);
-  assert.equal(GROVE_BIOME.features.length, 1);
+  assert.equal(GROVE_BIOME.features.length, 2);
   assert.equal(splat.layers.length, 5);
   assert.ok(splat.layers.every((layer) => layer.tint.every((value) => value > 0)));
   assert.equal(splat.rockOnOpenSlopes, false);
@@ -300,29 +324,164 @@ test('textures: the grove reuses the five CC0 Poly Haven canopy layers (no new t
   }
 });
 
-test('RegionEnvironment builds the grove world for the playtest variant only: no slabs, pond water and particles; the authored region keeps its slabs', { timeout: 120_000 }, () => {
+test('RegionEnvironment keeps Grove walk surfaces and Heartroot mound aligned with visible terrain', { timeout: 120_000 }, () => {
   const environment = new RegionEnvironment(region, {} as unknown as EnvironmentRecipeDefinition);
   environment.ready.catch(() => undefined);
-  const plain = new RegionEnvironment(authored, {} as unknown as EnvironmentRecipeDefinition);
   try {
-    const names: string[] = [];
-    environment.group.traverse((node) => {
-      if ((node as Mesh).isMesh || node.type === 'Points') names.push(node.name);
-    });
-    assert.equal(names.filter((name) => name.startsWith('surface:')).length, 0);
-    for (const expected of ['the-grove-terrain', 'grove-water', 'grove-particles', 'grove-exit-glow', 'grove-heartroot-glow']) assert.ok(names.includes(expected), `${expected} missing`);
     environment.update(5, { x: 8, y: 0, z: 10 });
     assert.ok(Math.abs(environment.visualGroundHeightAt(8, 10)) <= 0.02);
     assert.ok(environment.visualGroundHeightAt(HEARTROOT_MOUND.x, HEARTROOT_MOUND.z) >= HEARTROOT_MOUND.height * 0.5, 'ground props follow the mound');
     environment.setReducedEffects(true);
-    assert.equal(plain.profile, undefined);
-    let plainSlabs = 0;
-    plain.group.traverse((node) => {
-      if (node.name.startsWith('surface:')) plainSlabs++;
-    });
-    assert.ok(plainSlabs > 0, 'the authored grove region keeps its generic slabs');
   } finally {
     environment.dispose();
-    plain.dispose();
+  }
+});
+
+test('the Black Sap field: none south of the first gate, dense in the hollow, thinner up the spur, total round the Memory Pool', () => {
+  // Nothing of the practice ring, the glade, the camp or the trailhead is touched.
+  for (const [x, z] of [[-24, -22], [-24, -30], [-30, -20], [10, 0], [8, 21], [10, 40], [26, 5], [-22, 3]] as const) assert.equal(blightAt(x, z), 0, `blight at (${x}, ${z})`);
+  const mean = (cx: number, cz: number, radius: number): number => {
+    let sum = 0, count = 0;
+    for (let dx = -radius; dx <= radius; dx += 1) for (let dz = -radius; dz <= radius; dz += 1) { sum += blightAt(cx + dx, cz + dz); count++; }
+    return sum / count;
+  };
+  const hollow = mean(HOLLOW_CENTRE.x, HOLLOW_CENTRE.z, 5), spur = mean(-24, -76, 3), arena = mean(ARENA_CENTRE.x, ARENA_CENTRE.z, 5), practice = mean(-24, -22, 6);
+  assert.ok(hollow > 0.85, `hollow ${hollow}`);
+  assert.ok(arena > 0.85, `arena ${arena}`);
+  assert.ok(spur > 0.2 && spur < Math.min(hollow, arena), `spur ${spur}`);
+  assert.equal(practice, 0);
+  for (let index = 0; index < 400; index++) {
+    const x = -60 + (index % 20) * 4.1, z = -140 + Math.floor(index / 20) * 5.3;
+    const value = blightAt(x, z), mud = sapMudAt(x, z);
+    assert.ok(value >= 0 && value <= 1 && mud >= 0 && mud <= 1);
+    if (value === 0) assert.equal(mud, 0, 'no sap mud without blight');
+  }
+  // Ragged patches, not one smooth disc: the hollow's rim has both blighted and clean ground within a few metres.
+  const rim = Array.from({ length: 40 }, (_, step) => blightAt(HOLLOW_CENTRE.x + 12 + step * 0.15, HOLLOW_CENTRE.z + step * 0.1));
+  assert.ok(Math.max(...rim) - Math.min(...rim) > 0.3, 'the edge of the blight is ragged');
+  // The sap-mud patches are real ground: the splat mask paints wet mud there and nowhere in the stage-1 clearing.
+  const mask = bakeGroundMask(region, field, GROVE_BIOME);
+  const s = createMaskSample();
+  let soaked = 0;
+  for (let x = ARENA_CENTRE.x - 12; x <= ARENA_CENTRE.x + 12; x += 1.5) for (let z = ARENA_CENTRE.z - 12; z <= ARENA_CENTRE.z + 12; z += 1.5) if (sampleMask(mask, x, z, s).mud > 0.5) soaked++;
+  assert.ok(soaked > 20, `${soaked} soaked samples in the arena`);
+  for (let x = -32; x <= -16; x += 2) for (let z = -30; z <= -14; z += 2) assert.equal(sampleMask(mask, x, z, s).mud, 0, `mud in the practice ring at (${x}, ${z})`);
+  // The ground grade runs from ochre at the hollow to violet at the pool and the grass uses the same field.
+  const ochre = blightGrade(HOLLOW_CENTRE.z), violet = blightGrade(ARENA_CENTRE.z);
+  assert.ok(ochre[0] > ochre[2] + 0.2, 'ochre: red well above blue');
+  assert.ok(violet[2] > violet[1] - 0.05 && violet[2] > ochre[2], 'violet: blue lifted towards the pool');
+  assert.equal(GROVE_BIOME.understory.grass.blight!.amount, blightAt);
+  assert.ok(GROVE_BIOME.understory.grass.blight!.shrink > 0.3);
+});
+
+test('the dead dressing: a ring of ancient stones round the arena, dead trees and shrubs only where the sap is, nothing on a route or an arena', () => {
+  const props = region.props.filter((prop) => !prop.id.startsWith(GROVE_BOUNDARY_ID_PREFIX));
+  const obstacles = region.props.map((prop) => ({ x: prop.position.x, z: prop.position.z, radius: 1.4 }));
+  const plan = planBlight(field, obstacles);
+  assert.equal(JSON.stringify(planBlight(field, obstacles)), JSON.stringify(plan), 'deterministic');
+  assert.ok(plan.stones.length >= 14 && plan.roots.length >= 14 && plan.trees.length >= 8 && plan.shrubs.length >= 60, `${plan.stones.length} stones, ${plan.roots.length} roots, ${plan.trees.length} trees, ${plan.shrubs.length} shrubs`);
+  assert.ok(plan.veins.length >= 15 && plan.puddles.length >= 10);
+  for (const stone of plan.stones) {
+    const radius = Math.hypot(stone.x - ARENA_CENTRE.x, stone.z - ARENA_CENTRE.z);
+    assert.ok(Math.abs(radius - STONE_RING_RADIUS) <= 1.2, `a ring stone stands ${radius} m from the arena centre`);
+    assert.ok(distanceToWalkable(stone.x, stone.z) >= 1.5, 'stones stand outside the walkable clearing');
+    assert.ok(waterMargin(stone.x, stone.z) >= 3);
+    // Tall behind the arena, knee-high on the camera's side so the Warden and the guardian stay visible.
+    const outward = ((stone.x - ARENA_CENTRE.x) * 0.5812 + (stone.z - ARENA_CENTRE.z) * 0.8137) / radius;
+    if (outward > 0.6) assert.ok(stone.height <= 1.7, `a camera-side stone is ${stone.height} m tall`);
+    if (outward < -0.4 && stone.seed < 100) assert.ok(stone.height >= 1.6, 'the far stones stand tall');
+    // The south entrance and the Ridge Trail stay open.
+    const angle = Math.atan2(stone.z - ARENA_CENTRE.z, stone.x - ARENA_CENTRE.x);
+    assert.ok(Math.abs(angle - Math.PI / 2) >= 0.3 && Math.abs(angle) >= 0.28, 'a stone blocks the entrance or the trail');
+  }
+  assert.ok(Math.max(...plan.stones.map((stone) => stone.height)) >= 3.4, 'tall standing stones behind the arena');
+  for (const tree of plan.trees) {
+    assert.ok(blightAt(tree.x, tree.z) >= 0.25 && distanceToWalkable(tree.x, tree.z) >= 2.7, 'a dead tree in the blight and off the walk-mesh');
+    assert.ok(Math.hypot(tree.x - ARENA_CENTRE.x, tree.z - ARENA_CENTRE.z) > STONE_RING_RADIUS, 'dead trees stand behind the ring');
+    assert.ok(tree.height >= 3.8 && tree.height <= 7.1);
+  }
+  for (const shrub of plan.shrubs) {
+    assert.ok(blightAt(shrub.x, shrub.z) >= 0.3, 'a dead shrub only in the blight');
+    assert.ok(Math.hypot(shrub.x - HOLLOW_CENTRE.x, shrub.z - HOLLOW_CENTRE.z) >= 9.4, 'no shrub in the hollow fight');
+    assert.ok(Math.hypot(shrub.x - ARENA_CENTRE.x, shrub.z - ARENA_CENTRE.z) >= 12.2, 'no shrub in the arena fight');
+    assert.ok(shrub.height <= 1.5);
+    assert.ok(!(Math.abs(shrub.x + 24) < 3.6 && shrub.z < HOLLOW_CENTRE.z - 8 && shrub.z > ARENA_CENTRE.z + 11), 'no shrub on the spur route');
+    for (const prop of props) assert.ok(Math.hypot(shrub.x - prop.position.x, shrub.z - prop.position.z) > 0.9, `shrub on ${prop.id}`);
+  }
+  // Nothing of it south of the first gate: the practice ring stays a sunlit meadow.
+  for (const item of [...plan.trees, ...plan.shrubs, ...plan.roots, ...plan.stones]) assert.ok(item.z < -38, 'blight dressing south of the first gate');
+  for (const vein of plan.veins) for (const [, z] of vein.points) assert.ok(z < -38);
+});
+
+test('the merged blight meshes: four draw calls, vertex-coloured, finite and bounded; reduced effects still the sap; dispose frees them', () => {
+  const plan = planBlight(field, region.props.map((prop) => ({ x: prop.position.x, z: prop.position.z, radius: 1.4 })));
+  const solids = buildDressingGeometry(plan, field);
+  const triangles = solids.index!.count / 3;
+  assert.ok(triangles > 8000 && triangles < 60000, `${triangles} solid triangles`);
+  for (const attribute of ['position', 'color', 'normal']) assert.ok(Array.from(solids.getAttribute(attribute).array).every(Number.isFinite), `${attribute} is finite`);
+  solids.computeBoundingBox();
+  assert.ok(solids.boundingBox!.min.y > -1 && solids.boundingBox!.max.y < 9, `solid heights ${solids.boundingBox!.min.y}..${solids.boundingBox!.max.y}`);
+  assert.ok(solids.boundingBox!.max.z < -36, 'no solid south of the first gate');
+  const decals = buildDecalGeometry(plan, field);
+  assert.ok(decals.index!.count / 3 > 300 && decals.getAttribute('aInfo').count === decals.getAttribute('position').count);
+  assert.ok(Array.from(decals.getAttribute('aInfo').array).every(Number.isFinite));
+  const wash = buildWashGeometry(field);
+  const grades = wash.getAttribute('aGrade'), washPositions = wash.getAttribute('position');
+  let strong = 0;
+  for (let index = 0; index < grades.count; index++) {
+    const alpha = grades.getW(index);
+    if (alpha > 0.8) strong++;
+    if (washPositions.getZ(index) > -34) assert.fail('the wash reaches the practice ring');
+    if (blightAt(washPositions.getX(index), washPositions.getZ(index)) === 0) assert.equal(alpha, 0);
+  }
+  assert.ok(strong > 100, `${strong} strongly graded wash vertices`);
+
+  const water = new GroundWater(field, GROVE_WATER);
+  const feature = new GroveBlightDressing({ region, field, sunDirection: water.mesh.position.clone().set(-0.8, 0.45, 0.2).normalize() });
+  try {
+    assert.deepEqual(feature.group.children.map((child) => child.name), ['grove-blight-solids', 'grove-blight-wash', 'grove-sap-decals', 'grove-memory-pool-surface']);
+    assert.equal(feature.group.children.length, 4, 'four draw calls');
+    assert.equal(feature.wash.material.blending, 5, 'the wash multiplies (custom blending)');
+    assert.equal(feature.wash.material.depthWrite, false);
+    assert.equal(feature.decals.material.depthWrite, false);
+    assert.equal(feature.poolSurface.material.depthWrite, false);
+    assert.ok(feature.solids.material.vertexColors && feature.solids.castShadow && feature.solids.receiveShadow);
+    assert.ok(Math.abs(feature.poolSurface.position.x - MEMORY_POOL.x) < 1e-9 && Math.abs(feature.poolSurface.position.z - MEMORY_POOL.z) < 1e-9);
+    assert.ok(feature.poolSurface.position.y > MEMORY_POOL.waterY, 'the corrupted surface lies just over the water');
+    feature.update(7);
+    assert.equal(feature.decals.material.uniforms.uTime!.value, 7);
+    assert.equal(feature.poolSurface.material.uniforms.uTime!.value, 7);
+    feature.setReducedEffects(true);
+    assert.equal(feature.decals.material.uniforms.uMotion!.value, 0);
+    assert.equal(feature.poolSurface.material.uniforms.uMotion!.value, 0);
+    assert.ok(feature.group.children.every((child) => child.visible), 'reduced effects keep every shape and colour');
+    feature.setReducedEffects(false);
+    assert.equal(feature.poolSurface.material.uniforms.uMotion!.value, 1);
+  } finally {
+    feature.dispose();
+    water.dispose();
+  }
+  assert.equal(feature.group.parent, null);
+});
+
+test('framing: from the gameplay camera the Memory Pool and the ring of stones stand behind the guardian while the player is in the arena', () => {
+  const guardian = GROVE_COMBAT_TRIALS[2]!;
+  const camera = new PerspectiveCamera(34, 1.6, 0.1, 100);
+  const project = (x: number, y: number, z: number, from: { x: number; z: number }): Vector3 => {
+    camera.position.set(from.x + 10, 12, from.z + 14);
+    camera.lookAt(from.x, 0, from.z);
+    camera.updateMatrixWorld(true);
+    return new Vector3(x, y, z).project(camera);
+  };
+  // The player stands between the guardian and the entrance, 6 to 8 m south of it, as the fight keeps him.
+  for (const standoff of [5, 7.5]) {
+    const player = { x: guardian.monsterPosition.x, z: guardian.monsterPosition.z + standoff };
+    const boss = project(guardian.monsterPosition.x, 1.5, guardian.monsterPosition.z, player);
+    const pool = project(MEMORY_POOL.x, MEMORY_POOL.waterY, MEMORY_POOL.z, player);
+    assert.ok(Math.abs(boss.x) < 0.5 && Math.abs(boss.y) < 0.85, `the guardian is framed at ${boss.x}, ${boss.y}`);
+    assert.ok(Math.abs(pool.x) < 1 && Math.abs(pool.y) < 1, `the pool centre is framed (${pool.x}, ${pool.y}) at ${standoff} m`);
+    assert.ok(pool.y > boss.y, 'the pool stands behind (above, on screen) the guardian');
+    const nearEdge = project(MEMORY_POOL.x, MEMORY_POOL.waterY, MEMORY_POOL.z + MEMORY_POOL.radiusZ, player);
+    assert.ok(nearEdge.y < pool.y && nearEdge.y > boss.y, 'the pool\'s near edge is between the guardian and the pool centre');
   }
 });

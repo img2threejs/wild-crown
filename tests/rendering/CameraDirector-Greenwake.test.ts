@@ -35,32 +35,53 @@ function makeSnapshot(playerPosition: { x: number; y: number; z: number }): Comb
   };
 }
 
-test("Aren stays centered through movement, elevation, encounters and telegraphs without reframing", () => {
+test("Aren is framed through movement, elevation, encounters and telegraphs: rigid when no time passes, and settled to the exact framing after a bounded lag", () => {
   const director = new CameraDirector(new Scene());
   const focus = new Vector3();
   const originalRotation = director.camera.quaternion.clone();
+  const frame = 1 / 60;
   let priorPosition: Vector3 | undefined;
   let priorCamera: Vector3 | undefined;
   for (const position of [
     { x: -18, y: 0, z: -9 },
-    { x: -17.93, y: 0, z: -8.93 },
+    { x: -17.93, y: 0.2, z: -8.93 },
     { x: 10, y: 2.8, z: 17 },
     { x: 72, y: 0, z: 38 },
   ]) {
     const snapshot = makeSnapshot(position);
     snapshot.encounterId = 'greenwake-boar';
     snapshot.telegraphs = [{ id: 'warning', attackId: 'strike' as never, sourceId: 'boar', targetPosition: position, phase: 'anticipation', remainingTicks: 20 }];
-    director.update(snapshot);
+    // The first frame after a step: the height trails by no more than the step (a jump of more than 3 m or 6 m snaps).
+    director.update(snapshot, undefined, frame);
+    director.copyTarget(focus);
+    assert.ok(Math.abs(director.verticalLag) <= Math.abs(position.y - (priorPosition?.y ?? position.y)) + epsilon, 'the lag never exceeds the step it is absorbing');
+    assert.ok(director.camera.quaternion.angleTo(originalRotation) < epsilon, 'camera orientation never changes with movement or warnings');
+    for (let i = 0; i < 90; i++) director.update(snapshot, undefined, frame);
     director.copyTarget(focus);
     const projected = focus.clone().project(director.camera);
-    assert.ok(Math.abs(projected.x) < epsilon && Math.abs(projected.y) < epsilon, 'torso focus projects to the viewport center');
+    assert.ok(Math.abs(director.verticalLag) < 1e-3, 'height has settled onto the rendered root');
+    assert.ok(director.lookAheadMagnitude < epsilon, 'a stationary actor has no look-ahead');
+    assert.ok(Math.abs(projected.x) < epsilon && Math.abs(projected.y) < 1e-3, 'torso focus settles at the viewport center');
     assert.ok(director.camera.quaternion.angleTo(originalRotation) < epsilon, 'camera orientation never changes with movement or warnings');
     if (priorPosition && priorCamera) {
       const movement = new Vector3(position.x, position.y, position.z).sub(priorPosition);
-      assert.ok(director.camera.position.clone().sub(priorCamera).distanceTo(movement) < epsilon, 'camera follows exactly, without positional chase lag');
+      assert.ok(director.camera.position.clone().sub(priorCamera).distanceTo(movement) < 1e-3, 'settled camera has followed the full movement');
     }
     priorPosition = new Vector3(position.x, position.y, position.z);
     priorCamera = director.camera.position.clone();
+  }
+});
+
+test("with no time elapsed (load, reset, teleport) the camera frames the rendered pose rigidly", () => {
+  const director = new CameraDirector(new Scene());
+  const focus = new Vector3();
+  for (const position of [{ x: -18, y: 0, z: -9 }, { x: 10, y: 2.8, z: 17 }, { x: 72, y: 0, z: 38 }]) {
+    director.update(makeSnapshot(position));
+    director.copyTarget(focus);
+    const projected = focus.clone().project(director.camera);
+    assert.ok(Math.abs(projected.x) < epsilon && Math.abs(projected.y) < epsilon, 'torso focus projects to the viewport center');
+    assert.ok(Math.abs(director.verticalLag) < epsilon);
+    assert.ok(Math.abs(focus.y - (position.y + 0.85)) < epsilon);
   }
 });
 

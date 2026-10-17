@@ -30,6 +30,7 @@ const SKILLS = ['vesper-iai-1', 'vesper-iai-2', 'vesper-iai-3', 'vesper-iai-4', 
 const TOTAL_TICKS = {
   'vesper-iai-1': 18, 'vesper-iai-2': 18, 'vesper-iai-3': 22, 'vesper-iai-4': 30, 'vesper-shadow-step': 26, 'vesper-cuts-charge': 60, 'vesper-thousand-cuts': 72, 'vesper-kunai-fan': 24,
   'vesper-shade-charge': 60, 'vesper-shade-swap': 40, 'vesper-severing-shadow': 36, 'vesper-cleanse': 108, 'vesper-requiem': 120, 'vesper-mist-blink': 24, 'aren-air-step': 60,
+  'aren-knockdown': 90, 'aren-knockdown-forward': 90, 'aren-getup': 66, 'aren-getup-forward': 66,
 };
 const ACTIVE_TICK = { 'vesper-iai-1': 6, 'vesper-iai-2': 6, 'vesper-iai-3': 8, 'vesper-iai-4': 10, 'vesper-shadow-step': 8, 'vesper-kunai-fan': 9, 'vesper-shade-swap': 8, 'vesper-severing-shadow': 12 };
 /** Ticks on which a katana cut or thrust lands (strikes of Thousand Cuts 8…58 and the finisher 66; Requiem 12…84). Requiem tick 110 is the noto/detonation beat, not a blade contact: it is
@@ -45,14 +46,14 @@ const RIG_SCALE = entry.coordinateTransform.scale;
 const bladeAxis = new Vector3(...report.grip.bladeAxisHand);
 const hipsWorld = (frames, k) => new Vector3().setFromMatrixPosition(rig.poseFrame(frames, k)[rig.index.get('mixamorig:Hips')]);
 
-test('the manifest and offline safety reports describe the exact delivered GLB', () => {
+test('the manifest and offline safety reports describe the exact delivered Vesper GLB', () => {
   const outputHash = createHash('sha256').update(bytes).digest('hex');
   const acceptance = JSON.parse(readFileSync(`${output}acceptance-report.json`, 'utf8'));
   for (const [name, artifact] of Object.entries({ manifest: entry, anatomy: report, acceptance, provenance })) {
     assert.equal(artifact.outputHash, outputHash, `${name} is stale for the delivered Vesper GLB`);
   }
-  assert.equal(Object.keys(report.clips).length, 22);
-  assert.equal(Object.keys(entry.actionToClipMapping).length, 43);
+  assert.equal(Object.keys(report.clips).length, 26);
+  assert.equal(Object.keys(entry.actionToClipMapping).length, 47);
 });
 
 test('every Vesper clip stays inside its anatomical limits (locomotion: the native envelope, combat: the strict table)', () => {
@@ -110,6 +111,252 @@ test('the shared locomotion, reaction, dodge and traversal action ids resolve to
   assert.equal(entry.evidenceStatus, 'blocked');
   assert.equal(entry.rigFamily, 'biped');
   assert.deepEqual(entry.sockets, []);
+});
+
+/* ------------------------------------------------------------------ knockdown / get-up clips (local://wc-hero-knockdown.md, contracts aren-knockdown / aren-knockdown-forward / aren-getup / aren-getup-forward) */
+
+const REACTIONS = ['aren-knockdown', 'aren-knockdown-forward', 'aren-getup', 'aren-getup-forward'];
+const KNOCKDOWN_LENGTH = { 'aren-knockdown': 90, 'aren-knockdown-forward': 90, 'aren-getup': 66, 'aren-getup-forward': 66 };
+const [KNOCKDOWN, KNOCKDOWN_FORWARD, GETUP, GETUP_FORWARD] = REACTIONS;
+const PAIRS = [[KNOCKDOWN, GETUP], [KNOCKDOWN_FORWARD, GETUP_FORWARD]];
+const HOLD_FROM = 48;
+/** The four clips are keyed four times per simulation tick (240 Hz) so the engine's joint-wise slerp between keys is the pose the katana layers measured: tick `t` is key `t * KPT`. */
+const KPT = 4;
+const DEG = Math.PI / 180;
+/** Distance of a rig-space point along the actor's front (the manifest's forward axis; rig units). */
+const FRONT = new Vector3(entry.coordinateTransform.forward.x, 0, entry.coordinateTransform.forward.z);
+const along = (point) => point.dot(FRONT);
+const clipCache = new Map();
+const clipData = (name) => { if (!clipCache.has(name)) clipCache.set(name, readClipFrames(rig, name)); return clipCache.get(name); };
+const lastOf = (name) => clipData(name).count - 1;
+/** `poseFrame` returns one shared buffer: every pose read here is a copy. Tick `t` of a clip. */
+const world = (name, tick) => rig.poseFrame(clipData(name).frames, tick * KPT).map((matrix) => matrix.clone());
+const at = (matrices, joint) => new Vector3().setFromMatrixPosition(matrices[rig.index.get(`mixamorig:${joint}`)]);
+const metresHigh = (matrices, joint) => at(matrices, joint).y * RIG_SCALE;
+/** The torso's own frame, independent of any rest convention: forward = (Hips→Neck) × (LeftArm→RightArm); a standing hero faces +X, so forward.y > 0.7 is lying on the back. */
+const torso = (matrices) => {
+  const base = at(matrices, 'Hips'), up = at(matrices, 'Neck').sub(base).normalize(), right = at(matrices, 'RightArm').sub(at(matrices, 'LeftArm')).normalize(), head = at(matrices, 'Head').sub(base);
+  return { forward: new Vector3().crossVectors(up, right).normalize(), axis: Math.atan2(-head.z, head.x) / DEG };
+};
+const angleBetween = (a, b) => 2 * Math.acos(Math.min(1, Math.abs(a.clone().normalize().dot(b.clone().normalize())))) / DEG;
+const rotationOf = (frames, node, k) => new Quaternion().fromArray(frames.rotations[node], k * 4);
+/** Largest joint rotation difference (degrees) and Hips translation difference (metres) between two keys of two clips, on the encoded tracks. */
+function delta(nameA, ka, nameB, kb) {
+  const a = clipData(nameA).frames, b = clipData(nameB).frames, hips = rig.index.get('mixamorig:Hips');
+  let rotation = 0;
+  a.rotations.forEach((track, node) => { if (track && b.rotations[node]) rotation = Math.max(rotation, angleBetween(rotationOf(a, node, ka), rotationOf(b, node, kb))); });
+  return { rotation, position: new Vector3().fromArray(a.positions[hips], ka * 3).distanceTo(new Vector3().fromArray(b.positions[hips], kb * 3)) * RIG_SCALE };
+}
+const clipSpec = (name) => provenance.clips.find((item) => item.clip === name);
+
+const HAIR_RADIUS = 0.09;
+/**
+ * Lowest skinned vertex (metres above the floor = the bind pose's lowest vertex) of every 3rd referenced vertex of the WHOLE mesh except the hair: Vesper's ponytail is skinned rigidly to the
+ * head and a lying head pushes it 15–30 cm through the floor, which no pose can change (real hair drapes over the floor), so the vertices of the head joint farther than 0.09 rig units from the skull axis (the script's HAIR_RADIUS) are not floor contacts.
+ */
+function lowestKit(stride = 3) {
+  const primitive = glb.json.meshes[0].primitives[0], read = (id) => readAccessorAny(glb.json, glb.bin, id);
+  const positions = read(primitive.attributes.POSITION), joints = read(primitive.attributes.JOINTS_0), weights = read(primitive.attributes.WEIGHTS_0), inverseBind = read(glb.json.skins[0].inverseBindMatrices), indices = read(primitive.indices);
+  const skinJoints = glb.json.skins[0].joints, matrices = skinJoints.map(() => new Matrix4()), inverse = new Matrix4();
+  // The skull axis in the mesh's bind space (the inverse of the head joint's inverse bind matrix): the rig's own rest transform may carry the actor's yaw wrapper, the vertices do not.
+  const headNode = rig.index.get('mixamorig:Head'), headBind = new Matrix4().fromArray(inverseBind, skinJoints.indexOf(headNode) * 16).invert();
+  const skullA = new Vector3().setFromMatrixPosition(headBind), skullAxis = new Vector3(0, 0.15, 0).applyMatrix4(headBind).sub(skullA);
+  const referenced = new Uint8Array(positions.length / 3), point = new Vector3(), nearest = new Vector3(), soles = [];
+  for (const index of indices) referenced[index] = 1;
+  for (let v = 0; v < referenced.length; v += 1) {
+    if (!referenced[v] || v % stride !== 0) continue;
+    let best = 0;
+    for (let s = 1; s < 4; s += 1) if (weights[v * 4 + s] > weights[v * 4 + best]) best = s;
+    point.set(positions[v * 3], positions[v * 3 + 1], positions[v * 3 + 2]);
+    const along = Math.max(0, Math.min(1, point.clone().sub(skullA).dot(skullAxis) / skullAxis.lengthSq()));
+    if (skinJoints[joints[v * 4 + best]] === headNode && point.distanceTo(nearest.copy(skullA).addScaledVector(skullAxis, along)) > HAIR_RADIUS) continue;
+    soles.push(v);
+  }
+  const lowestOf = (worldMatrices) => {
+    skinJoints.forEach((node, j) => matrices[j].multiplyMatrices(worldMatrices[node], inverse.fromArray(inverseBind, j * 16)));
+    let lowest = Infinity;
+    for (const v of soles) {
+      let y = 0;
+      for (let s = 0; s < 4; s += 1) { const w = weights[v * 4 + s]; if (w > 0) { const e = matrices[joints[v * 4 + s]].elements; y += w * (e[1] * positions[v * 3] + e[5] * positions[v * 3 + 1] + e[9] * positions[v * 3 + 2] + e[13]); } }
+      lowest = Math.min(lowest, y);
+    }
+    return lowest;
+  };
+  const floor = lowestOf(rig.restWorld);
+  return (name, tick) => (lowestOf(world(name, tick)) - floor) * RIG_SCALE;
+}
+
+test('every knockdown and get-up clip has its contract duration, is mapped to itself, and the manifest names it', () => {
+  for (const name of REACTIONS) {
+    const { times, count } = clipData(name);
+    const seconds = times[count - 1] - times[0];
+    assert.ok(Math.abs(seconds * 60 - KNOCKDOWN_LENGTH[name]) <= 1e-3, `${name}: ${seconds * 60} ticks, expected ${KNOCKDOWN_LENGTH[name]}`);
+    assert.equal(count, KNOCKDOWN_LENGTH[name] * KPT + 1, `${name}: ${count} keys`);
+    for (let k = 0; k < count; k += 1) assert.ok(Math.abs(times[k] - k / 240) < 1e-6, `${name}: key ${k} is at ${times[k]} s`);
+    assert.equal(clipSpec(name).sim.totalTicks, KNOCKDOWN_LENGTH[name]);
+    assert.equal(entry.actionToClipMapping[name], name, `${name} is not mapped to itself`);
+  }
+});
+
+test('the knockdowns hold the lie exactly from tick 48 to the end: every stored key of every joint and of the Hips is identical', () => {
+  for (const name of [KNOCKDOWN, KNOCKDOWN_FORWARD]) {
+    const { frames, count } = clipData(name);
+    for (const track of [...frames.rotations, ...frames.positions]) {
+      if (!track) continue;
+      const size = track.length / count, from = HOLD_FROM * KPT;
+      for (let k = from + 1; k < count; k += 1) for (let c = 0; c < size; c += 1) assert.equal(track[k * size + c], track[from * size + c], `${name}: key ${k} differs from key ${from}`);
+    }
+    assert.equal(report.clips[name].lie.heldRange.identical, true);
+  }
+});
+
+test('the pelvis (Hips joint) is within 0.25 m of the floor at tick 30 and in the lie, and the vertical Hips motion is kept (the hero really goes down, and comes up)', () => {
+  for (const name of [KNOCKDOWN, KNOCKDOWN_FORWARD]) {
+    assert.ok(metresHigh(world(name, 0), 'Hips') > 0.6, `${name}: starts standing`);
+    assert.ok(metresHigh(world(name, 30), 'Hips') <= 0.25, `${name}: pelvis ${metresHigh(world(name, 30), 'Hips')} m at tick 30`);
+    for (let k = 30; k <= KNOCKDOWN_LENGTH[name]; k += 1) assert.ok(metresHigh(world(name, k), 'Hips') <= 0.3, `${name}: pelvis bounces to ${metresHigh(world(name, k), 'Hips')} m at tick ${k}`);
+    for (let k = HOLD_FROM; k <= KNOCKDOWN_LENGTH[name]; k += 1) assert.ok(metresHigh(world(name, k), 'Hips') <= 0.25, `${name}: pelvis ${metresHigh(world(name, k), 'Hips')} m in the lie`);
+    assert.ok(report.clips[name].lie.groundContactTick <= 30, `${name}: ground contact tick ${report.clips[name].lie.groundContactTick}`);
+  }
+  for (const name of [GETUP, GETUP_FORWARD]) {
+    const rise = Math.max(...Array.from({ length: KNOCKDOWN_LENGTH[name] + 1 }, (_, k) => metresHigh(world(name, k), 'Hips')));
+    assert.ok(rise > 0.7, `${name}: the pelvis only reaches ${rise} m`);
+    assert.ok(metresHigh(world(name, 0), 'Hips') <= 0.25, `${name}: starts lying`);
+  }
+});
+
+test('the back fall ends supine (chest to the sky, back and pelvis on the floor), the stomach fall ends prone (chest, thighs and legs on the floor, legs not raised)', () => {
+  const back = world(KNOCKDOWN, 90), stomach = world(KNOCKDOWN_FORWARD, 90);
+  assert.ok(torso(back).forward.y > 0.9, `aren-knockdown: torso forward.y ${torso(back).forward.y} (must face the sky)`);
+  assert.ok(torso(stomach).forward.y < -0.9, `aren-knockdown-forward: torso forward.y ${torso(stomach).forward.y} (must face the floor)`);
+  for (const joint of ['Spine2', 'Spine', 'Hips']) assert.ok(metresHigh(back, joint) <= 0.3, `supine ${joint} ${metresHigh(back, joint)} m`);
+  for (const joint of ['Spine2', 'Spine', 'Hips', 'LeftUpLeg', 'RightUpLeg', 'LeftLeg', 'RightLeg', 'LeftFoot', 'RightFoot']) assert.ok(metresHigh(stomach, joint) <= 0.3, `prone ${joint} ${metresHigh(stomach, joint)} m (legs must be on the floor)`);
+  // The head lies beyond the pelvis: back fall = behind the standing direction, stomach fall = the head toward the hero's front (the manifest's forward axis).
+  assert.ok(along(at(back, 'Head')) < along(at(back, 'Hips')) - 0.1, 'supine head must point back');
+  assert.ok(along(at(stomach, 'Head')) > along(at(stomach, 'Hips')) + 0.1, 'prone head must point forward');
+  for (let k = HOLD_FROM; k <= 90; k += 1) {
+    assert.ok(torso(world(KNOCKDOWN, k)).forward.y > 0.7);
+    assert.ok(torso(world(KNOCKDOWN_FORWARD, k)).forward.y < -0.7);
+  }
+  assert.ok(torso(world(GETUP, 0)).forward.y > 0.9);
+  assert.ok(torso(world(GETUP_FORWARD, 0)).forward.y < -0.9);
+});
+
+test('the whole mesh never sinks below the floor by more than 1 cm, and rests on it (within 2 cm) in every lying frame (hair excluded)', { timeout: 600_000 }, () => {
+  const lowest = lowestKit();
+  for (const name of REACTIONS) {
+    let flat = 0;
+    for (let k = 0; k <= KNOCKDOWN_LENGTH[name]; k += 1) {
+      const m = world(name, k), low = lowest(name, k);
+      assert.ok(low >= -0.01, `${name} tick ${k}: the mesh is ${(-low * 100).toFixed(2)} cm below the floor`);
+      if (Math.abs(torso(m).forward.y) > 0.7 && metresHigh(m, 'Hips') - Math.max(0, low) < 0.3) {
+        flat += 1;
+        assert.ok(low <= 0.02, `${name} tick ${k}: lying ${(low * 100).toFixed(2)} cm above the floor`);
+      }
+    }
+    assert.ok(flat >= (name.includes('knockdown') ? 40 : 6), `${name}: only ${flat} lying frames`);
+  }
+});
+
+test('each get-up starts exactly where its knockdown ended: every joint within 0.5° and the Hips within 1 mm (encoded tracks), lying to lying, with no facing flip', () => {
+  for (const [down, up] of PAIRS) {
+    const seam = delta(up, 0, down, lastOf(down));
+    assert.ok(seam.rotation <= 0.5, `${up}: frame 0 differs from ${down}'s last frame by ${seam.rotation.toFixed(4)}°`);
+    assert.ok(seam.position <= 0.001, `${up}: Hips ${(seam.position * 1000).toFixed(3)} mm`);
+    const lieAxis = torso(world(down, 90)).axis, sign = Math.sign(torso(world(down, 90)).forward.y), blend = clipSpec(up).getup.blend;
+    assert.ok(blend <= 12, `${up}: lying-to-lying blend of ${blend} ticks`);
+    for (let k = 0; k <= blend; k += 1) {
+      const m = world(up, k), t = torso(m);
+      assert.equal(Math.sign(t.forward.y), sign, `${up} tick ${k}: facing flipped`);
+      assert.ok(Math.abs(t.forward.y) > 0.7, `${up} tick ${k}: not lying (forward.y ${t.forward.y})`);
+      assert.ok(metresHigh(m, 'Hips') <= 0.3, `${up} tick ${k}: pelvis ${metresHigh(m, 'Hips')} m`);
+      const turn = Math.abs(((t.axis - lieAxis + 540) % 360) - 180);
+      assert.ok(turn <= 25, `${up} tick ${k}: the lie turned ${turn.toFixed(1)}° from the knockdown's`);
+    }
+    for (let k = 1; k <= 3; k += 1) assert.ok(delta(up, (k - 1) * KPT, up, k * KPT).rotation <= 25, `${up}: step into tick ${k}`);
+  }
+});
+
+/** The one place a katana-arm joint steps more than 90° / KPT between two 240 Hz keys: aren-getup's sit-up at tick 30, where the sword hand switches between the two clear poses (the blade passes through the right leg if the hand stays on the first one,
+ * and the two poses are not connected by any clear path inside the wrist ≤ 90° / shoulder ≤ 60° budget). Every joint still steps ≤ 90° from one displayed tick to the next, and every other key of every clip steps ≤ 90° / KPT. */
+const SWORD_ARM_SWITCH = { clip: 'aren-getup', joints: ['mixamorig:RightHand', 'mixamorig:RightArm'], key: 30 * KPT };
+test('every joint and the Hips keep continuous encoded tracks across all four clips (≤ 90° per tick, ≤ 22.5° per 240 Hz key except the one documented sword-hand switch)', () => {
+  for (const name of REACTIONS) {
+    const { frames, count } = clipData(name);
+    frames.rotations.forEach((track, node) => {
+      if (!track) return;
+      for (let k = 1; k < count; k += 1) {
+        const a = rotationOf(frames, node, k - 1), b = rotationOf(frames, node, k), step = angleBetween(a, b);
+        assert.ok(a.dot(b) >= 0, `${name} ${rig.names[node]} key ${k}: opposite quaternion hemisphere`);
+        const switching = name === SWORD_ARM_SWITCH.clip && SWORD_ARM_SWITCH.joints.includes(rig.names[node]) && k === SWORD_ARM_SWITCH.key;
+        if (!switching) assert.ok(step <= 90 / KPT, `${name} ${rig.names[node]} key ${k}: ${step.toFixed(1)}° in one key`);
+        if (k >= KPT) assert.ok(angleBetween(rotationOf(frames, node, k - KPT), b) <= 90, `${name} ${rig.names[node]} key ${k}: ${angleBetween(rotationOf(frames, node, k - KPT), b).toFixed(1)}° in one tick`);
+      }
+    });
+    const track = frames.positions[rig.index.get('mixamorig:Hips')];
+    for (let k = 1; k < count; k += 1) {
+      const step = new Vector3().fromArray(track, k * 3).distanceTo(new Vector3().fromArray(track, (k - 1) * 3)) * RIG_SCALE;
+      assert.ok(step <= 0.05, `${name}: the Hips jump ${(step * 100).toFixed(1)} cm in key ${k}`);
+    }
+  }
+});
+
+test('the last quarter of each get-up is a gradual slerp into aren-idle frame 0: the end mismatch is under 2°, the Hips under 1 mm, and no joint steps abruptly in it', () => {
+  const idle = readClipFrames(rig, 'aren-idle');
+  for (const name of [GETUP, GETUP_FORWARD]) {
+    const { frames, count } = clipData(name);
+    let end = 0;
+    frames.rotations.forEach((track, node) => { if (track && idle.frames.rotations[node]) end = Math.max(end, angleBetween(rotationOf(frames, node, count - 1), rotationOf(idle.frames, node, 0))); });
+    assert.ok(end < 2, `${name}: ends ${end.toFixed(4)}° from aren-idle`);
+    const hips = rig.index.get('mixamorig:Hips');
+    assert.ok(new Vector3().fromArray(frames.positions[hips], (count - 1) * 3).distanceTo(new Vector3().fromArray(idle.frames.positions[hips], 0)) * RIG_SCALE <= 0.001, `${name}: Hips off the idle`);
+    const first = Math.round(KNOCKDOWN_LENGTH[name] * 0.75);
+    let worst = 0, worstFinal = 0;
+    frames.rotations.forEach((track, node) => {
+      if (!track) return;
+      for (let tick = first; tick <= KNOCKDOWN_LENGTH[name]; tick += 1) {
+        const step = angleBetween(rotationOf(frames, node, (tick - 1) * KPT), rotationOf(frames, node, tick * KPT));
+        worst = Math.max(worst, step);
+        if (tick >= KNOCKDOWN_LENGTH[name] - 2) worstFinal = Math.max(worstFinal, step);
+      }
+    });
+    assert.ok(worst <= 40, `${name}: a joint steps ${worst.toFixed(1)}°/tick in the last quarter`);
+    assert.ok(worstFinal <= 8, `${name}: a joint steps ${worstFinal.toFixed(1)}°/tick over the last three ticks (the idle must be reached gradually)`);
+    const distance = (tick) => { let d = 0; frames.rotations.forEach((track, node) => { if (track && idle.frames.rotations[node]) d = Math.max(d, angleBetween(rotationOf(frames, node, tick * KPT), rotationOf(idle.frames, node, 0))); }); return d; };
+    assert.ok(distance(first) > 10, `${name}: already at the idle ${distance(first).toFixed(1)}° at the start of the last quarter`);
+    for (let tick = first + 6; tick <= KNOCKDOWN_LENGTH[name]; tick += 1) assert.ok(distance(tick) <= distance(tick - 6) + 1e-6, `${name}: moves away from the idle at tick ${tick}`);
+  }
+});
+
+test('the Hips stay within 0.7 m of their standing XZ in every frame, and each get-up returns them onto it', () => {
+  const stand = at(world('aren-idle', 0), 'Hips');
+  for (const name of REACTIONS) {
+    let worst = 0;
+    for (let k = 0; k <= KNOCKDOWN_LENGTH[name]; k += 1) { const p = at(world(name, k), 'Hips'); worst = Math.max(worst, Math.hypot(p.x - stand.x, p.z - stand.z) * RIG_SCALE); }
+    assert.ok(worst <= 0.7, `${name}: the Hips are ${worst.toFixed(3)} m from their standing XZ`);
+  }
+  for (const name of [GETUP, GETUP_FORWARD]) {
+    const p = at(world(name, 66), 'Hips');
+    assert.ok(Math.hypot(p.x - stand.x, p.z - stand.z) * RIG_SCALE <= 0.001, `${name} does not end on the standing XZ`);
+  }
+  assert.ok(along(at(world(KNOCKDOWN, 90), 'Hips')) < along(stand) - 0.2 / RIG_SCALE, 'the back fall moves the Hips back');
+  assert.ok(along(at(world(KNOCKDOWN_FORWARD, 90), 'Hips')) > along(stand) + 0.2 / RIG_SCALE, 'the stomach fall moves the Hips forward');
+});
+
+test('the four clips play captured Mixamo reaction takes (recorded bytes), with no hand-keyed pose', () => {
+  const ledger = JSON.stringify(JSON.parse(readFileSync(`${root}asset-source/mixamo/provenance.json`, 'utf8')));
+  const expected = { [KNOCKDOWN]: ['react-backward', 'getting-up-back'], [KNOCKDOWN_FORWARD]: ['fall-flat-hit-back'], [GETUP]: ['getting-up-back'], [GETUP_FORWARD]: ['getting-up-stomach'] };
+  for (const name of REACTIONS) {
+    assert.equal(clipSpec(name).pose, undefined, `${name}: hand-keyed pose keys`);
+    const takes = [...new Set(clipSpec(name).parts.map((part) => part.source.file.replace(/^.*\//, '').replace(/\.fbx$/, '')))];
+    assert.deepEqual(takes, expected[name], `${name}: takes`);
+    for (const take of takes) {
+      const file = `asset-source/mixamo/reactions/${take}.fbx`, source = provenance.mixamoFiles[file];
+      assert.ok(source, `${take} is not a recorded reaction take`);
+      assert.equal(createHash('sha256').update(readFileSync(root + file)).digest('hex'), source.sha256, `${file} changed since the build`);
+      assert.ok(ledger.includes(source.sha256), `${file} is not in asset-source/mixamo/provenance.json`);
+    }
+  }
 });
 
 test('locomotion and charge loops are seamless: the last frame equals the first', () => {
@@ -188,12 +435,18 @@ test('every captured thrust travels point-first within 20° of its blade on the 
 
 /** Cuts, thrusts and the kunai throw keep the donor's wrist within 30°; a merely carried sword (every other clip) may be bent up to 45° off the donor hand, still inside the native Hand joint table. */
 const STRIKE_CLASS = ['vesper-iai-1', 'vesper-iai-2', 'vesper-iai-3', 'vesper-iai-4', 'vesper-shadow-step', 'vesper-thousand-cuts', 'vesper-requiem', 'vesper-severing-shadow', 'vesper-kunai-fan'];
-test('all clips retain captured whole-body sources and only bounded wrist corrections (strikes ≤ 30°, carried sword ≤ 45°)', () => {
+/** The one per-clip exception (approved): the back get-up's sit-up holds the katana fist about 7 cm off the floor with the donor blade pointing 40° down through the floor and the right leg, so it gets wrist ≤ 90° / shoulder ≤ 60°. */
+const GETUP_BACK_CAPS = { 'aren-getup': { wrist: 90, shoulder: 60 } };
+test('all clips retain captured whole-body sources with only bounded wrist (strikes ≤ 30°, carried sword ≤ 45°) and shoulder (≤ 35°) corrections', () => {
   for (const spec of provenance.clips) {
     assert.ok(['mixamo', 'tripo'].includes(spec.origin), `${spec.clip}: ${spec.origin}`);
-    for (const field of ['body', 'arm', 'torso', 'aim', 'sway', 'joints']) assert.equal(spec[field], undefined, `${spec.clip}: synthetic ${field} layer`);
-    const maximum = STRIKE_CLASS.includes(spec.clip) ? 30 : 45;
+    for (const field of ['body', 'torso', 'aim', 'sway', 'joints']) assert.equal(spec[field], undefined, `${spec.clip}: synthetic ${field} layer`);
+    const maximum = GETUP_BACK_CAPS[spec.clip]?.wrist ?? (STRIKE_CLASS.includes(spec.clip) ? 30 : 45);
     assert.ok(report.clips[spec.clip].wristMaxCorrectionDegrees <= maximum + 0.01, `${spec.clip}: wrist correction ${report.clips[spec.clip].wristMaxCorrectionDegrees}° exceeds ${maximum}°`);
+    // The palm-seated tsuka needs the fist lifted off the thigh or torso in some captured poses; the shoulder turn stays small and is reported.
+    const shoulder = report.clips[spec.clip].armMaxCorrectionDegrees;
+    assert.equal(shoulder !== undefined, spec.arm !== undefined, `${spec.clip}: shoulder layer and its report disagree`);
+    if (shoulder !== undefined) assert.ok(shoulder <= (GETUP_BACK_CAPS[spec.clip]?.shoulder ?? 35) + 0.01, `${spec.clip}: shoulder correction ${shoulder}° exceeds ${GETUP_BACK_CAPS[spec.clip]?.shoulder ?? 35}°`);
   }
 });
 

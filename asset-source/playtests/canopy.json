@@ -9,7 +9,8 @@
       "prop-ancient-canopy-shrine",
       "prop-rainforest-canopy-tree",
       "prop-canopy-cliff-rock",
-      "prop-canopy-fern-cluster"
+      "prop-canopy-fern-cluster",
+      "prop-mire-bank-rock"
     ],
     "runtimeUrl": null,
     "lodIds": [],
@@ -27,7 +28,7 @@
     "rigFamily": "biped",
     "sourceHash": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
     "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
-    "outputHash": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
+    "outputHash": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -66,7 +67,11 @@
       "aren-sigil-barrage": "aren-sigil-barrage",
       "aren-sigil-charge": "aren-sigil-charge",
       "aren-judgement": "aren-judgement",
-      "aren-air-step": "aren-air-step"
+      "aren-air-step": "aren-air-step",
+      "aren-knockdown": "aren-knockdown",
+      "aren-knockdown-forward": "aren-knockdown-forward",
+      "aren-getup": "aren-getup",
+      "aren-getup-forward": "aren-getup-forward"
     },
     "rootMotion": {
       "aren-cheer": {
@@ -908,6 +913,134 @@
       "aren-air-step": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "aren-knockdown": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.489657,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.733333,
+            "position": {
+              "x": 0.001952,
+              "y": 0.067299,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": 0.001952,
+              "y": 0.067147,
+              "z": -0.009761
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.492497,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.733333,
+            "position": {
+              "x": 0.001952,
+              "y": 0.093443,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": 0.001952,
+              "y": 0.113863,
+              "z": -0.009761
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.067147,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.533333,
+            "position": {
+              "x": 0.001952,
+              "y": 0.096265,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 1.1,
+            "position": {
+              "x": 0.001952,
+              "y": 0.550391,
+              "z": -0.009761
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.001952,
+              "y": 0.113863,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 0.533333,
+            "position": {
+              "x": 0.001952,
+              "y": 0.130848,
+              "z": -0.009761
+            }
+          },
+          {
+            "time": 1.1,
+            "position": {
+              "x": 0.001952,
+              "y": 0.550391,
+              "z": -0.009761
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
@@ -919,40 +1052,80 @@
     "actorId": "vara",
     "sourceType": "native-glb",
     "kind": "character",
-    "tripoSourceTask": "a60d75d8-a3e1-4c60-8d23-476157a25dc9",
-    "runtimeUrl": "/asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb",
-    "outputHash": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
+    "tripoSourceTask": "3b12e5de-aba6-4c9f-aba0-863c6ebf0fa1",
+    "runtimeUrl": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+    "outputHash": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60",
     "lodIds": [],
+    "rigFamily": "avian",
+    "castSocketBone": "tripo::Head_2",
     "coordinateTransform": {
       "forward": {
-        "x": 0,
+        "x": -1,
         "y": 0,
-        "z": 1
+        "z": 0
       },
-      "scale": 1.7
+      "scale": 2.494
     },
     "requiredActionIds": [],
-    "actionToClipMapping": {},
-    "playtestAnimation": {
-      "rigFamily": "avian",
-      "actionIds": [
-        "vara:idle"
-      ],
-      "torsoBoneNames": [
-        "tripo::Spine_1"
-      ],
-      "headBoneName": "tripo::Head_0",
-      "wingRootNames": [
-        "bone_11",
-        "bone_16"
-      ],
-      "wingSecondaryBoneNames": [
-        "bone_12",
-        "bone_17"
-      ]
+    "actionToClipMapping": {
+      "vara-sky-survey": "vara-sky-survey",
+      "vara:idle": "vara:idle",
+      "vara:walk": "vara:walk",
+      "vara:takeoff": "vara:takeoff",
+      "vara:fly": "vara:fly",
+      "vara:hover": "vara:hover",
+      "vara:land": "vara:land",
+      "vara:dive": "vara:dive",
+      "vara:strike": "vara:strike",
+      "vara-sky-mark": "vara-sky-mark",
+      "vara:hurt": "vara:hurt"
+    },
+    "rootMotion": {
+      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara:idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:takeoff": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:fly": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:hover": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:land": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:strike": {
+        "mode": "in-place",
+        "evidenceStatus": "verified",
+        "contactTime": 0.5
+      },
+      "vara-sky-mark": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "vara:hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/provenance.json",
+    "provenance": "asset-source/generated/actor-vara-harpy-runtime-01/clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1027,7 +1200,7 @@
     "castSocketBone": "Head",
     "tripoSourceTask": "39e6d691-ca03-4017-9f2d-3d972eca2404",
     "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
-    "outputHash": "b7fe18a6790f18803c9de19278fe23e3d4e16e0f92bd64bc75c53f5acf8f070d",
+    "outputHash": "eb5b9c1086562039527f1b1cf6f43828e624b7d91223b7d6522d5a5f6d4492a9",
     "lodIds": [],
     "requiredActionIds": [],
     "coordinateTransform": {
@@ -1048,7 +1221,11 @@
       "monster-hurt": "monster-hurt",
       "monster-turn": "monster-turn",
       "monster-dive": "monster-dive",
-      "monster-roar": "monster-roar"
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1090,6 +1267,22 @@
       "monster-roar": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
@@ -1105,7 +1298,7 @@
     "castSocketBone": "tripo::Head_0",
     "tripoSourceTask": "d4e8f94b-2aea-4fe3-a819-af13901f7190",
     "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
-    "outputHash": "a5f4ac093f79968dda96e0cd1d0f7209b0f34bfd869d2ddfb176d049467e8c26",
+    "outputHash": "362813aeead1086dbc505324ac07a6231e18dc7dde481c461ad52b096e4ca5d9",
     "lodIds": [],
     "requiredActionIds": [],
     "coordinateTransform": {
@@ -1127,6 +1320,10 @@
       "monster-turn": "monster-turn",
       "monster-dive": "monster-dive",
       "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup",
       "monster-tail": "monster-tail"
     },
     "rootMotion": {
@@ -1167,6 +1364,22 @@
         "evidenceStatus": "verified"
       },
       "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
       },
@@ -1188,7 +1401,7 @@
     "castSocketBone": "tripo::Head_1",
     "tripoSourceTask": "8efed69c-61f4-4398-9cef-1d6e64adc8a9",
     "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
-    "outputHash": "018587fc2a45aaac42e10c00ff2907746dad35b7155bab1c38548d98d050b39a",
+    "outputHash": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
     "lodIds": [],
     "requiredActionIds": [],
     "coordinateTransform": {
@@ -1210,6 +1423,10 @@
       "monster-turn": "monster-turn",
       "monster-dive": "monster-dive",
       "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup",
       "monster-tail": "monster-tail"
     },
     "rootMotion": {
@@ -1250,6 +1467,22 @@
         "evidenceStatus": "verified"
       },
       "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
       },
@@ -1398,6 +1631,33 @@
     "evidenceStatus": "blocked"
   },
   {
+    "id": "prop-mire-bank-rock",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "91897a7c-823e-4880-9f2e-4d4560c9bc6f",
+    "runtimeUrl": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+    "outputHash": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 4.085,
+      "originOffset": {
+        "x": 0,
+        "y": 0.95756,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-mire-bank-rock-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
     "id": "actor-yara-hero",
     "actorId": "aren",
     "variantOf": "actor-aren",
@@ -1406,7 +1666,7 @@
     "rigFamily": "biped",
     "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
     "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-    "outputHash": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
+    "outputHash": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31",
     "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
@@ -1427,6 +1687,10 @@
       "aren-hit": "aren-hit",
       "aren-cheer": "aren-cheer",
       "aren-defeat": "aren-defeat",
+      "aren-knockdown": "aren-knockdown",
+      "aren-knockdown-forward": "aren-knockdown-forward",
+      "aren-getup": "aren-getup",
+      "aren-getup-forward": "aren-getup-forward",
       "yara-thornshot-1": "yara-thornshot-1",
       "yara-thornshot-2": "yara-thornshot-2",
       "yara-thornshot-3": "yara-thornshot-3",
@@ -1718,6 +1982,134 @@
         ],
         "evidenceStatus": "verified"
       },
+      "aren-knockdown": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.5100526213645935
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": -0.07672006636857986,
+              "y": 0.3441104590892792,
+              "z": 0.1320057064294815
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -0.07617085427045822,
+              "y": 0.34430670738220215,
+              "z": 0.13233886659145355
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.511361300945282
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": -0.04388658329844475,
+              "y": -0.3329811990261078,
+              "z": 0.16185572743415833
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -0.04523219168186188,
+              "y": -0.3328078091144562,
+              "z": 0.1658267229795456
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -0.07617085427045822,
+              "y": 0.34430670738220215,
+              "z": 0.13233886659145355
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": -0.010886118747293949,
+              "y": 0.03962491452693939,
+              "z": 0.2605013847351074
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.5040619969367981
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -0.04523219168186188,
+              "y": -0.3328078091144562,
+              "z": 0.1658267229795456
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": -0.012580798007547855,
+              "y": -0.09685087203979492,
+              "z": 0.3438928425312042
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.5071961283683777
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
       "yara-thornshot-1": {
         "mode": "native-root-motion",
         "rootNodeName": "mixamorigHips",
@@ -1727,23 +2119,23 @@
             "time": 0,
             "position": {
               "x": 1.1849464742752502e-9,
-              "y": -0.07734350115060806,
+              "y": -0.09796744585037231,
               "z": 0.5613521933555603
             }
           },
           {
             "time": 0.20000000298023224,
             "position": {
-              "x": -0.0004496107576414943,
-              "y": -0.06605695933103561,
+              "x": 0.000331217102939263,
+              "y": -0.1032819077372551,
               "z": 0.5074383020401001
             }
           },
           {
             "time": 0.4333333373069763,
             "position": {
-              "x": -0.0006879705470055342,
-              "y": -0.06515903770923615,
+              "x": 0.000506809214130044,
+              "y": -0.10062075406312943,
               "z": 0.47885581851005554
             }
           }
@@ -2014,24 +2406,24 @@
           {
             "time": 0,
             "position": {
-              "x": -6.84177834386901e-8,
-              "y": -0.04805852472782135,
+              "x": 7.816970537533052e-8,
+              "y": -1.9468760115159967e-7,
               "z": 0.5109941959381104
             }
           },
           {
             "time": 0.4333333373069763,
             "position": {
-              "x": -0.037633880972862244,
-              "y": -0.5895106792449951,
-              "z": 0.4212305247783661
+              "x": -0.011876503936946392,
+              "y": 0.5749015808105469,
+              "z": 0.41647228598594666
             }
           },
           {
             "time": 0.8999999761581421,
             "position": {
-              "x": -0.039227914065122604,
-              "y": -0.5914251804351807,
+              "x": 0.006427145563066006,
+              "y": 0.5700517892837524,
               "z": 0.41865020990371704
             }
           }
@@ -2841,7 +3233,7 @@
       "normalization": "top-4 by weight, non-negative, renormalised to sum 1 (float32)",
       "repairedBaseHash": "efc52ac237896a5505d40ec70a7f0ff959ae3c81f08e7504b1613dad2b7bfee7"
     },
-    "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+    "outputHash": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc",
     "runtimeUrl": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
@@ -2876,6 +3268,10 @@
       "vesper-shade-swap": "vesper-shade-swap",
       "vesper-mist-blink": "vesper-mist-blink",
       "aren-air-step": "aren-air-step",
+      "aren-knockdown": "aren-knockdown",
+      "aren-knockdown-forward": "aren-knockdown-forward",
+      "aren-getup": "aren-getup",
+      "aren-getup-forward": "aren-getup-forward",
       "aren-strafe": "aren-walk",
       "aren-stagger": "aren-hit",
       "aren-stumble-recovery": "aren-hit",
@@ -3141,7 +3537,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.46025025844573975
+              "z": 0.46040573716163635
             }
           },
           {
@@ -3164,24 +3560,24 @@
             "time": 0,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.008047735318541527,
-              "z": 0.45919355750083923
+              "y": -0.0071501354686915874,
+              "z": 0.46600523591041565
             }
           },
           {
             "time": 0.13333334028720856,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.008047735318541527,
-              "z": 0.4427742660045624
+              "y": -0.0071501354686915874,
+              "z": 0.4428046643733978
             }
           },
           {
             "time": 0.30000001192092896,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.008047735318541527,
-              "z": 0.4422115087509155
+              "y": -0.0071501354686915874,
+              "z": 0.44215092062950134
             }
           }
         ],
@@ -3196,24 +3592,24 @@
             "time": 0,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006415068171918392,
-              "z": 0.4282054007053375
+              "y": -0.00810809526592493,
+              "z": 0.4186060130596161
             }
           },
           {
             "time": 0.1666666716337204,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006415068171918392,
-              "z": 0.4430277645587921
+              "y": -0.00810809526592493,
+              "z": 0.4425911605358124
             }
           },
           {
             "time": 0.36666667461395264,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006415068171918392,
-              "z": 0.4375703036785126
+              "y": -0.00810809526592493,
+              "z": 0.43175652623176575
             }
           }
         ],
@@ -3228,23 +3624,23 @@
             "time": 0,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006164125166833401,
-              "z": 0.431077778339386
+              "y": -0.013484397903084755,
+              "z": 0.38906919956207275
             }
           },
           {
             "time": 0.23333333432674408,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006164125166833401,
-              "z": 0.46166372299194336
+              "y": -0.013484397903084755,
+              "z": 0.4619070887565613
             }
           },
           {
             "time": 0.5,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006164125166833401,
+              "y": -0.013484397903084755,
               "z": 0.4375978708267212
             }
           }
@@ -3324,24 +3720,24 @@
             "time": 0,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.009368790313601494,
-              "z": 0.4506511986255646
+              "y": -0.008047735318541527,
+              "z": 0.45919355750083923
             }
           },
           {
             "time": 0.30000001192092896,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.009368790313601494,
-              "z": 0.4424978792667389
+              "y": -0.008047735318541527,
+              "z": 0.4420298635959625
             }
           },
           {
             "time": 0.6000000238418579,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.009368790313601494,
-              "z": 0.4422115087509155
+              "y": -0.008047735318541527,
+              "z": 0.4421382248401642
             }
           }
         ],
@@ -3356,24 +3752,24 @@
             "time": 0,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006338621024042368,
-              "z": 0.44253477454185486
+              "y": -0.005733476020395756,
+              "z": 0.4444544017314911
             }
           },
           {
             "time": 0.20000000298023224,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006338621024042368,
-              "z": 0.4261508882045746
+              "y": -0.005733476020395756,
+              "z": 0.42027896642684937
             }
           },
           {
             "time": 0.4333333373069763,
             "position": {
               "x": -1.6171870509396058e-9,
-              "y": -0.006338621024042368,
-              "z": 0.4010299742221832
+              "y": -0.005733476020395756,
+              "z": 0.4019012749195099
             }
           }
         ],
@@ -3419,25 +3815,25 @@
           {
             "time": 0,
             "position": {
-              "x": -0.00209441059269011,
-              "y": 0.0003039167495444417,
-              "z": 0.4286820888519287
+              "x": -1.6171870509396058e-9,
+              "y": -0.006452709436416626,
+              "z": 0.43101468682289124
             }
           },
           {
             "time": 0.5,
             "position": {
-              "x": -0.0007380700553767383,
-              "y": -0.0029782122001051903,
-              "z": 0.44165176153182983
+              "x": -1.6171870509396058e-9,
+              "y": -0.006452709436416626,
+              "z": 0.4432007968425751
             }
           },
           {
             "time": 1,
             "position": {
-              "x": -0.00209441059269011,
-              "y": 0.0003039167495444417,
-              "z": 0.4286820888519287
+              "x": -1.6171870509396058e-9,
+              "y": -0.006452709436416626,
+              "z": 0.43101468682289124
             }
           }
         ],
@@ -3451,25 +3847,25 @@
           {
             "time": 0,
             "position": {
-              "x": 0.0016742062289267778,
-              "y": -0.006026199087500572,
-              "z": 0.42518168687820435
+              "x": -1.6171870509396058e-9,
+              "y": -0.07763835787773132,
+              "z": 0.5666986107826233
             }
           },
           {
             "time": 0.5,
             "position": {
-              "x": 0.0016742062289267778,
-              "y": -0.006026199087500572,
-              "z": 0.42518168687820435
+              "x": -1.6171870509396058e-9,
+              "y": -0.07763835787773132,
+              "z": 0.5690529346466064
             }
           },
           {
             "time": 1,
             "position": {
-              "x": 0.0016742062289267778,
-              "y": -0.006026199087500572,
-              "z": 0.42518168687820435
+              "x": -1.6171870509396058e-9,
+              "y": -0.07763835787773132,
+              "z": 0.5666986107826233
             }
           }
         ],
@@ -3483,25 +3879,25 @@
           {
             "time": 0,
             "position": {
-              "x": 6.951030684376747e-8,
-              "y": -1.1618718076533696e-7,
-              "z": 0.44440409541130066
+              "x": 4.788306995351377e-8,
+              "y": -0.006260936614125967,
+              "z": 0.44652611017227173
             }
           },
           {
             "time": 0.20000000298023224,
             "position": {
-              "x": 0.21684932708740234,
-              "y": 0.3179687261581421,
-              "z": 0.4254568815231323
+              "x": 0.2221544086933136,
+              "y": 0.2834247648715973,
+              "z": 0.42136913537979126
             }
           },
           {
             "time": 0.4000000059604645,
             "position": {
-              "x": 0.20026759803295135,
-              "y": 0.3740155100822449,
-              "z": 0.4163671135902405
+              "x": 0.22025169432163239,
+              "y": 0.3003118932247162,
+              "z": 0.4184930622577667
             }
           }
         ],
@@ -3515,25 +3911,25 @@
           {
             "time": 0,
             "position": {
-              "x": 5.138181080610593e-8,
-              "y": -0.002567612798884511,
-              "z": 0.44587910175323486
+              "x": -1.6171870509396058e-9,
+              "y": -0.07759785652160645,
+              "z": 0.5342991948127747
             }
           },
           {
             "time": 0.3333333432674408,
             "position": {
-              "x": 0.2098913937807083,
-              "y": 0.346811443567276,
-              "z": 0.4162730574607849
+              "x": -1.6171870509396058e-9,
+              "y": -0.07759785652160645,
+              "z": 0.5633904337882996
             }
           },
           {
             "time": 0.6666666865348816,
             "position": {
-              "x": 0.21554268896579742,
-              "y": 0.3268257975578308,
-              "z": 0.41839292645454407
+              "x": -1.6171870509396058e-9,
+              "y": -0.07759785652160645,
+              "z": 0.5511656999588013
             }
           }
         ],
@@ -3557,7 +3953,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3573,6 +3969,134 @@
       },
       "aren-air-step": {
         "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.42228198051452637
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": -0.04012652486562729,
+              "y": 0.3600887358188629,
+              "z": 0.11796344816684723
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -0.04012652486562729,
+              "y": 0.3600887358188629,
+              "z": 0.12859512865543365
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -1.6171870509396058e-9,
+              "y": 0,
+              "z": 0.4362902343273163
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": 0.024230215698480606,
+              "y": -0.3387395143508911,
+              "z": 0.11408785730600357
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": 0.023383861407637596,
+              "y": -0.3372753858566284,
+              "z": 0.11254402250051498
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -0.04012652486562729,
+              "y": 0.3600887358188629,
+              "z": 0.12859512865543365
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": -0.03459203988313675,
+              "y": 0.3094518184661865,
+              "z": 0.2376464605331421
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": -1.2585643638374222e-8,
+              "y": -0.007042494136840105,
+              "z": 0.42518168687820435
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.023383861407637596,
+              "y": -0.3372753858566284,
+              "z": 0.11254402250051498
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": 0.0063377367332577705,
+              "y": -0.0965457633137703,
+              "z": 0.3471302092075348
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": -1.2585643638374222e-8,
+              "y": -0.007042494136840105,
+              "z": 0.42518168687820435
+            }
+          }
+        ],
         "evidenceStatus": "verified"
       },
       "aren-strafe": {
@@ -3721,7 +4245,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3753,7 +4277,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3785,7 +4309,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3817,7 +4341,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3849,7 +4373,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3881,7 +4405,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3913,7 +4437,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3945,7 +4469,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -3977,7 +4501,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4009,7 +4533,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4041,7 +4565,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4073,7 +4597,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4105,7 +4629,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4137,7 +4661,7 @@
             "position": {
               "x": -1.6171870509396058e-9,
               "y": 0,
-              "z": 0.3972260653972626
+              "z": 0.39978012442588806
             }
           },
           {
@@ -4275,7 +4799,7 @@
     "rigFamily": "biped",
     "tripoSourceTask": "f646d7e4-8001-47d5-823f-df5d96a5b509",
     "sourceHash": "2a272c69d06fc415c525fc7f03c901951408bf75159188d2b4cf48a273b9eda6",
-    "outputHash": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+    "outputHash": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5",
     "runtimeUrl": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
@@ -4311,6 +4835,10 @@
       "sakda-guard-dash": "sakda-guard-dash",
       "sakda-cleanse": "sakda-cleanse",
       "sakda-tigers-wrath": "sakda-tigers-wrath",
+      "aren-knockdown": "aren-knockdown",
+      "aren-knockdown-forward": "aren-knockdown-forward",
+      "aren-getup": "aren-getup",
+      "aren-getup-forward": "aren-getup-forward",
       "aren-strafe": "aren-walk",
       "aren-stagger": "aren-hit",
       "aren-stumble-recovery": "aren-hit",
@@ -5037,6 +5565,134 @@
               "x": -9.006351220364195e-12,
               "y": 0,
               "z": 0.5310866832733154
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.40926697850227356
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": -0.0923006683588028,
+              "y": 0.3114122450351715,
+              "z": 0.11443393677473068
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": -0.09238988906145096,
+              "y": 0.31080979108810425,
+              "z": 0.11397583037614822
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-knockdown-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -9.006351220364195e-12,
+              "y": 0,
+              "z": 0.43408218026161194
+            }
+          },
+          {
+            "time": 0.75,
+            "position": {
+              "x": 0.014793912880122662,
+              "y": -0.31342050433158875,
+              "z": 0.09654846042394638
+            }
+          },
+          {
+            "time": 1.5,
+            "position": {
+              "x": 0.014044965617358685,
+              "y": -0.31204918026924133,
+              "z": 0.07852392643690109
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": -0.09238988906145096,
+              "y": 0.31080979108810425,
+              "z": 0.11397583037614822
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": -0.0205500777810812,
+              "y": 0.08036236464977264,
+              "z": 0.38743147253990173
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": 0.007630732376128435,
+              "y": -0.010035917162895203,
+              "z": 0.47516781091690063
+            }
+          }
+        ],
+        "evidenceStatus": "verified"
+      },
+      "aren-getup-forward": {
+        "mode": "native-root-motion",
+        "rootNodeName": "mixamorigHips",
+        "preserveVerticalMotion": true,
+        "curveSamples": [
+          {
+            "time": 0,
+            "position": {
+              "x": 0.014044965617358685,
+              "y": -0.31204918026924133,
+              "z": 0.07852392643690109
+            }
+          },
+          {
+            "time": 0.550000011920929,
+            "position": {
+              "x": 0.00936918705701828,
+              "y": -0.09189080446958542,
+              "z": 0.35815322399139404
+            }
+          },
+          {
+            "time": 1.100000023841858,
+            "position": {
+              "x": 0.007630732376128435,
+              "y": -0.010035917162895203,
+              "z": 0.47516781091690063
             }
           }
         ],

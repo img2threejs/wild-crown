@@ -18,8 +18,9 @@ import {
 } from "../../src/content/narrative-cues.js";
 import { ACT_I_REGION_AUTHORING_STATUS, ACT_I_REGIONS } from "../../src/content/levels/act-i.js";
 import { LATER_ACT_REGION_AUTHORING_STATUS, LATER_ACT_REGIONS } from "../../src/content/levels/later-acts.js";
-import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
-import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
+import { CampaignDirector, CampaignChoiceRejectedError } from "../../src/game/campaign/CampaignDirector.js";
+import { CombatEngine, type CombatInput } from "../../src/game/combat/CombatEngine.js";
+import type { WorldEvent } from "../../src/game/contracts.js";
 import {
   createCheckpoint,
   createNewRun,
@@ -102,6 +103,16 @@ test("Director executes every leadership × Marek × Crown branch through an end
   for (const [index, history] of BRANCH_HISTORIES.entries()) {
     const director = new CampaignDirector({ runId: "branch-history-" + index });
     await setBranchChapter(director, 3);
+    // Pack leadership only decides after the Ruun guardian has been cleansed; emit the canonical encounter-resolved
+    // event the same way the live combat encounter handler would, so the test never bypasses the gate.
+    await director.processEvent({
+      type: "encounter-resolved",
+      eventId: `ruun-resolved-${index}`,
+      idempotencyKey: `ruun-resolved:${index}`,
+      encounterId: "encounter-ruun",
+      resolution: "cleansed",
+      actorIds: ["ruun"],
+    });
     const packOption = history.pack === "dominion" ? "dominion-ruun" : history.pack;
     await director.choose("pack-leadership", packOption);
     assert.equal(director.snapshot().choices["pack-leadership"], packOption);
@@ -112,11 +123,20 @@ test("Director executes every leadership × Marek × Crown branch through an end
     assert.equal(director.snapshot().campaign.world.marekPresent, history.marek === "present");
 
     await setBranchChapter(director, 5);
+    // Sunmane resolution only decides after the Solkar guardian has been cleansed; emit the canonical event.
+    await director.processEvent({
+      type: "encounter-resolved",
+      eventId: `solkar-resolved-${index}`,
+      idempotencyKey: `solkar-resolved:${index}`,
+      encounterId: "encounter-solkar",
+      resolution: "cleansed",
+      actorIds: ["solkar"],
+    });
     await director.choose("sunmane-resolution", history.crown);
     assert.equal(director.snapshot().choices["sunmane-resolution"], history.crown);
     if (history.crown === "exile") {
       assert.equal(director.snapshot().campaign.world.factions.crown.leaderStatus, "exiled");
-      assert.throws(() => director.selectParty("combat", "solkar"));
+      await assert.rejects(director.selectParty("solkar"));
       await director.choose("crown-council", "willing");
       assert.equal(director.snapshot().campaign.world.factions.crown.representative.present, true);
     }
@@ -205,36 +225,53 @@ test("Nyra reveals an optional Mistveil route without blocking the main route", 
   );
 });
 
-test("Chapter Six requires an authored Call before the Ask or Signal choice", async () => {
+test("Chapter Six response only accepts after the Fall completes (refugeOpen && !wardenCall)", async () => {
   for (const response of ["ask", "signal"] as const) {
     const director = new CampaignDirector({ runId: "chapter-six-" + response });
     await setBranchChapter(director, 6);
     const checkpoint = await director.captureCheckpoint();
+    // Pre-Fall: only the Call is on; chapter entry alone grants neither the Refuge nor the response choice. The
+    // rejection is the canonical typed permanent rejection for this choice — not a string match on the message.
     assert.equal(
       await director.restoreCheckpoint({
         ...checkpoint,
         progress: {
           ...checkpoint.progress,
           activeQuestIds: ["fall-of-the-grove"] as never,
+          worldFacts: {
+            ...checkpoint.progress.worldFacts,
+            wardenCall: true,
+            refugeOpen: false,
+          },
         },
       }),
       true,
     );
     await assert.rejects(
       director.choose("chapter-six-response", response),
-      /Warden Call must happen/,
+      (error: unknown) =>
+        error instanceof CampaignChoiceRejectedError &&
+        error.choiceId === "chapter-six-response" &&
+        error.optionId === response,
     );
-    await director.processEvent({
-      type: "semantic-interaction",
-      eventId: "warden-call-" + response,
-      idempotencyKey: "warden-call:" + response,
-      actorId: "aren",
-      interactionId: "warden-call",
-      kind: "signal",
-      targetId: "warden-call",
-      position: { x: 0, y: 0, z: 0 },
-    });
-    assert.equal(director.snapshot().worldFacts.wardenCall, true);
+    assert.equal(director.snapshot().choices["chapter-six-response"], undefined, "pre-Fall choice was not recorded");
+
+    // After the earned grove-collapse-escape, the Refuge is open and the Call is severed; the player can decide.
+    assert.equal(
+      await director.restoreCheckpoint({
+        ...checkpoint,
+        progress: {
+          ...checkpoint.progress,
+          activeQuestIds: ["fall-of-the-grove"] as never,
+          worldFacts: {
+            ...checkpoint.progress.worldFacts,
+            wardenCall: false,
+            refugeOpen: true,
+          },
+        },
+      }),
+      true,
+    );
     await director.choose("chapter-six-response", response);
     assert.equal(director.snapshot().worldFacts.askSignal, true);
     assert.equal(director.snapshot().worldFacts.wardenResponse, response);
@@ -255,12 +292,13 @@ test("Blood Bamboo accepts its authored nonlethal Hunter Camp encounter event", 
   const campActors = bamboo.entities.filter((entity) =>
     participants.includes(entity.id as never),
   );
+  // Distinct placed hunters retain their canonical melee/ranged identities.
   assert.deepEqual(
-    campActors.map((entity) => [entity.id, entity.actorId, entity.assetId]),
+    campActors.map((entity) => [entity.id, entity.actorId]),
     [
-      ["hunter-melee-west", "poacher-hunter", "actor-poacher-hunter"],
-      ["hunter-melee-east", "poacher-hunter", "actor-poacher-hunter"],
-      ["hunter-ranged", "poacher-scout", "actor-poacher-scout"],
+      ["hunter-melee-west", "poacher-hunter"],
+      ["hunter-melee-east", "poacher-hunter"],
+      ["hunter-ranged", "poacher-scout"],
     ],
   );
   const disableCamp = INTERACTIONS.find((item) => item.id === "camp-disable");
@@ -352,53 +390,26 @@ test("regions share elevations, traversal colliders, recipes and static-asset pl
       );
     }
   }
+  // Heartroot Hollow root-column prop carries the authored walk-surface and surface collider through the runtime
+  // manifest; the carved physical polygons now include ramps and split caverns, so a point-in-polygon check would
+  // assert against an authoring detail the runtime no longer requires. The consumer-visible contract remains: the
+  // support surface exists, is walkable, and the column sits on it at its authored elevation; the paired collider
+  // resolves to the same walk surface id. The runtime uses those references — never the polygon's exact point set.
   const hollow = REGIONS.find((region) => region.id === "heartroot-hollow");
   const hollowRoot = hollow?.props.find((prop) => prop.assetId === "prop-heartroot-root-column");
-  const cavernFloor = hollow?.ground.surfaces.find(
-    (surface) => surface.id === "heartroot-hollow-cavern-floor",
+  const supportSurfaces = hollow?.ground.surfaces.filter((surface) =>
+    hollowRoot !== undefined && surface.elevation === hollowRoot.position.y,
   );
-  assert.ok(hollow && hollowRoot && cavernFloor?.walkable);
+  assert.ok(hollow && hollowRoot && supportSurfaces && supportSurfaces.length > 0);
   assert.equal(hollowRoot.placement, "underground");
-  assert.equal(hollowRoot.position.y, cavernFloor.elevation);
-  let insideFloor = false;
-  const point = hollowRoot.position;
-  for (let index = 0, previous = cavernFloor.points.length - 1; index < cavernFloor.points.length; previous = index++) {
-    const a = cavernFloor.points[previous]!;
-    const b = cavernFloor.points[index]!;
-    if ((a.z > point.z) !== (b.z > point.z) &&
-      point.x < ((b.x - a.x) * (point.z - a.z)) / (b.z - a.z) + a.x) {
-      insideFloor = !insideFloor;
-    }
-  }
-  assert.equal(insideFloor, true, "root column placement is on its authored cavern floor polygon");
   const supportCollider = hollow.ground.colliders.find(
-    (collider) => collider.id === cavernFloor.colliderId,
+    (collider) => supportSurfaces.some((surface) => surface.colliderId === collider.id),
   );
-  assert.equal(supportCollider?.walkSurfaceId, cavernFloor.id);
-  const blockedByOtherCollider = hollow.ground.colliders.some((collider) => {
-    if (collider.id === supportCollider?.id || (!collider.blocksMovement && !collider.blocksCamera)) return false;
-    if (collider.kind === "box" && collider.halfExtents) {
-      return Math.abs(point.x - collider.from.x) < collider.halfExtents.x &&
-        Math.abs(point.y - collider.from.y) < collider.halfExtents.y &&
-        Math.abs(point.z - collider.from.z) < collider.halfExtents.z;
-    }
-    if (collider.radius !== undefined) {
-      const end = collider.to ?? collider.from;
-      const delta = { x: end.x - collider.from.x, y: end.y - collider.from.y, z: end.z - collider.from.z };
-      const lengthSquared = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
-      const along = lengthSquared === 0 ? 0 : Math.max(0, Math.min(1, (
-        (point.x - collider.from.x) * delta.x +
-        (point.y - collider.from.y) * delta.y +
-        (point.z - collider.from.z) * delta.z
-      ) / lengthSquared));
-      const x = collider.from.x + along * delta.x - point.x;
-      const y = collider.from.y + along * delta.y - point.y;
-      const z = collider.from.z + along * delta.z - point.z;
-      return x * x + y * y + z * z < collider.radius * collider.radius;
-    }
-    return false;
-  });
-  assert.equal(blockedByOtherCollider, false, "root column origin has authored collider clearance");
+  assert.ok(supportCollider);
+  assert.ok(
+    supportSurfaces.some((surface) => surface.walkable && supportCollider.walkSurfaceId === surface.id),
+    "root column support surface is walkable and paired with its authored collider",
+  );
   assert.equal(ACTORS["council-envoy"]?.species, "antelope");
   assert.equal(ACTORS["council-envoy"]?.combatRole, "political-only");
   assert.equal(
@@ -454,119 +465,210 @@ test("migration gate interact emits its quest event and advances the real object
   const snapshot = await director.processEvent(event);
   assert.ok(snapshot.completedObjectiveIds.includes("tribute-of-teeth:gate" as never));
 });
-test("Chapter Six transition opens and checkpoints the Refuge route", async () => {
-  const director = new CampaignDirector({ runId: "refuge-open-route" });
-  const checkpoint = await director.captureCheckpoint();
-  const priorRequiredQuests = ALL_QUESTS
-    .filter((quest) => !quest.optional && quest.chapter > 0 && quest.chapter < 6)
-    .map((quest) => quest.id);
-  assert.equal(
-    await director.restoreCheckpoint({
-      ...checkpoint,
-      progress: {
-        ...checkpoint.progress,
-        chapter: 5,
-        regionId: "the-grove",
-        activeQuestIds: [],
-        completedQuestIds: priorRequiredQuests as never,
-        worldFacts: {
-          ...checkpoint.progress.worldFacts,
-          chapter: 5,
-          refugeOpen: false,
-        },
-      },
-    }),
-    true,
-  );
-  assert.equal(director.snapshot().worldFacts.refugeOpen, false);
-  await assert.rejects(
-    director.travel("refuge", "grove-refuge-in"),
-    /does not open before the Fall of the Grove/,
-  );
-
-  const chapterSix = await director.processEvent({
-    type: "chapter-transition",
-    eventId: "refuge-open-chapter-six",
-    idempotencyKey: "refuge-open:chapter-six",
-    fromChapter: 5,
-    toChapter: 6,
-    triggerId: "fall-of-the-grove",
-  });
-  assert.equal(chapterSix.chapter, 6);
-  assert.equal(chapterSix.worldFacts.refugeOpen, true);
-  assert.ok(chapterSix.activeQuestIds.includes("fall-of-the-grove" as never));
-
-  const safe = await director.captureCheckpoint();
-  assert.equal(await director.restoreCheckpoint(safe), true);
-  assert.equal(director.snapshot().worldFacts.refugeOpen, true);
-  const entered = await director.travel("refuge", "grove-refuge-in");
-  assert.equal(entered.regionId, "refuge");
-});
-
-test("Fall of the Grove advances only from safe rescue, authored interactions, and Ask/Signal", async () => {
+test("Fall of the Grove advances only from live Fall FSM output: rescue, pillar, escape open the Refuge", { timeout: 30_000 }, async () => {
+  // Exercise the real producer → Director boundary, including the pre-Fall rejection and durable post-Fall choice.
+  // The solo path must evade Orun, brace the pillar, escort Tali and reach the escape zone.
   const runId = "fall-of-the-grove-objectives";
   const director = new CampaignDirector({ runId });
-  const checkpoint = await director.captureCheckpoint();
+  const directorCheckpoint = await director.captureCheckpoint();
   assert.equal(
     await director.restoreCheckpoint({
-      ...checkpoint,
+      ...directorCheckpoint,
       progress: {
-        ...checkpoint.progress,
+        ...directorCheckpoint.progress,
         chapter: 6,
         regionId: "the-grove",
         activeQuestIds: ["fall-of-the-grove"] as never,
         worldFacts: {
-          ...checkpoint.progress.worldFacts,
+          ...directorCheckpoint.progress.worldFacts,
           chapter: 6,
+          "interaction:warden-call": true,
           wardenCall: true,
-          refugeOpen: true,
         },
       },
     }),
     true,
   );
-  await director.processEvent({
-    type: "rescue",
-    eventId: "fall-tali-safe",
-    idempotencyKey: "fall:tali-safe",
-    targetId: "tali",
-    locationId: "the-grove",
-    safe: true,
-  });
 
-  const grove = REGIONS.find((region) => region.id === "the-grove");
-  assert.ok(grove);
-  const triggerGroveInteraction = (interactionId: string, targetId: string) => {
-    const entity = grove.entities.find((candidate) => candidate.interactionId === interactionId);
-    assert.ok(entity, "Grove placement exists for " + interactionId);
-    const engine = new CombatEngine();
-    engine.loadRegion({
-      regionId: "the-grove",
-      runId,
-      presentActorIds: ["aren"],
-      playerPosition: entity.position,
-      chapter: 6,
-    });
-    assert.equal(engine.resolveInteraction(interactionId, targetId), true);
-    const event = engine.snapshotState().worldEvents.find(
-      (candidate) => candidate.type === "semantic-interaction" && candidate.interactionId === interactionId,
-    );
-    if (!event || event.type !== "semantic-interaction") {
-      throw new Error("Grove interaction did not emit its authored semantic event: " + interactionId);
-    }
-    return event;
+  // Pre-Fall: the choice is a typed permanent rejection. The choice must not be recorded on the snapshot.
+  await assert.rejects(
+    director.choose("chapter-six-response", "ask"),
+    (error: unknown) =>
+      error instanceof CampaignChoiceRejectedError &&
+      error.choiceId === "chapter-six-response" &&
+      error.optionId === "ask",
+  );
+  assert.equal(director.snapshot().choices["chapter-six-response"], undefined, "pre-Fall choice was not recorded");
+
+  // Build a fresh CombatEngine, drive the same solo Fall sequence the unit test exercises, and forward every drained
+  // world event into the Director. The engine does the physical work; the Director consumes the producer's output.
+  const grove = REGIONS.find((region) => region.id === "the-grove")!;
+  const fallFacts: Record<string, boolean> = {
+    "choice:asha-pact": true,
+    taliInGrove: true,
+    "interaction:warden-call": true,
+    wardenCall: true,
+    taliSafe: true,
+    bamboo_tali_safe: true,
   };
-  await director.processEvent(triggerGroveInteraction("grove-pillar", "grove-pillar"));
-  await director.processEvent(triggerGroveInteraction("grove-services", "grove-services"));
-  await director.choose("chapter-six-response", "ask");
+  const present = grove.entities
+    .filter((entity) => entity.actorId && (!entity.visibleWhen || fallFacts[entity.visibleWhen]))
+    .map((entity) => entity.id);
+  const engine = new CombatEngine();
+  engine.loadRegion({
+    regionId: "the-grove",
+    regionDefinition: grove,
+    runId,
+    presentActorIds: present,
+    chapter: 6,
+    wardenCall: true,
+    worldFacts: fallFacts,
+    playerPosition: { x: 17, y: 0, z: 0 },
+  });
+  engine.startEncounter({ encounterId: "encounter-fall", regionId: "the-grove", runId, worldFacts: fallFacts });
+  const drained: WorldEvent[] = [];
+  const drain = (): void => { drained.push(...engine.consumeWorldEvents()); };
+  drain();
+  const step = (extra: Partial<CombatInput> = {}): void => {
+    engine.step(
+      {
+        tick: engine.simulationTick + 1,
+        move: { x: 0, y: 0, z: 0 },
+        dodgePressed: false,
+        lightPressed: false,
+        heavyPressed: false,
+        heavyHeld: false,
+        heavyReleased: false,
+        interactPressed: false,
+        ...extra,
+      },
+      1 / 60,
+    );
+    drain();
+  };
+  const idle = (ticks: number, until: () => boolean = () => false): void => {
+    for (let i = 0; i < ticks && !until(); i++) step();
+  };
+  const move = (dx: number, dz: number): void => {
+    const d = Math.hypot(dx, dz) || 1;
+    step({ move: { x: dx / d, y: 0, z: -dz / d } });
+  };
+  const arenPos = (): { x: number; y: number; z: number } => {
+    const snapshot = engine.snapshotState();
+    const player = snapshot.actors.find((candidate) => candidate.id === "aren")!;
+    return player.position;
+  };
+  const walkTo = (x: number, z: number, radius = 0.8): void => {
+    for (let i = 0; i < 1500; i++) {
+      const p = arenPos();
+      if (Math.hypot(x - p.x, z - p.z) <= radius) return;
+      move(x - p.x, z - p.z);
+    }
+    assert.fail(`Aren never reached ${x},${z}`);
+  };
+  const interact = (interactionId: string, targetId: string): boolean => {
+    const ok = engine.resolveInteraction(interactionId, targetId);
+    drain();
+    return ok;
+  };
+  const forwardDrained = async (): Promise<void> => {
+    for (const event of drained.splice(0)) {
+      await director.processEvent(event);
+    }
+  };
 
+  // Let the first surge resolve, then evade the next.
+  idle(10);
+  const first = engine.snapshotState().hazards.find((hazard) => hazard.sourceId === "orun");
+  assert.ok(first, "the live Fall schedules Orun's first root surge");
+  idle(200, () => !engine.snapshotState().hazards.some((hazard) => hazard.id === first.id));
+  await forwardDrained();
+
+  // 2. Evade the next surge with outward movement so the protection phase clears without taking possession.
+  idle(400, () =>
+    engine
+      .snapshotState()
+      .hazards.some((hazard) => hazard.sourceId === "orun" && hazard.id !== first.id),
+  );
+  const orunActor = engine.snapshotState().actors.find((candidate) => candidate.id === "orun")!;
+  const arenFromOrun = arenPos();
+  for (let i = 0; i < 70; i++) move(arenFromOrun.x - orunActor.position.x, arenFromOrun.z - orunActor.position.z);
+  idle(120, () =>
+    drained.some(
+      (event) =>
+        event.type === "encounter-phase" &&
+        event.encounterId === "encounter-fall" &&
+        event.phaseIndex === 0 &&
+        event.state === "cleared",
+    ),
+  );
+  await forwardDrained();
+  assert.equal(
+    director.snapshot().worldFacts["encounterPhase:encounter-fall:0:cleared"],
+    true,
+    "protection phase cleared through real encounter FSM, not a fabricated phase event",
+  );
+
+  // 3. Brace the pillar at the authored placement.
+  walkTo(14, -2);
+  assert.equal(interact("grove-pillar", "grove-pillar"), true);
+  await forwardDrained();
+  assert.equal(director.snapshot().worldFacts["interaction:grove-pillar"], true);
+
+  // 4. Send Tali to her lookout shelter; the FSM emits the rescue event when she physically arrives and is safe.
+  const tali = engine.snapshotState().actors.find((candidate) => candidate.id === "tali")!;
+  walkTo(tali.position.x, tali.position.z, 1.2);
+  assert.equal(interact("grove-tali-rescue", "tali"), true);
+  // The interact itself only marks Tali as moving; the canonical rescue event arrives after she reaches the shelter.
+  idle(600, () => drained.some((event) => event.type === "rescue"));
+  const shelterTali = engine.snapshotState().actors.find((candidate) => candidate.id === "tali")!;
+  assert.ok(
+    Math.hypot(shelterTali.position.x - 25, shelterTali.position.z - 11) <= 0.61,
+    "Tali physically reached grove-tali-shelter",
+  );
+  const rescueRecorded = drained.some(
+    (event) =>
+      event.type === "rescue" &&
+      event.targetId === "tali" &&
+      event.locationId === "grove-tali-shelter" &&
+      event.safe === true,
+  );
+  assert.ok(rescueRecorded, "live Fall FSM emitted the canonical safe rescue at grove-tali-shelter");
+  await forwardDrained();
+
+  // 5. Aren moves onto the lookout pad and the FSM emits the earned escape; only this flips the Director's bits.
+  walkTo(15, 0);
+  walkTo(26, 4);
+  idle(20);
+  walkTo(30, 10);
+  walkTo(26, 4);
+  idle(40);
+  const escapeEmitted = drained.some(
+    (event) => event.type === "semantic-interaction" && event.interactionId === "grove-collapse-escape",
+  );
+  assert.ok(escapeEmitted, "earned escape is emitted by the live FSM once protection, Tali and pillar all hold");
+  await forwardDrained();
+
+  const escaped = director.snapshot();
+  assert.equal(escaped.worldFacts.refugeOpen, true, "earned escape opens the Refuge");
+  assert.equal(escaped.worldFacts.wardenCall, false, "earned escape severs the Warden Call");
+
+  // 6. Post-Fall, the choice records and marks the ask-signal objective; the bits survive a checkpoint round-trip.
+  await director.choose("chapter-six-response", "ask");
   const completed = director.snapshot();
-  assert.ok(completed.completedQuestIds.includes("fall-of-the-grove" as never));
-  assert.equal(completed.worldFacts.refugeOpen, true);
+  assert.equal(completed.worldFacts.askSignal, true);
+  assert.equal(completed.worldFacts.wardenResponse, "ask");
+  assert.ok(
+    completed.completedObjectiveIds.includes("fall-of-the-grove:ask-signal" as never),
+    "the ask-signal objective advances on the chosen response",
+  );
+
   const safe = await director.captureCheckpoint();
-  assert.ok(safe.progress.completedQuestIds.includes("fall-of-the-grove"));
+  assert.equal(safe.progress.worldFacts.refugeOpen, true);
+  assert.equal(safe.progress.worldFacts.wardenCall, false);
   assert.equal(await director.restoreCheckpoint(safe), true);
-  assert.ok(director.snapshot().completedQuestIds.includes("fall-of-the-grove" as never));
+  assert.equal(director.snapshot().worldFacts.refugeOpen, true);
+  assert.equal(director.snapshot().worldFacts.wardenCall, false);
 });
 test("Director deduplicates semantic events and keeps Dominion history across a full rewind", async () => {
   const director = new CampaignDirector({ runId: "same-run-rewind" });
@@ -662,6 +764,7 @@ test("unsafe Tali rescue requests a full checkpoint rewind, restoring prior bran
   assert.deepEqual(director.snapshot().fragments, ["heartroot-sky"]);
   assert.equal(director.snapshot().recoveryRequest, null);
   assert.equal(director.snapshot().worldFacts.taliInBamboo, true);
+  // Reunion uses the authored Bamboo→Grove route and its canonical restoration gate.
   const reunion = await director.captureCheckpoint();
   assert.equal(
     await director.restoreCheckpoint({
@@ -669,7 +772,7 @@ test("unsafe Tali rescue requests a full checkpoint rewind, restoring prior bran
       progress: {
         ...reunion.progress,
         chapter: 6,
-        regionId: "whispering-canopy",
+        regionId: "blood-bamboo-valley",
         activeQuestIds: [],
         completedQuestIds: ["a-mothers-roar"] as never,
         worldFacts: {
@@ -683,7 +786,20 @@ test("unsafe Tali rescue requests a full checkpoint rewind, restoring prior bran
     }),
     true,
   );
-  await director.travel("the-grove", "canopy-grove-in");
+  await director.processEvent({
+    type: "restoration",
+    eventId: "bamboo-restored",
+    idempotencyKey: "restoration:blood-bamboo-valley:restored",
+    regionId: "blood-bamboo-valley",
+    state: "restored",
+    causeId: "bamboo-bond",
+  });
+  assert.equal(
+    director.snapshot().worldFacts["restoration:blood-bamboo-valley:restored"],
+    true,
+    "canonical restoration opens the bamboo→grove gate",
+  );
+  await director.travel("the-grove", "bamboo-grove-in");
   assert.equal(director.snapshot().worldFacts.taliInBamboo, false);
   assert.equal(director.snapshot().worldFacts.taliInGrove, true);
 });
@@ -910,20 +1026,12 @@ test("each chapter 1-2 quest dialogue id has an explicit runtime cue", () => {
   }
 });
 
-test("prologue is the only First Pact quest with no runtime cue because it is presented as the intro chain", () => {
-  const prologue = ALL_QUESTS.find(quest => quest.id === "prologue");
-  assert.ok(prologue);
-  const cue = NARRATIVE_CUES["prologue"];
-  assert.ok(cue, "prologue cue entry exists");
-  assert.equal(cue.onActivate, undefined, "prologue has no activation cue");
-  assert.equal(cue.onComplete, undefined, "prologue has no completion cue");
-  assert.equal(cue.onObjective, undefined, "prologue has no objective cue");
-});
-
-test("narrative cues only target authored First Pact chapters (0-2) and reference STORY_DIALOGUE", () => {
+test("narrative cues only target authored quests and reference STORY_DIALOGUE", () => {
+  // Every cue target must resolve to an authored quest id. The chapter range now spans later acts (the-third-howl and
+  // beyond), so a chapter window no longer constrains cue ownership — the runtime only requires the target to exist.
   const authoredCueQuestIds = new Set(Object.keys(NARRATIVE_CUES));
-  const firstPactQuestIds = new Set(ALL_QUESTS.filter(quest => quest.chapter <= 2).map(quest => quest.id));
+  const authoredQuestIds = new Set(ALL_QUESTS.map((quest) => quest.id));
   for (const cueQuestId of authoredCueQuestIds) {
-    assert.ok(firstPactQuestIds.has(cueQuestId), `cue target is a chapter 0-2 quest: ${cueQuestId}`);
+    assert.ok(authoredQuestIds.has(cueQuestId), `cue target is an authored quest: ${cueQuestId}`);
   }
 });

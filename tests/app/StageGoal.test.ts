@@ -7,6 +7,8 @@ import { REGIONS } from '../../src/content/campaign.js';
 import { CampaignDirector } from '../../src/game/campaign/CampaignDirector.js';
 import { CombatEngine, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
+import { appDefaults } from './fakeApp.js';
+import { PRODUCTION_SESSION, trialsSession } from '../../src/app/SessionConfig.js';
 
 const idle: CombatInput = { tick: 0, move: { x: 0, y: 0, z: 0 }, dodgePressed: false,
   lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
@@ -34,7 +36,8 @@ function arrivalApp(playtest: AssetPlaytest, position?: { x: number; y: number; 
   const progress = new PlaytestProgress(null);
   for (const previous of ASSET_PLAYTESTS.slice(0, ASSET_PLAYTESTS.indexOf(playtest))) progress.complete(previous.id);
   const app = Object.assign(Object.create(GameApplication.prototype), {
-    assetPlaytest: playtest, stageGoal: goal, stageCompleted: false, screen: 'game', screenHistory: [],
+    ...appDefaults(),
+    session: trialsSession(playtest.id), stageGoal: goal, stageCompleted: false, screen: 'game', screenHistory: [],
     playtestProgress: progress, worldReady: true, ready: true, disposed: false, suspended: false, loading: { active: false },
     error: null, sceneBlocked: false, region, campaign, combat, input,
     renderer: { sync() {}, render() {}, startPlayerOutcome() {}, beginWaystoneArrival() {} },
@@ -70,6 +73,7 @@ for (const playtest of ASSET_PLAYTESTS) {
     expect(app.stageCompleted).toBe(true);
     expect(app.screen).toBe('game');
     expect(app.playerOutcome).toBe('victory');
+    expect(app.appAudio.calls.filter((call: unknown[]) => call[0] === 'playStinger')).toEqual([['playStinger', 'victory']]);
     expect(app.outcomeElapsed).toBe(0);
     expect(progress.isCleared(playtest.id)).toBe(true);
     expect(input.enabled).toBe(false);
@@ -93,7 +97,7 @@ for (const playtest of ASSET_PLAYTESTS) {
       const seed = combat.snapshotState();
       if (blockedBy === 'death') seed.player.vitality = 0;
       else if (blockedBy === 'gates') { seed.combatTrial!.index = 0; seed.combatTrial!.status = 'approach'; }
-      else app.assetPlaytest = null;
+      else app.session = PRODUCTION_SESSION;
       combat.restore(JSON.stringify(seed));
       app.checkStageArrival(combat.snapshot());
       expect(app.stageCompleted).toBe(false);

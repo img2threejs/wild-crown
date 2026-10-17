@@ -13,6 +13,8 @@ const idle: CombatInput = {
   heavyHeld: false,
   heavyReleased: false,
   interactPressed: false,
+  lockOnPressed: false,
+  lockOnHeld: false,
 };
 
 const GREENWAKE_INSTANCES = ['corrupted-boar', 'greenwake-sap-stalker', 'greenwake-root-rammer'] as const;
@@ -38,14 +40,10 @@ function startGreenwake(playerPosition = vec(9, 0, 3), originX = 9, originZ = 0)
   const engine = new CombatEngine();
   const player = makeActor('aren', 'human', 'player', playerPosition, false, false, 100);
   const hostiles = makeGreenwakeHostiles(originX, originZ);
-  engine.startEncounter({
-    encounterId: 'greenwake-boar',
-    regionId: 'greenwake',
-    runId: 'aren-greenwake-evasion-test',
-    companionSlots: {},
-    playerPosition,
-    actors: [player, hostiles.boar, hostiles.sap, hostiles.root],
-  });
+  engine.startEncounter({encounterId: 'greenwake-boar',
+  regionId: 'greenwake',
+  runId: 'aren-greenwake-evasion-test', playerPosition,
+  actors: [player, hostiles.boar, hostiles.sap, hostiles.root],});
   return engine;
 }
 
@@ -207,7 +205,7 @@ describe('Greenwake evasion, damage, and dive persistence', () => {
     expect(after.actionId === 'aren-walk' || after.actionId === 'aren-run' || after.actionId === 'aren-strafe' || after.actionId === 'aren-idle').toBe(true);
   });
 
-  it('allows repeated movement+dive sequences without cancelling the finite action', () => {
+  it('keeps each moving dive finite and respects cooldown between repeated sequences', () => {
     const engine = startGreenwake(vec(6, 0, 6), 9, 0);
     engine.fixedStep(idle);
     for (let cycle = 0; cycle < 3; cycle++) {
@@ -220,6 +218,10 @@ describe('Greenwake evasion, damage, and dive persistence', () => {
         const moving = engine.snapshotState().actors.find((actor) => actor.id === 'aren')!;
         expect(moving.actionId).toBe('aren-forward-right-dive-roll');
       }
+      const readyAt = engine.snapshotState().skillReadyAt.dive!;
+      engine.fixedStep({ ...idle, move: vec(1, 0, 1), dodgePressed: true });
+      expect(engine.snapshotState().skillReadyAt.dive).toBe(readyAt);
+      while (engine.snapshotState().tick < readyAt - 1) engine.fixedStep({ ...idle, move: vec(1, 0, 1) });
     }
   });
 });
@@ -230,12 +232,9 @@ describe('non-Greenwake attack behavior is preserved', () => {
     const seed = createEngineState();
     seed.lastAttackTick = 10_000;
     const engine = new CombatEngine(seed);
-    engine.startEncounter({
-      encounterId: 'camp-hunters',
-      regionId,
-      runId: 'non-greenwake-cue-test',
-      companionSlots: {},
-    });
+    engine.startEncounter({encounterId: 'camp-hunters',
+    regionId,
+    runId: 'non-greenwake-cue-test', });
     engine.fixedStep(idle);
     const cues = engine.drainPresentationCues();
     const anticipation = cues.find((cue) => cue.kind === 'anticipation' && cue.attackId);

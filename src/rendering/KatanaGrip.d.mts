@@ -1,1 +1,1 @@
-export const KATANA_GRIP: Readonly<{ length: number; gripFromPommel: number; bladeLength: number; diagonalRadians: number; edgeRadians: number }>;
+export const KATANA_GRIP: Readonly<{ length: number; gripFromPommel: number; handleFromPommel: number; bladeLength: number; diagonalRadians: number; edgeRadians: number; guardFromPommel: readonly [number, number]; guardRadius: number; tsubaBackFromPommel: number; fuchi: Readonly<{ length: number; scale: number }> }>;

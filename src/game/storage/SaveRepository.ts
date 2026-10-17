@@ -1,6 +1,10 @@
 import {
   createNewRun,
   importCheckpoint,
+  LEGACY_SCHEMA_VERSION,
+  migrateCampaignStateV1,
+  migrateWorldV1,
+  SCHEMA_VERSION,
   type CampaignState,
   type CheckpointSnapshot,
   type DominionEvent,
@@ -11,15 +15,41 @@ import {
   DEFAULT_GAMEPAD_BINDINGS,
   DEFAULT_KEYBOARD_BINDINGS,
   type CampaignSafeSpawn,
+  type ChapterRuntimeDefinition,
+  type ChapterSegmentId,
+  type ChapterSessionMetadata,
+  type CompanionParty,
   type GameSettings,
   type InputBindingMaps,
+  type LayoutRevisionMigration,
   type RegionId,
+  type SaveScope,
   type WorldEvent,
 } from "../contracts.js";
+import { DEFAULT_HERO_ID, isHeroId, type HeroId } from "../heroes.js";
+import { DEFAULT_HERO_COMPANIONS, isCompanionId, migrateCompanionParty, validHeroCompanions } from "../companions/CompanionLoadout.js";
+import {
+  autosaveSlotId,
+  ChapterMigrationError,
+  deriveSegmentId,
+  isAutosaveSlotId,
+  isChapterSessionMetadata,
+  migrateLayout,
+  sessionContentProblem,
+  withLegacySession,
+  type MigrationContext,
+} from "../campaign/session.js";
+import { isRecord } from "../guards.js";
 
 export const SAVE_DATABASE_NAME = "wild-crown-saves";
+/** Isolated database for DEV candidate-asset chapter runs; the same repository implementation and stores. */
+export const CANDIDATE_SAVE_DATABASE_NAME = "wild-crown-candidate-chapter-saves";
+/** Nested record formats changed without any store/index change, so the IndexedDB structure stays at version 2. */
 export const SAVE_DATABASE_VERSION = 2 as const;
-export const SAVE_FORMAT_SCHEMA_VERSION = 1 as const;
+/** Export/slot envelope version: 3 replaces the three role slots with one traveling companion. */
+export const SAVE_FORMAT_SCHEMA_VERSION = 3 as const;
+/** Original envelope version; versions 1 and 2 migrate on read and are rewritten only on an explicit save. */
+export const LEGACY_SAVE_FORMAT_SCHEMA_VERSION = 1 as const;
 
 type SaveKind = "campaign" | "showcase-replay";
 
@@ -30,10 +60,22 @@ export type SaveErrorCode =
   | "invalid-schema"
   | "run-mismatch"
   | "replay-isolated"
+  | "scope-mismatch"
+  | "layout-revision"
   | "quota"
   | "transaction"
-  | "transaction"
   | "not-found";
+
+export interface SaveRepositoryOptions {
+  /** Persistence scope; defaults to production. A candidate scope selects the candidate database. */
+  scope?: SaveScope;
+  /** Explicit database name (tests); defaults to the scope's database. */
+  databaseName?: string;
+  /** Authored chapter definitions used to validate checkpoints/layout revisions and derive legacy resume state. */
+  chapters?: readonly ChapterRuntimeDefinition[];
+  /** Explicit old-layout → new-layout safe-spawn mappings. */
+  layoutMigrations?: readonly LayoutRevisionMigration[];
+}
 
 export interface CampaignProgressRecord {
   chapter: number;
@@ -42,7 +84,7 @@ export interface CampaignProgressRecord {
   completedQuestIds: string[];
   completedObjectiveIds: string[];
   trackedObjectiveId: string | null;
-  party: { combat?: string; utility?: string; scout: "vara" };
+  party: CompanionParty;
   choices: Record<string, string>;
   worldFacts: Record<string, boolean | number | string>;
   ending: "dominion" | "severance" | "living_pact" | null;
@@ -50,11 +92,15 @@ export interface CampaignProgressRecord {
   eventKeys?: string[];
   revision?: number;
   safeSpawn?: CampaignSafeSpawn;
+  /** Hero, scope, asset policy and chapter resume state (the shared persisted session definition). */
+  session: ChapterSessionMetadata;
 }
 
 export interface GameSaveEnvelope {
   format: "wild-crown-save";
   schemaVersion: typeof SAVE_FORMAT_SCHEMA_VERSION;
+  /** Persistence scope the payload belongs to; import and load reject a different scope before any mutation. */
+  scope: SaveScope;
   kind: SaveKind;
   runId: string;
   checkpoint: CheckpointSnapshot | null;
@@ -72,6 +118,11 @@ export interface SaveSlotSummary {
   updatedAt: number;
   chapter: number;
   regionId: RegionId;
+  scope: SaveScope;
+  heroId: HeroId;
+  segmentId: ChapterSegmentId | null;
+  checkpointId: string | null;
+  autosave: boolean;
 }
 
 export interface SaveSlotRecord extends SaveSlotSummary {
@@ -106,8 +157,6 @@ export class SaveRepositoryError extends Error {
   }
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
 const isRegionId = (value: unknown): value is RegionId =>
   typeof value === "string" && REGIONS.some((region) => region.id === value);
 const isStringMap = (value: unknown): value is Record<string, string> =>
@@ -163,7 +212,11 @@ function isGameSettings(value: unknown): value is GameSettings {
     isOneOf(value.autoTargetAssist, ["off", "subtle", "strong"]) &&
     isOneOf(value.perfectDodgeWindow, ["standard", "wide"]) &&
     isOneOf(value.lockOnMode, ["hold", "toggle"]) &&
-    isOneOf(value.controlGlyphs, ["keyboard-mouse", "gamepad"])
+    isOneOf(value.controlGlyphs, ["keyboard-mouse", "gamepad"]) &&
+    validHeroCompanions(value.heroCompanions) &&
+    // Absent in settings saved before tutorials existed; the application fills the default.
+    (value.seenTutorials === undefined ||
+      (Array.isArray(value.seenTutorials) && value.seenTutorials.every((entry) => typeof entry === "string")))
   );
 }
 
@@ -231,7 +284,12 @@ function mergeDominion(
   return merged;
 }
 
-function validProgress(value: unknown): value is CampaignProgressRecord {
+function validParty(party: Record<string, unknown>): boolean {
+  return Object.keys(party).every(key => key === "companionId")
+    && (party.companionId === undefined || isCompanionId(party.companionId));
+}
+
+function validProgress(value: unknown, chapters: readonly ChapterRuntimeDefinition[]): value is CampaignProgressRecord {
   if (!isRecord(value)) return false;
   const stringArray = (field: unknown): field is string[] =>
     Array.isArray(field) && field.every((entry) => typeof entry === "string");
@@ -270,9 +328,7 @@ function validProgress(value: unknown): value is CampaignProgressRecord {
     (typeof value.trackedObjectiveId === "string" ||
       value.trackedObjectiveId === null) &&
     isRecord(party) &&
-    party.scout === "vara" &&
-    (party.combat === undefined || typeof party.combat === "string") &&
-    (party.utility === undefined || typeof party.utility === "string") &&
+    validParty(party) &&
     isRecord(value.choices) &&
     Object.values(value.choices).every((entry) => typeof entry === "string") &&
     isRecord(facts) &&
@@ -296,7 +352,9 @@ function validProgress(value: unknown): value is CampaignProgressRecord {
     ) &&
     (value.eventKeys === undefined || stringArray(value.eventKeys)) &&
     (value.revision === undefined || Number.isInteger(value.revision)) &&
-    validSafeSpawn
+    validSafeSpawn &&
+    isChapterSessionMetadata(value.session) &&
+    sessionContentProblem(value.session, value.regionId as RegionId, chapters) === null
   );
 }
 
@@ -324,7 +382,50 @@ export class SaveRepository {
   private databaseHandle: IDBDatabase | null = null;
   private opening: Promise<void> | null = null;
 
-  constructor(private readonly factory: IDBFactory = globalThis.indexedDB) {}
+  /** Persistence scope of this repository; a payload from a different scope is rejected before any mutation. */
+  readonly scope: SaveScope;
+  private readonly databaseName: string;
+  readonly chapters: readonly ChapterRuntimeDefinition[];
+  readonly layoutMigrations: readonly LayoutRevisionMigration[];
+
+  constructor(private readonly factory: IDBFactory = globalThis.indexedDB, options: SaveRepositoryOptions = {}) {
+    this.scope = options.scope ?? "production";
+    this.databaseName = options.databaseName
+      ?? (this.scope === "candidate-chapters" ? CANDIDATE_SAVE_DATABASE_NAME : SAVE_DATABASE_NAME);
+    this.chapters = options.chapters ?? [];
+    this.layoutMigrations = options.layoutMigrations ?? [];
+  }
+
+  /** Summary of a stored row (v1 rows without session fields are summarized by derivation); null for malformed or foreign-scope rows. */
+  private rowSummary(row: unknown): SaveSlotSummary | null {
+    if (!isRecord(row) || typeof row.slotId !== "string" || typeof row.label !== "string" || typeof row.runId !== "string" ||
+      typeof row.updatedAt !== "number" || typeof row.chapter !== "number" || !isRegionId(row.regionId) ||
+      (row.kind !== "campaign" && row.kind !== "showcase-replay")) return null;
+    const scope = row.scope ?? this.scope;
+    if (scope !== this.scope) return null;
+    const envelope = isRecord(row.envelope) ? row.envelope : undefined;
+    const progress = envelope && isRecord(envelope.progress) ? envelope.progress : undefined;
+    const session = progress && isChapterSessionMetadata(progress.session) ? progress.session : undefined;
+    const completed = progress && Array.isArray(progress.completedQuestIds) ? progress.completedQuestIds as string[] : [];
+    return {
+      slotId: row.slotId,
+      label: row.label,
+      runId: row.runId,
+      kind: row.kind,
+      updatedAt: row.updatedAt,
+      chapter: row.chapter,
+      regionId: row.regionId,
+      scope: this.scope,
+      heroId: isHeroId(row.heroId) ? row.heroId : session?.heroId ?? DEFAULT_HERO_ID,
+      segmentId: "segmentId" in row
+        ? (row.segmentId as ChapterSegmentId | null)
+        : session?.resume.segmentId ?? deriveSegmentId(row.chapter, row.regionId, completed,
+          progress && Array.isArray(progress.completedObjectiveIds) ? progress.completedObjectiveIds as string[] : [],
+          session?.resume.completedBeatIds ?? []),
+      checkpointId: "checkpointId" in row ? (row.checkpointId as string | null) : session?.resume.checkpointId ?? null,
+      autosave: isAutosaveSlotId(row.slotId),
+    };
+  }
 
   async init(): Promise<void> {
     if (!this.factory) {
@@ -338,7 +439,7 @@ export class SaveRepository {
 
     this.opening = new Promise<void>((resolve, reject) => {
       const request = this.factory.open(
-        SAVE_DATABASE_NAME,
+        this.databaseName,
         SAVE_DATABASE_VERSION,
       );
       request.onupgradeneeded = (event) => {
@@ -414,30 +515,43 @@ export class SaveRepository {
     const rows = await requestValue(transaction.objectStore("slots").getAll());
     await done;
     return (rows as unknown[])
-      .filter(
-        (row): row is Record<string, unknown> =>
-          isRecord(row) &&
-          typeof row.slotId === "string" &&
-          typeof row.label === "string" &&
-          typeof row.runId === "string" &&
-          typeof row.updatedAt === "number" &&
-          typeof row.chapter === "number" &&
-          isRegionId(row.regionId) &&
-          (row.kind === "campaign" || row.kind === "showcase-replay"),
-      )
-      .map((row) => ({
-        slotId: row.slotId as string,
-        label: row.label as string,
-        runId: row.runId as string,
-        kind: row.kind as SaveKind,
-        updatedAt: row.updatedAt as number,
-        chapter: row.chapter as number,
-        regionId: row.regionId as RegionId,
-      }))
+      .flatMap((row) => {
+        const summary = this.rowSummary(row);
+        return summary ? [summary] : [];
+      })
       .sort((left, right) => right.updatedAt - left.updatedAt);
   }
 
+  /**
+   * Writes the run's stable autosave slot and run ledger in one transaction. The Director calls this for every committed
+   * event/checkpoint/party change, so a failed write leaves slot and ledger unchanged.
+   */
+  async saveAutosave(
+    checkpoint: CheckpointSnapshot,
+    campaign: CampaignState,
+    chapter: number,
+    regionId: RegionId,
+    eventKeys: readonly string[],
+    progress: CampaignProgressRecord,
+  ): Promise<SaveSlotSummary> {
+    return this.writeSlot(autosaveSlotId(campaign.runId), "Autosave", checkpoint, campaign, chapter, regionId, eventKeys, "campaign", progress);
+  }
+
   async saveCheckpoint(
+    slotId: string,
+    label: string,
+    checkpoint: CheckpointSnapshot,
+    campaign: CampaignState,
+    chapter: number,
+    regionId: RegionId,
+    eventKeys: readonly string[],
+    kind: SaveKind = "campaign",
+    progress: CampaignProgressRecord | null = null,
+  ): Promise<SaveSlotSummary> {
+    return this.writeSlot(slotId, label, checkpoint, campaign, chapter, regionId, eventKeys, kind, progress);
+  }
+
+  private async writeSlot(
     slotId: string,
     label: string,
     checkpoint: CheckpointSnapshot,
@@ -460,7 +574,7 @@ export class SaveRepository {
         "Checkpoint and campaign belong to different journeys.",
       );
     }
-    if (progress && !validProgress(progress)) {
+    if (progress && !validProgress(progress, this.chapters)) {
       throw new SaveRepositoryError(
         "invalid-schema",
         "Campaign progress is malformed.",
@@ -470,6 +584,7 @@ export class SaveRepository {
     const envelope: GameSaveEnvelope = {
       format: "wild-crown-save",
       schemaVersion: SAVE_FORMAT_SCHEMA_VERSION,
+      scope: this.scope,
       kind,
       runId: campaign.runId,
       checkpoint: clone(checkpoint),
@@ -529,6 +644,7 @@ export class SaveRepository {
     }
     await this.init();
     const updatedAt = Date.now();
+    const session = envelope.progress?.session;
     const summary: SaveSlotSummary = {
       slotId,
       label,
@@ -537,6 +653,11 @@ export class SaveRepository {
       updatedAt,
       chapter,
       regionId,
+      scope: envelope.scope,
+      heroId: session?.heroId ?? DEFAULT_HERO_ID,
+      segmentId: session?.resume.segmentId ?? null,
+      checkpointId: session?.resume.checkpointId ?? null,
+      autosave: isAutosaveSlotId(slotId),
     };
     const transaction = this.database().transaction(
       ["slots", "runs"],
@@ -645,6 +766,12 @@ export class SaveRepository {
         "The run ledger is malformed; no stored data was changed.",
         await this.recovery(),
       );
+    }
+    try {
+      // Stored records migrate on read only; the raw original is preserved until the next explicit save succeeds.
+      slot.envelope = this.upgradeEnvelope(slot.envelope);
+    } catch (error) {
+      throw this.migrationError(error, await this.recovery());
     }
     const validation = this.validateEnvelope(slot.envelope);
     if (validation.accepted === false) {
@@ -782,7 +909,7 @@ export class SaveRepository {
         "This save was created by a newer version. It was not changed.",
       );
     }
-    if (value.schemaVersion !== SAVE_FORMAT_SCHEMA_VERSION) {
+    if (![LEGACY_SAVE_FORMAT_SCHEMA_VERSION, 2, SAVE_FORMAT_SCHEMA_VERSION].includes(value.schemaVersion)) {
       throw new SaveRepositoryError(
         "invalid-schema",
         "Save export schema is unsupported.",
@@ -806,14 +933,30 @@ export class SaveRepository {
         await this.recovery(),
       );
     }
-    const campaign = value.campaign as unknown as CampaignState;
-    const checkpoint = value.checkpoint as unknown as CheckpointSnapshot;
-    const envelope = value as unknown as GameSaveEnvelope;
+    let envelope: GameSaveEnvelope;
+    try {
+      envelope = this.upgradeEnvelope(value);
+    } catch (error) {
+      throw this.migrationError(error, await this.recovery());
+    }
+    if (envelope.scope !== "production" && envelope.scope !== "candidate-chapters") {
+      throw new SaveRepositoryError("invalid-schema", "Save export scope is not recognized.", await this.recovery());
+    }
+    if (envelope.scope !== this.scope) {
+      throw new SaveRepositoryError(
+        "scope-mismatch",
+        envelope.scope === "candidate-chapters"
+          ? "This save belongs to the candidate chapter scope and cannot be imported here. It was not changed."
+          : "This save belongs to the production scope and cannot be imported here. It was not changed.",
+      );
+    }
+    const campaign = envelope.campaign as unknown as CampaignState;
+    const checkpoint = envelope.checkpoint as unknown as CheckpointSnapshot;
     if (
       !this.validCampaign(campaign, envelope.runId) ||
       (envelope.progress !== null &&
         envelope.progress !== undefined &&
-        !validProgress(envelope.progress))
+        !validProgress(envelope.progress, this.chapters))
     ) {
       throw new SaveRepositoryError(
         "corrupt",
@@ -961,10 +1104,13 @@ export class SaveRepository {
     );
     await done;
     if (record === undefined) return null;
+    const settings = isRecord(record) && isRecord(record.settings) && record.settings.heroCompanions === undefined
+      ? { ...record.settings, heroCompanions: { ...DEFAULT_HERO_COMPANIONS } }
+      : isRecord(record) ? record.settings : null;
     if (
       !isRecord(record) ||
       record.id !== "global" ||
-      !isGameSettings(record.settings) ||
+      !isGameSettings(settings) ||
       !isInputBindingMaps(record.bindings)
     ) {
       throw new SaveRepositoryError(
@@ -975,7 +1121,7 @@ export class SaveRepository {
     }
     return {
       id: "global",
-      settings: clone(record.settings),
+      settings: clone(settings),
       bindings: clone(record.bindings),
     };
 
@@ -1010,10 +1156,72 @@ export class SaveRepository {
     this.databaseHandle = null;
   }
 
+  private migrationContext(): MigrationContext {
+    return { scope: this.scope, chapters: this.chapters, layoutMigrations: this.layoutMigrations };
+  }
+
+  private migrationError(error: unknown, recovery: { slots: readonly SaveSlotSummary[]; exportAvailable: boolean }): SaveRepositoryError {
+    if (error instanceof SaveRepositoryError) return error;
+    if (error instanceof ChapterMigrationError) {
+      const code: SaveErrorCode = error.code === "layout-revision" ? "layout-revision" : error.code === "invalid-schema" ? "invalid-schema" : "corrupt";
+      return new SaveRepositoryError(code, error.message + " The stored save was not changed; export it for recovery.", recovery);
+    }
+    throw error;
+  }
+
+  /**
+   * Strict pure upgrade of a stored/imported envelope to schema 3, in memory only. Schema 1 additionally gains:
+   * production scope, Aren, derived safe-boundary resume, campaign/checkpoint worlds with derived companion progression.
+   * Parts that cannot migrate are left unchanged so strict schema-3 validators reject them as corrupt. Legacy parties are
+   * reduced at this boundary; installed layout revisions still validate through ChapterMigrationError.
+   */
+  private upgradeEnvelope(raw: unknown): GameSaveEnvelope {
+    if (!isRecord(raw)) return raw as unknown as GameSaveEnvelope;
+    let value: Record<string, unknown> = raw;
+    if (value.schemaVersion === LEGACY_SAVE_FORMAT_SCHEMA_VERSION) {
+      const campaign = migrateCampaignStateV1(value.campaign);
+      const legacyCheckpoint = value.checkpoint;
+      let checkpoint: unknown = legacyCheckpoint;
+      if (campaign && isRecord(legacyCheckpoint) && legacyCheckpoint.schemaVersion === LEGACY_SCHEMA_VERSION) {
+        const world = migrateWorldV1(legacyCheckpoint.world, campaign.dominionHistory);
+        if (world) checkpoint = { ...legacyCheckpoint, schemaVersion: 2, world };
+      }
+      value = {
+        ...value,
+        schemaVersion: SAVE_FORMAT_SCHEMA_VERSION,
+        scope: "production",
+        campaign: campaign ?? value.campaign,
+        checkpoint,
+        progress: isRecord(value.progress) ? withLegacySession(value.progress, this.migrationContext()) : value.progress,
+      };
+    }
+    if (raw.schemaVersion === 1 || raw.schemaVersion === 2) {
+      const progress = value.progress;
+      const party = isRecord(progress) ? migrateCompanionParty(progress.party) : null;
+      value = { ...value, schemaVersion: SAVE_FORMAT_SCHEMA_VERSION,
+        ...(party && isRecord(progress) ? { progress: { ...progress, party } } : {}) };
+    }
+    const progress = value.progress;
+    if (value.schemaVersion === SAVE_FORMAT_SCHEMA_VERSION && isRecord(progress) && isChapterSessionMetadata(progress.session) && isRecord(progress.worldFacts)
+      && typeof progress.regionId === "string") {
+      const carrier = {
+        regionId: progress.regionId as RegionId,
+        ...(isRecord(progress.safeSpawn) ? { safeSpawn: progress.safeSpawn as unknown as CampaignSafeSpawn } : {}),
+        worldFacts: progress.worldFacts as Record<string, boolean | number | string>,
+        session: progress.session,
+      };
+      const migrated = migrateLayout(carrier, this.chapters, this.layoutMigrations);
+      if (migrated !== carrier) {
+        value = { ...value, progress: { ...progress, session: migrated.session, ...(migrated.safeSpawn ? { safeSpawn: migrated.safeSpawn } : {}) } };
+      }
+    }
+    return value as unknown as GameSaveEnvelope;
+  }
+
   private validCampaign(campaign: CampaignState, runId: string): boolean {
     const leaders = ["koro", "asha", "ruun", "luma", "nyra", "solkar"];
     if (
-      campaign.schemaVersion !== 1 ||
+      campaign.schemaVersion !== SCHEMA_VERSION ||
       campaign.runId !== runId ||
       !Array.isArray(campaign.dominionHistory) ||
       !campaign.dominionHistory.every(
@@ -1027,7 +1235,7 @@ export class SaveRepository {
       return false;
     const checkpoint: CheckpointSnapshot = {
       kind: "campaign-checkpoint",
-      schemaVersion: 1,
+      schemaVersion: SCHEMA_VERSION,
       runId,
       world: campaign.world,
     };
@@ -1044,6 +1252,7 @@ export class SaveRepository {
           | "schema_mismatch"
           | "run_mismatch"
           | "invalid_snapshot"
+          | "scope_mismatch"
           | "replay_isolated";
       } {
     if (
@@ -1057,6 +1266,8 @@ export class SaveRepository {
       return { accepted: false, reason: "future_schema" };
     if (value.schemaVersion !== SAVE_FORMAT_SCHEMA_VERSION)
       return { accepted: false, reason: "schema_mismatch" };
+    if (value.scope !== this.scope)
+      return { accepted: false, reason: "scope_mismatch" };
     if (value.kind === "showcase-replay")
       return { accepted: false, reason: "replay_isolated" };
     if (
@@ -1077,7 +1288,7 @@ export class SaveRepository {
       !this.validCampaign(campaign, value.runId) ||
       (value.progress !== null &&
         value.progress !== undefined &&
-        !validProgress(value.progress))
+        !validProgress(value.progress, this.chapters))
     ) {
       return { accepted: false, reason: "invalid_snapshot" };
     }
@@ -1121,6 +1332,12 @@ export class SaveRepository {
       return new SaveRepositoryError(
         "run-mismatch",
         "The save belongs to a different journey.",
+        recovery,
+      );
+    if (reason === "scope_mismatch")
+      return new SaveRepositoryError(
+        "scope-mismatch",
+        "The save belongs to a different persistence scope and was not changed.",
         recovery,
       );
     if (reason === "replay_isolated")

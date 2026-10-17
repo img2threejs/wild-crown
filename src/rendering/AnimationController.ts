@@ -2,6 +2,12 @@ import { AnimationClip, AnimationMixer, LoopOnce, LoopRepeat, Matrix4, Quaternio
 import type { AnimationAction, Object3D } from 'three';
 import type { ActionId, AssetManifestEntry } from '../game/contracts';
 
+/**
+ * Presentation-only pose correction layered over the evaluated clip pose (foot grounding). `restore` puts back the clip values the
+ * previous `apply` overwrote and runs before every mixer evaluation, so the mixer's unchanged-value skip and root-motion compensation
+ * never see a corrected pose; `apply` runs after the clip pose, root-motion compensation and `postPose`. `dt` is 0 for `play()`.
+ */
+export interface GroundingSlot { restore(): void; apply(dt: number): void }
 export type AnimationIssue = { kind: 'missing-clip'; actionId: string; assetId: string };
 type RootMotionMetadata = NonNullable<AssetManifestEntry['rootMotion']>[string];
 /** `up`: the actor-space vertical expressed in the root node's parent space (rigs such as Z-up Mixamo exports rotate it off local Y). */
@@ -80,6 +86,7 @@ export class AnimationController {
   private clockValid = false;
   private readonly fallbackActionId: string | undefined;
   private postPose: (() => void) | undefined;
+  private grounding: GroundingSlot | undefined;
   /** Seconds used for finite→finite hand-offs and same-clip restarts; undefined keeps the default fades and never blends restarts. */
   private blendSeconds: number | undefined;
   /** Normalized time of the previous finite sample on the current layer (restart detection). */
@@ -232,9 +239,11 @@ export class AnimationController {
       this.suspendedPhase = recoveryLayer.phase / recoveryLayer.duration;
     }
     this.applyWeights();
+    this.grounding?.restore();
     this.mixer.update(0);
     this.compensateRootMotion();
     this.postPose?.();
+    this.grounding?.apply(0);
   }
 
   /**
@@ -276,15 +285,22 @@ export class AnimationController {
     if (this.fadeElapsed < this.fadeDuration) this.fadeElapsed = Math.min(this.fadeDuration, this.fadeElapsed + dt);
     if (this.restarting) this.restartElapsed = Math.min(this.restartDuration, this.restartElapsed + dt);
     this.applyWeights();
+    this.grounding?.restore();
     this.mixer.update(dt);
     this.compensateRootMotion();
     this.postPose?.();
+    this.grounding?.apply(dt);
   }
   /**
    * Presentation-only pose override (e.g. a weapon grip) run right after every mixer evaluation, so it always wins over
    * clip-sampled joints without touching the root-motion or timing logic. One hook per controller; `undefined` removes it.
    */
   setPostPose(hook: (() => void) | undefined): void { this.postPose = hook; }
+  /** Separate slot that always runs after `postPose`; installing or removing it restores the clip pose it had corrected. */
+  setGrounding(slot: GroundingSlot | undefined): void {
+    if (this.grounding !== slot) this.grounding?.restore();
+    this.grounding = slot;
+  }
   /**
    * Presentation blend for monsters: finite→finite hand-offs fade over `seconds`, and a finite clip that restarts on the same slot
    * (its normalized time jumps back) crossfades from the pose it was showing instead of popping. `undefined` restores the defaults.
@@ -332,6 +348,7 @@ export class AnimationController {
     this.suspendedPhase = undefined;
     this.previousClock = undefined;
     this.postPose = undefined;
+    this.grounding = undefined;
   }
 
 

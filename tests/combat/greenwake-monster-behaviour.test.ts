@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, FIXED_STEP_SECONDS, createEngineState, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { GREENWAKE_COMBAT_TRIALS } from '../../src/game/combat/CombatTrials.js';
-import { MONSTER_PROFILES, ROAR_TICKS, TRIAL_ENGAGE_RANGE } from '../../src/game/combat/WildlifePressure.js';
+import { MONSTER_ACCEL, MONSTER_DECEL, MONSTER_PROFILES, ROAR_TICKS, TRIAL_ENGAGE_RANGE } from '../../src/game/combat/WildlifePressure.js';
 import { getWildlifePressure } from '../../src/game/combat/WildlifePressure.js';
 import { groundHeightAt, vec } from '../../src/game/combat/geometry.js';
 import { MONSTER_HURT_HOLD_TIME, ROAR_CLIP_SECONDS, ROAR_CLIP_WINDOW, resolveMonsterAnimation } from '../../src/rendering/MonsterAnimationProfiles.js';
@@ -126,6 +126,40 @@ describe('trial monster locomotion', () => {
     }
     expect(sawMotion).toBe(true);
     expect(sawTurn).toBe(true);
+  });
+
+  it('ramps its ground speed up from a standstill and brakes instead of stepping 0 to cruise speed', () => {
+    const trial = GREENWAKE_COMBAT_TRIALS[0]!, profile = MONSTER_PROFILES[trial.monsterId]!;
+    const engine = trialEngine(0, { room: true, player: vec(trial.arena.center.x, 0, trial.arena.center.z) });
+    const speeds: number[] = [], attacking: boolean[] = [], atRim: boolean[] = [];
+    for (let tick = 0; tick < 900; tick++) {
+      engine.fixedStep(idle);
+      engine.consumeEvents(); engine.drainPresentationCues();
+      const monster = monsterOf(engine, 0);
+      speeds.push(Math.hypot(monster.velocity.x, monster.velocity.z));
+      attacking.push(monster.attackPhase !== undefined);
+      // The arena circle clamps a step outright; that wall is not part of the locomotion ramp.
+      atRim.push(Math.hypot(monster.position.x - trial.arena.center.x, monster.position.z - trial.arena.center.z) > trial.arena.radius - 1.2);
+    }
+    const step = MONSTER_ACCEL / 60;
+    const first = speeds.findIndex(speed => speed > 1e-6);
+    expect(first).toBeGreaterThan(0);
+    // The first strides after the roar pause are bounded by the acceleration, then the monster reaches its advance speed.
+    for (let offset = 0; offset < 8; offset++) expect(speeds[first + offset]!).toBeLessThanOrEqual(step * (offset + 1) + 1e-6);
+    const cruise = speeds.findIndex(speed => speed >= profile.advanceSpeed - 1e-6);
+    expect(cruise).toBeGreaterThan(first);
+    expect(cruise - first).toBeGreaterThanOrEqual(Math.floor(profile.advanceSpeed / step) - 1);
+    // Away from a cast (which plants the body) no tick sheds more than the braking rate: a strafe flip or pivot slows the monster down instead of stopping it.
+    let braked = 0, worstDrop = 0;
+    for (let tick = 1; tick < speeds.length - 3; tick++) {
+      if (attacking.slice(tick - 1, tick + 4).includes(true) || atRim.slice(tick - 1, tick + 4).includes(true)) continue;
+      const drop = speeds[tick - 1]! - speeds[tick]!;
+      if (speeds[tick - 1]! > 1) braked++;
+      worstDrop = Math.max(worstDrop, drop);
+    }
+    // Sample floor for the drop check below: the monsters now square up TURN_LEAD_TICKS before a cast is due, so they spend slightly fewer ticks striding.
+    expect(braked).toBeGreaterThan(90);
+    expect(worstDrop).toBeLessThanOrEqual(MONSTER_DECEL / 60 + 1e-6);
   });
 
   it('keeps cleared and upcoming monsters idle in place, facing back along the route', () => {

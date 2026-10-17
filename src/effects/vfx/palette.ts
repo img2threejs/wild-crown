@@ -7,8 +7,8 @@ import { MOONPINE_OWNER_GLOW } from '../../game/combat/MoonpineContent.js';
  * Presentation element: the four authored AttackElements plus physical earth/sap, Aren's Warden light and spirit vines,
  * and the Warden Arsenal looks: cyan `arcane` runes/blade, `lightning` strikes, warm `gold` heavy blows and cyan-violet `judgement`.
  */
-export type VfxElement = 'fire' | 'ice' | 'poison' | 'wind' | 'earth' | 'sap' | 'spirit' | 'arcane' | 'lightning' | 'gold' | 'judgement' | 'heartroot' | 'umbral' | 'ember';
-export const ELEMENT_INDEX: Readonly<Record<VfxElement, number>> = { fire: 0, ice: 1, poison: 2, wind: 3, earth: 4, sap: 5, spirit: 6, arcane: 7, lightning: 8, gold: 9, judgement: 10, heartroot: 11, umbral: 12, ember: 13 };
+export type VfxElement = 'fire' | 'ice' | 'poison' | 'wind' | 'earth' | 'sap' | 'spirit' | 'arcane' | 'lightning' | 'gold' | 'judgement' | 'heartroot' | 'umbral' | 'ember' | 'water';
+export const ELEMENT_INDEX: Readonly<Record<VfxElement, number>> = { fire: 0, ice: 1, poison: 2, wind: 3, earth: 4, sap: 5, spirit: 6, arcane: 7, lightning: 8, gold: 9, judgement: 10, heartroot: 11, umbral: 12, ember: 13, water: 14 };
 
 /** Hue-preserving HDR rule: no effect colour exceeds this on its dominant channel. */
 export const HDR_DOMINANT_MAX = 4;
@@ -23,6 +23,7 @@ const linear = (r: number, g: number, b: number): Color => new Color().setRGB(r,
 export const PALETTE: Readonly<Record<VfxElement, ElementPalette>> = {
   fire: { a: linear(0.8, 0.16, 0.02), b: linear(2.2, 0.6, 0.1), hot: linear(4, 1.6, 0.35) },
   ice: { a: linear(0.1, 0.36, 0.8), b: linear(0.35, 1.05, 2), hot: linear(1.1, 2.5, 3.6) },
+  water: { a: linear(0.015, 0.28, 0.48), b: linear(0.06, 1.15, 1.7), hot: linear(0.45, 2.5, 3.4) },
   poison: { a: linear(0.1, 0.28, 0.03), b: linear(0.4, 1.15, 0.12), hot: linear(0.9, 2.6, 0.3) },
   wind: { a: linear(0.25, 0.55, 0.5), b: linear(0.55, 1.3, 1.1), hot: linear(1, 2.4, 1.9) },
   earth: { a: linear(0.42, 0.3, 0.17), b: linear(0.95, 0.62, 0.3), hot: linear(2.2, 1.25, 0.45) },
@@ -59,6 +60,8 @@ export const OWNER_GLOW: Readonly<Record<string, VfxElement>> = {
   'corrupted-boar': 'fire', 'greenwake-sap-stalker': 'ice', 'greenwake-root-rammer': 'sap', aren: 'arcane',
   // Whispering Canopy: sap-bound howler, storm-blue hornbill, toxic viper.
   'canopy-howler': 'sap', 'canopy-hornbill': 'lightning', 'canopy-mire-viper': 'poison',
+  // Blood Bamboo Valley: the sap-bound Branchbreaker and the corrupted Asha.
+  koro: 'sap', asha: 'sap',
   ...GROVE_OWNER_GLOW, ...MOONPINE_OWNER_GLOW, ...MISTVEIL_OWNER_GLOW,
 };
 

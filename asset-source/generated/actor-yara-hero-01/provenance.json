@@ -54,8 +54,8 @@
     ]
   },
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
-  "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; original native skinned Yara mesh retained.",
+  "outputHash": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31",
+  "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
     "staffToMiddleFingerDegrees": 75.76603924438858,
@@ -99,6 +99,36 @@
     "c": 50,
     "d": 50,
     "e": 50
+  },
+  "mixamo": {
+    "falling-back": {
+      "file": "asset-source/mixamo/reactions/falling-back.fbx",
+      "sha256": "248ab54bdab4fdfab8a1a1703c38618ffacafbaf90f9d7baeec0abcbef49b7d8",
+      "durationSeconds": 2.6,
+      "frames": 79,
+      "facingDegrees": 84.11
+    },
+    "react-forward": {
+      "file": "asset-source/mixamo/reactions/react-forward.fbx",
+      "sha256": "2fc20a6ebc26cd0dac6b66649e10527d060dd78067bdaff0ce56fc6acc75530f",
+      "durationSeconds": 3.6667,
+      "frames": 111,
+      "facingDegrees": 84.11
+    },
+    "getting-up-stomach": {
+      "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx",
+      "sha256": "ead02bf768fb1d97870f820aa7b199bd199f702b59af36ea1cd6108f32250675",
+      "durationSeconds": 8.6,
+      "frames": 259,
+      "facingDegrees": 84.11
+    },
+    "getting-up-knocked": {
+      "file": "asset-source/mixamo/reactions/getting-up-knocked.fbx",
+      "sha256": "d3247fb0b39bd891e613dd53fad0a15298a5d30feebfffeadd7cb98680143451",
+      "durationSeconds": 2.7,
+      "frames": 82,
+      "facingDegrees": 84.11
+    }
   },
   "creditTotal": 275,
   "evidenceStatus": "blocked",
@@ -295,6 +325,281 @@
         8.46666622
       ],
       "limits": "JOINT_LIMITS"
+    },
+    {
+      "clip": "aren-knockdown",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:falling-back",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/falling-back.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.2
+            ],
+            [
+              6,
+              0.5
+            ],
+            [
+              17,
+              0.85
+            ],
+            [
+              30,
+              1.6
+            ],
+            [
+              48,
+              2.55
+            ],
+            [
+              90,
+              2.55
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "lie": {
+        "pose": "back",
+        "holdFrom": 48,
+        "fromIdle": 6
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.7346,
+      "floor": {
+        "liftMinMetres": -0.002,
+        "liftMaxMetres": 0.1594
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.034,
+        "lowestAfterMetres": 0.031,
+        "deepestIntoLimbBeforeMetres": 0.073,
+        "deepestIntoLimbAfterMetres": 0.014,
+        "framesTurned": 27,
+        "largestTurnDegrees": 24
+      }
+    },
+    {
+      "clip": "aren-knockdown-forward",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:react-forward",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/react-forward.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.85
+            ],
+            [
+              12,
+              1.25
+            ],
+            [
+              22,
+              1.95
+            ],
+            [
+              30,
+              2.3
+            ],
+            [
+              48,
+              3.4
+            ],
+            [
+              90,
+              3.4
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "lie": {
+        "pose": "stomach",
+        "holdFrom": 48,
+        "fromIdle": 8
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.7427,
+      "floor": {
+        "liftMinMetres": 0.0221,
+        "liftMaxMetres": 0.1605
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.675,
+        "lowestAfterMetres": 0.004,
+        "deepestIntoLimbBeforeMetres": 0.083,
+        "deepestIntoLimbAfterMetres": 0.021,
+        "framesTurned": 31,
+        "largestTurnDegrees": 56
+      }
+    },
+    {
+      "clip": "aren-getup",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:getting-up-knocked",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-knocked.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.25
+            ],
+            [
+              66,
+              2
+            ]
+          ],
+          "retarget": {
+            "yaw": 13.1
+          },
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "getup": {
+        "from": "aren-knockdown",
+        "blend": 10,
+        "travel": [
+          10,
+          40
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "take": {
+          "liftMinMetres": -0.0146,
+          "liftMaxMetres": 0.1137
+        },
+        "final": {
+          "liftMinMetres": -0.0411,
+          "liftMaxMetres": 0.0401
+        }
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.275,
+        "lowestAfterMetres": 0.013,
+        "deepestIntoLimbBeforeMetres": 0.101,
+        "deepestIntoLimbAfterMetres": 0.023,
+        "framesTurned": 43,
+        "largestTurnDegrees": 44
+      }
+    },
+    {
+      "clip": "aren-getup-forward",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              0,
+              2.45
+            ],
+            [
+              36,
+              3.3
+            ]
+          ],
+          "retarget": {
+            "yaw": 6.5
+          },
+          "ticks": [
+            0
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              36,
+              4.25
+            ],
+            [
+              66,
+              5.05
+            ]
+          ],
+          "retarget": {
+            "yaw": 6.5
+          },
+          "ticks": [
+            36
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "getup": {
+        "from": "aren-knockdown-forward",
+        "blend": 8,
+        "travel": [
+          8,
+          46
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "take": {
+          "liftMinMetres": -0.0227,
+          "liftMaxMetres": 0.1242
+        },
+        "final": {
+          "liftMinMetres": 0,
+          "liftMaxMetres": 0.0399
+        }
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.515,
+        "lowestAfterMetres": 0.031,
+        "deepestIntoLimbBeforeMetres": 0.022,
+        "deepestIntoLimbAfterMetres": 0,
+        "framesTurned": 34,
+        "largestTurnDegrees": 32
+      }
     },
     {
       "clip": "yara-thornshot-1",

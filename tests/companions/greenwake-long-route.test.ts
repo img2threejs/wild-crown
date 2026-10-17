@@ -45,7 +45,7 @@ test('the authored entrance-to-exit route stays walkable through the ramp, gatew
     position = walkTo(position, points[index]!);
   }
   assert.ok(length > 100, 'the supported authored journey spans more than 100 metres');
-  assert.ok(distance2(position, region.exits.find((exit) => exit.id === 'greenwake-grove-out')!.from) < 0.03);
+  assert.ok(distance2(position, region.exits.find((exit) => exit.destinationRegionId === 'whispering-canopy')!.from) < 0.03);
 });
 
 test('route obstacles stop a walking capsule while their side passages remain traversable', () => {

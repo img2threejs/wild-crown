@@ -161,6 +161,20 @@ describe('Sakda kit', () => {
   });
 
   describe('Eight Limbs', () => {
+    it('keeps the opening jab readable before contact and allows a longer recovery', () => {
+      const r = rig({ distance: 1.6 });
+      const before = r.live().vitality!;
+      r.step({ lightPressed: true });
+      const duration = r.me().actionEndsTick - r.me().actionStartedTick;
+      expect(duration).toBeGreaterThanOrEqual(40);
+      r.step({}, 11);
+      expect(r.live().vitality).toBe(before);
+      const hit = r.untilDamage({}, 7);
+      expect(hit.damage).toBe(10);
+      expect(Math.abs(r.me().normalizedTime - 11 / 30)).toBeLessThanOrEqual(1 / duration);
+      expect(r.state.actionRecoveryUntil).toBeGreaterThan(r.state.tick);
+    });
+
     it('chains four steps with their damage, clip length and strike tick', () => {
       const r = rig({ distance: 1.6 });
       const steps = SAKDA.limbs.steps;
@@ -324,7 +338,7 @@ describe('Sakda kit', () => {
     it('J never arms Flurry and the charges expire after the window', () => {
       const r = rig({ distance: 1.6 });
       r.step({ lightPressed: true });
-      r.step({}, 30);
+      r.waitIdle();
       expect(r.engine.snapshot().player.flurryCharges).toBeUndefined();
       r.step({ heavyPressed: true });
       expect(r.engine.snapshot().player.flurryCharges).toBe(SAKDA.flurry.charges);
@@ -363,6 +377,9 @@ describe('Sakda kit', () => {
       for (let i = 0; i < 60 && r.engine.snapshot().actors.find(actor => actor.id === MONSTER)!.heroMarks === undefined; i++) r.step();
       expect(r.engine.snapshot().actors.find(actor => actor.id === MONSTER)!.heroMarks![0]!.kind).toBe('echo-mark');
       r.waitIdle();
+      r.step({ rangedPressed: true });
+      expect(r.me().actionId).not.toBe('sakda-resonating-strike');
+      r.step({}, r.state.skillReadyAt.sigil_bolt! - r.state.tick - 1);
       const mana = r.state.player.mana, health = r.live().vitality!;
       const before = r.gap();
       r.step({ rangedPressed: true });
@@ -488,12 +505,13 @@ describe('Sakda kit', () => {
         // Move Sakda well away, free the monster and measure how far it chases in 40 ticks.
         const monster = r.live(), player = r.me();
         r.state.hazards = []; r.state.telegraphs = [];
-        monster.staggerUntil = 0; monster.recoveringUntil = 0; monster.hitReactUntil = undefined;
+        monster.staggerUntil = 0; monster.recoveringUntil = 0; monster.reactionState = undefined;
         // The monster is already engaged and past its roar, so only its walking speed is measured.
-        Object.assign(monster.motion!, { engaged: true, roarTier: 99, roarUntil: 0, lunge: undefined });
+        Object.assign(monster.motion!, { engaged: true, roarTier: 99, roarUntil: 0, lunge: undefined, nextCastAt: FROZEN });
         player.position = vec(monster.position.x, monster.position.y, monster.position.z + 10);
         const from = { ...monster.position };
-        r.step({}, 110);
+        const until = r.state.worldTick + 40;
+        while (r.state.worldTick < until) r.step();
         return Math.hypot(r.live().position.x - from.x, r.live().position.z - from.z);
       };
       const free = travel(false), crippled = travel(true);
@@ -503,7 +521,7 @@ describe('Sakda kit', () => {
   });
 
   describe('Flying Knee', () => {
-    it('charges with the loop clip, arcs through the air and lands 38 damage at tick 30', () => {
+    it('charges with the loop clip, arcs through the air and lands its damage on impact', () => {
       const r = rig({ distance: 8 });
       r.holdHeavy();
       expect(r.me().actionId).toBe('sakda-knee-charge');
@@ -515,7 +533,7 @@ describe('Sakda kit', () => {
       expect(r.me().actionEndsTick - r.me().actionStartedTick).toBe(SAKDA.flyingKnee.ticks);
       let peak = groundY, steps = 1;
       const health = r.live().vitality!;
-      while (r.live().vitality === health && steps < 60) { peak = Math.max(peak, r.me().position.y); r.step(); steps++; }
+      while (r.live().vitality === health && steps < SAKDA.flyingKnee.ticks) { peak = Math.max(peak, r.me().position.y); r.step(); steps++; }
       expect(steps).toBe(SAKDA.flyingKnee.impactAt + 1);
       expect(peak - groundY).toBeGreaterThan(0.8);
       expect(health - r.live().vitality!).toBe(SAKDA.flyingKnee.damage);
@@ -617,14 +635,22 @@ describe('Sakda kit', () => {
       r.state.player.vitality = 1000;
       r.step({ dodgePressed: true }, 1);
       r.step({}, 30);
+      r.engine.consumeEvents();
       hazardOnPlayer(r, 10, 2, 'first');
       r.step({}, 6);
       expect(r.state.player.vitality).toBe(1000);
       expect(r.engine.snapshot().player.shield).toBe(SAKDA.guardDash.shield - 10);
+      expect(r.cues.filter(cue => cue.kind === 'hit' && cue.targetId === 'aren')).toEqual([]);
+      expect(r.engine.consumeEvents().filter(event => event.kind === 'damage')).toEqual([]);
       hazardOnPlayer(r, 20, 2, 'second');
       r.step({}, 6);
       expect(r.engine.snapshot().player.shield).toBeUndefined();
       expect(r.state.player.vitality).toBe(1000 - (20 - (SAKDA.guardDash.shield - 10)));
+      const contact = r.cues.find(cue => cue.kind === 'hit' && cue.targetId === 'aren')!;
+      expect(contact.confirmedDamage).toBe(1000 - r.state.player.vitality);
+      const damage = r.engine.consumeEvents().find(event => event.damage?.targetId === 'aren')!;
+      expect(contact.tick).toBe(damage.tick);
+      expect(contact.confirmedDamage).toBe(damage.damage?.amount);
       // A fresh dash, then wait the shield out: the next hit lands in full.
       r.state.player.mana = r.state.player.maxMana;
       r.step({}, 20);
@@ -650,7 +676,7 @@ describe('Sakda kit', () => {
       return r;
     };
 
-    it('is untargetable for 30 ticks, kicks on tick 24 for 60, staggers 90 and knocks the target back 7 m', () => {
+    it('protects the windup, kicks on contact, staggers and finishes the finite knockback', () => {
       const r = wrath(3.2);
       const from = { ...r.live().position };
       r.step({ ultimatePressed: true });
@@ -663,14 +689,14 @@ describe('Sakda kit', () => {
       expect(steps).toBe(SAKDA.tigersWrath.kickAt + 1);
       expect(1000 - r.live().vitality!).toBe(SAKDA.tigersWrath.damage);
       expect(r.live().staggerUntil - r.state.worldTick).toBeGreaterThan(SAKDA.tigersWrath.staggerTicks - 4);
-      r.step({}, 12);
+      r.waitIdle();
       const moved = Math.hypot(r.live().position.x - from.x, r.live().position.z - from.z);
       expect(moved).toBeGreaterThan(SAKDA.tigersWrath.knockback - 0.2);
       expect(moved).toBeLessThanOrEqual(SAKDA.tigersWrath.knockback + 0.01);
       expect(r.cues.find(cue => cue.kind === 'beam')).toMatchObject({ element: 'ember', actionId: 'sakda-tigers-wrath' });
     });
 
-    it('stays untargetable through tick 29 and takes hits again from tick 30', () => {
+    it('protects the committed kick window but allows damage after its iframe deadline', () => {
       const r = wrath(3.2);
       r.step({ ultimatePressed: true });
       r.step({}, SAKDA.tigersWrath.untargetableTo - 2);
@@ -864,7 +890,7 @@ describe('Sakda kit', () => {
     const kneeNow = (r: Rig): void => { r.holdHeavy(); r.releaseHeavy(); };
     const dashIdPattern = /^aren-.*(dive|roll|cartwheel|slide)/;
 
-    it('Flying Knee cancels into Guard Dash, a Tempest Stomp and Resonating Strike only after its impact', () => {
+    it('cancels Flying Knee into other families after impact without bypassing the Heavy cooldown', () => {
       const into = (press: (r: Rig) => void, expectAction: (r: Rig) => void): void => {
         const r = rig({ distance: 7 });
         echo(r, r.state.worldTick + 600);
@@ -883,7 +909,10 @@ describe('Sakda kit', () => {
         expect(r.cues.some(cue => cue.kind === 'blink' && cue.actionId === 'sakda-guard-dash')).toBe(true);
       });
       into(r => r.step({ rangedPressed: true }), r => expect(r.me().actionId).toBe('sakda-resonating-strike'));
-      into(r => { r.state.player.mana = r.state.player.maxMana; r.step({ heavyPressed: true }); }, r => expect(r.me().actionId).toBe('sakda-tempest'));
+      into(r => { r.state.player.mana = r.state.player.maxMana; r.step({ heavyPressed: true }); }, r => {
+        expect(r.me().actionId).toBe('sakda-flying-knee');
+        expect(r.state.player.mana).toBe(r.state.player.maxMana);
+      });
     });
 
     it('Resonating Strike cancels into Flying Knee, Guard Dash and a second Resonating Strike', () => {

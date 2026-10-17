@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, type CombatInput } from '../../src/game/combat/CombatEngine.js';
-import { distance2, isSupportedCapsulePose, vec } from '../../src/game/combat/geometry.js';
+import { distance2, isSupportedCapsulePose, vec, type SupportField } from '../../src/game/combat/geometry.js';
 import type { RegionColliderDefinition } from '../../src/game/contracts.js';
 import { EVASION_PROFILES } from '../../src/game/combat/evasion.js';
 
@@ -16,6 +16,86 @@ function obstacleEngine(colliders: RegionColliderDefinition[], floorEdge = -6): 
   return new CombatEngine(seed);
 }
 const box = (id: string, height: number): RegionColliderDefinition => ({ id, kind: 'box', from: vec(0, height / 2, -0.9), halfExtents: vec(0.6, height / 2, 0.15), blocksMovement: true, blocksCamera: false });
+
+function raisedProp(height = 1): SupportField {
+  return { id: 'native:prop', ownerId: 'prop', kind: 'top', minX: 1, minZ: -1, cell: .25, cols: 8, rows: 8, minY: 0, maxY: height, top: Array<number>(64).fill(height), bottom: Array<number>(64).fill(0), stand: Array<number>(64).fill(1) };
+}
+
+function propEngine(height = 1): CombatEngine {
+  const engine = obstacleEngine([]);
+  engine.setSceneColliders([], [raisedProp(height)]);
+  return engine;
+}
+
+const right = { ...idle, move: vec(1, 0, 0) };
+
+function jumpOntoProp(engine: CombatEngine): void {
+  engine.fixedStep({ ...right, jumpPressed: true });
+  for (let tick = 0; tick < 100 && engine.snapshotState().playerJump; tick++) {
+    const phase = engine.snapshot().actors.find(actor => actor.id === 'aren')!.jumpPhase;
+    engine.fixedStep(phase === 'landing' ? idle : right);
+  }
+  expect(engine.snapshotState().playerJump).toBeUndefined();
+  expect(player(engine).position.y).toBeCloseTo(1, 6);
+}
+
+describe('measured native prop support', () => {
+  it('blocks grounded entry, accepts a reachable jump and holds a resting player on the real top', () => {
+    const walking = propEngine();
+    advance(walking, 60, right);
+    expect(player(walking).position.x).toBeLessThanOrEqual(1 - player(walking).radius + 1e-4);
+    expect(player(walking).position.y).toBe(0);
+    const jumping = propEngine();
+    jumpOntoProp(jumping);
+    const landed = player(jumping).position;
+    advance(jumping, 60);
+    expect(player(jumping).position).toEqual(landed);
+    expect(isSupportedCapsulePose(jumping.snapshotState().arena, landed, player(jumping).radius, player(jumping).collisionHeight)).toBe(true);
+  });
+
+  it('walks off a prop into a continuous fall, then returns to controllable ground movement', () => {
+    const engine = propEngine();
+    jumpOntoProp(engine);
+    let previous = player(engine).position, fell = false;
+    for (let tick = 0; tick < 80; tick++) {
+      engine.fixedStep(right);
+      const current = player(engine).position;
+      fell ||= engine.snapshotState().playerJump?.fallVelocityY !== undefined;
+      expect(distance2(previous, current)).toBeLessThan(.25);
+      expect(Math.abs(current.y - previous.y)).toBeLessThan(.2);
+      previous = current;
+    }
+    expect(fell).toBe(true);
+    expect(previous.y).toBeCloseTo(0, 6);
+    expect(previous.x).toBeGreaterThan(4);
+    expect(engine.snapshotState().playerJump).toBeUndefined();
+  });
+
+  it('falls rather than hovering after a native support is removed, without charging jump mana', () => {
+    const engine = propEngine();
+    jumpOntoProp(engine);
+    const mana = engine.snapshot().player.mana;
+    engine.setSceneColliders([], []);
+    advance(engine, 80);
+    expect(player(engine).position.y).toBeCloseTo(0, 6);
+    expect(engine.snapshotState().playerJump).toBeUndefined();
+    expect(engine.snapshot().player.mana).toBe(mana);
+  });
+
+  it('rejects tops beyond jump reach and tops without standing headroom', () => {
+    const tooHigh = propEngine(3);
+    tooHigh.fixedStep({ ...right, jumpPressed: true });
+    advance(tooHigh, 80, right);
+    expect(player(tooHigh).position.y).toBeCloseTo(0, 6);
+    expect(player(tooHigh).position.x).toBeLessThan(1);
+    const ceiling = propEngine();
+    ceiling.setSceneColliders([{ id: 'ceiling', kind: 'box', from: vec(2, 2.5, 0), halfExtents: vec(1, .1, 1), blocksMovement: true, blocksCamera: false }], [raisedProp()]);
+    ceiling.fixedStep({ ...right, jumpPressed: true });
+    advance(ceiling, 80, right);
+    expect(player(ceiling).position.y).toBeCloseTo(0, 6);
+    expect(player(ceiling).position.x).toBeLessThan(1);
+  });
+});
 
 it('faces screen-relative movement rather than a selected target, and retains the last heading on release', () => {
   const seed = createEngineState();

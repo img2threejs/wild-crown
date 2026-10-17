@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-sable",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "596e9271-67a3-45f3-b30b-ca9980e05c3f",
+    "decimate": "cf1ed0af-a8b6-45b8-afe7-71e8b8408d60",
+    "rig": "9bcdfa94-80e0-457e-95a5-30ef3993145c",
+    "animA": "b9970e90-00df-4b95-b5d5-10d1dfde16e0"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-sable-anim-a-01/tripo-out/actor-sable-anim-a-01-b9970e90/model.glb",
+      "sha256": "d9c88a59a194834a8b8fec42a3edc973cbabc107579e508c307acfe6752989a8"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-sable-runtime-01/actor-sable.glb",
+    "sha256": "bdbbb483b70a98953f044887ac8239bad9041cba112447ae4bd11555e70210dc",
+    "bytes": 5961660,
+    "vertices": 29714,
+    "triangles": 26806,
+    "boundsMin": [
+      -0.13714,
+      0,
+      -0.49006
+    ],
+    "boundsMax": [
+      0.13714,
+      0.70392,
+      0.49006
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 21
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 2825065,
+      "toBytes": 1182438
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3027709,
+      "toBytes": 1084095
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17666306,
+      "toBytes": 1945224
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

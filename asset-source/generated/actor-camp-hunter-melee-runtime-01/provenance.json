@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-camp-hunter-melee",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "3db0f3fe-af0b-449b-9a04-674bbbef1914",
+    "decimate": "c8926f37-c89b-4bf1-a306-3947ffe8499f",
+    "rig": "9a38661b-b345-4a40-97fd-88da980fd18f",
+    "animA": "aa7d4646-a636-4b59-9487-ef45e6fcd032"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (mixamo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-camp-hunter-melee-anim-a-01/tripo-out/actor-camp-hunter-melee-anim-a-0-aa7d4646/model.glb",
+      "sha256": "454871e9b42e184c721181eca1dc11addcfe3ebdf303842259f05049c31b8f94"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee.glb",
+    "sha256": "6aa08eba316bac92068f84a1c0b402092443826e50df92447d26c1b943ae97a8",
+    "bytes": 8014108,
+    "vertices": 36135,
+    "triangles": 27067,
+    "boundsMin": [
+      -0.13163,
+      0,
+      -0.27383
+    ],
+    "boundsMax": [
+      0.13163,
+      0.98195,
+      0.27383
+    ]
+  },
+  "clips": [
+    {
+      "name": "hit_to_head",
+      "durationSeconds": 1.8666666666666667,
+      "channels": 69
+    },
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 69
+    },
+    {
+      "name": "run",
+      "durationSeconds": 1.2666666666666666,
+      "channels": 69
+    },
+    {
+      "name": "slash",
+      "durationSeconds": 6.6,
+      "channels": 69
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 69
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4597755,
+      "toBytes": 1708863
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6514209,
+      "toBytes": 1776301
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20498593,
+      "toBytes": 2090117
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

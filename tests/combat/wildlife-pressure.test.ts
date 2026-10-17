@@ -26,7 +26,7 @@ describe('trial pacing per tier', () => {
 });
 
 describe('scaleWildlifeAttack floors', () => {
-  it('clamps a deliberately short authored warning to the reaction floors (windup 24, commit 8)', () => {
+  it('clamps a deliberately short authored warning to the reaction floors (windup 36, commit 12)', () => {
     const pressuring = getWildlifePressure(3600);
     const shortAttack = {
       ...ATTACKS['boar-charge']!,
@@ -35,25 +35,26 @@ describe('scaleWildlifeAttack floors', () => {
       recoveryTicks: 8,
     };
     const scaled = scaleWildlifeAttack(shortAttack, pressuring);
-    expect(scaled.windupTicks).toBe(24);
-    expect(scaled.commitTicks).toBe(8);
-    expect(scaled.recoveryTicks).toBeLessThan(shortAttack.recoveryTicks);
+    expect(scaled.windupTicks).toBe(36);
+    expect(scaled.commitTicks).toBe(12);
+    expect(scaled.recoveryTicks).toBeGreaterThanOrEqual(8);
   });
 
   it('preserves a long committed reaction window at maximum pressure', () => {
     const attack = { ...ATTACKS['boar-charge']!, commitTicks: 30 };
     const scaled = scaleWildlifeAttack(attack, getWildlifePressure(3600));
     expect(scaled.commitTicks).toBe(30);
-    expect(scaled.windupTicks).toBeLessThan(attack.windupTicks);
+    // Baseline 1.35× lift means scaled windup is longer than authored at every tier now; the
+    // useful behavioural check is the windup floor, not a relative comparison.
+    expect(scaled.windupTicks).toBeGreaterThanOrEqual(36);
   });
 
-  it('keeps every canopy attack readable at maximum pressure: windup never under 24 ticks, commit never under 8', () => {
+  it('keeps every canopy attack readable at maximum pressure: windup never under 36 ticks, commit never under 12', () => {
     const maximum = getWildlifePressure(3600);
     for (const id of CANOPY_COMBAT_TRIALS.flatMap(trial => trial.attackIds)) {
       const authored = ATTACKS[id]!, scaled = scaleWildlifeAttack(authored, maximum);
-      expect(scaled.windupTicks).toBeGreaterThanOrEqual(24);
-      expect(scaled.commitTicks).toBeGreaterThanOrEqual(8);
-      expect(scaled.windupTicks).toBeLessThanOrEqual(authored.windupTicks);
+      expect(scaled.windupTicks).toBeGreaterThanOrEqual(36);
+      expect(scaled.commitTicks).toBeGreaterThanOrEqual(12);
     }
   });
 });

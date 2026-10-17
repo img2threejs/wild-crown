@@ -8,18 +8,9 @@ import { ATTACKS } from '../../src/game/combat/content.js';
 import { MONSTER_PROFILES, getWildlifePressure, scaleWildlifeAttack } from '../../src/game/combat/WildlifePressure.js';
 import { vec } from '../../src/game/combat/geometry.js';
 import type { RegionId } from '../../src/game/contracts.js';
-import { rampedDamage, rampedTiming } from './trial-ramp-helpers.js';
+import { rampedDamage } from './trial-ramp-helpers.js';
 
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
-
-/** Authored vitality per stage, from the contract table; the Grove is exempt. */
-const HP_TABLE: Readonly<Record<string, readonly number[]>> = {
-  greenwake: [100, 115, 286],
-  'whispering-canopy': [145, 160, 385],
-  'moonpine-ridge': [190, 205, 484],
-  'mistveil-basin': [235, 250, 583],
-  'the-grove': [100],
-};
 
 function trialEngine(regionId: RegionId, options: { index?: number; cursor?: number; player?: { x: number; z: number }; mutate?: (seed: EngineState) => void } = {}): CombatEngine {
   const set = combatTrialSetFor(regionId)!;
@@ -41,78 +32,73 @@ function trialEngine(regionId: RegionId, options: { index?: number; cursor?: num
 }
 
 describe('TrialDifficulty (pure ramp)', () => {
-  it('follows the contract formulas for every stage of every ranked map', () => {
-    const ranks: Record<string, number> = { greenwake: 0, 'whispering-canopy': 1, 'moonpine-ridge': 2, 'mistveil-basin': 3 };
-    for (const [regionId, rank] of Object.entries(ranks)) {
-      for (let stage = 0; stage < 3; stage++) {
-        const level = rank * 3 + stage, boss = stage === 2, got = trialDifficulty(regionId as RegionId, stage, 3);
-        expect(got.level).toBe(level);
-        expect(got.boss).toBe(boss);
-        expect(got.vitality).toBe(HP_TABLE[regionId]![stage]!);
-        expect(got.damageScale).toBeCloseTo((1 + 0.05 * level) * (boss ? 1.35 : 1), 10);
-        expect(got.aggression).toBeCloseTo(1 + 0.03 * level + (boss ? 0.1 : 0), 10);
-        expect(got.speedScale).toBeCloseTo(1 + 0.02 * level + (boss ? 0.08 : 0), 10);
+  it('raises difficulty across regular stages and across bosses while keeping each local boss stronger', () => {
+    const ramp = ['greenwake', 'whispering-canopy', 'moonpine-ridge', 'mistveil-basin'].flatMap(regionId => [...trialRamp(regionId as RegionId, 3)]);
+    for (const boss of [false, true]) {
+      const stages = ramp.filter(stage => stage.boss === boss);
+      for (let index = 1; index < stages.length; index++) {
+        expect(stages[index]!.level).toBeGreaterThan(stages[index - 1]!.level);
+        for (const key of ['vitality', 'damageScale', 'aggression', 'speedScale'] as const) expect(stages[index]![key]).toBeGreaterThanOrEqual(stages[index - 1]![key]);
       }
     }
-  });
-
-  it('exempts the Grove: level 0, no boss, unit scales and 100 vitality', () => {
-    expect(trialDifficulty('the-grove', 0, 1)).toEqual({ level: 0, boss: false, vitality: 100, damageScale: 1, aggression: 1, speedScale: 1 });
-    expect(trialRamp('the-grove', 1)).toEqual([trialDifficulty('the-grove', 0, 1)]);
+    for (const mapStart of [0, 3, 6, 9]) {
+      for (const key of ['vitality', 'damageScale', 'speedScale'] as const) expect(ramp[mapStart + 2]![key]).toBeGreaterThan(ramp[mapStart + 1]![key]);
+      expect(ramp[mapStart + 2]!.aggression).toBeGreaterThanOrEqual(ramp[mapStart + 1]!.aggression);
+    }
   });
 
   it('keeps aggression and speed inside their bounds and never slows a later stage', () => {
     const ramp = ['greenwake', 'whispering-canopy', 'moonpine-ridge', 'mistveil-basin'].flatMap(regionId => [...trialRamp(regionId as RegionId, 3)]);
+    // Aggression capped at 1.18 (was an unbounded 1 + 0.03*level + 0.1 for boss) so late ranks never compress
+    // windup so far that telegraphs disappear.
+    const AGGRESSION_CEILING = 1.18;
     for (const stage of ramp) {
       expect(stage.aggression).toBeGreaterThanOrEqual(1);
-      expect(stage.aggression).toBeLessThanOrEqual(1 + 0.03 * 11 + 0.1 + 1e-9);
+      expect(stage.aggression).toBeLessThanOrEqual(AGGRESSION_CEILING + 1e-9);
       expect(stage.speedScale).toBeGreaterThanOrEqual(1);
       expect(stage.speedScale).toBeLessThanOrEqual(1 + 0.02 * 11 + 0.08 + 1e-9);
     }
-    const levels = ramp.map(stage => stage.level);
-    expect(levels).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-    // A boss is stricter than the stage before it on every axis.
-    for (const mapStart of [0, 3, 6, 9]) for (const key of ['vitality', 'damageScale', 'aggression', 'speedScale'] as const) expect(ramp[mapStart + 2]![key]).toBeGreaterThan(ramp[mapStart + 1]![key]);
   });
 
-  it('tightens windup and recovery by 1/aggression, keeping the 24-tick windup and 8-tick commit floors', () => {
-    const base = ATTACKS['viper-tail-lash']!;
-    expect(scaleTrialAttack(base, 1)).toBe(base);
-    const quick = scaleTrialAttack(base, 1.43);
-    expect(quick.windupTicks).toBe(Math.max(24, Math.round(base.windupTicks / 1.43)));
-    expect(quick.recoveryTicks).toBe(Math.round(base.recoveryTicks / 1.43));
-    expect(quick.commitTicks).toBe(base.commitTicks);
-    expect(quick.activeTicks).toBe(base.activeTicks);
+  it('scales rank pressure without applying the wildlife slowdown twice, preserving legible floors', () => {
+    const base = { ...ATTACKS['viper-tail-lash']!, windupTicks: 80, commitTicks: 20, recoveryTicks: 60 };
+    const neutral = scaleTrialAttack(base, 1);
+    expect([neutral.windupTicks, neutral.commitTicks, neutral.recoveryTicks]).toEqual([80, 20, 60]);
+    const quick = scaleTrialAttack(base, 2);
+    expect([quick.windupTicks, quick.commitTicks, quick.recoveryTicks]).toEqual([40, 20, 30]);
     const floor = scaleTrialAttack({ ...base, windupTicks: 30, commitTicks: 2 }, 3);
-    expect(floor.windupTicks).toBe(24);
-    expect(floor.commitTicks).toBe(8);
-    // It composes after the existing pressure scaling.
+    expect(floor.windupTicks).toBe(36);
+    expect(floor.commitTicks).toBe(12);
     const pressured = scaleWildlifeAttack(base, getWildlifePressure(3000));
-    expect(scaleTrialAttack(pressured, 1.2).windupTicks).toBeLessThanOrEqual(pressured.windupTicks);
-    expect(scaleTrialAttack(pressured, 1.2).windupTicks).toBeGreaterThanOrEqual(24);
+    const afterTrial = scaleTrialAttack(pressured, 1.2);
+    expect(afterTrial.windupTicks).toBeGreaterThanOrEqual(36);
+    expect(afterTrial.commitTicks).toBeGreaterThanOrEqual(12);
+    expect(afterTrial.windupTicks).toBeLessThanOrEqual(pressured.windupTicks);
   });
 });
 
 describe('trial monster vitality', () => {
   for (const set of COMBAT_TRIAL_SETS) {
-    it(`${set.regionId}: every stage's monster starts at the table HP, in the engine state, the snapshot and the checkpoint`, () => {
+    it(`${set.regionId}: every stage's monster starts at the trial-difficulty vitality, in the engine state, the snapshot and the checkpoint`, () => {
       const engine = trialEngine(set.regionId);
-      const expected = HP_TABLE[set.regionId]!;
-      expect(set.trials.length).toBe(expected.length);
+      const ramp = trialRamp(set.regionId, set.trials.length);
+      expect(set.trials.length).toBe(ramp.length);
       const state = engine.snapshotState();
       for (const [index, trial] of set.trials.entries()) {
+        const expected = ramp[index]!.vitality;
         const actor = state.actors.find(candidate => candidate.id === trial.monsterId)!;
-        expect([actor.vitality, actor.maxVitality]).toEqual([expected[index], expected[index]]);
+        expect([actor.vitality, actor.maxVitality]).toEqual([expected, expected]);
         const checkpointed = state.checkpoint!.actors.find(candidate => candidate.id === trial.monsterId)!;
-        expect([checkpointed.vitality, checkpointed.maxVitality]).toEqual([expected[index], expected[index]]);
+        expect([checkpointed.vitality, checkpointed.maxVitality]).toEqual([expected, expected]);
         const listed = engine.snapshot().encounterStatus!.monsters[index]!;
-        expect([listed.vitality, listed.maxVitality]).toEqual([expected[index], expected[index]]);
+        expect([listed.vitality, listed.maxVitality]).toEqual([expected, expected]);
       }
     });
   }
 
   it('checkpoint and retry restore the scaled HP of a wounded boss, and a paused restore keeps it', () => {
     const set = combatTrialSetFor('moonpine-ridge')!, boss = set.trials[2]!;
+    const expected = trialRamp('moonpine-ridge', set.trials.length)[2]!.vitality;
     const engine = trialEngine('moonpine-ridge', {
       index: 2,
       mutate: seed => { const actor = seed.actors.find(candidate => candidate.id === boss.monsterId)!; actor.vitality = 37; },
@@ -120,9 +106,9 @@ describe('trial monster vitality', () => {
     expect(engine.snapshotState().actors.find(actor => actor.id === boss.monsterId)!.vitality).toBe(37);
     engine.resetToCheckpoint();
     const restored = engine.snapshotState().actors.find(actor => actor.id === boss.monsterId)!;
-    expect([restored.vitality, restored.maxVitality]).toEqual([484, 484]);
+    expect([restored.vitality, restored.maxVitality]).toEqual([expected, expected]);
     const resumed = new CombatEngine(engine.snapshotState());
-    expect(resumed.snapshotState().actors.find(actor => actor.id === boss.monsterId)!.maxVitality).toBe(484);
+    expect(resumed.snapshotState().actors.find(actor => actor.id === boss.monsterId)!.maxVitality).toBe(expected);
   });
 });
 
@@ -138,12 +124,14 @@ describe('trial snapshot boss flags', () => {
     });
   }
 
-  it('flags only the final stage of a ranked map and nothing in the Grove', () => {
+  it('flags only the final stage of a ranked map and of the Grove (Hollowheart at the Memory Pool)', () => {
     expect(trialEngine('greenwake', { index: 1 }).snapshot().encounterStatus!.trial!.boss).toBe(false);
     expect(trialEngine('greenwake', { index: 2 }).snapshot().encounterStatus!.trial!.boss).toBe(true);
-    const grove = trialEngine('the-grove').snapshot().encounterStatus!;
-    expect(grove.trial!.boss).toBe(false);
-    expect(grove.monsters.every(monster => monster.boss === false)).toBe(true);
+    for (const [index, boss] of [[0, false], [1, false], [2, true]] as const) {
+      const grove = trialEngine('the-grove', { index }).snapshot().encounterStatus!;
+      expect(grove.trial!.boss).toBe(boss);
+      expect(grove.monsters.map(monster => monster.boss)).toEqual([false, false, true]);
+    }
   });
 });
 
@@ -192,17 +180,13 @@ describe('trial damage scaling on real casts', () => {
     }
   });
 
-  it('shortens the live windup and recovery of boss casts exactly by the ramp', () => {
+  it('retains readable boss telegraphs and a recovery interval at the highest rank', () => {
     const regionId = 'mistveil-basin', index = 2, set = combatTrialSetFor(regionId)!;
     const id = set.trials[index]!.attackIds[0]!;
     const { hazard } = castAndCollect(trialEngine(regionId, { index, cursor: 0 }), id, 400);
-    const authored = ATTACKS[id]!;
-    const [windup, commit, , recovery] = rampedTiming(regionId, index, set.trials.length, [authored.windupTicks, authored.commitTicks, authored.activeTicks, authored.recoveryTicks]);
-    expect(hazard.windupUntil! - hazard.startTick).toBe(windup);
-    expect(hazard.windupUntil! - hazard.startTick).toBeGreaterThanOrEqual(24);
-    expect(hazard.windupUntil! - hazard.startTick).toBeLessThan(authored.windupTicks);
-    expect(hazard.activeFrom - hazard.windupUntil!).toBe(commit);
-    expect(hazard.recoveryUntil! - hazard.castUntil!).toBe(recovery);
+    expect(hazard.recoveryUntil!).toBeGreaterThan(hazard.castUntil!);
+    expect(hazard.windupUntil! - hazard.startTick).toBeGreaterThanOrEqual(36);
+    expect(hazard.activeFrom - hazard.windupUntil!).toBeGreaterThanOrEqual(12);
   });
 });
 

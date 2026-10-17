@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, makeActor, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { distance2, vec } from '../../src/game/combat/geometry.js';
-import { MANA_PER_METRE, PLAYER_SKILLS } from '../../src/game/combat/PlayerSkills.js';
+import { MANA_PER_METRE, PLAYER_SKILLS, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
 const idle: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 function engineWithMana(mana: number): CombatEngine { const seed = createEngineState(); seed.player.mana = mana; return new CombatEngine(seed); }
 const position = (engine: CombatEngine) => engine.snapshot().actors.find(actor => actor.id === 'aren')!.position;
@@ -76,10 +76,10 @@ describe('movement-earned mana and authoritative skill readiness', () => {
       seed.actors.push(target);seed.targetId=target.id;
       const engine=new CombatEngine(seed);
       engine.fixedStep({...idle,heavyPressed:true,heavyHeld:true});
-      for(let tick=0;tick<40;tick++)engine.fixedStep({...idle,heavyHeld:true});
+      for(let tick=0;tick<THUNDER_CLEAVE.holdTicks;tick++)engine.fixedStep({...idle,heavyHeld:true});
       expect(ready(engine,'charged_heavy').manaCost).toBe(20);
       expect(ready(engine,'charged_heavy').available).toBe(availableMana>=20);
-      engine.fixedStep({...idle,heavyReleased:true,heavyHeldTicks:40});
+      engine.fixedStep({...idle,heavyReleased:true,heavyHeldTicks:THUNDER_CLEAVE.holdTicks});
       expect(mana(engine)).toBe(availableMana>=20?availableMana-20:availableMana);
       if(availableMana<20){
         expect(engine.snapshot().actors[0]!.actionId).toBe('aren-idle');

@@ -1,13 +1,24 @@
 {
   "schemaVersion": 1,
-  "outputHash": "81c22e63a5f83396e0c8d182bc077c56bd215f935a4fff436da5b3875fbd83cf",
+  "outputHash": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc",
   "grip": {
     "katanaGrip": {
       "length": 1.25,
-      "gripFromPommel": 0.2,
+      "gripFromPommel": 0.356,
+      "handleFromPommel": 0.2,
       "bladeLength": 0.76,
       "diagonalRadians": 2.45,
-      "edgeRadians": 1.18
+      "edgeRadians": 1.18,
+      "guardFromPommel": [
+        0.405,
+        0.445
+      ],
+      "guardRadius": 0.08,
+      "tsubaBackFromPommel": 0.4137,
+      "fuchi": {
+        "length": 0.008,
+        "scale": 1.35
+      }
     },
     "bladeDiagonalDegrees": 140.3746598070517,
     "bladeToMiddleFingerDegrees": 22.907574682065906,
@@ -23,11 +34,11 @@
       -0.373005
     ],
     "palmHand": [
-      -0.055898,
-      0.034703,
-      0.002205
+      0.010844,
+      0.036443,
+      0.02122
     ],
-    "shaftRadiusRig": 0.016384,
+    "shaftRadiusRig": 0.007222,
     "metacarpalHand": [
       -0.140246,
       0.868738,
@@ -39,9 +50,9 @@
       0.877585
     ],
     "palmNormalHand": [
-      -0.990113,
-      -0.12433,
-      -0.064946
+      0.990113,
+      0.12433,
+      0.064946
     ],
     "edgeAxisHand": [
       0.278835,
@@ -54,9 +65,9 @@
         0.363376,
         0.925554
       ],
-      "hingeRig": 0.020595280001362796,
-      "planeRig": 0.014674176909812892,
-      "radiusRig": 0.03621293645779568
+      "hingeRig": 0.03172922235470955,
+      "planeRig": 0.0013688992009214026,
+      "radiusRig": 0.0152773613910783
     }
   },
   "deformationCeiling": {
@@ -70,7 +81,7 @@
       "aren-defeat",
       "vesper-mist-blink"
     ],
-    "p999": 1.71719,
+    "p999": 1.71734,
     "gaitCeilingP999": 1.45892
   },
   "clips": {
@@ -95,15 +106,15 @@
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.24649064381407007,
+        "bodyMinMetres": 0.05871915573595333,
         "bodyBone": "RightUpLeg",
         "bodyFrame": 57,
-        "floorMetres": 0.3140250095647942,
-        "floorFrame": 11,
+        "floorMetres": 0.35704465639981087,
+        "floorFrame": 2,
         "intersections": [],
-        "minRigUnits": 0.030226556446261786,
-        "minMetres": 0.05138514595864504,
-        "frame": 11,
+        "minRigUnits": 0.02147496617059729,
+        "minMetres": 0.0365074424900154,
+        "frame": 22,
         "bone": "RightForeArm"
       },
       "deformation": {
@@ -120,6 +131,7 @@
           "donor": "asset-source/mixamo/vesper/run-with-sword.fbx"
         }
       ],
+      "armMaxCorrectionDegrees": 25,
       "wristMaxCorrectionDegrees": 43.3,
       "limits": "JOINT_LIMITS",
       "peakSwing": 116.3,
@@ -128,27 +140,27 @@
         "mixamorig:LeftLeg": 0.43
       },
       "midFrameBladeDegrees": {
-        "max": 0.1,
-        "frame": 1
+        "max": 0.3,
+        "frame": 5
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.03542795000355436,
+        "bodyMinMetres": 0.06968097010266724,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 8,
-        "floorMetres": 0.4810382732683381,
-        "floorFrame": 13,
+        "bodyFrame": 6.75,
+        "floorMetres": 0.5085368124960166,
+        "floorFrame": 10,
         "intersections": [],
-        "minRigUnits": 0.020839970590326093,
-        "minMetres": 0.03542795000355436,
-        "frame": 8,
-        "bone": "RightUpLeg"
+        "minRigUnits": 0.0025322776026167892,
+        "minMetres": 0.004304871924448541,
+        "frame": 14,
+        "bone": "RightArm"
       },
       "soleGroundShiftMetres": 0.0022,
       "deformation": {
-        "p99": 0.6668,
+        "p99": 0.66439,
         "p999": 1.40383,
-        "max": 2.40268,
+        "max": 2.40267,
         "worstBone": "RightArm"
       }
     },
@@ -160,6 +172,7 @@
           "mirrored": true
         }
       ],
+      "armMaxCorrectionDegrees": 22.9,
       "wristMaxCorrectionDegrees": 45,
       "limits": "JOINT_LIMITS",
       "peakSwing": 117.6,
@@ -168,26 +181,26 @@
         "mixamorig:RightLeg": 0.43
       },
       "midFrameBladeDegrees": {
-        "max": 0.7,
-        "frame": 8
+        "max": 0.6,
+        "frame": 5
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.05501800067974665,
+        "bodyMinMetres": 0.03463946043873939,
         "bodyBone": "Spine1",
         "bodyFrame": 2,
-        "floorMetres": 0.6618628248885078,
+        "floorMetres": 0.5856146270821939,
         "floorFrame": 4,
         "intersections": [],
-        "minRigUnits": 0.0302027722557282,
-        "minMetres": 0.05134471283473794,
-        "frame": 10,
-        "bone": "RightForeArm"
+        "minRigUnits": 0.020376153199258465,
+        "minMetres": 0.03463946043873939,
+        "frame": 2,
+        "bone": "Spine1"
       },
       "soleGroundShiftMetres": 0.01495,
       "deformation": {
-        "p99": 0.66157,
-        "p999": 1.37314,
+        "p99": 0.65759,
+        "p999": 1.37751,
         "max": 2.82715,
         "worstBone": "RightLeg"
       }
@@ -199,6 +212,7 @@
           "donor": "tripo:jump"
         }
       ],
+      "armMaxCorrectionDegrees": 17.8,
       "wristMaxCorrectionDegrees": 44.3,
       "limits": "JOINT_LIMITS",
       "peakSwing": 99.2,
@@ -208,25 +222,25 @@
         "mixamorig:RightFoot": 1.03
       },
       "midFrameBladeDegrees": {
-        "max": 0.9,
+        "max": 0.6,
         "frame": 8
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.04969267063024303,
+        "bodyMinMetres": 0.039401773376697466,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 21,
-        "floorMetres": 0.1483664715534035,
-        "floorFrame": 21,
+        "bodyFrame": 3.625,
+        "floorMetres": 0.16969653778417151,
+        "floorFrame": 20,
         "intersections": [],
-        "minRigUnits": 0.02666051045796123,
-        "minMetres": 0.04532286777853409,
-        "frame": 13,
+        "minRigUnits": 0.014012698295719793,
+        "minMetres": 0.023821587102723647,
+        "frame": 7.25,
         "bone": "RightForeArm"
       },
       "deformation": {
-        "p99": 0.447,
-        "p999": 0.86792,
+        "p99": 0.44664,
+        "p999": 0.86713,
         "max": 2.501,
         "worstBone": "Spine1"
       }
@@ -238,7 +252,8 @@
           "donor": "tripo:hit_to_body_01"
         }
       ],
-      "wristMaxCorrectionDegrees": 0,
+      "armMaxCorrectionDegrees": 14,
+      "wristMaxCorrectionDegrees": 1.7,
       "limits": "JOINT_LIMITS",
       "peakSwing": 127.1,
       "peakTwist": 83.2,
@@ -252,20 +267,20 @@
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.09153022607463304,
-        "bodyBone": "Head",
+        "bodyMinMetres": 0.07683493654169436,
+        "bodyBone": "Spine1",
         "bodyFrame": 0,
-        "floorMetres": 1.0096399578641808,
-        "floorFrame": 11.25,
+        "floorMetres": 0.820184806752876,
+        "floorFrame": 12,
         "intersections": [],
-        "minRigUnits": 0.02727629735344588,
-        "minMetres": 0.046369705500858,
-        "frame": 9,
+        "minRigUnits": 0.01766297835159801,
+        "minMetres": 0.030027063197716617,
+        "frame": 10,
         "bone": "RightForeArm"
       },
       "deformation": {
-        "p99": 0.76028,
-        "p999": 1.44772,
+        "p99": 0.75785,
+        "p999": 1.43758,
         "max": 2.94735,
         "worstBone": "LeftArm"
       }
@@ -277,7 +292,8 @@
           "donor": "tripo:cheer"
         }
       ],
-      "wristMaxCorrectionDegrees": 14.2,
+      "armMaxCorrectionDegrees": 10,
+      "wristMaxCorrectionDegrees": 24,
       "limits": "JOINT_LIMITS",
       "peakSwing": 81.9,
       "peakTwist": 114.7,
@@ -288,20 +304,20 @@
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.06495888221319548,
+        "bodyMinMetres": 0.03694437322675109,
         "bodyBone": "RightUpLeg",
         "bodyFrame": 142,
-        "floorMetres": 0.04011359188302938,
-        "floorFrame": 109,
+        "floorMetres": 0.055672038595667474,
+        "floorFrame": 148,
         "intersections": [],
-        "minRigUnits": 0.025060184849638546,
-        "minMetres": 0.04260231424438553,
-        "frame": 28,
+        "minRigUnits": 0.015102822210871114,
+        "minMetres": 0.025674797758480892,
+        "frame": 148,
         "bone": "RightForeArm"
       },
       "deformation": {
-        "p99": 0.92576,
-        "p999": 1.71719,
+        "p99": 0.92618,
+        "p999": 1.71734,
         "max": 2.83447,
         "worstBone": "Spine1"
       }
@@ -313,31 +329,32 @@
           "donor": "tripo:defeat_02"
         }
       ],
-      "wristMaxCorrectionDegrees": 28.1,
+      "armMaxCorrectionDegrees": 20,
+      "wristMaxCorrectionDegrees": 1.5,
       "limits": "JOINT_LIMITS",
       "peakSwing": 107.9,
       "peakTwist": 57.6,
       "corrections": {},
       "midFrameBladeDegrees": {
-        "max": 0.7,
-        "frame": 47
+        "max": 0.5,
+        "frame": 46
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.008217565144187122,
+        "bodyMinMetres": 0.008847201811503459,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 57.125,
-        "floorMetres": 0.04260108163279591,
-        "floorFrame": 71,
+        "bodyFrame": 50,
+        "floorMetres": 0.08974728350025778,
+        "floorFrame": 117,
         "intersections": [],
-        "minRigUnits": 0.004833861849521837,
-        "minMetres": 0.008217565144187122,
-        "frame": 57.125,
+        "minRigUnits": 0.005204236359707917,
+        "minMetres": 0.008847201811503459,
+        "frame": 50,
         "bone": "RightUpLeg"
       },
       "deformation": {
-        "p99": 0.35337,
-        "p999": 0.71069,
+        "p99": 0.35225,
+        "p999": 0.75036,
         "max": 3.0017,
         "worstBone": "RightArm"
       }
@@ -354,46 +371,48 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 5.3,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
       "peakSwing": 82.9,
-      "peakTwist": 62.9,
+      "peakTwist": 62.6,
       "corrections": {
         "mixamorig:LeftLeg": 0.24
       },
       "midFrameBladeDegrees": {
-        "max": 9.7,
+        "max": 14.6,
         "frame": 0
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.1073759551823442,
+        "bodyMinMetres": 0.022445095631062426,
         "bodyBone": "RightUpLeg",
         "bodyFrame": 0,
-        "floorMetres": 0.18033667482873963,
-        "floorFrame": 0,
+        "floorMetres": 0.37057217402505455,
+        "floorFrame": 9,
         "intersections": [],
-        "minRigUnits": 0.020245602012155403,
-        "minMetres": 0.03441752342066418,
-        "frame": 4,
-        "bone": "RightArm"
+        "minRigUnits": 0.013202997430036723,
+        "minMetres": 0.022445095631062426,
+        "frame": 0,
+        "bone": "RightUpLeg"
       },
       "edgeLead": {
         "6": {
-          "frontalDegrees": 60.70783232696936,
-          "edgeAngle": 14.11433696163062,
-          "edgeAcrossAngle": 6.094908391674257,
-          "bladeToTravelAngle": 102.75471510143683,
-          "tipMetresPerSecond": 34.59484163532953,
-          "travelPitchDegrees": 2.1013873869283364
+          "frontalDegrees": 62.6328488725603,
+          "edgeAngle": 18.73103498953661,
+          "edgeAcrossAngle": 3.864469169373136,
+          "bladeToTravelAngle": 108.34206521982217,
+          "tipMetresPerSecond": 29.40428256492693,
+          "travelPitchDegrees": 7.232138530062824
         }
       },
       "hipsTravel": {
@@ -401,9 +420,9 @@
         "verticalMetres": 0.0917
       },
       "deformation": {
-        "p99": 0.70467,
-        "p999": 1.38049,
-        "max": 2.27179,
+        "p99": 0.7043,
+        "p999": 1.38188,
+        "max": 2.27484,
         "worstBone": "RightShoulder"
       }
     },
@@ -416,56 +435,59 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
-            "preRate": 1,
-            "postRate": 0.5
+            "preRate": 1.35,
+            "postRate": 0.45,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 6,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 109.9,
-      "peakTwist": 45.9,
+      "peakSwing": 107.7,
+      "peakTwist": 62.6,
       "corrections": {
-        "mixamorig:RightHand": 0
+        "mixamorig:Neck": 0.17,
+        "mixamorig:RightHand": 1.33
       },
       "midFrameBladeDegrees": {
-        "max": 2.6,
-        "frame": 2
+        "max": 3.6,
+        "frame": 0
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.06944332123062603,
-        "bodyBone": "LeftUpLeg",
+        "bodyMinMetres": 0.04049445548847565,
+        "bodyBone": "Spine1",
         "bodyFrame": 9,
-        "floorMetres": 0.30155771697080536,
+        "floorMetres": 0.7210119013632525,
         "floorFrame": 9,
         "intersections": [],
-        "minRigUnits": 0.025272507823909073,
-        "minMetres": 0.04296326330064542,
-        "frame": 2.875,
+        "minRigUnits": 0.014174287759597531,
+        "minMetres": 0.024096289191315803,
+        "frame": 9,
         "bone": "RightForeArm"
       },
       "edgeLead": {
         "6": {
-          "frontalDegrees": 50.498811036593814,
-          "edgeAngle": 3.177706613796339,
-          "edgeAcrossAngle": 2.55191292331256,
-          "bladeToTravelAngle": 91.89417609736518,
-          "tipMetresPerSecond": 24.968473856162028,
-          "travelPitchDegrees": -22.34090258469042
+          "frontalDegrees": 54.27273968720464,
+          "edgeAngle": 7.362930678046647,
+          "edgeAcrossAngle": 3.3541905612060585,
+          "bladeToTravelAngle": 96.55829483108495,
+          "tipMetresPerSecond": 19.045725899380223,
+          "travelPitchDegrees": -25.546922415615434
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0292
+        "verticalMetres": 0.0407
       },
       "deformation": {
-        "p99": 0.81402,
-        "p999": 1.47443,
-        "max": 3.08459,
+        "p99": 0.81656,
+        "p999": 1.47751,
+        "max": 3.20653,
         "worstBone": "LeftUpLeg"
       }
     },
@@ -478,59 +500,61 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 0.8666666666666667,
-            "donorTipMetresPerSecond": 34.14080759966591,
-            "donorContactAngle": 28.459642007009727,
+            "donorTipMetresPerSecond": 29.077115176345778,
+            "donorContactAngle": 27.131143024316692,
             "contactWithinMax": true,
-            "preRate": 0.6,
-            "postRate": 0.3
+            "preRate": 0.8,
+            "postRate": 0.45,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 12,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 76.9,
-      "peakTwist": 87.8,
+      "peakSwing": 78.1,
+      "peakTwist": 89,
       "corrections": {
-        "mixamorig:Spine": 0.24,
-        "mixamorig:Spine1": 0.07,
-        "mixamorig:Spine2": 0.17,
-        "mixamorig:RightHand": 4.07
+        "mixamorig:Spine": 0.47,
+        "mixamorig:Spine1": 0.31,
+        "mixamorig:Spine2": 0.41,
+        "mixamorig:RightHand": 23.51
       },
       "midFrameBladeDegrees": {
-        "max": 3.3,
+        "max": 7.1,
         "frame": 2
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.17851129854688183,
+        "bodyMinMetres": 0.03431920928712332,
         "bodyBone": "LeftUpLeg",
-        "bodyFrame": 11,
-        "floorMetres": 0.7550379578174572,
-        "floorFrame": 11,
+        "bodyFrame": 8.75,
+        "floorMetres": 0.5905896220149555,
+        "floorFrame": 0.25,
         "intersections": [],
-        "minRigUnits": 0.014692065933420304,
-        "minMetres": 0.024976512086814517,
-        "frame": 4,
-        "bone": "RightArm"
+        "minRigUnits": 0.01373512600481984,
+        "minMetres": 0.023349714208193727,
+        "frame": 8,
+        "bone": "RightForeArm"
       },
       "edgeLead": {
         "8": {
-          "frontalDegrees": 68.08543064907032,
-          "edgeAngle": 2.6242323737696274,
-          "edgeAcrossAngle": 2.3574585952204288,
-          "bladeToTravelAngle": 91.15313222404279,
-          "tipMetresPerSecond": 20.1756051820605,
-          "travelPitchDegrees": -10.955954312898772
+          "frontalDegrees": 59.026196495238445,
+          "edgeAngle": 8.266433528028518,
+          "edgeAcrossAngle": 8.26603788752761,
+          "bladeToTravelAngle": 90.08115228842303,
+          "tipMetresPerSecond": 19.902549121292832,
+          "travelPitchDegrees": -16.927412058877778
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0261
+        "verticalMetres": 0.0424
       },
       "deformation": {
-        "p99": 0.77743,
-        "p999": 1.43676,
-        "max": 2.29567,
+        "p99": 0.78075,
+        "p999": 1.45193,
+        "max": 2.55951,
         "worstBone": "LeftArm"
       }
     },
@@ -543,57 +567,60 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
-            "preRate": 0.3,
-            "postRate": 0.8
+            "preRate": 0.8,
+            "postRate": 0.8,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 12,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 89,
-      "peakTwist": 62.8,
+      "peakSwing": 106.7,
+      "peakTwist": 63.4,
       "corrections": {
-        "mixamorig:LeftLeg": 0.4
+        "mixamorig:LeftLeg": 0.4,
+        "mixamorig:RightLeg": 0.02
       },
       "midFrameBladeDegrees": {
-        "max": 1.8,
+        "max": 4.5,
         "frame": 5
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.08452342305255141,
+        "bodyMinMetres": 0.0629336645897086,
         "bodyBone": "Spine1",
-        "bodyFrame": 1,
-        "floorMetres": 0.31854730463075065,
-        "floorFrame": 13.75,
+        "bodyFrame": 3,
+        "floorMetres": 0.35012947793562926,
+        "floorFrame": 0,
         "intersections": [],
-        "minRigUnits": 0.008002413548002282,
-        "minMetres": 0.01360410303160388,
-        "frame": 1,
-        "bone": "LeftArm"
+        "minRigUnits": 0.014075860171413143,
+        "minMetres": 0.02392896229140234,
+        "frame": 5.5,
+        "bone": "RightArm"
       },
       "edgeLead": {
         "10": {
-          "frontalDegrees": 69.00043865455856,
-          "edgeAngle": 18.1376564111214,
-          "edgeAcrossAngle": 0.5714826936374836,
-          "bladeToTravelAngle": 108.12895689853687,
-          "tipMetresPerSecond": 17.14631056961804,
-          "travelPitchDegrees": 9.103686022116046
+          "frontalDegrees": 50.4422618297207,
+          "edgeAngle": 19.204008995622328,
+          "edgeAcrossAngle": 0.548983678742838,
+          "bladeToTravelAngle": 109.1964673287977,
+          "tipMetresPerSecond": 28.19371120804567,
+          "travelPitchDegrees": 12.710069054293204
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0532
+        "verticalMetres": 0.1238
       },
       "deformation": {
-        "p99": 0.75364,
-        "p999": 1.46704,
-        "max": 2.31934,
-        "worstBone": "RightShoulder"
+        "p99": 0.77967,
+        "p999": 1.47212,
+        "max": 2.80908,
+        "worstBone": "RightArm"
       }
     },
     "vesper-thousand-cuts": {
@@ -605,11 +632,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
             "preRate": 0.3,
-            "postRate": 0.8
+            "postRate": 0.8,
+            "accent": false
           }
         },
         {
@@ -618,11 +646,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2,
-            "donorTipMetresPerSecond": 20.548626369707556,
-            "donorContactAngle": 29.595707893867853,
+            "donorTipMetresPerSecond": 17.12328943713777,
+            "donorContactAngle": 27.211584869766586,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -631,11 +660,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -644,11 +674,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": false
           }
         },
         {
@@ -657,11 +688,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2,
-            "donorTipMetresPerSecond": 20.548626369707556,
-            "donorContactAngle": 29.595707893867853,
+            "donorTipMetresPerSecond": 17.12328943713777,
+            "donorContactAngle": 27.211584869766586,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -670,11 +702,12 @@
             "kind": "thrust",
             "reversed": false,
             "sourceSeconds": 0.7333333333333333,
-            "donorTipMetresPerSecond": 9.670429509560144,
-            "donorContactAngle": 19.261958335611943,
+            "donorTipMetresPerSecond": 8.912444238700171,
+            "donorContactAngle": 16.261240586290217,
             "contactWithinMax": true,
-            "preRate": 0.45,
-            "postRate": 0.45
+            "preRate": 0.55,
+            "postRate": 0.55,
+            "accent": false
           }
         },
         {
@@ -683,105 +716,106 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 12,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
       "peakSwing": 111.2,
-      "peakTwist": 62.9,
+      "peakTwist": 72.5,
       "corrections": {
-        "mixamorig:RightHand": 0.28,
         "mixamorig:LeftLeg": 0
       },
       "midFrameBladeDegrees": {
-        "max": 10.2,
-        "frame": 11
+        "max": 10.6,
+        "frame": 16
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.06165938390824391,
-        "bodyBone": "LeftUpLeg",
-        "bodyFrame": 36,
-        "floorMetres": 0.11543379106824679,
+        "bodyMinMetres": 0.013362430660060032,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 26.375,
+        "floorMetres": 0.5756252828810681,
         "floorFrame": 36,
         "intersections": [],
-        "minRigUnits": 0.019914072275262804,
-        "minMetres": 0.033853922867946765,
-        "frame": 1,
-        "bone": "LeftArm"
+        "minRigUnits": 0.007860253329447078,
+        "minMetres": 0.013362430660060032,
+        "frame": 26.375,
+        "bone": "RightUpLeg"
       },
       "edgeLead": {
         "8": {
-          "frontalDegrees": 69.00043865455856,
-          "edgeAngle": 18.1376564111214,
-          "edgeAcrossAngle": 0.5714826936374836,
-          "bladeToTravelAngle": 108.12895689853687,
-          "tipMetresPerSecond": 17.14631056961804,
-          "travelPitchDegrees": 9.103686022116046
+          "frontalDegrees": 67.1354461315273,
+          "edgeAngle": 22.821661208788154,
+          "edgeAcrossAngle": 6.311876718771349,
+          "bladeToTravelAngle": 111.97643364829035,
+          "tipMetresPerSecond": 13.388715128623785,
+          "travelPitchDegrees": 20.17352944391834
         },
         "18": {
-          "frontalDegrees": 27.062368803653893,
-          "edgeAngle": 19.643466148381687,
-          "edgeAcrossAngle": 0.26896428027657876,
-          "bladeToTravelAngle": 109.64171423744197,
-          "tipMetresPerSecond": 24.769677356458793,
-          "travelPitchDegrees": -38.72934313921298
+          "frontalDegrees": 36.05111389027003,
+          "edgeAngle": 22.54990737554828,
+          "edgeAcrossAngle": 0.28740309732205604,
+          "bladeToTravelAngle": 112.54818971816127,
+          "tipMetresPerSecond": 11.541195306776034,
+          "travelPitchDegrees": -39.37745380402314
         },
         "28": {
-          "frontalDegrees": 31.873402986936366,
-          "edgeAngle": 4.014602477073513,
-          "edgeAcrossAngle": 2.2764535932076386,
-          "bladeToTravelAngle": 93.307641593437,
-          "tipMetresPerSecond": 40.72071766993592,
-          "travelPitchDegrees": -22.895582802819412
+          "frontalDegrees": 54.000263123014115,
+          "edgeAngle": 8.299138852535375,
+          "edgeAcrossAngle": 3.92441844040387,
+          "bladeToTravelAngle": 97.31836007126397,
+          "tipMetresPerSecond": 18.131330838872366,
+          "travelPitchDegrees": -25.516048358707003
         },
         "38": {
-          "frontalDegrees": 60.70783232696936,
-          "edgeAngle": 11.119976403163843,
-          "edgeAcrossAngle": 3.5565857149993074,
-          "bladeToTravelAngle": 100.54266449228923,
-          "tipMetresPerSecond": 37.673019973477885,
-          "travelPitchDegrees": 4.412226806642328
+          "frontalDegrees": 57.883022345144994,
+          "edgeAngle": 13.252773422364251,
+          "edgeAcrossAngle": 3.7801874067365877,
+          "bladeToTravelAngle": 102.71148102581265,
+          "tipMetresPerSecond": 31.576232399419673,
+          "travelPitchDegrees": 11.209806452877885
         },
         "48": {
-          "frontalDegrees": 27.062368803653893,
-          "edgeAngle": 19.749554205894952,
-          "edgeAcrossAngle": 0.3677776882961418,
-          "bladeToTravelAngle": 109.74628303832793,
-          "tipMetresPerSecond": 24.710141141761145,
-          "travelPitchDegrees": -38.64516151805511
+          "frontalDegrees": 36.05111453810919,
+          "edgeAngle": 22.3453752282369,
+          "edgeAcrossAngle": 1.148604408414304,
+          "bladeToTravelAngle": 112.31736385079303,
+          "tipMetresPerSecond": 11.585464425799126,
+          "travelPitchDegrees": -38.57230491542254
         },
         "58": {
-          "frontalDegrees": 34.55649584636774,
-          "edgeAngle": 91.15530096470955,
-          "edgeAcrossAngle": 100.49573773738072,
-          "bladeToTravelAngle": 6.354713040562852,
-          "tipMetresPerSecond": 3.123544452398484,
-          "travelPitchDegrees": 25.835980867230877
+          "frontalDegrees": 15.228017518448032,
+          "edgeAngle": 92.99601028127698,
+          "edgeAcrossAngle": 107.37039596994677,
+          "bladeToTravelAngle": 10.082656808638626,
+          "tipMetresPerSecond": 3.674144770451692,
+          "travelPitchDegrees": 21.893222504462443
         },
         "66": {
-          "frontalDegrees": 31.873408799884277,
-          "edgeAngle": 4.655262078097246,
-          "edgeAcrossAngle": 1.9235553493587583,
-          "bladeToTravelAngle": 94.24005748392918,
-          "tipMetresPerSecond": 37.3477410642165,
-          "travelPitchDegrees": -23.874621494787984
+          "frontalDegrees": 51.06334797674005,
+          "edgeAngle": 6.061253124138041,
+          "edgeAcrossAngle": 5.171015955687997,
+          "bladeToTravelAngle": 93.16647787709947,
+          "tipMetresPerSecond": 25.32695309022261,
+          "travelPitchDegrees": -23.393010704208265
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.1168
+        "verticalMetres": 0.1144
       },
       "deformation": {
-        "p99": 0.76083,
-        "p999": 1.5243,
-        "max": 3.12077,
+        "p99": 0.75522,
+        "p999": 1.52613,
+        "max": 3.30411,
         "worstBone": "LeftUpLeg"
       }
     },
@@ -794,11 +828,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
             "preRate": 0.3,
-            "postRate": 0.8
+            "postRate": 0.8,
+            "accent": false
           }
         },
         {
@@ -807,11 +842,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2,
-            "donorTipMetresPerSecond": 20.548626369707556,
-            "donorContactAngle": 29.595707893867853,
+            "donorTipMetresPerSecond": 17.12328943713777,
+            "donorContactAngle": 27.211584869766586,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -820,11 +856,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -833,11 +870,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 1.1666666666666667,
-            "donorTipMetresPerSecond": 27.42276429832554,
-            "donorContactAngle": 21.238803348331494,
+            "donorTipMetresPerSecond": 22.480366571279962,
+            "donorContactAngle": 19.468484946234003,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": false
           }
         },
         {
@@ -846,11 +884,12 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2,
-            "donorTipMetresPerSecond": 20.548626369707556,
-            "donorContactAngle": 29.595707893867853,
+            "donorTipMetresPerSecond": 17.12328943713777,
+            "donorContactAngle": 27.211584869766586,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 1.1
+            "postRate": 1.1,
+            "accent": true
           }
         },
         {
@@ -859,11 +898,12 @@
             "kind": "thrust",
             "reversed": false,
             "sourceSeconds": 0.7333333333333333,
-            "donorTipMetresPerSecond": 9.670429509560144,
-            "donorContactAngle": 19.261958335611943,
+            "donorTipMetresPerSecond": 8.912444238700171,
+            "donorContactAngle": 16.261240586290217,
             "contactWithinMax": true,
             "preRate": 0.45,
-            "postRate": 0.45
+            "postRate": 0.45,
+            "accent": false
           }
         },
         {
@@ -872,110 +912,112 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
             "preRate": 1.5,
-            "postRate": 0.15
+            "postRate": 0.15,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 12,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 112.7,
-      "peakTwist": 75.1,
+      "peakSwing": 107.8,
+      "peakTwist": 76.2,
       "corrections": {},
       "midFrameBladeDegrees": {
-        "max": 10.6,
-        "frame": 14
+        "max": 11.9,
+        "frame": 20
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.07907241677325333,
+        "bodyMinMetres": 0.00802566980750089,
         "bodyBone": "LeftUpLeg",
-        "bodyFrame": 60,
-        "floorMetres": 0.06749048962082359,
+        "bodyFrame": 47,
+        "floorMetres": 0.3315481345459265,
         "floorFrame": 33,
         "intersections": [],
-        "minRigUnits": 0.008002413548002282,
-        "minMetres": 0.01360410303160388,
-        "frame": 2,
-        "bone": "LeftArm"
+        "minRigUnits": 0.004720982239706406,
+        "minMetres": 0.00802566980750089,
+        "frame": 47,
+        "bone": "LeftUpLeg"
       },
       "edgeLead": {
         "12": {
-          "frontalDegrees": 69.00043865455856,
-          "edgeAngle": 18.1376564111214,
-          "edgeAcrossAngle": 0.5714826936374836,
-          "bladeToTravelAngle": 108.12895689853687,
-          "tipMetresPerSecond": 17.14631056961804,
-          "travelPitchDegrees": 9.103686022116046
+          "frontalDegrees": 67.1354461315273,
+          "edgeAngle": 22.821661208788154,
+          "edgeAcrossAngle": 6.311876718771349,
+          "bladeToTravelAngle": 111.97643364829035,
+          "tipMetresPerSecond": 13.388715128623785,
+          "travelPitchDegrees": 20.17352944391834
         },
         "24": {
-          "frontalDegrees": 27.062368803653893,
-          "edgeAngle": 19.62338697603991,
-          "edgeAcrossAngle": 0.25232147393736154,
-          "bladeToTravelAngle": 109.62184546850183,
-          "tipMetresPerSecond": 24.780973277344103,
-          "travelPitchDegrees": -38.74333086422323
+          "frontalDegrees": 34.24339858134934,
+          "edgeAngle": 22.347143687207176,
+          "edgeAcrossAngle": 0.9817100188803881,
+          "bladeToTravelAngle": 112.32669024241879,
+          "tipMetresPerSecond": 13.82452934702228,
+          "travelPitchDegrees": -40.05558620484261
         },
         "36": {
-          "frontalDegrees": 31.87340437995968,
-          "edgeAngle": 3.832178287987918,
-          "edgeAcrossAngle": 2.213364996321305,
-          "bladeToTravelAngle": 93.12912497136128,
-          "tipMetresPerSecond": 40.3523349508674,
-          "travelPitchDegrees": -22.761068973538794
+          "frontalDegrees": 51.06334395890322,
+          "edgeAngle": 7.948506773929943,
+          "edgeAcrossAngle": 4.58765536143495,
+          "bladeToTravelAngle": 96.49787758318898,
+          "tipMetresPerSecond": 21.687379254749082,
+          "travelPitchDegrees": -24.903612687134142
         },
         "48": {
-          "frontalDegrees": 60.70783232696936,
-          "edgeAngle": 12.06222342960008,
-          "edgeAcrossAngle": 3.807232814897991,
-          "bladeToTravelAngle": 101.45408100886135,
-          "tipMetresPerSecond": 37.056145057180856,
-          "travelPitchDegrees": 4.662432640946131
+          "frontalDegrees": 57.883022345144994,
+          "edgeAngle": 13.335392897869403,
+          "edgeAcrossAngle": 4.033335938260592,
+          "bladeToTravelAngle": 102.72137833044209,
+          "tipMetresPerSecond": 31.58070863381221,
+          "travelPitchDegrees": 10.998796049389219
         },
         "60": {
-          "frontalDegrees": 27.062368803653893,
-          "edgeAngle": 19.65779868885882,
-          "edgeAcrossAngle": 0.2812380964352164,
-          "bladeToTravelAngle": 109.6558831836859,
-          "tipMetresPerSecond": 24.761619241790722,
-          "travelPitchDegrees": -38.71898627612333
+          "frontalDegrees": 34.2433976042823,
+          "edgeAngle": 22.27264534515441,
+          "edgeAcrossAngle": 0.7095816332877762,
+          "bladeToTravelAngle": 112.2619306646446,
+          "tipMetresPerSecond": 13.834829950158596,
+          "travelPitchDegrees": -39.801504032371206
         },
         "72": {
-          "frontalDegrees": 7.797774685823597,
-          "edgeAngle": 82.95408927200131,
-          "edgeAcrossAngle": 59.106235317699294,
-          "bladeToTravelAngle": 13.821858410582264,
-          "tipMetresPerSecond": 3.2727603243741297,
-          "travelPitchDegrees": 1.8239530836774809
+          "frontalDegrees": 9.845725315040847,
+          "edgeAngle": 88.58027041470878,
+          "edgeAcrossAngle": 85.60617705993252,
+          "bladeToTravelAngle": 18.868891589697583,
+          "tipMetresPerSecond": 3.213696404129182,
+          "travelPitchDegrees": 23.495776755249675
         },
         "84": {
-          "frontalDegrees": 62.072647345479574,
-          "edgeAngle": 7.335180281324046,
-          "edgeAcrossAngle": 3.843219758375923,
-          "bladeToTravelAngle": 83.74753631446634,
-          "tipMetresPerSecond": 27.045947954445616,
-          "travelPitchDegrees": -16.60173939347835
+          "frontalDegrees": 54.27273968720464,
+          "edgeAngle": 6.675110979555877,
+          "edgeAcrossAngle": 3.8114506870873823,
+          "bladeToTravelAngle": 95.48400065642117,
+          "tipMetresPerSecond": 20.46205908767481,
+          "travelPitchDegrees": -24.925212568777383
         },
         "110": {
-          "frontalDegrees": 6.846773459744174,
-          "edgeAngle": 13.17162424358172,
-          "edgeAcrossAngle": 12.727312333971415,
-          "bladeToTravelAngle": 93.42057779978178,
-          "tipMetresPerSecond": 4.73401808820871,
-          "travelPitchDegrees": -44.73283853503321
+          "frontalDegrees": 17.767158459981232,
+          "edgeAngle": 90,
+          "edgeAcrossAngle": 90,
+          "bladeToTravelAngle": 90,
+          "tipMetresPerSecond": 0,
+          "travelPitchDegrees": 0
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.1237
+        "verticalMetres": 0.1219
       },
       "deformation": {
-        "p99": 0.78569,
-        "p999": 1.51468,
-        "max": 3.12077,
+        "p99": 0.77583,
+        "p999": 1.49777,
+        "max": 2.95495,
         "worstBone": "LeftUpLeg"
       }
     },
@@ -988,54 +1030,58 @@
             "kind": "cut",
             "reversed": false,
             "sourceSeconds": 2.966666666666667,
-            "donorTipMetresPerSecond": 29.33595700817657,
-            "donorContactAngle": 18.881926600527905,
+            "donorTipMetresPerSecond": 25.130496644338837,
+            "donorContactAngle": 18.149305758288055,
             "contactWithinMax": true,
-            "preRate": 0.3,
-            "postRate": 0.25
+            "preRate": 0.5,
+            "postRate": 0.28,
+            "accent": true
           }
         }
       ],
+      "armMaxCorrectionDegrees": 18,
       "wristMaxCorrectionDegrees": 30,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 109.9,
-      "peakTwist": 69.6,
-      "corrections": {},
+      "peakSwing": 111.5,
+      "peakTwist": 74.6,
+      "corrections": {
+        "mixamorig:LeftLeg": 0
+      },
       "midFrameBladeDegrees": {
-        "max": 0.3,
-        "frame": 4
+        "max": 1.3,
+        "frame": 5
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.03781533394703179,
-        "bodyBone": "LeftUpLeg",
-        "bodyFrame": 18,
-        "floorMetres": 0.2860389077381147,
-        "floorFrame": 18,
+        "bodyMinMetres": 0.03453615928150567,
+        "bodyBone": "Spine1",
+        "bodyFrame": 11,
+        "floorMetres": 0.6372651734852568,
+        "floorFrame": 11,
         "intersections": [],
-        "minRigUnits": 0.02224431408648929,
-        "minMetres": 0.03781533394703179,
-        "frame": 18,
-        "bone": "LeftUpLeg"
+        "minRigUnits": 0.013618725670047724,
+        "minMetres": 0.02315183363908113,
+        "frame": 12,
+        "bone": "RightForeArm"
       },
       "edgeLead": {
         "12": {
-          "frontalDegrees": 58.519487611450295,
-          "edgeAngle": 7.367362719035723,
-          "edgeAcrossAngle": 0.05875877778666415,
-          "bladeToTravelAngle": 97.36711958753509,
-          "tipMetresPerSecond": 9.265918238895743,
-          "travelPitchDegrees": -25.694605668080904
+          "frontalDegrees": 50.74622035315586,
+          "edgeAngle": 10.340192785561701,
+          "edgeAcrossAngle": 1.4548781469839072,
+          "bladeToTravelAngle": 100.23842139693738,
+          "tipMetresPerSecond": 16.992224427133696,
+          "travelPitchDegrees": -27.515205040167373
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0147
+        "verticalMetres": 0.0292
       },
       "deformation": {
-        "p99": 0.82152,
-        "p999": 1.47877,
-        "max": 3.37454,
+        "p99": 0.82502,
+        "p999": 1.46883,
+        "max": 3.46435,
         "worstBone": "LeftUpLeg"
       }
     },
@@ -1048,57 +1094,59 @@
             "kind": "thrust",
             "reversed": false,
             "sourceSeconds": 0.7333333333333333,
-            "donorTipMetresPerSecond": 9.670429509560144,
-            "donorContactAngle": 19.261958335611943,
+            "donorTipMetresPerSecond": 8.912444238700171,
+            "donorContactAngle": 16.261240586290217,
             "contactWithinMax": true,
-            "preRate": 0.45,
-            "postRate": 0.45
+            "preRate": 0.6,
+            "postRate": 0.5,
+            "accent": true
           }
         }
       ],
-      "wristMaxCorrectionDegrees": 16,
+      "armMaxCorrectionDegrees": 4,
+      "wristMaxCorrectionDegrees": 13.4,
       "limits": "JOINT_LIMITS",
       "peakSwing": 107.8,
-      "peakTwist": 87,
+      "peakTwist": 83.7,
       "corrections": {
-        "mixamorig:RightHand": 2.25
+        "mixamorig:RightHand": 0.26
       },
       "midFrameBladeDegrees": {
-        "max": 0.4,
+        "max": 1.1,
         "frame": 4
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.06722991267316494,
+        "bodyMinMetres": 0.0348318527182922,
         "bodyBone": "RightUpLeg",
         "bodyFrame": 0,
-        "floorMetres": 0.4035935765506996,
+        "floorMetres": 0.6316075214956359,
         "floorFrame": 0,
         "intersections": [],
-        "minRigUnits": 0.025592702840465407,
-        "minMetres": 0.04350759482879119,
-        "frame": 13,
-        "bone": "RightForeArm"
+        "minRigUnits": 0.004122709284237247,
+        "minMetres": 0.00700860578320332,
+        "frame": 8,
+        "bone": "RightArm"
       },
       "edgeLead": {
         "8": {
-          "frontalDegrees": 7.189107821839596,
-          "edgeAngle": 81.61588209355175,
-          "edgeAcrossAngle": 61.441698084908495,
-          "bladeToTravelAngle": 17.75851605062447,
-          "tipMetresPerSecond": 3.3618260484896143,
-          "travelPitchDegrees": 3.8964509285041307
+          "frontalDegrees": 8.375624201476414,
+          "edgeAngle": 74.21860240451169,
+          "edgeAcrossAngle": 30.928404342827175,
+          "bladeToTravelAngle": 18.48455395276058,
+          "tipMetresPerSecond": 4.585438443101428,
+          "travelPitchDegrees": 8.025218723639354
         }
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0706
+        "verticalMetres": 0.0723
       },
       "deformation": {
-        "p99": 0.83799,
-        "p999": 1.65878,
-        "max": 2.26642,
-        "worstBone": "Spine1"
+        "p99": 0.8515,
+        "p999": 1.67187,
+        "max": 2.26533,
+        "worstBone": "LeftUpLeg"
       }
     },
     "vesper-cleanse": {
@@ -1108,38 +1156,39 @@
           "donor": "tripo:cast_a_spell"
         }
       ],
-      "wristMaxCorrectionDegrees": 20.7,
+      "armMaxCorrectionDegrees": 34,
+      "wristMaxCorrectionDegrees": 27.8,
       "limits": "JOINT_LIMITS",
       "peakSwing": 109.6,
       "peakTwist": 119.5,
       "corrections": {
         "mixamorig:Head": 1.62,
         "mixamorig:LeftHand": 0.28,
-        "mixamorig:RightHand": 1.35,
+        "mixamorig:RightHand": 2.87,
         "mixamorig:RightLeg": 0.09,
         "mixamorig:LeftFoot": 0.99,
         "mixamorig:RightFoot": 1.06
       },
       "midFrameBladeDegrees": {
         "max": 0.6,
-        "frame": 7
+        "frame": 2
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.012414672389360297,
-        "bodyBone": "RightUpLeg",
-        "bodyFrame": 7.375,
-        "floorMetres": 0.7196000378489739,
+        "bodyMinMetres": 0.01925599193985185,
+        "bodyBone": "Spine1",
+        "bodyFrame": 6,
+        "floorMetres": 0.6785984688471324,
         "floorFrame": 0,
         "intersections": [],
-        "minRigUnits": 0.0073027484643295865,
-        "minMetres": 0.012414672389360297,
-        "frame": 7.375,
-        "bone": "RightUpLeg"
+        "minRigUnits": 0.011327054082265794,
+        "minMetres": 0.01925599193985185,
+        "frame": 6,
+        "bone": "Spine1"
       },
       "deformation": {
-        "p99": 0.82022,
-        "p999": 1.53684,
+        "p99": 0.81995,
+        "p999": 1.52049,
         "max": 3.18068,
         "worstBone": "LeftUpLeg"
       }
@@ -1148,78 +1197,85 @@
       "origin": "mixamo",
       "source": [
         {
-          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+          "donor": "asset-source/mixamo/vesper/sheath-sword-1.fbx"
         }
       ],
+      "armMaxCorrectionDegrees": 4,
       "wristMaxCorrectionDegrees": 0,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 47.5,
-      "peakTwist": 51.9,
+      "peakSwing": 72.6,
+      "peakTwist": 51.6,
       "corrections": {
         "mixamorig:LeftUpLeg": 0,
-        "mixamorig:LeftLeg": 0.06
+        "mixamorig:LeftLeg": 0
       },
       "midFrameBladeDegrees": {
         "max": 0,
-        "frame": 5
+        "frame": 14
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.28441154760465026,
+        "bodyMinMetres": 0.05271944902159858,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 0,
-        "floorMetres": 0.7451049329434297,
+        "bodyFrame": 8,
+        "floorMetres": 0.6309059822964146,
         "floorFrame": 0,
         "intersections": [],
-        "minRigUnits": 0.030288621582752952,
-        "minMetres": 0.051490656690680016,
-        "frame": 20.125,
+        "minRigUnits": 0.024742744552850346,
+        "minMetres": 0.04206266573984559,
+        "frame": 15,
         "bone": "RightForeArm"
       },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0207
+      },
       "deformation": {
-        "p99": 0.62948,
-        "p999": 1.45156,
-        "max": 2.15303,
+        "p99": 0.78043,
+        "p999": 1.6565,
+        "max": 2.45732,
         "worstBone": "RightUpLeg"
       }
     },
     "vesper-shade-charge": {
-      "origin": "mixamo",
+      "origin": "tripo",
       "source": [
         {
-          "donor": "asset-source/mixamo/vesper/melee-idle.fbx"
+          "donor": "tripo:cast_a_spell"
         }
       ],
+      "armMaxCorrectionDegrees": 34,
       "wristMaxCorrectionDegrees": 0,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 49.2,
-      "peakTwist": 51.9,
-      "corrections": {
-        "mixamorig:LeftUpLeg": 0,
-        "mixamorig:LeftLeg": 0.03
-      },
+      "peakSwing": 86.4,
+      "peakTwist": 71.5,
+      "corrections": {},
       "midFrameBladeDegrees": {
         "max": 0,
-        "frame": 3
+        "frame": 1
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.244765517660685,
-        "bodyBone": "RightUpLeg",
-        "bodyFrame": 0,
-        "floorMetres": 0.6888295070516598,
-        "floorFrame": 10,
+        "bodyMinMetres": 0.11464825830722482,
+        "bodyBone": "Spine1",
+        "bodyFrame": 8,
+        "floorMetres": 1.109889654971128,
+        "floorFrame": 15,
         "intersections": [],
-        "minRigUnits": 0.030288622417837203,
-        "minMetres": 0.051490658110323245,
-        "frame": 2.125,
+        "minRigUnits": 0.022380561954914807,
+        "minMetres": 0.03804695532335517,
+        "frame": 8,
         "bone": "RightForeArm"
       },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.005
+      },
       "deformation": {
-        "p99": 0.66345,
-        "p999": 1.45892,
-        "max": 2.13113,
-        "worstBone": "RightUpLeg"
+        "p99": 0.84225,
+        "p999": 1.56304,
+        "max": 1.98474,
+        "worstBone": "Spine1"
       }
     },
     "vesper-kunai-fan": {
@@ -1230,74 +1286,80 @@
           "mirrored": true
         }
       ],
-      "wristMaxCorrectionDegrees": 12,
+      "armMaxCorrectionDegrees": 30,
+      "wristMaxCorrectionDegrees": 9,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 119,
-      "peakTwist": 116.7,
+      "peakSwing": 114.5,
+      "peakTwist": 112.3,
       "corrections": {
-        "mixamorig:RightLeg": 0.43
+        "mixamorig:RightLeg": 0.42
       },
       "midFrameBladeDegrees": {
-        "max": 1.2,
-        "frame": 2
+        "max": 2.1,
+        "frame": 3
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.03070169539180975,
+        "bodyMinMetres": 0.029387886890911232,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 4.25,
-        "floorMetres": 0.6010990993927459,
-        "floorFrame": 12,
+        "bodyFrame": 3.625,
+        "floorMetres": 0.48653050578350715,
+        "floorFrame": 5,
         "intersections": [],
-        "minRigUnits": 0.018059820818711617,
-        "minMetres": 0.03070169539180975,
-        "frame": 4.25,
+        "minRigUnits": 0.017286992288771313,
+        "minMetres": 0.029387886890911232,
+        "frame": 3.625,
         "bone": "RightUpLeg"
       },
       "deformation": {
-        "p99": 0.86296,
-        "p999": 1.61928,
-        "max": 3.27375,
-        "worstBone": "Spine1"
+        "p99": 0.86459,
+        "p999": 1.63181,
+        "max": 2.62948,
+        "worstBone": "RightUpLeg"
       }
     },
     "vesper-shade-swap": {
       "origin": "tripo",
       "source": [
         {
-          "donor": "tripo:pitch_baseball",
-          "mirrored": true
+          "donor": "tripo:cast_a_spell"
         }
       ],
-      "wristMaxCorrectionDegrees": 12,
+      "armMaxCorrectionDegrees": 34,
+      "wristMaxCorrectionDegrees": 27.3,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 122.3,
-      "peakTwist": 123.3,
+      "peakSwing": 109.6,
+      "peakTwist": 88.7,
       "corrections": {
-        "mixamorig:RightLeg": 0.43
+        "mixamorig:RightHand": 0.99,
+        "mixamorig:RightFoot": 0.32
       },
       "midFrameBladeDegrees": {
-        "max": 1.2,
+        "max": 2.5,
         "frame": 2
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.02578965591203899,
-        "bodyBone": "RightUpLeg",
-        "bodyFrame": 4,
-        "floorMetres": 0.5985792369800836,
-        "floorFrame": 18,
+        "bodyMinMetres": 0.01344788816955002,
+        "bodyBone": "Spine1",
+        "bodyFrame": 1,
+        "floorMetres": 0.825375385875509,
+        "floorFrame": 0.5,
         "intersections": [],
-        "minRigUnits": 0.015170385830611172,
-        "minMetres": 0.02578965591203899,
-        "frame": 4,
-        "bone": "RightUpLeg"
+        "minRigUnits": 0.007910522452676483,
+        "minMetres": 0.01344788816955002,
+        "frame": 1,
+        "bone": "Spine1"
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.059
       },
       "deformation": {
-        "p99": 0.89367,
-        "p999": 1.65513,
-        "max": 3.31301,
-        "worstBone": "Spine1"
+        "p99": 0.82905,
+        "p999": 1.53095,
+        "max": 2.57472,
+        "worstBone": "RightUpLeg"
       }
     },
     "vesper-mist-blink": {
@@ -1307,40 +1369,41 @@
           "donor": "asset-source/mixamo/vesper/idle-to-sprint.fbx"
         }
       ],
+      "armMaxCorrectionDegrees": 18,
       "wristMaxCorrectionDegrees": 44.9,
       "limits": "JOINT_LIMITS",
       "peakSwing": 115.5,
-      "peakTwist": 31.8,
+      "peakTwist": 30.6,
       "corrections": {
         "mixamorig:LeftLeg": 0.43,
         "mixamorig:RightLeg": 0.42
       },
       "midFrameBladeDegrees": {
-        "max": 0.3,
-        "frame": 8
+        "max": 0.7,
+        "frame": 6
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.04207979097683817,
+        "bodyMinMetres": 0.09808616620104173,
         "bodyBone": "RightUpLeg",
-        "bodyFrame": 11,
-        "floorMetres": 0.026731799238934716,
-        "floorFrame": 11.375,
+        "bodyFrame": 6.5,
+        "floorMetres": 0.09581949523216345,
+        "floorFrame": 8,
         "intersections": [],
-        "minRigUnits": 0.024752818221669512,
-        "minMetres": 0.04207979097683817,
-        "frame": 11,
-        "bone": "RightUpLeg"
+        "minRigUnits": 0.024402480447476955,
+        "minMetres": 0.041484216760710825,
+        "frame": 5,
+        "bone": "RightForeArm"
       },
       "hipsTravel": {
         "horizontalMetres": 0,
-        "verticalMetres": 0.0488
+        "verticalMetres": 0.0483
       },
       "deformation": {
-        "p99": 0.70884,
-        "p999": 1.29878,
-        "max": 2.52885,
-        "worstBone": "LeftArm"
+        "p99": 0.70617,
+        "p999": 1.2785,
+        "max": 2.68027,
+        "worstBone": "RightArm"
       }
     },
     "aren-air-step": {
@@ -1356,31 +1419,32 @@
           "donor": "tripo:jump"
         }
       ],
-      "wristMaxCorrectionDegrees": 44.7,
+      "armMaxCorrectionDegrees": 21.2,
+      "wristMaxCorrectionDegrees": 45,
       "limits": "JOINT_LIMITS",
-      "peakSwing": 113.3,
-      "peakTwist": 84.4,
+      "peakSwing": 105.7,
+      "peakTwist": 81.7,
       "corrections": {
         "mixamorig:Spine": 0,
         "mixamorig:LeftHand": 0.01,
-        "mixamorig:RightHand": 0.4,
+        "mixamorig:RightHand": 0.02,
         "mixamorig:RightFoot": 1.27
       },
       "midFrameBladeDegrees": {
-        "max": 3.4,
-        "frame": 16
+        "max": 4,
+        "frame": 17
       },
       "bladeClearance": {
         "subdivisions": 8,
-        "bodyMinMetres": 0.05857328932274161,
-        "bodyBone": "RightUpLeg",
-        "bodyFrame": 26,
-        "floorMetres": -0.7365705063137039,
-        "floorFrame": 16.875,
+        "bodyMinMetres": 0.042607749230168634,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 5,
+        "floorMetres": -0.268412304849299,
+        "floorFrame": 16.625,
         "intersections": [],
-        "minRigUnits": 0.016395457765552332,
-        "minMetres": 0.027872278201438963,
-        "frame": 20,
+        "minRigUnits": 0.011888311341715266,
+        "minMetres": 0.02021012928091595,
+        "frame": 25,
         "bone": "RightArm"
       },
       "hipsTravel": {
@@ -1388,9 +1452,358 @@
         "verticalMetres": 0.136
       },
       "deformation": {
-        "p99": 0.83803,
-        "p999": 1.6463,
-        "max": 2.91067,
+        "p99": 0.83348,
+        "p999": 1.64398,
+        "max": 2.62229,
+        "worstBone": "Spine1"
+      }
+    },
+    "aren-knockdown": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/reactions/react-backward.fbx"
+        },
+        {
+          "donor": "asset-source/mixamo/reactions/getting-up-back.fbx",
+          "mirrored": true
+        }
+      ],
+      "armMaxCorrectionDegrees": 24.2,
+      "wristMaxCorrectionDegrees": 15.9,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 120.2,
+      "peakTwist": 76.9,
+      "corrections": {
+        "mixamorig:Spine": 0.24,
+        "mixamorig:Neck": 0.65,
+        "mixamorig:LeftUpLeg": 0.31,
+        "mixamorig:LeftLeg": 0.43,
+        "mixamorig:RightLeg": 0.43,
+        "mixamorig:RightFoot": 0.9
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.3,
+        "frame": 179
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.011315095479470386,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 185,
+        "floorMetres": 0.029999999982878296,
+        "floorFrame": 172,
+        "intersections": [],
+        "minRigUnits": 0.006655938517335522,
+        "minMetres": 0.011315095479470386,
+        "frame": 185,
+        "bone": "RightUpLeg"
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick30": 0.244,
+        "lyingFacing": 0.96,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": 1.03
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 6,
+          "maxCorrectionDegrees": 0.9
+        },
+        "sourceTimeScale": [
+          {
+            "take": "react-backward",
+            "fromSeconds": 1.55,
+            "toSeconds": 2.7,
+            "fastestKeyedStretch": 1.71
+          },
+          {
+            "take": "getting-up-back",
+            "fromSeconds": 3.05,
+            "toSeconds": 3.05,
+            "fastestKeyedStretch": 0
+          }
+        ],
+        "floorLiftMetres": {
+          "min": -0.0226,
+          "max": 0.15
+        },
+        "groundContactTick": 20.75,
+        "pelvisMetresAtContactTick": 0.245,
+        "pelvisMetresMaxFromContactOn": 0.247,
+        "pelvisMetresInLie": 0.219,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "keyRateHz": 240,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": 0.612,
+          "side": 0.068
+        }
+      },
+      "deformation": {
+        "p99": 0.81448,
+        "p999": 1.55494,
+        "max": 3.77269,
+        "worstBone": "RightLeg"
+      }
+    },
+    "aren-knockdown-forward": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/reactions/fall-flat-hit-back.fbx"
+        }
+      ],
+      "armMaxCorrectionDegrees": 19,
+      "wristMaxCorrectionDegrees": 9.1,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 118.3,
+      "peakTwist": 112.4,
+      "corrections": {
+        "mixamorig:Neck": 0,
+        "mixamorig:LeftLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.2,
+        "frame": 113
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.018617269547878335,
+        "bodyBone": "LeftUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.03552404191184057,
+        "floorFrame": 137,
+        "intersections": [],
+        "minRigUnits": 0.007854895641421306,
+        "minMetres": 0.013353322590416218,
+        "frame": 129,
+        "bone": "RightArm"
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick30": 0.201,
+        "lyingFacing": -0.97,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": 1.23
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 1,
+          "maxCorrectionDegrees": 0.43
+        },
+        "sourceTimeScale": [
+          {
+            "take": "fall-flat-hit-back",
+            "fromSeconds": 0.25,
+            "toSeconds": 1.95,
+            "fastestKeyedStretch": 3.17
+          }
+        ],
+        "floorLiftMetres": {
+          "min": -0.0176,
+          "max": 0.0857
+        },
+        "groundContactTick": 28.25,
+        "pelvisMetresAtContactTick": 0.25,
+        "pelvisMetresMaxFromContactOn": 0.25,
+        "pelvisMetresInLie": 0.191,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "keyRateHz": 240,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": -0.573,
+          "side": -0.04
+        }
+      },
+      "deformation": {
+        "p99": 0.85838,
+        "p999": 1.6256,
+        "max": 3.88823,
+        "worstBone": "LeftUpLeg"
+      }
+    },
+    "aren-getup": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/reactions/getting-up-back.fbx",
+          "mirrored": true
+        }
+      ],
+      "armMaxCorrectionDegrees": 44.8,
+      "wristMaxCorrectionDegrees": 82.1,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 140.6,
+      "peakTwist": 93.1,
+      "corrections": {
+        "mixamorig:Spine": 0.83,
+        "mixamorig:Neck": 0.66,
+        "mixamorig:RightHand": 4.88,
+        "mixamorig:LeftUpLeg": 1.23,
+        "mixamorig:LeftLeg": 0.28,
+        "mixamorig:RightFoot": 0.03
+      },
+      "midFrameBladeDegrees": {
+        "max": 12.2,
+        "frame": 119
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.02186790697789638,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 0,
+        "floorMetres": 0.03463146310829432,
+        "floorFrame": 1,
+        "intersections": [],
+        "minRigUnits": 0.012863474692880225,
+        "minMetres": 0.02186790697789638,
+        "frame": 0,
+        "bone": "RightUpLeg"
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick30": 0.477,
+        "lyingFacing": 0.96,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": 0.52
+        },
+        "maxHipsHorizontalOffsetMetres": 0.616,
+        "jointGuard": {
+          "jointsCorrected": 6,
+          "maxCorrectionDegrees": 4.88
+        },
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-back",
+            "fromSeconds": 3.05,
+            "toSeconds": 5.95,
+            "fastestKeyedStretch": 3.33
+          }
+        ],
+        "floorLiftMetres": {
+          "min": -0.0213,
+          "max": 0.1239
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 16.424
+      },
+      "deformation": {
+        "p99": 0.81583,
+        "p999": 1.51855,
+        "max": 2.96192,
+        "worstBone": "RightLeg"
+      }
+    },
+    "aren-getup-forward": {
+      "origin": "mixamo",
+      "source": [
+        {
+          "donor": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+        },
+        {
+          "donor": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+        }
+      ],
+      "armMaxCorrectionDegrees": 26.8,
+      "wristMaxCorrectionDegrees": 33.1,
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 127,
+      "peakTwist": 82.6,
+      "corrections": {
+        "mixamorig:Spine": 0.63,
+        "mixamorig:RightArm": 0,
+        "mixamorig:RightLeg": 0.43
+      },
+      "midFrameBladeDegrees": {
+        "max": 0.1,
+        "frame": 112
+      },
+      "bladeClearance": {
+        "subdivisions": 8,
+        "bodyMinMetres": 0.013944846447898823,
+        "bodyBone": "RightUpLeg",
+        "bodyFrame": 114.25,
+        "floorMetres": 0.030000069139714702,
+        "floorFrame": 24,
+        "intersections": [],
+        "minRigUnits": 0.00820285085170519,
+        "minMetres": 0.013944846447898823,
+        "frame": 114.25,
+        "bone": "RightUpLeg"
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick30": 0.577,
+        "lyingFacing": -0.97,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": -0.19
+        },
+        "maxHipsHorizontalOffsetMetres": 0.575,
+        "jointGuard": {
+          "jointsCorrected": 2,
+          "maxCorrectionDegrees": 0.63
+        },
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 2.35,
+            "toSeconds": 3.2,
+            "fastestKeyedStretch": 2.25
+          },
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 4.2,
+            "toSeconds": 5.6,
+            "fastestKeyedStretch": 2.77
+          }
+        ],
+        "floorLiftMetres": {
+          "min": -0.0269,
+          "max": 0.0552
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 10.819
+      },
+      "deformation": {
+        "p99": 0.80573,
+        "p999": 1.57969,
+        "max": 3.74573,
         "worstBone": "RightArm"
       }
     }

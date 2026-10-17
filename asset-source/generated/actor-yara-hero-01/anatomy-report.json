@@ -259,30 +259,345 @@
         }
       }
     },
+    "aren-knockdown": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 128,
+      "peakTwist": 46.5,
+      "corrections": {
+        "mixamorig:Neck": 14.44,
+        "mixamorig:LeftLeg": 20.2,
+        "mixamorig:RightUpLeg": 0.15,
+        "mixamorig:RightLeg": 3.41
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick0": 0.867,
+        "leanDegreesAtTick0": 7.5,
+        "pelvisMetresAtTick30": 0.242,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 4,
+          "maxCorrectionDegrees": 20.2
+        },
+        "floor": {
+          "liftMinMetres": -0.002,
+          "liftMaxMetres": 0.1594
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.034,
+          "lowestAfterMetres": 0.031,
+          "deepestIntoLimbBeforeMetres": 0.073,
+          "deepestIntoLimbAfterMetres": 0.014,
+          "framesTurned": 27,
+          "largestTurnDegrees": 24
+        },
+        "groundContactTick": 30,
+        "pelvisMetresAtContactTick": 0.242,
+        "pelvisMetresMaxFromContactOn": 0.246,
+        "pelvisMetresInLie": 0.225,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": 0.585,
+          "side": 0.129
+        }
+      },
+      "deformation": {
+        "p99": 1.07831,
+        "p999": 1.82636,
+        "max": 4.71501,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 115.7,
+        "peakTwist": 39,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.06806,
+          "p999": 1.66792,
+          "max": 4.44095,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "aren-knockdown-forward": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 142.1,
+      "peakTwist": 89.3,
+      "corrections": {
+        "mixamorig:Neck": 28.79,
+        "mixamorig:LeftShoulder": 2.69,
+        "mixamorig:RightShoulder": 2.83,
+        "mixamorig:RightForeArm": 2.43,
+        "mixamorig:LeftLeg": 39.71,
+        "mixamorig:LeftFoot": 14.76,
+        "mixamorig:RightLeg": 33.09,
+        "mixamorig:RightFoot": 13.35
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick0": 0.869,
+        "leanDegreesAtTick0": 7.5,
+        "pelvisMetresAtTick30": 0.212,
+        "lyingFacing": -0.99,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 8,
+          "maxCorrectionDegrees": 39.71
+        },
+        "floor": {
+          "liftMinMetres": 0.0221,
+          "liftMaxMetres": 0.1605
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.675,
+          "lowestAfterMetres": 0.004,
+          "deepestIntoLimbBeforeMetres": 0.083,
+          "deepestIntoLimbAfterMetres": 0.021,
+          "framesTurned": 31,
+          "largestTurnDegrees": 56
+        },
+        "groundContactTick": 29,
+        "pelvisMetresAtContactTick": 0.235,
+        "pelvisMetresMaxFromContactOn": 0.288,
+        "pelvisMetresInLie": 0.282,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": -0.566,
+          "side": 0.077
+        }
+      },
+      "deformation": {
+        "p99": 0.79819,
+        "p999": 1.583,
+        "max": 4.50767,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 107.4,
+        "peakTwist": 77.7,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.17663,
+          "p999": 1.76401,
+          "max": 4.46845,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-getup": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 145.5,
+      "peakTwist": 88.6,
+      "corrections": {
+        "mixamorig:Spine1": 0.01,
+        "mixamorig:Spine2": 7.05,
+        "mixamorig:Neck": 9.62,
+        "mixamorig:LeftHand": 29.22,
+        "mixamorig:RightHand": 1.62,
+        "mixamorig:LeftLeg": 14.98,
+        "mixamorig:RightFoot": 0.29
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick0": 0.225,
+        "leanDegreesAtTick0": 90.9,
+        "pelvisMetresAtTick30": 0.375,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": 1
+        },
+        "maxHipsHorizontalOffsetMetres": 0.599,
+        "jointGuard": {
+          "jointsCorrected": 7,
+          "maxCorrectionDegrees": 29.22
+        },
+        "floor": {
+          "take": {
+            "liftMinMetres": -0.0146,
+            "liftMaxMetres": 0.1137
+          },
+          "final": {
+            "liftMinMetres": -0.0411,
+            "liftMaxMetres": 0.0401
+          }
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.275,
+          "lowestAfterMetres": 0.013,
+          "deepestIntoLimbBeforeMetres": 0.101,
+          "deepestIntoLimbAfterMetres": 0.023,
+          "framesTurned": 43,
+          "largestTurnDegrees": 44
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 10.2491
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 10.53,
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-knocked",
+            "fromSeconds": 0.25,
+            "toSeconds": 2,
+            "fastestKeyedStretch": 1.59
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 1.25234,
+        "p999": 2.13622,
+        "max": 4.82307,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 143.6,
+        "peakTwist": 70.1,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.44701,
+          "p999": 2.19233,
+          "max": 4.42646,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "aren-getup-forward": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 117.4,
+      "peakTwist": 72.1,
+      "corrections": {
+        "mixamorig:Spine": 1.9
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick0": 0.282,
+        "leanDegreesAtTick0": 95.6,
+        "pelvisMetresAtTick30": 0.548,
+        "lyingFacing": -0.99,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0.04
+        },
+        "maxHipsHorizontalOffsetMetres": 0.571,
+        "jointGuard": {
+          "jointsCorrected": 1,
+          "maxCorrectionDegrees": 1.9
+        },
+        "floor": {
+          "take": {
+            "liftMinMetres": -0.0227,
+            "liftMaxMetres": 0.1242
+          },
+          "final": {
+            "liftMinMetres": 0,
+            "liftMaxMetres": 0.0399
+          }
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.515,
+          "lowestAfterMetres": 0.031,
+          "deepestIntoLimbBeforeMetres": 0.022,
+          "deepestIntoLimbAfterMetres": 0,
+          "framesTurned": 34,
+          "largestTurnDegrees": 32
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 15.5771
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 10.485,
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 2.45,
+            "toSeconds": 3.3,
+            "fastestKeyedStretch": 1.42
+          },
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 4.25,
+            "toSeconds": 5.05,
+            "fastestKeyedStretch": 1.6
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 1.09241,
+        "p999": 1.83254,
+        "max": 3.94356,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 108.5,
+        "peakTwist": 72.9,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.40953,
+          "p999": 0.85795,
+          "max": 2.59227,
+          "worstBone": "LeftForeArm"
+        }
+      }
+    },
     "yara-thornshot-1": {
       "limits": "COMBAT_LIMITS",
-      "peakSwing": 101.4,
-      "peakTwist": 68.3,
+      "peakSwing": 108.2,
+      "peakTwist": 59.5,
       "staffTiltMax": 15.9,
       "staffTiltMean": 9.6,
       "corrections": {
         "mixamorig:Head": 1.19,
         "mixamorig:LeftShoulder": 0.72,
         "mixamorig:RightShoulder": 0.72,
-        "mixamorig:LeftForeArm": 1.67,
         "mixamorig:LeftHand": 0.83,
         "mixamorig:LeftLeg": 0.36,
-        "mixamorig:RightLeg": 0.36,
-        "mixamorig:LeftFoot": 1.18,
+        "mixamorig:RightLeg": 0.34,
+        "mixamorig:LeftFoot": 1.16,
         "mixamorig:RightFoot": 1.17,
         "mixamorig:LeftToeBase": 0.95,
         "mixamorig:RightToeBase": 0.95
       },
       "deformation": {
-        "p99": 0.81695,
-        "p999": 1.33721,
-        "max": 2.50198,
-        "worstBone": "LeftLeg"
+        "p99": 0.9804,
+        "p999": 1.64471,
+        "max": 3.50885,
+        "worstBone": "RightUpLeg"
       },
       "before": {
         "peakSwing": 112.1,
@@ -600,26 +915,25 @@
     },
     "yara-binding-vines": {
       "limits": "COMBAT_LIMITS",
-      "peakSwing": 127.6,
-      "peakTwist": 77.9,
+      "peakSwing": 113.3,
+      "peakTwist": 78.1,
       "staffTiltMax": 18,
       "staffTiltMean": 10.8,
       "corrections": {
-        "mixamorig:Head": 1.18,
-        "mixamorig:LeftShoulder": 0.58,
-        "mixamorig:RightShoulder": 0.05,
-        "mixamorig:LeftArm": 1.64,
-        "mixamorig:LeftForeArm": 1.67,
+        "mixamorig:Head": 1.19,
+        "mixamorig:LeftShoulder": 0.6,
+        "mixamorig:RightShoulder": 0.04,
+        "mixamorig:LeftArm": 1.85,
         "mixamorig:RightUpLeg": 0.95,
-        "mixamorig:LeftLeg": 0.34,
+        "mixamorig:LeftLeg": 0.35,
         "mixamorig:RightLeg": 0.36,
-        "mixamorig:LeftFoot": 0.07,
-        "mixamorig:RightFoot": 0.59
+        "mixamorig:LeftFoot": 0.42,
+        "mixamorig:RightFoot": 0.6
       },
       "deformation": {
-        "p99": 1.05677,
-        "p999": 1.68322,
-        "max": 3.513,
+        "p99": 1.02569,
+        "p999": 1.687,
+        "max": 4.30308,
         "worstBone": "RightUpLeg"
       },
       "before": {

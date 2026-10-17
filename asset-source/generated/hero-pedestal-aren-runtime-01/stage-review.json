@@ -1,0 +1,11 @@
+{
+  "kind": "actual-browser-screenshot",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "surface": "Candidate Trials / Greenwake / hero select",
+  "hero": "aren",
+  "nativePedestal": "hero-pedestal-aren",
+  "evidenceStatus": "blocked"
+}

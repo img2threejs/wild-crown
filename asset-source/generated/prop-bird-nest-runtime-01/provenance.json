@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-bird-nest",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "8d18fc27-e807-48b0-b9f3-250c66900ce6",
+    "decimate": "b80bcd27-8680-41ae-b1f7-50b382369fb7"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 1024
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-bird-nest-decimate-01/tripo-out/prop-bird-nest-decimate-01-b80bcd27/model.glb",
+      "sha256": "ce00a7b4254bc3ac34d0be9006873000e54bd113633b3035b143d0e3500a6e28"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-bird-nest-runtime-01/prop-bird-nest.glb",
+    "sha256": "737efa48e650e9b90f91c29278dab7d453a649117dd7b1bf4f2fe9bc16085bca",
+    "bytes": 2174824,
+    "vertices": 12488,
+    "triangles": 9151,
+    "boundsMin": [
+      -0.49005,
+      -0.22178,
+      -0.44802
+    ],
+    "boundsMax": [
+      0.49014,
+      0.22516,
+      0.44585
+    ],
+    "worldBoundsMin": [
+      -0.49005,
+      -0.22178,
+      -0.44802
+    ],
+    "worldBoundsMax": [
+      0.49014,
+      0.22516,
+      0.44585
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3172017,
+      "toBytes": 432687
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5359586,
+      "toBytes": 611654
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16992296,
+      "toBytes": 673934
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

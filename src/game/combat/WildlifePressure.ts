@@ -15,15 +15,22 @@ export interface WildlifePressureTier {
   readonly chainEvery: number;
 }
 
+/**
+ * Wildlife pressure tiers. `timingScale` shrinks the published BASELINE_SCALE so tier 0 keeps the
+ * ~1.35× slower windup/recovery that the cadence pass mandated, while later tiers still feel
+ * incrementally more dangerous through HP and damage. Floor enforcement in `scaleWildlifeAttack`
+ * (36 / 12 ticks) keeps the slowest telegraph legible at every tier.
+ */
+const BASELINE_SCALE = 1.35;
 const TIERS: readonly WildlifePressureTier[] = [
-  { tier: 0, engagedTicks: 0, cadenceTicks: 48, timingScale: 1, maxConcurrent: 2, repositionTicks: 70, chainEvery: 0 },
-  { tier: 1, engagedTicks: 900, cadenceTicks: 40, timingScale: 0.9, maxConcurrent: 2, repositionTicks: 52, chainEvery: 3 },
-  { tier: 2, engagedTicks: 1800, cadenceTicks: 33, timingScale: 0.78, maxConcurrent: 3, repositionTicks: 38, chainEvery: 2 },
-  { tier: 3, engagedTicks: 3000, cadenceTicks: 27, timingScale: 0.66, maxConcurrent: 3, repositionTicks: 26, chainEvery: 2 },
+  { tier: 0, engagedTicks: 0, cadenceTicks: 60, timingScale: 1, maxConcurrent: 2, repositionTicks: 90, chainEvery: 0 },
+  { tier: 1, engagedTicks: 900, cadenceTicks: 50, timingScale: 0.95, maxConcurrent: 2, repositionTicks: 65, chainEvery: 3 },
+  { tier: 2, engagedTicks: 1800, cadenceTicks: 42, timingScale: 0.88, maxConcurrent: 3, repositionTicks: 48, chainEvery: 2 },
+  { tier: 3, engagedTicks: 3000, cadenceTicks: 36, timingScale: 0.78, maxConcurrent: 3, repositionTicks: 33, chainEvery: 2 },
 ];
 
-const WINDUP_FLOOR = 24;
-const COMMIT_FLOOR = 8;
+const WINDUP_FLOOR = 36;
+const COMMIT_FLOOR = 12;
 
 
 export function getWildlifePressure(engagedWorldTicks: number): WildlifePressureTier {
@@ -34,7 +41,7 @@ export function getWildlifePressure(engagedWorldTicks: number): WildlifePressure
 }
 
 export function scaleWildlifeAttack(def: AttackDefinition, pressure: WildlifePressureTier): AttackDefinition {
-  const scale = pressure.timingScale;
+  const scale = pressure.timingScale * BASELINE_SCALE;
   const scaledWindup = Math.max(WINDUP_FLOOR, Math.round(def.windupTicks * scale));
   const scaledCommit = Math.max(COMMIT_FLOOR, def.commitTicks);
   const scaledRecovery = Math.round(def.recoveryTicks * scale);
@@ -54,8 +61,13 @@ export const TRIAL_DISENGAGE_RANGE = 16;
 export const ROAR_TICKS = 42;
 /** A monster only starts a cast once its body points within this many radians of the player. */
 export const CAST_FACING_TOLERANCE = 0.42;
+/** A monster squares up to the player this many ticks before its next cast is due, so the turn is done when the cast window opens. */
+export const TURN_LEAD_TICKS = 45;
 /** Upper bound (rad/s) on how fast a monster may swing to its committed attack direction between windup and the first active tick. */
 export const ATTACK_TURN_RATE_MAX = 12;
+/** Monster ground speed ramps toward the steered speed at these rates (m/s²): a 4.2 m/s advance takes about 0.35 s to reach, a stop about 0.2 s. */
+export const MONSTER_ACCEL = 12;
+export const MONSTER_DECEL = 21;
 /** Beyond this heading error (rad) the monster pivots in place instead of walking. */
 const TURN_IN_PLACE_ANGLE = 1.5;
 /** A cast is only started within `bandMax + CAST_RANGE_MARGIN` metres of the player (always < TRIAL_ENGAGE_RANGE). */
@@ -117,6 +129,8 @@ export interface MonsterMotionState {
   roarTier: number;
   /** Signed rad/s of the last integrated step (positive = increasing atan2(x, z)). */
   yawRate: number;
+  /** Current ground speed (m/s) of the locomotion integrator; ramps toward the steered speed. */
+  speed: number;
   seed: number;
   blockedTicks: number;
   nextCastAt: number;
@@ -124,7 +138,7 @@ export interface MonsterMotionState {
 }
 
 export function createMonsterMotion(seed: number): MonsterMotionState {
-  return { engaged: false, strafe: 1, strafeUntil: 0, roarUntil: 0, roarFrom: 0, roarTier: 0, yawRate: 0, seed: seed >>> 0 || 1, blockedTicks: 0, nextCastAt: 0 };
+  return { engaged: false, strafe: 1, strafeUntil: 0, roarUntil: 0, roarFrom: 0, roarTier: 0, yawRate: 0, speed: 0, seed: seed >>> 0 || 1, blockedTicks: 0, nextCastAt: 0 };
 }
 
 export function wrapAngle(angle: number): number {

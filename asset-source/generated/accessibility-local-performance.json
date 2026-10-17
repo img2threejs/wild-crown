@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "status": "local-diagnostic-not-reference-benchmark",
+  "hardware": {
+    "chip_type": "Apple M1",
+    "machine_model": "MacBookPro17,1",
+    "number_processors": "proc 8:4:4",
+    "physical_memory": "16 GB"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "platform": "MacIntel",
+    "webgl2": true,
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "viewport": [
+      1200,
+      688
+    ],
+    "devicePixelRatio": 1.25,
+    "connectedGamepads": []
+  },
+  "fixture": {
+    "region": "the-grove",
+    "checkpoint": "earned pre-Fall chapter 3 fixture",
+    "spawn": [
+      -8,
+      0,
+      3
+    ],
+    "warmupFrames": 60,
+    "measurementFrames": 600,
+    "route": "stationary, not the authored Grove benchmark route",
+    "build": "Vite development client, not an emitted-build identity"
+  },
+  "limitations": [
+    "No reference-profile qualification or eight-route coverage.",
+    "Scene sync includes animation/LOD work; animation cost is not isolated.",
+    "GPU timer-query spans are raw backend observations; their approximately 45 ms medians exceed the observed frame intervals and are not interpreted as per-frame GPU execution costs.",
+    "Renderer counters cover the last postprocessing pass, not the complete scene.",
+    "Object counts are not GPU bytes or the ten-cycle memory acceptance test.",
+    "No test/build jobs ran concurrently with these two measurement windows."
+  ],
+  "normal": {
+    "measuredAt": "2026-10-14T21:39:47.579Z",
+    "method": "Warm stationary native Vite-client window; actual RAF intervals and wrapped CPU call durations; not an authored reference benchmark route. GPU elapsed queries surround the real render submission.",
+    "regionId": "the-grove",
+    "runId": "authored-flow-probe",
+    "settings": {
+      "masterVolume": 1,
+      "musicVolume": 0.8,
+      "effectsVolume": 1,
+      "ambienceVolume": 0.7,
+      "dialogueVolume": 1,
+      "subtitles": true,
+      "echoSubtitles": true,
+      "subtitleSize": "medium",
+      "subtitleBackground": "translucent",
+      "subtitleSpeakerLabels": true,
+      "reducedMotion": false,
+      "motionBlur": true,
+      "reducedCameraShake": true,
+      "telegraphIntensity": "high",
+      "offscreenWarningStrength": "high",
+      "highContrastTarget": true,
+      "autoTargetAssist": "off",
+      "perfectDodgeWindow": "standard",
+      "lockOnMode": "hold",
+      "controlGlyphs": "keyboard-mouse",
+      "gamepadDeadzone": 0.18
+    },
+    "viewport": {
+      "width": 1200,
+      "height": 688,
+      "dpr": 1.25,
+      "drawingBufferWidth": 1200,
+      "drawingBufferHeight": 688
+    },
+    "frames": 600,
+    "durationMs": 10191.699999999997,
+    "fps": 58.77331554107756,
+    "frameIntervalMs": {
+      "samples": 599,
+      "p50": 13.700000000000728,
+      "p95": 27.599999999998545,
+      "p99": 28.700000000000728,
+      "max": 94.29999999999927
+    },
+    "cpuSimulationPerStepMs": {
+      "samples": 611,
+      "p50": 0.10000002384185791,
+      "p95": 0.20000004768371582,
+      "p99": 0.30000007152557373,
+      "max": 4.299999952316284
+    },
+    "cpuSceneSyncMs": {
+      "samples": 600,
+      "p50": 0.6000000238418579,
+      "p95": 1.100000023841858,
+      "p99": 1.399999976158142,
+      "max": 2.299999952316284
+    },
+    "cpuRenderSubmissionMs": {
+      "samples": 600,
+      "p50": 2.5,
+      "p95": 4.400000095367432,
+      "p99": 5.700000047683716,
+      "max": 7
+    },
+    "gpuTiming": {
+      "status": "measured",
+      "samples": 600,
+      "p50": 45.439416,
+      "p95": 56.866958,
+      "p99": 62.149791,
+      "max": 107.757749,
+      "unit": "ms",
+      "disjointDiscarded": 0,
+      "pendingAtEnd": 0
+    },
+    "resources": {
+      "before": {
+        "geometries": 144,
+        "textures": 106
+      },
+      "after": {
+        "geometries": 144,
+        "textures": 106
+      },
+      "note": "Renderer object counts, not GPU bytes or a ten-cycle leak qualification."
+    },
+    "diagnostics": {
+      "assetErrors": [],
+      "missingActorAssets": [],
+      "animationIssues": [],
+      "actorCount": 9,
+      "propCount": 188,
+      "lodMeasurementsQualified": false
+    },
+    "lastPassRenderCounters": {
+      "frame": 10187,
+      "calls": 1,
+      "triangles": 1,
+      "points": 0,
+      "lines": 0
+    },
+    "assetTransferMeasurement": {
+      "status": "unavailable",
+      "reason": "The resource-timing GLB filter returned no entries; no transfer-byte claim is made."
+    }
+  },
+  "reducedMotion": {
+    "measuredAt": "2026-10-14T21:40:55.751Z",
+    "method": "Warm stationary native Vite-client window; actual RAF intervals and wrapped CPU call durations; not an authored reference benchmark route. GPU elapsed queries surround the real render submission.",
+    "regionId": "the-grove",
+    "runId": "authored-flow-probe",
+    "settings": {
+      "masterVolume": 1,
+      "musicVolume": 0.8,
+      "effectsVolume": 1,
+      "ambienceVolume": 0.7,
+      "dialogueVolume": 1,
+      "subtitles": true,
+      "echoSubtitles": true,
+      "subtitleSize": "medium",
+      "subtitleBackground": "translucent",
+      "subtitleSpeakerLabels": true,
+      "reducedMotion": true,
+      "motionBlur": true,
+      "reducedCameraShake": true,
+      "telegraphIntensity": "high",
+      "offscreenWarningStrength": "high",
+      "highContrastTarget": true,
+      "autoTargetAssist": "off",
+      "perfectDodgeWindow": "standard",
+      "lockOnMode": "hold",
+      "controlGlyphs": "keyboard-mouse",
+      "gamepadDeadzone": 0.18
+    },
+    "viewport": {
+      "width": 1200,
+      "height": 688,
+      "dpr": 1.25,
+      "drawingBufferWidth": 1200,
+      "drawingBufferHeight": 688
+    },
+    "frames": 600,
+    "durationMs": 10095,
+    "fps": 59.336305101535416,
+    "frameIntervalMs": {
+      "samples": 599,
+      "p50": 13.69999999999709,
+      "p95": 27.19999999999709,
+      "p99": 28.100000000002183,
+      "max": 81.80000000000291
+    },
+    "cpuSimulationPerStepMs": {
+      "samples": 606,
+      "p50": 0.10000002384185791,
+      "p95": 0.2999999523162842,
+      "p99": 0.30000007152557373,
+      "max": 0.6000000238418579
+    },
+    "cpuSceneSyncMs": {
+      "samples": 600,
+      "p50": 0.5,
+      "p95": 1,
+      "p99": 1.3000000715255737,
+      "max": 1.600000023841858
+    },
+    "cpuRenderSubmissionMs": {
+      "samples": 600,
+      "p50": 2.5,
+      "p95": 4.300000071525574,
+      "p99": 5.399999976158142,
+      "max": 6.699999928474426
+    },
+    "gpuTiming": {
+      "status": "measured",
+      "samples": 600,
+      "p50": 45.018791,
+      "p95": 55.337333,
+      "p99": 57.902416,
+      "max": 96.882333,
+      "unit": "ms",
+      "disjointDiscarded": 0,
+      "pendingAtEnd": 0
+    },
+    "resources": {
+      "before": {
+        "geometries": 144,
+        "textures": 106
+      },
+      "after": {
+        "geometries": 144,
+        "textures": 106
+      },
+      "note": "Renderer object counts, not GPU bytes or a ten-cycle leak qualification."
+    },
+    "diagnostics": {
+      "assetErrors": [],
+      "missingActorAssets": [],
+      "animationIssues": [],
+      "actorCount": 9,
+      "propCount": 188,
+      "lodMeasurementsQualified": false
+    },
+    "lastPassRenderCounters": {
+      "frame": 9992,
+      "calls": 1,
+      "triangles": 1,
+      "points": 0,
+      "lines": 0
+    },
+    "assetTransferMeasurement": {
+      "status": "unavailable",
+      "reason": "The resource-timing GLB filter returned no entries; no transfer-byte claim is made."
+    }
+  }
+}

@@ -2,21 +2,28 @@ import { AnimationClip, BufferAttribute, BufferGeometry, Group, InstancedBufferA
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import type { AssetManifestEntry, WorldAssetPlacement } from '../game/contracts';
+import { DEFAULT_FOLIAGE_LIMITS, InstanceVisibility, type FoliageLimits } from './InstanceVisibility';
 import { AnimationController } from './AnimationController';
 import { simplifyCandidateGeometry } from './CandidateGeometrySimplifier';
 import { createPlaytestAnimationSet } from './PlaytestAnimationFactory';
+import { computePropVariation, propVariationFor, type PropVariationProfile } from './PropInstanceVariation';
 
 export interface AssetLoadProgress { assetId: string; url: string; loaded: number; total: number; ratio: number | null }
 export interface NativeAssetInstance { readonly assetId: string; readonly root: Object3D; readonly animation: AnimationController; readonly sockets: Readonly<Record<string, Object3D>>; dispose(): void }
 export interface NativeStaticBatch {
   readonly assetId: string; readonly root: Group; readonly instanceCount: number; readonly lodIds: readonly string[];
-  setPlacementVisible(placementId: string, visible: boolean): void; updateOcclusion(camera: Camera, target: Vector3): void; dispose(): void;
+  setPlacementVisible(placementId: string, visible: boolean): void; updateOcclusion(camera: Camera, target: Vector3, dt?: number): void; dispose(): void;
+  /** Instances drawn right now (neither hidden by a world fact nor culled by the foliage view-distance limit). */
+  readonly drawnInstanceCount: number;
+  /** Pushes the current occlusion fade forward one frame; returns whether any alpha was re-uploaded. Allocation free. */
+  advanceFade(): boolean;
+  /** Whether this batch has any wind sway applied to its vertices (foliage wind reads this and the loader's wind clock). */
+  readonly hasWind: boolean;
 }
 export class NativeAssetError extends Error {
   constructor(readonly assetId: string, message: string) { super(`Asset ${assetId}: ${message}`); this.name = 'NativeAssetError'; }
 }
 interface Template { key: string; root: Object3D; clips: AnimationClip[]; manifest: AssetManifestEntry; playtestActionToClipMapping?: Record<string, string>; playtestRootMotion?: Record<string, NonNullable<AssetManifestEntry['rootMotion']>[string]>; leases: number; lastUsed: number; evictWhenFree: boolean }
-interface FadingInstances { values: Float32Array; attribute: InstancedBufferAttribute; position: Vector3[]; matrices: Matrix4[] }
 
 /** Loads only manifest-backed native GLBs. Templates share resources; skeleton clones and static instance batches are isolated. */
 export class NativeAssetLoader {
@@ -68,13 +75,28 @@ export class NativeAssetLoader {
     return this.createInstance(manifest.id, root, animation, sockets, template);
   }
 
-  async loadStaticBatch(manifest: AssetManifestEntry, placements: readonly WorldAssetPlacement[]): Promise<NativeStaticBatch> {
+  /**
+   * Instances a prop placement list into one draw call per mesh. `limits` are the foliage presentation limits of the asset (see
+   * `FoliagePresentation`): the default thins an occluding instance by alpha blend; `dither` keeps the material opaque and depth-writing
+   * (a screen-door discard fades it), and a finite `maxViewDistance` stops drawing instances far from the camera.
+   *
+   * Decorative vegetation and rocks (see `PropInstanceVariation`) get per-instance hue / value / scale / lean / wind-phase attributes that
+   * the shader reads: no extra batches, no extra draws, the static budget is unchanged. Trees, bushes and fern batches also receive a
+   * height-weighted vertex sway driven by the shared world clock (and dimmed to x0.25 when the user enables reduced motion).
+   */
+  async loadStaticBatch(manifest: AssetManifestEntry, placements: readonly WorldAssetPlacement[], limits: FoliageLimits = DEFAULT_FOLIAGE_LIMITS, worldWind: { value: number } = SHARED_WIND, reducedMotion: { value: boolean } = SHARED_REDUCED_MOTION): Promise<NativeStaticBatch> {
     if (manifest.kind !== 'prop' || manifest.sourceType !== 'native-glb') throw new NativeAssetError(manifest.id, 'static batches require a native-glb prop manifest entry');
     if (!placements.length) throw new NativeAssetError(manifest.id, 'static batch has no placements');
     const source = await this.load(manifest);
+    const profile = propVariationFor(manifest.id);
+    /** Per-instance variation packed once: hue shift, value scale, scale jitter (width, height, width again), lean axis (sin, cos), phase. */
+    const variationArrays = profile ? buildInstanceVariationArrays(manifest.id, placements) : null;
     const staticMeshes: InstancedMesh[] = [];
-    const fadeData: FadingInstances[] = [];
+    const attributes: InstancedBufferAttribute[] = [];
+    const matricesByMesh: Matrix4[][] = [];
     const placementIndices = new Map(placements.map((placement, index) => [placement.id, index]));
+    const positions = placements.map((placement) => new Vector3(placement.position.x, placement.position.y, placement.position.z));
+    const visibility = new InstanceVisibility(positions);
     try {
       source.root.updateMatrixWorld(true);
       source.root.traverse((node) => {
@@ -83,32 +105,58 @@ export class NativeAssetLoader {
         const mesh = node as InstancedMesh;
         // Shallow-clone the geometry: the source's typed arrays (vertex/index data) are already
         // compacted for blocked static candidates and immutable to us, so reuse them directly.
-        // Only the per-batch instanceOpacity attribute is owned by the batch, ensuring independent
-        // occlusion-fade bookkeeping per static-batch load.
+        // Only the per-batch instanceOpacity attribute is owned by the batch (it reads the batch's one alpha array),
+        // ensuring independent occlusion-fade bookkeeping per static-batch load.
         const geometry = shallowCloneGeometry(mesh.geometry);
-        const alphas = new Float32Array(placements.length).fill(1);
-        const attribute = new InstancedBufferAttribute(alphas, 1);
+        const attribute = new InstancedBufferAttribute(visibility.alpha, 1);
         geometry.setAttribute('instanceOpacity', attribute);
-        const material = cloneFadingMaterial(mesh.material);
+        if (variationArrays) {
+          // Three-component tint (rgb), three-component scale jitter (x, y, z), two-component lean (x, z) and a phase float. The
+          // vertex shader reads them when `instanceTint` is bound; setting the attribute unconditionally is safe even when the
+          // shader branch is skipped, but the GPU still pays for the vertex fetch.
+          geometry.setAttribute('instanceTint', new InstancedBufferAttribute(variationArrays.tint, 3));
+          geometry.setAttribute('instanceScaleJitter', new InstancedBufferAttribute(variationArrays.scale, 3));
+          geometry.setAttribute('instanceLean', new InstancedBufferAttribute(variationArrays.lean, 2));
+          geometry.setAttribute('instancePhase', new InstancedBufferAttribute(variationArrays.phase, 1));
+        }
+        // Local mesh height (y extent) is the divisor the wind shader uses to weight the sway by height; computed once per batch from
+        // the source mesh's local bounding box, so the trunk (y = 0) stays planted and the crown (y = meshHeight) reaches the peak.
+        let meshHeight = FOLIAGE_MESH_HEIGHT_FALLBACK;
+        const sourceBox = mesh.geometry.boundingBox;
+        if (sourceBox !== null && Number.isFinite(sourceBox.min.y) && Number.isFinite(sourceBox.max.y)) {
+          meshHeight = Math.max(0, sourceBox.max.y - sourceBox.min.y);
+        } else if (mesh.geometry.attributes.position !== undefined) {
+          // GLTFLoader does not auto-compute the local bounding box; do it once per source mesh and reuse via shallow-clone.
+          mesh.geometry.computeBoundingBox();
+          const computed = mesh.geometry.boundingBox;
+          if (computed !== null && Number.isFinite(computed.min.y) && Number.isFinite(computed.max.y)) {
+            meshHeight = Math.max(0, computed.max.y - computed.min.y);
+          }
+        }
+        const material = cloneFadingMaterial(mesh.material, limits.fade, profile, worldWind, reducedMotion, meshHeight);
         const batch = new InstancedMesh(geometry, material, placements.length);
         batch.name = `${manifest.id}:instances`;
         const localMatrix = mesh.matrixWorld.clone();
-        const positions: Vector3[] = [];
         const matrices: Matrix4[] = [];
         for (let index = 0; index < placements.length; index++) {
           const placement = placements[index]!;
-          const position = new Vector3(placement.position.x, placement.position.y, placement.position.z);
           const rotation = new Quaternion().setFromAxisAngle(UNIT_UP, placement.rotationY);
-          const scale = new Vector3(placement.scale.x, placement.scale.y, placement.scale.z);
-          const matrix = new Matrix4().compose(position, rotation, scale).multiply(localMatrix);
+          // Apply per-instance scale jitter on top of the authored scale (symmetric on X/Z, asymmetric on Y) before composing the
+          // world matrix. Collision is unchanged: the simulation reads `placement.scale`, not the rendered scale.
+          const variation = variationArrays ? readScaleJitter(variationArrays.scale, index) : null;
+          const sx = placement.scale.x * (variation ? variation[0]! : 1);
+          const sy = placement.scale.y * (variation ? variation[1]! : 1);
+          const sz = placement.scale.z * (variation ? variation[2]! : 1);
+          const scale = new Vector3(sx, sy, sz);
+          const matrix = new Matrix4().compose(positions[index]!, rotation, scale).multiply(localMatrix);
           matrices.push(matrix.clone());
           batch.setMatrixAt(index, matrix);
-          positions.push(position);
         }
         batch.instanceMatrix.needsUpdate = true;
         batch.computeBoundingSphere();
         staticMeshes.push(batch);
-        fadeData.push({ values: alphas, attribute, position: positions, matrices });
+        attributes.push(attribute);
+        matricesByMesh.push(matrices);
       });
       if (!staticMeshes.length) throw new NativeAssetError(manifest.id, 'GLB has no static mesh for instancing');
     } catch (error) {
@@ -120,34 +168,33 @@ export class NativeAssetLoader {
     root.name = `static-batch:${manifest.id}`;
     for (const mesh of staticMeshes) root.add(mesh);
     let released = false;
+    /** Rewrites one instance's matrix from its drawn state (a hidden instance is a zero-scale matrix). */
+    const writeInstance = (index: number): void => {
+      for (let meshIndex = 0; meshIndex < staticMeshes.length; meshIndex++) {
+        const mesh = staticMeshes[meshIndex]!;
+        mesh.setMatrixAt(index, visibility.isDrawn(index) ? matricesByMesh[meshIndex]![index]! : HIDDEN_MATRIX);
+        mesh.instanceMatrix.needsUpdate = true;
+      }
+    };
     return {
       assetId: manifest.id, root, instanceCount: placements.length, lodIds: manifest.lodIds,
+      hasWind: profile?.sways === true,
+      get drawnInstanceCount() { return visibility.drawnCount; },
       setPlacementVisible: (placementId, visible) => {
         const index = placementIndices.get(placementId);
         if (released || index === undefined) return;
-        for (let meshIndex = 0; meshIndex < staticMeshes.length; meshIndex++) {
-          const mesh = staticMeshes[meshIndex]!;
-          mesh.setMatrixAt(index, visible ? fadeData[meshIndex]!.matrices[index]! : HIDDEN_MATRIX);
-          mesh.instanceMatrix.needsUpdate = true;
-        }
+        if (visibility.setFactVisible(index, visible)) writeInstance(index);
       },
-      updateOcclusion: (camera, target) => {
+      updateOcclusion: (camera, target, dt) => {
         if (released) return;
-        const cameraPosition = camera.position;
-        const ray = SCRATCH_RAY.subVectors(cameraPosition, target);
-        const rayLengthSq = ray.lengthSq();
-        for (const data of fadeData) {
-          let changed = false;
-          for (let index = 0; index < data.values.length; index++) {
-            const position = data.position[index]!;
-            const along = Math.max(0, Math.min(1, SCRATCH_DELTA.subVectors(position, target).dot(ray) / rayLengthSq));
-            SCRATCH_CLOSEST.copy(target).addScaledVector(ray, along);
-            const distanceSq = position.distanceToSquared(SCRATCH_CLOSEST);
-            const alpha = along > 0.08 && along < 0.98 && distanceSq < 4.0 ? 0.3 : 1;
-            if (data.values[index] !== alpha) { data.values[index] = alpha; changed = true; }
-          }
-          if (changed) data.attribute.needsUpdate = true;
-        }
+        visibility.updateDistance(camera.position, limits.maxViewDistance, writeInstance);
+        if (visibility.updateOcclusion(camera.position, target, dt)) for (const attribute of attributes) attribute.needsUpdate = true;
+      },
+      advanceFade: () => {
+        if (released) return false;
+        if (!visibility.advanceFade()) return false;
+        for (const attribute of attributes) attribute.needsUpdate = true;
+        return true;
       },
       dispose: () => {
         if (released) return;
@@ -331,25 +378,148 @@ function assertSelfContainedGlb(assetId: string, bytes: ArrayBuffer): void {
 }
 const UNIT_UP = new Vector3(0, 1, 0);
 const HIDDEN_MATRIX = new Matrix4().makeScale(0, 0, 0);
-const SCRATCH_RAY = new Vector3();
-const SCRATCH_DELTA = new Vector3();
-const SCRATCH_CLOSEST = new Vector3();
-function cloneFadingMaterial(material: Material | Material[]): Material | Material[] {
+/** Shared wind clock (`GroundUnderstory.update` writes to `.value` once per frame). Foliage instanced meshes read it via the same uniform. */
+const SHARED_WIND: { value: number } = { value: 0 };
+/** Shared reduced-motion flag so the foliage wind shader can dim its amplitude to x0.25. */
+const SHARED_REDUCED_MOTION: { value: boolean } = { value: false };
+/** Sets the shared wind clock every render frame; the understory writes its own copy, so a setter keeps the two in lock-step. */
+export function setFoliageWorldWind(value: number): void { SHARED_WIND.value = value; }
+/** Mirrors the game-renderer reduced-motion flag so the foliage wind shader can scale its amplitude. */
+export function setFoliageReducedMotion(reduced: boolean): void { SHARED_REDUCED_MOTION.value = reduced; }
+/** Peak vertex sway in metres for a 1 m high foliage instance (crown reaches the peak). Tuned with `GroundClutter` so adjacent modules look the same. */
+const FOLIAGE_WIND_PEAK = 0.08;
+/** Fallback mesh height (m) when the source geometry has no usable local bounding box (e.g. an authored zero-height impostor): the shader still
+ *  produces a valid 0..1 sway weight and the trunk stays planted. */
+const FOLIAGE_MESH_HEIGHT_FALLBACK = 1.0;
+/** Wind direction (x, z) shared with grass and ground-clutter so the world feels like one breeze. */
+const WIND_DIR_X = 0.86;
+const WIND_DIR_Z = 0.5;
+/** Gust amplitude and frequency (rad/s): low-frequency modulation on top of the steady sway. */
+const GUST_AMPLITUDE = 0.4;
+const GUST_FREQUENCY = 0.5;
+/** Per-instance sway speed (rad/s) and base frequency: decorrelates adjacent crowns in space and time. */
+const SWAY_SPEED = 1.5;
+const SWAY_BASE_FREQ = 0.4;
+/** Reduced-motion multiplier (per task spec). */
+const REDUCED_MOTION_SCALE = 0.25;
+/** 4x4 Bayer threshold in (0, 1) from the window position: the screen-door pattern of the dither fade. */
+const DITHER_GLSL = `float wcBayer(vec2 p) {
+  int x = int(mod(p.x, 4.0)), y = int(mod(p.y, 4.0));
+  float m[16] = float[16](0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0);
+  return (m[x + y * 4] + 0.5) / 16.0;
+}`;
+/**
+ * Per-instance fade material. `blend`: transparent, no depth write, alpha by instance opacity. `dither`: stays opaque and writes depth (no
+ * blended overdraw, no sorting); an occluding instance is thinned by a Bayer screen-door discard instead. When the asset has a variation
+ * profile (`profile !== undefined`) the shader reads `instanceTint` (multiplied into `diffuseColor.rgb`), `instanceScaleJitter` (applied to
+ * the local scale) and `instanceLean` (small rotation through the base). Trees, bushes and fern profiles also read `uWorldWind` and
+ * `uReducedMotion` for a height-weighted crown sway.
+ */
+function cloneFadingMaterial(
+  material: Material | Material[],
+  mode: FoliageLimits['fade'],
+  profile: PropVariationProfile | undefined,
+  worldWind: { value: number },
+  reducedMotion: { value: boolean },
+  meshHeight: number,
+): Material | Material[] {
   const fade = (source: Material): Material => {
     const cloned = source.clone();
-    const shaderMaterial = cloned as Material & { transparent: boolean; depthWrite: boolean; onBeforeCompile: (shader: { vertexShader: string; fragmentShader: string }) => void; customProgramCacheKey: () => string };
-    shaderMaterial.transparent = true;
-    shaderMaterial.depthWrite = false;
+    const shaderMaterial = cloned as Material & { transparent: boolean; depthWrite: boolean; onBeforeCompile: (shader: { vertexShader: string; fragmentShader: string; uniforms: Record<string, { value: unknown }> }) => void; customProgramCacheKey: () => string };
+    const dither = mode === 'dither';
+    shaderMaterial.transparent = !dither;
+    shaderMaterial.depthWrite = dither;
+    const hasVariation = profile !== undefined;
+    const hasWind = profile?.sways === true;
     shaderMaterial.onBeforeCompile = (shader) => {
-      shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nattribute float instanceOpacity;\nvarying float vInstanceOpacity;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvInstanceOpacity = instanceOpacity;');
-      shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vInstanceOpacity;').replace('#include <opaque_fragment>', 'diffuseColor.a *= vInstanceOpacity;\n#include <opaque_fragment>');
+      const variationHeader = hasVariation
+        ? '\nattribute vec3 instanceTint;\nattribute vec3 instanceScaleJitter;\nattribute vec2 instanceLean;\nattribute float instancePhase;\nvarying vec3 vInstanceTint;\nvarying vec3 vInstanceScaleJitter;\nvarying vec2 vInstanceLean;\nvarying float vInstancePhase;'
+        : '';
+      const windHeader = hasWind
+        ? `\nuniform float uWorldWind;\nuniform float uReducedMotion;\nuniform float uFoliageMeshHeight;\nvarying float vSwayHeight;`
+        : '';
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nattribute float instanceOpacity;\nvarying float vInstanceOpacity;' + variationHeader + windHeader)
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvInstanceOpacity = instanceOpacity;' + (hasVariation
+          ? `
+vInstanceTint = instanceTint;
+vInstanceScaleJitter = instanceScaleJitter;
+vInstanceLean = instanceLean;
+vInstancePhase = instancePhase;`
+          : '') + (hasWind
+          ? `
+// Foliage wind: trunk (y = 0) stays planted, crown (y = meshHeight) reaches the peak amplitude.
+// uFoliageMeshHeight is the local bounding box height set once per batch (see loadStaticBatch); the divisor is constant-folded.
+float swayBase = clamp(position.y / uFoliageMeshHeight, 0.0, 1.0);
+float swayHeight = swayBase * swayBase;
+vSwayHeight = swayHeight;
+float motion = uReducedMotion > 0.5 ? ${REDUCED_MOTION_SCALE.toFixed(3)} : 1.0;
+float gust = 1.0 + ${GUST_AMPLITUDE.toFixed(3)} * sin(uWorldWind * ${GUST_FREQUENCY.toFixed(3)} + instancePhase);
+// The instance world placement is the translation column of three's per-instance instanceMatrix.
+float swayAmt = (${(0.6).toFixed(3)} + 0.4 * sin(uWorldWind * ${SWAY_SPEED.toFixed(3)} + instanceMatrix[3].x * ${SWAY_BASE_FREQ.toFixed(3)} + instanceMatrix[3].z * ${SWAY_BASE_FREQ.toFixed(3)} + instancePhase * 4.0)) * gust * motion;
+// Apply per-instance scale jitter (height-weighted so the trunk keeps the authored radius) and a sub-degree lean about the base.
+transformed.xz *= mix(vec2(1.0), vInstanceScaleJitter.xz, swayHeight);
+transformed.y *= mix(1.0, vInstanceScaleJitter.y, swayHeight);
+transformed.xz += vec2(${WIND_DIR_X.toFixed(3)}, ${WIND_DIR_Z.toFixed(3)}) * (${FOLIAGE_WIND_PEAK.toFixed(3)} * swayAmt * swayHeight);
+// Lean: rotate the local vertex around the base (y = 0) by instanceLean.x about Z, then by instanceLean.z about X.
+float leanX = vInstanceLean.x * smoothstep(0.0, 1.0, swayBase);
+float leanZ = vInstanceLean.y * smoothstep(0.0, 1.0, swayBase);
+float cz = cos(leanZ), sz = sin(leanZ), cx = cos(leanX), sx = sin(leanX);
+vec3 leaned = vec3(cz * transformed.x - sz * transformed.y, sz * transformed.x + cz * transformed.y, transformed.z);
+transformed = vec3(leaned.x, cx * leaned.y - sx * leaned.z, sx * leaned.y + cx * leaned.z);`
+          : ''));
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', '#include <common>\nvarying float vInstanceOpacity;' + (hasVariation ? '\nvarying vec3 vInstanceTint;varying vec3 vInstanceScaleJitter;varying vec2 vInstanceLean;varying float vInstancePhase;' : '') + (hasWind ? '\nvarying float vSwayHeight;' : '') + (dither ? '\n' + DITHER_GLSL : ''))
+        .replace('#include <color_fragment>', (hasVariation ? 'diffuseColor.rgb *= vInstanceTint;' : '') + '\n#include <color_fragment>')
+        .replace('#include <opaque_fragment>', (dither ? 'if (vInstanceOpacity < 0.999 && vInstanceOpacity <= wcBayer(gl_FragCoord.xy)) discard;' : 'diffuseColor.a *= vInstanceOpacity;') + '\n#include <opaque_fragment>');
+      if (hasWind) {
+        shader.uniforms.uWorldWind = worldWind;
+        shader.uniforms.uReducedMotion = reducedMotion;
+        // Per-batch local mesh height (clamped to the fallback so the shader never divides by zero or a negative value).
+        shader.uniforms.uFoliageMeshHeight = { value: Math.max(FOLIAGE_MESH_HEIGHT_FALLBACK, meshHeight) };
+      }
     };
-    shaderMaterial.customProgramCacheKey = () => 'wild-crown-instance-occlusion-fade-v3';
+    const programKey = 'wild-crown-instance-' + (hasVariation ? 'var-' : 'flat-') + (hasWind ? 'wind-' : '') + (dither ? 'dither-fade-v1' : 'occlusion-fade-v3');
+    shaderMaterial.customProgramCacheKey = () => programKey;
     return cloned;
   };
   return Array.isArray(material) ? material.map(fade) : fade(material);
 }
 function disposeMaterials(material: Material | Material[]): void { if (Array.isArray(material)) for (const item of material) item.dispose(); else material.dispose(); }
+
+/** Computes the deterministic per-instance attributes (tint rgb, scale jitter xyz, lean xz, phase) for one static batch. */
+function buildInstanceVariationArrays(assetId: string, placements: readonly WorldAssetPlacement[]): { tint: Float32Array; scale: Float32Array; lean: Float32Array; phase: Float32Array } {
+  const count = placements.length;
+  const tint = new Float32Array(count * 3);
+  const scale = new Float32Array(count * 3);
+  const lean = new Float32Array(count * 2);
+  const phase = new Float32Array(count);
+  for (let index = 0; index < count; index++) {
+    const placement = placements[index]!;
+    const variation = computePropVariation(assetId, placement.position.x, placement.position.y, placement.position.z);
+    // Tint: value-only jitter is encoded as a multiplier on white. Hue offset is encoded as a small RGB rotation on the luminance axis;
+    // ±4% of the hue circle lands inside ±5% of the RGB channels, so we approximate with a 1 + 0.05 * cos(hueShift * 2π) / 1 * (1 - 0.05).
+    const luminance = 1 + variation.valueScale - 1;
+    const tintR = luminance + variation.hueShift * 1.2;
+    const tintG = luminance - variation.hueShift * 0.8;
+    const tintB = luminance - variation.hueShift * 0.4;
+    tint[index * 3 + 0] = tintR;
+    tint[index * 3 + 1] = tintG;
+    tint[index * 3 + 2] = tintB;
+    scale[index * 3 + 0] = variation.widthScale;
+    scale[index * 3 + 1] = variation.heightScale;
+    scale[index * 3 + 2] = variation.widthScale;
+    lean[index * 2 + 0] = variation.leanX;
+    lean[index * 2 + 1] = variation.leanZ;
+    phase[index] = variation.swayPhase;
+  }
+  return { tint, scale, lean, phase };
+}
+
+/** Reads the scale jitter triple for an instance; reused by the static batch setup to compose the world matrix. */
+function readScaleJitter(scale: Float32Array, index: number): [number, number, number] {
+  return [scale[index * 3 + 0]!, scale[index * 3 + 1]!, scale[index * 3 + 2]!];
+}
 function disposeTemplate(template: Template): void { disposeObject(template.root); }
 function disposeObject(root: Object3D): void {
   const geometries = new Set<{ dispose(): void }>();

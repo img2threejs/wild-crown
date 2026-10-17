@@ -41,6 +41,12 @@ const REFINE_INSIDE = 0.75;
 const NO_OWNER = -2;
 const FLAT_OWNER = -1;
 const FLAT_EPSILON = 1e-3;
+/** Unowned coarse cells whose 1 m triangles stray from the analytic height by more than this are refined (steep massif / gorge walls). */
+export const HEIGHT_ERROR_TOLERANCE = 0.25;
+/** At most this many cells per region are refined for height error (worst first, lowest cell index on ties). */
+export const MAX_ERROR_REFINED_CELLS = 600;
+/** Cell-local probes (both triangle centroids, the centre and two off-centre points) that measure a coarse cell's height error. */
+const ERROR_PROBES: readonly (readonly [number, number])[] = [[1 / 3, 1 / 3], [2 / 3, 2 / 3], [0.5, 0.5], [0.15, 0.15], [0.85, 0.85]];
 /** Edges within this much farther than the nearest one contribute to the berm's outward normal. */
 const NORMAL_SLACK = 1;
 const NORMAL_SHARPNESS = 5;
@@ -194,9 +200,8 @@ function overlapsWithArea(a: Footprint, b: Footprint): boolean {
 }
 
 /**
- * A raised surface whose y = 0 foot lies inside a flat surface (the gateway ramp inside the first forest corridor, the root ramp
- * inside the forest floor) continues that flat ground: the ramp plane wins in the overlap. A raised surface that merely crosses a
- * flat one higher up (the root ramp's east flank over the boar thicket) never lifts that flat ground: flat y = 0 wins there.
+ * A ramp whose y = 0 foot is embedded in overlapping flat ground continues that ground, so its plane wins there.
+ * An elevated crossing without an embedded foot must not lift the underlying flat walkable.
  */
 function hasEmbeddedFoot(raised: Footprint, flat: Footprint): boolean {
   const probe = { distance: Infinity, x: 0, z: 0 };
@@ -300,12 +305,16 @@ export class TerrainField {
     const cellsX = this.cols - 1;
     const cellsZ = this.rows - 1;
     this.refineIndex = new Int32Array(cellsX * cellsZ).fill(-1);
-    let refined = 0;
+    const marked = new Uint8Array(cellsX * cellsZ);
     for (let row = 0; row < cellsZ; row++) {
       for (let col = 0; col < cellsX; col++) {
-        if (this.needsRefinement(this.gridMinX + (col + 0.5) * this.cell, this.gridMinZ + (row + 0.5) * this.cell)) this.refineIndex[row * cellsX + col] = refined++;
+        if (this.needsRefinement(this.gridMinX + (col + 0.5) * this.cell, this.gridMinZ + (row + 0.5) * this.cell)) marked[row * cellsX + col] = 1;
       }
     }
+    this.markHeightErrorCells(marked, cellsX, cellsZ);
+    this.pruneCoplanarCells(marked, cellsX, cellsZ);
+    let refined = 0;
+    for (let index = 0; index < marked.length; index++) if (marked[index]) this.refineIndex[index] = refined++;
     this.refinedCells = refined;
     const side = TERRAIN_REFINE + 1;
     this.fineHeights = new Float32Array(refined * side * side);
@@ -315,6 +324,73 @@ export class TerrainField {
         if (block >= 0) this.fillFineCell(col, row, block);
       }
     }
+  }
+
+  /**
+   * Unmarks every refined cell whose 25 fine-grid vertices all equal the coarse cell's own triangles (within 1e-6): such a
+   * refinement is exactly coplanar with the 1 m triangles (flat ground beside a walkable, a straight ramp), so it adds vertices
+   * and no shape. Plain neighbours stitch to straight coarse edges, which a coplanar cell already follows.
+   */
+  private pruneCoplanarCells(marked: Uint8Array, cellsX: number, cellsZ: number): void {
+    for (let row = 0; row < cellsZ; row++) {
+      for (let col = 0; col < cellsX; col++) {
+        const index = row * cellsX + col;
+        if (!marked[index]) continue;
+        const x0 = this.gridMinX + col * this.cell;
+        const z0 = this.gridMinZ + row * this.cell;
+        const i00 = row * this.cols + col;
+        const h00 = this.heights[i00]!;
+        const h10 = this.heights[i00 + 1]!;
+        const h01 = this.heights[i00 + this.cols]!;
+        const h11 = this.heights[i00 + this.cols + 1]!;
+        let coplanar = true;
+        for (let v = 0; v <= TERRAIN_REFINE && coplanar; v++) {
+          for (let u = 0; u <= TERRAIN_REFINE; u++) {
+            const fu = u / TERRAIN_REFINE;
+            const fv = v / TERRAIN_REFINE;
+            if (Math.abs(this.heightAt(x0 + fu * this.cell, z0 + fv * this.cell) - triangleHeight(h00, h10, h01, h11, fu, fv)) > 1e-6) {
+              coplanar = false;
+              break;
+            }
+          }
+        }
+        if (coplanar) marked[index] = 0;
+      }
+    }
+  }
+
+  /**
+   * Coarse cells of unowned (relief / backdrop / bank) ground that the walkable bands leave unrefined but whose 1 m triangles
+   * stray from the analytic height by more than {@link HEIGHT_ERROR_TOLERANCE} (steep massif and gorge walls cut by the fixed
+   * diagonal): the worst {@link MAX_ERROR_REFINED_CELLS} are refined too, ties broken by the lower cell index. Only cells
+   * wholly outside every walkable footprint (unowned or non-walkable summit ground) qualify, so the exact walk heights are never
+   * touched; edge vertices stitch to plain neighbours exactly as for every other refined cell.
+   */
+  private markHeightErrorCells(marked: Uint8Array, cellsX: number, cellsZ: number): void {
+    const candidates: { index: number; error: number }[] = [];
+    for (let row = 0; row < cellsZ; row++) {
+      for (let col = 0; col < cellsX; col++) {
+        const index = row * cellsX + col;
+        if (marked[index]) continue;
+        const x0 = this.gridMinX + col * this.cell;
+        const z0 = this.gridMinZ + row * this.cell;
+        const owner = this.ownerAt(x0 + this.cell / 2, z0 + this.cell / 2);
+        if (owner === FLAT_OWNER || (owner >= 0 && owner < this.raised.length)) continue;
+        const i00 = row * this.cols + col;
+        const h00 = this.heights[i00]!;
+        const h10 = this.heights[i00 + 1]!;
+        const h01 = this.heights[i00 + this.cols]!;
+        const h11 = this.heights[i00 + this.cols + 1]!;
+        let error = 0;
+        for (const [fx, fz] of ERROR_PROBES) {
+          const analytic = this.heightAt(x0 + fx * this.cell, z0 + fz * this.cell);
+          error = Math.max(error, Math.abs(analytic - triangleHeight(h00, h10, h01, h11, fx, fz)));
+        }
+        if (error > HEIGHT_ERROR_TOLERANCE) candidates.push({ index, error });
+      }
+    }
+    candidates.sort((a, b) => b.error - a.error || a.index - b.index);
+    for (let k = 0; k < Math.min(candidates.length, MAX_ERROR_REFINED_CELLS); k++) marked[candidates[k]!.index] = 1;
   }
 
   /**
@@ -628,7 +704,8 @@ export function buildTerrainMeshData(field: TerrainField): TerrainMeshData {
       pz.push(field.gridMinZ + row * cell);
     }
   }
-  // Global lattice of fine boundary/interior vertices; lattice corners alias the coarse vertices.
+  // Global lattice of fine vertices; lattice corners alias the coarse vertices. Every vertex on a refined cell's boundary exists
+  // (plain neighbours stitch to it); interior vertices exist only where a triangle uses them.
   const fineId = new Int32Array(fineColumns * fineRows).fill(-1);
   const vertexAt = (gx: number, gz: number): number => {
     if (gx % F === 0 && gz % F === 0) return (gz / F) * cols + gx / F;
@@ -639,25 +716,39 @@ export function buildTerrainMeshData(field: TerrainField): TerrainMeshData {
     for (let col = 0; col < cellsX; col++) {
       const block = refineIndex[row * cellsX + col]!;
       if (block < 0) continue;
+      const base = block * side * side;
+      const vertex = (u: number, v: number): number => {
+        const gx = col * F + u;
+        const gz = row * F + v;
+        let id = vertexAt(gx, gz);
+        if (id >= 0) return id;
+        id = px.length;
+        fineId[gz * fineColumns + gx] = id;
+        px.push(field.gridMinX + gx * (cell / F));
+        py.push(field.fineHeights[base + v * side + u]!);
+        pz.push(field.gridMinZ + gz * (cell / F));
+        return id;
+      };
       for (let v = 0; v <= F; v++) {
-        for (let u = 0; u <= F; u++) {
-          const gx = col * F + u;
-          const gz = row * F + v;
-          if (vertexAt(gx, gz) >= 0) continue;
-          fineId[gz * fineColumns + gx] = px.length;
-          px.push(field.gridMinX + gx * (cell / F));
-          py.push(field.fineHeights[block * side * side + v * side + u]!);
-          pz.push(field.gridMinZ + gz * (cell / F));
-        }
+        for (let u = 0; u <= F; u += v === 0 || v === F ? 1 : F) vertex(u, v);
       }
-      for (let v = 0; v < F; v++) {
-        for (let u = 0; u < F; u++) {
-          const a = vertexAt(col * F + u, row * F + v);
-          const b = vertexAt(col * F + u + 1, row * F + v);
-          const c = vertexAt(col * F + u, row * F + v + 1);
-          const d = vertexAt(col * F + u + 1, row * F + v + 1);
-          indices.push(a, c, b, b, c, d);
+      const plan = planRefinedCell(field.fineHeights, base);
+      for (const origin of plan.quads) {
+        const u = origin % side;
+        const v = (origin - u) / side;
+        const a = vertex(u, v);
+        const b = vertex(u + 1, v);
+        const c = vertex(u, v + 1);
+        const d = vertex(u + 1, v + 1);
+        indices.push(a, c, b, b, c, d);
+      }
+      for (const polygon of plan.rings) {
+        const ids: number[] = [];
+        for (const code of polygon) {
+          const u = code % side;
+          ids.push(vertex(u, (code - u) / side));
         }
+        earClip(ids, px, pz, indices);
       }
     }
   }
@@ -732,6 +823,84 @@ export function buildTerrainMeshData(field: TerrainField): TerrainMeshData {
     normals[o + 2] = normals[o + 2]! / length;
   }
   return { positions, normals, indices: Uint32Array.from(indices) };
+}
+
+/** Fine heights of a refined cell's strips agree with one plane within this (metres; float32 height rounding included). */
+const COPLANAR_TOLERANCE = 1e-6;
+
+interface CellPlan {
+  /** Origins (v * side + u) of the fine quads kept as the original two triangles. */
+  readonly quads: number[];
+  /** Convex rings (v * side + u codes, winding like the terrain triangles) of strips merged into one coplanar polygon. */
+  readonly rings: number[][];
+}
+
+/**
+ * Exact triangle saving for a refined cell: 1-fine-cell-wide strips along z (or along x) whose fine vertices all lie on one
+ * plane are merged into a polygon keeping every vertex on the cell boundary (no T-junctions) and, along a seam against a strip
+ * that is not merged, that seam's vertices; the polygon is the very surface the original triangles made. The direction with
+ * fewer triangles wins (z on ties).
+ */
+function planRefinedCell(fineHeights: Float32Array, base: number): CellPlan {
+  const F = TERRAIN_REFINE;
+  const side = F + 1;
+  let best: CellPlan | undefined;
+  let bestTriangles = Infinity;
+  for (let direction = 0; direction < 2; direction++) {
+    // direction 0: strips run along z (across = u, along = v); direction 1: strips run along x (across = v, along = u).
+    const code = (across: number, along: number): number => (direction === 0 ? along * side + across : across * side + along);
+    const height = (across: number, along: number): number => fineHeights[base + code(across, along)]!;
+    const planar = (from: number, to: number): boolean => {
+      const h0 = height(from, 0);
+      const slopeAcross = (height(to + 1, 0) - h0) / (to + 1 - from);
+      const slopeAlong = (height(from, F) - h0) / F;
+      for (let across = from; across <= to + 1; across++) {
+        for (let along = 0; along <= F; along++) {
+          if (Math.abs(height(across, along) - (h0 + slopeAcross * (across - from) + slopeAlong * along)) > COPLANAR_TOLERANCE) return false;
+        }
+      }
+      return true;
+    };
+    const runs: { from: number; to: number; merged: boolean }[] = [];
+    for (let from = 0; from < F; ) {
+      if (!planar(from, from)) {
+        runs.push({ from, to: from, merged: false });
+        from++;
+        continue;
+      }
+      let to = from;
+      while (to + 1 < F && planar(from, to + 1)) to++;
+      runs.push({ from, to, merged: true });
+      from = to + 1;
+    }
+    const quads: number[] = [];
+    const rings: number[][] = [];
+    let triangles = 0;
+    for (let index = 0; index < runs.length; index++) {
+      const run = runs[index]!;
+      if (!run.merged) {
+        for (let along = 0; along < F; along++) quads.push(code(run.from, along));
+        triangles += 2 * F;
+        continue;
+      }
+      const wholeLeft = run.from === 0 || !runs[index - 1]!.merged;
+      const wholeRight = run.to === F - 1 || !runs[index + 1]!.merged;
+      const ring: number[] = [];
+      for (let along = 0; along <= F; along += wholeLeft ? 1 : F) ring.push(code(run.from, along));
+      for (let across = run.from + 1; across <= run.to + 1; across++) ring.push(code(across, F));
+      for (let along = F - 1; along >= 0; along--) if (wholeRight || along === 0) ring.push(code(run.to + 1, along));
+      for (let across = run.to; across > run.from; across--) ring.push(code(across, 0));
+      // The walk above is clockwise in (u, v) for strips along z; strips along x mirror it.
+      if (direction === 1) ring.reverse();
+      rings.push(ring);
+      triangles += ring.length - 2;
+    }
+    if (triangles < bestTriangles) {
+      bestTriangles = triangles;
+      best = { quads, rings };
+    }
+  }
+  return best!;
 }
 
 /** True when the segment from the ring vertex before `index` to the one after it passes through another ring vertex. */

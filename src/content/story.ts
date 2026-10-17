@@ -55,23 +55,23 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "prologue:hear-roars",
         "Hear the night of a thousand roars",
-        "Watch the six migration signs and locate the sound beneath Greenwake.",
-        ["semantic:prologue-roars"],
+        "Observe fleeing animals and locate the sound beneath Greenwake.",
+        ["semantic:greenwake-roars"],
         "investigate",
-        ["greenwake-gate"],
+        ["greenwake-roars"],
       ),
       objective(
-        "prologue:reach-vara",
-        "Reach and tend the fallen Vara",
-        "Cross the settlement route and tend the injured hornbill.",
+        "prologue:tend-vara",
+        "Tend to Vara",
+        "Reach the fallen harpy eagle and tend the wing that brought Sky.",
         ["tend:vara"],
         "rescue",
         ["vara"],
       ),
       objective(
         "prologue:receive-sky",
-        "Receive the Sky fragment vision",
-        "Touch the fragment and experience the existing phrase BRING THEM HOME.",
+        "Receive Sky and witness its memory",
+        "Touch the fragment and hear the plea it carries: BRING THEM HOME.",
         ["fragment:heartroot-sky"],
         "collect",
         ["vara-fragment"],
@@ -79,18 +79,26 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "prologue:take-staff",
         "Receive Yara’s Warden Staff",
-        "Accept the staff and learn the first staff interaction.",
+        "Accept the staff and learn its first interaction.",
         ["interaction:warden-staff"],
         "interact",
         ["warden-staff"],
       ),
       objective(
         "prologue:cleanse-boar",
-        "Cleanse the corrupted boar without killing it",
-        "Evade its charge, tether it during exposure and cleanse the sap.",
+        "Cleanse the corrupted boar",
+        "Read its charge, tether the exposed boar and cleanse it without killing it.",
         ["encounter:greenwake-boar"],
         "encounter",
         ["corrupted-boar"],
+      ),
+      objective(
+        "prologue:open-gate",
+        "Open the settlement gate",
+        "With the boar cleansed, use the Warden Staff on the ridge gate to open the way to the forest exit.",
+        ["interaction:greenwake-gate"],
+        "interact",
+        ["greenwake-gate"],
       ),
     ],
   },
@@ -102,13 +110,13 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
     synopsis:
       "Birds and monkeys contest seeds and poisoned water. Aren learns that a clean wound cannot replace the resources the orchard needs.",
     questIds: ["fallen-scout", "thief-in-the-branches", "empty-orchard"],
-    requiredBeats: ["fallen-scout-open", "branches-open", "orchard-open"],
-    choices: ["canopy-water-seed-accord"],
+    requiredBeats: ["fallen-scout-open", "fallen-scout-close", "branches-open", "branches-close", "orchard-open", "koro-thorn-reveal", "koro-cleanse", "koro-pact-close", "orchard-close"],
+    choices: ["koro-pact"],
     absenceVariants: [
       {
         when: "koro-absent",
         route:
-          "The rope bridge counterweight is hand-operated; the route never requires Koro to be recruited.",
+          "The orchard waterwheel jam is cleared with a heavy staff strike; no route requires Koro to be recruited first.",
       },
       {
         when: "vara-absent",
@@ -128,16 +136,21 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
     requiredBeats: [
       "tracks-open",
       "hunters-open",
+      "marek-escape",
       "tali-rescue",
       "asha-echo",
+      "tali-shelter-warning",
+      "asha-phase-three",
       "asha-close",
+      "asha-pact-close",
+      "bamboo-source-cleansed",
     ],
-    choices: ["bamboo-snare-source"],
+    choices: ["asha-pact"],
     absenceVariants: [
       {
         when: "koro-absent",
         route:
-          "The bamboo bundle at Asha’s arena is lowered by a ground-level release lever; Koro’s interruption is optional.",
+          "The bamboo bundle at Asha’s arena is cut free by a staff heavy strike when Koro is not assigned; Koro’s special is optional.",
       },
       {
         when: "asha-absent",
@@ -254,7 +267,7 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "chapter-6:protect-tali",
         "Protect Tali and the refuge pillars",
-        "Keep Tali safe and restore the refuge service station after possession.",
+        "Keep Tali safe and set the refuge pillars after the possession.",
         ["rescue:tali-safe", "interaction:refuge-services"],
         "rescue",
         ["tali", "refuge-services"],
@@ -294,7 +307,7 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "chapter-7:form-march",
         "Form the Wild March by voluntary commitments",
-        "Record each faction’s choice; do not award an ending automatically.",
+        "Ask each faction in turn whether it will march; every answer is its own.",
         ["choice:wild-march-formation"],
         "choice",
         ["wild-march"],
@@ -348,7 +361,7 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "chapter-8:resolve-aspects",
         "Resolve all six Heartroot aspects",
-        "Use a player-only counter for every aspect; companions can help but never gate the path.",
+        "Answer each aspect with your own hand; companions can ease the way but are never the key.",
         ["encounter:encounter-orun"],
         "encounter",
         ["orun"],
@@ -356,7 +369,7 @@ export const CHAPTERS: readonly ChapterDefinition[] = [
       objective(
         "chapter-8:choose-ending",
         "Choose an ending after the final encounter",
-        "Dominion and Severance are always selectable; Living Pact is offered only by the package predicate.",
+        "Dominion and Severance stand open to you; the Living Pact answers only to what you have earned.",
         ["choice:final-ending"],
         "choice",
         ["hollow-crown-choice"],
@@ -452,12 +465,12 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   "river-of-black-sap-resolution": additional(
     "river-of-black-sap-resolution",
     "The river now follows the path we chose, and the floodplain has changed with it.",
-    "The source is neutralized; the water must still be allowed to settle.",
+    "The source is quiet; the water still needs time to settle.",
   ),
   "the-hunters-remorse-opening": additional(
     "the-hunters-remorse-opening",
     "If Marek is gone, the trap ledger still marks every supply line. We can dismantle them ourselves.",
-    "His presence may help. His absence cannot be a gate.",
+    "His help would be welcome. His absence will not stop us.",
   ),
   "the-hunters-remorse-resolution": additional(
     "the-hunters-remorse-resolution",
@@ -467,7 +480,7 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   "seeds-between-branches-opening": additional(
     "seeds-between-branches-opening",
     "The birds need seed for the winter; the monkeys need enough to restart the orchard.",
-    "Carry each basket in the requested order so neither store is emptied.",
+    "Carry the baskets across in turn so neither store is emptied.",
   ),
   "seeds-between-branches-resolution": additional(
     "seeds-between-branches-resolution",
@@ -527,7 +540,7 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   "a-path-for-the-young-opening": additional(
     "a-path-for-the-young-opening",
     "Tali knows the nursery trail. We will follow her pace and clear the snares ahead.",
-    "Asha may guard the young or lead the march; the obligation she accepted determines the formation.",
+    "Asha will guard the young or lead the march, depending on the promise she made.",
   ),
   "a-path-for-the-young-resolution": additional(
     "a-path-for-the-young-resolution",
@@ -547,7 +560,7 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   "witness-in-the-reeds-opening": additional(
     "witness-in-the-reeds-opening",
     "Nyra marked the low-contamination corridor. If Marek is gone, the hand release is still here.",
-    "Use the bypass rather than waiting for someone who is not part of this route.",
+    "Use the bypass; this crossing does not have to wait for anyone.",
   ),
   "witness-in-the-reeds-resolution": additional(
     "witness-in-the-reeds-resolution",
@@ -567,17 +580,17 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   "fall-of-the-grove-opening": additional(
     "fall-of-the-grove-opening",
     "The pillar is failing. Keep Tali in cover, then brace the root before the next pulse.",
-    "Use the ground lever if no companion is present; the shelter is never loadout-gated.",
+    "Use the ground lever if no companion is beside you; the shelter holds either way.",
   ),
   "fall-of-the-grove-resolution": additional(
     "fall-of-the-grove-resolution",
     "The Grove has fallen, but its services reached the Refuge.",
-    "A loss can be real without making the next day unplayable.",
+    "A loss can be real without closing the road ahead.",
   ),
   "wild-march-opening": additional(
     "wild-march-opening",
     "Ask each group separately. A refusal changes who joins, not whether the campaign can continue.",
-    "The march is a coalition route, not a promise that the Living Pact ending is already earned.",
+    "The march is a coalition, not a promise; the Living Pact still has to be earned.",
   ),
   "wild-march-resolution": additional(
     "wild-march-resolution",
@@ -586,8 +599,8 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   ),
   "heartroot-hollow-opening": additional(
     "heartroot-hollow-opening",
-    "Six memories lie ahead. Each one has a direct counter that you can perform alone.",
-    "Companions can make the opening clearer or shorter, but they are not the key to the Crown.",
+    "Six memories lie ahead. Each one can be answered by your own hand.",
+    "Companions can clear the way or shorten it, but they are not the key to the Crown.",
   ),
   "heartroot-hollow-resolution": additional(
     "heartroot-hollow-resolution",
@@ -596,7 +609,7 @@ const ADDITIONAL_DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
   ),
   "orun-the-hollow-king-opening": additional(
     "orun-the-hollow-king-opening",
-    "He mirrors a Warden’s actions, not a single attack. Wait for the announced cue, then choose your response.",
+    "He mirrors a Warden’s whole stance, not a single strike. Watch for his warning, then choose your answer.",
     "The final choice belongs after the encounter, not as its automatic reward.",
   ),
   "orun-the-hollow-king-resolution": additional(

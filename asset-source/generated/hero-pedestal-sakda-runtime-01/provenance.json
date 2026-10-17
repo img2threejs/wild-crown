@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "generator": "Tripo",
+  "sourceType": "native-glb",
+  "tasks": {
+    "concept": "76297804-de91-404f-b408-0a7739ec0b54",
+    "reference": "e035058f-d641-49ca-b92f-96ecc1bc595f",
+    "model": "f2f144d6-d060-455e-8875-5a5e2398ae2b"
+  },
+  "model": "v3.1-20260211",
+  "creditsConsumed": {
+    "concept": 5,
+    "reference": 5,
+    "model": 60
+  },
+  "source": "asset-source/generated/hero-pedestal-sakda-runtime-01/tripo-out/tripo-out/hero-pedestal-sakda-model-01-f2f144d6/model.glb",
+  "sourceHash": "1dc15fafc79a1304e8ce11e49eddcdf02121b1660e81857c75fe84c0854ad900",
+  "sourceInputHash": "2ae8c13ef3fc8dbba256f8ecc18962b809a6118b864ca777b398b5dddd693460",
+  "output": {
+    "file": "asset-source/generated/hero-pedestal-sakda-runtime-01/hero-pedestal-sakda.glb",
+    "sha256": "1dc15fafc79a1304e8ce11e49eddcdf02121b1660e81857c75fe84c0854ad900",
+    "triangleCount": 25420,
+    "boundsMin": [
+      -0.48947253823280334,
+      -0.09779533743858337,
+      -0.4892192780971527
+    ],
+    "boundsMax": [
+      0.48917847871780396,
+      0.09903332591056824,
+      0.48897066712379456
+    ],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.2990831,
+      "originOffset": {
+        "x": 0.000338,
+        "y": -0.1059701,
+        "z": 0.0002858
+      }
+    },
+    "standingPatch": {
+      "widthMeters": 0.44,
+      "sampleCount": 25,
+      "sourceHeights": [
+        0.046324197097105974,
+        0.045159978924596944,
+        0.04609234046538775,
+        0.04856727650195425,
+        0.0494195938720056,
+        0.03899618955782496,
+        0.04136657137644049,
+        0.04805629484064383,
+        0.05023089733982348,
+        0.04922406927817436,
+        0.04178107932151531,
+        0.045074244874781434,
+        0.04831893727624255,
+        0.04702698042560115,
+        0.04626151441219397,
+        0.04499843735140812,
+        0.04556012773581043,
+        0.046219224322290475,
+        0.044814873360553106,
+        0.04431414531003904,
+        0.049675927078885636,
+        0.047421886116395015,
+        0.04518769510626314,
+        0.04399470433568307,
+        0.044039122383997355
+      ],
+      "sourceMedianY": 0.04609234046538775,
+      "runtimeHeightSpreadMeters": 0.025829526635818594
+    },
+    "runtimeWidthMeters": 2.25,
+    "runtimeBoundsMin": [
+      -1.125,
+      -0.3308097265281589,
+      -1.1244699788924926
+    ],
+    "runtimeBoundsMax": [
+      1.125,
+      0.12171572418410716,
+      1.1244699788924926
+    ],
+    "materialCount": 1,
+    "embeddedImageCount": 3
+  },
+  "evidenceStatus": "blocked",
+  "notes": "Preview-only candidate. Native geometry and embedded PBR textures preserved; manifest transform centres its measured standing patch at y=0. Not production-release evidence."
+}

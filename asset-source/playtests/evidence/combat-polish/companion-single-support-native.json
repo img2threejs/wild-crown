@@ -1,0 +1,499 @@
+{
+  "capturedAt": "2026-10-16T14:53:58.628Z",
+  "scope": "Single companion candidate Chapters acceptance; not production release certification or audio certification",
+  "previewMethod": "Actual mounted Companions UI, unchanged native GLBs, native AnimationController and StoryEffects. Public preview.update(0.1) steps a controlled accelerated preview clock; proves native poses, phase cues, elemental effects and cleanup, not production-rate timing or gameplay damage.",
+  "verification": {
+    "gameplayGate": {
+      "command": "bun test --timeout 120000 tests/combat tests/companions tests/app tests/ui tests/campaign tests/effects tests/input tests/storage tests/content tests/audio tests/world tests/lab packages/campaign/test",
+      "passed": 1897,
+      "failed": 0,
+      "files": 136,
+      "assertions": 648601,
+      "elapsedSeconds": 166.16,
+      "scope": "Gameplay, campaign, content, app, UI, effects, input, storage, audio, world and campaign package; excludes rendering/release/asset-lab rebuild suites."
+    },
+    "build": {
+      "command": "bun run build (Node 22.22.3)",
+      "typescript": "tsc -b passed",
+      "vite": "passed",
+      "modules": 325,
+      "viteSeconds": 9.49,
+      "warning": "Existing chunks larger than 500 kB after minification."
+    }
+  },
+  "preservedNativeSha256": {
+    "koro": "c6985e814b630be140030ea03c5679e4a9ca6d558184f2e34567a41f1d1b048d",
+    "vara": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60",
+    "vesper": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc"
+  },
+  "allPairRuntime": {
+    "exercisedHeroCompanionPairs": 24,
+    "projectedCompanionsPerPair": 1,
+    "activeCompanionSlotsPerPair": 1,
+    "narrativeRecruitmentAndBond": "unchanged"
+  },
+  "heroPreferencesAfterReload": {
+    "wanted": {
+      "aren": "sable",
+      "yara": "koro",
+      "vesper": "vara",
+      "sakda": "solkar"
+    },
+    "checks": [
+      {
+        "hero": "aren",
+        "selected": [
+          "sable"
+        ],
+        "cta": "sable"
+      },
+      {
+        "hero": "yara",
+        "selected": [
+          "koro"
+        ],
+        "cta": "koro"
+      },
+      {
+        "hero": "vesper",
+        "selected": [
+          "vara"
+        ],
+        "cta": "vara"
+      },
+      {
+        "hero": "sakda",
+        "selected": [
+          "solkar"
+        ],
+        "cta": "solkar"
+      }
+    ],
+    "settings": {
+      "aren": "sable",
+      "yara": "koro",
+      "vesper": "vara",
+      "sakda": "solkar"
+    }
+  },
+  "continueProof": {
+    "hero": "sakda",
+    "savedCompanion": "solkar",
+    "newPreferenceAtContinue": "asha",
+    "loadedCompanion": "solkar",
+    "visibleTravelingActors": [
+      "solkar__party_companion"
+    ],
+    "worldReady": true
+  },
+  "nativeSkills": [
+    {
+      "id": "crown-rally",
+      "element": "fire",
+      "bones": 38,
+      "poseDelta": 0.7442757697136375,
+      "actionTimes": 18,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 28,
+      "moving": 28,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "solkar-search",
+      "element": "light",
+      "bones": 38,
+      "poseDelta": 0.7452843954904531,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 23,
+      "moving": 23,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "solkar-distract",
+      "element": "light",
+      "bones": 38,
+      "poseDelta": 0.644464383450764,
+      "actionTimes": 13,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 24,
+      "moving": 23,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "canopy-route",
+      "element": "wood",
+      "bones": 41,
+      "poseDelta": 0.03708518507931575,
+      "actionTimes": 14,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 35,
+      "moving": 35,
+      "gravity": 9.8,
+      "expired": true
+    },
+    {
+      "id": "canopy-move",
+      "element": "earth",
+      "bones": 41,
+      "poseDelta": 0.1551350032914865,
+      "actionTimes": 17,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 31,
+      "moving": 31,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "canopy-distract",
+      "element": "wood",
+      "bones": 41,
+      "poseDelta": 0.12850775753471647,
+      "actionTimes": 13,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 23,
+      "moving": 22,
+      "gravity": 1.2,
+      "expired": true
+    },
+    {
+      "id": "koro-search",
+      "element": "wood",
+      "bones": 41,
+      "poseDelta": 0.04613123690452704,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 31,
+      "moving": 31,
+      "gravity": 1.2,
+      "expired": true
+    },
+    {
+      "id": "fang-guard",
+      "element": "earth",
+      "bones": 43,
+      "poseDelta": 0.13806923018304268,
+      "actionTimes": 16,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 30,
+      "moving": 30,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "fang-pin",
+      "element": "fire",
+      "bones": 43,
+      "poseDelta": 0.10552004379360888,
+      "actionTimes": 14,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 31,
+      "moving": 31,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "asha-search",
+      "element": "earth",
+      "bones": 43,
+      "poseDelta": 0.05926450738486564,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 28,
+      "moving": 28,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "asha-distract",
+      "element": "fire",
+      "bones": 43,
+      "poseDelta": 0.13806923018300826,
+      "actionTimes": 13,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 21,
+      "moving": 20,
+      "gravity": 0.4,
+      "expired": true
+    },
+    {
+      "id": "pack-flank",
+      "element": "water",
+      "bones": 33,
+      "poseDelta": 0.1116548395877815,
+      "actionTimes": 14,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 22,
+      "moving": 22,
+      "gravity": 3.2,
+      "expired": true
+    },
+    {
+      "id": "sable-search",
+      "element": "water",
+      "bones": 33,
+      "poseDelta": 0.17853829635397625,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 26,
+      "moving": 23,
+      "gravity": 3.2,
+      "expired": true
+    },
+    {
+      "id": "sable-distract",
+      "element": "ice",
+      "bones": 33,
+      "poseDelta": 0.13954909806710547,
+      "actionTimes": 13,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 21,
+      "moving": 20,
+      "gravity": 9,
+      "expired": true
+    },
+    {
+      "id": "shadow-ambush",
+      "element": "lightning",
+      "bones": 39,
+      "poseDelta": 0.07499089677839249,
+      "actionTimes": 11,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 32,
+      "moving": 32,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "nyra-search",
+      "element": "shadow",
+      "bones": 39,
+      "poseDelta": 0.17488132613501894,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 28,
+      "moving": 28,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "nyra-distract",
+      "element": "shadow",
+      "bones": 39,
+      "poseDelta": 0.12064271206220718,
+      "actionTimes": 13,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 21,
+      "moving": 20,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "storm-talon",
+      "element": "wind",
+      "bones": 50,
+      "poseDelta": 0.1618669483674996,
+      "actionTimes": 18,
+      "phases": [
+        "anticipation",
+        "active",
+        "hit"
+      ],
+      "particles": 52,
+      "moving": 46,
+      "gravity": 7,
+      "expired": true
+    },
+    {
+      "id": "sky-mark",
+      "element": "lightning",
+      "bones": 50,
+      "poseDelta": 0.12772714752212572,
+      "actionTimes": 10,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 24,
+      "moving": 24,
+      "gravity": 0,
+      "expired": true
+    },
+    {
+      "id": "vara-search",
+      "element": "wind",
+      "bones": 50,
+      "poseDelta": 0.15039592018008907,
+      "actionTimes": 12,
+      "phases": [
+        "anticipation",
+        "commit",
+        "hit"
+      ],
+      "particles": 29,
+      "moving": 29,
+      "gravity": 7,
+      "expired": true
+    }
+  ],
+  "reducedEffects": {
+    "skill": "shadow-ambush",
+    "normalEmissions": 32,
+    "reducedEmissions": 15,
+    "liveBeforeCancel": 7,
+    "cleared": {
+      "effects": 0,
+      "ground": 0,
+      "particles": 0,
+      "beams": 0
+    }
+  },
+  "engineSmoke": {
+    "power": {
+      "base": 9,
+      "boosted": 10.079999999999927,
+      "ratio": 1.119999999999992
+    },
+    "haste": {
+      "normalTravel": 2.0500000000000007,
+      "boostedTravel": 2.295999999999992,
+      "ratio": 1.1199999999999957,
+      "expired": true
+    },
+    "ambientFightSwapBlocked": true
+  },
+  "allHeroHeavyFallback": [
+    {
+      "hero": "aren",
+      "phase": "settled",
+      "eventActor": "aren"
+    },
+    {
+      "hero": "yara",
+      "phase": "settled",
+      "eventActor": "aren"
+    },
+    {
+      "hero": "vesper",
+      "phase": "settled",
+      "eventActor": "aren"
+    },
+    {
+      "hero": "sakda",
+      "phase": "settled",
+      "eventActor": "aren"
+    }
+  ],
+  "liveOwnerSupport": {
+    "scenario": "Controlled native Greenwake: Sakda + Solkar; real Use-now UI order and subsequent autonomous support. Only hero/helper/enemy placement, enemy visibility/allegiance/durability and AI recovery were arranged.",
+    "worldTick": 1585,
+    "party": "solkar",
+    "ownerBoon": {
+      "kind": "power",
+      "sourceId": "solkar",
+      "untilWorldTick": 1790
+    },
+    "enemyHP": 10000,
+    "ownerHP": 115,
+    "instinct": 0,
+    "supportReadyAt": 2162,
+    "petAction": "solkar:idle",
+    "projected": 1
+  },
+  "viewports": {
+    "desktop": [
+      1440,
+      900
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "mobileScrollWidth": 390,
+    "selectedCount": 1
+  },
+  "captures": [
+    "companion-single-hero-desktop.png",
+    "companion-single-hero-mobile.png",
+    "companion-single-water.png",
+    "companion-single-lightning.png",
+    "companion-single-fire.png"
+  ],
+  "limits": [
+    "Initial development-time reloads produced connection-refused fetches; a stable reload and retry loaded the actual native scene.",
+    "Audio requests were aborted during screen transitions; no audio certification.",
+    "Initial full-repository Bun attempt exceeded 600 seconds; final gameplay gate is recorded separately."
+  ]
+}

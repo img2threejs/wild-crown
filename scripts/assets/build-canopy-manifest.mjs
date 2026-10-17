@@ -24,9 +24,10 @@ const ASSETS = {
   'prop-rainforest-canopy-tree': { revision: 1, measure: 'y', size: 22, forward: { x: 0, y: 0, z: 1 } },
   'prop-canopy-cliff-rock': { revision: 1, measure: 'y', size: 6, forward: { x: 0, y: 0, z: 1 } },
   'prop-canopy-fern-cluster': { revision: 1, measure: 'horizontal', size: 2.45, forward: { x: 0, y: 0, z: 1 } },
+  'prop-mire-bank-rock': { revision: 1, measure: 'horizontal', size: 4, forward: { x: 0, y: 0, z: 1 } },
 };
 
-const regionProps = ['prop-vine-bridge', 'prop-ancient-canopy-shrine', 'prop-rainforest-canopy-tree', 'prop-canopy-cliff-rock', 'prop-canopy-fern-cluster'];
+const regionProps = ['prop-vine-bridge', 'prop-ancient-canopy-shrine', 'prop-rainforest-canopy-tree', 'prop-canopy-cliff-rock', 'prop-canopy-fern-cluster', 'prop-mire-bank-rock'];
 const manifest = [
   environmentEntry('whispering-canopy-environment', regionProps),
   carried('actor-aren'), carried('actor-vara'), carried('prop-greenwake-root-gate'), carried('prop-warden-glaive'),

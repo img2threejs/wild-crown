@@ -9,6 +9,10 @@ import { PALETTE, type VfxElement } from './palette.js';
 import type { Footprint } from './footprint.js';
 
 const REDUCED_SCALE = 0.35;
+/** Limits of the glow / ring / flame particles of a confirmed contact (metres, seconds, alpha) and the largest colour channel any of its additive particles may carry. */
+const CONTACT_GLOW_MAX = 0.8, CONTACT_GLOW_LIFE = 0.14, CONTACT_GLOW_ALPHA = 0.45, CONTACT_HDR_MAX = 1.6;
+const FLASH_SIZE_MAX = 1.3, FLASH_LIFE_MAX = 0.1;
+const HERO_FLASH_ELEMENT: Readonly<Partial<Record<VfxElement, true>>> = { arcane: true, lightning: true, gold: true, judgement: true, heartroot: true, umbral: true, ember: true };
 const DUST = new Color().setRGB(0.42, 0.36, 0.27);
 const ROCK = new Color().setRGB(0.36, 0.3, 0.24);
 const ICE_CHUNK = new Color().setRGB(0.62, 0.84, 1);
@@ -43,6 +47,8 @@ export class VfxSystem {
   readonly cameraPosition = new Vector3(10, 12, 14);
   time = 0;
   private reduced = false;
+  private preAge = 0;
+  private contactActive = false;
   private seed = 0x9e3779b9;
   private readonly scratch = new Vector3();
   private readonly modules: VfxModule[] = [];
@@ -57,6 +63,7 @@ export class VfxSystem {
   addModule(module: VfxModule): void { this.modules.push(module); this.group.add(module.group); }
   get reducedEffects(): boolean { return this.reduced; }
   setReducedEffects(reduced: boolean): void { this.reduced = reduced; this.lights.setEnabled(!reduced); }
+  setTelegraphIntensity(intensity: 'standard' | 'high'): void { this.ground.setTelegraphIntensity(intensity); }
 
   /** Deterministic 0..1 sequence (mulberry32) so effect layouts are reproducible in tests. */
   random(): number {
@@ -71,7 +78,36 @@ export class VfxSystem {
   count(n: number): number { return n <= 0 ? 0 : this.reduced ? Math.max(1, Math.round(n * REDUCED_SCALE)) : Math.round(n); }
 
   spec(): ParticleSpec { return this.particles.spec.reset(); }
-  emit(pool: ParticlePool, owner: number): void { pool.emit(this.particles.spec, this.time, owner); }
+  /**
+   * Spawn time for pooled GPU effects. Particles ease their alpha in from age 0, and the world clock stands still during
+   * hit-stop, so an impact born at age 0 would stay invisible until the freeze ends. While a confirmed contact is drawn
+   * (`beginContact`) every spawn is given this much age already: the burst is visible on the frozen frame and then
+   * continues on the authoritative world clock (no second clock, no catch-up).
+   */
+  get birthTime(): number { return this.time - this.preAge; }
+  beginContact(ageSeconds: number): void { this.preAge = Number.isFinite(ageSeconds) ? Math.max(0, Math.min(0.05, ageSeconds)) : 0; this.contactActive = true; }
+  endContact(): void { this.preAge = 0; this.contactActive = false; }
+  emit(pool: ParticlePool, owner: number): void {
+    if (this.contactActive && pool === this.particles.additive) this.limitContact(this.particles.spec);
+    pool.emit(this.particles.spec, this.birthTime, owner);
+  }
+
+  /**
+   * A confirmed contact must never hide the victim's reaction: halos and rings drawn while it is built stay small (≤ CONTACT_GLOW_MAX m), live a
+   * few frames (≤ CONTACT_GLOW_LIFE s) and cannot stack into a white disc (alpha ≤ CONTACT_GLOW_ALPHA, no colour channel above CONTACT_HDR_MAX);
+   * thin sparks, embers and shards keep their own look but share the colour cap.
+   */
+  private limitContact(p: ParticleSpec): void {
+    const halo = p.frame === VFX_FRAME.glow || p.frame === VFX_FRAME.ring || p.frame === VFX_FRAME.flame;
+    if (halo) {
+      p.size0 = Math.min(p.size0, CONTACT_GLOW_MAX); p.size1 = Math.min(p.size1, CONTACT_GLOW_MAX);
+      p.life = Math.min(p.life, CONTACT_GLOW_LIFE); p.a0 = Math.min(p.a0, CONTACT_GLOW_ALPHA);
+    }
+    const peak = Math.max(p.r0, p.g0, p.b0);
+    if (peak > CONTACT_HDR_MAX) { const k = CONTACT_HDR_MAX / peak; p.r0 *= k; p.g0 *= k; p.b0 *= k; }
+    const end = Math.max(p.r1, p.g1, p.b1);
+    if (end > CONTACT_HDR_MAX) { const k = CONTACT_HDR_MAX / end; p.r1 *= k; p.g1 *= k; p.b1 *= k; }
+  }
 
   update(time: number): void {
     this.time = time;
@@ -113,6 +149,8 @@ export class VfxSystem {
    */
   flash(x: number, y: number, z: number, size: number, element: VfxElement, owner: number, life = 0.2): void {
     if (this.reduced) return;
+    // Readability rule for hero combat flashes (hero palettes only; monster telegraphs keep their authored size): a brief punctuation (≤ FLASH_LIFE_MAX s), never larger than FLASH_SIZE_MAX m across, so it cannot cover the bodies it marks.
+    if (HERO_FLASH_ELEMENT[element]) { size = Math.min(size, FLASH_SIZE_MAX); life = Math.min(life, FLASH_LIFE_MAX); }
     const { hot, b } = PALETTE[element], p = this.spec();
     p.x = x; p.y = y; p.z = z; p.life = life * 0.8; p.size0 = Math.min(0.4, size * 0.2); p.size1 = Math.min(0.6, size * 0.3); p.frame = VFX_FRAME.glow;
     p.r0 = p.r1 = hot.r; p.g0 = p.g1 = hot.g; p.b0 = p.b1 = hot.b; p.a0 = 0.9; p.fadeIn = 0.02; p.fadeOut = 0.2;
@@ -235,6 +273,7 @@ export class VfxSystem {
   /** Soft additive glow blob (heat haze, energy body, aura) in the saturated body colour. */
   glow(x: number, y: number, z: number, size: number, life: number, element: VfxElement, alpha: number, owner: number, rise = 0): void {
     const color = PALETTE[element].b, p = this.spec();
+    if (HERO_FLASH_ELEMENT[element]) size = Math.min(size, FLASH_SIZE_MAX);
     p.x = x; p.y = y; p.z = z; p.vy = rise; p.life = life; p.size0 = size * 0.8; p.size1 = size; p.frame = VFX_FRAME.glow;
     p.r0 = p.r1 = color.r; p.g0 = p.g1 = color.g; p.b0 = p.b1 = color.b; p.a0 = Math.min(0.6, alpha); p.fadeIn = 0.3; p.fadeOut = 0.6;
     this.emit(this.particles.additive, owner);
@@ -270,7 +309,7 @@ export class VfxSystem {
         const a = this.random() * Math.PI * 2, s = speed * this.range(0.3, 0.8);
         vx = Math.cos(a) * s; vz = Math.sin(a) * s;
       }
-      this.debris.spawn(x, y, z, vx, vy, vz, size * this.range(0.5, 1.1), this.range(1.4, 2.2), this.time, owner, ice ? ICE_CHUNK : ROCK, this.random());
+      this.debris.spawn(x, y, z, vx, vy, vz, size * this.range(0.5, 1.1), this.range(1.4, 2.2), this.birthTime, owner, ice ? ICE_CHUNK : ROCK, this.random());
     }
   }
 }

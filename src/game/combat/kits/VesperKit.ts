@@ -3,7 +3,8 @@ import type { CombatActor } from '../CombatEngine.js';
 import { distance2, facingFrom, vec } from '../geometry.js';
 import { rotateY, yawOf, type LivePlayerProjectile } from '../PlayerArsenal.js';
 import { LIGHT_ASSIST_RANGE, PLAYER_SKILLS } from '../PlayerSkills.js';
-import { VESPER, VESPER_CLIPS, VESPER_LABELS } from '../VesperSkills.js';
+import { VESPER, VESPER_CLIPS, VESPER_HITS, VESPER_LABELS } from '../VesperSkills.js';
+import type { HitSpec } from '../reactions.js';
 import type { HeroKit, KitCue, KitFactory, KitHost, KitStagger, KitStrike } from './KitHost.js';
 
 /**
@@ -24,8 +25,8 @@ const LANDING_TURNS: readonly number[] = [0, 0.7, -0.7, 1.4, -1.4, 2.1, -2.1, Ma
 const GOLDEN_ANGLE = 2.399963;
 const KUNAI_HEIGHT = 1.1;
 /** The clone moves at this speed, so its 8 m lane is flown by the swap tick. */
-const CLONE_SPEED = 24;
-const SHADE_LANE_CUE_TICKS = 24;
+const CLONE_SPEED = 16;
+const SHADE_LANE_CUE_TICKS = 36;
 const CUT_TIMES: readonly number[] = [...VESPER.thousandCuts.strikeAt, VESPER.thousandCuts.finisherAt];
 const RIFT_LANE_WIDTH = 2;
 /** Reach of every blink-and-strike impact, measured from the player's actual position (the blink stands Vesper well inside it). */
@@ -80,8 +81,8 @@ function newAction(kind: ActionKind, step = 0, targetId: string | null = null): 
 export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
   const state = (): VesperState => host.kitState<VesperState>(() => ({ stacks: {}, marks: {}, requiem: {}, action: null }));
   const clipOf = (key: string): ActionId => VESPER_CLIPS[key] as ActionId;
-  const strike = (action: string, clip: ActionId, damage: number, stagger: KitStagger, stopTicks: number, instinct: number): KitStrike =>
-    ({ action, clip, damage, element: ELEMENT, stagger, stopTicks, instinct });
+  const strike = (action: string, clip: ActionId, damage: number, stagger: KitStagger, stopTicks: number, instinct: number, spec?: HitSpec): KitStrike =>
+    ({ action, clip, damage, element: ELEMENT, stagger, stopTicks, instinct, ...(spec ? { hit: spec } : {}) });
   const hostile = (id: string | null): CombatActor | undefined => {
     if (id === null) return undefined;
     const actor = host.actors.find(candidate => candidate.id === id);
@@ -207,16 +208,16 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
     if (a.step < 4) {
       if (a.age === spec.activeAt) {
         host.setPhase('active');
-        host.queueCue(slashCue(clip, spec.reach, spec.arcDegrees, 6, 1 + 0.15 * a.step));
-        host.strikeCone(player.position, player.facing, spec.reach, spec.arcDegrees, strike(`light_${a.step}`, clip, spec.damage, 'interrupt', HIT_STOP.light, INSTINCT.light), a.hit);
-      } else if (a.age === spec.activeAt + 3) host.setPhase('recovery');
+        host.queueCue(slashCue(clip, spec.reach, spec.arcDegrees, 9, 1 + 0.15 * a.step));
+        host.strikeCone(player.position, player.facing, spec.reach, spec.arcDegrees, strike(`light_${a.step}`, clip, spec.damage, 'interrupt', HIT_STOP.light, INSTINCT.light, VESPER_HITS.iai[a.step - 1]), a.hit);
+      } else if (a.age === spec.activeAt + 5) host.setPhase('recovery');
       return a.age + 1 >= spec.ticks;
     }
     const rift = VESPER.iai, dashTicks = rift.riftDashTo - rift.riftDashFrom;
     if (a.age === rift.riftDashFrom) {
       a.from = copy(player.position);
       a.dir = facingFrom(player.facing);
-      a.to = host.moveCircle(a.from, scale(a.dir, rift.riftDashDistance));
+      a.to = (host.airborne ? host.moveAerial : host.moveCircle)(a.from, scale(a.dir, rift.riftDashDistance));
       // Untouchable for the whole dash, tick `riftDashTo` included.
       host.setUntargetableUntil(host.tick + dashTicks + 1);
       host.queueCue(cue('beam', 'active', {
@@ -226,10 +227,10 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
     }
     if (a.age >= rift.riftDashFrom && a.age < rift.riftDashTo) {
       const t0 = (a.age - rift.riftDashFrom) / dashTicks, t1 = (a.age - rift.riftDashFrom + 1) / dashTicks;
-      const before = copy(player.position), next = host.moveCircle(before, scale(a.dir, rift.riftDashDistance * (smooth(t1) - smooth(t0))));
+      const before = copy(player.position), next = (host.airborne ? host.moveAerial : host.moveCircle)(before, scale(a.dir, rift.riftDashDistance * (smooth(t1) - smooth(t0))));
       host.setPlayerPosition(next);
       host.setPlayerVelocity(scale({ x: next.x - before.x, y: 0, z: next.z - before.z }, 1 / FIXED_STEP_SECONDS));
-      riftSweep(a, before, player.position, () => strike('light_4', clip, spec.damage, 'interrupt', HIT_STOP.rift, INSTINCT.rift));
+      riftSweep(a, before, player.position, () => strike('light_4', clip, spec.damage, 'interrupt', HIT_STOP.rift, INSTINCT.rift, VESPER_HITS.iai[3]));
     }
     if (a.age === spec.activeAt) host.setPhase('active');
     else if (a.age === rift.riftDashTo) { host.setPhase('recovery'); host.setPlayerVelocity(vec(0, 0, 0)); }
@@ -244,15 +245,15 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
       else blinkTo(farthestStandable(player.position, facingFrom(player.facing), spec.fallbackDistance), undefined, clip, spec.strikeAt - spec.blinkAt);
     } else if (a.age === spec.strikeAt) {
       host.setPhase('active');
-      host.queueCue(slashCue(clip, 2.8, 140, 6, 1.4));
-      const target = hostile(a.targetId), hit = strike('heavy', clip, spec.damage, 'interrupt', HIT_STOP.step, INSTINCT.step);
+      host.queueCue(slashCue(clip, 2.8, 140, 9, 1.4));
+      const target = hostile(a.targetId), hit = strike('heavy', clip, spec.damage, 'interrupt', HIT_STOP.step, INSTINCT.step, VESPER_HITS.shadowStep);
       if (target && distance2(player.position, target.position) <= STRIKE_REACH + target.radius) reachStrike(target, hit);
       else {
         // A blocked or out-of-reach locked target is never swept up by the cone either.
         if (target) a.hit.push(target.id);
         host.strikeCone(player.position, player.facing, STRIKE_REACH, 140, hit, a.hit);
       }
-    } else if (a.age === spec.strikeAt + 3) host.setPhase('recovery');
+    } else if (a.age === spec.strikeAt + 5) host.setPhase('recovery');
     return a.age + 1 >= spec.ticks;
   };
 
@@ -272,8 +273,8 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
         }));
         blinkTo(point, target.position, clip, 4);
         reachStrike(target, finisher
-          ? strike('charged_heavy', clip, spec.finisherDamage, 'interrupt', HIT_STOP.finisher, INSTINCT.finisher)
-          : strike('thousand_cuts', clip, spec.strikeDamage, 'none', 0, INSTINCT.cut));
+          ? strike('charged_heavy', clip, spec.finisherDamage, 'interrupt', HIT_STOP.finisher, INSTINCT.finisher, VESPER_HITS.cutsFinisher)
+          : strike('thousand_cuts', clip, spec.strikeDamage, 'none', 0, INSTINCT.cut, VESPER_HITS.cut));
       }
     }
     if (a.age === spec.finisherAt + 1) host.setPhase('recovery');
@@ -330,7 +331,7 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
       });
     } else if (a.age === spec.swapAt && a.fired === 1) {
       host.setPhase('recovery');
-      if (distance2(a.to, player.position) > 0.1) blinkTo(copy(a.to), undefined, clip, 4);
+      if (distance2(a.to, player.position) > 0.1) blinkTo(copy(a.to), undefined, clip, 6);
       host.setUntargetableUntil(host.tick + spec.untouchableTicks);
     }
     return a.age + 1 >= spec.ticks;
@@ -338,17 +339,17 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
 
   const runSever = (a: VesperAction): boolean => {
     const spec = VESPER.severingShadow, clip = clipOf('root_tether'), player = host.player;
-    if (a.age === 4) {
+    if (a.age === 6) {
       const target = hostile(a.targetId);
-      if (target) blinkTo(landingAround(target, behindOf(target)) ?? approach(target), target.position, clip, spec.strikeAt - 4);
+      if (target) blinkTo(landingAround(target, behindOf(target)) ?? approach(target), target.position, clip, spec.strikeAt - 6);
     } else if (a.age === spec.strikeAt) {
       host.setPhase('active');
       const target = hostile(a.targetId);
       if (target && host.canStrike(target, player.position, STRIKE_REACH)) {
-        host.queueCue(cue('tether', 'commit', { targetId: target.id, position: copy(player.position), from: copy(player.position), to: copy(target.position), durationTicks: 10, actionId: clip, shape: 'beam' }));
-        host.strikeHostile(target, strike('root_tether', clip, spec.damage, 'interrupt', HIT_STOP.sever, INSTINCT.sever));
+        host.queueCue(cue('tether', 'commit', { targetId: target.id, position: copy(player.position), from: copy(player.position), to: copy(target.position), durationTicks: 15, actionId: clip, shape: 'beam' }));
+        host.strikeHostile(target, strike('root_tether', clip, spec.damage, 'interrupt', HIT_STOP.sever, INSTINCT.sever, VESPER_HITS.sever));
       }
-    } else if (a.age === spec.strikeAt + 3) host.setPhase('recovery');
+    } else if (a.age === spec.strikeAt + 5) host.setPhase('recovery');
     return a.age + 1 >= spec.ticks;
   };
 
@@ -356,7 +357,7 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
     const spec = VESPER.requiem, clip = clipOf('judgement'), player = host.player;
     if (a.age === 0) host.queueCue(cue('judgement', 'anticipation', { position: copy(player.position), durationTicks: spec.markAt, actionId: clip, shape: 'ring', intensity: 1.4 }));
     if (a.age === spec.markAt) {
-      host.queueCue(cue('judgement', 'commit', { position: copy(player.position), durationTicks: 12, actionId: clip, shape: 'ring', intensity: 1.4 }));
+      host.queueCue(cue('judgement', 'commit', { position: copy(player.position), durationTicks: 18, actionId: clip, shape: 'ring', intensity: 1.4 }));
       for (const foe of host.hostilesInRadius(player.position, spec.markRadius)) {
         s.requiem[foe.id] = spec.detonationAt - spec.markAt + 4;
         a.marked.push(foe.id);
@@ -372,7 +373,7 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
       if (target) {
         const angle = index * GOLDEN_ANGLE;
         blinkTo(landingAround(target, vec(Math.sin(angle), 0, Math.cos(angle))) ?? approach(target), target.position, clip, 6);
-        reachStrike(target, strike('requiem_slash', clip, spec.slashDamage, 'none', HIT_STOP.slash, INSTINCT.requiem));
+        reachStrike(target, strike('requiem_slash', clip, spec.slashDamage, 'none', HIT_STOP.slash, INSTINCT.requiem, VESPER_HITS.requiemSlash));
       }
     }
     if (a.age === spec.detonationAt) {
@@ -382,7 +383,7 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
         delete s.requiem[id];
         if (!target || !host.canStrike(target, player.position, DETONATION_REACH)) continue;
         host.queueCue(cue('judgement-mark', 'hit', { targetId: target.id, position: host.chestOf(target), actionId: clip, durationTicks: 12, shape: 'burst', intensity: 2.4 }));
-        host.strikeHostile(target, strike('judgement', clip, spec.detonationDamage, 'none', HIT_STOP.requiem, 0));
+        host.strikeHostile(target, strike('judgement', clip, spec.detonationDamage, 'none', HIT_STOP.requiem, 0, VESPER_HITS.requiem));
       }
       a.marked = [];
     } else if (a.age === spec.detonationAt + 4) host.setPhase('recovery');
@@ -512,8 +513,8 @@ export const createVesperKit: KitFactory = (host: KitHost): HeroKit => {
     },
     onProjectileHit(projectile: LivePlayerProjectile, target: CombatActor) {
       const clip = (projectile.actionId ?? VESPER_CLIPS.sigil_bolt) as ActionId;
-      if (projectile.callbackId === 'kunai') host.strikeHostile(target, strike('kunai', clip, projectile.damage, 'none', HIT_STOP.kunai, INSTINCT.kunai));
-      else if (projectile.callbackId === 'shade-clone') host.strikeHostile(target, strike('sigil_barrage', clip, projectile.damage, 'idle', HIT_STOP.clone, INSTINCT.clone));
+      if (projectile.callbackId === 'kunai') host.strikeHostile(target, { ...strike('kunai', clip, projectile.damage, 'none', HIT_STOP.kunai, INSTINCT.kunai, VESPER_HITS.kunai), direction: projectile.direction });
+      else if (projectile.callbackId === 'shade-clone') host.strikeHostile(target, { ...strike('sigil_barrage', clip, projectile.damage, 'idle', HIT_STOP.clone, INSTINCT.clone, VESPER_HITS.clone), direction: projectile.direction });
     },
   };
   return kit;

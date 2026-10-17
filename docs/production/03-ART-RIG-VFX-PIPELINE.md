@@ -38,7 +38,7 @@ Phong cách: stylized cinematic, tỷ lệ thú gần thật, khối lông rõ, 
 | Yara | Vai/cổ tay có dấu nghề Warden; gỗ cũ và linen sáng; seed knot motif | Bàn tay từng làm Crown, hesitation/guilt; transformed wood statue vẫn nhận ra silhouette |
 | Orun | Mặt người già đau buồn; crown rễ đứt sáu nhánh; rib-like empty chest | Phase 1 là Warden thật; mirror dodges; Crowned Beast là form riêng có transition authored |
 | Marek | Dáng hunched thực dụng; dụng cụ bẫy/thủy tinh chứa Sap; một tay bảo vệ sample | Không dùng mặt “ác” thay storytelling; variant repentant thay posture/equipment |
-| Vara | Hornbill casque mạnh, mỏ ngà/đen, patch cánh amber | Wing fold/perch/dive rõ; không humanoid expression |
+| Vara | Harpy eagle stylized (Storm Harpy; canonical `harpy-eagle`): crown feather crest, mỏ cong đen, iris vàng, cánh xám than + patch cánh amber, đuôi ngắn | Wing fold/perch/takeoff/dive rõ; không humanoid expression |
 | Koro | Vai/tay tạo silhouette dễ đọc, crest lông, đuôi nếu species lock có | Ground + climbing + grip; nghịch/ngờ vực → hợp tác, không copy biped run |
 | Asha | Shoulder mass bảo hộ, stripe như nhánh sông, muzzle scar | Stalk/pounce/scapula/paw plant; nhìn Tali và thay tension bằng chuyển động thật |
 | Tali | Tỷ lệ cub đầu/paw/lưng riêng; stripe echo Asha | Play/stumble/nuzzle; không scale nhỏ rig hổ trưởng thành |

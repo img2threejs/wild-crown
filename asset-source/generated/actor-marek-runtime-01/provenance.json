@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-marek",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "6e009393-5ab9-4f64-9320-c67cd066c579",
+    "decimate": "30ec218b-3edd-4a17-943c-864c123f9e1e",
+    "rig": "0941ac11-30f2-4d7b-a646-fd446fe15b10",
+    "animA": "d12d234e-e036-412b-b05d-58d1a111839c"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (mixamo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-marek-anim-a-01/tripo-out/actor-marek-anim-a-01-d12d234e/model.glb",
+      "sha256": "e2433049da639d52c8642d9bef740b41b874c88bc552aa0d93099aaa3d1c6a2b"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-marek-runtime-01/actor-marek.glb",
+    "sha256": "dfd017029c8530ddcf4a8d14774eea98f6e9d19390f5c655bd626ee6cd757373",
+    "bytes": 7855996,
+    "vertices": 31287,
+    "triangles": 24174,
+    "boundsMin": [
+      -0.10531,
+      0,
+      -0.28626
+    ],
+    "boundsMax": [
+      0.10531,
+      0.97654,
+      0.28626
+    ]
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 69
+    },
+    {
+      "name": "run",
+      "durationSeconds": 1.2666666666666666,
+      "channels": 69
+    },
+    {
+      "name": "standing_relax",
+      "durationSeconds": 17.6,
+      "channels": 69
+    },
+    {
+      "name": "swagger",
+      "durationSeconds": 3.7,
+      "channels": 69
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 69
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4226193,
+      "toBytes": 1652369
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6416834,
+      "toBytes": 1865250
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18799967,
+      "toBytes": 2027275
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

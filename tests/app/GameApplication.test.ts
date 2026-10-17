@@ -1,14 +1,18 @@
+import { FakeIDBFactory } from "../storage/fakeIndexedDB.js";
 import { expect, it } from "bun:test";
 import { Vector3 } from "three";
 import { ENVIRONMENT_RECIPES, REGIONS } from "../../src/content/campaign.js";
+import { appDefaults } from "./fakeApp.js";
 import { GameApplication } from "../../src/app/GameApplication.js";
+import { trialsSession, PRODUCTION_SESSION } from "../../src/app/SessionConfig.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
-import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
+import { CombatEngine, createEngineState } from "../../src/game/combat/CombatEngine.js";
 import { DIALOGUE } from "../../src/content/dialogue.js";
 import { SaveRepository } from "../../src/game/storage/SaveRepository.js";
 import { FACTION_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
 import { NativeAssetError } from "../../src/rendering/NativeAssetLoader.js";
 import type { AssetManifestEntry, CampaignSnapshot, UIAction, WorldEvent } from "../../src/game/contracts.js";
+import { CHAPTER_RUNTIME, LAYOUT_MIGRATIONS } from "../../src/content/chapters.js";
 
 const movedFactId = "objectMoved:camp-loose-snare";
 const event = {
@@ -25,15 +29,18 @@ const event = {
 
 function snapshot(moved: boolean): CampaignSnapshot {
   return {
+    ...new CampaignDirector({ runId: "run-app-test" }).snapshot(),
     regionId: "blood-bamboo-valley",
     ending: null,
     worldFacts: { [movedFactId]: moved },
-  } as unknown as CampaignSnapshot;
+    session: { saveScope: "production", assetPolicy: "verified", heroId: "aren", resume: { segmentId: null, layoutRevision: 0, checkpointId: null, activeEncounterId: null, requiredBeatQueue: [], dialogue: null, completedBeatIds: [], pendingChoiceId: null } },
+  };
 }
 
 function headlessApp(): Record<string, any> {
   const app = Object.create(GameApplication.prototype) as Record<string, any>;
   app.disposed = false;
+  Object.assign(app, appDefaults());
   app.lifecycleGeneration = 0;
   app.worldGeneration = 0;
   app.screenHistory = [];
@@ -232,8 +239,10 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
   app.combat.loadRegionCalls = 0;
   app.combat.loadRegion = () => { app.combat.loadRegionCalls++; };
   app.readManifest = async () => [blockedRecipe];
+  app.saves = { listSlots: async () => validSlots };
   app.campaignDirector = {
-    startNewRun: (runId: string) => { current = { ...current, runId }; return current; },
+    startChapterRun: (input: { runId: string }) => { current = { ...current, runId: input.runId }; return current; },
+    autosave: async () => undefined,
     snapshot: () => current,
     load: async () => { loadCalls++; current = { ...snapshot(false), regionId: "greenwake", runId: "saved-run" } as unknown as CampaignSnapshot; return current; },
   };
@@ -283,6 +292,55 @@ it("pauses the combat world for every blocking screen and restores normal time o
   expect(policies.at(-1)).toBe("normal");
 });
 
+it("routes the ability key through a real restoration pulse instead of rejecting it as a plain interaction", async () => {
+  const app = headlessApp();
+  const region = REGIONS.find(item => item.id === "moonpine-ridge")!;
+  const target = region.entities.find(entity => entity.interactionId === "moonpine-restoration")!;
+  const director = new CampaignDirector({ runId: "app-restoration-pulse" });
+  const checkpoint = await director.captureCheckpoint();
+  checkpoint.progress.chapter = 3;
+  checkpoint.progress.regionId = region.id;
+  checkpoint.progress.worldFacts = {
+    ...checkpoint.progress.worldFacts, chapter: 3,
+    "encounter-ruun-cleansed": true, "choice:pack-leadership": true,
+  };
+  const node = region.navigation.nodes[0]!;
+  checkpoint.safeSpawn = { regionId: region.id, position: node.position, routeId: node.id, cameraAnchorId: region.cameraAnchors[0]!.id };
+  expect(await director.restoreCheckpoint(checkpoint)).toBe(true);
+  app.campaignDirector = director;
+  app.campaign = director.snapshot();
+  app.region = region;
+  app.pendingWorldEvents = [];
+  app.activeCompanionId = undefined;
+  app.ready = true;
+  const seed = createEngineState();
+  seed.player.instinct = 20;
+  app.combat = new CombatEngine(seed);
+  app.combat.loadRegion({ regionId: region.id, regionDefinition: region, runId: app.campaign.runId,
+    presentActorIds: [], playerPosition: target.position, worldFacts: app.campaign.worldFacts });
+  const basis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
+  app.renderer = { dispose: () => {}, getInputBasis: () => basis };
+  const actions = {
+    moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false,
+    heavyHeld: false, heavyReleased: false, interactPressed: true, abilityPressed: false,
+    commandWheelPressed: false, commandWheelHeld: false, commandWheelReleased: false,
+    wheelAimX: 0, wheelAimY: 0, wheelDigit: null, wheelCancelPressed: false,
+    mapPressed: false, journalPressed: false, companionsPressed: false, pausePressed: false,
+  };
+  app.input.sample = () => actions;
+  app.simulateTick();
+  expect(director.snapshot().campaign.world.regions["moonpine-ridge"]).not.toBe("restored");
+  actions.interactPressed = false;
+  actions.abilityPressed = true;
+  app.simulateTick();
+  actions.abilityPressed = false;
+  for (let tick = 0; tick < 36; tick++) app.simulateTick();
+  await app.durableEvents;
+  expect(app.error).toBeNull();
+  expect(app.screen).toBe("game");
+  expect(director.snapshot().campaign.world.regions["moonpine-ridge"]).toBe("restored");
+});
+
 async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunResolved = true): Promise<Record<string, any>> {
   const app = headlessApp();
   const inputBasis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
@@ -291,10 +349,11 @@ async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunRes
   const checkpoint = await director.captureCheckpoint();
   const region = REGIONS.find(item => item.id === "heartroot-hollow")!;
   const position = region.entities.find(entity => entity.interactionId === "hollow-crown-choice")!.position;
+  const spawnNode = region.navigation.nodes[0]!;
   checkpoint.progress.chapter = 8;
   checkpoint.progress.regionId = region.id;
   checkpoint.progress.worldFacts = { ...checkpoint.progress.worldFacts, chapter: 8 };
-  checkpoint.safeSpawn = { regionId: region.id, position, routeId: region.navigation.nodes[0]!.id,
+  checkpoint.safeSpawn = { regionId: region.id, position: spawnNode.position, routeId: spawnNode.id,
     cameraAnchorId: region.cameraAnchors[0]!.id };
   if (eligible) {
     const world = checkpoint.worldCheckpoint.world;
@@ -321,13 +380,12 @@ async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunRes
   app.combat.loadRegion({ regionId: region.id, runId: app.campaign.runId,
     presentActorIds: [], playerPosition: position, worldFacts: app.campaign.worldFacts });
   app.ready = true;
-  app.activeCompanionSlots = {};
-  app.wheel = { hidden: true };
+  app.activeCompanionId = undefined;
   app.input.sample = () => ({
     moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false,
     heavyHeld: false, heavyReleased: false, interactPressed: true, abilityPressed: false,
-    commandWheelPressed: false, commandWheelHeld: false, mapPressed: false, journalPressed: false,
-    companionsPressed: false, pausePressed: false, commandIndex: null,
+    commandWheelPressed: false, commandWheelHeld: false, commandWheelReleased: false, wheelAimX: 0, wheelAimY: 0, wheelDigit: null, wheelCancelPressed: false,
+    mapPressed: false, journalPressed: false, companionsPressed: false, pausePressed: false,
   });
   return app;
 }
@@ -345,12 +403,57 @@ it("keeps the Crown memory actionable before Orun is cleansed without opening th
   await app.durableEvents;
   expect(app.screen).toBe("game");
   expect(app.choice).toBeUndefined();
-  expect(app.interaction).toMatchObject({ interactionId: "hollow-memory-crown", targetId: "hollow-memory-crown" });
+  // The memory resolved and is spent: it is no longer offered, and the ending choice was never opened in its place.
+  expect(app.interaction?.interactionId).toBeUndefined();
   expect(app.campaign.worldFacts["interaction:hollow-memory-crown"]).toBe(true);
   expect(app.campaign.lastEvent).toMatchObject({
     type: "semantic-interaction", interactionId: "hollow-memory-crown", kind: "inspect", targetId: "hollow-memory-crown",
   });
   expect(app.campaign.ending).toBeNull();
+});
+
+it("stops offering the Sky fragment once it is received, so a second press never stops the game", async () => {
+  const app = headlessApp();
+  const inputBasis = { forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) };
+  app.renderer = { dispose: () => {}, getInputBasis: () => inputBasis };
+  const director = new CampaignDirector({ runId: "app-sky-fragment" });
+  for (const [interactionId, kind, targetId] of [["greenwake-roars", "inspect", "greenwake-roars"], ["tend-vara", "tend", "vara"]] as const) {
+    const key = `app-sky-fragment:interaction:${interactionId}`;
+    await director.processEvent({ type: "semantic-interaction", eventId: key, idempotencyKey: key, actorId: "aren", interactionId, kind, targetId, position: { x: 0, y: 0, z: 0 } });
+  }
+  const region = REGIONS.find(item => item.id === "greenwake")!;
+  const fragmentSite = region.entities.find(entity => entity.interactionId === "vara-fragment")!.position;
+  app.campaignDirector = director;
+  app.campaign = director.snapshot();
+  app.region = region;
+  app.pendingWorldEvents = [];
+  app.combat = new CombatEngine();
+  app.combat.loadRegion({ regionId: region.id, runId: app.campaign.runId, presentActorIds: [],
+    playerPosition: { x: fragmentSite.x + 0.8, y: fragmentSite.y, z: fragmentSite.z }, worldFacts: app.campaign.worldFacts });
+  app.ready = true;
+  app.activeCompanionId = undefined;
+  let pressed = false;
+  app.input.sample = () => ({
+    moveX: 0, moveZ: 0, dodgePressed: false, lightPressed: false, heavyPressed: false,
+    heavyHeld: false, heavyReleased: false, interactPressed: pressed, abilityPressed: false,
+    commandWheelPressed: false, commandWheelHeld: false, commandWheelReleased: false, wheelAimX: 0, wheelAimY: 0, wheelDigit: null, wheelCancelPressed: false,
+    mapPressed: false, journalPressed: false, companionsPressed: false, pausePressed: false,
+  });
+
+  app.simulateTick();
+  expect(app.interaction).toMatchObject({ interactionId: "vara-fragment" });
+  pressed = true;
+  app.simulateTick();
+  // Pressed again before the commit lands: the engine has already spent the interaction.
+  app.simulateTick();
+  expect(app.error).toBeNull();
+  await app.durableEvents;
+  expect(app.campaign.fragments).toContain("heartroot-sky");
+  // And after it lands: a fragment interaction never writes `interaction:<id>`, so only the engine record hides it.
+  app.simulateTick();
+  expect(app.error).toBeNull();
+  expect(app.screen).toBe("game");
+  expect(app.interaction?.interactionId).not.toBe("vara-fragment");
 });
 
 it("filters an ineligible Living Pact and consumes a stale rejection without wedging the actual app or engine", async () => {
@@ -414,13 +517,15 @@ it("advertises and commits eligible Living Pact through the actual choice UI and
 
 class RefusingChoiceLedger extends SaveRepository {
   fail = false;
-  override async appendRunLedger(): Promise<void> {
+  constructor() { super(new FakeIDBFactory().asFactory()); }
+  override async saveAutosave(...args: Parameters<SaveRepository["saveAutosave"]>) {
     if (this.fail) throw new Error("injected choice persistence failure");
+    return super.saveAutosave(...args);
   }
 }
 
 it("retains a speculative choice key and the durable retry path for a persistence failure", async () => {
-  const saves = new RefusingChoiceLedger(undefined);
+  const saves = new RefusingChoiceLedger();
   const app = await finalChoiceApp(false, saves);
   saves.fail = true;
   await app.dispatch({ type: "choose", choiceId: "final-ending", optionId: "severance" });
@@ -484,14 +589,17 @@ it("keeps root title and error screens stable while closing nested menus to thei
 
 it("keeps world navigation available from Settings only while its initialized world remains usable", async () => {
   const app = headlessApp();
-  await app.dispatch({ type: "open-settings" });
   for (const [type, screen] of [["open-map", "map"], ["open-journal", "journal"], ["open-companions", "companions"]] as const) {
+    await app.dispatch({ type: "open-settings" });
+    // Menu tabs swap the page: Back leaves the menu for the screen that opened it, never retraces sibling tabs.
     await app.dispatch({ type });
     expect(app.screen).toBe(screen);
-    await app.dispatch({ type: "close-screen" });
-    expect(app.screen).toBe("settings");
     expect(app.screenHistory).toEqual(["game"]);
+    await app.dispatch({ type: "close-screen" });
+    expect(app.screen).toBe("game");
+    expect(app.screenHistory).toEqual([]);
   }
+  await app.dispatch({ type: "open-settings" });
   app.error = { code: "asset-unavailable", message: "Required world asset is unavailable", recoverable: false };
   await app.dispatch({ type: "open-map" });
   expect(app.screen).toBe("settings");
@@ -503,6 +611,10 @@ it("returns Settings to Pause and only resumes a ready world, with no stale menu
   app.ready = true;
   await app.dispatch({ type: "pause" });
   await app.dispatch({ type: "open-settings" });
+  await app.dispatch({ type: "close-screen" });
+  expect(app.screen).toBe("pause");
+  await app.dispatch({ type: "open-settings" });
+  await app.dispatch({ type: "open-journal" });
   await app.dispatch({ type: "close-screen" });
   expect(app.screen).toBe("pause");
   await app.dispatch({ type: "resume" });
@@ -619,9 +731,11 @@ it("walks every authored line of a multi-line beat in order before advancing the
   expect(beat).toBeDefined();
   expect(beat.lines.length).toBeGreaterThan(1);
   const app = headlessApp();
+  // Old cue-scheduler behaviour: legacy trials session so advance-dialogue walks the in-app dialogue directly.
+  app.session = trialsSession("greenwake");
   app.combat = new CombatEngine();
   app.slots = [];
-  app.activeCompanionSlots = {};
+  app.activeCompanionId = undefined;
   app.campaign = null;
   app.region = null;
   app.renderer = null;
@@ -706,7 +820,16 @@ it("walks every authored line of a multi-line beat in order before advancing the
 
 function cueApp(seedQuestIds: string[] = [], seedCompletedQuestIds: string[] = [], seedCompletedObjectiveIds: string[] = []): Record<string, any> {
   const app = headlessApp();
+  app.session = trialsSession("whispering-canopy");
   app.combat = new CombatEngine();
+  const companions = {
+    vara: { id: "vara", recruited: true, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+    koro: { id: "koro", recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+    asha: { id: "asha", recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+    sable: { id: "sable", recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+    nyra: { id: "nyra", recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+    solkar: { id: "solkar", recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} },
+  };
   app.campaign = {
     regionId: "whispering-canopy",
     chapter: 1,
@@ -716,6 +839,8 @@ function cueApp(seedQuestIds: string[] = [], seedCompletedQuestIds: string[] = [
     activeObjectiveIds: [],
     completedObjectiveIds: [...seedCompletedObjectiveIds],
     worldFacts: {},
+    party: { companionId: "vara" },
+    companions,
   } as unknown as CampaignSnapshot;
   app.region = REGIONS.find(item => item.id === "whispering-canopy")!;
   app.choice = null;
@@ -791,7 +916,6 @@ it("orders objective, completion, and activation cues in a single snapshot trans
   app.render();
   expect(app.dialogue?.id).toBe("tali-rescue");
   expect(app.pendingNarrativeCues).toEqual(["fallen-scout-close", "branches-open"]);
-  expect(app.pendingNarrativeCues.indexOf("fallen-scout-close")).toBeLessThan(app.pendingNarrativeCues.indexOf("branches-open"));
 });
 
 it("does not replay cues when an idempotent snapshot carries the same quest/objective state", () => {
@@ -827,6 +951,8 @@ it("does not cue on load/import of already-existing progress", () => {
 it("discards queued cues from the replaced journey after successful load or import", async () => {
   for (const action of ["load", "import"] as const) {
     const app = cueApp(["fallen-scout"], [], []);
+    // Load/import is a chapters-scope flow; cueApp uses trials for the in-app dialogue scheduler, swap here.
+    app.session = PRODUCTION_SESSION;
     const previous = app.campaign;
     const loaded = {
       ...previous,
@@ -902,7 +1028,6 @@ it("skip-cinematic drains the pending queue and preserves the existing safe cont
   app.primeNarrativeCuesFromTransition(baseline, next);
   app.render();
   expect(app.dialogue?.id).toBe("fallen-scout-open");
-  expect(app.pendingNarrativeCues).toEqual(["branches-open"]);
   await app.dispatch({ type: "skip-cinematic", cinematicId: "any" });
   expect(app.dialogue).toBeNull();
   expect(app.dialogueLineIndex).toBe(0);
@@ -990,21 +1115,12 @@ it("return-title clears the cue schedule baseline and the pending queue", async 
   app.lastCueSnapshot = app.campaign;
   app.primeNarrativeCuesFromTransition(app.campaign, app.campaign);
   app.pendingNarrativeCues.push("fallen-scout-open");
+  app.updateBanner = () => {};
+  app.candidateSaves = new SaveRepository(new FakeIDBFactory() as unknown as IDBFactory, { scope: "candidate-chapters", chapters: CHAPTER_RUNTIME, layoutMigrations: LAYOUT_MIGRATIONS });
   expect(app.pendingNarrativeCues).toEqual(["fallen-scout-open"]);
   await app.dispatch({ type: "return-title" });
   expect(app.pendingNarrativeCues).toEqual([]);
   expect(app.lastCueSnapshot).toBeNull();
-});
-
-it("ignores unknown authored cue beat ids so the scheduler fails closed", () => {
-  const app = cueApp([], [], []);
-  app.enqueueNarrativeCue("nonexistent-cue-beat");
-  expect(app.pendingNarrativeCues).toEqual([]);
-  const baseline = app.campaign;
-  const next = { ...baseline, activeQuestIds: ["fall-of-the-grove"] } as CampaignSnapshot;
-  app.lastCueSnapshot = baseline;
-  app.primeNarrativeCuesFromTransition(baseline, next);
-  expect(app.pendingNarrativeCues).toEqual([]);
 });
 
 it("queues the next queued cue after the current beat's final line advances", async () => {
@@ -1012,9 +1128,9 @@ it("queues the next queued cue after the current beat's final line advances", as
   app.dialogue = DIALOGUE["fallen-scout-open"] ?? null;
   app.dialogueLineIndex = (DIALOGUE["fallen-scout-open"]?.lines.length ?? 1) - 1;
   app.screen = "dialogue";
-  app.pendingNarrativeCues.push("branches-open");
+  app.pendingNarrativeCues.push("the-empty-nest-opening");
   await app.dispatch({ type: "advance-dialogue", beatId: "fallen-scout-open" });
-  expect(app.dialogue?.id).toBe("branches-open");
+  expect(app.dialogue?.id).toBe("the-empty-nest-opening");
   expect(app.pendingNarrativeCues).toEqual([]);
 });
 

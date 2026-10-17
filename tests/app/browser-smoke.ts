@@ -1,6 +1,7 @@
 import { mountGameApplication, type GameApplication } from '../../src/app/GameApplication.js';
-import type { GameViewModel, UIAction } from '../../src/game/contracts.js';
+import type { AssetManifestEntry, GameViewModel, SessionConfig, UIAction } from '../../src/game/contracts.js';
 import type { GameUIInstance } from '../../src/ui/GameUI.js';
+import { PRODUCTION_SESSION } from '../../src/app/SessionConfig.js';
 
 // Coordinator-only browser fixture. These observers retain native constructors,
 // listener dispatch, RAF scheduling, manifest fetch and all asset gates.
@@ -11,14 +12,20 @@ type ObservedApplication = {
   screen: GameViewModel['screen'];
   error: GameViewModel['error'];
   renderer: unknown;
-  region: unknown;
+  worldReady: boolean;
   slots: readonly unknown[];
   ui: GameUIInstance;
   dispatch(action: UIAction): Promise<void>;
+  session: SessionConfig;
+  manifestPromise: Promise<readonly AssetManifestEntry[]>;
+  readManifest(): Promise<readonly AssetManifestEntry[]>;
+  bindDirector(): void;
+  updateBanner(): void;
+  render(): void;
   model(): GameViewModel;
 };
 const observe = (app: GameApplication) => app as unknown as ObservedApplication;
-// In-process diagnostic seam: no production fields or behavior are replaced.
+// In-process diagnostic seam. This fixture selects the strict verified policy; it never replaces asset-gate behavior.
 const diagnosticWindow = window as unknown as { __applicationLifecycleSmoke: unknown };
 const root = document.querySelector<HTMLElement>('#application-root')!;
 const status = document.querySelector<HTMLPreElement>('#test-status')!;
@@ -102,12 +109,21 @@ async function assertUnavailableWorldPanels(app: GameApplication): Promise<void>
       runtime.ui.updateGamepad({ connected: true, buttons: [{ pressed: true }] } as Gamepad);
       await settle();
       assert(runtime.screen === 'settings' && runtime.error === originError, `Gamepad activation of stale ${action} bypassed the controller guard`);
-      assert(!runtime.renderer && !runtime.region && !root.querySelector('.wc-hud'), `Rejected ${action} constructed an empty world`);
+      assert(!runtime.renderer && !runtime.worldReady && !root.querySelector('.wc-hud'), `Rejected ${action} exposed gameplay`);
     } finally { stale.remove(); runtime.ui.updateGamepad(null); }
   }
 }
 function mount(): GameApplication {
   const app = mountGameApplication(root);
+  // Keep the genuine verified-asset error/lifecycle scenario independent of the playable candidate default.
+  // Initialization is awaiting the settings repository here; it observes this policy before opening campaign saves.
+  const runtime = observe(app);
+  runtime.session = PRODUCTION_SESSION;
+  runtime.updateBanner();
+  runtime.bindDirector();
+  runtime.manifestPromise = runtime.readManifest();
+  void runtime.manifestPromise.catch(() => undefined);
+  runtime.render();
   applications.push(app);
   return app;
 }
@@ -157,7 +173,7 @@ async function run(): Promise<void> {
         await settle();
         assert(observe(app).screen === 'title', `${value} left the root title`);
         assert(root.querySelector('.wc-state__title') && !root.querySelector('.wc-hud'), 'Title DOM was replaced by an empty gameplay HUD');
-        assert(!observe(app).renderer && !observe(app).region, 'Untouched title constructed a world');
+        assert(!observe(app).renderer && !observe(app).worldReady, 'Untouched title initialized a world');
       }
       sample('title keyboard recovery', app);
     });
@@ -175,7 +191,7 @@ async function run(): Promise<void> {
         await waitFor(() => !!observe(app).error, 'New Game did not reach the genuine current asset gate');
         const assetError = observe(app).error!;
         assert(assetError.code === 'asset-unavailable' && !assetError.recoverable && assetError.message.includes('greenwake-environment'), `Expected real greenwake gate, got ${JSON.stringify(assetError)}`);
-        assert(!observe(app).renderer && !observe(app).region, 'Asset-blocked New Game initialized a world');
+        assert(!observe(app).renderer && !observe(app).worldReady, 'Asset-blocked New Game initialized a world');
         for (const value of ['Escape', 'Backspace']) {
           key(value);
           await settle();

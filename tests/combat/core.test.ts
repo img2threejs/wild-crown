@@ -2,8 +2,11 @@ import { describe, expect, it } from 'bun:test';
 import { ACTORS, INTERACTIONS, REGIONS } from '../../src/content/campaign.js';
 import { CombatEngine, createEngineState, makeActor, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { vec } from '../../src/game/combat/geometry.js';
+import { liveState } from './act-one-bench.js';
 import type { ActorId } from '../../src/game/contracts.js';
 import { EVASION_PROFILES } from '../../src/game/combat/evasion.js';
+import { TARGETED_STRIKES } from '../../src/game/combat/PlayerSkills.js';
+import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
 
 const idle: CombatInput = {
   tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false,
@@ -15,6 +18,7 @@ function startHunters(): CombatEngine {
   const hunter=region.entities.find(entity=>entity.id==='hunter-melee-west')!;
   const seed=createEngineState();
   seed.lastAttackTick=10_000;
+  seed.player.vitality = seed.player.maxVitality = 10_000;
   const engine=new CombatEngine(seed);
   engine.startEncounter({
     encounterId:'camp-hunters',regionId:region.id,runId:'camp-hunter-test',
@@ -23,10 +27,14 @@ function startHunters(): CombatEngine {
   return engine;
 }
 
-/** One Heavy to the end of its recovery; a connecting hit freezes the player clock, so wait on the deadline rather than a tick count. */
+/** Resolve each Heavy and wait out its real cooldown before the next encounter-mechanics strike. */
 function heavyHit(engine: CombatEngine): void {
   engine.fixedStep({ ...idle, heavyPressed: true });
-  for (let tick = 1; tick < 120 && engine.snapshotState().actionRecoveryUntil > 0; tick++) engine.fixedStep(idle);
+  for (let tick = 1; tick < 400; tick++) {
+    const state = engine.snapshotState();
+    if (state.tick >= Math.max(state.actionRecoveryUntil, state.skillReadyAt.heavy ?? 0)) break;
+    engine.fixedStep(idle);
+  }
 }
 
 function approach(engine:CombatEngine,targetId:ActorId):void{
@@ -49,7 +57,8 @@ describe('Aren locomotion and jump animation inputs', () => {
     expect(walked.actionId).toBe('aren-walk');
     const walkSpeed = Math.hypot(walked.velocity.x, walked.velocity.z);
 
-    engine.fixedStep({ ...idle, move: vec(0, 0, 1), sprintHeld: true });
+    // The clip follows the measured speed: the first sprint ticks are still a walking pace, then the run clip takes over.
+    for (let tick = 0; tick < 8; tick++) engine.fixedStep({ ...idle, move: vec(0, 0, 1), sprintHeld: true });
     const ran = engine.snapshotState().actors.find(actor => actor.id === 'aren')!;
     expect(ran.actionId).toBe('aren-run');
     expect(Math.hypot(ran.velocity.x, ran.velocity.z)).toBeGreaterThan(walkSpeed);
@@ -119,51 +128,64 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     const resolved=engine.consumeWorldEvents().filter(event=>event.type==='encounter-resolved');
     expect(resolved).toHaveLength(1);
     expect(resolved[0]).toMatchObject({encounterId:'camp-hunters',resolution:'subdued',actorIds:['hunter-melee-west','hunter-melee-east','hunter-ranged']});
-  });
+  }, 60_000);
 
-  it('keeps Asha core state on a missed Cleanse and advances one per successful impact', () => {
+  it('keeps Asha core state on a missed or sealed Cleanse and advances one core per successful, gated impact', () => {
     const region=REGIONS.find(candidate=>candidate.id==='blood-bamboo-valley')!;
     const asha=region.entities.find(entity=>entity.actorId==='asha')!;
     const seed=createEngineState();
     seed.player.instinct=100;
     let engine=new CombatEngine(seed);
-    const playerPosition=vec(asha.position.x,asha.position.y,asha.position.z+4);
+    const playerPosition=vec(asha.position.x,asha.position.y,asha.position.z+1.8);
     const player=makeActor('aren','human','player',playerPosition,false,false,100);
     const mother=makeActor('asha',ACTORS.asha!.species,'hostile',asha.position,true,false,100);
     mother.recoveringUntil=10_000;
     engine.startEncounter({encounterId:'encounter-asha',regionId:region.id,runId:'asha-core-test',playerPosition,actors:[player,mother]});
     const coreIds=['asha-corruption-core-1','asha-corruption-core-2','asha-corruption-core-3'];
-    expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map(id=>({id,cleansed:false})));
+    const cores=(cleared:number)=>coreIds.map((id,index)=>({id,cleansed:index<cleared}));
+    const expose=()=>{liveState(engine).actors.find(actor=>actor.id==='asha')!.staggerUntil=liveState(engine).worldTick+100_000;};
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(0));
 
-    expect(engine.useAbility('cleanse','asha')).toBe(true);
-    for(let tick=0;tick<36;tick++)engine.fixedStep(idle);
-    expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map(id=>({id,cleansed:false})));
-    expect(engine.snapshotState().player.instinct).toBe(100);
-    while(engine.snapshotState().tick<engine.snapshotState().actionRecoveryUntil)engine.fixedStep(idle);
-    for(let tick=0;tick<35;tick++)engine.fixedStep({...idle,move:vec(0,0,1)});
-    const closePlayer=engine.snapshotState().actors.find(actor=>actor.id==='aren')!;
-    expect(Math.hypot(closePlayer.position.x-asha.position.x,closePlayer.position.z-asha.position.z)).toBeLessThan(2.5);
+    // The corruption is sealed until the boss is exposed: no mana is spent and nothing is eased.
+    const mana=engine.snapshot().player.mana;
+    expect(engine.useAbility('cleanse','asha')).toBe(false);
+    expect(engine.snapshot().player.mana).toBe(mana);
+    expose();
 
-    for(let cleared=1;cleared<=coreIds.length;cleared++){
+    const cleanse=(expected:boolean)=>{
       if(engine.snapshot().player.mana<30){
         for(let tick=0;tick<60;tick++)engine.fixedStep({...idle,move:vec(1,0,0)});
         for(let tick=0;tick<60;tick++)engine.fixedStep({...idle,move:vec(-1,0,0)});
+        expose();
       }
-      expect(engine.useAbility('cleanse','asha')).toBe(true);
+      expect(engine.useAbility('cleanse','asha')).toBe(expected);
+      if(!expected)return;
       for(let tick=0;tick<36;tick++)engine.fixedStep(idle);
-      expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map((id,index)=>({id,cleansed:index<cleared})));
-      if(cleared===1){
-        const restored=new CombatEngine();
-        restored.restore(engine.serialize());
-        engine=restored;
-        expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map((id,index)=>({id,cleansed:index===0})));
-      }
-      if(cleared<coreIds.length){
-        while(engine.snapshotState().tick<engine.snapshotState().actionRecoveryUntil)engine.fixedStep(idle);
-      }
-    }
+      while(engine.snapshotState().tick<engine.snapshotState().actionRecoveryUntil)engine.fixedStep(idle);
+    };
+    cleanse(true);
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(1));
+    const restored=new CombatEngine();
+    restored.restore(engine.serialize());
+    engine=restored;
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(1));
+
+    // Phase gating: the second core waits for the Corruption Rage phase.
+    cleanse(false);
+    liveState(engine).phaseIndex=1;
+    cleanse(true);
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(2));
+
+    // The last core is the Cub's: even exposed, in the final phase, it cannot be eased before the tether step.
+    liveState(engine).phaseIndex=2;
+    cleanse(false);
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(2));
+    expect(engine.consumeWorldEvents().filter(event=>event.type==='encounter-resolved')).toHaveLength(0);
+    liveState(engine).chapter.sequence!.step='tethered';
+    liveState(engine).chapter.sequence!.until=liveState(engine).worldTick+10_000;
+    cleanse(true);
     for(let tick=0;tick<60;tick++)engine.fixedStep(idle);
-    expect(engine.snapshot().boss?.corruptionCores).toEqual(coreIds.map(id=>({id,cleansed:true})));
+    expect(engine.snapshot().boss?.corruptionCores).toEqual(cores(3));
     expect(engine.consumeWorldEvents().filter(event=>event.type==='encounter-resolved'&&event.encounterId==='encounter-asha')).toHaveLength(1);
   });
 
@@ -171,7 +193,7 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     const region = REGIONS.find((candidate) => candidate.id === 'whispering-canopy')!;
     const thorn = region.entities.find((entity) => entity.id === 'koro-thorn' || entity.interactionId === 'koro-thorn')!;
     const engine = new CombatEngine();
-    engine.loadRegion({ regionId: region.id, runId: 'koro-context-test', presentActorIds: ['koro' as ActorId], companionSlots: { utility: 'koro' }, playerPosition: thorn.position });
+    engine.loadRegion({regionId: region.id, runId: 'koro-context-test', presentActorIds: ['koro' as ActorId], companionId: 'koro', playerPosition: thorn.position});
     expect(engine.resolveInteraction('koro-thorn', 'koro-thorn')).toBe(true);
     expect(engine.resolveInteraction('koro-thorn', 'koro-thorn')).toBe(false);
     expect(engine.consumeWorldEvents()).toMatchObject([{ type: 'semantic-interaction', interactionId: 'koro-thorn', kind: 'inspect' }]);
@@ -182,7 +204,7 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     const nyra=region.entities.find(entity=>entity.actorId==='nyra')!;
     const interaction=INTERACTIONS.find(candidate=>candidate.id==='nyra-reveal-hidden-route')!;
     const engine=new CombatEngine();
-    engine.loadRegion({regionId:region.id,runId:'nyra-route-test',presentActorIds:[nyra.id],companionSlots:{utility:'nyra'},playerPosition:nyra.position,wardenCall:false,bond:0});
+    engine.loadRegion({regionId:region.id,runId:'nyra-route-test',presentActorIds:[nyra.id], companionId: 'nyra', playerPosition:nyra.position,wardenCall:false,bond:0});
     expect(engine.resolveInteraction(interaction.id,interaction.targetId)).toBe(true);
     expect(engine.consumeWorldEvents()).toMatchObject([{type:'semantic-interaction',actorId:'nyra',interactionId:'nyra-reveal-hidden-route',kind:'signal',targetId:'mistveil-hidden-route'}]);
     expect(engine.resolveInteraction(interaction.id,interaction.targetId)).toBe(false);
@@ -199,7 +221,7 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
       const seed=createEngineState();
       seed.regionId=region.id;
       seed.runId='nyra-instance-target-test';
-      seed.companionSlots={utility:'nyra'};
+      seed.companionState=createCompanionState('nyra');
       seed.actors=[makeActor('aren','human','player',playerPosition,false,false,100),...ids.map(id=>makeActor(id,ACTORS.nyra!.species,'ally',playerPosition,false,false,100,'nyra'))];
       return seed;
     };
@@ -235,7 +257,7 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     expect(engine.consumeWorldEvents()).toHaveLength(0);
 
     engine.fixedStep({...idle,heavyPressed:true,interactionId:'camp-disable',interactionTargetId:'hunter-camp'});
-    for(let tick=1;tick<24;tick++)engine.fixedStep(idle);
+    for(let tick=0;tick<TARGETED_STRIKES.heavy.activeAt;tick++)engine.fixedStep(idle);
     expect(engine.consumeWorldEvents()).toMatchObject([{type:'semantic-interaction',interactionId:'camp-disable',kind:'break',targetId:'hunter-camp'}]);
 
     for(let tick=0;tick<400;tick++){
@@ -258,14 +280,14 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     expect(engine.snapshotState().actors.find(actor=>actor.id==='tali')?.allegiance).toBe('ally');
   });
 
-  it('restores the river source only after an authored Cleanse pulse lands', () => {
+  it('neutralizes the cleared guardian’s river source only after an authored Cleanse pulse lands', () => {
     const region=REGIONS.find(candidate=>candidate.id==='mistveil-basin')!;
     const source=region.entities.find(entity=>entity.id==='river-source'||entity.interactionId==='river-source')!;
     const seed=createEngineState();
     seed.player.instinct=20;
     const engine=new CombatEngine(seed);
     const playerPosition=vec(source.position.x+0.5,source.position.y,source.position.z);
-    engine.loadRegion({regionId:region.id,runId:'river-restoration-test',presentActorIds:[],playerPosition});
+    engine.loadRegion({regionId:region.id,regionDefinition:region,runId:'river-restoration-test',presentActorIds:[],playerPosition,worldFacts:{'encounter-ghor-cleansed':true}});
     const before=engine.snapshotState();
     expect(engine.resolveInteraction('river-source','river-source')).toBe(false);
     expect(engine.consumeWorldEvents()).toHaveLength(0);
@@ -274,6 +296,32 @@ describe('authored hunter encounters and mechanic-backed interactions', () => {
     engine.fixedStep({...idle,cleansePressed:true,interactionId:'river-source',interactionTargetId:'river-source'});
     for(let tick=1;tick<36;tick++)engine.fixedStep(idle);
     expect(engine.resolveInteraction('river-source','river-source')).toBe(false);
-    expect(engine.consumeWorldEvents()).toMatchObject([{type:'restoration',regionId:'mistveil-basin',state:'restored',causeId:'river-source'}]);
+    expect(engine.consumeWorldEvents()).toMatchObject([{type:'semantic-interaction',interactionId:'river-source',kind:'restore',targetId:'river-source'}]);
   });
+});
+
+it('adopts a saved branch before resolving another ending, while retaining committed-event deduplication', () => {
+  const engine = new CombatEngine();
+  const region = REGIONS.find(item => item.id === 'heartroot-hollow')!;
+  const interaction = INTERACTIONS.find(item => item.id === 'hollow-crown-choice')!;
+  const position = region.entities.find(item => item.interactionId === interaction.id)!.position;
+  const input = {
+    regionId: region.id, runId: 'ending-rollback', presentActorIds: ['aren'],
+    playerPosition: position,
+    worldFacts: Object.fromEntries(interaction.requiresFacts.map(fact => [fact, true])),
+  };
+  engine.loadRegion({ ...input, eventKeys: [] });
+  expect(engine.resolveInteraction(interaction.id, interaction.targetId, 'dominion')).toBe(true);
+  const [first] = engine.consumeWorldEvents();
+  expect(first).toMatchObject({ type: 'choice', optionId: 'dominion' });
+
+  engine.loadRegion(input);
+  expect(engine.resolveInteraction(interaction.id, interaction.targetId, 'severance')).toBe(false);
+  engine.loadRegion({ ...input, eventKeys: [] });
+  expect(engine.resolveInteraction(interaction.id, interaction.targetId, 'severance')).toBe(true);
+  expect(engine.consumeWorldEvents()).toEqual([expect.objectContaining({ type: 'choice', optionId: 'severance' })]);
+
+  engine.loadRegion({ ...input, eventKeys: [first!.idempotencyKey] });
+  expect(engine.resolveInteraction(interaction.id, interaction.targetId, 'dominion')).toBe(false);
+  expect(engine.consumeWorldEvents()).toEqual([]);
 });

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-asha",
+  "generator": "scripts/assets/repair-quadruped-hind-legs.mjs",
+  "reason": "Tripo rig v2.5 quadruped: the far-side hind leg has no (or only a lone) joint; the chain is completed so an IK gait can plant every foot.",
+  "input": {
+    "sha256": "c7047b4bd499749ba51cab2393f33a8cc76fb05c453b2ab7c197afe42f3e535e",
+    "bytes": 6627272
+  },
+  "output": {
+    "sha256": "66058bcd553846cfb8bec8b848ea9082eeea90d618d3a5fde966ff0a760e5e4a",
+    "bytes": 6630820
+  },
+  "plane": {
+    "axis": "z",
+    "at": -0.002
+  },
+  "chains": {
+    "HL": {
+      "joints": [
+        "tripo::0_Left_Limb_0",
+        "tripo::0_Left_Limb_1",
+        "tripo::0_Left_Limb_2",
+        "repair::HL_Paw"
+      ],
+      "createdJoints": [
+        "repair::HL_Paw"
+      ],
+      "verticesRebound": 2268,
+      "verticesMirrored": 0,
+      "verticesByChainPosition": 2268,
+      "verticesNearestJoint": [
+        315,
+        511,
+        320,
+        1122
+      ],
+      "largestOldShare": 1
+    },
+    "HR": {
+      "joints": [
+        "repair::HR_0",
+        "repair::HR_1",
+        "repair::HR_2",
+        "repair::HR_Paw"
+      ],
+      "createdJoints": [
+        "repair::HR_0",
+        "repair::HR_1",
+        "repair::HR_2",
+        "repair::HR_Paw"
+      ],
+      "verticesRebound": 2483,
+      "verticesMirrored": 2483,
+      "verticesByChainPosition": 0,
+      "verticesNearestJoint": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "largestOldShare": 0.9999
+    }
+  }
+}

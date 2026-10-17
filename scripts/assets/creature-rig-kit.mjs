@@ -12,17 +12,45 @@ export const TAU = Math.PI * 2;
 export const MONSTER_SLOTS = [
   'monster-idle', 'monster-walk', 'monster-run', 'monster-slash', 'monster-shoot',
   'monster-jump', 'monster-hurt', 'monster-turn', 'monster-dive', 'monster-roar',
+  'monster-death', 'monster-spawn',
+  // Knockdown + get-up pair the physical-reaction presenter plays for a non-lethal hit (the head of `monster-death` is the impact and the
+  // tail is the settled lie; `monster-knockdown` is the matched non-lethal shove to the ground, `monster-getup` the matched stand-back-up).
+  'monster-knockdown', 'monster-getup',
 ];
 /** Optional eleventh slot: a tail whip / sweep, produced only for rigs with a real tail chain (a report lists it under `slots` / `clips` when present). */
 export const MONSTER_TAIL_SLOT = 'monster-tail';
+/** Companion / harpy skeleton skill set (Storm Harpy native clip contract for Vara, scripts/assets/author-creature-clips.mjs):
+ * idle (loop), walk (loop), takeoff, fly (loop), hover (loop), land, dive, strike, screech (sky-mark), sky-survey, hurt. */
+export const HARPY_SLOTS = [
+  'vara:idle', 'vara:walk', 'vara:takeoff', 'vara:fly', 'vara:hover',
+  'vara:land', 'vara:dive', 'vara:strike', 'vara-sky-mark', 'vara:hurt',
+  'vara-sky-survey',
+];
 /** Durations the Greenwake clip contract uses (seconds); finite clips are driven by normalized time. */
 export const SLOT_SECONDS = {
   'monster-idle': 3.0, 'monster-walk': 1.2, 'monster-run': 0.6, 'monster-slash': 1.2, 'monster-shoot': 1.4,
   'monster-jump': 1.6, 'monster-hurt': 0.7, 'monster-turn': 1.0, 'monster-dive': 1.0, 'monster-roar': 2.0, 'monster-tail': 1.3,
+  // One-shots: death ends on a held collapsed pose resting on the ground, spawn ends on the idle pose.
+  'monster-death': 1.6, 'monster-spawn': 1.4,
+  // Knockdown / get-up: non-lethal hit reaction. Knockdown is the same fall as the death clip but ends on an alert held lie
+  // (not a limp death); get-up starts on the knockdown's last frame and ends blended into the idle pose.
+  'monster-knockdown': 1.2, 'monster-getup': 1.6,
+  // Storm Harpy (Vara) native clip durations.
+  'vara:idle': 3.0, 'vara:walk': 0.8, 'vara:takeoff': 0.6, 'vara:fly': 0.7, 'vara:hover': 0.9,
+  'vara:land': 0.7, 'vara:dive': 0.4, 'vara:strike': 0.55, 'vara-sky-mark': 0.8, 'vara:hurt': 0.5,
+  'vara-sky-survey': 1,
+  // Koro's companion-only gestures on the original native macaque rig.
+  'koro-throw': 1.2, 'koro-push': 1.5, 'koro-distract': 1.1, 'koro-search': 1,
 };
 export const SLOT_LOOPS = {
   'monster-idle': true, 'monster-walk': true, 'monster-run': true, 'monster-slash': false, 'monster-shoot': false,
   'monster-jump': false, 'monster-hurt': false, 'monster-turn': true, 'monster-dive': false, 'monster-roar': false, 'monster-tail': false,
+  'monster-death': false, 'monster-spawn': false,
+  'monster-knockdown': false, 'monster-getup': false,
+  'vara:idle': true, 'vara:walk': true, 'vara:takeoff': false, 'vara:fly': true, 'vara:hover': true,
+  'vara:land': false, 'vara:dive': false, 'vara:strike': false, 'vara-sky-mark': false, 'vara:hurt': false,
+  'vara-sky-survey': false,
+  'koro-throw': false, 'koro-push': false, 'koro-distract': false, 'koro-search': false,
 };
 
 export const round = (value, digits = 4) => Number(value.toFixed(digits));
@@ -309,10 +337,36 @@ export class PoseBuilder {
    * bending towards `hint` (a world direction). `keepEndWorld` restores the end joint's rest world orientation.
    */
   reach(upper, lower, end, target, hint, keepEndWorld = false) { this.ik.push({ upper, lower, end, target, hint, keepEndWorld }); return this; }
+  /**
+   * Turns `joint` so the segment towards `child` points along `direction`, evaluated after every increment and earlier reach / aim queued so far
+   * (so chains are aimed from the parent outward). `direction` is a world vector or a function of the segment's current world direction
+   * (e.g. flattening its height); the segment keeps its length and the joint keeps its position.
+   */
+  aim(joint, child, direction) { this.ik.push({ aim: { joint, child, direction } }); return this; }
+  /**
+   * After the reaches / aims queued so far, turns `joint` and everything below it rigidly about the world `axis` through the joint's own origin by
+   * `degrees` (a twist an aim cannot express). World-space increments of descendants are conjugated by the turn so the subtree keeps its shape.
+   */
+  spin(joint, axis, degrees) { this.ik.push({ spin: { joint, q: new Quaternion().setFromAxisAngle(axis.clone().normalize(), degrees * DEG) } }); return this; }
 
   solve() {
     const rig = this.rig;
-    for (const { upper, lower, end, target, hint, keepEndWorld } of this.ik) {
+    for (const entry of this.ik) {
+      if (entry.spin) {
+        const { joint, q } = entry.spin, back = q.clone().invert();
+        for (const [descendant, inc] of this.inc.map) if (rig.isAncestor(joint, descendant)) this.inc.map.set(descendant, q.clone().multiply(inc).multiply(back));
+        this.inc.add(joint, q);
+        continue;
+      }
+      if (entry.aim) {
+        const { joint, child, direction } = entry.aim;
+        const state = rig.world(rig.pose(this.inc.map, this.translations));
+        const current = state.P[child].clone().sub(state.P[joint]).normalize();
+        const wanted = (typeof direction === 'function' ? direction(current.clone()) : direction).clone().normalize();
+        this.inc.add(joint, fromTo(current, wanted));
+        continue;
+      }
+      const { upper, lower, end, target, hint, keepEndWorld } = entry;
       const state = rig.world(rig.pose(this.inc.map, this.translations));
       const S = state.P[upper], E = state.P[lower], H = state.P[end];
       const l1 = E.distanceTo(S), l2 = H.distanceTo(E);
@@ -449,6 +503,41 @@ export function makeCentroidSampler(rig, bin, stride = 6) {
       sum3.add(acc); n++;
     }
     return sum3.multiplyScalar(1 / n);
+  };
+}
+
+/**
+ * Lowest skinned vertex height (every `stride`-th vertex) for world joint positions P and rotations Q: the ground-contact criterion of
+ * the death clips (the collapsed pose must rest on the floor, neither sink into it nor hover). Works for any rig shape, since it
+ * skins the real mesh instead of trusting joint heights. Vertices whose dominant joint is in `ignoreJoints` are skipped: geometry bound
+ * to the Root alone (chain links or tufts lying on the ground) is a ground attachment, not part of the body that collapses.
+ */
+export function makeLowestSampler(json, bin, joints, stride = 3, ignoreJoints = []) {
+  const primitive = json.meshes[0].primitives[0];
+  const positions = readAccessorAny(json, bin, primitive.attributes.POSITION), jointIds = readAccessorAny(json, bin, primitive.attributes.JOINTS_0);
+  const weights = readAccessorAny(json, bin, primitive.attributes.WEIGHTS_0), inverse = readAccessorAny(json, bin, json.skins[0].inverseBindMatrices);
+  const count = positions.length / 3, inverseMatrices = joints.map((_, k) => new Matrix4().fromArray(Array.from(inverse.subarray(k * 16, k * 16 + 16))));
+  const unit = new Vector3(1, 1, 1), v = new Vector3();
+  const ignored = new Set(ignoreJoints);
+  const sampled = [];
+  for (let i = 0; i < count; i += stride) {
+    let dominant = 0;
+    for (let k = 1; k < 4; k++) if (weights[i * 4 + k] > weights[i * 4 + dominant]) dominant = k;
+    if (!ignored.has(joints[jointIds[i * 4 + dominant]])) sampled.push(i);
+  }
+  return (P, Q) => {
+    const matrices = joints.map((joint, k) => new Matrix4().compose(P[joint], Q[joint], unit).multiply(inverseMatrices[k]));
+    let lowest = Infinity;
+    for (const i of sampled) {
+      let y = 0;
+      for (let k = 0; k < 4; k++) {
+        const w = weights[i * 4 + k];
+        if (w <= 0) continue;
+        y += w * v.set(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]).applyMatrix4(matrices[jointIds[i * 4 + k]]).y;
+      }
+      if (y < lowest) lowest = y;
+    }
+    return lowest;
   };
 }
 

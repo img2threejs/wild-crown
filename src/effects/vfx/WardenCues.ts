@@ -248,14 +248,7 @@ export class WardenCues {
     cut.frame = VFX_FRAME.cut; cut.life = 0.17; cut.size0 = 1.5 * scale; cut.size1 = 2.1 * scale;
     cut.r0 = cut.r1 = hot.r; cut.g0 = cut.g1 = hot.g; cut.b0 = cut.b1 = hot.b; cut.a0 = 1; cut.fadeIn = 0.04; cut.fadeOut = 0.5;
     vfx.emit(vfx.particles.additive, owner);
-    // Black-sap droplets (never blood) and cyan energy droplets, plus a little debris.
-    for (let i = vfx.count(5); i > 0; i--) {
-      const q = vfx.spec(), spread = vfx.range(1, 3);
-      q.x = this.a.x; q.y = this.a.y; q.z = this.a.z; q.vx = hx * spread + vfx.range(-1.2, 1.2); q.vy = vfx.range(1.2, 3.2); q.vz = hz * spread + vfx.range(-1.2, 1.2);
-      q.gravity = 9; q.drag = 0.4; q.life = vfx.range(0.5, 0.9); q.size0 = vfx.range(0.05, 0.09); q.size1 = 0.04; q.frame = VFX_FRAME.drop;
-      q.r0 = q.r1 = 0.03; q.g0 = q.g1 = 0.025; q.b0 = q.b1 = 0.045; q.a0 = 0.95; q.fadeIn = 0.02; q.fadeOut = 0.7;
-      vfx.emit(vfx.particles.alpha, owner);
-    }
+    // Cyan energy droplets and a little debris; the monster's blood and material spray is the shared HitImpactFx layer.
     for (let i = vfx.count(4); i > 0; i--) {
       const q = vfx.spec();
       q.x = this.a.x; q.y = this.a.y; q.z = this.a.z; q.vx = hx * vfx.range(1.5, 3.5) + vfx.range(-1, 1); q.vy = vfx.range(1, 2.6); q.vz = hz * vfx.range(1.5, 3.5) + vfx.range(-1, 1);

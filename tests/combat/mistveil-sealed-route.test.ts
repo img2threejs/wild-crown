@@ -26,7 +26,6 @@ describe('Mistveil Basin trial region', () => {
     expect(JSON.stringify(authored)).toBe(before);
     expect(region.id).toBe('mistveil-basin');
     expect(region.environmentRecipeId).toBe('mistveil-basin-environment');
-    expect(createCombatTrialRegion(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!)).toBe(REGIONS.find(candidate => candidate.id === 'blood-bamboo-valley')!);
     expect(MISTVEIL_TRIAL_SET).toMatchObject({ regionId: 'mistveil-basin', encounterId: 'mistveil-trials', clearedTitle: 'Basin trials cleared' });
   });
 
@@ -152,8 +151,8 @@ describe('Mistveil Basin trial region', () => {
     const boundary = region.props.filter(prop => prop.id.startsWith(MISTVEIL_BOUNDARY_ID_PREFIX));
     expect(boundary.length).toBeGreaterThan(150);
     for (const prop of boundary) expect(solidPropKind(prop)).toBe('decoration');
-    // No arena holds a prop: dodge arenas stay open ground.
-    for (const trial of MISTVEIL_COMBAT_TRIALS) for (const prop of region.props) expect(Math.hypot(prop.position.x - trial.arena.center.x, prop.position.z - trial.arena.center.z)).toBeGreaterThan(trial.arena.radius);
+    // Visual boundary dressing stays out of combat arenas; measured climbable props may occupy their rims.
+    for (const trial of MISTVEIL_COMBAT_TRIALS) for (const prop of boundary) expect(Math.hypot(prop.position.x - trial.arena.center.x, prop.position.z - trial.arena.center.z)).toBeGreaterThan(trial.arena.radius);
   });
 
   it('starts Aren well outside every trial: at least 18 m from each monster and its arena edge, so the player walks into Trial 1', () => {

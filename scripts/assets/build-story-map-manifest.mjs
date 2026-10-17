@@ -33,8 +33,12 @@ const ASSETS = {
   'prop-training-post': { measure: 'y', size: 2.5, forward: Z },
   'prop-water-basin': { measure: 'horizontal', size: 4, forward: Z },
   'prop-grove-platform': { measure: 'horizontal', size: 4, forward: Z },
-  'actor-koro': { monster: true, rigFamily: 'biped', measure: 'y', size: 1.3, forward: X_FRONT, slots: ['monster-idle', 'monster-walk'] },
+  'actor-koro': { monster: true, rigFamily: 'biped', measure: 'y', size: 1.3, forward: X_FRONT, slots: ['monster-idle', 'monster-walk', 'koro-throw', 'koro-push', 'koro-distract', 'koro-search'] },
   'actor-grove-rootling': { monster: true, rigFamily: 'biped', measure: 'y', size: 1.6, forward: X_FRONT },
+  // The blighted twin (scripts/assets/build-grove-blighted-variant.mjs): the rootling's runtime with a darker material, drawn a quarter larger (2.0 m) so the blight reads as a bigger, heavier threat than the 1.6 m sparring partner.
+  'actor-grove-blighted-rootling': { monster: true, rigFamily: 'biped', measure: 'y', size: 2, forward: X_FRONT },
+  // The Memory Pool guardian dominates the three-quarter camera at 3.5 m (the concept's stated 2.8 m read too small beside the arena's 11 m radius).
+  'actor-grove-hollowheart': { monster: true, rigFamily: 'biped', measure: 'y', size: 3.5, forward: X_FRONT },
   // Moonpine Ridge
   'prop-moonpine-tree': { measure: 'y', size: 16, forward: Z },
   'prop-buried-wolf-temple': { measure: 'horizontal', size: 14, forward: Z },
@@ -62,13 +66,13 @@ const ASSETS = {
 const MAPS = {
   grove: {
     carriedFirst: ['actor-aren', 'actor-vara', 'prop-greenwake-root-gate', 'prop-warden-glaive', 'prop-warden-waystone'],
-    built: ['actor-koro', 'actor-grove-rootling', 'prop-heartroot-trunk', 'prop-refuge-shelter', 'prop-training-post', 'prop-water-basin', 'prop-grove-platform'],
-    carriedProps: ['prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-canopy-fern-cluster'],
+    built: ['actor-koro', 'actor-grove-rootling', 'actor-grove-blighted-rootling', 'actor-grove-hollowheart', 'prop-heartroot-trunk', 'prop-refuge-shelter', 'prop-training-post', 'prop-water-basin', 'prop-grove-platform'],
+    carriedProps: ['prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-canopy-fern-cluster', 'prop-ancient-canopy-shrine', 'prop-canopy-cliff-rock', 'prop-mire-bank-rock', 'prop-root-cavern-mouth'],
   },
   moonpine: {
     carriedFirst: ['actor-aren', 'actor-vara', 'prop-greenwake-root-gate', 'prop-warden-glaive', 'prop-warden-waystone'],
     built: ['actor-frostfang-tracker', 'actor-howl-scout', 'actor-ruun-chained-howl', 'prop-moonpine-tree', 'prop-buried-wolf-temple', 'prop-temple-chain-anchor', 'prop-snow-ridge-rock', 'prop-moonpine-log-bridge'],
-    carriedProps: [],
+    carriedProps: ['prop-mire-bank-rock'],
   },
   mistveil: {
     carriedFirst: ['actor-aren', 'prop-greenwake-root-gate', 'prop-warden-glaive', 'prop-warden-waystone'],
@@ -96,7 +100,7 @@ const actorIdOf = assetId => {
   return entity.actorId;
 };
 
-const carried = carriedFrom([read('asset-source/playtests/canopy.json'), read('asset-source/playtests/greenwake.json')]);
+const carried = carriedFrom([read('asset-source/playtests/canopy.json'), read('asset-source/playtests/greenwake.json'), read('asset-source/playtests/mistveil.json')]);
 const build = id => {
   const spec = { ...ASSETS[id], revision };
   return spec.monster ? monsterEntry(id, { ...spec, actorId: actorIdOf(id) }) : propEntry(id, spec);

@@ -11,7 +11,7 @@ import { describeSealedRoute } from './sealed-route-harness.js';
 const authored = REGIONS.find(region => region.id === 'greenwake')!;
 const region: RegionDefinition = createCombatTrialRegion(authored);
 const gates = GREENWAKE_COMBAT_TRIALS.map(trial => trial.gate);
-const exit = authored.exits.find(route => route.id === 'greenwake-grove-out')!.from;
+const exit = authored.exits.find(route => route.id === 'greenwake-canopy-out')!.from;
 
 describeSealedRoute({
   name: 'Greenwake', regionId: 'greenwake', encounterId: 'greenwake-boar', region, trials: GREENWAKE_COMBAT_TRIALS,
@@ -40,14 +40,16 @@ describe('Greenwake boundary dressing', () => {
   it('is deterministic, uniquely named, and spread over both rings', () => {
     expect(JSON.stringify(createCombatTrialRegion(authored).props)).toBe(JSON.stringify(region.props));
     expect(new Set(region.props.map(prop => prop.id)).size).toBe(region.props.length);
-    // Perf budget: the thinned ring stays well under the first draft's 36 bramble / 48 boulder / 48 tree instances (the boulder cap also covers the ~16 rock outcrops dressing the ridge, ramps and creek banks).
+    // Perf budget: clustered placement (groups of 2-5) produces more instances per edge than the previous regular lattice; the
+    // old ceiling was 36 bramble / 48 boulder / 48 tree (~ +16 boulder rock outcrops). The cluster budget is wider but still
+    // far under an unthinned jungle, and the per-cell draw count remains the same.
     const brambles = byAsset('prop-greenwake-bramble-wall'), boulders = byAsset('prop-greenwake-boulder-cluster'), trees = byAsset('prop-erya-edge-tree');
     expect(brambles.length).toBeGreaterThan(8);
     expect(boulders.length).toBeGreaterThan(15);
     expect(trees.length).toBeGreaterThan(8);
-    expect(brambles.length).toBeLessThanOrEqual(20);
-    expect(boulders.length).toBeLessThanOrEqual(52);
-    expect(trees.length).toBeLessThanOrEqual(26);
+    expect(brambles.length).toBeLessThanOrEqual(28);
+    expect(boulders.length).toBeLessThanOrEqual(70);
+    expect(trees.length).toBeLessThanOrEqual(36);
     // Bramble walls are stretched along the edge rather than multiplied.
     for (const bramble of brambles) expect(bramble.scale.x).toBeGreaterThan(bramble.scale.z * 1.4);
     for (const tree of trees) {
@@ -55,18 +57,29 @@ describe('Greenwake boundary dressing', () => {
       expect(tree.scale.x).toBeLessThanOrEqual(0.8);
     }
     expect(boundary.every(prop => prop.placement === 'ground' && prop.position.y === 0)).toBe(true);
-    // Neighbours along one edge are 4-5.5 m apart (low props) or 6-9 m apart (trees).
-    const edges = new Map<string, { position: Vec3; tree: boolean }[]>();
+    // Clustered placement: each edge is broken into clusters of 2-5 props spaced 0.4-3 m apart (the cluster span), then a 3-8 m gap.
+    // The old regular lattice (uniform 4-5.5 m / 6-9 m) is gone; the cluster-vs-gap signature replaces it. Variance on nearest-neighbour
+    // spacing is a stronger signal of the decluster than any single bound.
+    const edges = new Map<string, { position: Vec3; tree: boolean; serial: number }[]>();
     for (const prop of boundary) {
       if (prop.id.endsWith('corner')) continue;
-      const [, kind, polygon, edge] = prop.id.slice(GREENWAKE_BOUNDARY_ID_PREFIX.length - 1).split('-');
+      const [, kind, polygon, edge, serial] = prop.id.slice(GREENWAKE_BOUNDARY_ID_PREFIX.length - 1).split('-');
       const key = `${kind}-${polygon}-${edge}`;
-      edges.set(key, [...(edges.get(key) ?? []), { position: prop.position, tree: kind === 'tree' }]);
+      edges.set(key, [...(edges.get(key) ?? []), { position: prop.position, tree: kind === 'tree', serial: Number(serial) }]);
     }
-    for (const list of edges.values()) for (let index = 1; index < list.length; index++) {
-      const gap = Math.hypot(list[index]!.position.x - list[index - 1]!.position.x, list[index]!.position.z - list[index - 1]!.position.z);
-      expect(gap).toBeGreaterThanOrEqual(list[index]!.tree ? 6 - 1e-6 : 4 - 1e-6);
+    const spacings: number[] = [];
+    for (const list of edges.values()) {
+      list.sort((a, b) => a.serial - b.serial);
+      for (let index = 1; index < list.length; index++) {
+        spacings.push(Math.hypot(list[index]!.position.x - list[index - 1]!.position.x, list[index]!.position.z - list[index - 1]!.position.z));
+      }
     }
+    expect(spacings.length).toBeGreaterThan(20);
+    const mean = spacings.reduce((acc, value) => acc + value, 0) / spacings.length;
+    const variance = spacings.reduce((acc, value) => acc + (value - mean) ** 2, 0) / spacings.length;
+    expect(variance).toBeGreaterThan(1.5); // a uniform 4-5 m lattice would score well under 1; clusters push this past 2.
+    expect(Math.min(...spacings)).toBeLessThan(2.5); // in-cluster pairs sit within ~clusterSpan/2
+    expect(Math.max(...spacings)).toBeGreaterThan(5); // cluster-to-cluster gaps exceed the cluster span
   });
 
   it('adds no simulation solids: boundary ids classify as decoration, authored trees stay trunks', () => {

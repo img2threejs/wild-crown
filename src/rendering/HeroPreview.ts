@@ -1,11 +1,33 @@
-import { ACESFilmicToneMapping, Box3, CircleGeometry, Color, DirectionalLight, Group, HemisphereLight, Mesh, PerspectiveCamera, SRGBColorSpace, Scene, ShaderMaterial, Vector3, WebGLRenderer } from 'three';
+import {
+  ACESFilmicToneMapping,
+  AdditiveBlending,
+  Box3,
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  DirectionalLight,
+  Group,
+  HemisphereLight,
+  Mesh,
+  PCFSoftShadowMap,
+  PerspectiveCamera,
+  Points,
+  Scene,
+  ShaderMaterial,
+  SRGBColorSpace,
+  Vector3,
+  WebGLRenderer,
+} from 'three';
 import type { AssetManifestEntry } from '../game/contracts';
 import { heroById, type HeroDefinition, type HeroId } from '../game/heroes';
+import { HERO_COMBAT } from '../game/combat/HeroProfiles';
 import { NativeAssetLoader, type NativeAssetInstance } from './NativeAssetLoader';
 import { WARDEN_EDGE_IDLE_INTENSITY, WardenWeapon, weaponKindForGrip } from './WardenWeapon';
 import { fitUnarmedFists, releaseHandGeometry, type HandGeometryEdit } from './NativeHandGrip';
+import { VesperShowcaseFx } from './VesperShowcaseFx';
+import { vesperActionSeconds, vesperClipProgress } from './VesperAnimation';
 
-export interface HeroPreviewOptions { readonly reducedMotion: boolean }
+export interface HeroPreviewOptions { readonly reducedMotion: boolean; readonly motionBlur: boolean }
 export interface HeroPreviewHandle {
   /** Brings the hero forward (loading it on first use) and plays its reveal flourish unless motion is reduced. */
   show(heroId: HeroId): void;
@@ -15,38 +37,47 @@ export interface HeroPreviewHandle {
   dispose(): void;
 }
 
-interface StagedHero { readonly hero: HeroDefinition; readonly actor: NativeAssetInstance; /** Absent for an unarmed hero (no `weaponAssetId`). */ readonly weapon: WardenWeapon | null; readonly fists: HandGeometryEdit | null; readonly bounds: Box3 }
+interface StagedHero {
+  readonly hero: HeroDefinition;
+  readonly actor: NativeAssetInstance;
+  readonly pedestal: NativeAssetInstance;
+  readonly weapon: WardenWeapon | null;
+  readonly fists: HandGeometryEdit | null;
+  readonly bounds: Box3;
+  readonly pedestalBounds: Box3;
+  readonly pedestalMeshes: readonly Mesh[];
+  readonly showcaseFx: VesperShowcaseFx | null;
+}
 
 /** Seconds a finished showcase clip holds its last pose before the next one starts. */
 const SHOWCASE_HOLD_SECONDS = 0.18;
-const VIEW_DIRECTION = new Vector3(0.3, 0.14, 1).normalize();
-/** Ground sigil radius (m); the framing keeps the whole ring inside the stage. */
-const GROUND_RADIUS = 0.95;
-const GROUND_VERTEX = /* glsl */`
-varying vec2 vUv;
-void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
-/** Contact pool under the feet plus a slowly turning dashed sigil ring in the hero's element colour. */
-const GROUND_FRAGMENT = /* glsl */`
-uniform vec3 uColor;
-uniform float uTime;
-uniform float uPulse;
-varying vec2 vUv;
-void main() {
-  vec2 p = vUv * 2.0 - 1.0;
-  float r = length(p);
-  float pool = smoothstep(0.7, 0.0, r) * 0.6;
-  float angle = atan(p.y, p.x) / 6.28318 + 0.5;
-  float dash = step(0.42, fract(angle * 40.0 + uTime * 0.04));
-  float outer = smoothstep(0.022, 0.0, abs(r - 0.9)) * dash;
-  float inner = smoothstep(0.012, 0.0, abs(r - 0.7)) * 0.6;
-  float glow = (outer + inner) * (0.55 + 0.6 * uPulse);
-  float fade = smoothstep(1.0, 0.93, r);
-  gl_FragColor = vec4(uColor * glow * 1.7, clamp(pool + glow, 0.0, 1.0) * fade);
-}`;
+/** Elevated enough to read the native floor materials without losing the hero's silhouette. */
+const VIEW_DIRECTION = new Vector3(0.32, 0.24, 1).normalize();
+const VIEW_RIGHT = new Vector3().crossVectors(new Vector3(0, 1, 0), VIEW_DIRECTION).normalize();
+const VIEW_UP = new Vector3().crossVectors(VIEW_DIRECTION, VIEW_RIGHT);
+/** Deterministic ambient particles; the floor itself has no procedural dressing or glowing ring. */
+const MOTES = 16;
+const MOTES_SEED = 0x77a3eb1;
+
+function framingDistance(point: Vector3, vertical: number, horizontal: number): number {
+  return point.dot(VIEW_DIRECTION) + 1.06 * Math.max(Math.abs(point.dot(VIEW_RIGHT)) / horizontal, Math.abs(point.dot(VIEW_UP)) / vertical);
+}
+
+/** Tiny seeded RNG so the floating motes start in the same place each mount (no Math.random in sim paths). */
+function mulberry32(seed: number): () => number {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6D2B79F5) | 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 /**
- * Character-select stage: the exact native hero GLB with its native weapon, the same manifest-bound clips the game plays,
- * a drag-to-turn turntable and an element-coloured ground sigil. Presentation only; it never touches the simulation.
+ * Character-select stage: native hero, weapon and hero-specific Tripo pedestal, manifest-bound clips and drag-to-turn.
+ * Presentation only; it never touches the simulation. Pedestal contact planes are measured offline at y=0.
  */
 export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManifestEntry[], options: HeroPreviewOptions): HeroPreviewHandle {
   const placeholder = host.querySelector<HTMLElement>('[data-preview-placeholder]');
@@ -67,33 +98,71 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = PCFSoftShadowMap;
+  // Cap stays at 2 so a focused hero reads clearly on a Retina display; the title diorama caps lower because the cliff fills less of the frame.
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   host.append(canvas);
 
   const scene = new Scene();
   const keyLight = new DirectionalLight(0xfff0d8, 2.6);
   keyLight.position.set(2.2, 3.6, 3);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.set(1024, 1024);
+  keyLight.shadow.camera.left = keyLight.shadow.camera.bottom = -2.5;
+  keyLight.shadow.camera.right = keyLight.shadow.camera.top = 2.5;
+  keyLight.shadow.camera.near = 0.1;
+  keyLight.shadow.camera.far = 12;
+  keyLight.shadow.bias = -0.0002;
+  keyLight.shadow.normalBias = 0.015;
   const rimLight = new DirectionalLight(0xffffff, 2.4);
   rimLight.position.set(-2.4, 2.6, -2.8);
   const fillLight = new DirectionalLight(0x9fb8c8, 0.45);
   fillLight.position.set(-3, 1.4, 2);
   scene.add(new HemisphereLight(0xf6efe0, 0x26382b, 1.15), keyLight, rimLight, fillLight);
+
   const turntable = new Group();
   turntable.rotation.y = -0.32;
   scene.add(turntable);
-  const groundUniforms = { uColor: { value: new Color() }, uTime: { value: 0 }, uPulse: { value: 0 } };
-  const ground = new Mesh(new CircleGeometry(GROUND_RADIUS, 72), new ShaderMaterial({
-    vertexShader: GROUND_VERTEX, fragmentShader: GROUND_FRAGMENT, transparent: true, depthWrite: false, uniforms: groundUniforms,
-  }));
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = 0.003;
-  ground.renderOrder = -1;
-  turntable.add(ground);
+
+  // The authored pedestal stays still while the hero turns.
+  const platformGroup = new Group();
+  platformGroup.name = 'wc-hero-stage-platform';
+  scene.add(platformGroup);
+
+  // Mist/mote particles hovering over the platform. Reduced motion skips the time uniform so motes stay static.
+  const motesRng = mulberry32(MOTES_SEED);
+  const motePositions = new Float32Array(MOTES * 3);
+  const moteSeeds = new Float32Array(MOTES);
+  for (let index = 0; index < MOTES; index++) {
+    const radius = 0.9 + motesRng() * 0.45;
+    const angle = motesRng() * Math.PI * 2;
+    motePositions[index * 3 + 0] = Math.cos(angle) * radius;
+    motePositions[index * 3 + 1] = 0.4 + motesRng() * 1.2;
+    motePositions[index * 3 + 2] = Math.sin(angle) * radius;
+    moteSeeds[index] = motesRng() * Math.PI * 2;
+  }
+  const motesGeometry = new BufferGeometry();
+  motesGeometry.setAttribute('position', new BufferAttribute(motePositions, 3));
+  motesGeometry.setAttribute('aSeed', new BufferAttribute(moteSeeds, 1));
+  const motesMaterial = new ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uColor: { value: new Color(0xffffff) }, uSize: { value: 3.0 } },
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    vertexShader: `attribute float aSeed; varying float vSeed; uniform float uTime; uniform float uSize; void main() { vSeed = aSeed; vec3 p = position; p.y += sin(uTime * 0.6 + aSeed) * 0.18; p.x += sin(uTime * 0.4 + aSeed * 1.7) * 0.12; p.z += cos(uTime * 0.3 + aSeed * 0.9) * 0.12; vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_PointSize = uSize * (1.0 / max(-mv.z, 0.5)); gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying float vSeed; uniform vec3 uColor; void main() { vec2 p = gl_PointCoord * 2.0 - 1.0; float r = length(p); if (r > 1.0) discard; float a = smoothstep(1.0, 0.0, r) * (0.55 + 0.45 * sin(vSeed * 4.0)); gl_FragColor = vec4(uColor, a); }`,
+  });
+  const motes = new Points(motesGeometry, motesMaterial);
+  motes.name = 'wc-hero-stage-motes';
+  platformGroup.add(motes);
+
   const camera = new PerspectiveCamera(28, 1, 0.05, 50);
   const loader = new NativeAssetLoader({ allowMissingActionClips: true });
   const staged = new Map<HeroId, Promise<StagedHero>>();
   const ready = new Map<HeroId, StagedHero>();
   const target = new Vector3();
+  const corner = new Vector3();
   let current: StagedHero | null = null;
   let wanted: HeroId | null = null;
   let sequence: readonly string[] = [];
@@ -101,7 +170,6 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
   let stepElapsed = 0;
   let stepDuration = 0;
   let idleClock = 0;
-  let pulse = 0;
   let time = 0;
   let disposed = false;
   let sized = false;
@@ -119,18 +187,23 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     const pending = (async () => {
       const actorManifest = manifest(hero.variantAssetId ?? 'actor-aren', 'character');
       const weaponManifest = hero.weaponAssetId ? manifest(hero.weaponAssetId, 'prop') : null;
-      const [actorResult, staffResult] = await Promise.allSettled([
+      const pedestalManifest = manifest(`hero-pedestal-${heroId}`, 'prop');
+      const [actorResult, staffResult, pedestalResult] = await Promise.allSettled([
         loader.load(actorManifest),
         weaponManifest ? loader.load(weaponManifest) : Promise.resolve(null),
+        loader.load(pedestalManifest),
       ]);
-      if (actorResult.status === 'rejected' || staffResult.status === 'rejected') {
+      if (actorResult.status === 'rejected' || staffResult.status === 'rejected' || pedestalResult.status === 'rejected') {
         if (actorResult.status === 'fulfilled') actorResult.value.dispose();
         if (staffResult.status === 'fulfilled') staffResult.value?.dispose();
-        throw actorResult.status === 'rejected' ? actorResult.reason : (staffResult as PromiseRejectedResult).reason;
+        if (pedestalResult.status === 'fulfilled') pedestalResult.value.dispose();
+        throw actorResult.status === 'rejected' ? actorResult.reason
+          : staffResult.status === 'rejected' ? staffResult.reason : (pedestalResult as PromiseRejectedResult).reason;
       }
-      const actor = actorResult.value, staff = staffResult.value;
+      const actor = actorResult.value, staff = staffResult.value, pedestal = pedestalResult.value;
       let weapon: WardenWeapon | null = null;
       let fists: HandGeometryEdit | null = null;
+      let showcaseFx: VesperShowcaseFx | null = null;
       try {
         if (disposed) throw new Error('Hero preview closed while loading.');
         // In play the actor root is driven to the simulation pose; facing +Z is yaw 0.
@@ -138,19 +211,34 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
         actor.root.rotation.set(0, 0, 0);
         if (staff) weapon = new WardenWeapon(staff, actor, weaponKindForGrip(hero.weaponGrip));
         else fists = fitUnarmedFists(actor.root);
+        actor.root.traverse(node => { if (node instanceof Mesh) node.castShadow = true; });
+        const pedestalMeshes: Mesh[] = [];
+        pedestal.root.traverse(node => {
+          if (node instanceof Mesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+            pedestalMeshes.push(node);
+          }
+        });
         actor.animation.play(hero.idleActionId, 'idle', undefined, 0);
         actor.root.updateMatrixWorld(true);
+        pedestal.root.updateMatrixWorld(true);
         const bounds = new Box3().setFromObject(actor.root);
-        actor.root.visible = false;
+        const pedestalBounds = new Box3().setFromObject(pedestal.root);
+        actor.root.visible = pedestal.root.visible = false;
         turntable.add(actor.root);
-        const entry = { hero, actor, weapon, fists, bounds };
+        platformGroup.add(pedestal.root);
+        if (heroId === 'vesper') showcaseFx = new VesperShowcaseFx(scene, actor, weapon, options.reducedMotion, options.motionBlur);
+        const entry = { hero, actor, pedestal, weapon, fists, bounds, pedestalBounds, pedestalMeshes, showcaseFx };
         ready.set(heroId, entry);
         return entry;
       } catch (error) {
+        showcaseFx?.dispose();
         weapon?.dispose();
         if (!weapon) staff?.dispose();
         if (fists) releaseHandGeometry(fists);
         actor.dispose();
+        pedestal.dispose();
         throw error;
       }
     })();
@@ -163,12 +251,23 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     const width = Math.max(1, host.clientWidth), height = Math.max(1, host.clientHeight);
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    const box = current.bounds, top = Math.max(1.2, box.max.y);
-    target.set(0, top * 0.46, 0);
+    const box = current.bounds;
+    target.set(0, (Math.max(box.max.y, current.pedestalBounds.max.y) + Math.min(0, current.pedestalBounds.min.y)) * 0.5, 0);
     const vertical = Math.tan(camera.fov * Math.PI / 360);
     const horizontal = vertical * camera.aspect;
-    const halfWidth = Math.max(GROUND_RADIUS, Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z));
-    const distance = Math.max(top * 0.64 / vertical, halfWidth * 1.15 / horizontal);
+    // Fit the hero's idle bounds and the actual floor silhouette, not an oversized box stretching up to the head.
+    let distance = 0;
+    for (let index = 0; index < 8; index++) {
+      corner.set(index & 1 ? box.max.x : box.min.x, index & 2 ? box.max.y : box.min.y, index & 4 ? box.max.z : box.min.z).sub(target);
+      distance = Math.max(distance, framingDistance(corner, vertical, horizontal));
+    }
+    for (const mesh of current.pedestalMeshes) {
+      const positions = mesh.geometry.attributes.position!;
+      for (let index = 0; index < positions.count; index++) {
+        corner.fromBufferAttribute(positions, index).applyMatrix4(mesh.matrixWorld).sub(target);
+        distance = Math.max(distance, framingDistance(corner, vertical, horizontal));
+      }
+    }
     camera.position.copy(target).addScaledVector(VIEW_DIRECTION, distance);
     camera.near = distance / 50;
     camera.far = distance * 4;
@@ -177,15 +276,20 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     sized = true;
   };
   const bringForward = (entry: StagedHero) => {
-    if (current === entry) return;
-    if (current) current.actor.root.visible = false;
+    host.dataset.previewHero = entry.hero.id;
+    host.dataset.previewPedestal = entry.pedestal.assetId;
+    if (current === entry) { setStatus('ready'); return; }
+    if (current) {
+      current.actor.root.visible = current.pedestal.root.visible = false;
+      current.showcaseFx?.reset();
+    }
     current = entry;
-    entry.actor.root.visible = true;
+    entry.actor.root.visible = entry.pedestal.root.visible = true;
     const accent = new Color(entry.hero.accent);
     rimLight.color.copy(accent);
-    groundUniforms.uColor.value.copy(accent);
+    motesMaterial.uniforms.uColor!.value.copy(accent);
     sequence = options.reducedMotion ? [] : entry.hero.revealActionIds;
-    step = 0; stepElapsed = 0; stepDuration = 0; idleClock = 0; pulse = 1;
+    step = 0; stepElapsed = 0; stepDuration = 0; idleClock = 0;
     frame();
     setStatus('ready');
   };
@@ -193,12 +297,21 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     if (!current) return;
     const { actor, weapon, hero } = current;
     const animation = actor.animation;
+    let playedAction = hero.idleActionId, progress = 0;
     while (step < sequence.length && !animation.hasAction(sequence[step]!)) step++;
     if (step < sequence.length) {
       const actionId = sequence[step]!;
-      if (stepElapsed === 0) { animation.play(actionId, 'active', 0); stepDuration = Math.max(0.1, animation.activeDuration ?? 0.1); }
+      playedAction = actionId;
+      if (stepElapsed === 0) {
+        animation.play(actionId, 'active', 0);
+        const unscaled = actionId.endsWith('-charge') || actionId === 'cleanse' || actionId.endsWith('-cleanse')
+          || actionId === 'vesper-mist-blink' || actionId === 'sakda-guard-dash';
+        const rate = unscaled ? 1 : HERO_COMBAT[hero.id].attackPlaybackRate;
+        stepDuration = Math.max(0.1, (hero.id === 'vesper' ? vesperActionSeconds(actionId) : undefined) ?? (animation.activeDuration ?? 0.1) / rate);
+      }
       stepElapsed += dt;
-      animation.play(actionId, 'active', Math.min(1, stepElapsed / stepDuration));
+      progress = Math.min(1, stepElapsed / stepDuration);
+      animation.play(actionId, 'active', hero.id === 'vesper' ? vesperClipProgress(actionId, progress) : progress);
       weapon?.setEdgeIntensity(1.8);
       if (stepElapsed >= stepDuration + SHOWCASE_HOLD_SECONDS) { step++; stepElapsed = 0; }
     } else {
@@ -207,6 +320,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
       weapon?.setEdgeIntensity(WARDEN_EDGE_IDLE_INTENSITY);
     }
     animation.update(dt);
+    current.showcaseFx?.update(playedAction, progress, stepDuration, dt, camera.position);
   };
 
   const onPointerDown = (event: PointerEvent) => {
@@ -235,13 +349,23 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     canvas.removeEventListener('pointermove', onPointerMove);
     canvas.removeEventListener('pointerup', onPointerEnd);
     canvas.removeEventListener('pointercancel', onPointerEnd);
-    for (const entry of ready.values()) { entry.weapon?.dispose(); if (entry.fists) releaseHandGeometry(entry.fists); entry.actor.dispose(); }
+    for (const entry of ready.values()) {
+      entry.showcaseFx?.dispose();
+      entry.weapon?.dispose();
+      if (entry.fists) releaseHandGeometry(entry.fists);
+      entry.actor.dispose();
+      entry.pedestal.dispose();
+    }
     ready.clear();
     staged.clear();
     current = null;
-    ground.geometry.dispose();
-    ground.material.dispose();
+    motesGeometry.dispose();
+    motesMaterial.dispose();
     scene.clear();
+    keyLight.shadow.dispose();
+    delete host.dataset.previewHero;
+    delete host.dataset.previewPedestal;
+    delete host.dataset.dragging;
     renderer.dispose();
     loader.dispose();
     canvas.remove();
@@ -262,8 +386,9 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     },
     showcase(actionIds) {
       if (disposed || !current) return;
+      current.showcaseFx?.reset();
       sequence = actionIds;
-      step = 0; stepElapsed = 0; stepDuration = 0; pulse = 1;
+      step = 0; stepElapsed = 0; stepDuration = 0;
     },
     update(dt) {
       if (disposed) return;
@@ -271,9 +396,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
       if (!current) return;
       const delta = Math.max(0, Math.min(dt, 0.1));
       if (!options.reducedMotion) time += delta;
-      pulse *= Math.exp(-delta * 2.4);
-      groundUniforms.uTime.value = time;
-      groundUniforms.uPulse.value = pulse;
+      motesMaterial.uniforms.uTime!.value = time;
       drive(delta);
       if (!sized) frame();
       renderer.render(scene, camera);

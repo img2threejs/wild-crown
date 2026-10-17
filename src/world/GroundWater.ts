@@ -101,14 +101,16 @@ export function buildWaterData(field: TerrainField, plan: WaterPlan): WaterMeshD
 const VERTEX_SHADER = `
 attribute vec2 aFlow;
 attribute vec3 aAux;
+uniform float uRiverLevelOffset;
 varying vec2 vFlow;
 varying vec3 vAux;
 varying vec3 vWorld;
 #include <fog_pars_vertex>
 void main() {
-  vFlow = aFlow;
+  float levelOffset = dot(aAux.xy, aAux.xy) > 0.0 ? uRiverLevelOffset : 0.0;
+  vFlow = aFlow + vec2(levelOffset, 0.0);
   vAux = aAux;
-  vec4 world = modelMatrix * vec4(position, 1.0);
+  vec4 world = modelMatrix * vec4(position + vec3(0.0, levelOffset, 0.0), 1.0);
   vWorld = world.xyz;
   vec4 mvPosition = viewMatrix * world;
   gl_Position = projectionMatrix * mvPosition;
@@ -233,6 +235,7 @@ export class GroundWater {
         UniformsLib.fog,
         {
           uTime: { value: 0 },
+          uRiverLevelOffset: { value: 0 },
           uSunDir: { value: this.sunDirection },
           uShallow: { value: new Color(palette.shallow) },
           uDeep: { value: new Color(palette.deep) },
@@ -253,6 +256,17 @@ export class GroundWater {
     this.mesh.castShadow = false;
     this.mesh.receiveShadow = false;
     this.mesh.renderOrder = WATER_RENDER_ORDER;
+  }
+
+  /** Recolors existing water; river displacement leaves independent still pools in place. */
+  setWaterway(palette: WaterPalette, riverLevelOffset: number): void {
+    const uniforms = this.mesh.material.uniforms;
+    uniforms.uShallow!.value.setHex(palette.shallow);
+    uniforms.uDeep!.value.setHex(palette.deep);
+    uniforms.uSky!.value.setHex(palette.sky);
+    uniforms.uSun!.value.setHex(palette.sun);
+    uniforms.uFoam!.value.setHex(palette.foam);
+    uniforms.uRiverLevelOffset!.value = riverLevelOffset;
   }
 
   /** Points the glint along the key light (direction from the water towards the sun). */

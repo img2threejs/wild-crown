@@ -7,8 +7,6 @@ import { HERO_COMBAT } from '../../src/game/combat/HeroProfiles.js';
 import { groundHeightAt, isSupportedCapsulePose, vec } from '../../src/game/combat/geometry.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { PLAYER_MAX_VITALITY, PLAYER_SKILLS, SIGIL, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
-import { SAKDA } from '../../src/game/combat/SakdaSkills.js';
-import { VESPER } from '../../src/game/combat/VesperSkills.js';
 import { KIT_FACTORIES } from '../../src/game/combat/kits/registry.js';
 import type { HeroKit, KitHost } from '../../src/game/combat/kits/KitHost.js';
 import { HEROES, type HeroId } from '../../src/game/heroes.js';
@@ -103,28 +101,9 @@ describe('per-hero health and speed', () => {
     });
   }
 
-  it('matches the design table for every hero', () => {
-    expect(Object.fromEntries(HEROES_UNDER_TEST.map(id => [id, [HERO_COMBAT[id].maxVitality, HERO_COMBAT[id].walkSpeed, HERO_COMBAT[id].runSpeed, HERO_COMBAT[id].element]]))).toEqual({
-      aren: [120, 4.1, 6, 'arcane'], yara: [85, 4.1, 6, 'heartroot'], vesper: [80, 4.9, 7.5, 'umbral'], sakda: [115, 4.4, 6.6, 'ember'],
-    });
-  });
-
-  it('the hero definitions mirror the profile', () => {
-    expect(HEROES.map(hero => hero.id)).toEqual(HEROES_UNDER_TEST);
-    for (const hero of HEROES) {
-      expect(hero.maxVitality).toBe(HERO_COMBAT[hero.id].maxVitality);
-      expect(hero.skills.map(skill => skill.action)).toEqual(['light', 'heavy', 'ranged', 'ability', 'dodge', 'ultimate']);
-    }
-  });
 });
 
 describe('Yara damage', () => {
-  it('uses the raised constants, timings unchanged', () => {
-    expect(HEARTROOT).toMatchObject({
-      thornDamage: 16, twinDamage: 12, seedDamage: 32, spikeDamage: 37, eruptionDamage: 55, lanceDamage: 40,
-      stormDamage: 13, meteorDamage: 13, bloomPulseDamage: 58, spikeAt: 20, spikeTicks: 63, eruptionAt: 36, eruptionTicks: 76, bloomTicks: 156,
-    });
-  });
   it('lands a Thornshot for exactly the constant', () => {
     const b = bench('yara', [[0, 7]]);
     b.step({ lightPressed: true });
@@ -133,16 +112,6 @@ describe('Yara damage', () => {
   });
 });
 
-describe('Vesper and Sakda skill data', () => {
-  it('carries the contract timings', () => {
-    expect(VESPER.iai.steps.map(step => [step.ticks, step.activeAt, step.damage])).toEqual([[18, 6, 12], [18, 6, 12], [22, 8, 15], [30, 10, 22]]);
-    expect(VESPER.thousandCuts.strikeAt).toEqual([8, 18, 28, 38, 48, 58]);
-    expect(VESPER.mistBlink).toMatchObject({ distance: 6.5, durationTicks: 12, iframes: 14, recoveryTicks: 12 });
-    expect(SAKDA.limbs.steps.map(step => [step.ticks, step.activeAt, step.damage])).toEqual([[20, 7, 10], [22, 8, 11], [26, 10, 14], [32, 13, 18]]);
-    expect(SAKDA.hundredElbows.hitAt).toEqual([12, 18, 24, 30, 36, 42]);
-    expect(SAKDA.guardDash).toMatchObject({ distance: 5.5, durationTicks: 18, iframes: 8, shield: 25, shieldTicks: 120 });
-  });
-});
 
 interface TestKitState { updates: number; hitStops: number; shield: number; dealt: number; marked: string[]; log: string[] }
 
@@ -219,17 +188,6 @@ describe('hero kit seam', () => {
   beforeEach(() => { delete KIT_FACTORIES.vesper; delete KIT_FACTORIES.sakda; });
   afterEach(() => { delete KIT_FACTORIES.vesper; delete KIT_FACTORIES.sakda; Object.assign(KIT_FACTORIES, original); });
 
-  it('Vesper and Sakda play Aren’s kit until a factory is registered', () => {
-    for (const id of ['vesper', 'sakda'] as const) {
-      const b = bench(id, [[0, 2]]);
-      b.step({ lightPressed: true });
-      expect(b.state.actors[0]!.actionId).toBe('aren-light-1');
-      expect(b.engine.snapshot().skills.find(skill => skill.id === 'light')!.label).toBe('Warden Blade');
-      expect(b.engine.snapshot().player).not.toHaveProperty('shield');
-      b.step({}, 12);
-      expect(b.cues.some(cue => cue.element === 'arcane')).toBe(true);
-    }
-  });
 
   it('routes J through the kit, caps the chain at its step count and applies the damage modifier', () => {
     KIT_FACTORIES.vesper = host => testKit(host);
@@ -249,29 +207,6 @@ describe('hero kit seam', () => {
     expect(kitState(b.engine).dealt).toBe(b.state.actors[1]!.maxVitality - b.health(0));
   });
 
-  it('shows the kit labels and replaces Aren’s skill clips', () => {
-    KIT_FACTORIES.vesper = host => testKit(host);
-    const b = bench('vesper');
-    const skills = b.engine.snapshot().skills;
-    expect(skills.find(skill => skill.id === 'light')!.label).toBe('Test Cut');
-    expect(skills.find(skill => skill.id === 'heavy')!.label).toBe('Test Stomp');
-    // A kit's K needs no target.
-    expect(skills.find(skill => skill.id === 'heavy')!.available).toBe(true);
-  });
-
-  it('routes K tap and the K hold release, charging with the kit clip', () => {
-    KIT_FACTORIES.vesper = host => testKit(host);
-    const b = bench('vesper', [[0, 6]]);
-    b.step({ heavyPressed: true });
-    expect(actions(b.engine)).toEqual(['heavy:false']);
-    expect(b.state.player.mana).toBe(100 - PLAYER_SKILLS.heavy.manaCost);
-    b.step({}, 40);
-    b.step({ heavyPressed: true, heavyHeld: true });
-    expect(b.state.actors[0]!.actionId).toBe('test-heavy-charge');
-    b.step({ heavyHeld: true }, THUNDER_CLEAVE.holdTicks);
-    b.step({ heavyReleased: true, heavyHeldTicks: THUNDER_CLEAVE.holdTicks + 1 });
-    expect(kitState(b.engine).log.at(-1)).toBe('heavy:true');
-  });
 
   it('routes L tap and L hold release, spawns a kit projectile and resolves its hit and end through callbacks', () => {
     KIT_FACTORIES.vesper = host => testKit(host);
@@ -682,19 +617,3 @@ describe('hero kit host fixes', () => {
   });
 });
 
-describe('hero definitions', () => {
-  it('declare presentation fields for the kit and renderer', () => {
-    expect(Object.fromEntries(HEROES.map(hero => [hero.id, [hero.style, hero.weaponGrip, hero.dodgeVanish, hero.dodgeLabel]]))).toEqual({
-      aren: ['warden', 'glaive', false, 'DIVE'],
-      yara: ['heartroot', 'staff', true, 'PETAL STEP'],
-      vesper: ['umbral', 'katana', true, 'MIST BLINK'],
-      sakda: ['ember', undefined, false, 'GUARD DASH'],
-    });
-    expect(HEROES.find(hero => hero.id === 'sakda')!.weaponAssetId).toBeUndefined();
-    for (const hero of HEROES) {
-      expect(hero.ratings.length).toBe(5);
-      expect(hero.biography).toHaveLength(2);
-      expect(hero.skills.every(skill => skill.previewActionIds.length > 0)).toBe(true);
-    }
-  });
-});

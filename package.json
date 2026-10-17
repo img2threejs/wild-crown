@@ -12,6 +12,9 @@
     "release:artifact": "node scripts/release/artifact.mjs --dist dist"
   },
   "dependencies": {
+    "@fontsource/alegreya": "^5.3.0",
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
     "three": "0.169.0"
   },
   "devDependencies": {

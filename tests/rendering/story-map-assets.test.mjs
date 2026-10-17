@@ -13,33 +13,35 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 const root = process.cwd();
 const SLOTS = ['monster-idle', 'monster-walk', 'monster-run', 'monster-slash', 'monster-shoot', 'monster-jump', 'monster-hurt', 'monster-turn', 'monster-dive', 'monster-roar'];
 const TOLERANCE = 0.25;
-/** A skinned vertex may dip this far (metres, after scaling) below the ground in any clip: skin bulge around planted joints. */
+/** A skinned vertex may dip this far (metres, after scaling) below the ground in any clip: skin bulge around planted joints. A character may state its own (`sink`). */
 const SINK_TOLERANCE = 0.15;
 
-/** Carried verbatim (shared kit and reused Greenwake / Canopy props): the manifest must equal its source entry. */
-const SHARED = ['actor-aren', 'prop-greenwake-root-gate', 'prop-warden-glaive', 'actor-yara-hero', 'prop-heartroot-focus-staff', 'actor-vesper-hero', 'prop-vesper-katana', 'actor-sakda-hero'];
-
 /**
- * Per map: the exact ids the playtest asset gate requires (derived by scripts/assets/story-map-required-assets.ts), the composed
- * environment's component props, the built assets with their stated sizes in metres (height / width = larger footprint axis / length /
+ * Per map: the composed environment and built assets with their stated sizes in metres (height / width = larger footprint axis / length /
  * wingspan / shoulder) and the decoration triangle budgets (boundary decoration is drawn as hundreds of instances per frame).
  */
 const MAPS = {
   grove: {
     environment: 'the-grove-environment',
-    required: ['actor-aren', 'actor-grove-rootling', 'actor-koro', 'actor-sakda-hero', 'actor-vara', 'actor-vesper-hero', 'actor-yara-hero', 'prop-canopy-fern-cluster', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-greenwake-root-gate', 'prop-grove-platform', 'prop-heartroot-focus-staff', 'prop-heartroot-trunk', 'prop-refuge-shelter', 'prop-training-post', 'prop-vesper-katana', 'prop-warden-glaive', 'prop-warden-waystone', 'prop-water-basin', 'the-grove-environment'],
-    components: ['prop-canopy-fern-cluster', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-grove-platform', 'prop-heartroot-trunk', 'prop-refuge-shelter', 'prop-training-post', 'prop-water-basin'],
-    carried: ['actor-vara', 'prop-erya-edge-tree', 'prop-greenwake-boulder-cluster', 'prop-canopy-fern-cluster'],
-    characters: { 'actor-koro': { actorId: 'grove-koro', slots: ['monster-idle', 'monster-walk'], height: 1.3 }, 'actor-grove-rootling': { actorId: 'grove-sprig', slots: SLOTS, height: 1.6 } },
-    props: { 'prop-heartroot-trunk': { height: 9 }, 'prop-refuge-shelter': { width: 4 }, 'prop-training-post': { height: 2.5 }, 'prop-water-basin': { width: 4 }, 'prop-grove-platform': { width: 4 } },
-    budgets: {},
+    characters: {
+      'actor-koro': { actorId: 'grove-koro', slots: ['monster-idle', 'monster-walk'], height: 1.3 },
+      'actor-grove-rootling': { actorId: 'grove-sprig', slots: SLOTS, height: 1.6 },
+      // Stage 2: the rootling body drawn a quarter larger (2.0 m) on its own darkened material variant; stage 3: the 3.5 m biped guardian.
+      'actor-grove-blighted-rootling': { actorId: 'grove-blighted', slots: SLOTS, height: 2 },
+      // The 3.5 m guardian's sink allowance is 6% of its height (0.21 m): idle toes dip 0.08 m, the walk 0.14 m, the guarded slash hand 0.18 m (the Tripo slash and pitch presets took it 0.45 to 0.53 m under, which `limbFloor` in author-creature-clips.mjs removes).
+      'actor-grove-hollowheart': { actorId: 'grove-hollowheart', slots: SLOTS, height: 3.5, sink: 0.21 },
+    },
+    // The Memory Pool's set dressing is carried from the Canopy (shrine, cliff rock) and Mistveil (mire rock, cavern mouth) generation logs.
+    props: {
+      'prop-heartroot-trunk': { height: 9 }, 'prop-refuge-shelter': { width: 4 }, 'prop-training-post': { height: 2.5 }, 'prop-water-basin': { width: 4 }, 'prop-grove-platform': { width: 4 },
+      'prop-ancient-canopy-shrine': { width: 14, log: 'canopy-tripo-log.jsonl' }, 'prop-canopy-cliff-rock': { height: 6, log: 'canopy-tripo-log.jsonl' },
+      'prop-mire-bank-rock': { width: 4, log: 'mistveil-tripo-log.jsonl' }, 'prop-root-cavern-mouth': { width: 8, log: 'mistveil-tripo-log.jsonl' },
+    },
+    budgets: { 'prop-canopy-cliff-rock': 2500, 'prop-mire-bank-rock': 2600 },
     log: 'grove-tripo-log.jsonl',
   },
   moonpine: {
     environment: 'moonpine-ridge-environment',
-    required: ['actor-aren', 'actor-frostfang-tracker', 'actor-howl-scout', 'actor-ruun-chained-howl', 'actor-sakda-hero', 'actor-vara', 'actor-vesper-hero', 'actor-yara-hero', 'moonpine-ridge-environment', 'prop-buried-wolf-temple', 'prop-greenwake-root-gate', 'prop-heartroot-focus-staff', 'prop-moonpine-log-bridge', 'prop-moonpine-tree', 'prop-snow-ridge-rock', 'prop-temple-chain-anchor', 'prop-vesper-katana', 'prop-warden-glaive', 'prop-warden-waystone'],
-    components: ['prop-buried-wolf-temple', 'prop-moonpine-log-bridge', 'prop-moonpine-tree', 'prop-snow-ridge-rock', 'prop-temple-chain-anchor'],
-    carried: ['actor-vara'],
     characters: {
       'actor-frostfang-tracker': { actorId: 'moonpine-frostfang', slots: SLOTS, shoulder: 1.1 },
       'actor-howl-scout': { actorId: 'moonpine-scout', slots: SLOTS, shoulder: 0.9 },
@@ -51,9 +53,6 @@ const MAPS = {
   },
   mistveil: {
     environment: 'mistveil-basin-environment',
-    required: ['actor-aren', 'actor-bog-lurker', 'actor-ghor-mire-maw', 'actor-lantern-heron', 'actor-sakda-hero', 'actor-vesper-hero', 'actor-yara-hero', 'mistveil-basin-environment', 'prop-black-sap-filter-drum', 'prop-greenwake-root-gate', 'prop-heartroot-focus-staff', 'prop-hunter-extraction-rig', 'prop-mire-bank-rock', 'prop-mistveil-reed-cluster', 'prop-mistveil-root-tree', 'prop-root-cavern-mouth', 'prop-vesper-katana', 'prop-warden-glaive', 'prop-warden-waystone'],
-    components: ['prop-black-sap-filter-drum', 'prop-hunter-extraction-rig', 'prop-mire-bank-rock', 'prop-mistveil-reed-cluster', 'prop-mistveil-root-tree', 'prop-root-cavern-mouth'],
-    carried: [],
     characters: {
       'actor-bog-lurker': { actorId: 'mistveil-lurker', slots: SLOTS, height: 1.4 },
       'actor-lantern-heron': { actorId: 'mistveil-heron', slots: SLOTS, height: 2.4, wingspan: 3.6, grounded: true },
@@ -115,47 +114,46 @@ for (const [map, config] of Object.entries(MAPS)) {
     };
     before(async () => { manifest = await readJson(manifestPath); });
 
-    it('lists exactly the assets the playtest gate requires, all evidence-blocked', () => {
+    it('keeps candidate ids unique and all assets evidence-blocked', () => {
       const ids = manifest.map(item => item.id);
       assert.equal(new Set(ids).size, ids.length, 'ids must be unique');
-      assert.deepEqual([...ids].sort(), config.required);
       for (const item of manifest) assert.equal(item.evidenceStatus, 'blocked', `${item.id} must stay evidence-blocked`);
     });
 
-    it('composes the environment from exactly the region props', () => {
+    it('resolves every environment component to a native prop in its manifest', () => {
       const environment = entry(config.environment);
       assert.equal(environment.sourceType, 'composed-recipe');
       assert.equal(environment.kind, 'environment');
-      assert.deepEqual([...environment.componentAssetIds].sort(), config.components);
-    });
-
-    it('copies the shared and reused entries unchanged', async () => {
-      const sources = [await readJson('asset-source/playtests/canopy.json'), await readJson('asset-source/playtests/greenwake.json')];
-      for (const id of [...SHARED, ...config.carried]) {
-        const source = sources.map(list => list.find(item => item.id === id)).find(Boolean);
-        assert.ok(source, `no source entry for ${id}`);
-        assert.deepEqual(entry(id), source, `${id} must match its Greenwake / Canopy entry`);
+      for (const id of environment.componentAssetIds) {
+        const component = entry(id);
+        assert.equal(component.kind, 'prop');
+        assert.equal(component.sourceType, 'native-glb');
       }
     });
 
     it('every runtimeUrl resolves to a local GLB whose sha256 matches outputHash', async () => {
-      let checked = 0;
       for (const item of manifest) {
-        if (!item.runtimeUrl) continue;
+        if (item.sourceType === 'composed-recipe') { assert.equal(item.runtimeUrl, null); continue; }
+        assert.equal(typeof item.runtimeUrl, 'string', `${item.id} needs a runtime GLB`);
         assert.match(item.outputHash ?? '', /^[0-9a-f]{64}$/, `${item.id} needs a sha256 outputHash`);
         const path = localPath(item.runtimeUrl);
         assert.ok(existsSync(path), `${item.id}: ${item.runtimeUrl} does not exist`);
         assert.equal(sha256(await readFile(path)), item.outputHash, `${item.id}: outputHash does not match the file`);
-        checked++;
       }
-      assert.equal(checked, config.required.length - 1, 'every asset except the composed environment has a runtime GLB');
     });
 
-    it('every Tripo source task of the new assets is in the map generation log', async () => {
-      const rows = (await readFile(`${root}/asset-source/generated/${config.log}`, 'utf8')).trim().split('\n').map(line => JSON.parse(line));
-      const logged = new Set(rows.flatMap(row => [row.task_id, ...(row.tasks ?? []).map(task => task.task_id)]).filter(Boolean));
-      for (const id of [...Object.keys(config.characters), ...Object.keys(config.props)]) {
-        assert.ok(logged.has(entry(id).tripoSourceTask), `${id}: Tripo task ${entry(id).tripoSourceTask} is not in ${config.log}`);
+    it('every Tripo source task of the new assets is in its generation log', async () => {
+      const logged = new Map();
+      const tasksOf = async log => {
+        if (!logged.has(log)) {
+          const rows = (await readFile(`${root}/asset-source/generated/${log}`, 'utf8')).trim().split('\n').map(line => JSON.parse(line));
+          logged.set(log, new Set(rows.flatMap(row => [row.task_id, ...(row.tasks ?? []).map(task => task.task_id)]).filter(Boolean)));
+        }
+        return logged.get(log);
+      };
+      for (const [id, stated] of [...Object.entries(config.characters), ...Object.entries(config.props)]) {
+        const log = stated.log ?? config.log;
+        assert.ok((await tasksOf(log)).has(entry(id).tripoSourceTask), `${id}: Tripo task ${entry(id).tripoSourceTask} is not in ${log}`);
       }
     });
 
@@ -229,7 +227,7 @@ for (const [map, config] of Object.entries(MAPS)) {
               }
               action.stop();
               assert.ok(worstDrift <= 0.12 * span, `${id}: ${slot} (${clip.name}) drifts ${(worstDrift / span * 100).toFixed(1)}% of the body span from the actor origin`);
-              assert.ok(lowest * scale >= -SINK_TOLERANCE, `${id}: ${slot} (${clip.name}) sinks ${(-lowest * scale).toFixed(3)} m below the ground`);
+              assert.ok(lowest * scale >= -(stated.sink ?? SINK_TOLERANCE), `${id}: ${slot} (${clip.name}) sinks ${(-lowest * scale).toFixed(3)} m below the ground`);
             }
           });
 

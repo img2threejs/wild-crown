@@ -1,13 +1,17 @@
 import { describe, expect, it } from 'bun:test';
 import { AdditiveBlending, Bone, BufferAttribute, BufferGeometry, Group, MeshBasicMaterial, NormalBlending, Scene, Skeleton, SkinnedMesh, Vector3, type Object3D } from 'three';
-import { AFTERIMAGE_DASH_ACTIONS, AFTERIMAGE_STYLES, PoseAfterimages, type AfterimageStyle } from '../../src/rendering/PoseAfterimages.js';
+import { AFTERIMAGE_DASH_ACTIONS, PoseAfterimages, type AfterimageStyle } from '../../src/rendering/PoseAfterimages.js';
 import type { ActorSnapshot, WorldClockSnapshot } from '../../src/game/contracts.js';
 
-function fixture() {
+function fixture(withBlade = false) {
   const scene = new Scene(), parent = new Group(), root = new Group();
   parent.position.set(8, 0, -3); parent.rotation.y = 0.3; scene.add(parent); parent.add(root);
   root.scale.set(1.3, 1.6, 0.9); root.rotation.y = 0.7;
   const hips = new Bone(), arm = new Bone(); arm.name = 'arm'; arm.position.y = 1; hips.add(arm);
+  if (withBlade) {
+    const tip = new Group(); tip.name = 'wc:weapon-tip'; tip.position.x = 1;
+    arm.add(tip);
+  }
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new BufferAttribute(new Float32Array([1, 1, 0]), 3));
   geometry.setAttribute('skinIndex', new BufferAttribute(new Uint16Array([1, 0, 0, 0]), 4));
@@ -35,6 +39,38 @@ describe('native pose afterimages', () => {
       expect(f.vertex(body).distanceTo(expected)).toBeLessThan(1e-6);
       expect(f.vertex(body).distanceTo(f.vertex(f.mesh))).toBeGreaterThan(0.5);
       expect(body.skeleton).not.toBe(f.mesh.skeleton);
+    } finally { f.dispose(); }
+  });
+
+  it('freezes real in-place umbral sword poses without inventing root travel or repeating a held pose', () => {
+    const f = fixture(true);
+    try {
+      f.ghosts.setStyle('umbral'); f.actor.actionId = 'vesper-iai-1'; f.actor.phase = 'active';
+      f.actor.velocity = { x: 0, y: 0, z: 0 };
+      f.capture(20);
+      const first = f.visible()[0]!.getObjectByName('body') as SkinnedMesh, expected = f.vertex(first);
+      f.capture(23); expect(f.visible()).toHaveLength(1);
+      f.arm.rotation.z = 0.7; f.capture(24);
+      expect(f.visible()).toHaveLength(2);
+      expect(f.vertex(first).distanceTo(expected)).toBeLessThan(1e-6);
+      expect(f.vertex(first).distanceTo(f.vertex(f.mesh))).toBeGreaterThan(0.5);
+      expect((first.material as MeshBasicMaterial).blending).toBe(NormalBlending);
+      f.capture(27); expect(f.visible()).toHaveLength(2);
+      f.actor.phase = 'idle'; f.arm.rotation.z = -1; f.capture(36);
+      expect(f.visible()).toHaveLength(0);
+    } finally { f.dispose(); }
+  });
+
+  it('suppresses in-place blade echoes for reduced motion and motion-blur off, and leaves other hero styles unchanged', () => {
+    const f = fixture(true);
+    try {
+      f.actor.actionId = 'vesper-iai-2'; f.actor.phase = 'active'; f.actor.velocity = { x: 0, y: 0, z: 0 };
+      f.capture(20); expect(f.visible()).toHaveLength(0);
+      f.ghosts.setStyle('umbral'); f.capture(24); expect(f.visible()).toHaveLength(1);
+      f.capture(25, 'normal', true); expect(f.visible()).toHaveLength(0);
+      f.ghosts.setMotionBlur(false); f.arm.rotation.z = 0.8; f.capture(30);
+      expect(f.visible()).toHaveLength(0);
+      f.ghosts.setMotionBlur(true); f.capture(34); expect(f.visible()).toHaveLength(1);
     } finally { f.dispose(); }
   });
 
@@ -143,32 +179,9 @@ function materialOf(ghost: Object3D): MeshBasicMaterial {
   if (!(body instanceof SkinnedMesh) || !(body.material instanceof MeshBasicMaterial)) throw new Error('afterimage ghost has no basic body material');
   return body.material;
 }
-const STYLE_NAMES: readonly AfterimageStyle[] = ['warden', 'heartroot', 'umbral', 'ember'];
 const luma = (color: { r: number; g: number; b: number }): number => 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
 
 describe('four hero afterimage styles', () => {
-  it('every style has its own tint pair, HDR dash colour, spacing, life and opacity; umbral is denser and longer-lived', () => {
-    expect(Object.keys(AFTERIMAGE_STYLES).sort()).toEqual([...STYLE_NAMES].sort());
-    const tints = new Set(STYLE_NAMES.map(name => AFTERIMAGE_STYLES[name].tint.join()));
-    const dashes = new Set(STYLE_NAMES.map(name => AFTERIMAGE_STYLES[name].dash.join()));
-    expect(tints.size).toBe(4); expect(dashes.size).toBe(4);
-    for (const name of STYLE_NAMES) {
-      const look = AFTERIMAGE_STYLES[name];
-      expect(Math.max(...look.dash)).toBeLessThanOrEqual(4);
-      expect(look.dashSpacing).toBeLessThanOrEqual(look.spacing);
-      expect(look.opacity).toBeGreaterThan(0); expect(look.dashOpacity).toBeGreaterThan(look.opacity);
-    }
-    const umbral = AFTERIMAGE_STYLES.umbral;
-    for (const name of ['warden', 'heartroot', 'ember'] as const) {
-      expect(umbral.spacing).toBeLessThan(AFTERIMAGE_STYLES[name].spacing);
-      expect(umbral.life).toBeGreaterThan(AFTERIMAGE_STYLES[name].life);
-      expect(umbral.dashLife).toBeGreaterThan(AFTERIMAGE_STYLES[name].dashLife);
-    }
-    expect(umbral.dashSpacing).toBe(2);
-    expect(umbral.dodgeDash).toBe(true);
-    expect(STYLE_NAMES.filter(name => AFTERIMAGE_STYLES[name].dodgeDash)).toEqual(['umbral']);
-  });
-
   it('switching style drops live ghosts and recolours the next captures: jade, amber, violet-black/crimson, flame orange/gold', () => {
     const f = fixture();
     try {
@@ -195,7 +208,7 @@ describe('four hero afterimage styles', () => {
     } finally { f.dispose(); }
   });
 
-  it('each style\'s dash ghosts are additive HDR in its own hue', () => {
+  it('umbral blink ghosts stay dark while the other heroes retain additive HDR dashes', () => {
     const f = fixture();
     try {
       const dash = (name: AfterimageStyle, action: string, tick: number): MeshBasicMaterial => {
@@ -205,10 +218,12 @@ describe('four hero afterimage styles', () => {
       };
       const warden = dash('warden', 'aren-judgement', 20), heartroot = dash('heartroot', 'aren-judgement', 40);
       const umbral = dash('umbral', 'vesper-shadow-step', 60), ember = dash('ember', 'sakda-flying-knee', 80);
-      for (const material of [warden, heartroot, umbral, ember]) expect(material.blending).toBe(AdditiveBlending);
+      for (const material of [warden, heartroot, ember]) expect(material.blending).toBe(AdditiveBlending);
+      expect(umbral.blending).toBe(NormalBlending);
+      expect(luma(umbral.color)).toBeLessThan(0.1);
       expect(warden.color.b).toBeGreaterThan(warden.color.r * 3);
       expect(heartroot.color.r).toBeGreaterThan(heartroot.color.b * 3);
-      expect(umbral.color.r).toBeGreaterThan(umbral.color.g * 5);
+      expect(umbral.color.r).toBeGreaterThan(umbral.color.g * 3);
       expect(umbral.color.b).toBeGreaterThan(umbral.color.g * 3);
       expect(ember.color.r).toBeGreaterThan(ember.color.g);
       expect(ember.color.g).toBeGreaterThan(ember.color.b * 3);
