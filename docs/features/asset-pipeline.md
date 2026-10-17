@@ -53,3 +53,42 @@ asset-lab.html loads an actual GLB through GLTFLoader and exports the source byt
 - All kinds additionally require applicable plugin checks, G11 exact-derivative freeze parity, G12 joint correspondence when skinned, action coverage where applicable, authored species/geometry policy, and human visual review. The raw plugin aggregate is not game acceptance.
 
 LOD IDs remain empty until real derivative files and hashes exist. Numeric switching thresholds are proposals/unprofiled until P11 locked-hardware profiling; no measured distance is invented.
+
+## Offline 2K texture-only derivatives (Q03 partial)
+
+The initial hero texture allocation in production art pipeline §6.3 is 2K. Run the local Pillow utility on a selected native GLB, or subsequently on its authored rigged derivative:
+
+```sh
+python3 scripts/assets/derive-texture-budget.py <source.glb> <new-output.glb>
+# Optional positive integer budget; default is 2048 pixels on the longest axis.
+python3 scripts/assets/derive-texture-budget.py <source.glb> <new-output.glb> --max-dimension 2048
+python3 scripts/assets/test-derive-texture-budget.py
+node scripts/assets/inspect-glb.mjs <new-output.glb>
+```
+
+The output and adjacent `<new-output>.provenance.json` must not already exist, including dangling symlinks. Input/output aliasing is refused. If either exclusive file creation or write fails, files created by that attempt are removed so a partial pair cannot block retry; pre-existing paths are never removed. This is deterministic offline processing in the recorded Pillow environment (measured here with existing Pillow 12.3.0), not a provider call, production promotion or a mesh exporter. Keep source files immutable. Paths in provenance are repository-relative, or basenames for outside inputs; no signed URLs or local absolute paths are copied.
+
+Only embedded single-frame 8-bit PNG/JPEG images are supported. The longest side is capped without upscaling; aspect ratio is preserved to the nearest integer pixel. Images already inside budget retain their encoded bytes. Resized PNGs remain PNGs; resized JPEGs use fixed quality 95 with no chroma subsampling. Material/texture/sampler references, UVs and color-space roles are unchanged. Color RGB is filtered in linear light and encoded back to sRGB; alpha and packed metallic/roughness/occlusion channels are filtered independently as linear data. Normal RGB channels remain floating-point through resizing and vector normalization, with quantization only at final encoding. Recognized KHR color slots include diffuseTransmissionColorTexture; unknown material texture slots fail closed rather than guessing linear semantics. One image used in incompatible color/data/normal roles is refused until separate authored images exist. External images/buffers, alternate compressed image formats, multiple buffers and extension-owned direct binary offsets fail closed with a missing-prerequisite message; they are never dropped or replaced with fake fallback textures.
+
+The entire original JSON tree is retained, including unknown extras/extensions. The only permitted edits are buffer byte length, bufferView relocation/image length and image bufferView references when an image shares a non-image view. Every original non-image bufferView payload remains byte-identical. Overlapping/aliased non-image ranges retain their relative offsets and alignment; image ranges are four-byte aligned, and JSON/BIN padding and declared GLB length are rebuilt. Mesh primitives, accessors, nodes, skins, inverse-bind/joint data, animation channels, materials, textures and sampler IDs are compared after binary round-trip. Unrelated GLB chunks are copied unchanged. Provenance records source/output SHA-256, encoded file/image sizes, before/after image dimensions, parity and estimated decoded RGBA8 bytes both without and with a full mip chain. These are file/pixel measurements and estimates, never provider-account deltas or measured VRAM.
+
+### Selected native candidate measurements (2026-10-01)
+
+Actual selected candidate 2 inputs were processed with algorithm revision 2 into `asset-source/derived/textures2048/<actor>/model.v2.glb`. Adjacent `model.v2.provenance.json` records exact source paths, source/output hashes, algorithm revision and utility script hash. Independent binary inspection and decoding of each persisted output observed three 2048×2048 images, valid structural references, and unchanged non-image bytes/source hashes. Repeated derivation was byte-identical. Both originals had one 8192×8192 base-color JPEG, one 4096×4096 packed-data JPEG and one 4096×4096 normal PNG.
+
+| Actor | Source GLB bytes | Derivative GLB bytes | Frozen vertices | Frozen triangles | Skins / clips |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Aren | 76,269,096 | 60,629,308 | 1,011,304 | 1,964,099 | 0 / 0 |
+| Asha | 79,718,876 | 59,920,400 | 989,606 | 1,934,187 | 0 / 0 |
+
+For each actor the decoded RGBA8 base-level estimate decreases from 402,653,184 B (384 MiB) to 50,331,648 B (48 MiB); including a full mip chain, 536,870,908 B to 67,108,860 B. These do not include driver overhead, geometry memory or scene/performance measurements. Output hashes:
+
+- Aren: `7e4f2237d95f698b1981fd547e8e2e184493fddcf12446e1b643933fad514e98`.
+- Asha: `691d40d569c0e19dfbcd61cc96d81581870d9be9631135266a1524b16c113d20`.
+
+Coordinator native-loader/visual handoff: open the existing `/asset-lab.html` route on the coordinator-owned development server, leave the upload unassigned (scratch only), and upload each exact derivative via `#model-file`. Check rendered geometry/materials from multiple angles, inspect `#summary` and console errors, then upload the corresponding original for visual comparison. Downloaded scratch evidence must not be relabeled release evidence. This worker did not open a browser or claim visual acceptance. Re-run the utility with a new output path on authored rigged derivatives when available; the static sources cannot prove native skin/clip preservation on real authored rigs. The mixed-buffer skin/channel regressions are instrumentation coverage only.
+
+Revision 1 outputs/provenance are withdrawn: their normal filter quantized each channel before normalization, allowing a cancelling X/Y signal to rotate toward the wrong direction. Revision 2 keeps float components until normalization; the cancellation regression now encodes `(128,128,255)` and measures less than 0.5° deviation from +Z. The color-routing regression checks KHR diffuse-transmission color versus linear data and rejects unknown slots. The skin fixture has real JOINTS_0/WEIGHTS_0 influence bytes, two inverse binds and two animated joints; five source/derivative samples match independently expected deformed vertex positions, and changed influence weights change sampled deformation. Eleven behavior regressions include dangling-provenance refusal and actual POSIX file-size-limit publication rollback; they cover instrumentation, not acceptance of either static candidate. After the publication fix, both native outputs were re-derived byte-identically and provenance was refreshed to the measured current utility hash.
+
+Q03 remains open: these frozen high-poly artifacts are far above the initial 25–45k-triangle allocation, are not LODs, and prove no LOD, culling, locked-hardware profiling, visual/rig quality or performance gate. Both canonical and runtime manifests remain unchanged; modelReady is false and productionAcceptance is NOT_ESTABLISHED.
+
