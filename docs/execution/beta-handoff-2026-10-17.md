@@ -78,3 +78,13 @@ Both generic GitHub SSH and the configured personal SSH alias rejected public-ke
 5. After publication, retain the VFX proposal without implementing it. Resume only the user's next approved task; use this handoff, feature docs and actual evidence instead of machine-local sessions.
 
 No workers were dispatched for this handoff/publication task. Request/token counters are unavailable and are not asserted to be zero.
+
+## Subsequent merge and deployment check
+
+After publication, the user explicitly requested merging the beta and checking whether the repository is sufficient to deploy and play. That authorizes a PR merge into `main`; the no-merge boundary above describes the earlier snapshot request.
+
+The published branch `2caa8d8` was two commits ahead of `main` (`7f64a9e`) with no commits behind. Its [CI run 39005827499](https://github.com/img2threejs/wild-crown/actions/runs/39005827499) reported success, but the downloaded build artifact contained **91 GLB paths and all 91 were Git LFS pointer text, not GLB binaries**. The 14,226,380-byte ZIP artifact was therefore not a playable deployment despite its green build result. This is distinct from the earlier workstation build, whose LFS assets were already materialized.
+
+Root cause: both workflow checkout steps omitted LFS hydration. The corrective change adds `with: lfs: true` to ordinary CI and strict release checkout, and documents Git LFS plus complete root-hosted `dist/` deployment in README. It does not weaken release gates, change gameplay or implement the VFX proposal.
+
+A fresh isolated clone is used for deployment verification, without copying this worktree's dependencies or excluded raw assets. Actual clean-build/browser and corrected-CI artifact results must be attached to the PR before merge; do not interpret the workflow edit alone as passing deployment proof. No production hosting site is created by merging or by the existing artifact-only workflows.

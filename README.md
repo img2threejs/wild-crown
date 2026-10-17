@@ -25,6 +25,22 @@ bun run dev
 
 Vite serves `http://127.0.0.1:5173/` with a strict port. If it is already running, use that server rather than starting another. For installation pinned to the existing npm lockfile, use `npm ci` instead of `bun install`; the same package scripts also work with `npm run`.
 
+Git LFS is required for native models and image assets. After cloning, run `git lfs pull` before development or building; an LFS pointer is not a model even if Vite copies it successfully. CI checks out LFS content explicitly.
+
+### Deploy the playable beta
+
+Use Node 22 and Git LFS in the build environment:
+
+```sh
+git lfs pull
+npm ci
+npm run build
+```
+
+Publish the **entire `dist/` directory** at the root of a static HTTPS site, including `asset-source/`, `assets/`, `audio/` and `ui/`. The game has no required application backend; campaign saves remain browser-local and origin-specific. Serve `.glb` files as binary model files, not SPA fallback HTML or Git LFS pointers. A project subpath such as `/wild-crown/` is not supported by the current `base: '/'` configuration.
+
+The CI build artifact is a playable **candidate beta**, not a strict release artifact. GitHub workflows build/upload artifacts but do not deploy a live site. The strict release workflow remains gated on asset acceptance and measured release evidence.
+
 | URL | Purpose |
 |---|---|
 | `http://127.0.0.1:5173/` | Beta Title/New Game/Continue/Load Game; candidate story chapters with isolated browser saves and a not-release-verified banner. |
