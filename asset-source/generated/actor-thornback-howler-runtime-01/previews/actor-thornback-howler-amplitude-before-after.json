@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-thornback-howler",
+  "description": "Motion amplitude per attack-relevant slot, measured from the GLB animations against the idle clip first frame (scripts: throwaway /tmp measurement, units: BH = body heights of the model bounds). before = outputs prior to the MonsterUpgrade slice; after = current runtime GLB.",
+  "metrics": {
+    "top5RotDeg": "mean of the five largest per-joint peak rotation deltas from idle, degrees",
+    "peakRotDeg": "largest single joint rotation delta from idle, degrees",
+    "headEnvelopeBH": "extent of the head-tip path relative to the in-place anchor bone (forward/lateral/up ranges combined)",
+    "limbTipSweepBH": "largest wing/hand tip displacement from its idle position (winged / biped rigs)",
+    "headSpeedBHPerS": "peak head-tip speed",
+    "rootTravelBH": "largest Root translation from idle",
+    "tailArcDeg": "peak-to-peak bearing swing of the tail tip around its root",
+    "tailTipPeakSpeedBHPerS": "peak tail-tip speed"
+  },
+  "slots": {
+    "monster-slash": {
+      "usedBy": "howler-branch-sweep",
+      "top5RotDeg": {
+        "before": 109.5,
+        "after": 109.5
+      },
+      "peakRotDeg": {
+        "before": 131.2,
+        "after": 131.2
+      },
+      "headEnvelopeBH": {
+        "before": 0.512,
+        "after": 0.512
+      },
+      "limbTipSweepBH": {
+        "before": 1.006,
+        "after": 1.006
+      },
+      "headSpeedBHPerS": {
+        "before": 5.47,
+        "after": 5.47
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "monster-shoot": {
+      "usedBy": "howler-rock-hurl",
+      "top5RotDeg": {
+        "before": 115.2,
+        "after": 115.2
+      },
+      "peakRotDeg": {
+        "before": 135.4,
+        "after": 135.4
+      },
+      "headEnvelopeBH": {
+        "before": 0.684,
+        "after": 0.684
+      },
+      "limbTipSweepBH": {
+        "before": 1.048,
+        "after": 1.048
+      },
+      "headSpeedBHPerS": {
+        "before": 6.23,
+        "after": 6.23
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "monster-jump": {
+      "usedBy": "howler-leap-slam",
+      "top5RotDeg": {
+        "before": 102.3,
+        "after": 102.3
+      },
+      "peakRotDeg": {
+        "before": 125.1,
+        "after": 125.1
+      },
+      "headEnvelopeBH": {
+        "before": 0.301,
+        "after": 0.301
+      },
+      "limbTipSweepBH": {
+        "before": 0.999,
+        "after": 0.999
+      },
+      "headSpeedBHPerS": {
+        "before": 5.59,
+        "after": 5.59
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "monster-dive": {
+      "usedBy": "-",
+      "top5RotDeg": {
+        "before": 81.3,
+        "after": 81.3
+      },
+      "peakRotDeg": {
+        "before": 117.7,
+        "after": 117.7
+      },
+      "headEnvelopeBH": {
+        "before": 0.35,
+        "after": 0.35
+      },
+      "limbTipSweepBH": {
+        "before": 0.382,
+        "after": 0.382
+      },
+      "headSpeedBHPerS": {
+        "before": 6.26,
+        "after": 6.26
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "monster-roar": {
+      "usedBy": "roar pause",
+      "top5RotDeg": {
+        "before": 77.4,
+        "after": 77.4
+      },
+      "peakRotDeg": {
+        "before": 123.2,
+        "after": 123.2
+      },
+      "headEnvelopeBH": {
+        "before": 0.082,
+        "after": 0.082
+      },
+      "limbTipSweepBH": {
+        "before": 0.549,
+        "after": 0.549
+      },
+      "headSpeedBHPerS": {
+        "before": 0.59,
+        "after": 0.59
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "monster-hurt": {
+      "usedBy": "stagger/downed/weak-point",
+      "top5RotDeg": {
+        "before": 87.9,
+        "after": 87.8
+      },
+      "peakRotDeg": {
+        "before": 142.5,
+        "after": 142.5
+      },
+      "headEnvelopeBH": {
+        "before": 0.059,
+        "after": 0.083
+      },
+      "limbTipSweepBH": {
+        "before": 0.49,
+        "after": 0.49
+      },
+      "headSpeedBHPerS": {
+        "before": 0.9,
+        "after": 1.04
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      }
+    }
+  }
+}

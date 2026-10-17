@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T21:51:08.744Z",
+  "status": "bounded-native-smoke-not-release-acceptance",
+  "hardware": {
+    "chip_type": "Apple M1",
+    "machine_model": "MacBookPro17,1",
+    "number_processors": "proc 8:4:4",
+    "physical_memory": "16 GB"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "platform": "MacIntel",
+    "webgl2": true,
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "viewport": [
+      1200,
+      688
+    ],
+    "devicePixelRatio": 1.25,
+    "connectedGamepads": []
+  },
+  "method": [
+    "Actual native GLB scenes, real application settings UI, IndexedDB and keyboard input.",
+    "Grove dodge samples are live; Greenwake telegraph comparisons pause the real simulation at an observed enemy windup to preserve geometry and timing.",
+    "Aim comparisons restore one captured native combat state and cast through the real L binding.",
+    "Logical gamepad remapping uses a controlled navigator.getGamepads input, not a physical controller."
+  ],
+  "dodge": {
+    "wideBlurOff": {
+      "settings": {
+        "wide": "wide",
+        "blur": false
+      },
+      "actions": [
+        "idle",
+        "forward_right_dive_roll"
+      ],
+      "dodgeRows": [
+        {
+          "tick": 2762,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2763,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2764,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2765,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2767,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2768,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2769,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2770,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2771,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2772,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2774,
+          "action": "forward_right_dive_roll",
+          "phase": "active",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2775,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2776,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2777,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2779,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2780,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2781,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2783,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2784,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        },
+        {
+          "tick": 2785,
+          "action": "forward_right_dive_roll",
+          "phase": "recovery",
+          "span": 14,
+          "ghosts": 0
+        }
+      ],
+      "maxGhosts": 0,
+      "animationIssues": []
+    },
+    "standardBlurOn": {
+      "settings": {
+        "window": "standard",
+        "blur": true,
+        "reducedMotion": false
+      },
+      "actions": [
+        "forward_right_dive_roll",
+        "idle"
+      ],
+      "dodgeSpans": [
+        10
+      ],
+      "maxGhosts": 4,
+      "animationIssues": []
+    },
+    "reducedMotion": {
+      "settings": {
+        "window": "standard",
+        "blur": true,
+        "reducedMotion": true
+      },
+      "actions": [
+        "forward_right_dive_roll",
+        "idle"
+      ],
+      "dodgeSpans": [
+        10
+      ],
+      "maxGhosts": 0,
+      "animationIssues": []
+    }
+  },
+  "cameraShake": {
+    "reduced": {
+      "scale": 0.25,
+      "magnitude": 0.09219465579015515
+    },
+    "full": {
+      "scale": 1,
+      "magnitude": 0.3687786231606206
+    },
+    "reducedAgain": {
+      "scale": 0.25,
+      "magnitude": 0.09219465579015515
+    }
+  },
+  "telegraph": {
+    "high": {
+      "setting": "high",
+      "telegraphs": [
+        {
+          "id": "corrupted-boar:boar-charge:3729",
+          "attackId": "boar-charge",
+          "sourceId": "corrupted-boar",
+          "targetPosition": {
+            "x": 1.4818396056163268,
+            "y": 0,
+            "z": -4.4979370929337925
+          },
+          "phase": "windup",
+          "remainingTicks": 35,
+          "targetActorId": "aren"
+        }
+      ],
+      "slots": [
+        {
+          "name": "vfx-ground-surface",
+          "mode": 0,
+          "tell": 0.4,
+          "progress": 0.454320987654321,
+          "alpha": 1,
+          "bounds": [
+            -1.15,
+            1.15,
+            -4.5,
+            4.5
+          ]
+        }
+      ],
+      "ring": {
+        "hidden": false,
+        "contrast": "true"
+      }
+    },
+    "standard": {
+      "setting": "standard",
+      "telegraphs": [
+        {
+          "id": "corrupted-boar:boar-charge:3729",
+          "attackId": "boar-charge",
+          "sourceId": "corrupted-boar",
+          "targetPosition": {
+            "x": 1.4818396056163268,
+            "y": 0,
+            "z": -4.4979370929337925
+          },
+          "phase": "windup",
+          "remainingTicks": 35,
+          "targetActorId": "aren"
+        }
+      ],
+      "slots": [
+        {
+          "name": "vfx-ground-surface",
+          "mode": 0,
+          "tell": 0,
+          "progress": 0.454320987654321,
+          "alpha": 1,
+          "bounds": [
+            -1.15,
+            1.15,
+            -4.5,
+            4.5
+          ]
+        }
+      ],
+      "ring": {
+        "hidden": false,
+        "contrast": "false"
+      }
+    }
+  },
+  "offscreenWarnings": [
+    {
+      "strength": "low",
+      "width": "28px",
+      "opacity": "0.55",
+      "transform": "translate(304px, 483.095px) translate(-50%, -50%) rotate(123.827deg)"
+    },
+    {
+      "strength": "standard",
+      "width": "38px",
+      "opacity": "0.85",
+      "transform": "translate(304px, 483.095px) translate(-50%, -50%) rotate(123.827deg)"
+    },
+    {
+      "strength": "high",
+      "width": "50px",
+      "opacity": "1",
+      "transform": "translate(304px, 483.095px) translate(-50%, -50%) rotate(123.827deg)"
+    }
+  ],
+  "lock": {
+    "hold": {
+      "mode": "hold",
+      "assist": "off",
+      "target": "corrupted-boar",
+      "lockStatus": "explicit",
+      "ringHidden": true,
+      "player": {
+        "x": -12.088538820635836,
+        "y": 0,
+        "z": -8.945320653710468
+      }
+    },
+    "release": {
+      "ringHidden": true
+    },
+    "toggleFirstTap": {
+      "target": "corrupted-boar",
+      "status": "explicit"
+    },
+    "toggleSecondTap": {}
+  },
+  "aimAssist": [
+    {
+      "assist": "off",
+      "projectile": {
+        "id": "sigil-bolt:2",
+        "kind": "sigil-bolt",
+        "ownerId": "aren",
+        "position": {
+          "x": -3.961290674291357,
+          "y": 1.25,
+          "z": -4.8573589861060595
+        },
+        "direction": {
+          "x": -0.1787841126460408,
+          "y": 0,
+          "z": 0.9838883275379212
+        },
+        "speed": 28,
+        "radius": 0.35,
+        "ageTicks": 0,
+        "lifeTicks": 60,
+        "damage": 14,
+        "hitIds": []
+      }
+    },
+    {
+      "assist": "subtle",
+      "projectile": {
+        "id": "sigil-bolt:2",
+        "kind": "sigil-bolt",
+        "ownerId": "aren",
+        "position": {
+          "x": -3.977580533729035,
+          "y": 1.25,
+          "z": -4.845723372222004
+        },
+        "direction": {
+          "x": -0.1787841126460408,
+          "y": 0,
+          "z": 0.9838883275379212
+        },
+        "speed": 28,
+        "radius": 0.35,
+        "ageTicks": 0,
+        "lifeTicks": 60,
+        "damage": 14,
+        "hitIds": []
+      }
+    },
+    {
+      "assist": "strong",
+      "projectile": {
+        "id": "sigil-bolt:2",
+        "kind": "sigil-bolt",
+        "ownerId": "aren",
+        "position": {
+          "x": -2.9479552992538456,
+          "y": 1.25,
+          "z": -5.492001138615256
+        },
+        "direction": {
+          "x": 0.9636996102765186,
+          "y": 0.007752709741512492,
+          "z": 0.26687629464707036
+        },
+        "speed": 28,
+        "radius": 0.35,
+        "ageTicks": 0,
+        "lifeTicks": 60,
+        "damage": 14,
+        "targetId": "corrupted-boar",
+        "hitIds": []
+      }
+    }
+  ],
+  "logicalGamepadRemap": {
+    "active": "Gamepad Button 15",
+    "persisted": "Gamepad Button 15",
+    "field": "Gamepad Button 15"
+  },
+  "persistence": {
+    "beforeReload": {
+      "settings": {
+        "masterVolume": 1,
+        "musicVolume": 0.8,
+        "effectsVolume": 1,
+        "ambienceVolume": 0.7,
+        "dialogueVolume": 1,
+        "subtitles": true,
+        "echoSubtitles": true,
+        "subtitleSize": "medium",
+        "subtitleBackground": "translucent",
+        "subtitleSpeakerLabels": true,
+        "reducedMotion": true,
+        "motionBlur": true,
+        "reducedCameraShake": true,
+        "telegraphIntensity": "high",
+        "offscreenWarningStrength": "high",
+        "highContrastTarget": true,
+        "autoTargetAssist": "strong",
+        "perfectDodgeWindow": "standard",
+        "lockOnMode": "toggle",
+        "controlGlyphs": "keyboard-mouse",
+        "gamepadDeadzone": 0.18
+      },
+      "persisted": {
+        "masterVolume": 1,
+        "musicVolume": 0.8,
+        "effectsVolume": 1,
+        "ambienceVolume": 0.7,
+        "dialogueVolume": 1,
+        "subtitles": true,
+        "echoSubtitles": true,
+        "subtitleSize": "medium",
+        "subtitleBackground": "translucent",
+        "subtitleSpeakerLabels": true,
+        "reducedMotion": true,
+        "motionBlur": true,
+        "reducedCameraShake": true,
+        "telegraphIntensity": "high",
+        "offscreenWarningStrength": "high",
+        "highContrastTarget": true,
+        "autoTargetAssist": "strong",
+        "perfectDodgeWindow": "standard",
+        "lockOnMode": "toggle",
+        "controlGlyphs": "keyboard-mouse",
+        "gamepadDeadzone": 0.18
+      },
+      "bindings": {
+        "keyboard": {
+          "moveForward": "w",
+          "moveBack": "s",
+          "moveLeft": "a",
+          "moveRight": "d",
+          "dodge": "f",
+          "jump": "space",
+          "sprint": "shift",
+          "light": "j",
+          "heavy": "k",
+          "ranged": "l",
+          "ultimate": "u",
+          "interact": "e",
+          "ability": "q",
+          "map": "m",
+          "journal": "tab",
+          "companions": "c",
+          "pause": "escape",
+          "commandWheel": "r",
+          "lockOn": "t"
+        },
+        "gamepad": {
+          "dodge": "Gamepad Button 1",
+          "ability": "Gamepad Button 2",
+          "light": "Gamepad Button 3",
+          "interact": "Gamepad Button 4",
+          "map": "Gamepad Button 5",
+          "heavy": "Gamepad Button 6",
+          "ranged": "Gamepad Button 12",
+          "ultimate": "Gamepad Button 11",
+          "commandWheel": "Gamepad Button 7",
+          "journal": "Gamepad Button 8",
+          "companions": "Gamepad Button 9",
+          "pause": "Gamepad Button 10",
+          "jump": "Gamepad Button 13",
+          "sprint": "Gamepad Button 14",
+          "lockOn": "Gamepad Button 16"
+        }
+      }
+    },
+    "afterReload": {
+      "settings": {
+        "masterVolume": 1,
+        "musicVolume": 0.8,
+        "effectsVolume": 1,
+        "ambienceVolume": 0.7,
+        "dialogueVolume": 1,
+        "subtitles": true,
+        "echoSubtitles": true,
+        "subtitleSize": "medium",
+        "subtitleBackground": "translucent",
+        "subtitleSpeakerLabels": true,
+        "reducedMotion": true,
+        "motionBlur": true,
+        "reducedCameraShake": true,
+        "telegraphIntensity": "high",
+        "offscreenWarningStrength": "high",
+        "highContrastTarget": true,
+        "autoTargetAssist": "strong",
+        "perfectDodgeWindow": "standard",
+        "lockOnMode": "toggle",
+        "controlGlyphs": "keyboard-mouse",
+        "gamepadDeadzone": 0.18
+      },
+      "bindings": {
+        "keyboard": {
+          "moveForward": "w",
+          "moveBack": "s",
+          "moveLeft": "a",
+          "moveRight": "d",
+          "dodge": "f",
+          "jump": "space",
+          "sprint": "shift",
+          "light": "j",
+          "heavy": "k",
+          "ranged": "l",
+          "ultimate": "u",
+          "interact": "e",
+          "ability": "q",
+          "map": "m",
+          "journal": "tab",
+          "companions": "c",
+          "pause": "escape",
+          "commandWheel": "r",
+          "lockOn": "t"
+        },
+        "gamepad": {
+          "dodge": "Gamepad Button 1",
+          "ability": "Gamepad Button 2",
+          "light": "Gamepad Button 3",
+          "interact": "Gamepad Button 4",
+          "map": "Gamepad Button 5",
+          "heavy": "Gamepad Button 6",
+          "ranged": "Gamepad Button 12",
+          "ultimate": "Gamepad Button 11",
+          "commandWheel": "Gamepad Button 7",
+          "journal": "Gamepad Button 8",
+          "companions": "Gamepad Button 9",
+          "pause": "Gamepad Button 10",
+          "jump": "Gamepad Button 13",
+          "sprint": "Gamepad Button 14",
+          "lockOn": "Gamepad Button 16"
+        }
+      },
+      "combat": {
+        "autoTargetAssist": "strong",
+        "perfectDodgeWindow": "standard",
+        "lockOnMode": "toggle"
+      }
+    }
+  },
+  "ui": {
+    "desktop": {
+      "viewport": [
+        1200,
+        688
+      ],
+      "horizontalOverflow": false,
+      "focus": {
+        "tag": "SELECT",
+        "name": "Telegraph Intensity",
+        "outline": "rgb(240, 215, 142) solid 3px"
+      },
+      "switches": [
+        {
+          "label": "Subtitles",
+          "state": "true"
+        },
+        {
+          "label": "Echo Sense Subtitles",
+          "state": "true"
+        },
+        {
+          "label": "Speaker Labels",
+          "state": "true"
+        },
+        {
+          "label": "Motion Blur",
+          "state": "true"
+        },
+        {
+          "label": "Reduced Motion",
+          "state": "true"
+        },
+        {
+          "label": "Reduced Camera Shake",
+          "state": "true"
+        },
+        {
+          "label": "High-Contrast Target Ring",
+          "state": "true"
+        }
+      ]
+    },
+    "narrow": {
+      "viewport": [
+        360,
+        800
+      ],
+      "horizontalOverflow": false,
+      "lockModeBox": {
+        "left": 190,
+        "right": 330,
+        "top": 279.359375,
+        "bottom": 315.359375
+      }
+    },
+    "narrowCommandBefore": {
+      "button": {
+        "top": 678.609375,
+        "bottom": 708,
+        "left": 242.203125,
+        "right": 354.25
+      },
+      "skills": {
+        "top": 685.90625,
+        "bottom": 768,
+        "left": 12,
+        "right": 348
+      },
+      "overlap": true
+    },
+    "narrowCommandAfter": {
+      ".wc-skill-bar": false,
+      ".wc-party-hud": false
+    },
+    "primaryContrast": {
+      "normal": 6.999701262320418,
+      "hover": 9.95316333944075
+    },
+    "detector": {
+      "exitCode": 2,
+      "finding": "game-ui.css .wc-error semantic danger border",
+      "disposition": "Retained existing error-state distinction; not a decorative card accent."
+    }
+  },
+  "console": {
+    "afterSequence": 449,
+    "pageErrors": [],
+    "requestFailures": [
+      {
+        "seq": 558,
+        "ts": 1792013589548,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 559,
+        "ts": 1792013589550,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 560,
+        "ts": 1792013589550,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 566,
+        "ts": 1792013975463,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 567,
+        "ts": 1792013975469,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 568,
+        "ts": 1792013975470,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 569,
+        "ts": 1792013975540,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 572,
+        "ts": 1792014044200,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 573,
+        "ts": 1792014044213,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 576,
+        "ts": 1792014190084,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/title.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/title.ogg"
+      }
+    ]
+  },
+  "screenshots": [
+    "asset-source/generated/accessibility-native-settings-desktop.webp",
+    "asset-source/generated/accessibility-native-settings-narrow.webp",
+    "asset-source/generated/accessibility-native-telegraph-high.webp",
+    "asset-source/generated/accessibility-native-telegraph-standard.webp",
+    "asset-source/generated/accessibility-native-warning-narrow.webp",
+    "asset-source/generated/accessibility-native-pause.webp"
+  ],
+  "limitations": [
+    "No physical gamepad connected.",
+    "Not the committed reference hardware/browser/viewport.",
+    "Candidate assets remain blocked; no release acceptance or full uninterrupted playthrough is claimed."
+  ]
+}

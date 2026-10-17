@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "taskId": "db7ced9a-59c7-413b-a8f0-e5fe80cbef60",
+  "type": "text_to_model",
+  "model": "v3.1-20260211",
+  "creditsConsumed": 30,
+  "outputHash": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b",
+  "output": "model.glb",
+  "evidenceStatus": "blocked"
+}

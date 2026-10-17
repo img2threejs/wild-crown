@@ -29,7 +29,7 @@ export class ScreenSpaceLOD {
     this.select(0);
   }
 
-  update(camera: Camera, cameraTarget: Vector3, viewportHeight: number): void {
+  update(camera: Camera, cameraTarget: Vector3, viewportHeight: number, dt: number = 0): void {
     if (this.disposed || viewportHeight <= 0) return;
     const perspective = camera as PerspectiveCamera;
     let nearestDistance = Infinity;
@@ -49,7 +49,10 @@ export class ScreenSpaceLOD {
       if (this.projectedHeightPixels <= threshold * (1 + this.policy.hysteresisRatio)) break;
       this.select(this.selectedLevel - 1);
     }
-    for (const level of this.levels) level.updateOcclusion(camera, cameraTarget);
+    for (const level of this.levels) {
+      level.updateOcclusion(camera, cameraTarget, dt);
+      level.advanceFade();
+    }
   }
 
   get debugState(): ScreenSpaceLODDebugState {

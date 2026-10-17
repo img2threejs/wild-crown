@@ -1,0 +1,19 @@
+{
+  "task_id": "a20197a3-9e55-4762-a43b-1876a831779c",
+  "type": "image_to_image",
+  "status": "success",
+  "input": {
+    "prompt": "Create a new wide, pulled-back studio view of this same two-hut Greenwake village compound. Preserve the two distinct ochre-and-moss huts, their broad grouped leaf roofs, timber supports, and the short connecting walkway. Correct the framing: show both whole huts from every roof edge to all support feet, the complete walkway, and all ground-contact bases; center the entire compound at 45 percent of the square canvas with generous neutral-gray empty margin on every side. The current close crop is wrong; do not crop any roof, wall, platform or post. Keep the original stylized cinematic game-art shapes and restrained moderate detail, neutral soft lighting, plain background. Do not add huts, trees, characters, fences, text, logos, particles, or pedestal.",
+    "model_version": "seedream_v5"
+  },
+  "output_fields": [
+    "generated_image_url"
+  ],
+  "credits_consumed": 5,
+  "created_at": "2026-10-06T02:59:19.865278Z",
+  "completed_at": "2026-10-06T02:59:58.995135Z",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-koro",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "ceb9083c-8430-4eda-ba67-141423ea9bb8",
+    "decimate": "97d05b0f-cef9-4d88-a85d-d2933e4f202f",
+    "rig": "4f67bf43-fda9-4f9d-96dd-7ae31f5f31cd",
+    "animA": "e17c7257-3fd9-4065-b620-94fb83674254"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": 0.8,
+    "maxError": 0.01,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-koro-anim-a-01/tripo-out/actor-koro-anim-a-01-e17c7257/model.glb",
+      "sha256": "5e9e6fea72473af2fb4fb0979d9e8fa0e5dcf02cbe80a3a9a1f0c78951d6d85a"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-koro-runtime-01/actor-koro.glb",
+    "sha256": "4f8c5dc4e2afc2ced5d1a5902d27e2e35c436da52c50a7c21908eecb7ba3e693",
+    "bytes": 6899600,
+    "vertices": 26799,
+    "triangles": 18903,
+    "boundsMin": [
+      -0.28032,
+      0,
+      -0.48864
+    ],
+    "boundsMax": [
+      0.28032,
+      0.91393,
+      0.48864
+    ]
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 123
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 123
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3008819,
+      "toBytes": 1179316
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4916053,
+      "toBytes": 1735402
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18521817,
+      "toBytes": 1952196
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 23631,
+      "trianglesAfter": 18903,
+      "relativeError": 0.0011443806579336524
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

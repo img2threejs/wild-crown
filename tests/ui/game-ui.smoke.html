@@ -29,7 +29,7 @@
       loading: { active: false, label: '', progress: null },
       error: null,
       trackedObjectiveId: null,
-      hud: { vitality: 100, maxVitality: 100, dodgeCharges: 2, maxDodgeCharges: 2, instinct: 20, boss: undefined, targetId: target.id, target: { ...target, weakPointExposed: exposed } },
+      hud: { vitality: 100, maxVitality: 100, mana: 100, maxMana: 100, skills: [], instinct: 20, boss: undefined, targetId: target.id, target: { ...target, weakPointExposed: exposed } },
       campaign: null,
       journal: { quests: [], region: null },
       map: { currentRegion: null, regions: [] },
@@ -40,6 +40,7 @@
       bindings: { keyboard: {}, gamepad: {} },
       saves: { slots: [], continueSlotId: null },
       dialogue: null,
+      dialogueLineIndex: 0,
       choice: null,
       ending: null,
     });

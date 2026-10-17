@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-black-sap-filter-drum",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "87f6085b-64e2-41f4-bc17-46e5830d21a5",
+    "decimate": "03a583fb-34e7-4540-b88a-61bb18899314"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.4,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-black-sap-filter-drum-decimate-01/tripo-out/prop-black-sap-filter-drum-decim-03a583fb/model.glb",
+      "sha256": "03be29285b30ff4280dfaf0af65a9bc40245108612228186013f98ddbe65deb6"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-black-sap-filter-drum-runtime-01/prop-black-sap-filter-drum.glb",
+    "sha256": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb",
+    "bytes": 1778764,
+    "vertices": 7303,
+    "triangles": 4439,
+    "boundsMin": [
+      -0.39534,
+      -0.48949,
+      -0.48924
+    ],
+    "boundsMax": [
+      0.38973,
+      0.48706,
+      0.48923
+    ],
+    "worldBoundsMin": [
+      -0.39534,
+      -0.48949,
+      -0.48924
+    ],
+    "worldBoundsMax": [
+      0.38973,
+      0.48706,
+      0.48923
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3993531,
+      "toBytes": 501847
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5314222,
+      "toBytes": 517456
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 15391232,
+      "toBytes": 470436
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 11160,
+      "trianglesAfter": 4464,
+      "relativeError": 0.00588580034673214
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 11436,
+      "trianglesAfter": 11416,
+      "removed": 20,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 11416,
+      "trianglesAfter": 11160,
+      "removed": 256
+    },
+    {
+      "trianglesBefore": 4464,
+      "trianglesAfter": 4439,
+      "removed": 25
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 17114,
+      "verticesAfter": 7303
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

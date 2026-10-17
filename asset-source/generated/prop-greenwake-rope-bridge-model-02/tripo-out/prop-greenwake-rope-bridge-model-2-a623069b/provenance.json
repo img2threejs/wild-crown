@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-rope-bridge",
+  "candidateNumber": 2,
+  "candidateCount": 3,
+  "selection": "AI-candidate visual review only: the actual loaded model has an elongated narrow span, four end posts, a plank walkway and two rope rails. Retained as the source for a lower-poly candidate; not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/prop-greenwake-rope-bridge-concept-04/tripo-out/prop-greenwake-rope-bridge-conce-4-1dbe048c/generated_image.png",
+    "sha256": "bd7eb1081179c21858e39e38667e02eaaa9b10ce52f11adf869cae735712ad1b"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.front_view.jpeg",
+      "sha256": "50d59009bab26e46c5d63daf7776029be0db2c77c51ca685bf78ce01d9e55085"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.left_view.jpeg",
+      "sha256": "a5d3b1c8b357e74669606e5cf93626f698a8174cabcee741a5ced06fe523dd1c"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.back_view.jpeg",
+      "sha256": "005ccfe57b386c4c01fe2252d45b268a5751f5f9a64e4e85993cbe28d9cd4ed9"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/prop-greenwake-rope-bridge-multiview-02/tripo-out/prop-greenwake-rope-bridge-multi-2-873f1a55/generate_multiview_image.right_view.jpeg",
+      "sha256": "7469fb94079d15a718ae018a1696758f82c5abcd74056fd64cbecef5923aa60e"
+    }
+  ],
+  "taskId": "a623069b-b3e7-49a4-9c3e-670b9e3f5ad7",
+  "generationTasks": [
+    {
+      "taskId": "2af983e4-b639-4dc8-a968-1cb955c28ef3",
+      "type": "text_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "First bridge concept; cropped supports and incorrect geometry after model generation."
+    },
+    {
+      "taskId": "96813ce9-62f2-4b78-8df6-00ff4c7098c6",
+      "type": "image_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Pulled-back concept still clipped the lower supports."
+    },
+    {
+      "taskId": "9aaf9f3a-93aa-4fd5-a53a-2787a5f141d2",
+      "type": "image_to_image",
+      "status": "success",
+      "creditsConsumed": 5,
+      "selection": "Complete but square-platform concept; its model output was rejected."
+    },
+    {
+      "taskId": "c694962a-a168-4ff7-94e8-67e0bd02b219",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "Input for rejected square-platform candidate."
+    },
+    {
+      "taskId": "6a8545bf-f5ec-4695-bebe-86aa0d19788d",
+      "type": "multiview_to_model",
+      "status": "success",
+      "creditsConsumed": 60,
+      "selection": "Rejected: model became a square platform."
+    },
+    {
+      "taskId": "1dbe048c-adc4-4947-9138-d78900f96aca",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Selected elongated, complete bridge concept with visible support feet."
+    },
+    {
+      "taskId": "873f1a55-6d28-4b6e-b5a4-8b03fd590f46",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four narrow-span views were inspected and used."
+    },
+    {
+      "taskId": "a623069b-b3e7-49a4-9c3e-670b9e3f5ad7",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 160,
+  "output": {
+    "path": "model.glb",
+    "sha256": "54947d9442a1b4a1b908e8c9b7fe5e1eccc0626be5175523a57afcc520151c11",
+    "bytes": 63596908,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 989210,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The 989,210-vertex source is far beyond a real-time asset budget without optimization.",
+      "Actual game-scale measurements, collision/traversal proxy, anchor placement, and environment/runtime parity are absent.",
+      "Asset-lab GLTFLoader success is not production acceptance or traversal evidence."
+    ]
+  }
+}

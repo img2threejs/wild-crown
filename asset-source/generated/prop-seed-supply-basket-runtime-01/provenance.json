@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-seed-supply-basket",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "8e67c5ba-5683-4699-bd00-6a39e2a4bd95",
+    "decimate": "a5fa06a3-c2bf-4fc7-8e34-092be77f4246"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 1024
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-seed-supply-basket-decimate-01/tripo-out/prop-seed-supply-basket-decimate-a5fa06a3/model.glb",
+      "sha256": "a7825395b1458935400a745ed60a678ae0b34ece69be3414ae6cd1a0b207f1c1"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-seed-supply-basket-runtime-01/prop-seed-supply-basket.glb",
+    "sha256": "93ce0dbcc3518de68d61bfff8ff9c40998759d0d36963ffcc32eebabe175fdd5",
+    "bytes": 2082900,
+    "vertices": 7201,
+    "triangles": 4470,
+    "boundsMin": [
+      -0.44187,
+      -0.44362,
+      -0.48776
+    ],
+    "boundsMax": [
+      0.4436,
+      0.29045,
+      0.48971
+    ],
+    "worldBoundsMin": [
+      -0.44187,
+      -0.44362,
+      -0.48776
+    ],
+    "worldBoundsMax": [
+      0.4436,
+      0.29045,
+      0.48971
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4712704,
+      "toBytes": 563492
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6438726,
+      "toBytes": 614478
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18447462,
+      "toBytes": 645661
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

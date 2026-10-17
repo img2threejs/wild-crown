@@ -1,0 +1,13 @@
+{
+  "task_id": "4050559b-70ff-4ff1-be8b-3f1f0f63a1b9",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-ember-boar-anim-a-01/tripo-out/actor-ember-boar-anim-a-01-2-4050559b",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-ember-boar-anim-a-01/tripo-out/actor-ember-boar-anim-a-01-2-4050559b/model.glb",
+  "started": "2026-10-10T11:32:31.370Z",
+  "finished": "2026-10-10T11:32:50.691Z"
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "4a450b7f-daa0-4a07-9a09-cc1d5e2d5060",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-mire-bank-rock-decimate-01/tripo-out/prop-mire-bank-rock-decimate-01-4a450b7f",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-mire-bank-rock-decimate-01/tripo-out/prop-mire-bank-rock-decimate-01-4a450b7f/model.glb",
+  "preview": "asset-source/generated/prop-mire-bank-rock-decimate-01/tripo-out/prop-mire-bank-rock-decimate-01-4a450b7f/preview.png",
+  "started": "2026-10-11T08:51:25.544Z",
+  "finished": "2026-10-11T08:55:14.181Z"
+}

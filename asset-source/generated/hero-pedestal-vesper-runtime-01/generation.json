@@ -1,0 +1,9 @@
+{
+  "taskId": "c7ea5ad4-e172-413b-b715-5b55725404dd",
+  "status": "success",
+  "type": "image_to_model",
+  "model": "v3.1-20260211",
+  "creditsConsumed": 60,
+  "conceptTaskId": "b2fbf375-93cf-4ded-888f-2f20acdfd1bb",
+  "modelFile": "asset-source/generated/hero-pedestal-vesper-runtime-01/tripo-out/tripo-out/hero-pedestal-vesper-model-01-c7ea5ad4/model.glb"
+}

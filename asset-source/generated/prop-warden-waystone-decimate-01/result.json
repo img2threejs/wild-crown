@@ -1,0 +1,16 @@
+{
+  "task_id": "b665e071-0cd0-4b56-a4e9-4d910218fdc7",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-warden-waystone-decimate-01/tripo-out/prop-warden-waystone-decimate-01-b665e071",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-warden-waystone-decimate-01/tripo-out/prop-warden-waystone-decimate-01-b665e071/model.glb",
+  "preview": "asset-source/generated/prop-warden-waystone-decimate-01/tripo-out/prop-warden-waystone-decimate-01-b665e071/preview.png",
+  "started": "2026-10-11T10:21:55.918Z",
+  "finished": "2026-10-11T10:27:48.401Z"
+}

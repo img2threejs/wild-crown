@@ -1,0 +1,16 @@
+{
+  "task_id": "7a4ec4b8-f6d3-45fe-85d7-cf7b87a4dae9",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-canopy-cliff-rock-decimate-01/tripo-out/prop-canopy-cliff-rock-decimate-7a4ec4b8",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-canopy-cliff-rock-decimate-01/tripo-out/prop-canopy-cliff-rock-decimate-7a4ec4b8/model.glb",
+  "preview": "asset-source/generated/prop-canopy-cliff-rock-decimate-01/tripo-out/prop-canopy-cliff-rock-decimate-7a4ec4b8/preview.png",
+  "started": "2026-10-11T03:31:57.281Z",
+  "finished": "2026-10-11T03:38:18.996Z"
+}

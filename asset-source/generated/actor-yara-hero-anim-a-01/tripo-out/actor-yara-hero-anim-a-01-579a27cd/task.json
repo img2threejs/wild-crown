@@ -1,0 +1,26 @@
+{
+  "task_id": "579a27cd-1f53-4e60-987a-7d1d01236e0b",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animations": [
+      "preset:biped:idle",
+      "preset:biped:walk",
+      "preset:biped:run",
+      "preset:biped:cast_a_spell",
+      "preset:biped:shoot"
+    ],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 50,
+  "created_at": "2026-10-11T07:06:06.307972Z",
+  "completed_at": "2026-10-11T07:06:38.910921Z",
+  "files": [
+    "model.glb"
+  ]
+}

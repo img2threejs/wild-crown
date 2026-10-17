@@ -1,0 +1,46 @@
+{
+  "assetId": "rocky_trail",
+  "name": "Rocky Trail",
+  "sourceUrl": "https://polyhaven.com/a/rocky_trail",
+  "apiUrl": "https://api.polyhaven.com/files/rocky_trail",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Amal Kumar",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 2.0,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocky_trail/rocky_trail_diff_1k.jpg",
+      "sourceSha256": "7f20d83cd4a67f9c38abf72f39f5a3749a962e90bdc156998be027b1227a5bd6",
+      "sourceBytes": 1076180,
+      "sha256": "7f20d83cd4a67f9c38abf72f39f5a3749a962e90bdc156998be027b1227a5bd6",
+      "md5": "f515d1f026fe4a022d5c182f191d60dc",
+      "bytes": 1076180
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocky_trail/rocky_trail_nor_gl_1k.jpg",
+      "sourceSha256": "087b8912c8cf40a528965c4282a5b3e4be011da5790273ffcdb5bd2697bde7dd",
+      "sourceBytes": 1398291,
+      "sha256": "087b8912c8cf40a528965c4282a5b3e4be011da5790273ffcdb5bd2697bde7dd",
+      "md5": "72db2dba30e2c1685c2c203508528a29",
+      "bytes": 1398291
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocky_trail/rocky_trail_arm_1k.jpg",
+      "sourceSha256": "4c1a5a64fad1049a9e9719a9af5f4b9d4eabef5307de81d7828f5170d0c4c172",
+      "sourceBytes": 1085984,
+      "sha256": "4c1a5a64fad1049a9e9719a9af5f4b9d4eabef5307de81d7828f5170d0c4c172",
+      "md5": "fb9fdd5a66762bfc2c0c82ccb8d34088",
+      "bytes": 1085984
+    }
+  }
+}

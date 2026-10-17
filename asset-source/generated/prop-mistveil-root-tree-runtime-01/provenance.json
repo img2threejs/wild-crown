@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-mistveil-root-tree",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "bc4f6d42-8ab1-419b-ae7b-487292b00045",
+    "decimate": "3f07a3a1-1137-44e3-829b-361b5ebf1a9b"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.28,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-mistveil-root-tree-decimate-01/tripo-out/prop-mistveil-root-tree-decimate-3f07a3a1/model.glb",
+      "sha256": "dcbb230f979ef7c395132098f6795800cd3c326473b4ec605dc44900c437c371"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-mistveil-root-tree-runtime-01/prop-mistveil-root-tree.glb",
+    "sha256": "9571b6523579882e32beb6deb0b24166acf5e1d9962d5df62014ca1452949cdd",
+    "bytes": 2491292,
+    "vertices": 11265,
+    "triangles": 7084,
+    "boundsMin": [
+      -0.43704,
+      -0.40484,
+      -0.48708
+    ],
+    "boundsMax": [
+      0.43297,
+      0.40756,
+      0.48279
+    ],
+    "worldBoundsMin": [
+      -0.43704,
+      -0.40484,
+      -0.48708
+    ],
+    "worldBoundsMax": [
+      0.43297,
+      0.40756,
+      0.48279
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 5414158,
+      "toBytes": 626239
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5465828,
+      "toBytes": 581304
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20558600,
+      "toBytes": 836189
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 25326,
+      "trianglesAfter": 7085,
+      "relativeError": 0.007433854974806309
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 25370,
+      "trianglesAfter": 25326,
+      "removed": 44,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 7085,
+      "trianglesAfter": 7084,
+      "removed": 1
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 36837,
+      "verticesAfter": 11265
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

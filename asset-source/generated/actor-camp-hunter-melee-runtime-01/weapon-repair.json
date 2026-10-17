@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-camp-hunter-melee",
+  "generator": "scripts/assets/repair-hunter-weapon-skin.mjs",
+  "reason": "The decimated trapping pole is two vertex rings; Tripo bound the butt ring to the left toe, so the pole stretched with the left foot.",
+  "input": {
+    "sha256": "6aa08eba316bac92068f84a1c0b402092443826e50df92447d26c1b943ae97a8",
+    "bytes": 8014108
+  },
+  "output": {
+    "sha256": "aec4c2dbdd709af7bf3c409b7046c36fb6db5f1554d73fd7a7ad2495054d9875",
+    "bytes": 8014108
+  },
+  "tube": {
+    "from": [
+      0.048,
+      0,
+      -0.15
+    ],
+    "to": [
+      0.094,
+      0.98,
+      -0.228
+    ],
+    "radius": 0.028,
+    "yMax": 0.5
+  },
+  "reboundTo": "mixamorig:LeftHand",
+  "verticesRebound": 80,
+  "previousDominantJoint": {
+    "mixamorig:LeftToeBase": 80
+  }
+}

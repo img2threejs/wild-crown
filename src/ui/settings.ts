@@ -1,5 +1,6 @@
 import playerCopy from '../../docs/production/content/PLAYER-COPY.en.json' with { type: 'json' };
 import type { GameSettings, GameViewModel } from '../game/contracts';
+import { DEFAULT_KEYBOARD_BINDINGS } from '../game/contracts';
 import './game-ui.css';
 import './settings.css';
 
@@ -13,7 +14,8 @@ export function settingsMarkup(viewModel: GameViewModel): string {
   const volume = (id: 'masterVolume' | 'musicVolume' | 'effectsVolume' | 'ambienceVolume' | 'dialogueVolume', label: string) =>
     `<label class="wc-setting-row"><span>${escape(label)}</span><input type="range" min="0" max="1" step="0.05" value="${settings[id]}" data-setting="${id}" data-focus-key="setting-${id}" aria-label="${escape(label)}"></label>`;
   const toggle = (id: 'subtitles' | 'subtitleSpeakerLabels' | 'echoSubtitles' | 'motionBlur' | 'reducedMotion' | 'reducedCameraShake' | 'highContrastTarget', label: string) =>
-    `<div class="wc-setting-row"><span>${escape(label)}</span><button type="button" class="wc-action wc-action--quiet" data-ui-action="toggle-setting" data-setting="${id}" data-focus-key="setting-${id}" aria-pressed="${settings[id]}">${settings[id] ? playerCopy.common.on : playerCopy.common.off}</button></div>`;
+    // A switch named by its setting and its visible state ("Reduced Motion On"), so assistive tech never hears a bare "On".
+    `<div class="wc-setting-row"><span id="wc-setting-${id}-label">${escape(label)}</span><button type="button" role="switch" class="wc-action wc-action--quiet" id="wc-setting-${id}" data-ui-action="toggle-setting" data-setting="${id}" data-focus-key="setting-${id}" aria-checked="${settings[id]}" aria-labelledby="wc-setting-${id}-label wc-setting-${id}">${settings[id] ? playerCopy.common.on : playerCopy.common.off}</button></div>`;
   const select = (id: 'subtitleSize' | 'subtitleBackground' | 'telegraphIntensity' | 'offscreenWarningStrength' | 'autoTargetAssist' | 'perfectDodgeWindow' | 'lockOnMode' | 'controlGlyphs', label: string, options: readonly string[]) =>
     `<label class="wc-setting-row"><span>${escape(label)}</span><select data-setting="${id}" data-focus-key="setting-${id}" aria-label="${escape(label)}">${options.map(option => `<option value="${option}" ${settings[id] === option ? 'selected' : ''}>${escape(option.replaceAll('-', ' '))}</option>`).join('')}</select></label>`;
   const audio = [
@@ -39,16 +41,18 @@ export function settingsMarkup(viewModel: GameViewModel): string {
     select('perfectDodgeWindow', playerCopy.accessibility.perfect_dodge_window, ['standard', 'wide']),
     select('lockOnMode', playerCopy.accessibility.lock_on_mode, ['hold', 'toggle']),
     select('controlGlyphs', 'Control Glyphs', ['keyboard-mouse', 'gamepad']),
+    `<div class="wc-setting-row"><span id="wc-setting-tutorials-label">How-to-play cards</span><button type="button" class="wc-action wc-action--quiet" data-ui-action="reset-tutorials" data-focus-key="reset-tutorials" aria-labelledby="wc-setting-tutorials-label" ${settings.seenTutorials.length ? '' : 'disabled'}>Show again</button></div>`,
   ].join('');
   const deadzone = `<label class="wc-setting-row"><span>${escape(playerCopy.input.deadzone)}</span><input type="range" min="0.05" max="0.45" step="0.01" value="${settings.gamepadDeadzone.toFixed(2)}" data-setting="gamepadDeadzone" data-focus-key="setting-gamepadDeadzone" title="${escape(playerCopy.input.deadzone_description)}" aria-label="${escape(playerCopy.input.deadzone)}"></label>`;
   const bindingRows = (device: 'keyboard' | 'gamepad', deviceBindings: Readonly<Record<string, string>>) =>
-    Object.entries(deviceBindings).map(([id, binding]) => {
+    Object.keys({ ...DEFAULT_KEYBOARD_BINDINGS, ...deviceBindings }).map(id => {
+      const binding = deviceBindings[id] ?? '';
       const label = id.replace(/([a-z])([A-Z])/g, '$1 $2');
       const readOnly = device === 'gamepad' ? 'readonly' : '';
-      return `<label class="wc-setting-row"><span>${escape(label)}</span><input type="text" value="${escape(binding)}" data-remap="${escape(id)}" data-remap-device="${device}" data-focus-key="binding-${device}-${escape(id)}" aria-label="${escape(`${playerCopy.input.remap} ${label} ${device}`)}" ${readOnly}></label>`;
+      return `<label class="wc-setting-row"><span>${escape(label)}</span><input type="text" value="${escape(binding)}" placeholder="Unbound" data-remap="${escape(id)}" data-remap-device="${device}" data-focus-key="binding-${device}-${escape(id)}" aria-label="${escape(`${playerCopy.input.remap} ${label} ${device}`)}" ${readOnly}></label>`;
     }).join('');
   const remaps = `${deadzone}<section class="wc-settings-section"><h3>Keyboard and Mouse</h3><p class="wc-state__copy">${escape(playerCopy.input.press_binding)}</p>${bindingRows('keyboard', bindings.keyboard)}</section><section class="wc-settings-section"><h3>Gamepad</h3><p class="wc-state__copy">Focus a binding and press a controller button.</p>${bindingRows('gamepad', bindings.gamepad)}</section>`;
-  return `<div class="wc-settings-columns"><section class="wc-menu__side"><p class="wc-kicker">${escape(playerCopy.settings.title)}</p><h1 class="wc-heading">${escape(playerCopy.settings.title)}</h1><section class="wc-settings-section"><h2>${escape(playerCopy.settings.audio)}</h2>${audio}</section><section class="wc-settings-section"><h2>${escape(playerCopy.accessibility.title)}</h2>${accessibility}</section></section><section class="wc-menu__side"><p class="wc-kicker">${escape(playerCopy.input.keyboard_mouse)} · ${escape(playerCopy.input.gamepad)}</p><h2 class="wc-heading">${escape(playerCopy.input.remap)}</h2><p class="wc-state__copy">${escape(playerCopy.input.press_binding)}</p>${remaps}</section></div>`;
+  return `<div class="wc-settings-columns"><section class="wc-sheet wc-menu__side"><h1 class="wc-heading">${escape(playerCopy.settings.title)}</h1><section class="wc-settings-section"><h2>${escape(playerCopy.settings.audio)}</h2>${audio}</section><section class="wc-settings-section"><h2>${escape(playerCopy.accessibility.title)}</h2>${accessibility}</section></section><section class="wc-sheet wc-menu__side"><h2 class="wc-heading">${escape(playerCopy.input.remap)}</h2>${remaps}</section></div>`;
 }
 
 export function settingPatch(id: string, value: string | number | boolean): Partial<GameSettings> | null {

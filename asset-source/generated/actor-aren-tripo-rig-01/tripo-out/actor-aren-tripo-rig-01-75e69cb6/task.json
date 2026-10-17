@@ -1,0 +1,23 @@
+{
+  "task_id": "75e69cb6-d7ad-4db3-83a1-6e08389132f6",
+  "type": "animate_rig",
+  "status": "success",
+  "input": {
+    "spec": "mixamo",
+    "topology": "biped",
+    "out_format": "glb",
+    "original_model_id": "fbdd937d-d537-484b-96f5-8cbaf3b11ede"
+  },
+  "output_fields": [
+    "model_url",
+    "rendered_image_url"
+  ],
+  "credits_consumed": 25,
+  "created_at": "2026-10-10T11:16:18.841501Z",
+  "completed_at": "2026-10-10T11:16:26.320604Z",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ]
+}

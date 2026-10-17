@@ -1,13 +1,14 @@
-.wc-settings-columns { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); min-height: 100%; }
-.wc-settings-columns > .wc-menu__side { min-width: 0; border-top: 0; }
-.wc-settings-columns > .wc-menu__side:first-child { border-left: 0; }
-.wc-settings-columns .wc-setting-row { gap: 18px; }
-.wc-settings-columns .wc-setting-row > span:first-child { max-width: 28ch; }
-.wc-settings-columns .wc-setting-row input[type="range"] { width: min(220px, 38%); }
-.wc-settings-columns .wc-setting-row input[type="text"] { width: min(180px, 45%); }
-.wc-settings-columns .wc-setting-row select { width: min(190px, 48%); text-transform: capitalize; }
-.wc-settings-columns .wc-setting-row button { min-height: 34px; padding: 5px 10px; }
+.wc-settings-columns { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; min-height: 0; }
+.wc-settings-columns > .wc-menu__side { min-width: 0; min-height: 0; overflow-y: auto; }
+/* One control column for every row: selects, ranges, bindings and switches share its width, so no control sizes itself from its container. */
+.wc-settings-columns .wc-setting-row { gap: 18px; grid-template-columns: minmax(0, 1fr) clamp(8.75rem, 40%, 12rem); }
+.wc-settings-columns .wc-setting-row > span:first-child { max-width: 30ch; }
+.wc-settings-columns .wc-setting-row input[type="range"], .wc-settings-columns .wc-setting-row input[type="text"], .wc-settings-columns .wc-setting-row select { width: 100%; min-width: 0; }
+.wc-settings-columns .wc-setting-row select { text-transform: capitalize; text-overflow: ellipsis; }
+.wc-settings-columns .wc-setting-row button { justify-self: end; min-width: 4.5rem; min-height: 34px; padding: 5px 10px; justify-content: center; }
+.wc-settings-columns .wc-settings-section .wc-state__copy { margin: 2px 0 6px; font-size: 13px; }
 @media (max-width: 760px) {
-  .wc-settings-columns { grid-template-columns: minmax(0,1fr); }
-  .wc-settings-columns > .wc-menu__side + .wc-menu__side { border-left: 0; border-top: 1px solid var(--wc-line); }
+  /* Stacked sheets take their content height; the menu body scrolls, not each sheet. */
+  .wc-settings-columns { grid-template-columns: minmax(0, 1fr); min-height: auto; }
+  .wc-settings-columns > .wc-menu__side { overflow: visible; }
 }

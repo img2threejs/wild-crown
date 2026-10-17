@@ -1,0 +1,39 @@
+{
+  "scenario": "Sakda Canopy normal input-driven combat and basin movement; no vitality or AI changes",
+  "durationMs": 20049.20000000001,
+  "frames": 1065,
+  "p50": 16.70000000001164,
+  "p95": 33.300000000046566,
+  "max": 133.29999999998836,
+  "over25ms": 116,
+  "simulationTicks": 1266,
+  "outcome": null,
+  "player": {
+    "vitality": 98,
+    "maxVitality": 115,
+    "instinct": 100,
+    "mana": 100,
+    "maxMana": 100
+  },
+  "actions": [
+    "sakda-limb-4",
+    "sakda-echo-wave",
+    "aren-walk",
+    "sakda-limb-1",
+    "sakda-limb-2",
+    "sakda-limb-3",
+    "aren-forward-left-dive-roll",
+    "sakda-resonating-strike"
+  ],
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 1,
+    "bufferWidth": 1440,
+    "bufferHeight": 900
+  },
+  "gpu": "Brave",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+  "glError": 0,
+  "assetErrors": []
+}

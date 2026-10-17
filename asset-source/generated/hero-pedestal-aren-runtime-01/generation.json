@@ -1,0 +1,9 @@
+{
+  "taskId": "e3513e9a-2498-4394-a79c-ac0f22accfa8",
+  "status": "success",
+  "type": "image_to_model",
+  "model": "v3.1-20260211",
+  "creditsConsumed": 60,
+  "conceptTaskId": "af687217-0c58-4223-9b4a-f6dbcc88cd5c",
+  "modelFile": "asset-source/generated/hero-pedestal-aren-runtime-01/tripo-out/tripo-out/hero-pedestal-aren-model-01-e3513e9a/model.glb"
+}

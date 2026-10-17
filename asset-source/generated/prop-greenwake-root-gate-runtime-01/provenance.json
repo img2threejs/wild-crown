@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-root-gate",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "79974d6b-9bc0-4781-91c0-a94ed605a059",
+    "decimate": "b66c5e89-c8ca-42da-8238-883d0d4b641a"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-greenwake-root-gate-decimate-01/tripo-out/prop-greenwake-root-gate-decimat-b66c5e89/model.glb",
+      "sha256": "924690e721e99c8b21d293011b743aa0bf5463428545abfc41e6e7e292c54cb1"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+    "sha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604",
+    "bytes": 6108204,
+    "vertices": 23447,
+    "boundsMin": [
+      -0.12552358210086823,
+      -0.2783322036266327,
+      -0.48933157324790955
+    ],
+    "boundsMax": [
+      0.12530668079853058,
+      0.30949142575263977,
+      0.4890979826450348
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4149163,
+      "toBytes": 1635879
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4912247,
+      "toBytes": 1577953
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18889256,
+      "toBytes": 2041650
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

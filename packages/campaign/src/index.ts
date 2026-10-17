@@ -1,6 +1,22 @@
 import playerCopy from '../content/PLAYER-COPY.en.json' with { type: 'json' };
+import { hasExactKeys, isRecord } from './guards.js';
+import {
+  applyDominionFloors, createCompanionRoster, deriveLegacyCompanions, raiseDominionForLeader, validCompanionRoster,
+  type CompanionRoster, type LegacyWorldV1,
+} from './progression.js';
 
-export const SCHEMA_VERSION = 1 as const;
+export {
+  awardCompanionBond, applyDominionFloors, COMPANION_CORE_ABILITY_IDS, COMPANION_IDS, COMPANION_LEVEL_MAX, COMPANION_LEVEL_MIN,
+  createCompanionProgress, createCompanionRoster, deriveLegacyCompanions, DOMINION_PACT_LEVEL, DOMINION_SPECIAL_ABILITY_ID,
+  DOMINION_SPECIAL_THRESHOLD, isCompanionId, LEGACY_MIGRATED_FLAG, LEGACY_TIER_BOND, POSSESSION_RISK_FLAG, raiseDominionForLeader,
+  recruitCompanion, RECRUITMENT_BOND, RESPECTFUL_PACT_BOND, setCompanionStoryFlag, validCompanionRoster,
+} from './progression.js';
+export type { CampaignCompanionId, CompanionProgress, CompanionRoster, LegacyWorldV1 } from './progression.js';
+
+/** Current package schema: per-companion progression lives in `WorldState.companions`. */
+export const SCHEMA_VERSION = 2 as const;
+/** Last schema without per-companion progression; accepted on import through explicit pure migration. */
+export const LEGACY_SCHEMA_VERSION = 1 as const;
 export const FACTION_IDS = ['sky', 'canopy', 'fang', 'pack', 'shadow', 'crown'] as const;
 export type FactionId = (typeof FACTION_IDS)[number];
 export const FRAGMENT_IDS = [
@@ -39,6 +55,8 @@ export interface WorldState {
   regionalObligations: Record<RegionalObligationId, boolean>;
   renewedCommitments: Record<FactionId, boolean>;
   marekPresent: boolean;
+  /** Personal relationship progression; faction `bondTier` stays separate political covenant state. */
+  companions: CompanionRoster;
 }
 export interface DominionEvent {
   sequence: number;
@@ -101,6 +119,7 @@ function freshWorld(): WorldState {
     regionalObligations: Object.fromEntries(REGIONAL_OBLIGATION_IDS.map((id) => [id, false])) as Record<RegionalObligationId, boolean>,
     renewedCommitments: Object.fromEntries(FACTION_IDS.map((id) => [id, false])) as Record<FactionId, boolean>,
     marekPresent: true,
+    companions: createCompanionRoster(),
   };
 }
 
@@ -118,7 +137,7 @@ export function collectFragment(state: CampaignState, fragmentId: FragmentId): C
 export function recordLeaderDominion(state: CampaignState, leaderId: LeaderId): CampaignState {
   if (!(validLeaderIds as readonly string[]).includes(leaderId)) throw new Error('Unknown leader Dominion target');
   const sequence = (state.dominionHistory.at(-1)?.sequence ?? 0) + 1;
-  return { ...state, dominionHistory: [...state.dominionHistory, { sequence, leaderId }] };
+  return raiseDominionForLeader({ ...state, dominionHistory: [...state.dominionHistory, { sequence, leaderId }] }, leaderId);
 }
 
 export function setPackLeader(state: CampaignState, leaderId: PackLeaderId): CampaignState {
@@ -136,12 +155,6 @@ export function createCheckpoint(state: CampaignState): CheckpointSnapshot {
   return { kind: 'campaign-checkpoint', schemaVersion: SCHEMA_VERSION, runId: state.runId, world: structuredClone(state.world) };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-function hasExactKeys(value: Record<string, unknown>, expected: readonly string[]): boolean {
-  return Object.keys(value).length === expected.length && expected.every((key) => key in value);
-}
 function validFaction(id: FactionId, value: unknown): value is FactionState {
   if (!isRecord(value) || !isRecord(value.representative)) return false;
   const leaderId = value.leaderId;
@@ -157,7 +170,7 @@ function validFaction(id: FactionId, value: unknown): value is FactionState {
   return isActiveLeader || isAbsentLeader || isFactionEnvoy || isCrownCouncil;
 }
 
-function validWorld(value: unknown): value is WorldState {
+function validWorldCore(value: unknown): value is Record<string, unknown> {
   if (!isRecord(value)) return false;
   const fragments = value.fragments;
   const rawFactions = value.factions;
@@ -177,16 +190,50 @@ function validWorld(value: unknown): value is WorldState {
   return FACTION_IDS.every((id) => validFaction(id, factions[id]));
 }
 
+/** Strict schema-2 world: the schema-1 shape plus a validated per-companion roster. */
+function validWorld(value: unknown): value is WorldState {
+  return validWorldCore(value) && Object.keys(value).length === 8 && validCompanionRoster(value.companions);
+}
+
+/** Strict schema-1 world: exactly the pre-companion shape; any extra key is rejected rather than guessed. */
+function validLegacyWorld(value: unknown): value is LegacyWorldV1 {
+  return validWorldCore(value) && Object.keys(value).length === 7 && !('companions' in value);
+}
+
+/** Validates a schema-2 world's roster-independent invariants for repository callers. */
+export function isValidWorld(value: unknown): value is WorldState {
+  return validWorld(value);
+}
+
+/** Pure schema-1 → 2 world migration; the run's Dominion ledger seeds the monotonic Dominion floors. */
+export function migrateWorldV1(world: unknown, dominionHistory: readonly DominionEvent[]): WorldState | null {
+  if (!validLegacyWorld(world)) return null;
+  const legacy = structuredClone(world);
+  return { ...legacy, companions: deriveLegacyCompanions(legacy, dominionHistory) };
+}
+
+/** Pure schema-1 → 2 campaign-state migration. Returns null when the input is not a strictly valid schema-1 state. */
+export function migrateCampaignStateV1(input: unknown): CampaignState | null {
+  if (!isRecord(input) || input.schemaVersion !== LEGACY_SCHEMA_VERSION || typeof input.runId !== 'string' || !Array.isArray(input.dominionHistory)) return null;
+  const history = input.dominionHistory as DominionEvent[];
+  const world = migrateWorldV1(input.world, history);
+  if (!world) return null;
+  return { schemaVersion: SCHEMA_VERSION, runId: input.runId, world, dominionHistory: structuredClone(history) };
+}
+
 /** Imports a campaign checkpoint, never replay data. Run-lifetime history remains the current run's ledger. */
 export function importCheckpoint(current: CampaignState, input: unknown): ImportResult {
   if (!isRecord(input)) return { accepted: false, reason: 'invalid_snapshot' };
   if (input.kind === 'showcase-replay') return { accepted: false, reason: 'replay_isolated' };
   if (input.kind !== 'campaign-checkpoint' || typeof input.runId !== 'string' || typeof input.schemaVersion !== 'number' || !Number.isInteger(input.schemaVersion)) return { accepted: false, reason: 'invalid_snapshot' };
   if (input.schemaVersion > SCHEMA_VERSION) return { accepted: false, reason: 'future_schema' };
-  if (input.schemaVersion !== SCHEMA_VERSION) return { accepted: false, reason: 'schema_mismatch' };
+  if (input.schemaVersion !== SCHEMA_VERSION && input.schemaVersion !== LEGACY_SCHEMA_VERSION) return { accepted: false, reason: 'schema_mismatch' };
   if (input.runId !== current.runId) return { accepted: false, reason: 'run_mismatch' };
-  if (!validWorld(input.world)) return { accepted: false, reason: 'invalid_snapshot' };
-  return { accepted: true, state: { ...current, world: structuredClone(input.world) } };
+  const world = input.schemaVersion === LEGACY_SCHEMA_VERSION
+    ? migrateWorldV1(input.world, current.dominionHistory)
+    : validWorld(input.world) ? structuredClone(input.world) : null;
+  if (!world) return { accepted: false, reason: 'invalid_snapshot' };
+  return { accepted: true, state: applyDominionFloors({ ...current, world }) };
 }
 
 export function createShowcaseReplay(): ReplayState {

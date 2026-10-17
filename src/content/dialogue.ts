@@ -204,6 +204,150 @@ export const DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
       ),
     ],
   },
+  "prologue-opening": {
+    id: "prologue-opening",
+    lines: [
+      line(
+        "opening-roars",
+        "narrator",
+        "Night in Greenwake. Every animal in the Erya has begun to run, and the roars beneath the roots do not stop.",
+        "vision",
+      ),
+      line(
+        "opening-yara",
+        "yara",
+        "Something below Erya is waking. Find the bird who fell near the courtyard before the village loses its voice.",
+      ),
+    ],
+  },
+  "greenwake-cleanse": {
+    id: "greenwake-cleanse",
+    lines: [
+      line(
+        "boar-freed",
+        "echo",
+        "The Black Sap drains from the boar in a dark thread. It shakes itself, breathes, and runs for the trees, alive.",
+        "echo",
+      ),
+      line(
+        "yara-gate",
+        "yara",
+        "You did not kill it, and the sap did not win. Open the ridge gate with the staff. The forest road leads to the Canopy.",
+      ),
+    ],
+  },
+  "koro-thorn-reveal": {
+    id: "koro-thorn-reveal",
+    lines: [
+      line(
+        "koro-roar",
+        "echo",
+        "The Branchbreaker hurls a rock, drops a limb across the path and charges the bridge. He is not hunting you; he is guarding something.",
+        "echo",
+      ),
+      line(
+        "aren-thorn",
+        "aren",
+        "There. A black thorn in his shoulder. It is the thorn that hurts him, not the monkeys, and not me.",
+      ),
+    ],
+  },
+  "koro-cleanse": {
+    id: "koro-cleanse",
+    lines: [
+      line(
+        "koro-free",
+        "echo",
+        "The thorn lets go. Koro sags, then straightens. The Branchbreaker is gone; the macaque who leads the canopy looks at you.",
+        "echo",
+      ),
+      line(
+        "aren-koro-free",
+        "aren",
+        "The fragment is yours to hand over, and the pact is yours to choose. I will not ask for more than you give.",
+      ),
+    ],
+  },
+  "koro-pact-close": {
+    id: "koro-pact-close",
+    lines: [
+      line(
+        "koro-pact-sealed",
+        "echo",
+        "Koro presses his palm to the old branch. The orchard answers with new growth, and the birds shed their wariness one feather at a time.",
+        "echo",
+      ),
+    ],
+  },
+  "marek-escape": {
+    id: "marek-escape",
+    lines: [
+      line(
+        "marek-sample",
+        "marek",
+        "Keep the cub. I keep this vial of Black Sap. We will argue about who owes whom later.",
+      ),
+      line(
+        "aren-marek",
+        "aren",
+        "He is gone with the sample. His fate is a question for another day, and I will not decide it in the dark.",
+      ),
+    ],
+  },
+  "tali-shelter-warning": {
+    id: "tali-shelter-warning",
+    lines: [
+      line(
+        "tali-warning",
+        "echo",
+        "Tali presses against the bamboo at the den's edge and will not go farther. The mother's roar rolls down the slope.",
+        "echo",
+      ),
+      line(
+        "aren-shelter",
+        "aren",
+        "Stay behind the old stems, small one. I will keep the charge away from you.",
+      ),
+    ],
+  },
+  "asha-phase-three": {
+    id: "asha-phase-three",
+    lines: [
+      line(
+        "asha-rage",
+        "echo",
+        "Asha drops low. Her next charge will run straight along the den toward the shelter.",
+        "echo",
+      ),
+      line(
+        "aren-instruction",
+        "aren",
+        "Evade the charge, bring the bundle down across the lane, then tether the exposed thorn and cleanse it.",
+      ),
+    ],
+  },
+  "asha-pact-close": {
+    id: "asha-pact-close",
+    lines: [
+      line(
+        "asha-pact-sealed",
+        "echo",
+        "Asha lowers her head to Tali and then to you. The den goes quiet; the bamboo stops creaking.",
+        "echo",
+      ),
+    ],
+  },
+  "bamboo-source-cleansed": {
+    id: "bamboo-source-cleansed",
+    lines: [
+      line(
+        "source-cleansed",
+        "echo",
+        "The Black Sap source runs clear. Across the valley, every snare line goes slack and the road east to the Grove lies open.",
+        "echo",
+      ),
+    ],
+  },
   "howl-open": {
     id: "howl-open",
     lines: [
@@ -296,7 +440,7 @@ export const DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
       line(
         "aren-river",
         "aren",
-        "The route to Hollow must not depend on Marek’s answer.",
+        "Whatever Marek answers, the way to Hollow stays open.",
       ),
     ],
   },
@@ -313,7 +457,7 @@ export const DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
       line(
         "marek-absent",
         "narrator",
-        "Marek is gone. A stamped ledger and the empty rig identify the upstream source.",
+        "No sign of Marek remains. A stamped ledger and the empty rig point to the source upstream.",
         "spoken",
         "!marekPresent",
       ),
@@ -419,7 +563,7 @@ export const DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
       line(
         "tali-failure",
         "narrator",
-        "If Tali is endangered, return safely to the checkpoint and try again.",
+        "Tali is not lost. The roots draw you back to the last safe moment; try again.",
         "spoken",
         "taliRescueFailed",
       ),
@@ -452,7 +596,7 @@ export const DIALOGUE: Readonly<Record<string, DialogueBeat>> = {
       line(
         "aren-hollow",
         "aren",
-        "I will answer each aspect myself. Help can clear the way, but no companion is required here.",
+        "I will answer each aspect myself. Help can clear the way, but this answer is mine to give.",
       ),
     ],
   },

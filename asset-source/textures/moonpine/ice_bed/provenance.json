@@ -1,0 +1,46 @@
+{
+  "assetId": "ice_bed",
+  "name": "Snow 03",
+  "sourceUrl": "https://polyhaven.com/a/snow_03",
+  "apiUrl": "https://api.polyhaven.com/files/snow_03",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Rob Tuytel",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 2.0,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_03/snow_03_diff_1k.jpg",
+      "sourceSha256": "1210d17f1395c030c33c1a2c6dc3f5e0e9edac4c4365d163fc9ebb52416cddc3",
+      "sourceBytes": 574004,
+      "sha256": "1210d17f1395c030c33c1a2c6dc3f5e0e9edac4c4365d163fc9ebb52416cddc3",
+      "md5": "81c88f59622c1b0bbc80da483a69d0d5",
+      "bytes": 574004
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_03/snow_03_nor_gl_1k.jpg",
+      "sourceSha256": "f26e3f11af257e6b46920e470299f69e24949e628a4b23059305a87842e9e8be",
+      "sourceBytes": 1434358,
+      "sha256": "f26e3f11af257e6b46920e470299f69e24949e628a4b23059305a87842e9e8be",
+      "md5": "ef60d989b9942af0d6d03615f2bb2912",
+      "bytes": 1434358
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_03/snow_03_arm_1k.jpg",
+      "sourceSha256": "e92ab535532a2c9f46b948b29db0676bba39d89b4e15fa16d7deab94369b4203",
+      "sourceBytes": 248443,
+      "sha256": "e92ab535532a2c9f46b948b29db0676bba39d89b4e15fa16d7deab94369b4203",
+      "md5": "e6919cb851dcd756a1ea99d201357bf6",
+      "bytes": 248443
+    }
+  }
+}

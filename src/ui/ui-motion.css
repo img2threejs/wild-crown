@@ -1,0 +1,122 @@
+/*
+ * Motion for the out-of-game interface.
+ *
+ * One authored moment: a page opens like a survey sheet unfolding from its top fold, and the current objective's route
+ * draws itself across the area map. Everything else is quick, quiet feedback.
+ * - Only transform, opacity, clip-path, filter and stroke-dashoffset animate. Entrances hang off `.wc-enter` on the layer and
+ *   end with it, so nothing keeps running once a screen has settled; nothing here runs during gameplay.
+ * - `.wc-reduced-motion` (settings.reducedMotion or prefers-reduced-motion, resolved by GameUI) swaps every motion for an
+ *   authored static state: instant screens with a one-frame cross-fade and a route that is simply drawn.
+ *
+ * Layer lifecycle (see swapScreen in GameUI.ts): the incoming layer gets `.wc-enter`, the outgoing layer becomes inert and
+ * gets `.wc-leave`. `data-motion` is the layer's own screen kind (scene | overlay | hud); `data-from` is the previous key.
+ */
+.wc-ui {
+  --wc-leave-ms: 200ms;
+  --wc-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --wc-ease-in: cubic-bezier(.5, 0, .75, .4);
+}
+.wc-ui--paused, .wc-ui--paused *, .wc-ui--paused *::before, .wc-ui--paused *::after { animation-play-state: paused !important; }
+
+/* ---------- Layer transitions ---------- */
+.wc-layer.wc-enter[data-motion="scene"] { --wc-enter-delay: 0ms; animation: wc-fade-in 360ms var(--wc-ease-out) var(--wc-enter-delay) both; }
+.wc-layer.wc-enter[data-motion="scene"]:not([data-from="none"]) { --wc-enter-delay: 120ms; }
+.wc-layer.wc-leave[data-motion="scene"] { animation: wc-fade-out var(--wc-leave-ms) var(--wc-ease-in) both; }
+.wc-layer.wc-enter[data-motion="hud"] { animation: wc-fade-in 160ms ease-out both; }
+.wc-layer.wc-enter[data-motion="hud"][data-from="shot"] { animation-duration: 520ms; }
+.wc-layer.wc-leave[data-motion="hud"] { animation: wc-fade-out 120ms ease-in both; }
+.wc-layer.wc-enter[data-motion="overlay"] > .wc-screen { animation: wc-fade-in 220ms ease-out both; }
+.wc-layer.wc-leave[data-motion="overlay"] > .wc-screen { animation: wc-fade-out var(--wc-leave-ms) var(--wc-ease-in) both; }
+@keyframes wc-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wc-fade-out { from { opacity: 1; } to { opacity: 0; } }
+/* Reduced motion: an instant swap with a single-frame cross-fade, so the change never reads as a glitch. */
+.wc-layer.wc-crossfade { animation: wc-crossfade 16ms linear both; }
+@keyframes wc-crossfade { from { opacity: .55; } to { opacity: 1; } }
+
+/* ---------- The signature: sheets unfold, the route draws ---------- */
+.wc-enter .wc-sheet { animation: wc-unfold 460ms var(--wc-ease-out) calc(var(--wc-enter-delay, 0ms) + var(--wc-sheet-delay, 0ms)) both; }
+.wc-enter .wc-sheet + .wc-sheet, .wc-enter .wc-menu__side + .wc-menu__side { --wc-sheet-delay: 70ms; }
+@keyframes wc-unfold { from { clip-path: inset(0 0 100% 0); transform: translateY(-6px); } 60% { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 0); transform: none; } }
+.wc-areamap__route { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.wc-enter .wc-areamap__route { animation: wc-route-draw 900ms cubic-bezier(.65, 0, .35, 1) calc(var(--wc-enter-delay, 0ms) + 360ms) both; }
+.wc-enter .wc-areamap__marker[data-kind="current"] { animation: wc-pin-drop 420ms var(--wc-ease-out) calc(var(--wc-enter-delay, 0ms) + 1150ms) both; }
+@keyframes wc-route-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes wc-pin-drop { from { opacity: 0; translate: 0 -10px; } to { opacity: 1; translate: 0 0; } }
+
+/* ---------- Title ---------- */
+.wc-title__card { transform-origin: 50% 0; }
+.wc-enter[data-screen="title"] .wc-title__crest path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: wc-route-draw 1100ms cubic-bezier(.65, 0, .35, 1) calc(var(--wc-enter-delay, 0ms) + 300ms) both; }
+.wc-enter[data-screen="title"] .wc-title__crest path + path { animation-duration: 600ms; animation-delay: calc(var(--wc-enter-delay, 0ms) + 1000ms); }
+.wc-enter[data-screen="title"] .wc-title__letter { animation: wc-letter-in 700ms var(--wc-ease-out) calc(var(--wc-enter-delay, 0ms) + 420ms + var(--i) * 55ms) both; }
+@keyframes wc-letter-in { from { opacity: 0; transform: translateY(.4em); } to { opacity: 1; transform: none; } }
+
+/* ---------- Map select and hero select ---------- */
+.wc-map-choice { position: relative; transition: transform 240ms var(--wc-ease-out), box-shadow 240ms ease; }
+.wc-map-choice > img { transition: transform 600ms var(--wc-ease-out); }
+.wc-map-choice:not([data-coming-soon="true"]):not([data-locked="true"]):is(:hover, :focus-within) { transform: translateY(-4px); box-shadow: inset 0 0 0 2px var(--wc-route), var(--wc-lift); }
+.wc-map-choice:not([data-coming-soon="true"]):not([data-locked="true"]):is(:hover, :focus-within) > img { transform: scale(1.04); }
+.wc-hero-select__frame { position: relative; }
+.wc-hero-pick:not([aria-pressed="true"]):is(:hover, :focus-visible) { transform: translateX(3px); }
+.wc-hero-panel[data-slide="next"] > *, .wc-hero-panel[data-slide="prev"] > *, .wc-hero-panel[data-slide="fade"] > * { animation: wc-fade-in 220ms ease-out both; }
+/* Choosing a hero: a wash in the hero's colour over the stage while the screen leaves. */
+.wc-hero-select__frame[data-confirming="true"]::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 70% at 50% 56%, color-mix(in srgb, var(--wc-hero-accent) 55%, transparent), transparent 70%); animation: wc-confirm-flash 520ms ease-out both; }
+@keyframes wc-confirm-flash { from { opacity: 0; } 30% { opacity: .8; } to { opacity: 0; } }
+
+/* ---------- Dialogue: subtitles sit on the frame over the scene ---------- */
+.wc-dialogue { place-items: end center; padding-bottom: clamp(18px, 6vh, 64px); background: linear-gradient(0deg, rgba(10, 12, 8, .82) 0%, rgba(10, 12, 8, .35) 45%, transparent 75%); backdrop-filter: none; }
+.wc-dialogue__card { width: min(920px, 94vw); max-height: 70vh; animation: wc-fade-in 240ms ease-out both; }
+.wc-dialogue__speaker { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.wc-dialogue__crest { flex: none; width: 52px; height: 52px; border-radius: 50%; }
+.wc-dialogue__crest--mono { display: grid; place-items: center; color: var(--wc-route-bright); background: var(--wc-frame); border: 1.5px solid currentColor; font: 600 24px var(--wc-display); }
+.wc-dialogue__name { margin: 0; color: var(--wc-route-bright); font: 600 15px var(--wc-display); letter-spacing: .18em; text-transform: uppercase; }
+.wc-dialogue__count { margin: 0 0 0 auto; color: var(--wc-fg-faint); font-size: 11px; letter-spacing: .1em; font-variant-numeric: tabular-nums; }
+.wc-wg { animation: wc-fade-in 360ms ease-out calc(100ms + var(--i) * 70ms) both; }
+.wc-dialogue__card[data-size="small"] .wc-dialogue-text { font-size: clamp(16px, 2vw, 21px); }
+.wc-dialogue__card[data-size="large"] .wc-dialogue-text { font-size: clamp(26px, 3.6vw, 38px); }
+.wc-dialogue__card[data-background="off"] { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; text-shadow: 0 2px 10px #000, 0 0 3px #000; }
+.wc-dialogue__card[data-background="translucent"] { background: var(--wc-frame-glass); }
+.wc-dialogue__card[data-background="solid"] { background: var(--wc-frame); backdrop-filter: none; }
+
+/* ---------- Outcomes ---------- */
+.wc-stage-complete::before, .wc-defeat::before { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.wc-stage-complete::before { background: radial-gradient(ellipse 75% 85% at 72% 52%, color-mix(in srgb, var(--wc-hero-accent, var(--wc-route)) 40%, transparent), transparent 68%); }
+.wc-defeat::before { background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 25%, rgba(84, 24, 12, .78) 100%); }
+.wc-outcome .wc-state__card { position: relative; }
+.wc-enter[data-screen="stage-complete"] .wc-stage-complete::before, .wc-enter[data-screen="defeat"] .wc-defeat::before { animation: wc-fade-in 1100ms ease-out both; }
+.wc-enter[data-screen="stage-complete"] .wc-state__title, .wc-enter[data-screen="defeat"] .wc-state__title { animation: wc-letter-in 700ms var(--wc-ease-out) calc(var(--wc-enter-delay, 0ms) + 260ms) both; }
+
+/* ---------- Establishing shot overlay ---------- */
+.wc-shot { cursor: pointer; --wc-shot-bar: clamp(40px, 11vh, 120px); }
+.wc-shot__bar { position: absolute; left: 0; right: 0; height: var(--wc-shot-bar); background: #000; pointer-events: none; }
+.wc-shot__bar--top { top: 0; transform-origin: top; animation: wc-bar-top 800ms var(--wc-ease-out) both; }
+.wc-shot__bar--bottom { bottom: 0; transform-origin: bottom; animation: wc-bar-bottom 800ms var(--wc-ease-out) both; }
+.wc-shot__title { position: absolute; left: clamp(20px, 5vw, 80px); bottom: calc(var(--wc-shot-bar) + 4vh); max-width: min(760px, 80vw); text-shadow: 0 2px 18px #000, 0 0 4px #000; animation: wc-shot-title 3.6s ease both; }
+.wc-shot__title h1 { margin: 0; color: var(--wc-frame-text); font: 600 clamp(44px, 7vw, 92px)/.95 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
+.wc-shot__chapter { margin: 8px 0 0; color: var(--wc-shot-accent, var(--wc-route-bright)); font: 600 14px var(--wc-display); letter-spacing: .22em; text-transform: uppercase; }
+.wc-shot__tagline { margin: 6px 0 0; color: var(--wc-frame-soft); font: italic 400 clamp(16px, 1.7vw, 22px)/1.4 var(--wc-lore); }
+.wc-shot__skip { position: absolute; right: clamp(16px, 3vw, 48px); bottom: calc(var(--wc-shot-bar) / 2 - 16px); display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 12px; color: var(--wc-frame-text); background: transparent; border: 1px solid rgba(239, 232, 214, .4); border-radius: 2px; font: 600 13px var(--wc-display); letter-spacing: .14em; text-transform: uppercase; animation: wc-fade-in 600ms ease-out 600ms both; }
+@keyframes wc-bar-top { from { transform: translateY(-100%); } to { transform: none; } }
+@keyframes wc-bar-bottom { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes wc-shot-title { 0% { opacity: 0; transform: translateY(16px); } 14% { opacity: 1; transform: none; } 78% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+
+/* ---------- Loading scene recovery: the error takes its own row above the actions ---------- */
+.wc-scene__actions .wc-error { flex: 1 0 100%; max-width: 64ch; margin: 0 auto 4px; text-align: center; overflow-wrap: anywhere; }
+
+/* ---------- Reduced motion: authored static alternatives ---------- */
+.wc-reduced-motion .wc-sheet, .wc-reduced-motion .wc-areamap__route, .wc-reduced-motion .wc-areamap__marker, .wc-reduced-motion .wc-title__crest path, .wc-reduced-motion .wc-title__letter,
+.wc-reduced-motion .wc-dialogue__card, .wc-reduced-motion .wc-wg, .wc-reduced-motion .wc-hero-panel > *, .wc-reduced-motion .wc-state__title,
+.wc-reduced-motion .wc-shot__bar, .wc-reduced-motion .wc-shot__title, .wc-reduced-motion .wc-shot__skip, .wc-reduced-motion .wc-stage-complete::before, .wc-reduced-motion .wc-defeat::before { animation: none !important; }
+.wc-reduced-motion .wc-title__crest path { stroke-dashoffset: 0; }
+.wc-reduced-motion .wc-action, .wc-reduced-motion .wc-hero-pick, .wc-reduced-motion .wc-map-choice, .wc-reduced-motion .wc-map-choice > img, .wc-reduced-motion .wc-tabs .wc-action::after { transition: none; }
+.wc-reduced-motion .wc-action:active:not(:disabled), .wc-reduced-motion .wc-hero-pick:is(:hover, :focus-visible), .wc-reduced-motion .wc-map-choice:is(:hover, :focus-within), .wc-reduced-motion .wc-map-choice:is(:hover, :focus-within) > img { transform: none; }
+.wc-reduced-motion .wc-hero-select__frame[data-confirming="true"]::after { animation: none; opacity: .25; }
+.wc-reduced-motion .wc-skill[data-skill=judgement][data-ready=true]::after { animation: none; opacity: .6; }
+.wc-reduced-motion .wc-map-art__image, .wc-reduced-motion .wc-map-regions { transition: none; }
+/* Title diorama: under reduced motion the cross-fade is instant (no opacity transition), so the canvas swap never reads as motion. */
+.wc-reduced-motion .wc-title-stage-host { transition: none; }
+/* Title backdrop: a slow push-in and pan across the painted map; held still under reduced motion. Paused with the UI when hidden. */
+.wc-title::before { animation: wc-title-drift 46s ease-in-out infinite alternate; }
+@keyframes wc-title-drift { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.12) translate(-2.5%, 1.2%); } }
+.wc-reduced-motion .wc-title::before { animation: none; transform: scale(1.04); }
+/* Hero stage backdrop stays static under reduced motion; the accent gradient halos can otherwise look like a slow pulse. */
+.wc-reduced-motion .wc-preview-host.wc-hero-stage__view { background: radial-gradient(ellipse 60% 70% at 50% 64%, color-mix(in srgb, var(--wc-hero-accent) 14%, transparent), transparent 70%), radial-gradient(ellipse 90% 80% at 50% 50%, #2a3322 0%, #171b14 55%, #0e110c 100%); }

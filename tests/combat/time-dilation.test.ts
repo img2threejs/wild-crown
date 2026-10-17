@@ -7,6 +7,7 @@ import type { RegionRouteDefinition } from '../../src/game/contracts.js';
 import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
 import { vec, type CombatArena } from '../../src/game/combat/geometry.js';
 import { REGIONS } from '../../src/content/campaign.js';
+import { LIGHT_STEPS, TARGETED_STRIKES } from '../../src/game/combat/PlayerSkills.js';
 
 const idle: CombatInput = {
   tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false,
@@ -45,8 +46,7 @@ function makeClockState(duplicateHazard = false): EngineState {
   state.actors = [player, enemy];
   state.arena = floor;
   state.hazards = [hazard, ...(duplicateHazard ? [{ ...structuredClone(hazard), id: 'spear-volume-b' }] : [])];
-  state.companionSlots = { combat: 'asha' };
-  state.companionState = createCompanionState({ combat: 'asha' });
+  state.companionState = createCompanionState('asha');
   state.companionState.slots.asha!.readyAt = 50;
   state.player.instinct = 0;
   return state;
@@ -99,30 +99,33 @@ describe('Perfect Dodge world-clock time dilation', () => {
     state.timePolicy = 'perfect-dodge-slow';
     state.worldTimeScale = 0.25;
     state.slowMotionRemainingTicks = 12;
+    // Out of reach: a connecting hit would add a hit-stop shift, which warden-arsenal.test.ts covers separately.
+    state.actors.find(actor => actor.id !== state.playerId)!.position = vec(0, 0, -6);
     const engine = new CombatEngine(state);
     engine.fixedStep({ ...idle, heavyPressed: true });
     const started = engine.snapshotState();
+    const duration = TARGETED_STRIKES.heavy.ticks + TARGETED_STRIKES.heavy.recoveryTicks;
+    const deadline = started.tick + duration;
     expect(started.tick).toBe(61);
     expect(started.worldTick).toBe(45.5);
     expect(started.actors.find(actor => actor.id === started.playerId)).toMatchObject({
-      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: 124, normalizedTime: 0,
+      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: deadline, normalizedTime: 0,
     });
     engine.fixedStep(idle);
-    expect(engine.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo(1 / 63);
+    expect(engine.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo(1 / duration);
     const restored = new CombatEngine();
     restored.restore(engine.serialize());
     expect(restored.snapshotState().actors).toEqual(engine.snapshotState().actors);
-    for (let step = 0; step < 61; step++) restored.fixedStep(idle);
-    expect(restored.snapshotState().tick).toBe(123);
+    while (restored.snapshotState().tick < deadline - 1) restored.fixedStep(idle);
     expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)).toMatchObject({
-      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: 124,
+      actionId: 'aren-heavy', actionStartedTick: 61, actionEndsTick: deadline,
     });
-    expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo(62 / 63);
+    expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)?.normalizedTime).toBeCloseTo((duration - 1) / duration);
     restored.fixedStep(idle);
-    expect(restored.snapshotState().tick).toBe(124);
+    expect(restored.snapshotState().tick).toBe(deadline);
     expect(restored.snapshotState().actionId).toBe('idle');
     expect(restored.snapshotState().actors.find(actor => actor.id === started.playerId)).toMatchObject({
-      actionId: 'aren-idle', actionStartedTick: 124, actionEndsTick: 0, normalizedTime: 0, phase: 'idle',
+      actionId: 'aren-idle', actionStartedTick: deadline, actionEndsTick: 0, normalizedTime: 0, phase: 'idle',
     });
   });
 
@@ -222,13 +225,15 @@ describe('Perfect Dodge world-clock time dilation', () => {
     const counterAction = engine.snapshotState();
     const playerAction = counterAction.actors.find(actor => actor.id === 'aren')!;
     expect(counterAction.actionId).toBe('light_1');
-    expect(counterAction.pendingImpact?.counter).toBe(true);
+    expect(counterAction.swing?.counter).toBe(true);
     expect(playerAction.actionId).toBe('aren-light-1');
     expect(playerAction.actionStartedTick).toBe(counterAction.tick);
     expect(playerAction.actionEndsTick).toBe(counterAction.actionRecoveryUntil);
-    for (let step = 0; step < 12; step++) engine.fixedStep(idle);
-    expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.vitality).toBe(88);
-    const recoveryUntil = engine.snapshotState().actionRecoveryUntil;
+    for (let step = 0; step < LIGHT_STEPS[0]!.activeFrom; step++) engine.fixedStep(idle);
+    // light_1 base 9 against the exposed attacker: ceil(9 × 1.5) = 14.
+    expect(engine.snapshotState().actors.find(actor => actor.id === 'hunter-melee-west')?.vitality).toBe(86);
+    const contact = engine.snapshotState();
+    const recoveryUntil = contact.actionRecoveryUntil + (contact.hitStop?.remainingTicks ?? 0);
     while (engine.snapshotState().tick <= recoveryUntil) engine.fixedStep(idle);
     const recovered = engine.snapshotState();
     const actorAfterRecovery = recovered.actors.find(actor => actor.id === 'aren')!;
@@ -384,6 +389,25 @@ describe('Perfect Dodge world-clock time dilation', () => {
     engine.loadRegion({ regionId: region.id, runId: 'time-dilation-load-reset', presentActorIds: [], playerPosition: region.entrances[0]!.from });
     expect(engine.snapshot().worldClock).toMatchObject({ worldTick: worldTickBeforeLoad, timeScale: 1, policy: 'normal' });
   });
+  it.each([
+    { window: 'standard', activeFrom: 37.5, reward: false },
+    { window: 'wide', activeFrom: 37.5, reward: true },
+    { window: 'wide', activeFrom: 38, reward: false },
+  ] as const)('$window requires strict intersection with a hazard starting at world tick $activeFrom', ({ window, activeFrom, reward }) => {
+    const state = makeClockState();
+    state.tick = 34;
+    state.worldTick = 34;
+    state.hazards[0]!.activeFrom = activeFrom;
+    state.hazards[0]!.activeUntil = 45;
+    state.hazards[0]!.threatTicks = [];
+    const engine = new CombatEngine(state);
+    engine.setAccessibilitySettings({ autoTargetAssist: 'off', lockOnMode: 'toggle', perfectDodgeWindow: window });
+    engine.fixedStep({ ...idle, dodgePressed: true, dodgeDirection: 'left' });
+    expect(engine.snapshotState().player.instinct).toBe(reward ? 20 : 0);
+    expect(engine.snapshot().worldClock.policy).toBe(reward ? 'perfect-dodge-slow' : 'normal');
+    expect(engine.consumeEvents().filter(event => event.kind === 'perfect-dodge')).toHaveLength(reward ? 1 : 0);
+  });
+
   it('requires the live hit window to intersect evasion frames rather than warning ticks', () => {
     const future = makeClockState();
     future.tick = 34;
@@ -695,7 +719,7 @@ describe('Perfect Dodge world-clock time dilation', () => {
     expect(effects.emit(migratedCue)).toBe(true);
     effects.update(restored.snapshot().worldClock);
     expect(effects.activeCount).toBe(1);
-    const activeMaterials = scene.getObjectByName('story-effects')!.children.map(child => (child as THREE.Mesh).material as THREE.MeshBasicMaterial);
+    const activeMaterials = scene.getObjectByName('story-effects')!.children.filter((child): child is THREE.Mesh => child instanceof THREE.Mesh).map(child => child.material as THREE.MeshBasicMaterial);
     expect(activeMaterials.some(material => Number.isFinite(material.opacity) && material.opacity > 0)).toBe(true);
     for (let tick = 0; tick < 6; tick++) restored.fixedStep(idle);
     effects.update(restored.snapshot().worldClock);
@@ -803,6 +827,6 @@ describe('Perfect Dodge world-clock time dilation', () => {
     engine.resetToCheckpoint();
     expect(engine.snapshotState().lastAttackTick).toBe(299);
     engine.fixedStep(idle);
-    expect(engine.snapshot().telegraphs.find(telegraph => telegraph.sourceId === 'koro')?.attackId).toBe('koro-fruit-burst');
+    expect(engine.snapshot().telegraphs.find(telegraph => telegraph.sourceId === 'koro')?.attackId).toBe('koro-branch-swing');
   });
 });

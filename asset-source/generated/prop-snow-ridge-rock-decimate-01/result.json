@@ -1,0 +1,16 @@
+{
+  "task_id": "5c5f91b6-61d4-4104-b6b2-a41930e0eabf",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-snow-ridge-rock-decimate-01/tripo-out/prop-snow-ridge-rock-decimate-01-5c5f91b6",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-snow-ridge-rock-decimate-01/tripo-out/prop-snow-ridge-rock-decimate-01-5c5f91b6/model.glb",
+  "preview": "asset-source/generated/prop-snow-ridge-rock-decimate-01/tripo-out/prop-snow-ridge-rock-decimate-01-5c5f91b6/preview.png",
+  "started": "2026-10-11T09:12:04.080Z",
+  "finished": "2026-10-11T09:17:23.530Z"
+}

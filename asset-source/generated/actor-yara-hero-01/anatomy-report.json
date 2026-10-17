@@ -1,0 +1,1061 @@
+{
+  "schemaVersion": 1,
+  "grip": {
+    "staffDiagonalDegrees": 0,
+    "staffToMiddleFingerDegrees": 75.76603924438858,
+    "staffToPrincipalAxisDegrees": 90,
+    "middleFingerHand": [
+      -0.132633,
+      0.974967,
+      -0.17846
+    ],
+    "staffAxisHand": [
+      0.758689,
+      0.24491,
+      -0.603664
+    ],
+    "palmHand": [
+      0.014573,
+      0.047026,
+      0.009131
+    ],
+    "shaftRadiusRig": 0.01195,
+    "metacarpalHand": [
+      -0.29332,
+      0.955823,
+      0.019135
+    ],
+    "thumbSideHand": [
+      0.758689,
+      0.24491,
+      -0.603664
+    ],
+    "palmNormalHand": [
+      0.581682,
+      0.162549,
+      0.79701
+    ]
+  },
+  "deformationCeiling": {
+    "clips": [
+      "aren-idle",
+      "aren-walk",
+      "aren-run",
+      "aren-jump",
+      "aren-forward-left-dive-roll"
+    ],
+    "p999": 2.23787
+  },
+  "clips": {
+    "aren-idle": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 97.4,
+      "peakTwist": 42.3,
+      "staffTiltMax": 4,
+      "staffTiltMean": 4,
+      "corrections": {},
+      "deformation": {
+        "p99": 0.36402,
+        "p999": 0.56429,
+        "max": 1.06126,
+        "worstBone": "Spine1"
+      },
+      "before": {
+        "peakSwing": 33.7,
+        "peakTwist": 15.3,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.35261,
+          "p999": 0.53294,
+          "max": 0.79388,
+          "worstBone": "RightArm"
+        }
+      }
+    },
+    "aren-walk": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 108,
+      "peakTwist": 45.8,
+      "staffTiltMax": 11.9,
+      "staffTiltMean": 5.9,
+      "corrections": {},
+      "deformation": {
+        "p99": 0.61532,
+        "p999": 1.42235,
+        "max": 5.41438,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 71.2,
+        "peakTwist": 45.8,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.61082,
+          "p999": 1.42489,
+          "max": 5.41438,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-run": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 114.5,
+      "peakTwist": 56.7,
+      "staffTiltMax": 11.6,
+      "staffTiltMean": 4.6,
+      "corrections": {},
+      "deformation": {
+        "p99": 1.23946,
+        "p999": 2.09399,
+        "max": 4.72307,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 114.5,
+        "peakTwist": 55.1,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.23778,
+          "p999": 2.09327,
+          "max": 4.72307,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "aren-jump": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 119.9,
+      "peakTwist": 67.5,
+      "staffTiltMax": 13.4,
+      "staffTiltMean": 10.4,
+      "corrections": {
+        "mixamorig:RightLeg": 0.16,
+        "mixamorig:RightFoot": 1.06
+      },
+      "deformation": {
+        "p99": 0.68553,
+        "p999": 1.28166,
+        "max": 3.6981,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 133.4,
+        "peakTwist": 87.7,
+        "jointsOverJointLimits": [
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.6804,
+          "p999": 1.28138,
+          "max": 3.6981,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-forward-left-dive-roll": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 134.1,
+      "peakTwist": 87.3,
+      "staffTiltMax": 126.3,
+      "staffTiltMean": 63.8,
+      "corrections": {
+        "mixamorig:LeftHand": 0,
+        "mixamorig:LeftUpLeg": 0,
+        "mixamorig:RightUpLeg": 0.08,
+        "mixamorig:LeftFoot": 0.8
+      },
+      "deformation": {
+        "p99": 1.35351,
+        "p999": 2.23787,
+        "max": 4.35512,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 134.1,
+        "peakTwist": 88.4,
+        "jointsOverJointLimits": [
+          "LeftFoot"
+        ],
+        "deformation": {
+          "p99": 1.35451,
+          "p999": 2.23807,
+          "max": 4.35512,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-hit": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 116.9,
+      "peakTwist": 39,
+      "corrections": {
+        "mixamorig:LeftUpLeg": 2.52,
+        "mixamorig:RightUpLeg": 0.95
+      },
+      "deformation": {
+        "p99": 1.38935,
+        "p999": 2.19328,
+        "max": 4.39935,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 129.9,
+        "peakTwist": 88.4,
+        "jointsOverJointLimits": [
+          "LeftUpLeg",
+          "RightUpLeg"
+        ],
+        "deformation": {
+          "p99": 1.37336,
+          "p999": 2.14451,
+          "max": 3.67131,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-cheer": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 92.4,
+      "peakTwist": 116,
+      "corrections": {},
+      "deformation": {
+        "p99": 0.85027,
+        "p999": 1.47917,
+        "max": 3.71407,
+        "worstBone": "Spine1"
+      },
+      "before": {
+        "peakSwing": 92.4,
+        "peakTwist": 116,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.85027,
+          "p999": 1.47917,
+          "max": 3.71407,
+          "worstBone": "Spine1"
+        }
+      }
+    },
+    "aren-defeat": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 110.1,
+      "peakTwist": 56.7,
+      "corrections": {},
+      "deformation": {
+        "p99": 0.5874,
+        "p999": 0.98164,
+        "max": 5.35968,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 110.1,
+        "peakTwist": 56.7,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.5874,
+          "p999": 0.98164,
+          "max": 5.35968,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-knockdown": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 128,
+      "peakTwist": 46.5,
+      "corrections": {
+        "mixamorig:Neck": 14.44,
+        "mixamorig:LeftLeg": 20.2,
+        "mixamorig:RightUpLeg": 0.15,
+        "mixamorig:RightLeg": 3.41
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick0": 0.867,
+        "leanDegreesAtTick0": 7.5,
+        "pelvisMetresAtTick30": 0.242,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 4,
+          "maxCorrectionDegrees": 20.2
+        },
+        "floor": {
+          "liftMinMetres": -0.002,
+          "liftMaxMetres": 0.1594
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.034,
+          "lowestAfterMetres": 0.031,
+          "deepestIntoLimbBeforeMetres": 0.073,
+          "deepestIntoLimbAfterMetres": 0.014,
+          "framesTurned": 27,
+          "largestTurnDegrees": 24
+        },
+        "groundContactTick": 30,
+        "pelvisMetresAtContactTick": 0.242,
+        "pelvisMetresMaxFromContactOn": 0.246,
+        "pelvisMetresInLie": 0.225,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": 0.585,
+          "side": 0.129
+        }
+      },
+      "deformation": {
+        "p99": 1.07831,
+        "p999": 1.82636,
+        "max": 4.71501,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 115.7,
+        "peakTwist": 39,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.06806,
+          "p999": 1.66792,
+          "max": 4.44095,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "aren-knockdown-forward": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 142.1,
+      "peakTwist": 89.3,
+      "corrections": {
+        "mixamorig:Neck": 28.79,
+        "mixamorig:LeftShoulder": 2.69,
+        "mixamorig:RightShoulder": 2.83,
+        "mixamorig:RightForeArm": 2.43,
+        "mixamorig:LeftLeg": 39.71,
+        "mixamorig:LeftFoot": 14.76,
+        "mixamorig:RightLeg": 33.09,
+        "mixamorig:RightFoot": 13.35
+      },
+      "lie": {
+        "ticks": 90,
+        "pelvisMetresAtTick0": 0.869,
+        "leanDegreesAtTick0": 7.5,
+        "pelvisMetresAtTick30": 0.212,
+        "lyingFacing": -0.99,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0
+        },
+        "maxHipsHorizontalOffsetMetres": 0.62,
+        "jointGuard": {
+          "jointsCorrected": 8,
+          "maxCorrectionDegrees": 39.71
+        },
+        "floor": {
+          "liftMinMetres": 0.0221,
+          "liftMaxMetres": 0.1605
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.675,
+          "lowestAfterMetres": 0.004,
+          "deepestIntoLimbBeforeMetres": 0.083,
+          "deepestIntoLimbAfterMetres": 0.021,
+          "framesTurned": 31,
+          "largestTurnDegrees": 56
+        },
+        "groundContactTick": 29,
+        "pelvisMetresAtContactTick": 0.235,
+        "pelvisMetresMaxFromContactOn": 0.288,
+        "pelvisMetresInLie": 0.282,
+        "heldRange": {
+          "fromTick": 48,
+          "toTick": 90,
+          "maxRotationComponentDelta": 0,
+          "maxHipsComponentDelta": 0,
+          "identical": true
+        },
+        "lieHipsOffsetFromStandingMetres": {
+          "back": -0.566,
+          "side": 0.077
+        }
+      },
+      "deformation": {
+        "p99": 0.79819,
+        "p999": 1.583,
+        "max": 4.50767,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 107.4,
+        "peakTwist": 77.7,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.17663,
+          "p999": 1.76401,
+          "max": 4.46845,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-getup": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 145.5,
+      "peakTwist": 88.6,
+      "corrections": {
+        "mixamorig:Spine1": 0.01,
+        "mixamorig:Spine2": 7.05,
+        "mixamorig:Neck": 9.62,
+        "mixamorig:LeftHand": 29.22,
+        "mixamorig:RightHand": 1.62,
+        "mixamorig:LeftLeg": 14.98,
+        "mixamorig:RightFoot": 0.29
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick0": 0.225,
+        "leanDegreesAtTick0": 90.9,
+        "pelvisMetresAtTick30": 0.375,
+        "lyingFacing": 1,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": -0.34,
+          "lyingFramesMax": 1
+        },
+        "maxHipsHorizontalOffsetMetres": 0.599,
+        "jointGuard": {
+          "jointsCorrected": 7,
+          "maxCorrectionDegrees": 29.22
+        },
+        "floor": {
+          "take": {
+            "liftMinMetres": -0.0146,
+            "liftMaxMetres": 0.1137
+          },
+          "final": {
+            "liftMinMetres": -0.0411,
+            "liftMaxMetres": 0.0401
+          }
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.275,
+          "lowestAfterMetres": 0.013,
+          "deepestIntoLimbBeforeMetres": 0.101,
+          "deepestIntoLimbAfterMetres": 0.023,
+          "framesTurned": 43,
+          "largestTurnDegrees": 44
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 10.2491
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 10.53,
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-knocked",
+            "fromSeconds": 0.25,
+            "toSeconds": 2,
+            "fastestKeyedStretch": 1.59
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 1.25234,
+        "p999": 2.13622,
+        "max": 4.82307,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 143.6,
+        "peakTwist": 70.1,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.44701,
+          "p999": 2.19233,
+          "max": 4.42646,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "aren-getup-forward": {
+      "limits": "JOINT_LIMITS",
+      "peakSwing": 117.4,
+      "peakTwist": 72.1,
+      "corrections": {
+        "mixamorig:Spine": 1.9
+      },
+      "lie": {
+        "ticks": 66,
+        "pelvisMetresAtTick0": 0.282,
+        "leanDegreesAtTick0": 95.6,
+        "pelvisMetresAtTick30": 0.548,
+        "lyingFacing": -0.99,
+        "floorLowestVertexCm": {
+          "overAllFrames": -0.34,
+          "lyingFramesMin": 0,
+          "lyingFramesMax": 0.04
+        },
+        "maxHipsHorizontalOffsetMetres": 0.571,
+        "jointGuard": {
+          "jointsCorrected": 1,
+          "maxCorrectionDegrees": 1.9
+        },
+        "floor": {
+          "take": {
+            "liftMinMetres": -0.0227,
+            "liftMaxMetres": 0.1242
+          },
+          "final": {
+            "liftMinMetres": 0,
+            "liftMaxMetres": 0.0399
+          }
+        },
+        "staff": {
+          "lowestBeforeMetres": -0.515,
+          "lowestAfterMetres": 0.031,
+          "deepestIntoLimbBeforeMetres": 0.022,
+          "deepestIntoLimbAfterMetres": 0,
+          "framesTurned": 34,
+          "largestTurnDegrees": 32
+        },
+        "seamFromKnockdown": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 0
+        },
+        "idleEnd": {
+          "rotationDegrees": 0,
+          "hipsMillimetres": 15.5771
+        },
+        "endHipsXZOffsetFromStandingMillimetres": 0,
+        "maxJointStepLastQuarterDegreesPerTick": 10.485,
+        "sourceTimeScale": [
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 2.45,
+            "toSeconds": 3.3,
+            "fastestKeyedStretch": 1.42
+          },
+          {
+            "take": "getting-up-stomach",
+            "fromSeconds": 4.25,
+            "toSeconds": 5.05,
+            "fastestKeyedStretch": 1.6
+          }
+        ]
+      },
+      "deformation": {
+        "p99": 1.09241,
+        "p999": 1.83254,
+        "max": 3.94356,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 108.5,
+        "peakTwist": 72.9,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.40953,
+          "p999": 0.85795,
+          "max": 2.59227,
+          "worstBone": "LeftForeArm"
+        }
+      }
+    },
+    "yara-thornshot-1": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 108.2,
+      "peakTwist": 59.5,
+      "staffTiltMax": 15.9,
+      "staffTiltMean": 9.6,
+      "corrections": {
+        "mixamorig:Head": 1.19,
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftHand": 0.83,
+        "mixamorig:LeftLeg": 0.36,
+        "mixamorig:RightLeg": 0.34,
+        "mixamorig:LeftFoot": 1.16,
+        "mixamorig:RightFoot": 1.17,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 0.9804,
+        "p999": 1.64471,
+        "max": 3.50885,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 112.1,
+        "peakTwist": 122.2,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 0.83578,
+          "p999": 1.68898,
+          "max": 4.20098,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-thornshot-2": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 111.6,
+      "peakTwist": 77.3,
+      "staffTiltMax": 82,
+      "staffTiltMean": 52.7,
+      "corrections": {
+        "mixamorig:Head": 1.19,
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftArm": 1.09,
+        "mixamorig:LeftHand": 0.83,
+        "mixamorig:RightHand": 5.28,
+        "mixamorig:LeftLeg": 0.34,
+        "mixamorig:RightLeg": 0.33,
+        "mixamorig:LeftFoot": 1.18,
+        "mixamorig:RightFoot": 1.18,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 0.97413,
+        "p999": 1.66831,
+        "max": 4.02961,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 84.2,
+        "peakTwist": 100.6,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftForeArm",
+          "LeftHand",
+          "RightHand",
+          "LeftLeg",
+          "RightLeg",
+          "LeftFoot"
+        ],
+        "deformation": {
+          "p99": 0.64324,
+          "p999": 1.1194,
+          "max": 2.46864,
+          "worstBone": "Spine1"
+        }
+      }
+    },
+    "yara-thornshot-3": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 136.1,
+      "peakTwist": 69.6,
+      "staffTiltMax": 54,
+      "staffTiltMean": 33.1,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.59,
+        "mixamorig:RightShoulder": 0.6,
+        "mixamorig:LeftArm": 2.6,
+        "mixamorig:LeftForeArm": 5.52,
+        "mixamorig:RightForeArm": 0,
+        "mixamorig:LeftHand": 11.89,
+        "mixamorig:RightHand": 2.57
+      },
+      "deformation": {
+        "p99": 0.99348,
+        "p999": 1.70357,
+        "max": 4.05756,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 81.7,
+        "peakTwist": 98.1,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "LeftFoot"
+        ],
+        "deformation": {
+          "p99": 1.08759,
+          "p999": 1.85999,
+          "max": 3.7854,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-root-spike": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 104.6,
+      "peakTwist": 53.5,
+      "staffTiltMax": 122,
+      "staffTiltMean": 70.9,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftHand": 1.79,
+        "mixamorig:LeftFoot": 1.19,
+        "mixamorig:RightFoot": 1.19,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 0.66898,
+        "p999": 1.10856,
+        "max": 2.66413,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 92.7,
+        "peakTwist": 98.1,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "LeftLeg",
+          "LeftFoot"
+        ],
+        "deformation": {
+          "p99": 1.04687,
+          "p999": 1.75898,
+          "max": 3.7854,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-root-charge": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 127.6,
+      "peakTwist": 76.2,
+      "staffTiltMax": 6,
+      "staffTiltMean": 6,
+      "corrections": {
+        "mixamorig:LeftArm": 0,
+        "mixamorig:RightArm": 0.45,
+        "mixamorig:RightForeArm": 0.25,
+        "mixamorig:LeftHand": 7.55,
+        "mixamorig:RightHand": 1.39
+      },
+      "deformation": {
+        "p99": 0.54477,
+        "p999": 1.07517,
+        "max": 2.90128,
+        "worstBone": "LeftArm"
+      },
+      "before": {
+        "peakSwing": 115.3,
+        "peakTwist": 123.4,
+        "jointsOverJointLimits": [],
+        "deformation": {
+          "p99": 1.14332,
+          "p999": 2.00122,
+          "max": 4.44499,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-root-eruption": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 140.5,
+      "peakTwist": 74.2,
+      "staffTiltMax": 8,
+      "staffTiltMean": 5.7,
+      "corrections": {
+        "mixamorig:Spine": 0.62,
+        "mixamorig:LeftArm": 0.06,
+        "mixamorig:LeftHand": 1.76,
+        "mixamorig:RightHand": 1.73,
+        "mixamorig:RightUpLeg": 0.19,
+        "mixamorig:LeftLeg": 0.27,
+        "mixamorig:LeftToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 1.20625,
+        "p999": 2.00715,
+        "max": 4.1453,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 114.8,
+        "peakTwist": 121.8,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "RightHand",
+          "LeftFoot",
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.98591,
+          "p999": 1.75328,
+          "max": 4.33376,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-seed-charge": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 98.6,
+      "peakTwist": 44.9,
+      "staffTiltMax": 76,
+      "staffTiltMean": 76,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftToeBase": 0.93,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 0.58403,
+        "p999": 1.17412,
+        "max": 2.24102,
+        "worstBone": "Spine1"
+      },
+      "before": {
+        "peakSwing": 105.3,
+        "peakTwist": 98.5,
+        "jointsOverJointLimits": [
+          "RightHand",
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.7708,
+          "p999": 1.22994,
+          "max": 2.01979,
+          "worstBone": "Spine1"
+        }
+      }
+    },
+    "yara-sap-lance": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 123.7,
+      "peakTwist": 65.2,
+      "staffTiltMax": 84,
+      "staffTiltMean": 68.3,
+      "corrections": {
+        "mixamorig:Head": 1.19,
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.72,
+        "mixamorig:LeftHand": 1.82,
+        "mixamorig:RightHand": 4.87,
+        "mixamorig:LeftLeg": 0.33,
+        "mixamorig:RightLeg": 0.33,
+        "mixamorig:LeftFoot": 1.18,
+        "mixamorig:RightFoot": 1.18,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 0.96686,
+        "p999": 1.58456,
+        "max": 4.27581,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 154,
+        "peakTwist": 136.3,
+        "jointsOverJointLimits": [
+          "LeftHand",
+          "RightLeg"
+        ],
+        "deformation": {
+          "p99": 1.3143,
+          "p999": 2.08347,
+          "max": 3.92941,
+          "worstBone": "RightUpLeg"
+        }
+      }
+    },
+    "yara-seed-storm": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 109,
+      "peakTwist": 78.1,
+      "staffTiltMax": 78,
+      "staffTiltMean": 61.3,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:LeftArm": 1.87,
+        "mixamorig:LeftHand": 0.83,
+        "mixamorig:RightHand": 0.09,
+        "mixamorig:LeftFoot": 0.83,
+        "mixamorig:RightFoot": 1.19
+      },
+      "deformation": {
+        "p99": 0.83032,
+        "p999": 1.71016,
+        "max": 4.58988,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 109.1,
+        "peakTwist": 122.5,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "RightHand",
+          "LeftFoot",
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.95136,
+          "p999": 1.6845,
+          "max": 4.20098,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-binding-vines": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 113.3,
+      "peakTwist": 78.1,
+      "staffTiltMax": 18,
+      "staffTiltMean": 10.8,
+      "corrections": {
+        "mixamorig:Head": 1.19,
+        "mixamorig:LeftShoulder": 0.6,
+        "mixamorig:RightShoulder": 0.04,
+        "mixamorig:LeftArm": 1.85,
+        "mixamorig:RightUpLeg": 0.95,
+        "mixamorig:LeftLeg": 0.35,
+        "mixamorig:RightLeg": 0.36,
+        "mixamorig:LeftFoot": 0.42,
+        "mixamorig:RightFoot": 0.6
+      },
+      "deformation": {
+        "p99": 1.02569,
+        "p999": 1.687,
+        "max": 4.30308,
+        "worstBone": "RightUpLeg"
+      },
+      "before": {
+        "peakSwing": 114.4,
+        "peakTwist": 122.7,
+        "jointsOverJointLimits": [
+          "RightHand"
+        ],
+        "deformation": {
+          "p99": 0.79946,
+          "p999": 1.54088,
+          "max": 4.20098,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-cleanse": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 141.5,
+      "peakTwist": 48.5,
+      "staffTiltMax": 4,
+      "staffTiltMean": 4,
+      "corrections": {
+        "mixamorig:Spine": 0.65,
+        "mixamorig:RightUpLeg": 0.48,
+        "mixamorig:LeftLeg": 0.45,
+        "mixamorig:LeftToeBase": 0.95
+      },
+      "deformation": {
+        "p99": 1.32457,
+        "p999": 2.18653,
+        "max": 4.18791,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": {
+        "peakSwing": 111.3,
+        "peakTwist": 123.3,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "RightHand",
+          "LeftFoot",
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.98765,
+          "p999": 1.77189,
+          "max": 4.27663,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "yara-heartroot-bloom": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 137.7,
+      "peakTwist": 79.2,
+      "staffTiltMax": 108,
+      "staffTiltMean": 7.1,
+      "corrections": {
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:RightShoulder": 0.71,
+        "mixamorig:LeftArm": 0.4,
+        "mixamorig:RightArm": 5.11,
+        "mixamorig:RightForeArm": 2.56,
+        "mixamorig:RightHand": 1.85,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.94
+      },
+      "deformation": {
+        "p99": 0.78138,
+        "p999": 1.35575,
+        "max": 3.1243,
+        "worstBone": "Spine1"
+      },
+      "before": {
+        "peakSwing": 111.5,
+        "peakTwist": 122.5,
+        "jointsOverJointLimits": [
+          "Head",
+          "LeftHand",
+          "RightHand",
+          "LeftLeg",
+          "LeftFoot",
+          "RightFoot"
+        ],
+        "deformation": {
+          "p99": 0.97945,
+          "p999": 1.73989,
+          "max": 3.90447,
+          "worstBone": "LeftUpLeg"
+        }
+      }
+    },
+    "aren-air-step": {
+      "limits": "COMBAT_LIMITS",
+      "peakSwing": 113.6,
+      "peakTwist": 77.1,
+      "staffTiltMax": 138.7,
+      "staffTiltMean": 47.8,
+      "corrections": {
+        "mixamorig:Spine": 0,
+        "mixamorig:LeftShoulder": 0.72,
+        "mixamorig:LeftArm": 0.96,
+        "mixamorig:LeftHand": 1.57,
+        "mixamorig:RightHand": 1.43,
+        "mixamorig:RightLeg": 0.35,
+        "mixamorig:LeftFoot": 0.59,
+        "mixamorig:RightFoot": 1.17,
+        "mixamorig:LeftToeBase": 0.95,
+        "mixamorig:RightToeBase": 0.95
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.136
+      },
+      "deformation": {
+        "p99": 0.95357,
+        "p999": 1.71672,
+        "max": 4.21538,
+        "worstBone": "LeftUpLeg"
+      },
+      "before": null
+    }
+  }
+}

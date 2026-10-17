@@ -1,0 +1,16 @@
+{
+  "task_id": "93e71a35-af46-48a9-a440-ce8e0ac1822c",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-warden-glaive-decimate-01/tripo-out/prop-warden-glaive-decimate-01-93e71a35",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-warden-glaive-decimate-01/tripo-out/prop-warden-glaive-decimate-01-93e71a35/model.glb",
+  "preview": "asset-source/generated/prop-warden-glaive-decimate-01/tripo-out/prop-warden-glaive-decimate-01-93e71a35/preview.png",
+  "started": "2026-10-10T13:54:59.653Z",
+  "finished": "2026-10-10T13:59:20.317Z"
+}

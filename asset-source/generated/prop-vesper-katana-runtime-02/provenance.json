@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-vesper-katana",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "concept": "75aaa1f6-6e22-41ed-a65f-a7c68af3300e",
+    "model": "74d921f2-eb21-4288-b141-1c532e5ad6c0",
+    "decimate": "5674dcee-968a-4920-a8b9-428e53394b52"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048,
+    "decimate": {
+      "face_limit": 12000,
+      "bake": true
+    }
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-vesper-katana-decimate-02/tripo-out/prop-vesper-katana-decimate-02-5674dcee/model.glb",
+      "sha256": "5a42841aa6bd450eff15054ac0718ac829f1f588e9629b36b9c7fc30cfda03d5"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+    "sha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753",
+    "bytes": 4845100,
+    "vertices": 18160,
+    "triangles": 15491,
+    "boundsMin": [
+      -0.35884,
+      -0.44083,
+      -0.48909
+    ],
+    "boundsMax": [
+      0.35905,
+      0.4417,
+      0.48725
+    ],
+    "worldBoundsMin": [
+      -0.35884,
+      -0.44083,
+      -0.48909
+    ],
+    "worldBoundsMax": [
+      0.35905,
+      0.4417,
+      0.48725
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3179284,
+      "toBytes": 1409297
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3511636,
+      "toBytes": 1115094
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 14854908,
+      "toBytes": 1644611
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  },
+  "rejectedTasks": [
+    {
+      "task": "41a68468-0a85-4b8d-aa39-1fdfdc8c85bc",
+      "type": "text_to_image",
+      "credits": 15,
+      "note": "pure side-view concept, accepted visually"
+    },
+    {
+      "task": "7df29eae-352a-465e-9831-f90a2f183d19",
+      "type": "image_to_model",
+      "credits": 70,
+      "note": "REJECTED: the wide side-view crop produced two parallel katanas with slab blades; previews and task.json kept in prop-vesper-katana-model-02-rejected-twin (the 73 MB model.glb was deleted)"
+    }
+  ],
+  "credits": {
+    "concept": 15,
+    "model": 70,
+    "decimate": 30,
+    "rejected": 85,
+    "total": 200,
+    "budget": 250
+  },
+  "concept": "asset-source/generated/prop-vesper-katana-concept-03/tripo-out/prop-vesper-katana-concept-03-75aaa1f6/generated_image.png (3/4 diagonal view, banana_pro)",
+  "runtimeShaping": "src/rendering/WardenWeapon.ts sharpenKatanaBlade reshapes the stylised Tripo blade at load into a slender wedge (width x0.62, thickness 0.27 spine to 0.05 edge, nicks flattened); UVs and topology unchanged. Emission is a thin line on the cutting edge only.",
+  "grip": {
+    "length": 1.25,
+    "gripFromPommel": 0.2,
+    "bladeLength": 0.76,
+    "diagonalRadians": 0.5
+  }
+}

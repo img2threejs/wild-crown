@@ -1,0 +1,129 @@
+{
+  "sourceHash": "cfb94d2bb28ad7d5fd8b1203c41f5c888e14983a4801061d19d986fa47fba828",
+  "parentHash": "6a8715c18e09f1c23e3d49626f01cfc64cf08fee1cdb810aea141af23571f2c1",
+  "outputHash": "dadde5fb21784c208094025d45300415bcfefa0fba7c3a0c9e9121949d48cecb",
+  "outputBytes": 17524632,
+  "mappings": {
+    "aren-idle": "idle.001",
+    "aren-cheer": "cheer.001",
+    "aren-defeat": "defeat_03.001"
+  },
+  "rootMotion": {
+    "aren-idle": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0.0416666679084301,
+          "position": {
+            "x": 0.0019521858775988221,
+            "y": 0.5503907799720764,
+            "z": -0.00976080447435379
+          }
+        },
+        {
+          "time": 7.708333492279053,
+          "position": {
+            "x": -0.13298241794109344,
+            "y": 0.5481448769569397,
+            "z": -0.011536921374499798
+          }
+        },
+        {
+          "time": 15.375,
+          "position": {
+            "x": 0.0019484610529616475,
+            "y": 0.5503931641578674,
+            "z": -0.009762820787727833
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-cheer": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0.0416666679084301,
+          "position": {
+            "x": 0.00251505128107965,
+            "y": 0.5432308912277222,
+            "z": -0.010567361488938332
+          }
+        },
+        {
+          "time": 6.083333492279053,
+          "position": {
+            "x": 0.05230865627527237,
+            "y": 0.5435519218444824,
+            "z": -0.03354179114103317
+          }
+        },
+        {
+          "time": 12.125,
+          "position": {
+            "x": 0.004079883452504873,
+            "y": 0.5336994528770447,
+            "z": -0.018239818513393402
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    },
+    "aren-defeat": {
+      "mode": "native-root-motion",
+      "rootNodeName": "mixamorigHips",
+      "preserveVerticalMotion": true,
+      "curveSamples": [
+        {
+          "time": 0.0416666679084301,
+          "position": {
+            "x": 0.0019521877402439713,
+            "y": 0.5765112042427063,
+            "z": -0.009760811924934387
+          }
+        },
+        {
+          "time": 2.7916667461395264,
+          "position": {
+            "x": -0.09597373753786087,
+            "y": 0.2896636426448822,
+            "z": -0.2765192985534668
+          }
+        },
+        {
+          "time": 5.583333492279053,
+          "position": {
+            "x": -0.18829037249088287,
+            "y": 0.08222855627536774,
+            "z": 0.0003911207022611052
+          }
+        }
+      ],
+      "evidenceStatus": "verified"
+    }
+  },
+  "clips": [
+    {
+      "action": "aren-idle",
+      "name": "idle.001",
+      "durationSeconds": 15.375,
+      "channels": 195
+    },
+    {
+      "action": "aren-cheer",
+      "name": "cheer.001",
+      "durationSeconds": 12.125,
+      "channels": 195
+    },
+    {
+      "action": "aren-defeat",
+      "name": "defeat_03.001",
+      "durationSeconds": 5.583333492279053,
+      "channels": 195
+    }
+  ]
+}

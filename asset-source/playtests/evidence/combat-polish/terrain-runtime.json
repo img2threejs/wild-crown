@@ -1,0 +1,74 @@
+{
+  "sampling": "Four barycentric probes per emitted triangle against TerrainField.sample; full edge incidence, winding, area and unused-vertex checks.",
+  "meshes": [
+    {
+      "region": "greenwake",
+      "vertices": 56908,
+      "triangles": 113078,
+      "maxSampleDeviation": 7.15e-8,
+      "openInteriorEdges": 0,
+      "nonmanifoldEdges": 0,
+      "wrongWinding": 0,
+      "degenerateTriangles": 0,
+      "unusedVertices": 0
+    },
+    {
+      "region": "whispering-canopy",
+      "vertices": 61498,
+      "triangles": 122349,
+      "maxSampleDeviation": 6.33e-7,
+      "openInteriorEdges": 0,
+      "nonmanifoldEdges": 0,
+      "wrongWinding": 0,
+      "degenerateTriangles": 0,
+      "unusedVertices": 0
+    },
+    {
+      "region": "the-grove",
+      "vertices": 38982,
+      "triangles": 77358,
+      "maxSampleDeviation": 2.38e-8,
+      "openInteriorEdges": 0,
+      "nonmanifoldEdges": 0,
+      "wrongWinding": 0,
+      "degenerateTriangles": 0,
+      "unusedVertices": 0
+    },
+    {
+      "region": "moonpine-ridge",
+      "vertices": 60293,
+      "triangles": 119952,
+      "maxSampleDeviation": 7.63e-7,
+      "openInteriorEdges": 0,
+      "nonmanifoldEdges": 0,
+      "wrongWinding": 0,
+      "degenerateTriangles": 0,
+      "unusedVertices": 0
+    },
+    {
+      "region": "mistveil-basin",
+      "vertices": 50637,
+      "triangles": 100632,
+      "maxSampleDeviation": 4.77e-8,
+      "openInteriorEdges": 0,
+      "nonmanifoldEdges": 0,
+      "wrongWinding": 0,
+      "degenerateTriangles": 0,
+      "unusedVertices": 0
+    }
+  ],
+  "greenwakeKeyboardBank": {
+    "start": {
+      "x": 11.893988703003563,
+      "y": 0.7974064948345507,
+      "z": 7.987032474172754
+    },
+    "end": {
+      "x": 13.247803556795168,
+      "y": 0.9998908747282844,
+      "z": 8.999454373641422
+    },
+    "maxYStep": 0.013425917296604695,
+    "maxTerrainError": 1.207551314497124e-8
+  }
+}

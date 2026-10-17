@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-bamboo-grove-cluster",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "49fef864-67cd-409b-9b4a-2be165a47602",
+    "decimate": "dae080bf-8fd8-4ef7-93ec-f987a6d3d93e"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.5,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-bamboo-grove-cluster-decimate-01/tripo-out/prop-bamboo-grove-cluster-decima-dae080bf/model.glb",
+      "sha256": "ae1cfe72b2434865af65b1a1f8ec560b505af1e187df542673af761e1f8d201e"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-bamboo-grove-cluster-runtime-01/prop-bamboo-grove-cluster.glb",
+    "sha256": "a6d9d3beeeb811dc6c55962795cb07275953b2804318a5f5fa84b6b93224e75f",
+    "bytes": 2656088,
+    "vertices": 17243,
+    "triangles": 11623,
+    "boundsMin": [
+      -0.30176,
+      -0.48922,
+      -0.3396
+    ],
+    "boundsMax": [
+      0.30946,
+      0.48988,
+      0.32909
+    ],
+    "worldBoundsMin": [
+      -0.30176,
+      -0.48922,
+      -0.3396
+    ],
+    "worldBoundsMax": [
+      0.30946,
+      0.48988,
+      0.32909
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4497089,
+      "toBytes": 556993
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6664616,
+      "toBytes": 680644
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19487866,
+      "toBytes": 725127
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 23253,
+      "trianglesAfter": 11623,
+      "relativeError": 0.003161818953230977
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 23276,
+      "trianglesAfter": 23253,
+      "removed": 23,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [],
+  "compaction": [
+    {
+      "verticesBefore": 33470,
+      "verticesAfter": 17243
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

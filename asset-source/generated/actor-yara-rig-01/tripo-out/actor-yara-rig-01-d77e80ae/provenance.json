@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-yara",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "sourceModel": {
+    "path": "asset-source/generated/actor-yara-model-01/tripo-out/actor-yara-model-01-04e6f63d/model.glb",
+    "sha256": "d4da3e2df6f94e74feb3f693246765c4ab433d8003b46f6ef17c482afc0715df",
+    "bytes": 63591780
+  },
+  "taskId": "d77e80ae-120d-4f90-8e0a-a093bb22a05c",
+  "generationTask": {
+    "type": "animate_rig",
+    "status": "success",
+    "spec": "tripo",
+    "topology": "biped",
+    "outputFormat": "glb",
+    "creditsConsumed": 25
+  },
+  "selectedChainCredits": 100,
+  "allCreativeAttemptsCredits": 105,
+  "output": {
+    "path": "model.glb",
+    "sha256": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b",
+    "bytes": 83886648,
+    "sceneNodes": 31,
+    "bones": 28,
+    "meshes": 1,
+    "vertices": 1014289,
+    "skins": 1,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "rigQuality": "not-evaluated-under-motion",
+    "animationQuality": "not-evaluated-no-clips",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The GLB contains a 28-bone, one-skin biped rig, but no animation clips; successful rig generation does not establish deform quality.",
+      "The 1,014,289-vertex mesh remains too heavy for a production character without validated LODs.",
+      "No game actions, contact/profile controls, full character gates, collision/scale, or reviewer approval were supplied."
+    ]
+  }
+}

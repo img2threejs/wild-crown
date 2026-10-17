@@ -1,0 +1,20 @@
+{
+  "task_id": "e9c57a60-591f-4317-9d91-76775470d1f2",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animation": "preset:biped:front_kick_01",
+    "out_format": "fbx",
+    "animate_in_place": true,
+    "original_model_id": "f646d7e4-8001-47d5-823f-df5d96a5b509"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 10,
+  "created_at": "2026-10-12T06:49:32.159062Z",
+  "completed_at": "2026-10-12T06:49:54.089589Z",
+  "files": [
+    "model.fbx"
+  ]
+}

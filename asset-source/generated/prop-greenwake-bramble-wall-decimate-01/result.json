@@ -1,0 +1,16 @@
+{
+  "task_id": "d1cc03b1-8e3f-49f3-8d1b-b8339460b159",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-greenwake-bramble-wall-decimate-01/tripo-out/prop-greenwake-bramble-wall-deci-d1cc03b1",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-greenwake-bramble-wall-decimate-01/tripo-out/prop-greenwake-bramble-wall-deci-d1cc03b1/model.glb",
+  "preview": "asset-source/generated/prop-greenwake-bramble-wall-decimate-01/tripo-out/prop-greenwake-bramble-wall-deci-d1cc03b1/preview.png",
+  "started": "2026-10-10T11:34:21.171Z",
+  "finished": "2026-10-10T11:39:43.941Z"
+}

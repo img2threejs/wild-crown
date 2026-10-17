@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-grove-hollowheart",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "5919c138-619c-4c88-9781-bd9cd7410165",
+    "decimate": "ebda171c-ef8f-4790-b057-d21f3f0a832c",
+    "rig": "2875c803-d0ea-48ad-85bd-c43f27015e24",
+    "animA": "b059ef74-3de0-431d-8a30-50fe9e6be206",
+    "animB": "6122c7b7-13b5-4a62-a6de-b96e86b38c96"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v1.0 biped (tripo spec, -p model=rig-v1.0; Hip/Waist/Spine01 skeleton, preset:biped:* retargets)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-grove-hollowheart-anim-a-01/tripo-out/actor-grove-hollowheart-anim-a-0-b059ef74/model.glb",
+      "sha256": "9753b8859773f514577316a01ed06b916324c76ba501ca879615a6486eb868de"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart.glb",
+    "sha256": "81d8c8caabdcdf53b8695e03d3e2a64e9026f519cc03ce46fb024ac16beb01da",
+    "bytes": 9418744,
+    "vertices": 43612,
+    "triangles": 29996,
+    "boundsMin": [
+      -0.13122,
+      0,
+      -0.40227
+    ],
+    "boundsMax": [
+      0.13122,
+      0.80071,
+      0.40227
+    ]
+  },
+  "clips": [
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 123
+    },
+    {
+      "name": "pitch_baseball",
+      "durationSeconds": 3.8,
+      "channels": 123
+    },
+    {
+      "name": "run",
+      "durationSeconds": 1.2666666666666666,
+      "channels": 123
+    },
+    {
+      "name": "slash",
+      "durationSeconds": 6.6,
+      "channels": 123
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 123
+    },
+    {
+      "name": "dive",
+      "durationSeconds": 2.7333333333333334,
+      "channels": 123
+    },
+    {
+      "name": "hurt",
+      "durationSeconds": 13.866666666666667,
+      "channels": 123
+    },
+    {
+      "name": "jump",
+      "durationSeconds": 2.2333333333333334,
+      "channels": 123
+    },
+    {
+      "name": "turn",
+      "durationSeconds": 3.8666666666666667,
+      "channels": 123
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4795685,
+      "toBytes": 1842950
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4917914,
+      "toBytes": 1720369
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20467592,
+      "toBytes": 2553440
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

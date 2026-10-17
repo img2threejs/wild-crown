@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-migration-gate",
+  "generator": "author-migration-gate.mjs (Tripo API via tripo-greenwake-chain.mjs + native partition)",
+  "tasks": {
+    "model": "bf3d1bab-9235-48fa-9c3f-00864ea97f89"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00837,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-migration-gate-model-01/tripo-out/prop-migration-gate-model-01-bf3d1bab/model.glb",
+      "sha256": "8ea198a9ab1235f5d4a0d96a4c99934d940229849d3f60e24464355ac5fb341d"
+    },
+    "articulatedSource": {
+      "path": "asset-source/generated/prop-migration-gate-runtime-01/prop-migration-gate.glb",
+      "sha256": "65d5d1814191887d9ed4495c380c860eecb37962acc6d781573e9617758735ab"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-migration-gate-runtime-01/prop-migration-gate-articulated.glb",
+    "sha256": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b",
+    "bytes": 2829472,
+    "meshes": 2,
+    "nodes": 3,
+    "panelNodeName": "migration_gate_panel",
+    "panelNodeExtras": {
+      "closedTranslation": [
+        0,
+        0,
+        0
+      ],
+      "openTranslation": [
+        0,
+        0.4,
+        0
+      ]
+    },
+    "partition": {
+      "rule": "all vertices inside X[-0.025,0.04], |Z|<0.25, Y<0.22",
+      "frameTriangles": 5514,
+      "panelTriangles": 10764,
+      "originalTriangles": 16278,
+      "frameVertices": 7610,
+      "panelVertices": 15499,
+      "frameUniqueTriangles": 5454,
+      "panelUniqueTriangles": 10764,
+      "originalUniqueTriangles": 16218
+    },
+    "bounds": {
+      "frame": {
+        "min": [
+          -0.2068639099597931,
+          -0.37834465503692627,
+          -0.4828406274318695
+        ],
+        "max": [
+          0.21603094041347504,
+          0.3787817656993866,
+          0.4775407910346985
+        ]
+      },
+      "panel": {
+        "min": [
+          -0.024793969467282295,
+          -0.37572115659713745,
+          -0.2465636432170868
+        ],
+        "max": [
+          0.03942079097032547,
+          0.2176503837108612,
+          0.2411644160747528
+        ]
+      }
+    },
+    "lift": {
+      "nativeMetres": 0.4,
+      "runtimeMetres": 3.332,
+      "manifestScale": 8.33
+    },
+    "clearOpening": {
+      "floorRuntimeMetres": 0,
+      "lowestSelectedVertexNativeY": -0.376,
+      "lowestSelectedVertexLiftedNativeY": 0.024,
+      "lowestSelectedVertexLiftedRuntimeMetres": 3.354,
+      "liftRuntimeMetres": 3.332,
+      "spec": ">= 3m physically clear passage; selected panel bounds alone do not prove this.",
+      "met": false,
+      "note": "Requires native collider passage and visual verification of the wood/stone partition."
+    },
+    "textures": [
+      {
+        "index": 0,
+        "from": "image/jpeg",
+        "fromBytes": 8376955,
+        "toBytes": 1052028
+      },
+      {
+        "index": 1,
+        "from": "image/jpeg",
+        "fromBytes": 1771060,
+        "toBytes": 567972
+      },
+      {
+        "index": 2,
+        "from": "image/png",
+        "fromBytes": 3088246,
+        "toBytes": 271717
+      }
+    ]
+  },
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local candidate requiring visual partition review and physical passage verification."
+  }
+}

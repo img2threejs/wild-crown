@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-vara",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "Candidate model generated from the visually reviewed full-body concept and four identity views; visual approval and production acceptance are still pending runtime inspection.",
+  "sourceConcept": {
+    "path": "asset-source/generated/actor-vara-concept-02/tripo-out/actor-vara-concept-02-6a7545fa/generated_image.png",
+    "sha256": "2f3ae4196a9f1955d80eca23bbbdbb746cb24a1e62f1a18b1225e24a55519437"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/actor-vara-multiview-01/tripo-out/actor-vara-multiview-01-767db347/generate_multiview_image.front_view.jpeg",
+      "sha256": "b8cbb3ec3ccf2f92d1e81b2d2f17a33fb7b5ba036603cd668e98434e4d1ab5f9"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/actor-vara-multiview-01/tripo-out/actor-vara-multiview-01-767db347/generate_multiview_image.left_view.jpeg",
+      "sha256": "40ab12625a35988bf35a004e16ba6c8349beec169bafbd087513dd265a57bba4"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/actor-vara-multiview-01/tripo-out/actor-vara-multiview-01-767db347/generate_multiview_image.back_view.jpeg",
+      "sha256": "9911fea4a968892c0bd5839c727393345313b56b9f4f28f88dda1ad063eb42f8"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/actor-vara-multiview-01/tripo-out/actor-vara-multiview-01-767db347/generate_multiview_image.right_view.jpeg",
+      "sha256": "985eac397cf690a34275043c90de10149a4f1cec9d897486acbd3d9d971ed134"
+    }
+  ],
+  "generationTask": {
+    "taskId": "f50fa0c8-9d1f-446a-ba38-53574a8542fa",
+    "type": "multiview_to_model",
+    "status": "success",
+    "modelVersion": "v3.1-20260211",
+    "geometryQuality": "detailed",
+    "textureQuality": "detailed",
+    "pbr": true,
+    "uvExport": true,
+    "creditsConsumed": 60
+  },
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 80,
+  "output": {
+    "path": "model.glb",
+    "sha256": "7e4402814e6206fdd7c56c3b2500f133e038fac949bb4eb320b5329818b992f0",
+    "bytes": 63059968,
+    "format": "glTF 2.0 binary",
+    "runtimeLoad": "pending; inspect the actual GLB in project asset-lab before candidate review.",
+    "skins": 0,
+    "animations": 0
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "rigQuality": "pending-avian-rig",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "This is an AI-generated static source pending actual runtime-scene and visual inspection.",
+      "Rig, deform, animation, scale, collision and character gate evidence are incomplete."
+    ]
+  }
+}

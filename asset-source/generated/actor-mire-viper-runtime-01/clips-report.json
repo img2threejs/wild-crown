@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-mire-viper",
+  "generator": "scripts/assets/author-creature-clips.mjs",
+  "input": {
+    "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper.glb",
+    "sha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
+    "bytes": 7526196
+  },
+  "output": {
+    "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
+    "sha256": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
+    "bytes": 7774772
+  },
+  "castSocketBone": "tripo::Head_1",
+  "inPlaceAnchorBone": "tripo::Tail_1",
+  "rootBone": "tripo::Root",
+  "body": {
+    "heightUnits": 0.4948,
+    "boundsMin": [
+      -0.2397,
+      0,
+      -0.489
+    ],
+    "boundsMax": [
+      0.2397,
+      0.4948,
+      0.489
+    ]
+  },
+  "fps": 30,
+  "slots": {
+    "monster-idle": {
+      "clip": "monster-idle",
+      "produced": "authored",
+      "durationSeconds": 3,
+      "frames": 91,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0.0075,
+        "maxMeshCentroidWanderUnits": 0.0214,
+        "maxRootBoneTravelUnits": 0.0689,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.139,
+        "peakStrikeTime": 0.511,
+        "loopClosureStepDegrees": 1.212,
+        "maxInteriorStepDegrees": 1.206
+      }
+    },
+    "monster-walk": {
+      "clip": "preset:serpentine:march",
+      "produced": "preset",
+      "durationSeconds": 1.25,
+      "loop": true,
+      "note": "Tripo preset kept untouched (rotation-only tracks, no root translation)"
+    },
+    "monster-run": {
+      "clip": "monster-run",
+      "produced": "authored",
+      "durationSeconds": 0.6,
+      "frames": 19,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0.0151,
+        "maxMeshCentroidWanderUnits": 0.0505,
+        "maxRootBoneTravelUnits": 0.0647,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.174,
+        "peakStrikeTime": 0.722,
+        "loopClosureStepDegrees": 9.782,
+        "maxInteriorStepDegrees": 9.878
+      }
+    },
+    "monster-slash": {
+      "clip": "monster-slash",
+      "produced": "authored",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "windupEnd": 0.35,
+        "strike": 0.45,
+        "followThroughEnd": 0.7
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.101,
+        "maxMeshCentroidWanderUnits": 0.1233,
+        "maxRootBoneTravelUnits": 0.3856,
+        "hipHeightRangeUnits": [
+          -0.0842,
+          0.0292
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 9.272,
+        "peakStrikeTime": 0.472
+      }
+    },
+    "monster-shoot": {
+      "clip": "monster-shoot",
+      "produced": "authored",
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "rearEnd": 0.4,
+        "expel": 0.5,
+        "holdEnd": 0.65
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0083,
+        "maxMeshCentroidWanderUnits": 0.0345,
+        "maxRootBoneTravelUnits": 0.4572,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 9.626,
+        "peakStrikeTime": 0.524
+      }
+    },
+    "monster-jump": {
+      "clip": "monster-jump",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.28,
+        "takeoff": 0.3,
+        "peak": 0.5,
+        "touchdown": 0.7,
+        "compressionBottom": 0.78
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.008,
+        "maxMeshCentroidWanderUnits": 0.0274,
+        "maxRootBoneTravelUnits": 0.5067,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 7.037,
+        "peakStrikeTime": 0.313
+      }
+    },
+    "monster-hurt": {
+      "clip": "monster-hurt",
+      "produced": "authored",
+      "durationSeconds": 0.7,
+      "frames": 22,
+      "loop": false,
+      "semanticKeyTimes": {
+        "flinch": 0.18,
+        "hold": 0.52
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0644,
+        "maxMeshCentroidWanderUnits": 0.0878,
+        "maxRootBoneTravelUnits": 0.065,
+        "hipHeightRangeUnits": [
+          -0.0385,
+          0.0322
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.671,
+        "peakStrikeTime": 0.048
+      }
+    },
+    "monster-turn": {
+      "clip": "monster-turn",
+      "produced": "authored",
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0.0255,
+        "maxMeshCentroidWanderUnits": 0.07,
+        "maxRootBoneTravelUnits": 0.061,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.414,
+        "peakStrikeTime": 0.4,
+        "loopClosureStepDegrees": 3.836,
+        "maxInteriorStepDegrees": 4.323
+      }
+    },
+    "monster-dive": {
+      "clip": "monster-dive",
+      "produced": "authored",
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.22,
+        "strike": 0.4,
+        "recoverStart": 0.55
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0797,
+        "maxMeshCentroidWanderUnits": 0.1186,
+        "maxRootBoneTravelUnits": 0.2287,
+        "hipHeightRangeUnits": [
+          -0.131,
+          0.0338
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 11.394,
+        "peakStrikeTime": 0.4
+      }
+    },
+    "monster-roar": {
+      "clip": "monster-roar",
+      "produced": "authored",
+      "durationSeconds": 2,
+      "frames": 61,
+      "loop": false,
+      "semanticKeyTimes": {
+        "stamp": 0.2,
+        "shakeStart": 0.25,
+        "shakeEnd": 0.8
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0063,
+        "maxMeshCentroidWanderUnits": 0.0326,
+        "maxRootBoneTravelUnits": 0.4813,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.138,
+        "peakStrikeTime": 0.017
+      }
+    },
+    "monster-death": {
+      "clip": "monster-death",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "topple": 0.52,
+        "headDown": 0.74,
+        "rest": 0.82
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": 0,
+          "final": 0
+        },
+        "heldFromTime": 0.833,
+        "maxHipsDriftUnits": 0.0653,
+        "maxMeshCentroidWanderUnits": 0.1272,
+        "maxRootBoneTravelUnits": 0.4241,
+        "hipHeightRangeUnits": [
+          -0.0034,
+          0.0002
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.362,
+        "peakStrikeTime": 0.021
+      }
+    },
+    "monster-spawn": {
+      "clip": "monster-spawn",
+      "produced": "authored",
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "risen": 0.4,
+        "alert": 0.54,
+        "shake": 0.7,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.0001,
+          "final": -0.0001
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0.0099,
+        "maxMeshCentroidWanderUnits": 0.0273,
+        "maxRootBoneTravelUnits": 0.2613,
+        "hipHeightRangeUnits": [
+          0,
+          0.0005
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.877,
+        "peakStrikeTime": 0.69
+      }
+    },
+    "monster-knockdown": {
+      "clip": "monster-knockdown",
+      "produced": "authored",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "topple": 0.4,
+        "headRest": 0.62
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": 0,
+          "final": 0
+        },
+        "heldFromTime": 0.639,
+        "maxHipsDriftUnits": 0.0662,
+        "maxMeshCentroidWanderUnits": 0.1062,
+        "maxRootBoneTravelUnits": 0.4098,
+        "hipHeightRangeUnits": [
+          -0.0038,
+          0.0001
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.631,
+        "peakStrikeTime": 0.028
+      }
+    },
+    "monster-getup": {
+      "clip": "monster-getup",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "coil": 0.32,
+        "alert": 0.6,
+        "shake": 0.78,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.0001,
+          "final": -0.0001
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0.0798,
+        "maxMeshCentroidWanderUnits": 0.0645,
+        "maxRootBoneTravelUnits": 0.351,
+        "hipHeightRangeUnits": [
+          -0.0034,
+          0.0029
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.296,
+        "peakStrikeTime": 0.125
+      }
+    },
+    "monster-tail": {
+      "clip": "monster-tail",
+      "produced": "authored",
+      "durationSeconds": 1.3,
+      "frames": 40,
+      "loop": false,
+      "semanticKeyTimes": {
+        "windupEnd": 0.36,
+        "strike": 0.5,
+        "followThroughEnd": 0.8
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.022,
+        "maxMeshCentroidWanderUnits": 0.0772,
+        "maxRootBoneTravelUnits": 0.057,
+        "hipHeightRangeUnits": [
+          0,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 3.714,
+        "peakStrikeTime": 0.513
+      }
+    }
+  }
+}

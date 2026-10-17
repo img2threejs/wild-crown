@@ -1,0 +1,1746 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-14T21:02:30.297Z",
+  "status": "blocked-not-approved",
+  "scope": "Seven chapter candidate manifests, including reused native dependencies and hero bindings; not a production release certification.",
+  "manifestPaths": [
+    "asset-source/playtests/greenwake.json",
+    "asset-source/playtests/canopy.json",
+    "asset-source/playtests/bamboo.json",
+    "asset-source/playtests/grove.json",
+    "asset-source/playtests/moonpine.json",
+    "asset-source/playtests/mistveil.json",
+    "asset-source/playtests/later.json"
+  ],
+  "manifestSha256": {
+    "asset-source/playtests/greenwake.json": "f206b54afa73532b9f18709a73b52da899fe5804bf007893c983360d5bed92b3",
+    "asset-source/playtests/canopy.json": "4a8c804b4044c7d26428bebcb2a6e19d1b92b8f8a49755af1130f15cd9acd9f0",
+    "asset-source/playtests/bamboo.json": "dd9a461c3e4172ccaeac40c228a5dd8061d3732f7d6532304ba001ac3e1e38eb",
+    "asset-source/playtests/grove.json": "bcfa886f492b601d1642b42196348eace012a0358089a4c1bd39815a8df33c18",
+    "asset-source/playtests/moonpine.json": "e187d63219f05a196d37872abbe6edd0c128deddc9cdb461870e456d9d495b19",
+    "asset-source/playtests/mistveil.json": "3614e19a1ed73d025e3d99866830bffa4dfe1778f60dd51dfc21ac84734c4ed2",
+    "asset-source/playtests/later.json": "ed66ad5eed52e599d65d010c4244d047e47e3363ad53b0d5ebfdcef6b111a9f3"
+  },
+  "measurement": {
+    "uniqueBindings": 99,
+    "nativeBindings": 90,
+    "uniqueNativeFiles": 86,
+    "matchingNativeHashes": 90,
+    "recipeBindings": 9,
+    "method": "SHA-256 of each actual local native file compared with every candidate outputHash; hash identity alone is not a G1/G3/G6/G10/G11/G12 pass."
+  },
+  "userApproval": null,
+  "assets": [
+    {
+      "id": "actor-aren",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+      "declaredSha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
+      "provenance": "asset-source/generated/actor-aren-user-supplied-01/retarget-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 18238764,
+        "sha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-asha",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb",
+      "declaredSha256": "e182b5f1b28e44aa9bc6ca27ca1ad56d6d6586deef7bf949628767c07016203b",
+      "provenance": "asset-source/generated/actor-asha-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 7548024,
+        "sha256": "e182b5f1b28e44aa9bc6ca27ca1ad56d6d6586deef7bf949628767c07016203b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-bog-lurker",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
+      "declaredSha256": "9544b5bc7611bcc401a9bb77f6fbaa5f44cf5e347c6ad5ab96e5e7082f43de37",
+      "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 6283800,
+        "sha256": "9544b5bc7611bcc401a9bb77f6fbaa5f44cf5e347c6ad5ab96e5e7082f43de37"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-camp-hunter-melee",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb",
+      "declaredSha256": "2cc2f3c1409d401a66e443a42f49083d107ac91bfcced3b7e3efe2d80e934079",
+      "provenance": "asset-source/generated/actor-camp-hunter-melee-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 7908324,
+        "sha256": "2cc2f3c1409d401a66e443a42f49083d107ac91bfcced3b7e3efe2d80e934079"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-camp-hunter-ranged",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb",
+      "declaredSha256": "4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a",
+      "provenance": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 7339584,
+        "sha256": "4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-council-envoy",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb",
+      "declaredSha256": "97fb5f8a5a1a7f53903ac639321fce33b3096d9c23b90bd8657ad9898c639800",
+      "provenance": "asset-source/generated/actor-council-envoy-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6124464,
+        "sha256": "97fb5f8a5a1a7f53903ac639321fce33b3096d9c23b90bd8657ad9898c639800"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-ember-boar",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
+      "declaredSha256": "a1334e49db4725a0de738842dfbf60034165d006b5768023e9496a5ae2b56bc5",
+      "provenance": "asset-source/generated/actor-ember-boar-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 7094568,
+        "sha256": "a1334e49db4725a0de738842dfbf60034165d006b5768023e9496a5ae2b56bc5"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-frost-sap-stalker",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
+      "declaredSha256": "850fa81dd89406c5e98579f4aafdcbe01ada14595833be598181a8859e14167d",
+      "provenance": "asset-source/generated/actor-frost-sap-stalker-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 8096216,
+        "sha256": "850fa81dd89406c5e98579f4aafdcbe01ada14595833be598181a8859e14167d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-frostfang-tracker",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb",
+      "declaredSha256": "807af505c747c5bec4de5bc66d90959e3c60c110b23cfe0bcb0269ca35a6fd8b",
+      "provenance": "asset-source/generated/actor-frostfang-tracker-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 7898896,
+        "sha256": "807af505c747c5bec4de5bc66d90959e3c60c110b23cfe0bcb0269ca35a6fd8b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-ghor-mire-maw",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
+      "declaredSha256": "5be953fff1fe4f3717ac9efb23e20521b990aa60ef91a742929a33d23536226c",
+      "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 7498140,
+        "sha256": "5be953fff1fe4f3717ac9efb23e20521b990aa60ef91a742929a33d23536226c"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-grove-blighted-rootling",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb",
+      "declaredSha256": "5fe5ab10d67d370c9186f1b72c9c5489eb7eb3568176520095cde9e69b495dde",
+      "provenance": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 7193808,
+        "sha256": "5fe5ab10d67d370c9186f1b72c9c5489eb7eb3568176520095cde9e69b495dde"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-grove-hollowheart",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb",
+      "declaredSha256": "2341f605d6f909302829fcd2575e7ad023ebaa47f6f766d6dbcfaf165bf37a84",
+      "provenance": "asset-source/generated/actor-grove-hollowheart-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 9055076,
+        "sha256": "2341f605d6f909302829fcd2575e7ad023ebaa47f6f766d6dbcfaf165bf37a84"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-grove-rootling",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb",
+      "declaredSha256": "ce46b6f7b44066b6d0b7432c8cb77ee45b0dd9fb4fdb7c40ae366632c9ec37f6",
+      "provenance": "asset-source/generated/actor-grove-rootling-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 7193760,
+        "sha256": "ce46b6f7b44066b6d0b7432c8cb77ee45b0dd9fb4fdb7c40ae366632c9ec37f6"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-howl-scout",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb",
+      "declaredSha256": "c0707113cef4cb6b022f7c4b7f7e88b216fdcfad08129e0705ef033ce7e699f7",
+      "provenance": "asset-source/generated/actor-howl-scout-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 7045760,
+        "sha256": "c0707113cef4cb6b022f7c4b7f7e88b216fdcfad08129e0705ef033ce7e699f7"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-koro",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
+      "declaredSha256": "00be46c1121e77f8a9380a6778674f4348512c4490a4ee550cf0120b3fa75e71",
+      "provenance": "asset-source/generated/actor-koro-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 6694360,
+        "sha256": "00be46c1121e77f8a9380a6778674f4348512c4490a4ee550cf0120b3fa75e71"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-koro-branchbreaker",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
+      "declaredSha256": "9a87004392a1a3bbd45dc0ebfde02456220e35d732fb7c0347282cb66fd32872",
+      "provenance": "asset-source/generated/actor-koro-branchbreaker-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 7682408,
+        "sha256": "9a87004392a1a3bbd45dc0ebfde02456220e35d732fb7c0347282cb66fd32872"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-lantern-heron",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
+      "declaredSha256": "2e29c6649a151bdb1ed038a8ddd74a7d3c35c0534cdd7af230e2efb661e3cd9b",
+      "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 7643752,
+        "sha256": "2e29c6649a151bdb1ed038a8ddd74a7d3c35c0534cdd7af230e2efb661e3cd9b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-luma",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
+      "declaredSha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d",
+      "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6094300,
+        "sha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-marek",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-marek-runtime-01/actor-marek-animated.glb",
+      "declaredSha256": "df001308c0ce1356d7c1b997ba07061043f7f437df8acd077411423917177248",
+      "provenance": "asset-source/generated/actor-marek-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 7692988,
+        "sha256": "df001308c0ce1356d7c1b997ba07061043f7f437df8acd077411423917177248"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-mire-viper",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
+      "declaredSha256": "d72669df7967d315c5aad7f525fbf8a99580ae01adc6d4544b6ed3209efdad1c",
+      "provenance": "asset-source/generated/actor-mire-viper-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy"
+      ],
+      "observed": {
+        "bytes": 7739212,
+        "sha256": "d72669df7967d315c5aad7f525fbf8a99580ae01adc6d4544b6ed3209efdad1c"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-nursery-cub",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
+      "declaredSha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9",
+      "provenance": "asset-source/generated/actor-tali-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 5956648,
+        "sha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-nyra",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
+      "declaredSha256": "6ec519525a22aa151b30ad015c1ac570cb9f464f6b39c734840d3082e2c4ab3a",
+      "provenance": "asset-source/generated/actor-nyra-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 5361640,
+        "sha256": "6ec519525a22aa151b30ad015c1ac570cb9f464f6b39c734840d3082e2c4ab3a"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-orun",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+      "declaredSha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+      "provenance": "asset-source/generated/actor-orun-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6745644,
+        "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-orun-crowned-beast",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
+      "declaredSha256": "2b148adb2ee1dec205c6bab047c4dc7124798438d97b4f509840814cba6d5256",
+      "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 7976108,
+        "sha256": "2b148adb2ee1dec205c6bab047c4dc7124798438d97b4f509840814cba6d5256"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-ridge-elder-scout",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+      "declaredSha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01",
+      "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6357640,
+        "sha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-ridge-young-scout",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
+      "declaredSha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d",
+      "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6094300,
+        "sha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-roost-hornbill",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb",
+      "declaredSha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
+      "provenance": "asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 83079120,
+        "sha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-root-rammer",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
+      "declaredSha256": "e1fefc653deec1801ade9ee60909f4022e2a15c416e75df752319b21aed51fc9",
+      "provenance": "asset-source/generated/actor-root-rammer-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 7367796,
+        "sha256": "e1fefc653deec1801ade9ee60909f4022e2a15c416e75df752319b21aed51fc9"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-ruun-chained-howl",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb",
+      "declaredSha256": "9d12d9e6a1884790f64fcb2ed2ad5497e96772af08a812bd6c6963e00df8e268",
+      "provenance": "asset-source/generated/actor-ruun-chained-howl-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 8107772,
+        "sha256": "9d12d9e6a1884790f64fcb2ed2ad5497e96772af08a812bd6c6963e00df8e268"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-sable",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+      "declaredSha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01",
+      "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 6357640,
+        "sha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-sakda-hero",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
+      "declaredSha256": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+      "provenance": "asset-source/generated/actor-sakda-hero-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 93505180,
+        "sha256": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-solkar",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
+      "declaredSha256": "4988bfd69cfb48f4425aabccb3930827dd7a5d0272fc6303d23da0f7d457f6b8",
+      "provenance": "asset-source/generated/actor-solkar-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 7677656,
+        "sha256": "4988bfd69cfb48f4425aabccb3930827dd7a5d0272fc6303d23da0f7d457f6b8"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-storm-hornbill",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
+      "declaredSha256": "adbc57e73169516a9f514418f6fad911cb24ace44ee107b35f045ae479f6d663",
+      "provenance": "asset-source/generated/actor-storm-hornbill-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy"
+      ],
+      "observed": {
+        "bytes": 7203948,
+        "sha256": "adbc57e73169516a9f514418f6fad911cb24ace44ee107b35f045ae479f6d663"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-tali",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
+      "declaredSha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9",
+      "provenance": "asset-source/generated/actor-tali-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 5956648,
+        "sha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-thornback-howler",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
+      "declaredSha256": "2564325385a4d8b834d6aa95277dbd62257a10341c0152a1b055438047a85e6c",
+      "provenance": "asset-source/generated/actor-thornback-howler-runtime-01/clips-report.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy"
+      ],
+      "observed": {
+        "bytes": 7599352,
+        "sha256": "2564325385a4d8b834d6aa95277dbd62257a10341c0152a1b055438047a85e6c"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-vara",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb",
+      "declaredSha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
+      "provenance": "asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 83079120,
+        "sha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-vesper-hero",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
+      "declaredSha256": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc",
+      "provenance": "asset-source/generated/actor-vesper-hero-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 89287420,
+        "sha256": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-yara",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/model.glb",
+      "declaredSha256": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b",
+      "provenance": "asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 83886648,
+        "sha256": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "actor-yara-hero",
+      "kind": "character",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
+      "declaredSha256": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
+      "provenance": "asset-source/generated/actor-yara-hero-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 84412704,
+        "sha256": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "blood-bamboo-valley-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#blood-bamboo-valley-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ]
+    },
+    {
+      "id": "greenwake-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#greenwake-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ]
+    },
+    {
+      "id": "heartroot-hollow-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#heartroot-hollow-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ]
+    },
+    {
+      "id": "mistveil-basin-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#mistveil-basin-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ]
+    },
+    {
+      "id": "moonpine-ridge-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#moonpine-ridge-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ]
+    },
+    {
+      "id": "prop-ancient-bamboo-shrine",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-ancient-bamboo-shrine-runtime-01/prop-ancient-bamboo-shrine.glb",
+      "declaredSha256": "e0e8788446740812af4ec8fd63f0ff7ab4e691d15066219a7e08cdbda5da51e8",
+      "provenance": "asset-source/generated/prop-ancient-bamboo-shrine-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 4074176,
+        "sha256": "e0e8788446740812af4ec8fd63f0ff7ab4e691d15066219a7e08cdbda5da51e8"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-ancient-canopy-shrine",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-ancient-canopy-shrine-runtime-01/prop-ancient-canopy-shrine.glb",
+      "declaredSha256": "af21b7f718795cbda9289a071f3c2ad5c58acdce02bbcc672342a6d430201987",
+      "provenance": "asset-source/generated/prop-ancient-canopy-shrine-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 4153492,
+        "sha256": "af21b7f718795cbda9289a071f3c2ad5c58acdce02bbcc672342a6d430201987"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-bamboo-grove-cluster",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-bamboo-grove-cluster-runtime-01/prop-bamboo-grove-cluster.glb",
+      "declaredSha256": "a6d9d3beeeb811dc6c55962795cb07275953b2804318a5f5fa84b6b93224e75f",
+      "provenance": "asset-source/generated/prop-bamboo-grove-cluster-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 2656088,
+        "sha256": "a6d9d3beeeb811dc6c55962795cb07275953b2804318a5f5fa84b6b93224e75f"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-bird-nest",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-bird-nest-runtime-01/prop-bird-nest.glb",
+      "declaredSha256": "737efa48e650e9b90f91c29278dab7d453a649117dd7b1bf4f2fe9bc16085bca",
+      "provenance": "asset-source/generated/prop-bird-nest-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2174824,
+        "sha256": "737efa48e650e9b90f91c29278dab7d453a649117dd7b1bf4f2fe9bc16085bca"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-black-sap-filter-drum",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-black-sap-filter-drum-runtime-01/prop-black-sap-filter-drum.glb",
+      "declaredSha256": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb",
+      "provenance": "asset-source/generated/prop-black-sap-filter-drum-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 1778764,
+        "sha256": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-black-sap-jaw-trap",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-black-sap-jaw-trap-runtime-01/prop-black-sap-jaw-trap.glb",
+      "declaredSha256": "3fe666616a292d7c73bebfd8a27f656ab38b33ba3e8a8ad95beccec1d65d368f",
+      "provenance": "asset-source/generated/prop-black-sap-jaw-trap-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 2003888,
+        "sha256": "3fe666616a292d7c73bebfd8a27f656ab38b33ba3e8a8ad95beccec1d65d368f"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-buried-wolf-temple",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-buried-wolf-temple-runtime-01/prop-buried-wolf-temple.glb",
+      "declaredSha256": "da4eee96e452bf1ff4a6dbd929b0adab3e1cdcb5076aa51a5bf5207643e6cb6d",
+      "provenance": "asset-source/generated/prop-buried-wolf-temple-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 3952712,
+        "sha256": "da4eee96e452bf1ff4a6dbd929b0adab3e1cdcb5076aa51a5bf5207643e6cb6d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-canopy-cliff-rock",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-canopy-cliff-rock-runtime-01/prop-canopy-cliff-rock.glb",
+      "declaredSha256": "947c088b727ca4c9a8edbb8659aae303024786c9d8c84409a3eba5a780c59805",
+      "provenance": "asset-source/generated/prop-canopy-cliff-rock-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy",
+        "bamboo",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 1844840,
+        "sha256": "947c088b727ca4c9a8edbb8659aae303024786c9d8c84409a3eba5a780c59805"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-canopy-fern-cluster",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-canopy-fern-cluster-runtime-01/prop-canopy-fern-cluster.glb",
+      "declaredSha256": "e3296cb5527aab25c353b391f86b8a6f24b4daeb455b0591deafa558c7bb2a62",
+      "provenance": "asset-source/generated/prop-canopy-fern-cluster-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy",
+        "bamboo",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 2155208,
+        "sha256": "e3296cb5527aab25c353b391f86b8a6f24b4daeb455b0591deafa558c7bb2a62"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-erya-edge-tree",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
+      "declaredSha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15",
+      "provenance": "asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 64095300,
+        "sha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-greenwake-boulder-cluster",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/prop-greenwake-boulder-cluster.glb",
+      "declaredSha256": "ba9a07310cd71ac30d0cc1b39d0ff700d12035b044df575eea66c430037ec484",
+      "provenance": "asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo",
+        "grove"
+      ],
+      "observed": {
+        "bytes": 1590292,
+        "sha256": "ba9a07310cd71ac30d0cc1b39d0ff700d12035b044df575eea66c430037ec484"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-greenwake-bramble-wall",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-bramble-wall-runtime-01/prop-greenwake-bramble-wall.glb",
+      "declaredSha256": "078858fc2aeeb9b9d4f1d3bfee477a8aeacc9d274c2ad04f1f9ab7fd85b8ecde",
+      "provenance": "asset-source/generated/prop-greenwake-bramble-wall-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 2771928,
+        "sha256": "078858fc2aeeb9b9d4f1d3bfee477a8aeacc9d274c2ad04f1f9ab7fd85b8ecde"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-greenwake-houses",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb",
+      "declaredSha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48",
+      "provenance": "asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 68558524,
+        "sha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-greenwake-root-gate",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+      "declaredSha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604",
+      "provenance": "asset-source/generated/prop-greenwake-root-gate-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 6108204,
+        "sha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-greenwake-rope-bridge",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+      "declaredSha256": "1a2b2d9730501274b6854b4a0d61eb55eec212622f6b272bdcfdc518fc58f1d5",
+      "provenance": "asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 9464844,
+        "sha256": "1a2b2d9730501274b6854b4a0d61eb55eec212622f6b272bdcfdc518fc58f1d5"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-grove-platform",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-grove-platform-runtime-01/prop-grove-platform.glb",
+      "declaredSha256": "b969c577f56cb1af7ebcb28d155f43c9aa8e5c11ee066999fd21cc18b4f870e9",
+      "provenance": "asset-source/generated/prop-grove-platform-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 4727336,
+        "sha256": "b969c577f56cb1af7ebcb28d155f43c9aa8e5c11ee066999fd21cc18b4f870e9"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-heartroot-focus-staff",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
+      "declaredSha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b",
+      "provenance": "asset-source/generated/prop-heartroot-focus-staff-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 49681812,
+        "sha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-heartroot-fragment-stone",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-heartroot-fragment-stone-runtime-01/prop-heartroot-fragment-stone.glb",
+      "declaredSha256": "1d8ff4a75c588d03f2a6884cb60be8c9b35dd593f1d49db759bc7827bf235cbf",
+      "provenance": "asset-source/generated/prop-heartroot-fragment-stone-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 1730292,
+        "sha256": "1d8ff4a75c588d03f2a6884cb60be8c9b35dd593f1d49db759bc7827bf235cbf"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-heartroot-root-column",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb",
+      "declaredSha256": "99de3cbd57986b32dc62a81b0eba038c97965f1789e5c11f46aad267915b67ef",
+      "provenance": "asset-source/generated/prop-heartroot-root-column-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2335360,
+        "sha256": "99de3cbd57986b32dc62a81b0eba038c97965f1789e5c11f46aad267915b67ef"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-heartroot-trunk",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-heartroot-trunk-runtime-01/prop-heartroot-trunk.glb",
+      "declaredSha256": "6c9361728819a197394bc75c908164bbbcd153ae27b608e7b0e780279433eaba",
+      "provenance": "asset-source/generated/prop-heartroot-trunk-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 5909272,
+        "sha256": "6c9361728819a197394bc75c908164bbbcd153ae27b608e7b0e780279433eaba"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-hollow-cavern-rock",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-hollow-cavern-rock-runtime-01/prop-hollow-cavern-rock.glb",
+      "declaredSha256": "a75f5a0d3fe74c06f6291cd90d38963281e1ec4322f691a41355429a61a49839",
+      "provenance": "asset-source/generated/prop-hollow-cavern-rock-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2069324,
+        "sha256": "a75f5a0d3fe74c06f6291cd90d38963281e1ec4322f691a41355429a61a49839"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-hunter-cage",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb",
+      "declaredSha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963",
+      "provenance": "asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 65300800,
+        "sha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-hunter-camp",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-hunter-camp-runtime-01/prop-hunter-camp.glb",
+      "declaredSha256": "43592898cc2a3abf8032e52fe68b7842e1e73e6ef1a96cf125d5966d6a00d72d",
+      "provenance": "asset-source/generated/prop-hunter-camp-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 2185864,
+        "sha256": "43592898cc2a3abf8032e52fe68b7842e1e73e6ef1a96cf125d5966d6a00d72d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-hunter-extraction-rig",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-hunter-extraction-rig-runtime-01/prop-hunter-extraction-rig.glb",
+      "declaredSha256": "3e7edc383ad9dccf08feea93efcfcfe75cfcdfc0f63bb6f048fe230806c67b15",
+      "provenance": "asset-source/generated/prop-hunter-extraction-rig-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 2232668,
+        "sha256": "3e7edc383ad9dccf08feea93efcfcfe75cfcdfc0f63bb6f048fe230806c67b15"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-map-table",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-map-table-runtime-01/prop-map-table.glb",
+      "declaredSha256": "924e1281730d63b269db5d39b1c1ec6563606d40223dbd2d7b13cc31ab08d23b",
+      "provenance": "asset-source/generated/prop-map-table-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 1924476,
+        "sha256": "924e1281730d63b269db5d39b1c1ec6563606d40223dbd2d7b13cc31ab08d23b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-migration-gate",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-migration-gate-runtime-01/prop-migration-gate-articulated.glb",
+      "declaredSha256": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b",
+      "provenance": "asset-source/generated/prop-migration-gate-runtime-01/provenance-articulated.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2829472,
+        "sha256": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-mire-bank-rock",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+      "declaredSha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b",
+      "provenance": "asset-source/generated/prop-mire-bank-rock-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 1454092,
+        "sha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-mistveil-reed-cluster",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-mistveil-reed-cluster-runtime-01/prop-mistveil-reed-cluster.glb",
+      "declaredSha256": "94240be1243221e21165df097be567595304658342438395bb1243db82ca302a",
+      "provenance": "asset-source/generated/prop-mistveil-reed-cluster-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 1762544,
+        "sha256": "94240be1243221e21165df097be567595304658342438395bb1243db82ca302a"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-mistveil-root-tree",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-mistveil-root-tree-runtime-01/prop-mistveil-root-tree.glb",
+      "declaredSha256": "9571b6523579882e32beb6deb0b24166acf5e1d9962d5df62014ca1452949cdd",
+      "provenance": "asset-source/generated/prop-mistveil-root-tree-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 2491292,
+        "sha256": "9571b6523579882e32beb6deb0b24166acf5e1d9962d5df62014ca1452949cdd"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-moonpine-log-bridge",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-moonpine-log-bridge-runtime-01/prop-moonpine-log-bridge.glb",
+      "declaredSha256": "317acf6610f48de927d0b3a33fd5d30988a8db446e1dd0090601b0133fb23a86",
+      "provenance": "asset-source/generated/prop-moonpine-log-bridge-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 2288812,
+        "sha256": "317acf6610f48de927d0b3a33fd5d30988a8db446e1dd0090601b0133fb23a86"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-moonpine-tree",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-moonpine-tree-runtime-01/prop-moonpine-tree.glb",
+      "declaredSha256": "ca44a540c63f320a549ec4c1802f05453ee77925ded73ac9ba52fc2df2e4c418",
+      "provenance": "asset-source/generated/prop-moonpine-tree-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 2425604,
+        "sha256": "ca44a540c63f320a549ec4c1802f05453ee77925ded73ac9ba52fc2df2e4c418"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-plains-stone-arch",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-plains-stone-arch-runtime-01/prop-plains-stone-arch.glb",
+      "declaredSha256": "a36819ac2d46692c59e3f0c6a095a64bdc7302881cec9013bdf1454a9402cb2b",
+      "provenance": "asset-source/generated/prop-plains-stone-arch-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2295468,
+        "sha256": "a36819ac2d46692c59e3f0c6a095a64bdc7302881cec9013bdf1454a9402cb2b"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-rainforest-canopy-tree",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-rainforest-canopy-tree-runtime-01/prop-rainforest-canopy-tree.glb",
+      "declaredSha256": "db9347f79497ca80bdd4b4abae3cbdfde35668f5d2986d269131d534ef5078bc",
+      "provenance": "asset-source/generated/prop-rainforest-canopy-tree-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy",
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 2405424,
+        "sha256": "db9347f79497ca80bdd4b4abae3cbdfde35668f5d2986d269131d534ef5078bc"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-refuge-shelter",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-refuge-shelter-runtime-01/prop-refuge-shelter.glb",
+      "declaredSha256": "2758244c4cbedf2982e2eff04056ea704456b986085817cc839c73b8266bfaf1",
+      "provenance": "asset-source/generated/prop-refuge-shelter-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 3500136,
+        "sha256": "2758244c4cbedf2982e2eff04056ea704456b986085817cc839c73b8266bfaf1"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-root-arch",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/model.glb",
+      "declaredSha256": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d",
+      "provenance": "asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "bamboo"
+      ],
+      "observed": {
+        "bytes": 67641796,
+        "sha256": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-root-cavern-mouth",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb",
+      "declaredSha256": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901",
+      "provenance": "asset-source/generated/prop-root-cavern-mouth-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "bamboo",
+        "grove",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 2218952,
+        "sha256": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-root-crown-altar",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-root-crown-altar-runtime-01/prop-root-crown-altar.glb",
+      "declaredSha256": "bbabd257d859a287e617fca717cf42e6ce00c53fc2e97cd750931a6f6adfb92d",
+      "provenance": "asset-source/generated/prop-root-crown-altar-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2172368,
+        "sha256": "bbabd257d859a287e617fca717cf42e6ce00c53fc2e97cd750931a6f6adfb92d"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-root-tether-anchor",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-root-tether-anchor-runtime-01/prop-root-tether-anchor.glb",
+      "declaredSha256": "74aee811ab2e8984a3611427b05a3202c506a2593fdd93bc91781a8f61ee9ef5",
+      "provenance": "asset-source/generated/prop-root-tether-anchor-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2264984,
+        "sha256": "74aee811ab2e8984a3611427b05a3202c506a2593fdd93bc91781a8f61ee9ef5"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-savanna-acacia",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-savanna-acacia-runtime-01/prop-savanna-acacia.glb",
+      "declaredSha256": "a31bf1c7c6637e1ce1252ef6c590d2984a32ee7c4e21b2b9844d3031295c74b2",
+      "provenance": "asset-source/generated/prop-savanna-acacia-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2245588,
+        "sha256": "a31bf1c7c6637e1ce1252ef6c590d2984a32ee7c4e21b2b9844d3031295c74b2"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-seed-supply-basket",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-seed-supply-basket-runtime-01/prop-seed-supply-basket.glb",
+      "declaredSha256": "93ce0dbcc3518de68d61bfff8ff9c40998759d0d36963ffcc32eebabe175fdd5",
+      "provenance": "asset-source/generated/prop-seed-supply-basket-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2082900,
+        "sha256": "93ce0dbcc3518de68d61bfff8ff9c40998759d0d36963ffcc32eebabe175fdd5"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-six-fragment-shrine",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-six-fragment-shrine-runtime-01/prop-six-fragment-shrine.glb",
+      "declaredSha256": "30fde41fd063369f9600ccc5b48d2af6649a4649bf2545283d9c122e2ca526d9",
+      "provenance": "asset-source/generated/prop-six-fragment-shrine-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2197172,
+        "sha256": "30fde41fd063369f9600ccc5b48d2af6649a4649bf2545283d9c122e2ca526d9"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-snow-ridge-rock",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-snow-ridge-rock-runtime-01/prop-snow-ridge-rock.glb",
+      "declaredSha256": "95db97be2a4d1b616262938e7eaf14b8d70fc35231bcee50aa8f38d6ccf64776",
+      "provenance": "asset-source/generated/prop-snow-ridge-rock-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 1722136,
+        "sha256": "95db97be2a4d1b616262938e7eaf14b8d70fc35231bcee50aa8f38d6ccf64776"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-sunmane-stone-terrace",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-sunmane-stone-terrace-runtime-01/prop-sunmane-stone-terrace.glb",
+      "declaredSha256": "fc1108a8201e6113f98c8c985cc00c47fbc8a2bc6f42ca769a574034e7f382af",
+      "provenance": "asset-source/generated/prop-sunmane-stone-terrace-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2816212,
+        "sha256": "fc1108a8201e6113f98c8c985cc00c47fbc8a2bc6f42ca769a574034e7f382af"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-temple-chain-anchor",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-temple-chain-anchor-runtime-01/prop-temple-chain-anchor.glb",
+      "declaredSha256": "9136661aa7b26357e72d00a44dee3005bf28c791f5a48a0adc6640c87b39a409",
+      "provenance": "asset-source/generated/prop-temple-chain-anchor-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "moonpine"
+      ],
+      "observed": {
+        "bytes": 2160104,
+        "sha256": "9136661aa7b26357e72d00a44dee3005bf28c791f5a48a0adc6640c87b39a409"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-training-post",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-training-post-runtime-01/prop-training-post.glb",
+      "declaredSha256": "4861706514b3d696c1687009f69b8ec6d040a9c0ee8f22adcdfe9621d80e64e1",
+      "provenance": "asset-source/generated/prop-training-post-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 2188788,
+        "sha256": "4861706514b3d696c1687009f69b8ec6d040a9c0ee8f22adcdfe9621d80e64e1"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-vesper-katana",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+      "declaredSha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753",
+      "provenance": "asset-source/generated/prop-vesper-katana-runtime-02/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 4845100,
+        "sha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-vine-bridge",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-vine-bridge-runtime-02/prop-vine-bridge.glb",
+      "declaredSha256": "a5b2438381e3c68d8b18267b459dfa7094b89b9b6841c5bbfdd828d9151ef497",
+      "provenance": "asset-source/generated/prop-vine-bridge-runtime-02/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy"
+      ],
+      "observed": {
+        "bytes": 2131232,
+        "sha256": "a5b2438381e3c68d8b18267b459dfa7094b89b9b6841c5bbfdd828d9151ef497"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-warden-glaive",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+      "declaredSha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822",
+      "provenance": "asset-source/generated/prop-warden-glaive-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 2138816,
+        "sha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-warden-waystone",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+      "declaredSha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba",
+      "provenance": "asset-source/generated/prop-warden-waystone-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake",
+        "canopy",
+        "bamboo",
+        "grove",
+        "moonpine",
+        "mistveil"
+      ],
+      "observed": {
+        "bytes": 5682636,
+        "sha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-water-allotment-gate",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-water-allotment-gate-runtime-01/prop-water-allotment-gate.glb",
+      "declaredSha256": "95438d07e9f14b74849f682602168a263183f5303b8e91b8b05b7b87c5b2a9bf",
+      "provenance": "asset-source/generated/prop-water-allotment-gate-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ],
+      "observed": {
+        "bytes": 2160752,
+        "sha256": "95438d07e9f14b74849f682602168a263183f5303b8e91b8b05b7b87c5b2a9bf"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-water-basin",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-water-basin-runtime-01/prop-water-basin.glb",
+      "declaredSha256": "b8fa405234741e7c7f1396a9186ecaf893a686ef42bfa167196dbb1e5b88e911",
+      "provenance": "asset-source/generated/prop-water-basin-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ],
+      "observed": {
+        "bytes": 2150440,
+        "sha256": "b8fa405234741e7c7f1396a9186ecaf893a686ef42bfa167196dbb1e5b88e911"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "refuge-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#refuge-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ]
+    },
+    {
+      "id": "sunmane-expanse-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#sunmane-expanse-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "later"
+      ]
+    },
+    {
+      "id": "the-grove-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#the-grove-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "grove"
+      ]
+    },
+    {
+      "id": "whispering-canopy-environment",
+      "kind": "environment",
+      "sourceType": "composed-recipe",
+      "runtimeUrl": null,
+      "declaredSha256": null,
+      "provenance": "asset-source/manifest.json#whispering-canopy-environment",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "canopy"
+      ]
+    }
+  ]
+}

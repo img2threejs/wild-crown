@@ -2,11 +2,16 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createCheckpoint, createNewRun, recordLeaderDominion } from "../../packages/campaign/src/index.js";
 import { REGIONS } from "../../src/content/world.js";
-import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope } from "../../src/game/storage/SaveRepository.js";
+import { SAVE_FORMAT_SCHEMA_VERSION, SaveRepository, SaveRepositoryError, type GameSaveEnvelope } from "../../src/game/storage/SaveRepository.js";
+import { createResumeState, createSessionMetadata } from "../../src/game/campaign/session.js";
+import type { RegionId } from "../../src/game/contracts.js";
+
+const session = (chapter: number, regionId: RegionId) =>
+  createSessionMetadata("production", "aren", createResumeState({ chapter, regionId, completedQuestIds: [], completedObjectiveIds: [], chapters: [], facts: {} }));
 
 function envelope(): GameSaveEnvelope {
   const campaign = createNewRun("storage-boundary-run");
-  return { format: "wild-crown-save", schemaVersion: 1, kind: "campaign", runId: campaign.runId,
+  return { format: "wild-crown-save", schemaVersion: SAVE_FORMAT_SCHEMA_VERSION, scope: "production", kind: "campaign", runId: campaign.runId,
     checkpoint: createCheckpoint(campaign), campaign, progress: null, eventKeys: ["arrival"], savedAt: 123 };
 }
 const unavailable = () => new SaveRepository(undefined);
@@ -24,7 +29,7 @@ test("valid exported checkpoints import independent world state", async () => {
 test("malformed JSON, future format and incompatible checkpoint exports are rejected", async () => {
   const repository = unavailable();
   await assert.rejects(repository.importSave("{"), code("corrupt"));
-  await assert.rejects(repository.importSave({ ...envelope(), schemaVersion: 2 }), code("future-schema"));
+  await assert.rejects(repository.importSave({ ...envelope(), schemaVersion: SAVE_FORMAT_SCHEMA_VERSION + 1 }), code("future-schema"));
   const mismatch = envelope();
   mismatch.checkpoint!.runId = "another-run";
   await assert.rejects(repository.importSave(mismatch), code("run-mismatch"));
@@ -37,7 +42,7 @@ test("a null Dominion event is rejected as corrupt rather than escaping as a Typ
 });
 
 for (const [name, mutate, expected] of [
-  ["future envelope", (value: GameSaveEnvelope) => { Object.assign(value, { schemaVersion: 2 }); }, "future-schema"],
+  ["future envelope", (value: GameSaveEnvelope) => { Object.assign(value, { schemaVersion: SAVE_FORMAT_SCHEMA_VERSION + 1 }); }, "future-schema"],
   ["malformed world", (value: GameSaveEnvelope) => { Object.assign(value.campaign!, { world: {} }); }, "corrupt"],
   ["mismatched checkpoint", (value: GameSaveEnvelope) => { value.checkpoint!.runId = "another-run"; }, "run-mismatch"],
 ] as const) {
@@ -94,7 +99,7 @@ test("safe spawn must match the saved region, authored entry/node and camera", a
   input.progress = {
     chapter: 0, regionId: "greenwake", activeQuestIds: ["prologue"],
     completedQuestIds: [], completedObjectiveIds: [], trackedObjectiveId: null,
-    party: { scout: "vara" }, choices: {}, worldFacts: {}, ending: null, eventLog: [],
+    party: { companionId: "vara" }, choices: {}, worldFacts: {}, ending: null, eventLog: [], session: session(0, "greenwake"),
     safeSpawn: { regionId: "greenwake", position: { ...node.position }, routeId: node.id, cameraAnchorId: region.cameraAnchors[0]!.id },
   };
   const repository = unavailable();
@@ -116,8 +121,8 @@ function choiceEnvelope(): GameSaveEnvelope {
   input.progress = {
     chapter: 3, regionId: "moonpine-ridge", activeQuestIds: ["the-alpha-below"],
     completedQuestIds: [], completedObjectiveIds: [], trackedObjectiveId: null,
-    party: { scout: "vara" }, choices: { "pack-leadership": "ruun" },
-    worldFacts: { chapter: 3 }, ending: null,
+    party: { companionId: "vara" }, choices: { "pack-leadership": "ruun" },
+    worldFacts: { chapter: 3 }, ending: null, session: session(3, "moonpine-ridge"),
     eventLog: [{ type: "choice", eventId: "historic-choice", idempotencyKey: "historic:choice", choiceId: "pack-leadership", optionId: "ruun", leaderId: "ruun", dominion: false }],
   };
   return input;
@@ -180,4 +185,29 @@ test("slot writes reject invalid legacy or mismatched progress location before o
   const withProgress = choiceEnvelope();
   await assert.rejects(unavailable().commitImported("existing", "Must preserve", withProgress, 0, "greenwake"), code("corrupt"));
   await assert.rejects(unavailable().saveCheckpoint("existing", "Must preserve", withProgress.checkpoint!, withProgress.campaign!, 0, "greenwake", [], "campaign", withProgress.progress), code("corrupt"));
+});
+
+test("version-2 three-companion imports select one primary ally without changing story progress", async () => {
+  const input = choiceEnvelope();
+  Object.assign(input, { schemaVersion: 2 });
+  Object.assign(input.progress!, { party: { combat: "asha", utility: "koro", scout: "vara" } });
+  const before = structuredClone(input);
+  const imported = await unavailable().importSave(input);
+  assert.equal(imported.envelope.schemaVersion, 3);
+  assert.deepEqual(imported.envelope.progress!.party, { companionId: "asha" });
+  assert.deepEqual(imported.envelope.campaign!.world, input.campaign!.world);
+  assert.deepEqual(imported.envelope.progress!.eventLog, input.progress!.eventLog);
+  assert.deepEqual(input, before);
+});
+
+test("current exports reject legacy or mixed role fields rather than equipping extra companions", async () => {
+  const repository = unavailable();
+  for (const party of [
+    { combat: "asha", utility: "koro", scout: "vara" },
+    { companionId: "nyra", combat: "asha" },
+  ]) {
+    const input = choiceEnvelope();
+    Object.assign(input.progress!, { party });
+    await assert.rejects(repository.importSave(input), code("corrupt"));
+  }
 });

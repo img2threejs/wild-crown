@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-bramble-wall",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "fa3b49ef-c262-43ad-a582-bf4de624d55c",
+    "decimate": "d1cc03b1-8e3f-49f3-8d1b-b8339460b159"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.3,
+    "maxError": 0.06,
+    "maxTexture": 1024
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-greenwake-bramble-wall-decimate-01/tripo-out/prop-greenwake-bramble-wall-deci-d1cc03b1/model.glb",
+      "sha256": "9102bea58a0801897ea748be9aa5012618a6d01e259571b47fbb1d4de13401a2"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-greenwake-bramble-wall-runtime-01/prop-greenwake-bramble-wall.glb",
+    "sha256": "078858fc2aeeb9b9d4f1d3bfee477a8aeacc9d274c2ad04f1f9ab7fd85b8ecde",
+    "bytes": 2771928,
+    "vertices": 23061,
+    "boundsMin": [
+      -0.19574032723903656,
+      -0.20241306722164154,
+      -0.48906242847442627
+    ],
+    "boundsMax": [
+      0.19583633542060852,
+      0.1930215060710907,
+      0.4831278920173645
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4532794,
+      "toBytes": 581237
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4171950,
+      "toBytes": 444641
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20380041,
+      "toBytes": 795889
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 14437,
+      "trianglesAfter": 10285,
+      "relativeError": 0.02563174068927765
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

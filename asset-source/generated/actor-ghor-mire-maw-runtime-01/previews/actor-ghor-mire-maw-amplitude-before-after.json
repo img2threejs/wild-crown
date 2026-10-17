@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-ghor-mire-maw",
+  "description": "Motion amplitude per attack-relevant slot, measured from the GLB animations against the idle clip first frame (scripts: throwaway /tmp measurement, units: BH = body heights of the model bounds). before = outputs prior to the MonsterUpgrade slice; after = current runtime GLB.",
+  "metrics": {
+    "top5RotDeg": "mean of the five largest per-joint peak rotation deltas from idle, degrees",
+    "peakRotDeg": "largest single joint rotation delta from idle, degrees",
+    "headEnvelopeBH": "extent of the head-tip path relative to the in-place anchor bone (forward/lateral/up ranges combined)",
+    "limbTipSweepBH": "largest wing/hand tip displacement from its idle position (winged / biped rigs)",
+    "headSpeedBHPerS": "peak head-tip speed",
+    "rootTravelBH": "largest Root translation from idle",
+    "tailArcDeg": "peak-to-peak bearing swing of the tail tip around its root",
+    "tailTipPeakSpeedBHPerS": "peak tail-tip speed"
+  },
+  "slots": {
+    "monster-slash": {
+      "usedBy": "-",
+      "top5RotDeg": {
+        "before": 35.1,
+        "after": 59.1
+      },
+      "peakRotDeg": {
+        "before": 58.9,
+        "after": 98.3
+      },
+      "headEnvelopeBH": {
+        "before": 0.29,
+        "after": 0.579
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 3.75,
+        "after": 7.46
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      },
+      "tailArcDeg": 56,
+      "tailTipPeakSpeedBHPerS": 7.58,
+      "tailLatSweepBH": 0.915
+    },
+    "monster-shoot": {
+      "usedBy": "-",
+      "top5RotDeg": {
+        "before": 35.8,
+        "after": 41.6
+      },
+      "peakRotDeg": {
+        "before": 60.4,
+        "after": 67.7
+      },
+      "headEnvelopeBH": {
+        "before": 0.197,
+        "after": 0.38
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 3.57,
+        "after": 8.57
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      },
+      "tailArcDeg": 14,
+      "tailTipPeakSpeedBHPerS": 4.6,
+      "tailLatSweepBH": 0.228
+    },
+    "monster-jump": {
+      "usedBy": "mire-maw-black-river-wave",
+      "top5RotDeg": {
+        "before": 52,
+        "after": 52
+      },
+      "peakRotDeg": {
+        "before": 68.8,
+        "after": 68.8
+      },
+      "headEnvelopeBH": {
+        "before": 0.196,
+        "after": 0.196
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 2.37,
+        "after": 2.37
+      },
+      "rootTravelBH": {
+        "before": 0.2,
+        "after": 0.2
+      },
+      "tailArcDeg": 19,
+      "tailTipPeakSpeedBHPerS": 4.15,
+      "tailLatSweepBH": 0.304
+    },
+    "monster-dive": {
+      "usedBy": "mire-maw-bite-lunge",
+      "top5RotDeg": {
+        "before": 39.9,
+        "after": 60.6
+      },
+      "peakRotDeg": {
+        "before": 46.5,
+        "after": 74.6
+      },
+      "headEnvelopeBH": {
+        "before": 0.153,
+        "after": 0.29
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 3,
+        "after": 3.75
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      },
+      "tailArcDeg": 14,
+      "tailTipPeakSpeedBHPerS": 4.99,
+      "tailLatSweepBH": 0.212
+    },
+    "monster-roar": {
+      "usedBy": "roar pause",
+      "top5RotDeg": {
+        "before": 31.1,
+        "after": 32.4
+      },
+      "peakRotDeg": {
+        "before": 45.7,
+        "after": 52.3
+      },
+      "headEnvelopeBH": {
+        "before": 0.184,
+        "after": 0.205
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 1.34,
+        "after": 1.33
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      },
+      "tailArcDeg": 33,
+      "tailTipPeakSpeedBHPerS": 4.87,
+      "tailLatSweepBH": 0.508
+    },
+    "monster-hurt": {
+      "usedBy": "stagger/downed/weak-point",
+      "top5RotDeg": {
+        "before": 34.2,
+        "after": 32.7
+      },
+      "peakRotDeg": {
+        "before": 49.3,
+        "after": 49.3
+      },
+      "headEnvelopeBH": {
+        "before": 0.185,
+        "after": 0.172
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": 2.8,
+        "after": 2.91
+      },
+      "rootTravelBH": {
+        "before": 0,
+        "after": 0
+      },
+      "tailArcDeg": 20,
+      "tailTipPeakSpeedBHPerS": 5.91,
+      "tailLatSweepBH": 0.294
+    },
+    "monster-tail": {
+      "usedBy": "mire-maw-tail-sweep",
+      "top5RotDeg": {
+        "before": null,
+        "after": 57.9
+      },
+      "peakRotDeg": {
+        "before": null,
+        "after": 63.8
+      },
+      "headEnvelopeBH": {
+        "before": null,
+        "after": 0.418
+      },
+      "limbTipSweepBH": {
+        "before": null,
+        "after": null
+      },
+      "headSpeedBHPerS": {
+        "before": null,
+        "after": 5.3
+      },
+      "rootTravelBH": {
+        "before": null,
+        "after": 0
+      },
+      "tailArcDeg": 52,
+      "tailTipPeakSpeedBHPerS": 7.2,
+      "tailLatSweepBH": 0.777
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "79d5bbcd-889b-467e-a6fd-df37510a6948",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-ruun-chained-howl-anim-a-01/tripo-out/actor-ruun-chained-howl-anim-a-0-79d5bbcd",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-ruun-chained-howl-anim-a-01/tripo-out/actor-ruun-chained-howl-anim-a-0-79d5bbcd/model.glb",
+  "started": "2026-10-11T09:42:00.199Z",
+  "finished": "2026-10-11T09:42:16.452Z"
+}

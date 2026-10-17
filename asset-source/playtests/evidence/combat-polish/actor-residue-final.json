@@ -1,0 +1,61 @@
+{
+  "events": [
+    {
+      "kind": "hit",
+      "phase": "hit",
+      "actorId": "aren",
+      "targetId": "canopy-howler",
+      "position": {
+        "x": -48.7187008897634,
+        "y": 0.8800000000000001,
+        "z": -24.6406495551183
+      },
+      "to": {
+        "x": -47.824273698763484,
+        "y": 0.8800000000000001,
+        "z": -25.087863150618258
+      },
+      "contact": {
+        "kind": "actor",
+        "normal": {
+          "x": -0.8944271909999159,
+          "y": 0,
+          "z": 0.4472135954999579
+        },
+        "surfaceId": "canopy-howler"
+      },
+      "scopeId": "canopy-trials",
+      "attackId": "aren-light_1",
+      "actionId": "sakda-limb-1",
+      "confirmedDamage": 10,
+      "intensity": 0.8333333333333334,
+      "element": "ember",
+      "priority": "essential",
+      "shape": "burst",
+      "instanceId": "38af0b18-9552-45c5-86ac-0a5ecfdad010:canopy-trials:cue:178:12",
+      "tick": 178,
+      "worldTick": 178,
+      "worldTimeSeconds": 2.966666666666667
+    }
+  ],
+  "actorMarks": [
+    {
+      "actorId": "canopy-howler",
+      "localPoint": [
+        0,
+        0.8800000000000001,
+        0.7620000000000005
+      ],
+      "normal": [
+        2.2204460492503126e-16,
+        0,
+        1
+      ],
+      "life": 1.8,
+      "age": 0.04166666666666652
+    }
+  ],
+  "changedPixels": 122,
+  "peakChannelDifference": 36,
+  "glError": 0
+}

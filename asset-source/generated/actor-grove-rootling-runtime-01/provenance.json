@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-grove-rootling",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "b3461ce7-c6a6-4169-8c71-c34d74e41bd9",
+    "decimate": "eb28adbe-d8b7-4f37-9b8e-b479e545e349",
+    "rig": "21b55cfd-3355-496e-bba4-95de869a4154",
+    "animA": "760b2591-37fd-4696-8b00-9d91e6bfc650"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 biped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": 0.8,
+    "maxError": 0.01,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-grove-rootling-anim-a-01/tripo-out/actor-grove-rootling-anim-a-01-760b2591/model.glb",
+      "sha256": "62d8d348046bf85b98be449c62580f476934d78bd0e978d471d1dcbbbef44534"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling.glb",
+    "sha256": "0c99eae3d810abc28f68e80ffe513776d864defae3de8e49c3a6ce51743ba87a",
+    "bytes": 7460996,
+    "vertices": 25175,
+    "triangles": 18183,
+    "boundsMin": [
+      -0.12842,
+      0,
+      -0.38237
+    ],
+    "boundsMax": [
+      0.12842,
+      0.97941,
+      0.38237
+    ]
+  },
+  "clips": [
+    {
+      "name": "hurt",
+      "durationSeconds": 13.866666666666667,
+      "channels": 123
+    },
+    {
+      "name": "idle",
+      "durationSeconds": 15.366666666666667,
+      "channels": 123
+    },
+    {
+      "name": "pitch_baseball",
+      "durationSeconds": 3.8,
+      "channels": 123
+    },
+    {
+      "name": "slash",
+      "durationSeconds": 6.6,
+      "channels": 123
+    },
+    {
+      "name": "walk",
+      "durationSeconds": 2.3666666666666667,
+      "channels": 123
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3407972,
+      "toBytes": 1347196
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5311301,
+      "toBytes": 1812023
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19373162,
+      "toBytes": 2017042
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 22731,
+      "trianglesAfter": 18183,
+      "relativeError": 0.0009451674995943904
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

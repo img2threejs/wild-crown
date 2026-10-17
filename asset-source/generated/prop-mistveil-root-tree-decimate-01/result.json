@@ -1,0 +1,16 @@
+{
+  "task_id": "3f07a3a1-1137-44e3-829b-361b5ebf1a9b",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-mistveil-root-tree-decimate-01/tripo-out/prop-mistveil-root-tree-decimate-3f07a3a1",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-mistveil-root-tree-decimate-01/tripo-out/prop-mistveil-root-tree-decimate-3f07a3a1/model.glb",
+  "preview": "asset-source/generated/prop-mistveil-root-tree-decimate-01/tripo-out/prop-mistveil-root-tree-decimate-3f07a3a1/preview.png",
+  "started": "2026-10-11T08:52:28.938Z",
+  "finished": "2026-10-11T09:01:54.535Z"
+}

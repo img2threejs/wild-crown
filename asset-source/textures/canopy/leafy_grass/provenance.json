@@ -1,0 +1,49 @@
+{
+  "assetId": "leafy_grass",
+  "name": "Leafy Grass",
+  "sourceUrl": "https://polyhaven.com/a/leafy_grass",
+  "apiUrl": "https://api.polyhaven.com/files/leafy_grass",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Charlotte Baglioni",
+  "resolution": "512x512",
+  "format": "jpg",
+  "physicalSizeMeters": 2,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_diff_1k.jpg",
+      "sourceSha256": "cfa40bc9d9417d1852db8753a8d5917f110c40101179f63543c382e39bc05e4a",
+      "sourceBytes": 1195394,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "7c7274472a33b028b099a342e1811f29ba57e974f3c88c637b6fbd7e8a3a0e35",
+      "md5": "798991002c2b72c11b8417943b4736a0",
+      "bytes": 116279
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_nor_gl_1k.jpg",
+      "sourceSha256": "832328216adc0a7e1f70a31d5ee48c9ab7f2152d83816122736cf42ac4b2ebd6",
+      "sourceBytes": 1466049,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "a3b0515429bdd4b689588b1e4a2b5f9311e2e85b34278c53c3fb05aa44a9d80e",
+      "md5": "ee92f75129c7a2398e8b3b2baac6134f",
+      "bytes": 139215
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_arm_1k.jpg",
+      "sourceSha256": "95432451cb2693794459fe7ea339ea9ffdb5959c40373740f80a4aa1703f089d",
+      "sourceBytes": 1010081,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "6c584a2a888e11d4030917a035a24c789b60733971cd3dddf9ad9e796adc1e39",
+      "md5": "b03a5de628e21d2985cd3d1cd45dbdf5",
+      "bytes": 79433
+    }
+  }
+}

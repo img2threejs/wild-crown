@@ -1,0 +1,46 @@
+{
+  "assetId": "mossy_rock",
+  "name": "Mossy Rock",
+  "sourceUrl": "https://polyhaven.com/a/mossy_rock",
+  "apiUrl": "https://api.polyhaven.com/files/mossy_rock",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Rob Tuytel",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 3,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_diff_1k.jpg",
+      "sourceSha256": "4dbf37f1b0465c9c8914213163923be159716f5b97fb6946437b6c5e143ef540",
+      "sourceBytes": 1124438,
+      "sha256": "4dbf37f1b0465c9c8914213163923be159716f5b97fb6946437b6c5e143ef540",
+      "md5": "a57fbbf55269eb64f8d40708fe3af26c",
+      "bytes": 1124438
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_nor_gl_1k.jpg",
+      "sourceSha256": "232cdd6a9fdfd01bb8bb1f8f604c53dbca79fa0d3d7995edf85c9945757aa8df",
+      "sourceBytes": 995727,
+      "sha256": "232cdd6a9fdfd01bb8bb1f8f604c53dbca79fa0d3d7995edf85c9945757aa8df",
+      "md5": "59370f9b3d068271c2bccfb414dc325b",
+      "bytes": 995727
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/mossy_rock/mossy_rock_arm_1k.jpg",
+      "sourceSha256": "1c1b8da603c93e863ccb68a8f4fcc6ff02774b83d9a6e9422c7d4aa77397b6a3",
+      "sourceBytes": 926941,
+      "sha256": "1c1b8da603c93e863ccb68a8f4fcc6ff02774b83d9a6e9422c7d4aa77397b6a3",
+      "md5": "aa606bf7dda9c12bfea7702ea0507d7b",
+      "bytes": 926941
+    }
+  }
+}

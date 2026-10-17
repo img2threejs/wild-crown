@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-root-rammer",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "560b2e3e-daab-45e3-890c-ef511ff4c5c1",
+    "decimate": "d3ee8c70-cf72-4fa0-8a92-1266237aef87",
+    "rig": "e43837b6-6996-4f1a-9940-fb8c82105c5e",
+    "animA": "ac925914-eec0-4c9d-9a06-012ca16e4350"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place"
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-root-rammer-anim-a-01/tripo-out/actor-root-rammer-anim-a-01-ac925914/model.glb",
+      "sha256": "7181686b735e8348519ba63762d4605d111a24d32fc173d93af7c77c3693a85b"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer.glb",
+    "sha256": "2e430686eb4fee5d4afedc424cdaa6c15235f9c287c3f4e4cd9f00ab3a75d38d",
+    "bytes": 6966384,
+    "vertices": 30846,
+    "boundsMin": [
+      -0.4881022274494171,
+      -3.2782554626464844e-7,
+      -0.23926576972007751
+    ],
+    "boundsMax": [
+      0.4881020188331604,
+      0.6737722754478455,
+      0.23926576972007751
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 17
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3610466,
+      "toBytes": 1492555
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4621496,
+      "toBytes": 1588254
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 15467949,
+      "toBytes": 2090743
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-luma",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "e6efa8e9-5875-4aca-8d87-569af63ab12c",
+    "decimate": "6d4f6124-f0e9-401d-98a8-56e08fcdfe53",
+    "rig": "db82ff09-e650-4575-8912-b7274ed3cb0a",
+    "animA": "33dc1d78-d4d9-45fb-9fed-12226d3570f0"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-luma-anim-a-01/tripo-out/actor-luma-anim-a-01-33dc1d78/model.glb",
+      "sha256": "d8260c531216a7d7774eb3ad636cb92e3019b741c23b4fbc3af08271fbc42a13"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-luma-runtime-01/actor-luma.glb",
+    "sha256": "52ad6abd612c52e58b17d0d752cf27e538c838e19ed70878c31755fdb240963c",
+    "bytes": 5698872,
+    "vertices": 25042,
+    "triangles": 26202,
+    "boundsMin": [
+      -0.12942,
+      0,
+      -0.48988
+    ],
+    "boundsMax": [
+      0.12942,
+      0.66723,
+      0.48988
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 17
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 2406792,
+      "toBytes": 996926
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4622320,
+      "toBytes": 1634101
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16868366,
+      "toBytes": 1570214
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

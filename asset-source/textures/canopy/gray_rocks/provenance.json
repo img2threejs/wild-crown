@@ -1,0 +1,49 @@
+{
+  "assetId": "gray_rocks",
+  "name": "Gray Rocks",
+  "sourceUrl": "https://polyhaven.com/a/gray_rocks",
+  "apiUrl": "https://api.polyhaven.com/files/gray_rocks",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Dimitrios Savva",
+  "resolution": "512x512",
+  "format": "jpg",
+  "physicalSizeMeters": 1.8,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gray_rocks/gray_rocks_diff_1k.jpg",
+      "sourceSha256": "4c3b6fada26a9b564ca110ad47bca5921eceefc611d970159ce559c3c50728a0",
+      "sourceBytes": 1014209,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "d6c987032c6813499f60c1a69f2eedac850feef19c977cd7f978ad36387db3fd",
+      "md5": "cf02b697762b16510c9f31b063dec583",
+      "bytes": 105405
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gray_rocks/gray_rocks_nor_gl_1k.jpg",
+      "sourceSha256": "1922b18e09a95bb782794163117ea47d62771dd59501085cc95ab10081107a9d",
+      "sourceBytes": 1266242,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "83d8bec5db060559fe38382d9b8a66f02b1ca1bfc0fb045955717e4297dea361",
+      "md5": "6a48e99e8eeb606ae237b7cbc73870e4",
+      "bytes": 139523
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gray_rocks/gray_rocks_arm_1k.jpg",
+      "sourceSha256": "ceaef1b0ee229a4c2ed3905b084d3015a39a59e5175ea936bb761417ed059c76",
+      "sourceBytes": 827806,
+      "derivation": "Downscaled with ImageMagick Lanczos to 512x512 (JPEG quality 90) from the 1k source.",
+      "sha256": "e9056ab91cdfd88712d21d69400fe5515c63dc865b289a6c7d38c9b76eb53a61",
+      "md5": "709532cfcbccf5db3c1291a69c008bf1",
+      "bytes": 73038
+    }
+  }
+}

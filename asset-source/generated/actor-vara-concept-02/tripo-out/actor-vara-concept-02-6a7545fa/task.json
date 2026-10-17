@@ -1,0 +1,19 @@
+{
+  "task_id": "6a7545fa-15d7-4e98-8494-af7eb145ff0e",
+  "type": "image_to_image",
+  "status": "success",
+  "input": {
+    "prompt": "Preserve Vara exactly: the same stylized black-and-warm-cream hornbill scout, ivory curved beak with amber casque, green scout harness and seed-knot, cinematic handcrafted 3D game art. Recompose as a WIDE FULL-BODY character sheet: complete bird visible from very top of casque through both entire feet, centered with generous clear margin on every side, small enough to fit in frame. Show the compact whole bird standing upright on both legs, front three-quarter view, both feathered wings extended sideways slightly away from the body and fully visible for later rigging, tail visible. Plain warm-gray studio only, soft even light. No close-up, no crop, no frame edge contact, no scenery, no extra props, no text.",
+    "model_version": "seedream_v5"
+  },
+  "output_fields": [
+    "generated_image_url"
+  ],
+  "credits_consumed": 5,
+  "created_at": "2026-10-06T04:48:32.386821Z",
+  "completed_at": "2026-10-06T04:48:51.936504Z",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ]
+}

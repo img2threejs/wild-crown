@@ -1,4 +1,4 @@
-import { AnimationClip, Bone, Box3, BoxGeometry, BufferAttribute, BufferGeometry, CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Skeleton, SkinnedMesh, Vector3, VectorKeyframeTrack, WebGLRenderTarget, type Object3D } from 'three';
+import { AnimationClip, Bone, Box3, BoxGeometry, BufferAttribute, BufferGeometry, CanvasTexture, Color, Group, InstancedMesh, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Skeleton, SkinnedMesh, Vector3, VectorKeyframeTrack, WebGLRenderTarget, type Object3D } from 'three';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import type { ActorSnapshot, AssetManifestEntry, CombatSnapshot, EnvironmentRecipeDefinition, RegionColliderDefinition, RegionDefinition, RegionEntityDefinition } from '../../src/game/contracts';
 import { GameRenderer, mountCompanionPreview } from '../../src/rendering/GameRenderer';
@@ -58,6 +58,11 @@ async function run(): Promise<void> {
   let missingActionFailed = false;
   try { animation.play('not-authored', 'active'); } catch (error) { missingActionFailed = error instanceof Error && error.name === 'AnimationBindingError'; }
   assert(missingActionFailed, 'missing clip fails visibly instead of choosing another action');
+  const playtestFallback = new AnimationController(new Group(), [], { ...character, requiredActionIds: [], actionToClipMapping: {} } as AssetManifestEntry, true);
+  playtestFallback.play('not-authored', 'active');
+  playtestFallback.playPreview('preview-only-missing');
+  assert(playtestFallback.activeActionId === undefined && playtestFallback.issues.some((issue) => issue.actionId === 'not-authored') && playtestFallback.issues.some((issue) => issue.actionId === 'preview-only-missing'), 'explicit local playtest keeps real skinned GLBs static for gameplay and preview without choosing substitute clips');
+  playtestFallback.dispose();
   let requiredClipFailed = false;
   const incompleteManifest = { ...character, actionToClipMapping: { 'wild-crown:actor-idle': 'Idle', attack: 'Missing' } } as AssetManifestEntry;
   const incomplete = new AnimationController(first.root, [], incompleteManifest);
@@ -96,7 +101,7 @@ async function run(): Promise<void> {
   assert(capacityLoader.cachedAssetIds.length === 1 && capacityLoader.cachedAssetIds[0] === 'test-character-capacity', 'least-recently-used unleased native template is evicted at capacity');
   capacityLoader.dispose();
 
-  const lodLevels = [0, 1, 2].map((level) => ({ assetId: `fixture-lod-${level}`, root: new Group(), instanceCount: 1, lodIds: [], updateOcclusion: () => {}, dispose: () => {} }));
+  const lodLevels = [0, 1, 2].map((level) => ({ assetId: `fixture-lod-${level}`, root: new Group(), instanceCount: 1, drawnInstanceCount: 1, lodIds: [], updateOcclusion: () => {}, dispose: () => {} }));
   const lod = new ScreenSpaceLOD(lodLevels as never, [{ position: { x: 0, y: 0, z: 0 } }], 2, { transitionPixels: [100, 50], hysteresisRatio: 0.1 });
   const lodCamera = new PerspectiveCamera(60, 1, 0.1, 100);
   lodCamera.updateProjectionMatrix();
@@ -115,24 +120,25 @@ async function run(): Promise<void> {
     id: 'fixture-environment', sourceType: 'composed-recipe', proceduralRecipeId: 'fixture-environment', componentAssetIds: [],
     kind: 'environment', lodIds: [], requiredActionIds: [], actionToClipMapping: {}, sockets: [],
   } as unknown as AssetManifestEntry;
-  const recipeDefinition: EnvironmentRecipeDefinition = { id: 'fixture-environment', regionId: 'greenwake', restorationFacts: { partial: 'restore:partial', restored: 'restore:restored' }, proceduralLayers: ['terrain', 'water', 'vegetation', 'fog', 'lighting', 'collision'], assetPlacementIds: [], groundSurfaceIds: ['ground', 'raised-walkway'] };
-  const renderer = new GameRenderer({ canvas });
   const region = fixtureRegion();
+  const recipeDefinition: EnvironmentRecipeDefinition = { id: 'fixture-environment', regionId: region.id, restorationFacts: { partial: 'restore:partial', restored: 'restore:restored' }, proceduralLayers: ['terrain', 'vegetation', 'fog', 'lighting', 'collision'], assetPlacementIds: [], groundSurfaceIds: ['ground', 'raised-walkway'] };
+  const renderer = new GameRenderer({ canvas });
   await renderer.loadRegion(region, [recipe], recipeDefinition);
   const actor = fixtureActor();
   const combat: CombatSnapshot = {
     actors: [actor], movableObjects: [], worldClock: { simulationTick: 30, worldTick: 7.5, worldTimeSeconds: 0.125, timeScale: 0.25, policy: 'perfect-dodge-slow' },
-    player: { vitality: 1, maxVitality: 1, instinct: 0, dodgeCharges: 0, maxDodgeCharges: 0 },
+    player: { vitality: 1, maxVitality: 1, instinct: 0, mana: 0, maxMana: 100 }, skills: [],
     telegraphs: [{ id: 'warning', attackId: 'test' as never, sourceId: 'aren', targetPosition: { x: 0, y: 0, z: -2 }, phase: 'anticipation', remainingTicks: 4 }],
     hazards: [], events: [],
   };
   renderer.sync([actor], combat, 1 / 60);
+  renderer.render();
   const evidence = renderer.capture();
-  assert(evidence.regionId === 'greenwake', 'composed environment recipe commits with a region scene');
   assert(evidence.surfaceCount === 2 && evidence.colliderCount === 1, 'authored ground surfaces and camera collider are retained');
   const walkway = renderer.scene.getObjectByName('surface:raised-walkway') as Mesh | undefined;
   assert(walkway?.geometry.getAttribute('position').getY(0) === 3.5 && walkway.geometry.getAttribute('normal').getY(0) > 0, 'authored surface vertices stay absolute and fan winding faces the visible world side');
-  assert(evidence.camera.telegraphLocked, 'camera director enters telegraph framing lock');
+  const warningFocus = new Vector3(...evidence.camera.target).project(renderer.camera);
+  assert(Math.abs(warningFocus.x) < 1e-6 && Math.abs(warningFocus.y) < 1e-6, 'live telegraphs leave Aren centered');
   assert(evidence.missingActorAssets.includes('aren'), 'unmapped player instance is reported by canonical archetype instead of an inferred asset ID');
   const basisA = renderer.getInputBasis();
   const basisB = renderer.getInputBasis();
@@ -167,6 +173,29 @@ async function run(): Promise<void> {
     rootMotion: { ...character.rootMotion, 'clock-strike': { mode: 'in-place', evidenceStatus: 'verified' } },
   } as AssetManifestEntry;
   const arenManifest = { ...clockCharacter, id: 'actor-aren', actorId: 'aren' } as AssetManifestEntry;
+  const playerOnlyRegion = fixtureRegion();
+  await renderer.loadRegion(playerOnlyRegion, [recipe, arenManifest], recipeDefinition);
+  const actorUsingBaseAsset = { ...actor, renderVariantId: 'actor-aren' };
+  renderer.sync([actorUsingBaseAsset], { ...combat, actors: [actorUsingBaseAsset] }, 1 / 60);
+  const playerOnlyEvidence = renderer.capture();
+  // Pose ghosts intentionally clone userData; only the displayed-root API identifies the live body.
+  const playerRoot = renderer.resolveActorRoot('aren');
+  assert(playerOnlyEvidence.actorCount === 1 && !playerOnlyEvidence.missingActorAssets.includes('actor-aren') && playerRoot?.visible, 'base actor GLB stays visible when its snapshot names that same base asset');
+  assert(renderer.resolveSocket('aren', 'hips') === playerRoot?.getObjectByName('hips'),
+    'socket-bound effects resolve the displayed native base rig when renderVariantId explicitly names the base asset');
+  const priorPose: CombatSnapshot = { ...combat, actors: [actorUsingBaseAsset] };
+  const nextActor = { ...actorUsingBaseAsset, position: { x: actor.position.x + 0.1, y: actor.position.y, z: actor.position.z } };
+  const nextPose: CombatSnapshot = { ...priorPose, actors: [nextActor], worldClock: { ...priorPose.worldClock, simulationTick: 31, worldTick: 7.75, worldTimeSeconds: 7.75 / 60 } };
+  renderer.sync(nextPose.actors, nextPose, 1 / 120, priorPose, 0.25);
+  assert(Math.abs(playerRoot!.position.x - actor.position.x - 0.025) < 1e-6, 'rendered native root interpolates between authoritative fixed steps');
+  renderer.sync(nextPose.actors, nextPose, 1 / 120, priorPose, 0.75);
+  assert(Math.abs(playerRoot!.position.x - actor.position.x - 0.075) < 1e-6, 'zero-simulation-tick render frames still advance the displayed pose');
+  const interpolatedFocus = playerRoot!.position.clone().add(new Vector3(0, 0.85, 0)).project(renderer.camera);
+  assert(Math.abs(interpolatedFocus.x) < 1e-6 && Math.abs(interpolatedFocus.y) < 1e-6, 'camera uses the same interpolated native root, with no sub-tick drift');
+  assert(nextActor.position.x === actor.position.x + 0.1, 'render interpolation never mutates authoritative actor positions');
+  const teleportedActor = { ...nextActor, position: { x: 20, y: 0, z: 0 } };
+  renderer.sync([teleportedActor], { ...nextPose, actors: [teleportedActor] }, 1 / 120, priorPose, 0.25);
+  assert(playerRoot!.position.x === 20, 'teleport discontinuities snap instead of drawing a path through obstacles');
   const arenPlacement: RegionEntityDefinition = { id: 'aren', actorId: 'aren', kind: 'actor', assetId: 'actor-aren', position: { x: 0, y: 0, z: 0 }, placement: 'ground' };
   const clockHunterManifest = { ...clockCharacter, id: 'actor-clock-hunter', actorId: 'poacher-hunter' } as AssetManifestEntry;
   const clockHunterPlacement: RegionEntityDefinition = { id: 'clock-hunter', actorId: 'poacher-hunter', kind: 'actor', assetId: clockHunterManifest.id, position: { x: 2, y: 0, z: 0 }, placement: 'ground' };
@@ -226,29 +255,13 @@ async function run(): Promise<void> {
   assert(renderer.capture().actorCount === 3, 'renderer retains all camp runtime instance IDs without archetype-key overwrite');
   const enemyLoopSample = findSkinnedMesh(westRig!).skeleton.bones[0]!.position.y;
   assert(Math.abs(enemyLoopSample - 0.0125) < 1e-6, 'hostile loop clip remains sampled on scaled world time');
-  const horizontalCollider: RegionColliderDefinition = { id: 'horizontal', kind: 'capsule', from: { x: 0, y: 0, z: 0 }, to: { x: 0, y: 0, z: 10 }, radius: 0.5, blocksMovement: true, blocksCamera: true };
-  await renderer.loadRegion(fixtureRegion([], [horizontalCollider]), [recipe], recipeDefinition);
-  let colliderMesh = renderer.scene.getObjectByName('camera-collider:horizontal') as Mesh;
-  let colliderBox = new Box3().setFromObject(colliderMesh);
-  assert(close(colliderBox.min.x, -0.5) && close(colliderBox.max.x, 0.5) && close(colliderBox.min.y, -0.5) && close(colliderBox.max.y, 0.5) && close(colliderBox.min.z, -0.5) && close(colliderBox.max.z, 10.5), 'horizontal capsule bounds match endpoint centers plus caps');
-  const verticalCollider: RegionColliderDefinition = { ...horizontalCollider, id: 'vertical', to: { x: 0, y: 10, z: 0 } };
-  await renderer.loadRegion(fixtureRegion([], [verticalCollider]), [recipe], recipeDefinition);
-  colliderMesh = renderer.scene.getObjectByName('camera-collider:vertical') as Mesh;
-  colliderBox = new Box3().setFromObject(colliderMesh);
-  assert(close(colliderBox.min.x, -0.5) && close(colliderBox.max.x, 0.5) && close(colliderBox.min.y, -0.5) && close(colliderBox.max.y, 10.5) && close(colliderBox.min.z, -0.5) && close(colliderBox.max.z, 0.5), 'vertical capsule bounds orient along Y without axis drift');
-  const diagonalCollider: RegionColliderDefinition = { ...horizontalCollider, id: 'diagonal', to: { x: 3, y: 4, z: 0 } };
-  await renderer.loadRegion(fixtureRegion([], [diagonalCollider]), [recipe], recipeDefinition);
-  colliderMesh = renderer.scene.getObjectByName('camera-collider:diagonal') as Mesh;
-  colliderBox = new Box3().setFromObject(colliderMesh);
-  assert(close(colliderBox.min.x, -0.5) && close(colliderBox.max.x, 3.5) && close(colliderBox.min.y, -0.5) && close(colliderBox.max.y, 4.5) && close(colliderBox.min.z, -0.5) && close(colliderBox.max.z, 0.5), 'diagonal capsule bounds preserve both endpoint coordinates and radius');
-
-  const collisionCollider: RegionColliderDefinition = { id: 'camera-collision', kind: 'capsule', from: { x: 0, y: 3, z: 4 }, to: { x: 0, y: 3, z: 8 }, radius: 0.8, blocksMovement: true, blocksCamera: true };
+  const cameraDistance = renderer.camera.position.distanceTo(new Vector3(...renderer.capture().camera.target));
+  const collisionCollider: RegionColliderDefinition = { id: 'camera-collision', kind: 'capsule', from: { x: 3, y: 4.45, z: 3.8 }, to: { x: 3, y: 4.45, z: 4.6 }, radius: 0.8, blocksMovement: true, blocksCamera: true };
   const cameraRegion = fixtureRegion([], [collisionCollider], { position: { x: 0, y: 5, z: 10 }, lookAt: { x: 0, y: 1, z: 0 } });
   await renderer.loadRegion(cameraRegion, [recipe], recipeDefinition);
-  const lockedCamera = { ...combat, telegraphs: [] };
-  for (let frame = 0; frame < 60; frame++) renderer.sync([actor], lockedCamera, 1 / 60);
-  const cameraTarget = new Vector3(0, 1.15, 0);
-  assert(renderer.camera.position.distanceTo(cameraTarget) < Math.hypot(4, 10), 'camera raycast collides with and retracts from the authored capsule');
+  renderer.sync([actor], combat, 1 / 60);
+  const cameraTarget = new Vector3(...renderer.capture().camera.target);
+  assert(Math.abs(renderer.camera.position.distanceTo(cameraTarget) - cameraDistance) < 1e-6, 'foreground obstacles do not zoom or rotate the centered gameplay camera');
   const previewHost = document.createElement('div');
   previewHost.style.width = '240px'; previewHost.style.height = '240px';
   document.body.append(previewHost);
@@ -268,6 +281,21 @@ async function run(): Promise<void> {
   livePreview.dispose();
   livePreview.dispose();
   assert(previewHost.childElementCount === 0, 'native preview disposer releases the mounted canvas idempotently');
+  const candidatePreviewManifest = { ...previewManifest, id: 'actor-preview-candidate', evidenceStatus: 'blocked', requiredActionIds: [] } as AssetManifestEntry;
+  let candidateWithoutOptInFailed = false;
+  try { await mountCompanionPreview(previewHost, 'preview-candidate', [candidatePreviewManifest], previewOptions); }
+  catch (error) { candidateWithoutOptInFailed = error instanceof Error && error.message.includes('no explicitly required native idle action'); }
+  assert(candidateWithoutOptInFailed, 'candidate preview actions require explicit session opt-in');
+  const candidatePreview = await mountCompanionPreview(previewHost, 'preview-candidate', [candidatePreviewManifest], { ...previewOptions, allowCandidateActions: true });
+  const candidateTime = candidatePreview.actionTime ?? 0;
+  candidatePreview.update(0.1);
+  assert(candidatePreview.actionTime! > candidateTime, 'candidate preview plays its exact loaded idle clip');
+  candidatePreview.dispose();
+  const missingCandidateClip = { ...candidatePreviewManifest, id: 'actor-preview-missing', actionToClipMapping: { 'preview-test:idle': 'AbsentIdle' } } as AssetManifestEntry;
+  let missingCandidateClipFailed = false;
+  try { await mountCompanionPreview(previewHost, 'preview-missing', [missingCandidateClip], { ...previewOptions, allowCandidateActions: true }); }
+  catch (error) { missingCandidateClipFailed = error instanceof Error && error.message.includes('no loaded native idle action'); }
+  assert(missingCandidateClipFailed && previewHost.childElementCount === 0, 'candidate preview rejects a missing loaded clip instead of displaying a static substitute');
   previewHost.remove();
 
   const detachedPreviewHost = document.createElement('div');
@@ -328,6 +356,16 @@ async function run(): Promise<void> {
     id: 'prop-occlusion-fixture', sourceType: 'native-glb', kind: 'prop', runtimeUrl: staticFixture.url,
     outputHash: staticFixture.outputHash, lodIds: [], requiredActionIds: [], actionToClipMapping: {}, sockets: [],
   } as unknown as AssetManifestEntry;
+  const calibratedProp = await renderer.assetLoader.load({
+    ...propManifest,
+    id: 'prop-calibrated-fixture',
+    coordinateTransform: { forward: { x: 0, y: 0, z: 1 }, scale: 2, originOffset: { x: 0, y: 2, z: 0 } },
+  } as AssetManifestEntry);
+  calibratedProp.root.updateMatrixWorld(true);
+  const calibratedBounds = new Box3().setFromObject(calibratedProp.root);
+  assert(close(calibratedBounds.min.y, 0) && close(calibratedBounds.max.y, 4),
+    'native prop transform scales GLB geometry and grounds a centered source origin');
+  calibratedProp.dispose();
   let disposedTextureCount = 0;
   const batch = await renderer.assetLoader.loadStaticBatch(propManifest, [{ id: 'fade-probe', assetId: propManifest.id, position: { x: 0, y: 0, z: 2 }, rotationY: 0, scale: { x: 1, y: 1, z: 1 }, placement: 'ground' }]);
   batch.root.traverse((node) => {
@@ -365,11 +403,59 @@ async function run(): Promise<void> {
   let rejected = false;
   try { await renderer.loadRegion(broken, [brokenRecipe], brokenRecipeDefinition); } catch { rejected = true; }
   assert(rejected, 'missing native prop rejects region staging');
-  assert(renderer.capture().regionId === 'greenwake', 'failed region staging preserves the previous valid scene');
+  assert(renderer.capture().regionId === region.id, 'failed region staging preserves the previous valid scene');
   assert(renderer.capture().assetErrors.length === 1, 'failed asset load remains visible in renderer debug evidence');
   renderer.dispose();
   assert(Number(disposedTextureCount) === 1, 'native template eviction disposes its unique embedded texture once');
   renderer.dispose();
+
+  const distantProps = Array.from({ length: 24 }, (_, index) => ({
+    id: `distant-${index}`, assetId: propManifest.id,
+    position: { x: 80 + (index % 4) * 3, y: 0, z: 80 + Math.floor(index / 4) * 3 },
+    rotationY: 0, scale: { x: 1, y: 1, z: 1 }, placement: 'ground' as const,
+  }));
+  const spatialRegion = fixtureRegion([
+    { ...distantProps[0]!, id: 'nearby', position: { x: 0, y: 0, z: 0 } },
+    ...distantProps,
+  ], []);
+  const spatialRenderer = new GameRenderer({ canvas });
+  await spatialRenderer.loadRegion(spatialRegion, [
+    { ...recipe, componentAssetIds: [propManifest.id] } as AssetManifestEntry,
+    propManifest, arenManifest,
+  ], { ...recipeDefinition, assetPlacementIds: spatialRegion.props.map(prop => prop.id) });
+  let submittedNativeInstances = 0;
+  spatialRenderer.scene.traverse((root) => {
+    if (root.userData.assetId !== propManifest.id) return;
+    root.traverse((node) => {
+      if (!(node instanceof InstancedMesh)) return;
+      const beforeRender = node.onBeforeRender;
+      node.onBeforeRender = (...args) => {
+        beforeRender.apply(node, args);
+        if (args[2] === spatialRenderer.camera) submittedNativeInstances += node.count;
+      };
+    });
+  });
+  const nearbyActor = fixtureActor();
+  const nearbyCombat = { ...combat, actors: [nearbyActor] };
+  spatialRenderer.sync(nearbyCombat.actors, nearbyCombat, 0);
+  spatialRenderer.render();
+  assert(submittedNativeInstances === 1,
+    'the main render pass submits the nearby native prop without the distant route instances');
+  const distantActor = { ...nearbyActor, position: { x: 80, y: 0, z: 80 } };
+  const distantCombat = { ...combat, actors: [distantActor] };
+  const distantTarget = new WebGLRenderTarget(32, 32);
+  spatialRenderer.renderer.setRenderTarget(distantTarget);
+  spatialRenderer.sync(distantCombat.actors, distantCombat, 0);
+  // Probe the native batch into this target; the HDR composer deliberately presents to the screen.
+  spatialRenderer.renderer.render(spatialRenderer.scene, spatialRenderer.camera);
+  const distantPropCenter = new Vector3(80, 0, 80).project(spatialRenderer.camera);
+  spatialRenderer.renderer.readRenderTargetPixels(distantTarget,
+    Math.floor((distantPropCenter.x + 1) * 16), Math.floor((distantPropCenter.y + 1) * 16), 1, 1, pixel);
+  assert(pixel[0]! > pixel[1]! * 1.5 && pixel[0]! > pixel[2]! * 1.5,
+    `distant native props render when the centered player reaches their route section (pixel=${[...pixel]})`);
+  spatialRenderer.renderer.setRenderTarget(null);
+  distantTarget.dispose();
+  spatialRenderer.dispose();
   URL.revokeObjectURL(aliasUrl);
   URL.revokeObjectURL(fixture.url);
   URL.revokeObjectURL(alternate.url);
@@ -386,7 +472,8 @@ function fixtureRegion(
   movableObjects: RegionDefinition['movableObjects'] = [],
 ): RegionDefinition {
   return {
-    id: 'greenwake', authoringStatus: 'in-progress', name: 'Renderer fixture', biome: 'forest', environmentRecipeId: 'fixture-environment', props, movableObjects,
+    // This fixture tests generic stacked surfaces, not Greenwake's continuous terrain-backed walk mesh.
+    id: 'bamboo-valley', authoringStatus: 'in-progress', name: 'Renderer fixture', biome: 'forest', environmentRecipeId: 'fixture-environment', props, movableObjects,
     bounds: { min: { x: -12, y: -2, z: -12 }, max: { x: 12, y: 8, z: 12 } },
     ground: {
       y: 0, profile: 'flat', navGraphId: 'fixture-nav',

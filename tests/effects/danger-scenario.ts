@@ -7,7 +7,7 @@ export const DANGER_SCENARIOS = [
   { family: 'strike', encounterId: 'encounter-asha', regionId: 'blood-bamboo-valley', attackId: 'asha-guarding-pounce', phaseIndex: 0, selectorTick: 0 },
   { family: 'sweep', encounterId: 'encounter-asha', regionId: 'blood-bamboo-valley', attackId: 'asha-claw-combination', phaseIndex: 0, selectorTick: 120 },
   { family: 'wave', encounterId: 'encounter-asha', regionId: 'blood-bamboo-valley', attackId: 'asha-ground-wave', phaseIndex: 1, selectorTick: 0 },
-  { family: 'area', encounterId: 'encounter-koro', regionId: 'whispering-canopy', attackId: 'koro-fruit-burst', phaseIndex: 0, selectorTick: 120 },
+  { family: 'area', encounterId: 'encounter-koro', regionId: 'whispering-canopy', attackId: 'koro-falling-branch', phaseIndex: 0, selectorTick: 240 },
   { family: 'projectile', encounterId: 'camp-hunters', regionId: 'blood-bamboo-valley', attackId: 'poacher-scout-net', phaseIndex: 0, selectorTick: 0 },
   { family: 'area', encounterId: 'encounter-asha', regionId: 'blood-bamboo-valley', attackId: 'asha-protective-roar', phaseIndex: 1, selectorTick: 120 },
 ] as const;

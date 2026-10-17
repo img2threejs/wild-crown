@@ -1,0 +1,19 @@
+{
+  "task_id": "55c04d11-6a3c-4514-a0cf-bf489031dcea",
+  "type": "text_to_image",
+  "status": "success",
+  "input": {
+    "prompt": "Clearly non-photoreal stylized cinematic 3D game character design, not a photo or realistic render. Full-body Yara from Wild Crown: mature adult human woman, final apprentice of Orun and the compassionate mentor who raised Aren, carrying quiet guilt without looking villainous. Use a designed animated-film face with simplified sculpted planes and expressive eyes, strong readable silhouette, broad garment forms and restrained hand-painted texture. Practical Warden travel clothes: layered light linen tunic under a muted moss-green wrap and weathered bark-brown panels, subtle seed-knot motif at the chest, small non-glowing Warden marks on shoulder and wrist, simple boots; no armor, crown, staff, weapon, long cape, or animal features. Neutral relaxed A-pose, arms slightly separated from torso, fingers visible. Full figure shown small in the frame, occupying only about 55 percent of square canvas height with generous empty neutral-gray studio margin above hair and below both boot soles; 3/4 front view, no crop, no text, no logos. Avoid photographic skin pores, realistic cloth microtexture, modern streetwear, and exaggerated fantasy glow.",
+    "model_version": "seedream_v5"
+  },
+  "output_fields": [
+    "generated_image_url"
+  ],
+  "credits_consumed": 5,
+  "created_at": "2026-10-06T04:37:10.376854Z",
+  "completed_at": "2026-10-06T04:37:38.719863Z",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ]
+}

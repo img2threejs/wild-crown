@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-orun-crowned-beast",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "cdb276fc-a51f-42a5-bedb-ceb58a3ff3c7",
+    "decimate": "ffcd77e2-6b2d-4e0e-9e1d-4223c8c6925f",
+    "rig": "63146190-47f6-4f28-9618-393cd4a68cb6",
+    "animA": "661bbfea-539c-4c0b-b973-cca3f060a431"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-orun-crowned-beast-anim-a-01/tripo-out/actor-orun-crowned-beast-anim-a-661bbfea/model.glb",
+      "sha256": "6cce3c3902340d7050705e281de90352c58a6b593e00f36647bcafb29c3085cd"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast.glb",
+    "sha256": "37653ce0253104c4cf35bec7e3af2b8c2424a121e2f843ec15d4f531df15ed68",
+    "bytes": 7439100,
+    "vertices": 33991,
+    "triangles": 27536,
+    "boundsMin": [
+      -0.212,
+      0,
+      -0.48922
+    ],
+    "boundsMax": [
+      0.212,
+      0.79043,
+      0.48922
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 19
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3731410,
+      "toBytes": 1526568
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4784678,
+      "toBytes": 1644012
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20063684,
+      "toBytes": 2291228
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

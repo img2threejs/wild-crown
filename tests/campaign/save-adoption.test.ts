@@ -5,7 +5,11 @@ import { REGIONS } from "../../src/content/campaign.js";
 import { CampaignDirector } from "../../src/game/campaign/CampaignDirector.js";
 import type { CampaignState } from "../../packages/campaign/src/index.js";
 import type { CampaignSafeCheckpoint, RegionId, WorldEvent } from "../../src/game/contracts.js";
-import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type RunLedgerRecord, type SaveSlotRecord, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
+import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type SaveSlotRecord, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
+
+function summary(slotId: string, label: string, runId: string, chapter: number, regionId: RegionId): SaveSlotSummary {
+  return { slotId, label, runId, kind: "campaign", updatedAt: 1, chapter, regionId, scope: "production", heroId: "aren", segmentId: null, checkpointId: null, autosave: false };
+}
 
 // Deterministic consumer/domain boundary fixture, not an IndexedDB substitute.
 // Native persistence/ledger transactions are exercised by storage/browser-smoke.html.
@@ -15,18 +19,19 @@ class SelectedSlotRepository extends SaveRepository {
   protected override async loadRecord(slotId: string, currentRunId?: string): Promise<SaveSlotRecord> {
     if (currentRunId && currentRunId !== this.selected.runId) throw new SaveRepositoryError("run-mismatch", "Wrong journey.");
     const envelope = (await this.importSave(structuredClone(this.selected))).envelope;
-    return { slotId, label: "Selected", runId: envelope.runId, kind: "campaign", updatedAt: 1, chapter: this.chapter, regionId: this.regionId, envelope };
+    return { ...summary(slotId, "Selected", envelope.runId, this.chapter, this.regionId), envelope };
   }
   override async listSlots(): Promise<SaveSlotSummary[]> {
-    return [{ slotId: "selected", label: "Selected", runId: this.selected.runId, kind: "campaign", updatedAt: 1, chapter: this.chapter, regionId: this.regionId }];
+    return [summary("selected", "Selected", this.selected.runId, this.chapter, this.regionId)];
   }
-  override async appendRunLedger(runId: string, _events: readonly RunLedgerRecord["dominionHistory"][number][], eventKeys: readonly string[]): Promise<void> {
-    this.writes.push({ runId, eventKeys: [...eventKeys] });
+  override async saveAutosave(_checkpoint: Parameters<SaveRepository["saveAutosave"]>[0], campaign: CampaignState, chapter: number, regionId: RegionId, eventKeys: readonly string[]): Promise<SaveSlotSummary> {
+    this.writes.push({ runId: campaign.runId, eventKeys: [...eventKeys] });
+    return summary("autosave:" + campaign.runId, "Autosave", campaign.runId, chapter, regionId);
   }
   override async commitImported(slotId: string, label: string, envelope: GameSaveEnvelope, chapter: number, regionId: RegionId): Promise<SaveSlotSummary> {
     const validated = await this.importSave(envelope);
     Object.assign(this.selected, validated.envelope);
-    return { slotId, label, runId: this.selected.runId, kind: "campaign", updatedAt: 1, chapter, regionId };
+    return summary(slotId, label, this.selected.runId, chapter, regionId);
   }
 }
 
@@ -35,13 +40,14 @@ class DeferredCheckpointRepository extends SelectedSlotRepository {
   override async saveCheckpoint(...args: Parameters<SaveRepository["saveCheckpoint"]>): Promise<SaveSlotSummary> {
     const [slotId, label, , campaign, chapter, regionId, , , progress] = args;
     await new Promise<void>(complete => { this.pendingCheckpoints.push({ progress, complete }); });
-    return { slotId, label, runId: campaign.runId, kind: "campaign", updatedAt: 1, chapter, regionId };
+    return summary(slotId, label, campaign.runId, chapter, regionId);
   }
 }
 const sky: WorldEvent = { type: "fragment", eventId: "sky", idempotencyKey: "branch:sky", fragmentId: "heartroot-sky", sourceId: "vara" };
 const dominate = (leaderId: "koro" | "asha"): WorldEvent => ({ type: "encounter-resolved", eventId: `dominion:${leaderId}`, idempotencyKey: `dominion:${leaderId}`, encounterId: `encounter-${leaderId}`, resolution: "dominated", actorIds: [leaderId] });
+const cleanse = (leaderId: "koro" | "asha"): WorldEvent => ({ type: "encounter-resolved", eventId: `cleanse:${leaderId}`, idempotencyKey: `cleanse:${leaderId}`, encounterId: `encounter-${leaderId}`, resolution: "cleansed", actorIds: [leaderId] });
 function saved(campaign: CampaignState, checkpoint?: CampaignSafeCheckpoint): GameSaveEnvelope {
-  return { format: "wild-crown-save", schemaVersion: 1, kind: "campaign", runId: campaign.runId, campaign: structuredClone(campaign), checkpoint: createCheckpoint(campaign),
+  return { format: "wild-crown-save", schemaVersion: 2, scope: "production", kind: "campaign", runId: campaign.runId, campaign: structuredClone(campaign), checkpoint: createCheckpoint(campaign),
     progress: checkpoint ? { ...structuredClone(checkpoint.progress),
       activeQuestIds: [...checkpoint.progress.activeQuestIds],
       completedQuestIds: [...checkpoint.progress.completedQuestIds],
@@ -160,12 +166,24 @@ test("run adoption does not loosen same-run checkpoint or replay restoration gua
 
 test("slot selection replaces current leadership choice and quest branch with the saved branch", async () => {
   const source = await atQuest("moonpine-ridge", 3, "the-alpha-below");
+  // The Director's pack-leadership gate requires the authored Ruun guardian
+  // encounter-resolved event before the choice will commit. The slot selection
+  // scenario must set that up locally so it exercises the slot-adoption path
+  // rather than the regional-leadership gate.
+  await source.processEvent({
+    type: "encounter-resolved", eventId: "ruun-cleansed-event", idempotencyKey: "ruun-cleansed-event",
+    encounterId: "encounter-ruun", actorIds: ["ruun"], resolution: "cleansed",
+  });
   await source.choose("pack-leadership", "luma");
   const checkpoint = await source.captureCheckpoint();
   const repository = new SelectedSlotRepository(saved(source.snapshot().campaign, checkpoint), 3, "moonpine-ridge");
   const director = new CampaignDirector({ saves: repository, runId: "other-pack-journey" });
   const current = await director.captureCheckpoint();
   assert.equal(await director.restoreCheckpoint({ ...current, progress: { ...current.progress, chapter: 3 } }), true);
+  await director.processEvent({
+    type: "encounter-resolved", eventId: "ruun-cleansed-event", idempotencyKey: "ruun-cleansed-event",
+    encounterId: "encounter-ruun", actorIds: ["ruun"], resolution: "cleansed",
+  });
   await director.choose("pack-leadership", "ruun");
   const loaded = await director.load("selected");
   assert.deepEqual(loaded.choices, source.snapshot().choices);
@@ -228,8 +246,8 @@ test("Greenwake wildlife checkpoint resolves authoritative combat content despit
   const director = new CampaignDirector({ runId: "greenwake-checkpoint" });
   const checkpoint = await director.captureCheckpoint();
   assert.equal(checkpoint.encounterReset.encounterId, "greenwake-boar");
-  assert.deepEqual(checkpoint.encounterReset.actorIds, ["corrupted-boar"]);
-  await director.processEvent({ type: "encounter-resolved", eventId: "boar", idempotencyKey: "boar", encounterId: "greenwake-boar", resolution: "cleansed", actorIds: ["corrupted-boar"] });
+  assert.deepEqual(checkpoint.encounterReset.actorIds, ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"]);
+  await director.processEvent({ type: "encounter-resolved", eventId: "boar", idempotencyKey: "boar", encounterId: "greenwake-boar", resolution: "cleansed", actorIds: ["corrupted-boar", "greenwake-sap-stalker", "greenwake-root-rammer"] });
   assert.equal((await director.captureCheckpoint()).encounterReset.encounterId, null);
 });
 
@@ -282,10 +300,10 @@ test("failed adopted-run save preserves recovery checkpoint; successful retry sa
     override async saveCheckpoint(...args: Parameters<SaveRepository["saveCheckpoint"]>): Promise<SaveSlotSummary> {
       if (this.fail) throw new SaveRepositoryError("quota", "Synthetic boundary failure, not IndexedDB evidence.");
       const [slotId, label, checkpoint, campaign, chapter, regionId, eventKeys, kind = "campaign", progress = null] = args;
-      const envelope: GameSaveEnvelope = { format: "wild-crown-save", schemaVersion: 1, kind, runId: campaign.runId,
+      const envelope: GameSaveEnvelope = { format: "wild-crown-save", schemaVersion: 2, scope: "production", kind, runId: campaign.runId,
         checkpoint: structuredClone(checkpoint), campaign: structuredClone(campaign), progress: structuredClone(progress), eventKeys: [...eventKeys], savedAt: 1 };
       this.checkpoints.push(envelope);
-      return { slotId, label, runId: campaign.runId, kind, updatedAt: 1, chapter, regionId };
+      return summary(slotId, label, campaign.runId, chapter, regionId);
     }
   }
   const source = new CampaignDirector({ runId: "adopted-save-run" });
@@ -319,7 +337,7 @@ test("a completed save cannot replace a newer journey's recovery checkpoint", as
     override async saveCheckpoint(...args: Parameters<SaveRepository["saveCheckpoint"]>): Promise<SaveSlotSummary> {
       const [slotId, label, , campaign, chapter, regionId] = args;
       await pending;
-      return { slotId, label, runId: campaign.runId, kind: "campaign", updatedAt: 1, chapter, regionId };
+      return summary(slotId, label, campaign.runId, chapter, regionId);
     }
   }
   const repository = new PendingRepository(saved(createNewRun("reused-run-id")));
@@ -337,25 +355,24 @@ test("a completed save cannot replace a newer journey's recovery checkpoint", as
 });
 
 for (const operation of ["save", "saveNewSlot"] as const) {
-  test(`pending ${operation} cannot replace a checkpoint captured after party selection at the same revision`, async () => {
+  test(`pending ${operation} cannot replace a checkpoint captured after durable party selection`, async () => {
     const repository = new DeferredCheckpointRepository(saved(createNewRun(`pending-party-${operation}`)));
     const director = new CampaignDirector({ saves: repository, runId: repository.selected.runId });
-    await director.processEvent({ ...sky, eventId: "unlock-koro", idempotencyKey: "unlock:koro", fragmentId: "heartroot-canopy", sourceId: "koro" });
-    await director.processEvent({ ...sky, eventId: "unlock-asha", idempotencyKey: "unlock:asha", fragmentId: "heartroot-fang", sourceId: "asha" });
-    director.selectParty("combat", "koro");
+    await director.processEvent(cleanse("koro"));
+    await director.processEvent(cleanse("asha"));
+    await director.selectParty("koro");
     const checkpointA = await director.captureCheckpoint();
     const campaignBefore = director.snapshot().campaign;
     const writing = operation === "save"
       ? director.save("selected", "Party A")
       : director.saveNewSlot("Party A");
     assert.equal(repository.pendingCheckpoints.length, 1);
-    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.combat, "koro");
-    director.selectParty("combat", "asha");
+    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.companionId, "koro");
+    await director.selectParty("asha");
     const checkpointB = await director.captureCheckpoint();
-    assert.equal(checkpointB.progress.revision, checkpointA.progress.revision);
-    assert.equal(checkpointB.checkpointId, checkpointA.checkpointId);
+    assert.ok(checkpointB.progress.revision > checkpointA.progress.revision, "a party change is a committed, revisioned write");
     assert.deepEqual(director.snapshot().campaign, campaignBefore);
-    assert.equal(checkpointB.progress.party.combat, "asha");
+    assert.equal(checkpointB.progress.party.companionId, "asha");
     const beforeCompletion = director.snapshot();
     repository.pendingCheckpoints[0]!.complete();
     await writing;
@@ -368,24 +385,24 @@ for (const completionOrder of ["older-first", "newer-first"] as const) {
   test(`newer party save retains recovery when writes complete ${completionOrder}`, async () => {
     const repository = new DeferredCheckpointRepository(saved(createNewRun(`party-save-${completionOrder}`)));
     const director = new CampaignDirector({ saves: repository, runId: repository.selected.runId });
-    await director.processEvent({ ...sky, eventId: "unlock-koro", idempotencyKey: "unlock:koro", fragmentId: "heartroot-canopy", sourceId: "koro" });
-    await director.processEvent({ ...sky, eventId: "unlock-asha", idempotencyKey: "unlock:asha", fragmentId: "heartroot-fang", sourceId: "asha" });
-    director.selectParty("combat", "koro");
+    await director.processEvent(cleanse("koro"));
+    await director.processEvent(cleanse("asha"));
+    await director.selectParty("koro");
     await director.captureCheckpoint();
     const older = director.save("selected", "Party A");
-    director.selectParty("combat", "asha");
+    await director.selectParty("asha");
     const newer = director.save("selected", "Party B");
     assert.equal(repository.pendingCheckpoints.length, 2);
-    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.combat, "koro");
-    assert.equal(repository.pendingCheckpoints[1]!.progress?.party.combat, "asha");
-    assert.equal(repository.pendingCheckpoints[0]!.progress?.revision, repository.pendingCheckpoints[1]!.progress?.revision);
+    assert.equal(repository.pendingCheckpoints[0]!.progress?.party.companionId, "koro");
+    assert.equal(repository.pendingCheckpoints[1]!.progress?.party.companionId, "asha");
+    assert.ok(repository.pendingCheckpoints[0]!.progress!.revision! < repository.pendingCheckpoints[1]!.progress!.revision!);
     const first = completionOrder === "older-first" ? 0 : 1;
     repository.pendingCheckpoints[first]!.complete();
     await (first === 0 ? older : newer);
     const afterFirst = director.snapshot();
     repository.pendingCheckpoints[1 - first]!.complete();
     await (first === 0 ? newer : older);
-    assert.equal(director.snapshot().lastSafeCheckpoint?.progress.party.combat, "asha");
+    assert.equal(director.snapshot().lastSafeCheckpoint?.progress.party.companionId, "asha");
     if (completionOrder === "newer-first") assert.deepEqual(director.snapshot(), afterFirst);
   });
 }

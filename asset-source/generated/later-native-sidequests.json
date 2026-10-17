@@ -1,0 +1,145 @@
+{
+  "method": "Earned public-Director checkpoint fixture per authored site; actual engine interaction inputs, native GLB colliders, physical basket carry, nursery escort, Marek approach and herd crossing. Not an uninterrupted playthrough.",
+  "results": [
+    {
+      "quest": "the-empty-nest",
+      "completed": true,
+      "nativeColliders": 16,
+      "consequences": [
+        {
+          "fact": "hub:bird-roost",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "the-last-cub",
+      "completed": true,
+      "nativeColliders": 167,
+      "consequences": [
+        {
+          "fact": "side:nursery-safe",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "a-pack-divided",
+      "completed": true,
+      "nativeColliders": 236,
+      "consequences": [
+        {
+          "fact": "side:shared-hunt",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "the-silent-hunter",
+      "completed": true,
+      "nativeColliders": 71,
+      "consequences": [
+        {
+          "fact": "side:protected-corridor",
+          "value": true
+        },
+        {
+          "fact": "mistveil_nyra_hidden_route",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "a-king-without-subjects",
+      "completed": true,
+      "nativeColliders": 257,
+      "consequences": [
+        {
+          "fact": "side:crown-refusal",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "river-of-black-sap",
+      "completed": true,
+      "nativeColliders": 71,
+      "consequences": [
+        {
+          "fact": "side:river-cleared",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "the-hunters-remorse",
+      "completed": true,
+      "nativeColliders": 71,
+      "consequences": [
+        {
+          "fact": "side:trap-line-cleared",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "seeds-between-branches",
+      "completed": true,
+      "nativeColliders": 16,
+      "consequences": [
+        {
+          "fact": "hub:seed-nursery",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "the-broken-snare-trail",
+      "completed": true,
+      "nativeColliders": 167,
+      "consequences": [
+        {
+          "fact": "side:snare-supply-cleared",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "winter-stores",
+      "completed": true,
+      "nativeColliders": 237,
+      "consequences": [
+        {
+          "fact": "side:winter-cache",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "the-last-crossing",
+      "completed": true,
+      "nativeColliders": 257,
+      "consequences": [
+        {
+          "fact": "side:herd-passage",
+          "value": true
+        }
+      ]
+    },
+    {
+      "quest": "roots-we-share",
+      "completed": true,
+      "nativeColliders": 17,
+      "consequences": [
+        {
+          "fact": "hub:refuge-garden",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "reports": [
+    "Marek helper reached native rig and completed dismantling"
+  ],
+  "reloadedAllTwelve": true
+}

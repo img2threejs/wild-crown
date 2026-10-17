@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-storm-hornbill",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "f93f896c-4d1c-40cf-9b39-ace27366793b",
+    "decimate": "ef658be1-56bf-4ada-a4d8-26de343e7852",
+    "rig": "d4e8f94b-2aea-4fe3-a819-af13901f7190"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 avian (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-storm-hornbill-rig-01/tripo-out/actor-storm-hornbill-rig-01-d4e8f94b/model.glb",
+      "sha256": "e8ca534f41763718312790d5c0874a935940adcced64a90fe1b27db37c9bacba"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill.glb",
+    "sha256": "e777124d8773bb183ea296ae1a79d7cbaed5d99536d75ae2b6843b511bf60168",
+    "bytes": 6939216,
+    "vertices": 29572,
+    "triangles": 24582,
+    "boundsMin": [
+      -0.26423,
+      0,
+      -0.49098
+    ],
+    "boundsMax": [
+      0.26423,
+      0.79172,
+      0.49098
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3956831,
+      "toBytes": 1588363
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4559476,
+      "toBytes": 1537496
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19675066,
+      "toBytes": 2119618
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

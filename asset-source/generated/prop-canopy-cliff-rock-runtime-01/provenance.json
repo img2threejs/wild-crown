@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-canopy-cliff-rock",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "c857af89-634e-42a7-bf30-b9cd77aa23df",
+    "decimate": "7a4ec4b8-f6d3-45fe-85d7-cf7b87a4dae9"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.14,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-canopy-cliff-rock-decimate-01/tripo-out/prop-canopy-cliff-rock-decimate-7a4ec4b8/model.glb",
+      "sha256": "741538a1255b1be1e3c790fa98f2c84c4ebca9d2ac691fda40076c68e96924cb"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-canopy-cliff-rock-runtime-01/prop-canopy-cliff-rock.glb",
+    "sha256": "947c088b727ca4c9a8edbb8659aae303024786c9d8c84409a3eba5a780c59805",
+    "bytes": 1844840,
+    "vertices": 3325,
+    "triangles": 2233,
+    "boundsMin": [
+      -0.39208,
+      -0.48985,
+      -0.32967
+    ],
+    "boundsMax": [
+      0.41162,
+      0.49032,
+      0.33017
+    ],
+    "worldBoundsMin": [
+      -0.39208,
+      -0.48985,
+      -0.32967
+    ],
+    "worldBoundsMax": [
+      0.41162,
+      0.49032,
+      0.33017
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4076676,
+      "toBytes": 513257
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5913421,
+      "toBytes": 530872
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17570478,
+      "toBytes": 665449
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 16077,
+      "trianglesAfter": 2246,
+      "relativeError": 0.009349015541374683
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 18561,
+      "trianglesAfter": 16077,
+      "removed": 2484,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 2246,
+      "trianglesAfter": 2233,
+      "removed": 13
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 23417,
+      "verticesAfter": 3325
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

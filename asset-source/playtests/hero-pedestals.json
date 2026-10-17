@@ -1,0 +1,118 @@
+[
+  {
+    "id": "hero-pedestal-aren",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "e3513e9a-2498-4394-a79c-ac0f22accfa8",
+    "sourceHash": "4f34172f78e9ee58d5d1e815150fb7a59f932ae7e99ffc98e7a9486fbe886b87",
+    "sourceInputHash": "cc0442639988e908b82cfff6961c5af82966daff4233c631a50734578436021e",
+    "outputHash": "4f34172f78e9ee58d5d1e815150fb7a59f932ae7e99ffc98e7a9486fbe886b87",
+    "runtimeUrl": "/asset-source/generated/hero-pedestal-aren-runtime-01/hero-pedestal-aren.glb",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.2958064,
+      "originOffset": {
+        "x": 0.000618,
+        "y": -0.1635911,
+        "z": 0.0011699
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/hero-pedestal-aren-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "hero-pedestal-yara",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "84e182df-0564-4426-8c26-f55846ca9d30",
+    "sourceHash": "286ad9a90441e2eaed5936cb1ec4b0d2c69b32daa139f6cd28f4607ada674f16",
+    "sourceInputHash": "d8f7b65713eeddb8345e7dcda20fb5e227d50ecaaa2e04d8bf91bff066635f59",
+    "outputHash": "286ad9a90441e2eaed5936cb1ec4b0d2c69b32daa139f6cd28f4607ada674f16",
+    "runtimeUrl": "/asset-source/generated/hero-pedestal-yara-runtime-01/hero-pedestal-yara.glb",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.2927734,
+      "originOffset": {
+        "x": -0.0019762,
+        "y": -0.0581015,
+        "z": -0.0000261
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/hero-pedestal-yara-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "hero-pedestal-vesper",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "c7ea5ad4-e172-413b-b715-5b55725404dd",
+    "sourceHash": "88dcd0fc0e2ea4970c506bd2755360ffa8712226ed832f8592181aa03141c86c",
+    "sourceInputHash": "3bc3c3dd5fa1adaa6298075be9c73acc24887b332d4b3f83aeaa7864de4fd841",
+    "outputHash": "88dcd0fc0e2ea4970c506bd2755360ffa8712226ed832f8592181aa03141c86c",
+    "runtimeUrl": "/asset-source/generated/hero-pedestal-vesper-runtime-01/hero-pedestal-vesper.glb",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.2971259,
+      "originOffset": {
+        "x": -0.0010267,
+        "y": -0.1136344,
+        "z": 0.0001574
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/hero-pedestal-vesper-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "hero-pedestal-sakda",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "f2f144d6-d060-455e-8875-5a5e2398ae2b",
+    "sourceHash": "1dc15fafc79a1304e8ce11e49eddcdf02121b1660e81857c75fe84c0854ad900",
+    "sourceInputHash": "2ae8c13ef3fc8dbba256f8ecc18962b809a6118b864ca777b398b5dddd693460",
+    "outputHash": "1dc15fafc79a1304e8ce11e49eddcdf02121b1660e81857c75fe84c0854ad900",
+    "runtimeUrl": "/asset-source/generated/hero-pedestal-sakda-runtime-01/hero-pedestal-sakda.glb",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.2990831,
+      "originOffset": {
+        "x": 0.000338,
+        "y": -0.1059701,
+        "z": 0.0002858
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/hero-pedestal-sakda-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  }
+]

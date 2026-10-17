@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-yara",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "selection": "AI-candidate visual review only: the full-body model preserves the Warden outfit, neutral A-pose, shoulder/wrist marks, and seed-knot motif; retained for rig and production review, not approved.",
+  "sourceReference": {
+    "path": "asset-source/generated/actor-yara-concept-02/tripo-out/actor-yara-concept-02-55c04d11/generated_image.png",
+    "sha256": "891354e3b08c80a58874eb2ccbfc3d7af2ce10829d10950649b7f88af43c81d8"
+  },
+  "sourceViews": [
+    {
+      "role": "front",
+      "path": "asset-source/generated/actor-yara-multiview-01/tripo-out/actor-yara-multiview-01-7d96df33/generate_multiview_image.front_view.jpeg",
+      "sha256": "9a50c984989af650d75b695c20f713bfdfaf4460fc582550fca709eec6d3258c"
+    },
+    {
+      "role": "left",
+      "path": "asset-source/generated/actor-yara-multiview-01/tripo-out/actor-yara-multiview-01-7d96df33/generate_multiview_image.left_view.jpeg",
+      "sha256": "4a39e40d28a9c51ba5fcc9c699400e391cd05fa559a2a77544c02e9025fdef2e"
+    },
+    {
+      "role": "back",
+      "path": "asset-source/generated/actor-yara-multiview-01/tripo-out/actor-yara-multiview-01-7d96df33/generate_multiview_image.back_view.jpeg",
+      "sha256": "f84b14bdf992edfe887d17d3ac1c3a962991e4826621101cb0e423e2d004efb3"
+    },
+    {
+      "role": "right",
+      "path": "asset-source/generated/actor-yara-multiview-01/tripo-out/actor-yara-multiview-01-7d96df33/generate_multiview_image.right_view.jpeg",
+      "sha256": "75019ea9ef1df9e3659f9de4a6a5b208a5031db87c82e689e7e122ab72f1ec75"
+    }
+  ],
+  "taskId": "04e6f63d-8fa1-402d-99ff-3c7516799c70",
+  "generationTasks": [
+    {
+      "taskId": "6cf812d9-6359-47f1-b44a-1bec3ef4a680",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Rejected: too photorealistic and too close to the frame for the selected game art direction."
+    },
+    {
+      "taskId": "55c04d11-6a3c-4514-a0cf-bf489031dcea",
+      "type": "text_to_image",
+      "status": "success",
+      "modelVersion": "seedream_v5",
+      "creditsConsumed": 5,
+      "selection": "Selected: more stylized layered Warden outfit, full figure and readable motif."
+    },
+    {
+      "taskId": "7d96df33-f5df-4bc0-84b2-f8ad798dd372",
+      "type": "image_to_multiview",
+      "status": "success",
+      "creditsConsumed": 10,
+      "selection": "All four identity views were visually inspected and used."
+    },
+    {
+      "taskId": "04e6f63d-8fa1-402d-99ff-3c7516799c70",
+      "type": "multiview_to_model",
+      "status": "success",
+      "modelVersion": "v3.1-20260211",
+      "geometryQuality": "detailed",
+      "textureQuality": "detailed",
+      "pbr": true,
+      "uvExport": true,
+      "creditsConsumed": 60
+    }
+  ],
+  "selectedChainCredits": 75,
+  "allCreativeAttemptsCredits": 80,
+  "output": {
+    "path": "model.glb",
+    "sha256": "d4da3e2df6f94e74feb3f693246765c4ab433d8003b46f6ef17c482afc0715df",
+    "bytes": 63591780,
+    "format": "glTF 2.0 binary",
+    "sceneNodes": 2,
+    "meshes": 1,
+    "vertices": 1014289,
+    "skins": 0,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "gates": {
+      "G1": "incomplete",
+      "G3": "incomplete",
+      "G6": "not-evaluated",
+      "G10": "incomplete",
+      "G11": "incomplete",
+      "G12": "incomplete"
+    },
+    "rigQuality": "not-measured-unrigged-source",
+    "animationQuality": "not-measured",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The source is an unrigged static mesh with 1,014,289 measured vertices; it is not game-ready.",
+      "No semantic action clips, authored skeleton contract, contact markers, or character negative-control evidence exists.",
+      "No full visual approval, collision, runtime animation, scale, or environment parity evidence exists."
+    ]
+  }
+}

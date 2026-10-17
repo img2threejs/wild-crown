@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, makeActor, type CombatInput, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { ATTACKS, BOSS_ENCOUNTERS } from '../../src/game/combat/content.js';
+import { TARGETED_STRIKES } from '../../src/game/combat/PlayerSkills.js';
+import { createCompanionState } from '../../src/game/companions/CompanionSystem.js';
 
 const v = (x = 0, y = 0, z = 0) => ({ x, y, z });
 const idle: CombatInput = { tick: 0, move: v(), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
@@ -34,16 +36,17 @@ describe('terminal player combat authority', () => {
     expect(e.useAbility('ferocity', 'koro')).toBe(false);
   });
   it('retains a Heavy impact genuinely resolved before a later lethal hit, without postmortem follow-ups', () => {
-    const e = combat(30); e.fixedStep({ ...idle, heavyPressed: true });
-    for (let t = 0; t < 24; t++) e.fixedStep(idle);
+    const e = combat(TARGETED_STRIKES.heavy.activeAt + 10); e.fixedStep({ ...idle, heavyPressed: true });
+    for (let t = 0; t < TARGETED_STRIKES.heavy.activeAt; t++) e.fixedStep(idle);
     expect(e.snapshot().actors.find(a => a.id === 'koro')?.vitality).toBe(78);
     for (let t = 0; t < 100; t++) e.fixedStep({ ...idle, lightPressed: true });
     expect(e.snapshot().player.vitality).toBe(0);
     expect(e.snapshot().actors.find(a => a.id === 'koro')?.vitality).toBe(78);
   });
   it('clears a genuinely buffered follow-up when the player dies during recovery', () => {
-    const e = combat(60); e.fixedStep({ ...idle, heavyPressed: true });
-    for (let t = 0; t < 54; t++) e.fixedStep(idle);
+    const e = combat(TARGETED_STRIKES.heavy.ticks + TARGETED_STRIKES.heavy.recoveryTicks - 3); e.fixedStep({ ...idle, heavyPressed: true });
+    // The connecting Heavy freezes the player clock, so wait for the actual last-8-ticks buffer window.
+    for (let t = 0; t < 200 && e.snapshotState().actionRecoveryUntil - e.snapshotState().tick > 8; t++) e.fixedStep(idle);
     e.fixedStep({ ...idle, lightPressed: true });
     expect(e.snapshotState().bufferedAction?.action).toBe('light_1');
     for (let t = 0; t < 104; t++) e.fixedStep(idle);
@@ -64,7 +67,7 @@ describe('terminal player combat authority', () => {
     state.arena.bounds = { min: v(-20, -2, -20), max: v(20, 20, 20) };
     state.encounter = BOSS_ENCOUNTERS['encounter-orun']!; state.encounterId = state.encounter.id; state.phaseIndex = 2;
     state.actors.push(makeActor('orun', 'human', 'hostile', v(0, 0, -1), false, false, 100), makeActor('vara', 'hornbill', 'ally', v(1), false, true, 100));
-    state.companionSlots = { scout: 'vara' };
+    state.companionState = createCompanionState('vara');
     state.lastAttackTick = 120;
     const e = new CombatEngine(state);
     for (let t = 0; t < 100; t++) e.fixedStep(idle);

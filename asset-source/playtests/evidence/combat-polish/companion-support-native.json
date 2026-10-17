@@ -1,0 +1,3933 @@
+{
+  "capturedAt": "2026-10-16T10:57:18.138Z",
+  "scope": "Native candidate Chapters and Trials; not production release certification",
+  "historicalBaseline": true,
+  "currentSingleCompanionEvidence": "companion-single-support-native.json",
+  "setup": {
+    "preview": "Actual mounted Companions UI, original native GLBs, native AnimationController and StoryEffects. Final 20-skill capture additionally steps the public preview.update(0.04) per rendered frame: accelerated preview fixture, not production-rate timing or gameplay-contact proof. Separate live Greenwake/Grove command and damage observations remain recorded below.",
+    "chaptersCombat": "Controlled live Greenwake encounter: hero/companions placed near the authored boar using CombatEngine.restore; real Use-now click followed by autonomous support, no fabricated contacts or damage.",
+    "trials": "Controlled Grove Trials entry bypassed map-selection progression only. Native canonical lookout and traveling Koro remained separate. Fighting status was arranged solely to exercise assignment refusal; ordinary Search/Storm Talon then ran through real commands and native presentation."
+  },
+  "skills": [
+    {
+      "id": "storm-talon",
+      "companion": "vara",
+      "nativeBoneCount": 50,
+      "poseDelta": 0.31627769592954336,
+      "clips": [
+        {
+          "clip": "vara:takeoff",
+          "min": 0.08000000317891269,
+          "max": 0.6000000238418579
+        },
+        {
+          "clip": "vara:dive",
+          "min": 0.029942857589025918,
+          "max": 0.3512000052332919
+        },
+        {
+          "clip": "vara:strike",
+          "min": 0.2593444426258306,
+          "max": 0.5111333297490878
+        },
+        {
+          "clip": "vara:fly",
+          "min": 0.03453333274522498,
+          "max": 0.6578833221295901
+        }
+      ],
+      "particleEmissions": 37,
+      "peakGround": 1,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            0.9200000000000002,
+            1.2,
+            0
+          ],
+          "to": [
+            1.6700000000000002,
+            0.45,
+            0.2
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            1.1,
+            1.2,
+            0
+          ],
+          "to": [
+            1.85,
+            0.45,
+            0.2
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            1.28,
+            1.2,
+            0
+          ],
+          "to": [
+            2.0300000000000002,
+            0.45,
+            0.2
+          ],
+          "width": 0.045
+        }
+      ],
+      "cues": [
+        {
+          "skill": "storm-talon",
+          "kind": "storm-talon",
+          "phase": "anticipation",
+          "actionId": "vara:takeoff"
+        },
+        {
+          "skill": "storm-talon",
+          "kind": "storm-talon",
+          "phase": "active",
+          "actionId": "vara:takeoff"
+        },
+        {
+          "skill": "storm-talon",
+          "kind": "storm-talon",
+          "phase": "hit",
+          "actionId": "vara:takeoff"
+        }
+      ]
+    },
+    {
+      "id": "sky-mark",
+      "companion": "vara",
+      "nativeBoneCount": 50,
+      "poseDelta": 0.33848766138686925,
+      "clips": [
+        {
+          "clip": "vara-sky-mark",
+          "min": 0.040000000596045596,
+          "max": 0.7867000117227042
+        }
+      ],
+      "particleEmissions": 8,
+      "peakGround": 0,
+      "peakBeam": 1,
+      "beamSegments": [
+        {
+          "from": [
+            0.007745484272980531,
+            0.9564712379912697,
+            0.2821978004336241
+          ],
+          "to": [
+            1.5,
+            0.5700000000000001,
+            0
+          ],
+          "width": 0.035
+        }
+      ],
+      "cues": [
+        {
+          "skill": "sky-mark",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "vara-sky-mark"
+        },
+        {
+          "skill": "sky-mark",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "vara-sky-mark"
+        },
+        {
+          "skill": "sky-mark",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "vara-sky-mark"
+        }
+      ]
+    },
+    {
+      "id": "canopy-route",
+      "companion": "koro",
+      "nativeBoneCount": 41,
+      "poseDelta": 0.06868310262406803,
+      "clips": [
+        {
+          "clip": "koro-throw",
+          "min": 0.04000000158945719,
+          "max": 1.1899333806170473
+        }
+      ],
+      "particleEmissions": 27,
+      "peakGround": 0,
+      "peakBeam": 0,
+      "beamSegments": [],
+      "cues": [
+        {
+          "skill": "canopy-route",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "koro-canopy-route"
+        },
+        {
+          "skill": "canopy-route",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "koro-canopy-route"
+        },
+        {
+          "skill": "canopy-route",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "koro-canopy-route"
+        }
+      ]
+    },
+    {
+      "id": "canopy-move",
+      "companion": "koro",
+      "nativeBoneCount": 41,
+      "poseDelta": 0.20003338004566218,
+      "clips": [
+        {
+          "clip": "koro-push",
+          "min": 0.040000000000000036,
+          "max": 1.4940999999999995
+        }
+      ],
+      "particleEmissions": 22,
+      "peakGround": 0,
+      "peakBeam": 2,
+      "beamSegments": [
+        {
+          "from": [
+            -0.3211387913639473,
+            0.29274611780087884,
+            0.34615892316020647
+          ],
+          "to": [
+            1.525311114866214,
+            0.32,
+            0.24871539450590777
+          ],
+          "width": 0.06
+        },
+        {
+          "from": [
+            -0.35353701839270124,
+            0.29274611780087884,
+            0.02780321819264453
+          ],
+          "to": [
+            1.474688885133786,
+            0.32,
+            -0.24871539450590777
+          ],
+          "width": 0.06
+        }
+      ],
+      "cues": [
+        {
+          "skill": "canopy-move",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "koro-move-object"
+        },
+        {
+          "skill": "canopy-move",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "koro-move-object"
+        },
+        {
+          "skill": "canopy-move",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "koro-move-object"
+        }
+      ]
+    },
+    {
+      "id": "canopy-distract",
+      "companion": "koro",
+      "nativeBoneCount": 41,
+      "poseDelta": 0.22980768233531867,
+      "clips": [
+        {
+          "clip": "koro-distract",
+          "min": 0.040000000866976686,
+          "max": 1.0533000228296308
+        }
+      ],
+      "particleEmissions": 7,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            -0.6352654096372996,
+            0.27935387369703285,
+            0.19713827816397655
+          ],
+          "to": [
+            -0.7852654096372997,
+            0.9293538736970328,
+            0.19713827816397655
+          ],
+          "width": 0.055
+        },
+        {
+          "from": [
+            -0.03526540963729968,
+            0.27935387369703285,
+            0.19713827816397655
+          ],
+          "to": [
+            0.11473459036270034,
+            0.9293538736970328,
+            0.19713827816397655
+          ],
+          "width": 0.055
+        },
+        {
+          "from": [
+            1.5,
+            0.77,
+            0
+          ],
+          "to": [
+            1.5,
+            1.37,
+            0
+          ],
+          "width": 0.08
+        }
+      ],
+      "cues": [
+        {
+          "skill": "canopy-distract",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "koro-distract"
+        },
+        {
+          "skill": "canopy-distract",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "koro-distract"
+        },
+        {
+          "skill": "canopy-distract",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "koro-distract"
+        }
+      ]
+    },
+    {
+      "id": "fang-guard",
+      "companion": "asha",
+      "nativeBoneCount": 43,
+      "poseDelta": 0.22452103848714616,
+      "clips": [
+        {
+          "clip": "monster-roar",
+          "min": 0.05714285714285714,
+          "max": 1.984333333333377
+        }
+      ],
+      "particleEmissions": 14,
+      "peakGround": 0,
+      "peakBeam": 6,
+      "beamSegments": [
+        {
+          "from": [
+            -0.7,
+            0.25,
+            0
+          ],
+          "to": [
+            -0.48,
+            1.25,
+            0
+          ],
+          "width": 0.065
+        },
+        {
+          "from": [
+            -0.48,
+            1.25,
+            0
+          ],
+          "to": [
+            0.48,
+            1.25,
+            0
+          ],
+          "width": 0.065
+        },
+        {
+          "from": [
+            0.48,
+            1.25,
+            0
+          ],
+          "to": [
+            0.7,
+            0.25,
+            0
+          ],
+          "width": 0.065
+        },
+        {
+          "from": [
+            0.8,
+            0.25,
+            0
+          ],
+          "to": [
+            1.02,
+            1.25,
+            0
+          ],
+          "width": 0.065
+        },
+        {
+          "from": [
+            1.02,
+            1.25,
+            0
+          ],
+          "to": [
+            1.98,
+            1.25,
+            0
+          ],
+          "width": 0.065
+        },
+        {
+          "from": [
+            1.98,
+            1.25,
+            0
+          ],
+          "to": [
+            2.2,
+            0.25,
+            0
+          ],
+          "width": 0.065
+        }
+      ],
+      "cues": [
+        {
+          "skill": "fang-guard",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "asha-fang-guard"
+        },
+        {
+          "skill": "fang-guard",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "asha-fang-guard"
+        },
+        {
+          "skill": "fang-guard",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "asha-fang-guard"
+        }
+      ]
+    },
+    {
+      "id": "fang-pin",
+      "companion": "asha",
+      "nativeBoneCount": 43,
+      "poseDelta": 0.32620048277319263,
+      "clips": [
+        {
+          "clip": "monster-slash",
+          "min": 0.040000001589457226,
+          "max": 1.1609000461300167
+        }
+      ],
+      "particleEmissions": 14,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            1.492971222975084,
+            0.5700000000000001,
+            0.339927339726498
+          ],
+          "to": [
+            1.1990107401749355,
+            -0.18,
+            -0.23980297218750182
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            1.635674068984684,
+            0.5700000000000001,
+            0.2675678362679999
+          ],
+          "to": [
+            1.3417135861845355,
+            -0.18,
+            -0.3121624756459999
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            1.778376914994284,
+            0.5700000000000001,
+            0.1952083328095018
+          ],
+          "to": [
+            1.4844164321941355,
+            -0.18,
+            -0.38452197910449804
+          ],
+          "width": 0.045
+        }
+      ],
+      "cues": [
+        {
+          "skill": "fang-pin",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "asha-pin"
+        },
+        {
+          "skill": "fang-pin",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "asha-pin"
+        },
+        {
+          "skill": "fang-pin",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "asha-pin"
+        }
+      ]
+    },
+    {
+      "id": "pack-flank",
+      "companion": "sable",
+      "nativeBoneCount": 33,
+      "poseDelta": 0.2556883042110621,
+      "clips": [
+        {
+          "clip": "monster-jump",
+          "min": 0.05333333412806193,
+          "max": 1.5689778011574063
+        }
+      ],
+      "particleEmissions": 15,
+      "peakGround": 0,
+      "peakBeam": 2,
+      "beamSegments": [
+        {
+          "from": [
+            1.6688482053662517,
+            0.33999999999999997,
+            0.30657834813403906
+          ],
+          "to": [
+            1.3311517946337483,
+            0.039999999999999994,
+            -0.30657834813403906
+          ],
+          "width": 0.055
+        },
+        {
+          "from": [
+            1.6688482053662517,
+            0.039999999999999994,
+            0.30657834813403906
+          ],
+          "to": [
+            1.3311517946337483,
+            0.33999999999999997,
+            -0.30657834813403906
+          ],
+          "width": 0.055
+        }
+      ],
+      "cues": [
+        {
+          "skill": "pack-flank",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "sable-pack-flank"
+        },
+        {
+          "skill": "pack-flank",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "sable-pack-flank"
+        },
+        {
+          "skill": "pack-flank",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "sable-pack-flank"
+        }
+      ]
+    },
+    {
+      "id": "shadow-ambush",
+      "companion": "nyra",
+      "nativeBoneCount": 39,
+      "poseDelta": 0.18474931860834481,
+      "clips": [
+        {
+          "clip": "monster-dive",
+          "min": 0.04,
+          "max": 0.9633333333333223
+        }
+      ],
+      "particleEmissions": 19,
+      "peakGround": 0,
+      "peakBeam": 2,
+      "beamSegments": [
+        {
+          "from": [
+            1.05,
+            -0.18,
+            0
+          ],
+          "to": [
+            1.95,
+            0.52,
+            0
+          ],
+          "width": 0.06
+        },
+        {
+          "from": [
+            1.1,
+            0.47,
+            0.08
+          ],
+          "to": [
+            1.9,
+            -0.13,
+            0.08
+          ],
+          "width": 0.06
+        }
+      ],
+      "cues": [
+        {
+          "skill": "shadow-ambush",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "nyra-shadow-ambush"
+        },
+        {
+          "skill": "shadow-ambush",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "nyra-shadow-ambush"
+        },
+        {
+          "skill": "shadow-ambush",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "nyra-shadow-ambush"
+        }
+      ]
+    },
+    {
+      "id": "crown-rally",
+      "companion": "solkar",
+      "nativeBoneCount": 38,
+      "poseDelta": 0.9839804286089543,
+      "clips": [
+        {
+          "clip": "monster-roar",
+          "min": 0.049999999999999996,
+          "max": 1.9376666666666698
+        }
+      ],
+      "particleEmissions": 12,
+      "peakGround": 0,
+      "peakBeam": 0,
+      "beamSegments": [],
+      "cues": [
+        {
+          "skill": "crown-rally",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "solkar-crown-rally"
+        },
+        {
+          "skill": "crown-rally",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "solkar-crown-rally"
+        },
+        {
+          "skill": "crown-rally",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "solkar-crown-rally"
+        }
+      ]
+    },
+    {
+      "id": "vara-search",
+      "companion": "vara",
+      "nativeBoneCount": 50,
+      "poseDelta": 0.3248882481040321,
+      "clips": [
+        {
+          "clip": "vara-sky-survey",
+          "min": 0.04,
+          "max": 0.9635333333333005
+        }
+      ],
+      "particleEmissions": 13,
+      "peakGround": 0,
+      "peakBeam": 4,
+      "beamSegments": [
+        {
+          "from": [
+            0.0030063170382354865,
+            0.9510505397446103,
+            0.28697872500978977
+          ],
+          "to": [
+            2.5771122531786874,
+            0.88,
+            2.217767443740725
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0.0030063170382354865,
+            0.9510505397446103,
+            0.28697872500978977
+          ],
+          "to": [
+            3.379228221017246,
+            0.88,
+            0.3752554200549504
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0.0030063170382354865,
+            0.9510505397446103,
+            0.28697872500978977
+          ],
+          "to": [
+            3.0008825502481273,
+            0.88,
+            -1.5983441180222406
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0.0030063170382354865,
+            0.9510505397446103,
+            0.28697872500978977
+          ],
+          "to": [
+            1.5742422687442774,
+            0.88,
+            -3.013596071025258
+          ],
+          "width": 0.025
+        }
+      ],
+      "cues": [
+        {
+          "skill": "vara-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "vara-search"
+        },
+        {
+          "skill": "vara-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "vara-search"
+        },
+        {
+          "skill": "vara-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "vara-search"
+        }
+      ]
+    },
+    {
+      "id": "koro-search",
+      "companion": "koro",
+      "nativeBoneCount": 41,
+      "poseDelta": 0.0540197172975107,
+      "clips": [
+        {
+          "clip": "koro-search",
+          "min": 0.04,
+          "max": 0.9775333333333389
+        }
+      ],
+      "particleEmissions": 15,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            0,
+            0.92,
+            0
+          ],
+          "to": [
+            2.5176717685379795,
+            0.92,
+            0.9753608900847129
+          ],
+          "width": 0.035
+        },
+        {
+          "from": [
+            0,
+            0.92,
+            0
+          ],
+          "to": [
+            2.6835634235966546,
+            0.92,
+            -0.29746823617691154
+          ],
+          "width": 0.035
+        },
+        {
+          "from": [
+            0,
+            0.92,
+            0
+          ],
+          "to": [
+            2.242942494834873,
+            0.92,
+            -1.5030665204387719
+          ],
+          "width": 0.035
+        }
+      ],
+      "cues": [
+        {
+          "skill": "koro-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "koro-search"
+        },
+        {
+          "skill": "koro-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "koro-search"
+        },
+        {
+          "skill": "koro-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "koro-search"
+        }
+      ]
+    },
+    {
+      "id": "asha-search",
+      "companion": "asha",
+      "nativeBoneCount": 43,
+      "poseDelta": 0.19304939298000498,
+      "clips": [
+        {
+          "clip": "monster-shoot",
+          "min": 0.05599999904632569,
+          "max": 1.3859066430648042
+        }
+      ],
+      "particleEmissions": 12,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            0.09755346584255163,
+            0.8700000000000001,
+            0.19718854252239432
+          ],
+          "to": [
+            2.338332358142487,
+            0.8700000000000001,
+            -0.9113735693247833
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            0,
+            0.8700000000000001,
+            0
+          ],
+          "to": [
+            2.2407788922999354,
+            0.8700000000000001,
+            -1.1085621118471776
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            -0.09755346584255163,
+            0.8700000000000001,
+            -0.19718854252239432
+          ],
+          "to": [
+            2.143225426457384,
+            0.8700000000000001,
+            -1.3057506543695718
+          ],
+          "width": 0.045
+        }
+      ],
+      "cues": [
+        {
+          "skill": "asha-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "asha-search"
+        },
+        {
+          "skill": "asha-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "asha-search"
+        },
+        {
+          "skill": "asha-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "asha-search"
+        }
+      ]
+    },
+    {
+      "id": "sable-search",
+      "companion": "sable",
+      "nativeBoneCount": 33,
+      "poseDelta": 0.20983798414692892,
+      "clips": [
+        {
+          "clip": "monster-shoot",
+          "min": 0.05599999904632569,
+          "max": 1.3482466437061333
+        }
+      ],
+      "particleEmissions": 10,
+      "peakGround": 0,
+      "peakBeam": 1,
+      "beamSegments": [
+        {
+          "from": [
+            0,
+            0.88,
+            0
+          ],
+          "to": [
+            2.2724810545793446,
+            0.88,
+            -1.2632615946738632
+          ],
+          "width": 0.02
+        }
+      ],
+      "cues": [
+        {
+          "skill": "sable-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "sable-search"
+        },
+        {
+          "skill": "sable-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "sable-search"
+        },
+        {
+          "skill": "sable-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "sable-search"
+        }
+      ]
+    },
+    {
+      "id": "nyra-search",
+      "companion": "nyra",
+      "nativeBoneCount": 39,
+      "poseDelta": 0.18421042405165733,
+      "clips": [
+        {
+          "clip": "monster-shoot",
+          "min": 0.05599999904632569,
+          "max": 1.3475466437180708
+        }
+      ],
+      "particleEmissions": 12,
+      "peakGround": 0,
+      "peakBeam": 2,
+      "beamSegments": [
+        {
+          "from": [
+            0.17913876749855873,
+            0.9,
+            0.3576440996005629
+          ],
+          "to": [
+            2.3477124287375335,
+            0.9,
+            -0.22526950959087688
+          ],
+          "width": 0.06
+        },
+        {
+          "from": [
+            -0.17913876749855873,
+            0.9,
+            -0.3576440996005629
+          ],
+          "to": [
+            1.5863726668686589,
+            0.9,
+            -1.7452569328932692
+          ],
+          "width": 0.06
+        }
+      ],
+      "cues": [
+        {
+          "skill": "nyra-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "nyra-search"
+        },
+        {
+          "skill": "nyra-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "nyra-search"
+        },
+        {
+          "skill": "nyra-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "nyra-search"
+        }
+      ]
+    },
+    {
+      "id": "solkar-search",
+      "companion": "solkar",
+      "nativeBoneCount": 38,
+      "poseDelta": 0.9810423722135553,
+      "clips": [
+        {
+          "clip": "monster-shoot",
+          "min": 0.05599999904632569,
+          "max": 1.3674266433795
+        }
+      ],
+      "particleEmissions": 7,
+      "peakGround": 1,
+      "peakBeam": 4,
+      "beamSegments": [
+        {
+          "from": [
+            0,
+            0.88,
+            0
+          ],
+          "to": [
+            0,
+            0.88,
+            2.5
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0,
+            0.88,
+            0
+          ],
+          "to": [
+            2.5,
+            0.88,
+            1.5308084989341916e-16
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0,
+            0.88,
+            0
+          ],
+          "to": [
+            3.061616997868383e-16,
+            0.88,
+            -2.5
+          ],
+          "width": 0.025
+        },
+        {
+          "from": [
+            0,
+            0.88,
+            0
+          ],
+          "to": [
+            -2.5,
+            0.88,
+            -4.592425496802574e-16
+          ],
+          "width": 0.025
+        }
+      ],
+      "cues": [
+        {
+          "skill": "solkar-search",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "solkar-search"
+        },
+        {
+          "skill": "solkar-search",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "solkar-search"
+        },
+        {
+          "skill": "solkar-search",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "solkar-search"
+        }
+      ]
+    },
+    {
+      "id": "asha-distract",
+      "companion": "asha",
+      "nativeBoneCount": 43,
+      "poseDelta": 0.2073719450542197,
+      "clips": [
+        {
+          "clip": "monster-turn",
+          "min": 0.03636363636363636,
+          "max": 0.9727575757575964
+        }
+      ],
+      "particleEmissions": 5,
+      "peakGround": 0,
+      "peakBeam": 4,
+      "beamSegments": [
+        {
+          "from": [
+            0.22898834006106839,
+            0.9213472129834422,
+            1.0816304067986193
+          ],
+          "to": [
+            0.1400564000517594,
+            1.0713472129834423,
+            0.23187096434082546
+          ],
+          "width": 0.04
+        },
+        {
+          "from": [
+            0.22898834006106839,
+            1.0513472129834422,
+            1.0816304067986193
+          ],
+          "to": [
+            0.1400564000517594,
+            1.2013472129834422,
+            0.23187096434082546
+          ],
+          "width": 0.04
+        },
+        {
+          "from": [
+            0.22898834006106839,
+            1.1813472129834421,
+            1.0816304067986193
+          ],
+          "to": [
+            0.1400564000517594,
+            1.331347212983442,
+            0.23187096434082546
+          ],
+          "width": 0.04
+        },
+        {
+          "from": [
+            1.5,
+            0.77,
+            0
+          ],
+          "to": [
+            1.5,
+            1.37,
+            0
+          ],
+          "width": 0.08
+        }
+      ],
+      "cues": [
+        {
+          "skill": "asha-distract",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "asha-distract"
+        },
+        {
+          "skill": "asha-distract",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "asha-distract"
+        },
+        {
+          "skill": "asha-distract",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "asha-distract"
+        }
+      ]
+    },
+    {
+      "id": "sable-distract",
+      "companion": "sable",
+      "nativeBoneCount": 33,
+      "poseDelta": 0.23821537814738453,
+      "clips": [
+        {
+          "clip": "monster-turn",
+          "min": 0.03636363636363636,
+          "max": 0.9849393939393797
+        }
+      ],
+      "particleEmissions": 5,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            0.13046431053712915,
+            1.5135113155180844,
+            0.9273441095890385
+          ],
+          "to": [
+            0.3721013565117892,
+            1.7935113155180842,
+            1.3650786615867532
+          ],
+          "width": 0.035
+        },
+        {
+          "from": [
+            -0.014517917047666855,
+            1.5135113155180844,
+            0.6647033783904095
+          ],
+          "to": [
+            -0.2561549630223269,
+            1.7935113155180842,
+            0.22696882639269478
+          ],
+          "width": 0.035
+        },
+        {
+          "from": [
+            1.5,
+            0.77,
+            0
+          ],
+          "to": [
+            1.5,
+            1.37,
+            0
+          ],
+          "width": 0.08
+        }
+      ],
+      "cues": [
+        {
+          "skill": "sable-distract",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "sable-distract"
+        },
+        {
+          "skill": "sable-distract",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "sable-distract"
+        },
+        {
+          "skill": "sable-distract",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "sable-distract"
+        }
+      ]
+    },
+    {
+      "id": "nyra-distract",
+      "companion": "nyra",
+      "nativeBoneCount": 39,
+      "poseDelta": 0.2065977458502498,
+      "clips": [
+        {
+          "clip": "monster-turn",
+          "min": 0.03636363636363636,
+          "max": 0.9848484848484677
+        }
+      ],
+      "particleEmissions": 5,
+      "peakGround": 0,
+      "peakBeam": 3,
+      "beamSegments": [
+        {
+          "from": [
+            -0.18762895691039733,
+            0.9,
+            1.1867259603268336
+          ],
+          "to": [
+            0.728565820308926,
+            1.05,
+            1.0048272791990298
+          ],
+          "width": 0.07
+        },
+        {
+          "from": [
+            -0.457720079422618,
+            0.9,
+            0.6509547539895681
+          ],
+          "to": [
+            0.23339876236985477,
+            1.05,
+            0.022580067580709906
+          ],
+          "width": 0.07
+        },
+        {
+          "from": [
+            1.5,
+            0.77,
+            0
+          ],
+          "to": [
+            1.5,
+            1.37,
+            0
+          ],
+          "width": 0.08
+        }
+      ],
+      "cues": [
+        {
+          "skill": "nyra-distract",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "nyra-distract"
+        },
+        {
+          "skill": "nyra-distract",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "nyra-distract"
+        },
+        {
+          "skill": "nyra-distract",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "nyra-distract"
+        }
+      ]
+    },
+    {
+      "id": "solkar-distract",
+      "companion": "solkar",
+      "nativeBoneCount": 38,
+      "poseDelta": 0.9874199643801309,
+      "clips": [
+        {
+          "clip": "monster-turn",
+          "min": 0.03636363636363636,
+          "max": 0.9726666666666843
+        }
+      ],
+      "particleEmissions": 8,
+      "peakGround": 0,
+      "peakBeam": 4,
+      "beamSegments": [
+        {
+          "from": [
+            0.14311993689467056,
+            1.437335522978494,
+            1.044416818865979
+          ],
+          "to": [
+            0.29793724178292313,
+            1.9373355229784939,
+            1.2777226312820822
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            0.07676966337113376,
+            1.437335522978494,
+            0.9444286135447921
+          ],
+          "to": [
+            0.07676966337113376,
+            2.187335522978494,
+            0.9444286135447921
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            0.010419389847596952,
+            1.437335522978494,
+            0.8444404082236051
+          ],
+          "to": [
+            -0.14439791504065563,
+            1.9373355229784939,
+            0.6111345958075021
+          ],
+          "width": 0.045
+        },
+        {
+          "from": [
+            1.5,
+            0.77,
+            0
+          ],
+          "to": [
+            1.5,
+            1.37,
+            0
+          ],
+          "width": 0.08
+        }
+      ],
+      "cues": [
+        {
+          "skill": "solkar-distract",
+          "kind": "command",
+          "phase": "anticipation",
+          "actionId": "solkar-distract"
+        },
+        {
+          "skill": "solkar-distract",
+          "kind": "command",
+          "phase": "commit",
+          "actionId": "solkar-distract"
+        },
+        {
+          "skill": "solkar-distract",
+          "kind": "command",
+          "phase": "hit",
+          "actionId": "solkar-distract"
+        }
+      ]
+    }
+  ],
+  "chaptersPartySwaps": [
+    {
+      "companion": "sable",
+      "party": {
+        "combat": "sable",
+        "utility": "koro",
+        "scout": "vara"
+      },
+      "rendered": true,
+      "asset": "actor-sable",
+      "allegiance": "ally",
+      "heroPreserved": true,
+      "worldTickBefore": 0,
+      "worldTickAfter": 0,
+      "storyRecruited": false,
+      "error": null
+    },
+    {
+      "companion": "nyra",
+      "party": {
+        "combat": "nyra",
+        "utility": "koro",
+        "scout": "vara"
+      },
+      "rendered": true,
+      "asset": "actor-nyra",
+      "allegiance": "ally",
+      "heroPreserved": true,
+      "worldTickBefore": 0,
+      "worldTickAfter": 0,
+      "storyRecruited": false,
+      "error": null
+    },
+    {
+      "companion": "solkar",
+      "party": {
+        "combat": "solkar",
+        "utility": "koro",
+        "scout": "vara"
+      },
+      "rendered": true,
+      "asset": "actor-solkar",
+      "allegiance": "ally",
+      "heroPreserved": true,
+      "worldTickBefore": 0,
+      "worldTickAfter": 0,
+      "storyRecruited": false,
+      "error": null
+    },
+    {
+      "companion": "asha",
+      "party": {
+        "combat": "asha",
+        "utility": "koro",
+        "scout": "vara"
+      },
+      "rendered": true,
+      "asset": "actor-asha",
+      "allegiance": "ally",
+      "heroPreserved": true,
+      "worldTickBefore": 0,
+      "worldTickAfter": 0,
+      "storyRecruited": false,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "sable",
+      "party": {
+        "combat": "asha",
+        "utility": "sable",
+        "scout": "vara"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "nyra",
+      "party": {
+        "combat": "asha",
+        "utility": "nyra",
+        "scout": "vara"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "solkar",
+      "party": {
+        "combat": "asha",
+        "utility": "solkar",
+        "scout": "vara"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": null,
+      "party": {
+        "combat": "asha",
+        "scout": "vara"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "combat",
+      "id": "koro",
+      "party": {
+        "combat": "koro",
+        "scout": "vara"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "asha",
+      "party": {
+        "combat": "koro",
+        "scout": "vara",
+        "utility": "asha"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "sable",
+      "party": {
+        "combat": "koro",
+        "scout": "vara",
+        "utility": "sable"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "combat",
+      "id": "asha",
+      "party": {
+        "combat": "asha",
+        "scout": "vara",
+        "utility": "sable"
+      },
+      "native": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "koro",
+      "party": {
+        "combat": "asha",
+        "scout": "vara",
+        "utility": "koro"
+      },
+      "native": true,
+      "error": null
+    }
+  ],
+  "trialsPartySwaps": [
+    {
+      "slot": "utility",
+      "id": "nyra",
+      "party": {
+        "combat": "asha",
+        "utility": "nyra",
+        "scout": "vara"
+      },
+      "native": true,
+      "heroPreserved": true,
+      "trialPreserved": true,
+      "error": null
+    },
+    {
+      "slot": "combat",
+      "id": "sable",
+      "party": {
+        "combat": "sable",
+        "utility": "nyra",
+        "scout": "vara"
+      },
+      "native": true,
+      "heroPreserved": true,
+      "trialPreserved": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "solkar",
+      "party": {
+        "combat": "sable",
+        "utility": "solkar",
+        "scout": "vara"
+      },
+      "native": true,
+      "heroPreserved": true,
+      "trialPreserved": true,
+      "error": null
+    },
+    {
+      "slot": "combat",
+      "id": "asha",
+      "party": {
+        "combat": "asha",
+        "utility": "solkar",
+        "scout": "vara"
+      },
+      "native": true,
+      "heroPreserved": true,
+      "trialPreserved": true,
+      "error": null
+    },
+    {
+      "slot": "utility",
+      "id": "koro",
+      "party": {
+        "combat": "asha",
+        "utility": "koro",
+        "scout": "vara"
+      },
+      "native": true,
+      "heroPreserved": true,
+      "trialPreserved": true,
+      "error": null
+    }
+  ],
+  "greenwakeLive": {
+    "before": {
+      "disabled": false,
+      "worldTick": 0,
+      "screen": "companions"
+    },
+    "after": {
+      "screen": "game",
+      "error": null
+    },
+    "samples": [
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.010033333333338668
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.010033333333338668
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara:idle",
+            "nativeTime": 0
+          }
+        ]
+      },
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.016666666915019352
+          }
+        ]
+      },
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.016666666915019352
+          }
+        ]
+      },
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.016666666915019352
+          }
+        ]
+      },
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.016666666915019352
+          }
+        ]
+      },
+      {
+        "tick": 1,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha:idle",
+            "progress": 0,
+            "native": "asha-bond-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.016666666666666607
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.020833333333333332,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.016666666915019352
+          }
+        ]
+      },
+      {
+        "tick": 8,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.08333333333333333,
+            "native": "monster-slash",
+            "nativeTime": 0.08676667011444368
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.12009999999997945
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.16666666666666666,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.1201000017896089
+          }
+        ]
+      },
+      {
+        "tick": 31,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.4027777777777778,
+            "native": "monster-slash",
+            "nativeTime": 0.47356668548448855
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.5068999999999733
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.6458333333333334,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.5069000075533718
+          }
+        ]
+      },
+      {
+        "tick": 54,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.7222222222222222,
+            "native": "monster-slash",
+            "nativeTime": 0.8601667008466364
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 0.8935000000000173
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:takeoff",
+            "progress": 0.2,
+            "native": "vara:takeoff",
+            "nativeTime": 0.11220000445844817
+          }
+        ]
+      },
+      {
+        "tick": 77,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro:idle",
+            "progress": 0,
+            "native": "monster-idle",
+            "nativeTime": 1.2805000000000177
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:takeoff",
+            "progress": 0.9666666666666667,
+            "native": "vara:takeoff",
+            "nativeTime": 0.5766000229120467
+          }
+        ]
+      },
+      {
+        "tick": 101,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.041666666666666664,
+            "native": "koro-throw",
+            "nativeTime": 0.04716666854089662
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.39999999999997726
+          }
+        ]
+      },
+      {
+        "tick": 125,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.375,
+            "native": "koro-throw",
+            "nativeTime": 0.4339666839109415
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.08680001192090003
+          }
+        ]
+      },
+      {
+        "tick": 147,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.6805555555555556,
+            "native": "koro-throw",
+            "nativeTime": 0.812433365616573
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.4652666785876174
+          }
+        ]
+      },
+      {
+        "tick": 172,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.1786666905085137
+          }
+        ]
+      },
+      {
+        "tick": 198,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:takeoff",
+            "progress": 0.2777777777777778,
+            "native": "vara:takeoff",
+            "nativeTime": 0.1473333391877986
+          }
+        ]
+      },
+      {
+        "tick": 222,
+        "tokens": 1,
+        "health": 100,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:dive",
+            "progress": 0.23809523809523808,
+            "native": "vara:dive",
+            "nativeTime": 0.08350476314914076
+          }
+        ]
+      },
+      {
+        "tick": 247,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:strike",
+            "progress": 0.8011111111111111,
+            "native": "vara:strike",
+            "nativeTime": 0.4418425894942696
+          }
+        ]
+      },
+      {
+        "tick": 270,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0.5,
+            "native": "vara:fly",
+            "nativeTime": 0.18975559210350323
+          }
+        ]
+      },
+      {
+        "tick": 292,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.563255592103481
+          }
+        ]
+      },
+      {
+        "tick": 316,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.18055555555555555,
+            "native": "monster-slash",
+            "nativeTime": 0.21423334184625495
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.3125,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.2475666703557513
+          }
+        ]
+      },
+      {
+        "tick": 340,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.5138888888888888,
+            "native": "monster-slash",
+            "nativeTime": 0.6136333577169424
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara-sky-mark",
+            "progress": 0.8125,
+            "native": "vara-sky-mark",
+            "nativeTime": 0.6469666763072324
+          }
+        ]
+      },
+      {
+        "tick": 368,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 0.9027777777777778,
+            "native": "monster-slash",
+            "nativeTime": 1.0678333757652432
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 1,
+            "native": "koro-throw",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.3442556040244613
+          }
+        ]
+      },
+      {
+        "tick": 392,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.08333333333333333,
+            "native": "koro-throw",
+            "nativeTime": 0.09770000388229227
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.05745561594540782
+          }
+        ]
+      },
+      {
+        "tick": 416,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.4166666666666667,
+            "native": "koro-throw",
+            "nativeTime": 0.4847000192602911
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.44445561594540917
+          }
+        ]
+      },
+      {
+        "tick": 439,
+        "tokens": 1,
+        "health": 64,
+        "actors": [
+          {
+            "id": "asha__party_combat",
+            "action": "asha-pin",
+            "progress": 1,
+            "native": "monster-slash",
+            "nativeTime": 1.2000000476837158
+          },
+          {
+            "id": "koro__party_utility",
+            "action": "koro-canopy-route",
+            "progress": 0.7361111111111112,
+            "native": "koro-throw",
+            "nativeTime": 0.8715000346302791
+          },
+          {
+            "id": "vara__party_scout",
+            "action": "vara:fly",
+            "progress": 0,
+            "native": "vara:fly",
+            "nativeTime": 0.1312556278662742
+          }
+        ]
+      }
+    ],
+    "cues": [
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "mark",
+        "phase": "sustain",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "takeoff",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "special",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "sap-vein",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "aren"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "anticipation",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "active",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "hit",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "phase",
+        "phase": "resolve",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "landing",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "mark",
+        "phase": "sustain",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "sap-vein",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "aren"
+      },
+      {
+        "kind": "poise-break",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "special",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "anticipation",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "active",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "aren"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "active",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "hit",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "landing",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "mark",
+        "phase": "sustain",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "special",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "active",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "anticipation",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "active",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "hit",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "hit",
+        "phase": "hit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "sap-vein",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "aren"
+      },
+      {
+        "kind": "storm-talon",
+        "phase": "landing",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "focus",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "mark",
+        "phase": "sustain",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "vara-sky-mark",
+        "actorId": "vara__party_scout"
+      },
+      {
+        "kind": "poise-break",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "corrupted-boar"
+      },
+      {
+        "kind": "anticipation",
+        "phase": "anticipation",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "resolve",
+        "actionId": "asha-pin",
+        "actorId": "asha__party_combat"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "special",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "anticipation",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "command",
+        "phase": "commit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "commit",
+        "phase": "commit",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "command",
+        "phase": "hit",
+        "actionId": "koro-canopy-route",
+        "actorId": "koro__party_utility"
+      },
+      {
+        "kind": "sap-vein",
+        "phase": "active",
+        "actorId": "greenwake-sap-stalker"
+      },
+      {
+        "kind": "reaction-start",
+        "phase": "hit",
+        "actorId": "aren"
+      }
+    ]
+  },
+  "groveFinal": {
+    "region": "the-grove",
+    "ready": true,
+    "unlockedNative": true,
+    "activeCombatAssignmentEnabled": false,
+    "activeCombatSelectionAndClearRefused": true,
+    "before": {
+      "screen": "companions",
+      "disabled": false
+    },
+    "after": {
+      "screen": "game",
+      "error": null
+    },
+    "samples": [
+      {
+        "tick": 3532,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 1.8666666666666671
+      },
+      {
+        "tick": 3557,
+        "action": "koro-search",
+        "phase": "active",
+        "progress": 0.4,
+        "native": "koro-search",
+        "nativeTime": 0.3966999999999814
+      },
+      {
+        "tick": 3578,
+        "action": "koro-search",
+        "phase": "active",
+        "progress": 0.75,
+        "native": "koro-search",
+        "nativeTime": 0.7434999999999832
+      },
+      {
+        "tick": 3598,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-walk",
+        "nativeTime": 0.8337938391937056
+      },
+      {
+        "tick": 3618,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 2.727819943934561
+      },
+      {
+        "tick": 3637,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.04871994393455559
+      },
+      {
+        "tick": 3656,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.35451994393456054
+      },
+      {
+        "tick": 3674,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.6622199439345717
+      },
+      {
+        "tick": 3693,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.9813199439345635
+      },
+      {
+        "tick": 3713,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 1.3158199439345832
+      },
+      {
+        "tick": 3733,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 1.6484199439345684
+      },
+      {
+        "tick": 3753,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 1.969319943934563
+      },
+      {
+        "tick": 3773,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 2.302519943934568
+      },
+      {
+        "tick": 3793,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 2.635119943934546
+      },
+      {
+        "tick": 3814,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 2.996219943934575
+      },
+      {
+        "tick": 3835,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.3420199439345435
+      },
+      {
+        "tick": 3857,
+        "action": "koro:idle",
+        "phase": "idle",
+        "progress": 0,
+        "native": "monster-idle",
+        "nativeTime": 0.7022199439345567
+      }
+    ],
+    "lookout": [
+      {
+        "id": "grove-koro",
+        "asset": "actor-grove-koro-lookout",
+        "native": "actor-grove-koro-lookout"
+      }
+    ]
+  },
+  "stormFinal": {
+    "target": "grove-sprig",
+    "healthBefore": 160,
+    "before": {
+      "screen": "companions",
+      "disabled": false,
+      "label": "Use Storm Talon and return to game"
+    },
+    "keysUnique": true,
+    "keys": [
+      "preview-skill-storm-talon",
+      "ability-storm-talon",
+      "preview-skill-sky-mark",
+      "ability-sky-mark",
+      "preview-skill-vara-search",
+      "ability-vara-search"
+    ],
+    "cues": [
+      {
+        "phase": "anticipation",
+        "shape": "ring",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 0
+      },
+      {
+        "phase": "active",
+        "shape": "trail",
+        "actor": "vara__party_scout",
+        "groundSlots": 5,
+        "beams": 1
+      },
+      {
+        "phase": "hit",
+        "shape": "burst",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 4
+      },
+      {
+        "phase": "landing",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 0
+      },
+      {
+        "phase": "anticipation",
+        "shape": "ring",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 2
+      },
+      {
+        "phase": "active",
+        "shape": "trail",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 3
+      },
+      {
+        "phase": "hit",
+        "shape": "burst",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 6
+      },
+      {
+        "phase": "landing",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 0
+      },
+      {
+        "phase": "anticipation",
+        "shape": "ring",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 2
+      },
+      {
+        "phase": "active",
+        "shape": "trail",
+        "actor": "vara__party_scout",
+        "groundSlots": 4,
+        "beams": 3
+      },
+      {
+        "phase": "hit",
+        "shape": "burst",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 6
+      },
+      {
+        "phase": "landing",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 0
+      },
+      {
+        "phase": "anticipation",
+        "shape": "ring",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 2
+      },
+      {
+        "phase": "active",
+        "shape": "trail",
+        "actor": "vara__party_scout",
+        "groundSlots": 4,
+        "beams": 3
+      },
+      {
+        "phase": "hit",
+        "shape": "burst",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 6
+      },
+      {
+        "phase": "landing",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 0
+      },
+      {
+        "phase": "anticipation",
+        "shape": "ring",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 2
+      },
+      {
+        "phase": "active",
+        "shape": "trail",
+        "actor": "vara__party_scout",
+        "groundSlots": 5,
+        "beams": 3
+      },
+      {
+        "phase": "hit",
+        "shape": "burst",
+        "actor": "vara__party_scout",
+        "groundSlots": 3,
+        "beams": 6
+      },
+      {
+        "phase": "landing",
+        "actor": "vara__party_scout",
+        "groundSlots": 1,
+        "beams": 0
+      }
+    ],
+    "samples": [
+      {
+        "tick": 4245,
+        "action": "vara:takeoff",
+        "progress": 0.2777777777777778,
+        "native": "vara:idle",
+        "nativeTime": 2.185947910339185,
+        "health": 160
+      },
+      {
+        "tick": 4259,
+        "action": "vara:hover",
+        "progress": 1,
+        "native": "vara:hover",
+        "nativeTime": 0.6949843557294104,
+        "health": 160
+      },
+      {
+        "tick": 4270,
+        "action": "vara:dive",
+        "progress": 0.2857142857142857,
+        "native": "vara:dive",
+        "nativeTime": 0.0991238110008847,
+        "health": 160
+      },
+      {
+        "tick": 4279,
+        "action": "vara:dive",
+        "progress": 0.7142857142857143,
+        "native": "vara:dive",
+        "nativeTime": 0.2810666708548999,
+        "health": 160
+      },
+      {
+        "tick": 4290,
+        "action": "vara:strike",
+        "progress": 0.6344444444444444,
+        "native": "vara:strike",
+        "nativeTime": 0.3461074049804003,
+        "health": 136
+      },
+      {
+        "tick": 4301,
+        "action": "vara:strike",
+        "progress": 0.94,
+        "native": "vara:strike",
+        "nativeTime": 0.5234740704033127,
+        "health": 136
+      },
+      {
+        "tick": 4311,
+        "action": "vara:fly",
+        "progress": 0.2777777777777778,
+        "native": "vara:fly",
+        "nativeTime": 0.0653211830931486,
+        "health": 136
+      },
+      {
+        "tick": 4321,
+        "action": "vara:fly",
+        "progress": 0.5555555555555556,
+        "native": "vara:fly",
+        "nativeTime": 0.22492118309317455,
+        "health": 136
+      },
+      {
+        "tick": 4331,
+        "action": "vara:fly",
+        "progress": 0.8333333333333334,
+        "native": "vara:fly",
+        "nativeTime": 0.3992211830931769,
+        "health": 136
+      },
+      {
+        "tick": 4342,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.5719211830931545,
+        "health": 136
+      },
+      {
+        "tick": 4352,
+        "action": "vara-sky-mark",
+        "progress": 0.14583333333333334,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.1097333349684913,
+        "health": 136
+      },
+      {
+        "tick": 4363,
+        "action": "vara-sky-mark",
+        "progress": 0.375,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.297233337762459,
+        "health": 136
+      },
+      {
+        "tick": 4374,
+        "action": "vara-sky-mark",
+        "progress": 0.6041666666666666,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.4704333403433486,
+        "health": 136
+      },
+      {
+        "tick": 4384,
+        "action": "vara-sky-mark",
+        "progress": 0.8125,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.6432333429182645,
+        "health": 136
+      },
+      {
+        "tick": 4394,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.6247211830931594,
+        "health": 136
+      },
+      {
+        "tick": 4404,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.09832119501409586,
+        "health": 136
+      },
+      {
+        "tick": 4415,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.2721211950140674,
+        "health": 136
+      },
+      {
+        "tick": 4424,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.43172119501407913,
+        "health": 136
+      },
+      {
+        "tick": 4434,
+        "action": "vara:takeoff",
+        "progress": 0.2777777777777778,
+        "native": "vara:takeoff",
+        "nativeTime": 0.14166667229598867,
+        "health": 136
+      },
+      {
+        "tick": 4444,
+        "action": "vara:takeoff",
+        "progress": 0.8333333333333334,
+        "native": "vara:takeoff",
+        "nativeTime": 0.48766668604479707,
+        "health": 136
+      },
+      {
+        "tick": 4455,
+        "action": "vara:dive",
+        "progress": 0.09523809523809523,
+        "native": "vara:dive",
+        "nativeTime": 0.020152381252673685,
+        "health": 136
+      },
+      {
+        "tick": 4465,
+        "action": "vara:dive",
+        "progress": 0.5714285714285714,
+        "native": "vara:dive",
+        "nativeTime": 0.2179809556291264,
+        "health": 136
+      },
+      {
+        "tick": 4475,
+        "action": "vara:strike",
+        "progress": 0.5233333333333333,
+        "native": "vara:strike",
+        "nativeTime": 0.29435184978776263,
+        "health": 100
+      },
+      {
+        "tick": 4487,
+        "action": "vara:strike",
+        "progress": 0.8566666666666667,
+        "native": "vara:strike",
+        "nativeTime": 0.4833351817958919,
+        "health": 100
+      },
+      {
+        "tick": 4498,
+        "action": "vara:fly",
+        "progress": 0.2222222222222222,
+        "native": "vara:fly",
+        "nativeTime": 0.049698985693710895,
+        "health": 100
+      },
+      {
+        "tick": 4507,
+        "action": "vara:fly",
+        "progress": 0.4722222222222222,
+        "native": "vara:fly",
+        "nativeTime": 0.20949898569370085,
+        "health": 100
+      },
+      {
+        "tick": 4518,
+        "action": "vara:fly",
+        "progress": 0.7777777777777778,
+        "native": "vara:fly",
+        "nativeTime": 0.382298985693696,
+        "health": 100
+      },
+      {
+        "tick": 4527,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.5431989856937083,
+        "health": 100
+      },
+      {
+        "tick": 4537,
+        "action": "vara-sky-mark",
+        "progress": 0,
+        "native": "vara-sky-mark",
+        "nativeTime": 0,
+        "health": 100
+      },
+      {
+        "tick": 4547,
+        "action": "vara-sky-mark",
+        "progress": 0.20833333333333334,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.16393333577613162,
+        "health": 100
+      },
+      {
+        "tick": 4559,
+        "action": "vara-sky-mark",
+        "progress": 0.4583333333333333,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.3648333387697792,
+        "health": 100
+      },
+      {
+        "tick": 4571,
+        "action": "vara-sky-mark",
+        "progress": 0.7083333333333334,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.5515333415518279,
+        "health": 100
+      },
+      {
+        "tick": 4580,
+        "action": "vara-sky-mark",
+        "progress": 0.8958333333333334,
+        "native": "vara-sky-mark",
+        "nativeTime": 0.7112333439315441,
+        "health": 100
+      },
+      {
+        "tick": 4590,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.0707989976146326,
+        "health": 100
+      },
+      {
+        "tick": 4601,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.25749899761463446,
+        "health": 100
+      },
+      {
+        "tick": 4611,
+        "action": "vara:fly",
+        "progress": 0,
+        "native": "vara:fly",
+        "nativeTime": 0.43089899761462114,
+        "health": 100
+      },
+      {
+        "tick": 4622,
+        "action": "vara:takeoff",
+        "progress": 0.05555555555555555,
+        "native": "vara:takeoff",
+        "nativeTime": 0.010266667074642551,
+        "health": 100
+      },
+      {
+        "tick": 4631,
+        "action": "vara:takeoff",
+        "progress": 0.5555555555555556,
+        "native": "vara:takeoff",
+        "nativeTime": 0.3036666787333023,
+        "health": 100
+      },
+      {
+        "tick": 4641,
+        "action": "vara:hover",
+        "progress": 1,
+        "native": "vara:hover",
+        "nativeTime": 0.7915272757831162,
+        "health": 100
+      },
+      {
+        "tick": 4651,
+        "action": "vara:dive",
+        "progress": 0.2857142857142857,
+        "native": "vara:dive",
+        "nativeTime": 0.11203809690760838,
+        "health": 100
+      }
+    ],
+    "after": {
+      "screen": "game",
+      "error": null
+    }
+  },
+  "diagnostics": {
+    "earlierStormSectorFailure": [
+      {
+        "seq": 3,
+        "ts": 1792144997589.509,
+        "type": "pageerror",
+        "level": "error",
+        "text": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].",
+        "location": "http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:95:12",
+        "stack": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].\n    at StoryEffects.emit (http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:96:13)\n    at window.__companionEffectsClass.emit (<anonymous>:1:834)\n    at StoryPresentation.consumeTick (http://127.0.0.1:5184/src/effects/StoryPresentation.ts?t=1792143497918:33:24)\n    at GameApplication.simulateTick (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2609:26)\n    at frame (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2469:12)"
+      },
+      {
+        "seq": 4,
+        "ts": 1792145002398.743,
+        "type": "pageerror",
+        "level": "error",
+        "text": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].",
+        "location": "http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:95:12",
+        "stack": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].\n    at StoryEffects.emit (http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:96:13)\n    at window.__companionEffectsClass.emit (<anonymous>:1:834)\n    at StoryPresentation.consumeTick (http://127.0.0.1:5184/src/effects/StoryPresentation.ts?t=1792143497918:33:24)\n    at GameApplication.simulateTick (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2609:26)\n    at frame (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2469:12)"
+      },
+      {
+        "seq": 5,
+        "ts": 1792145007151.575,
+        "type": "pageerror",
+        "level": "error",
+        "text": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].",
+        "location": "http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:95:12",
+        "stack": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].\n    at StoryEffects.emit (http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:96:13)\n    at window.__companionEffectsClass.emit (<anonymous>:1:834)\n    at StoryPresentation.consumeTick (http://127.0.0.1:5184/src/effects/StoryPresentation.ts?t=1792143497918:33:24)\n    at GameApplication.simulateTick (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2609:26)\n    at frame (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2469:12)"
+      },
+      {
+        "seq": 6,
+        "ts": 1792145011937.65,
+        "type": "pageerror",
+        "level": "error",
+        "text": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].",
+        "location": "http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:95:12",
+        "stack": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].\n    at StoryEffects.emit (http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:96:13)\n    at window.__companionEffectsClass.emit (<anonymous>:1:834)\n    at StoryPresentation.consumeTick (http://127.0.0.1:5184/src/effects/StoryPresentation.ts?t=1792143497918:33:24)\n    at GameApplication.simulateTick (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2609:26)\n    at frame (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2469:12)"
+      },
+      {
+        "seq": 7,
+        "ts": 1792145016752.836,
+        "type": "pageerror",
+        "level": "error",
+        "text": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].",
+        "location": "http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:95:12",
+        "stack": "RangeError: Sector cues require authored footprint.sectorRadians in (0, 2π].\n    at StoryEffects.emit (http://127.0.0.1:5184/src/effects/StoryEffects.ts?t=1792143497918:96:13)\n    at window.__companionEffectsClass.emit (<anonymous>:1:834)\n    at StoryPresentation.consumeTick (http://127.0.0.1:5184/src/effects/StoryPresentation.ts?t=1792143497918:33:24)\n    at GameApplication.simulateTick (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2609:26)\n    at frame (http://127.0.0.1:5184/src/app/GameApplication.ts?t=1792144239821:2469:12)"
+      }
+    ],
+    "afterCorrectedStorm": [
+      {
+        "seq": 20,
+        "ts": 1792145880961,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/combat-c.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/combat-c.ogg"
+      },
+      {
+        "seq": 21,
+        "ts": 1792145880962,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/combat-c.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/combat-c.ogg"
+      },
+      {
+        "seq": 22,
+        "ts": 1792145880962,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/combat-c.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/combat-c.ogg"
+      },
+      {
+        "seq": 23,
+        "ts": 1792145880962,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/grove-explore.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/grove-explore.ogg"
+      },
+      {
+        "seq": 24,
+        "ts": 1792145880963,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/ambience/forest.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/ambience/forest.ogg"
+      },
+      {
+        "seq": 25,
+        "ts": 1792145880963,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/grove-explore.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/grove-explore.ogg"
+      },
+      {
+        "seq": 26,
+        "ts": 1792145880963,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/grove-explore.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/grove-explore.ogg"
+      },
+      {
+        "seq": 27,
+        "ts": 1792145880963,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 28,
+        "ts": 1792145905221,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5184/audio/music/grove-explore.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5184/audio/music/grove-explore.ogg"
+      }
+    ],
+    "javascriptPageErrorsAfterCorrection": 0,
+    "audioLimit": "Aborted audio requests were observed around HMR/navigation; this is not audio acceptance evidence.",
+    "finalReplayLog": {
+      "entries": [
+        {
+          "seq": 3,
+          "ts": 1792147102402.053,
+          "type": "pageerror",
+          "level": "error",
+          "text": "TypeError: Cannot read properties of undefined (reading 'instances')",
+          "location": "http://127.0.0.1:5184/?chapters=candidate:2:159",
+          "stack": "TypeError: Cannot read properties of undefined (reading 'instances')\n    at eval (eval at j (:3:1472), <anonymous>:3:160)\n    at T.<anonymous> (<anonymous>:4:22)\n    at T.start (<anonymous>:3:3750)\n    at <anonymous>:2:11"
+        }
+      ],
+      "nextSeq": 3,
+      "dropped": 0
+    },
+    "probeOnlyErrors": [
+      {
+        "seq": 3,
+        "ts": 1792147102402.053,
+        "type": "pageerror",
+        "level": "error",
+        "text": "TypeError: Cannot read properties of undefined (reading 'instances')",
+        "location": "http://127.0.0.1:5184/?chapters=candidate:2:159",
+        "stack": "TypeError: Cannot read properties of undefined (reading 'instances')\n    at eval (eval at j (:3:1472), <anonymous>:3:160)\n    at T.<anonymous> (<anonymous>:4:22)\n    at T.start (<anonymous>:3:3750)\n    at <anonymous>:2:11"
+      }
+    ],
+    "finalReplayApplicationPageErrors": 0,
+    "captureToolLimitations": [
+      "A raw Puppeteer evaluation could not see the direct-helper probe global; its retained diagnostic above is from probe setup, not application code.",
+      "Earlier recording/evaluation runs hit a 30s tool deadline; only the completed, inspected final recording is shipped."
+    ]
+  },
+  "media": {
+    "nativeSkills": "companion-skills-native.webm",
+    "durationMs": 28653,
+    "frames": 712,
+    "bytes": 4559763,
+    "desktop": "companion-roster-desktop.png",
+    "mobile": "companion-roster-mobile.png",
+    "controls": "companion-skills-controls.png",
+    "playback": "Accelerated native preview fixture; silent VP9, 1440×900, 30fps."
+  },
+  "poseDeltaMetric": "Maximum L2 distance of all native bone quaternion components from the first sampled skill pose; translation channels are not included.",
+  "verification": {
+    "scope": "Affected suites, not a full-repository test claim.",
+    "command": "bun test --timeout 120000 tests/companions tests/app tests/ui tests/campaign tests/effects tests/input tests/storage tests/combat/orun-duel.test.ts",
+    "tests": {
+      "passed": 863,
+      "failed": 0,
+      "files": 65,
+      "assertions": 289026,
+      "elapsedSeconds": 82.09
+    },
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "passed": true
+    },
+    "build": {
+      "command": "node node_modules/vite/bin/vite.js build",
+      "passed": true,
+      "modules": 324,
+      "elapsedSeconds": 6.82,
+      "warning": "Chunks larger than 500 kB after minification."
+    },
+    "additionalObservedGates": {
+      "combatGeometry": {
+        "passed": 140,
+        "failed": 0,
+        "files": 8,
+        "assertions": 180436
+      },
+      "nativeHarpy": {
+        "passed": 14,
+        "failed": 0
+      }
+    },
+    "manualOrunPolicies": "Real Stay orders reserve the scout mark; Asha begins within reachable arena formation and holds for manual interception. No boss phase/fact changes or automation-disable flag; warning and actual guard contact assertions pass."
+  }
+}

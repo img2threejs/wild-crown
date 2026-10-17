@@ -1,0 +1,16 @@
+{
+  "task_id": "2645ff6e-33cb-4c79-a898-86a6bea30d1b",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-mistveil-reed-cluster-decimate-01/tripo-out/prop-mistveil-reed-cluster-decim-2645ff6e",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-mistveil-reed-cluster-decimate-01/tripo-out/prop-mistveil-reed-cluster-decim-2645ff6e/model.glb",
+  "preview": "asset-source/generated/prop-mistveil-reed-cluster-decimate-01/tripo-out/prop-mistveil-reed-cluster-decim-2645ff6e/preview.png",
+  "started": "2026-10-11T08:53:58.175Z",
+  "finished": "2026-10-11T09:04:58.609Z"
+}

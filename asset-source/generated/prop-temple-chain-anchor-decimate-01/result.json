@@ -1,0 +1,16 @@
+{
+  "task_id": "fbef9c17-7edf-4b85-9677-e00f115b173e",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-temple-chain-anchor-decimate-01/tripo-out/prop-temple-chain-anchor-decimat-fbef9c17",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-temple-chain-anchor-decimate-01/tripo-out/prop-temple-chain-anchor-decimat-fbef9c17/model.glb",
+  "preview": "asset-source/generated/prop-temple-chain-anchor-decimate-01/tripo-out/prop-temple-chain-anchor-decimat-fbef9c17/preview.png",
+  "started": "2026-10-11T09:14:13.611Z",
+  "finished": "2026-10-11T09:21:14.991Z"
+}

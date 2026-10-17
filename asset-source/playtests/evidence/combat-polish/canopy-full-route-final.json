@@ -1,0 +1,161 @@
+{
+  "method": "Fresh stage; existing profile unlocks copied to isolated browser. Input.sample automation only; no actor relocation, vitality changes, forced kills or completion flags. Normal renderer, AI, collision and application RAF.",
+  "screen": "stage-complete",
+  "stageCompleted": true,
+  "outcome": "victory",
+  "player": {
+    "vitality": 36,
+    "maxVitality": 80,
+    "instinct": 51,
+    "mana": 97.2477051044668,
+    "maxMana": 100
+  },
+  "position": {
+    "x": 47.00567591725241,
+    "y": 0,
+    "z": 4.813357083256346
+  },
+  "goal": {
+    "position": {
+      "x": 47,
+      "y": 0,
+      "z": 7
+    },
+    "radius": 2.2
+  },
+  "routeIndex": 18,
+  "routePoints": 19,
+  "history": [
+    {
+      "tick": 734,
+      "stage": 1,
+      "hp": 36,
+      "at": {
+        "x": -58,
+        "y": 0,
+        "z": -20
+      }
+    },
+    {
+      "tick": 1061,
+      "stage": 2,
+      "hp": 36,
+      "at": {
+        "x": -53.7715415573762,
+        "y": 0,
+        "z": -30.146605298757464
+      }
+    },
+    {
+      "tick": 2101,
+      "stage": 3,
+      "hp": 36,
+      "at": {
+        "x": 1.3751704317365738,
+        "y": 4,
+        "z": -27.70968996333925
+      }
+    }
+  ],
+  "encounter": {
+    "title": "Canopy trials cleared",
+    "monsters": [
+      {
+        "id": "canopy-howler",
+        "name": "Thornback Howler",
+        "skills": [
+          "rock hurl",
+          "leap slam",
+          "branch sweep"
+        ],
+        "active": false,
+        "cleared": true,
+        "vitality": 0,
+        "maxVitality": 232,
+        "boss": false
+      },
+      {
+        "id": "canopy-hornbill",
+        "name": "Storm Hornbill",
+        "skills": [
+          "dive bomb",
+          "feather volley",
+          "gale flap"
+        ],
+        "active": false,
+        "cleared": true,
+        "vitality": 0,
+        "maxVitality": 256,
+        "boss": false
+      },
+      {
+        "id": "canopy-mire-viper",
+        "name": "Mire Viper",
+        "skills": [
+          "venom spit",
+          "tail lash",
+          "strike lunge"
+        ],
+        "active": false,
+        "cleared": true,
+        "vitality": 0,
+        "maxVitality": 616,
+        "boss": true
+      }
+    ],
+    "trial": {
+      "stage": 3,
+      "totalStages": 3,
+      "status": "complete",
+      "complete": true,
+      "boss": true,
+      "level": 5
+    }
+  },
+  "worldClock": {
+    "simulationTick": 4144,
+    "worldTick": 3977,
+    "worldTimeSeconds": 66.28333333333333,
+    "timeScale": 0,
+    "policy": "paused"
+  },
+  "contacts": [
+    {
+      "kind": "hit",
+      "phase": "hit",
+      "actorId": "aren",
+      "targetId": "canopy-mire-viper",
+      "position": {
+        "x": 48.406126199630826,
+        "y": 0.8800000000000001,
+        "z": -19.233431348796696
+      },
+      "to": {
+        "x": 49.10858129430456,
+        "y": 0.8800000000000001,
+        "z": -19.94515941482116
+      },
+      "contact": {
+        "kind": "actor",
+        "normal": {
+          "x": -0.7024550946737297,
+          "y": 0,
+          "z": 0.7117280660244623
+        },
+        "surfaceId": "canopy-mire-viper"
+      },
+      "scopeId": "canopy-trials",
+      "attackId": "aren-light_1",
+      "actionId": "vesper-iai-1",
+      "confirmedDamage": 19,
+      "intensity": 1.5833333333333333,
+      "element": "umbral",
+      "priority": "essential",
+      "shape": "burst",
+      "instanceId": "714f9b55-5ba0-4dde-b601-0d37eb808371:canopy-trials:cue:3852:271",
+      "tick": 3852,
+      "worldTick": 3691,
+      "worldTimeSeconds": 61.516666666666666
+    }
+  ]
+}

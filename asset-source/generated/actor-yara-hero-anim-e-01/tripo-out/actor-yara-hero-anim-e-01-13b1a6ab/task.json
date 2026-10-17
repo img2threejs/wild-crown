@@ -1,0 +1,26 @@
+{
+  "task_id": "13b1a6ab-eda4-4274-8520-bdc212de8673",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animations": [
+      "preset:biped:football_pass",
+      "preset:biped:victory_celebration",
+      "preset:biped:dance_02",
+      "preset:biped:dance_04",
+      "preset:biped:sing_04"
+    ],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 50,
+  "created_at": "2026-10-11T13:37:04.564093Z",
+  "completed_at": "2026-10-11T13:37:49.659938Z",
+  "files": [
+    "model.glb"
+  ]
+}

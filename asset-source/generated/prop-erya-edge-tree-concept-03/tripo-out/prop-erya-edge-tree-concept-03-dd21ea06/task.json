@@ -1,0 +1,19 @@
+{
+  "task_id": "dd21ea06-7779-496e-88b7-5fe658acd1a5",
+  "type": "text_to_image",
+  "status": "success",
+  "input": {
+    "prompt": "A single stylized cinematic 3D game asset, visibly designed and hand-sculpted rather than a photograph: the ancient Erya edge tree from Wild Crown. Exaggerated graceful S-curved trunk, four huge broad sculpted buttress roots flaring outward, one clear central trunk, three separated rounded canopy clusters made of large readable leaf shapes and open negative-space gaps. Coarse intentional shape design, broad smooth bark planes, leaf groups sculpted as a few overlapping clumps, medium texture only, hand-painted PBR colors, warm ochre-brown bark and restrained moss greens. Soft cinematic studio render on a neutral gray floor, full tree centered with margin, 3/4 view. The result should look like a premium animated-film/game environment prop sculpt, non-photoreal, not a real tree photograph, no photographic textures, no tiny realistic leaves, no high-frequency bark, no extra plants, no scene, no people, no text, no crop; all canopy tips and all four roots visible.",
+    "model_version": "seedream_v5"
+  },
+  "output_fields": [
+    "generated_image_url"
+  ],
+  "credits_consumed": 5,
+  "created_at": "2026-10-06T03:20:36.033324Z",
+  "completed_at": "2026-10-06T03:21:16.278020Z",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ]
+}

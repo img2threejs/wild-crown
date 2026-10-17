@@ -1,0 +1,1262 @@
+{
+  "observedAt": "2026-10-14T21:56:50.073Z",
+  "command": "node scripts/release/validate.mjs --dist dist --port 0",
+  "exitCode": 1,
+  "stderr": "",
+  "result": {
+    "accepted": false,
+    "manifest": {
+      "schemaVersion": 2,
+      "manifestVersion": "2.0.0",
+      "buildSchema": 1,
+      "saveSchema": 2
+    },
+    "inventory": [
+      {
+        "path": "assets/geometry-KNsxjE0d.js",
+        "bytes": 583530,
+        "sha256": "1f350bab5c5deecf7d6a4e43c56c58dd9b3365af73fb7e4b6a52e1980e64920b",
+        "mime": "text/javascript"
+      },
+      {
+        "path": "assets/index-DJ6gpfD8.js",
+        "bytes": 147061,
+        "sha256": "c3ba593b6a3a9c55805823916e69f63ee5ac0ee27fd9466f7ac8909b0023bd15",
+        "mime": "text/javascript"
+      },
+      {
+        "path": "assets/main-B2rEZhnY.css",
+        "bytes": 87865,
+        "sha256": "2c9a7b80a68d959335dbc1c66abf0d9080513fa30a9edcd9abbd0809a1ae60b8",
+        "mime": "text/css"
+      },
+      {
+        "path": "assets/main-CGmaTMBX.js",
+        "bytes": 1964387,
+        "sha256": "946079f70dbc25c5481be4225a3ea0093e1536ee1ddf787ea9a1c27512893c74",
+        "mime": "text/javascript"
+      },
+      {
+        "path": "assets/manifest.json",
+        "bytes": 58337,
+        "sha256": "9a2e8d3b8874ebf97073cf736e999b080b13434f210bdd182c00289bb4eb20ee",
+        "mime": "application/json"
+      },
+      {
+        "path": "assets/movementLab-BOfNHqOD.js",
+        "bytes": 16187,
+        "sha256": "113d7d97817b3a0ba6908f2cd2656b6a38bb74f84b0786302def68d74617a6af",
+        "mime": "text/javascript"
+      },
+      {
+        "path": "assets/movementLab-DWT9HHk8.css",
+        "bytes": 6727,
+        "sha256": "894e880f94c51f9f3aaf47ac97d1261d9a843142426c9204711231676f125e2e",
+        "mime": "text/css"
+      },
+      {
+        "path": "audio/ambience/forest.ogg",
+        "bytes": 278047,
+        "sha256": "d2578e29bff6105f4516310d43cfabb3fbe795652c0968af60eadddd5696536d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ambience/swamp.ogg",
+        "bytes": 104745,
+        "sha256": "a5cdc212fdc2fd5a877f096f4ecc21447c824419b305ab427351ba0d23e9c307",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ambience/water.ogg",
+        "bytes": 24201,
+        "sha256": "fbfef625a4e9a490fdd414f51a76d289e3e008505079c82f5f91201a2b879747",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ambience/wind.ogg",
+        "bytes": 277536,
+        "sha256": "0e1df4ca3c2531b1939312d6d97f9d70c6e0f99c125154ccc86ddb6ca53286b6",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/dirt-1.ogg",
+        "bytes": 1696,
+        "sha256": "3ffd00a828c1b13f856b9f753d578f5b2e254fdde207e4edbcaaaea3f1d1f08e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/dirt-2.ogg",
+        "bytes": 1885,
+        "sha256": "d668b31960b48f1d0aa4805245469714b09fd8f0539e4e243474492a277563f5",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/dirt-3.ogg",
+        "bytes": 1662,
+        "sha256": "b7e08e5a037b956681d5e7c295bd723214c6be2aa914fea289adae8084aea445",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/dirt-4.ogg",
+        "bytes": 1814,
+        "sha256": "c36a8c0dded934364fd19d4a6d6cf3095b03cfeaef9770ff67b79d957f0aba0d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/grass-1.ogg",
+        "bytes": 3335,
+        "sha256": "e19fe698fc79ffea0a7ed9933abe3c86447fb726b87036d14daaec875ad72b03",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/grass-2.ogg",
+        "bytes": 3372,
+        "sha256": "7fa11a08dba96511eb15cd4fe67b2713c463f97ab1c75c82781ac7f60d6ca7cf",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/grass-3.ogg",
+        "bytes": 3491,
+        "sha256": "042e8f3a79a97988969c65bf49034656f9702c989fede526d8e6117bb290e2cc",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/grass-4.ogg",
+        "bytes": 2948,
+        "sha256": "75d3927dd53e5c6e2dd836538dd01ef6590f71eba395a392647ec0364e6cf518",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/land-1.ogg",
+        "bytes": 5114,
+        "sha256": "611e5f3741e924bcf7b09b2d61b6e290c7e16cb73b02f609f520074313429148",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/land-2.ogg",
+        "bytes": 4714,
+        "sha256": "3d135d75115097128a33da31a38fcfd313ceac6cfddd5618021fea8bfd6a7737",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/mud-1.ogg",
+        "bytes": 2883,
+        "sha256": "cb57af3a1c531b1cf3e2a2d89d882b499fe05dbd71ae9d9b0d7883d006307683",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/mud-2.ogg",
+        "bytes": 4274,
+        "sha256": "b5646c9adad60747967961695698377d6fc87a9262c6695758fdef8638f440b9",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/mud-3.ogg",
+        "bytes": 4441,
+        "sha256": "45df6b3f932611042a05c3aa5990a5e40c312bb181c8d8b2d347061c2a9c8600",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/snow-1.ogg",
+        "bytes": 1962,
+        "sha256": "bc7c3217e29652829d4a5458be1c787db91d840f41fb687b81b9f3b335b953cc",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/snow-2.ogg",
+        "bytes": 1971,
+        "sha256": "1221ad78306fd5db3f8d41819e2365dc1e0b390aeecfa5e756fe8774caa19db0",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/snow-3.ogg",
+        "bytes": 2008,
+        "sha256": "b8d8aa26ea460855a45622d660a8197acf3bf77e088fa739580490c58eab9a4b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/stone-1.ogg",
+        "bytes": 782,
+        "sha256": "4bf47f3132450a668e3201473234d1d34c8514de3b590d114645dc31ce927581",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/stone-2.ogg",
+        "bytes": 808,
+        "sha256": "7dc7daefcd43f6322c309362c4b334ab1a4c148a2c8f72afae4bf6b81152429b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/stone-3.ogg",
+        "bytes": 790,
+        "sha256": "dc6f1b3d4b794373f38a75721c228069aeddd4659bb1b03219b8c86dd113614f",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/stone-4.ogg",
+        "bytes": 785,
+        "sha256": "055d54378a913821713a759f372a2a27d4b6cddc9aee125d6126582fbceabe55",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/water-1.ogg",
+        "bytes": 2578,
+        "sha256": "4e137effa4fb83560f7b20eda904006272bd63067fa720239cd8ee5d9e94e538",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/water-2.ogg",
+        "bytes": 2577,
+        "sha256": "22780ad36e3b0520cd0c6b4062989fd73e8fa967725c068c86d02bd8f9dc3690",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/water-3.ogg",
+        "bytes": 2500,
+        "sha256": "9dffd31a68037bd0c39d4107be2b0c367ce4ca5536d76ed19b661b098ab9b0d0",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/wood-1.ogg",
+        "bytes": 1523,
+        "sha256": "b275a83e9002f3ce8f2a4492cfeeb93cdd80dc3f6e52fd05b2f7019d86a7d3a3",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/wood-2.ogg",
+        "bytes": 1360,
+        "sha256": "1452d71b665b1a1438bd7d91b180158f57ec7cc81c4dfb3e2ff1bc780466a410",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/foot/wood-3.ogg",
+        "bytes": 2715,
+        "sha256": "f5781f7bc5ee68af0682b8467807609f40b12eaa919c6059bb9c4a081d811391",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-finisher-1.ogg",
+        "bytes": 6318,
+        "sha256": "ee6979e4ae6f48d95f8299960b21a4cd999babeb5dc5cf84b7db1263a5002b5c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-finisher-2.ogg",
+        "bytes": 6579,
+        "sha256": "1bd972cd79081fe4dfbf720194dcaaf64003b0d8c7f0ed036808dbbf27cd1f56",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-heavy-1.ogg",
+        "bytes": 2432,
+        "sha256": "3643854f8a84d8b1a8f7f3eb083aee994bf7f6b52f7e1ad436c66084653642f5",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-heavy-2.ogg",
+        "bytes": 2503,
+        "sha256": "14003fd2d44818b1a667973e3f9f53e1a474f331aa08fcdac1dee50c4224c7ca",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-light-1.ogg",
+        "bytes": 2036,
+        "sha256": "be513543435e99f9fad3dc5437d2550e4b9c287a334198a1a880f22dde39633e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-light-2.ogg",
+        "bytes": 2622,
+        "sha256": "755054c2b460d2bc5837b4fc72bfbe7adfe3e7cac2d0a5f88b7d08ac5b6f2806",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-medium-1.ogg",
+        "bytes": 2744,
+        "sha256": "e52b678379146896cb23a2f13b8ffb17a206be4c001a8b728ae20003084b32da",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/bark-medium-2.ogg",
+        "bytes": 2696,
+        "sha256": "03b34b2047a0447511df4d70b9f1aaf4bebdd8d70a57119fd6c02687c09186f1",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/finisher-layer-1.ogg",
+        "bytes": 4496,
+        "sha256": "1b171e6fce273f1870e85b28002ade8c69b2919645f9f3c005854a173cecd1d3",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/finisher-layer-2.ogg",
+        "bytes": 3160,
+        "sha256": "8683a191d9e87c70b9f526b8d9b923773fb79301488a70d405d817f1b41ea77b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-finisher-1.ogg",
+        "bytes": 4857,
+        "sha256": "dff0c79737d7b5013ee055804b1265455f06d06dd784596abbf3e1a3bfd4c00c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-finisher-2.ogg",
+        "bytes": 5727,
+        "sha256": "858e57f17873ecde93a4528873ed23c49e3cb2073ecad62eef8641d30782fb42",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-heavy-1.ogg",
+        "bytes": 3618,
+        "sha256": "3fd5e6bcb0dc8002ead6abc0eace4f471d624dbd11a9ec2d0eb1406dcb0accc2",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-heavy-2.ogg",
+        "bytes": 3035,
+        "sha256": "3b20f789c9f9cbb177f81fb99f2205d687700c3e134b547d1c28680977f129e2",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-light-1.ogg",
+        "bytes": 2454,
+        "sha256": "32783dc2196cccf7efcf87bd27851ffdc1d36c23380ecdcb28b06f446c3c9157",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-light-2.ogg",
+        "bytes": 2287,
+        "sha256": "20c2b608d9f75d6b8bc466a13479e18ad6ad0dad8fc10d8a2e056d89ab0c256b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-medium-1.ogg",
+        "bytes": 1698,
+        "sha256": "9edd8c0fd761e54ddd508506d6d8173a05d8bc3fa0475996754b7e8d95891ed8",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-medium-2.ogg",
+        "bytes": 2336,
+        "sha256": "ecf6f4bea561be4ed9b748e1f2575d8fa73ca28dd8b675c3e71cae1c26f66738",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/flesh-medium-3.ogg",
+        "bytes": 1650,
+        "sha256": "30f006aa0c0ccd0c46aedb6f7b81ce3caeda04c7d8d14a2b3344b7c362ba866e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-finisher-1.ogg",
+        "bytes": 6066,
+        "sha256": "16af66648e1e6cbc6e1d32f3a3fd40d0cc9e01638924a47b38532bf743e3b24d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-finisher-2.ogg",
+        "bytes": 2360,
+        "sha256": "68386a23113eb0ce4afa906c683b0a8caf24499f3ea7a9a435570579d61db3ab",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-heavy-1.ogg",
+        "bytes": 3826,
+        "sha256": "b8787747ff6c2b4b3ba987d39def7bdea582795f0f8ceec3e829b6afbab28169",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-heavy-2.ogg",
+        "bytes": 6249,
+        "sha256": "d5bb2e56837a403c98fdf573032902b2d0d624d7c7ede3f58dc51e8b57612e0e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-light-1.ogg",
+        "bytes": 7820,
+        "sha256": "ef9f86d95d090b9a9ee65ac065cd3b1ce9355addbc713026eceddf4d50f82b3b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-light-2.ogg",
+        "bytes": 7446,
+        "sha256": "01f012a9330bbfe7a0deae20f0baf11ff1691aceb40162f6a56bb1ee8b79c2a3",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-medium-1.ogg",
+        "bytes": 6455,
+        "sha256": "6f7946452c028efb2f41783d03cbf2bb3856a1be74e0d43c06da65793dcacbee",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/stone-medium-2.ogg",
+        "bytes": 7951,
+        "sha256": "541e5ee48c209dba58d4c20f1692a4fcc5f44c22b3d3a013425660038a385535",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-finisher-1.ogg",
+        "bytes": 1925,
+        "sha256": "efb571e49bd1db08993749a5bfacb873791a7e9887acfe27c443b46417039ca6",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-finisher-2.ogg",
+        "bytes": 1794,
+        "sha256": "8c6150ee55584b568fd189c835b4d0ee71034f35a8f83d7ef4586b01e9637658",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-heavy-1.ogg",
+        "bytes": 1856,
+        "sha256": "7fb94782911fd215251fe28babfd4c3c5172ad60ef54120d50358a590b38b35c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-heavy-2.ogg",
+        "bytes": 1801,
+        "sha256": "e3107ca25668767a1da04624d33642df2baad4641e518b6a6275c5a1066913ea",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-light-1.ogg",
+        "bytes": 2162,
+        "sha256": "7ed847e04835fa35187ab00836284c4146335869e20b6b851ef6a80ea9064808",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-light-2.ogg",
+        "bytes": 1688,
+        "sha256": "8f614982f38ba493495eeb1f25dc908d4302cb5b1cf317c1e0d0f25b243343dc",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-medium-1.ogg",
+        "bytes": 2088,
+        "sha256": "a87b8a684a5d7a9cdc010e3da67fffce08723b0c656d00e4a03116f8acd4e279",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/impact/wood-medium-2.ogg",
+        "bytes": 2138,
+        "sha256": "0921776f4219bcd841af37c3f3ce4456c5512914fb69a22d4e1c27655fddb720",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/boss.ogg",
+        "bytes": 977238,
+        "sha256": "cf9a3585c009f05b576a0662fd9ebc48bec9952741758b9fe0c766e68015ae4c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/canopy-explore.ogg",
+        "bytes": 732496,
+        "sha256": "ce1f50c1c28f8bc5fac054293600bb7b2c56f0dd6d3ee028a03a6bfbc8de71b4",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/combat-a.ogg",
+        "bytes": 764567,
+        "sha256": "38c6f4a1c3932cd8216415d28b98680a09a39c9d5eba93b8b5ad21c0dc5b7219",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/combat-b.ogg",
+        "bytes": 525967,
+        "sha256": "38d405988a09fc37ad6938af6d7ee84a038fed156e942957eca6c99b1b7dd72e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/combat-c.ogg",
+        "bytes": 796682,
+        "sha256": "37d7168c67ebc6bbe82d1197df076c92b617f01e9fea0d9d87f5f4719309bcdc",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/greenwake-explore.ogg",
+        "bytes": 930656,
+        "sha256": "68ca97b832213d197c441a8b1f609e8ede6736f223e43c25d9d7c7f10c29bb16",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/grove-explore.ogg",
+        "bytes": 645137,
+        "sha256": "ede0744244552fa00292166e0fc7a4584d208a082e5d2afd04931de0757a315a",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/hollow-explore.ogg",
+        "bytes": 1037258,
+        "sha256": "a4660fa588ad655baeaba4fbcd5a112bba482d446f39757afa059a9aa3ae560e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/layer-corrupted.ogg",
+        "bytes": 581453,
+        "sha256": "e4c72f3ee4920d213b4c4ca07e7e310a0755d707970b53882d223d3d9021f3bd",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/layer-restored.ogg",
+        "bytes": 264350,
+        "sha256": "f4e8c38d7a54d54e6d8f2174f7e302a9c97ade9ff6cfa4e616286d8b6fbff58c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/mistveil-explore.ogg",
+        "bytes": 458389,
+        "sha256": "7f39ebee6ec1747312ab6622f7d9eea5c21c2ce7e8ca75292d9034d022f4bdeb",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/moonpine-explore.ogg",
+        "bytes": 1064355,
+        "sha256": "b343a8984a1fccda7665f48459b0ebd87202d569b54f7abcc3e1a792490f0272",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/refuge-explore.ogg",
+        "bytes": 777036,
+        "sha256": "3d4acaf1281dead3b0adf1af45e5589d0b90eb97146b752d05205a8d84a0b155",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/stinger-defeat.ogg",
+        "bytes": 109498,
+        "sha256": "1ee1c803e4e3d8661740f44894900e0e734f752e8310f34b467e00e0af24c1de",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/stinger-victory.ogg",
+        "bytes": 88211,
+        "sha256": "7cc8241a20e2125b6496ba708429ff062674c7f28a93569c9762414c2723c718",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/music/title.ogg",
+        "bytes": 347005,
+        "sha256": "a3c2bd0f86728f82ae774b7545b3af717358743abb565c27f16546c1802bc915",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/provenance.json",
+        "bytes": 211573,
+        "sha256": "7f41ddfa97bbb551c554fc6500787e9aada48451b22b54d94927df0568a1ed48",
+        "mime": "application/json"
+      },
+      {
+        "path": "audio/react/getup-1.ogg",
+        "bytes": 4645,
+        "sha256": "58630944b66a49d35091d7938203a81164d4270bcb8ee8ff3ce62e566414c30a",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/getup-2.ogg",
+        "bytes": 2295,
+        "sha256": "9ad026a33c0454fe4c5d3f3c0099f25f571d6c27fcfa235b04ff85502c043333",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/knockback-1.ogg",
+        "bytes": 1754,
+        "sha256": "5bd25d74fed22f54b730a488cea61bcb22c627b9f253adf5673e715a727833ad",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/knockback-2.ogg",
+        "bytes": 1665,
+        "sha256": "dc92c538afffd69859fd39e8c1fdaa3c48db878ed298f9400884afa5e99b3b51",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/knockdown-1.ogg",
+        "bytes": 6052,
+        "sha256": "de6301b747e2baaa3d70b7fa8387827ba57c080058146eb4d70cc35dd4cd1ce3",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/knockdown-2.ogg",
+        "bytes": 5859,
+        "sha256": "2f3ad52d1db373128b8258847651409059bf8dbab0159a9db2ce647ea36c5f97",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/poise-break-1.ogg",
+        "bytes": 1743,
+        "sha256": "613a274be7e0b8f766949ae2ae884461584b55a6bc98350000dd08b22be8fd77",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/poise-break-2.ogg",
+        "bytes": 3117,
+        "sha256": "ffc200a1e055a9ef57a43e9c43f7ff783dcd3b9f032e2dcc141c8faf216e6ce6",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/stagger-1.ogg",
+        "bytes": 4326,
+        "sha256": "c314d284bf0734bf970182a90148a7c2907f2f4dcefb6686f00bccd31f4516f1",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/stagger-2.ogg",
+        "bytes": 3136,
+        "sha256": "d74befe469154c3a83b8bedf65339a65baa35f977ae7cc3890023e77b5c55e5e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/stun-loop-1.ogg",
+        "bytes": 7546,
+        "sha256": "ab76c8dc772e28d4125b199d507c7548c16bdd9327491f1c9034a90d4ec0e8ae",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/wall-impact-1.ogg",
+        "bytes": 10112,
+        "sha256": "bb3712b0a59fac5f28f2d28bb992aa07e89511707c7bc471a42c397f0df7d29c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/react/wall-impact-2.ogg",
+        "bytes": 6712,
+        "sha256": "8702c6b490da45e0f08fee5b4ce0fd5217e13ac9aa7848add69db08abca218b4",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/back-1.ogg",
+        "bytes": 492,
+        "sha256": "71af0517bb2cac072da2ea2398eca51d419c0c1cca098e1a3aa2153925483d7d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/click-1.ogg",
+        "bytes": 722,
+        "sha256": "893567ecacfe35c6136f8ab8aa812d0a5f08eeb5ded1714609c3a3e35d2f38f5",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/click-2.ogg",
+        "bytes": 252,
+        "sha256": "0079b91988374bfa7a61444f4e8c22436b707b9943bdad1cc0ce4b15bffd8d57",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/click-3.ogg",
+        "bytes": 241,
+        "sha256": "286241cffa197c385acfb0942cbb7a38edb3d5c7826099b98a605f2cb8004d9c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/close-1.ogg",
+        "bytes": 1124,
+        "sha256": "4c03c5e1f929247cf406b76dab8c229b22db1497e738254dc1d0c62c19868804",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/confirm-1.ogg",
+        "bytes": 2886,
+        "sha256": "30dee375f79c5de3b5c4894678418aa19fb53bafc4734bdb2f8edf163f243c18",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/confirm-2.ogg",
+        "bytes": 3445,
+        "sha256": "ba67098b7fd17e14afdeb2cc99de52678303a886f0cd4512872b52c16ec0beea",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/error-1.ogg",
+        "bytes": 1972,
+        "sha256": "af130cbe038a20fa3a1e975d472993491727b3ac1fe8719cbafce8ee94bb10ec",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/hover-1.ogg",
+        "bytes": 783,
+        "sha256": "80d94a821048d50dc8f4811ccc62eda7afe6798ed38f6c39ed6184e5a977e665",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/hover-2.ogg",
+        "bytes": 630,
+        "sha256": "39f82bc81bae4dac8957bdd98da52562cdf3c956f2b2c7b185aad9d49e83d363",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/open-1.ogg",
+        "bytes": 1148,
+        "sha256": "3940cce74a93ac4d7393624b5fa996e6501b59e070f8ab46be24021316f8a40c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/scroll-1.ogg",
+        "bytes": 4290,
+        "sha256": "a8218e137d79b39d9463003d0de444737916eaa4e02a2d6b37125399e453826b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/toggle-1.ogg",
+        "bytes": 1044,
+        "sha256": "ff47a8adb95eea5121583385eb0f32f6159b5174e9eafe8beffa6eed01280874",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/transition-1.ogg",
+        "bytes": 1811,
+        "sha256": "8c932aff217ec54415a9d0ba9277803656aaf0a0fe08f294bd6e7a86ee2f54ba",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/ui/transition-2.ogg",
+        "bytes": 1502,
+        "sha256": "d18235f08030ec9386784a85d41c745202e0f49a8f54bb6587671b6485ed3180",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/avian-death-1.ogg",
+        "bytes": 13335,
+        "sha256": "b436143430d27932230b02377562d3029d2f04d5b14763bb11b6f008be18f82b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/avian-hurt-1.ogg",
+        "bytes": 7890,
+        "sha256": "2aab7f89f9f337e29490c3cf376df3cb348040fd669c6c8191c00e26cb127428",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/avian-roar-1.ogg",
+        "bytes": 10347,
+        "sha256": "1ab63a4cdf86d266a9af54bb45c861340b7cbcc010f00d591caab4a7067c4a9d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/avian-roar-2.ogg",
+        "bytes": 10704,
+        "sha256": "b13cde68f0eceb8294eaba1a97d740687dfa09d344a102514b7d7ee8b96d9834",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-death-1.ogg",
+        "bytes": 2913,
+        "sha256": "87ecfddc3b18e49d82c89ecda0eea489df7f533cf27766a9c76bf26841686953",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-death-2.ogg",
+        "bytes": 4102,
+        "sha256": "938522b100416c5bb546c9d9f67e3fe8ab11bff1f8528a71e4886416a701418c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-hurt-1.ogg",
+        "bytes": 3521,
+        "sha256": "7d5b115992c285be51e311b192626814dbe185974f3324080e4c4242f42bf467",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-hurt-2.ogg",
+        "bytes": 3655,
+        "sha256": "a84696aed62cd10fe41bbc24a9b729120724e8afc15ff894101d1ae740e3fdb5",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-roar-1.ogg",
+        "bytes": 2545,
+        "sha256": "b058e79aa4f6c19f96fe8e3199bb7c21ffa6a9b7cba849654549106d9c4f508e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/beast-roar-2.ogg",
+        "bytes": 5714,
+        "sha256": "e4dac6e749e7596aa2446b5feb5e85f83cf227cdb73f75810d2bf6011e39e045",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/canine-death-1.ogg",
+        "bytes": 3419,
+        "sha256": "ae0eda2b0939c1012b2cb98560afcaed4edf087298d4312516edcce0f6e5a786",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/canine-hurt-1.ogg",
+        "bytes": 2404,
+        "sha256": "57b6be4c013746e4bd3c28606ac8e6c93cfbc94f3cd3f8ae5302bb4956f0635e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/canine-hurt-2.ogg",
+        "bytes": 2522,
+        "sha256": "cb0d0d04fd116e63619b1655fe812077c3830c4b0445dd36728c1d9e1d45b28e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/canine-roar-1.ogg",
+        "bytes": 5083,
+        "sha256": "e1623b65f22e7843828360552ceca373eecadb57edc8265e2204d8f18b1501eb",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/canine-roar-2.ogg",
+        "bytes": 2807,
+        "sha256": "2750aaa085fe757bcb7092d56edf2fa661a434662438a5d993d7d6f80df2946d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-death-1.ogg",
+        "bytes": 5611,
+        "sha256": "250b6e648edeff0f51bc9160fd7a27a657f1d64b962643d690a222e0659f615a",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-death-2.ogg",
+        "bytes": 10162,
+        "sha256": "ee525be0da023c976658af65731bef8c9b34dd91a595d4568bcbd34b645fa231",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-hurt-1.ogg",
+        "bytes": 7150,
+        "sha256": "793d400072f83903e37c5cf3d8b3fb6cfcb424e0a2855e69a882bcf24909db54",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-hurt-2.ogg",
+        "bytes": 6287,
+        "sha256": "21f4afbcaa6d624ff562bca28a31877a3ac9e0d13ad2e23a1b4b3cc7cf5ef139",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-roar-1.ogg",
+        "bytes": 6353,
+        "sha256": "62408a03c67709f9b7eee83dfc74fbe382499dd81cb79a9f1034b42098ab2c12",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-roar-2.ogg",
+        "bytes": 7884,
+        "sha256": "0f5012bfeee54062522cb0ac3fad48bf29c19500703b863a9b9be95300bb8df9",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-roar-3.ogg",
+        "bytes": 6648,
+        "sha256": "f44f3be0d29f0026940cb417ecc8af659eeee19ff0d5d28211bd4f324df9b948",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/giant-roar-4.ogg",
+        "bytes": 18289,
+        "sha256": "0ccc978b9981254720cc33cc7b6bc3bb0e2e18c06d63c299a68996cb70e60451",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-death-1.ogg",
+        "bytes": 3893,
+        "sha256": "205fd56a42ac6e3e9b60b4143b53d07ce4dcdf1b3e4fc71607c04691ab8a5731",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-death-2.ogg",
+        "bytes": 5998,
+        "sha256": "11e3c08ac337418339880341dce68857afe41906f6bbae0f2d5fcc6720f338da",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-hurt-1.ogg",
+        "bytes": 6319,
+        "sha256": "e60f64fa2efe37620eaef5976127b86aec696829a1ba1b947430bdf2b0d1f492",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-hurt-2.ogg",
+        "bytes": 5002,
+        "sha256": "28f4a3f4b1595eae29fabf09f192cac015066817c5b89909e475443150285997",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-roar-1.ogg",
+        "bytes": 5121,
+        "sha256": "a472856b9a003790b515d2c29bc62c92a7e13d6e7d845fc92eb1eaca1ccd09b6",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/humanoid-roar-2.ogg",
+        "bytes": 4469,
+        "sha256": "bf201c14014fdc595fa50aed5bfa7877eb701b15f08ab88a614406f8fccdbeb1",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/primate-death-1.ogg",
+        "bytes": 5519,
+        "sha256": "d61f659ca0f612b5109069b4375f07f6d676d9076bdb98bf3ed1dbd96c70fd6d",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/primate-hurt-1.ogg",
+        "bytes": 2425,
+        "sha256": "96c2a4a525f1108bf741d67d1fc06ad90186642515e7101f7d00e427ebf76475",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/primate-hurt-2.ogg",
+        "bytes": 2474,
+        "sha256": "2fa74299d6d928122f009218bbee98eefe316b5d0dc88b15ee455856b51fd913",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/primate-roar-1.ogg",
+        "bytes": 5892,
+        "sha256": "b5df087ca753fc9e05139f151f128cd948ea32f81cfcba80fd428b28e74fdb22",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/primate-roar-2.ogg",
+        "bytes": 5944,
+        "sha256": "f37ecf2afb012fdb4248c0a02cb97f60b4ad56564d0416521861aa96429c1e7e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-death-1.ogg",
+        "bytes": 3702,
+        "sha256": "fc5fe3ab474d4fbaef00afac4af4cb99be73c52570b43c510f146c0cb93645d0",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-death-2.ogg",
+        "bytes": 3687,
+        "sha256": "d922ab83d3639e57ad83ab3d49308aef1a6d752a311c1faaac469cfcaf3523a1",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-hurt-1.ogg",
+        "bytes": 3171,
+        "sha256": "aff3b46da70bdd73f09ade5bdc8b969e11ae84b9537f369b9ae5cddbc3a75eb0",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-hurt-2.ogg",
+        "bytes": 4445,
+        "sha256": "77d20d0f4c320a275647480fefb4b29682f9352f91d637f8d67d6f5a2279ce7e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-roar-1.ogg",
+        "bytes": 1280,
+        "sha256": "747bf7d93a92017557b744b9375078a79d8a624be53de439ca0856caeb9a6f09",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/reptile-roar-2.ogg",
+        "bytes": 4533,
+        "sha256": "0232be30ef8976140e3e45f1545a9d3cd467aa7f531bd4cc85cbc736a49214ec",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-death-1.ogg",
+        "bytes": 2889,
+        "sha256": "c5c9d83b45396ca64ef6fec488b4a9a369312688a05a1ee4014b5b3334df723e",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-death-2.ogg",
+        "bytes": 6791,
+        "sha256": "4754c2217cfd59632b15265d9b01e47d264fe1a5af385679dbce050eb6845c4c",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-hurt-1.ogg",
+        "bytes": 4589,
+        "sha256": "9e517fa3d2e31a196144117f876871c407623ab07061923872c74d7cbf6b7459",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-hurt-2.ogg",
+        "bytes": 5512,
+        "sha256": "f53342c49891475887e1d5c5dc355ac18cf5f4308d67fdd8df67241530c1cfe2",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-roar-1.ogg",
+        "bytes": 4474,
+        "sha256": "5f9ee293e25ed64a0da30444e1f0dc38b967f17874f41fded97fb60420b631e4",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/vocal/rootling-roar-2.ogg",
+        "bytes": 5930,
+        "sha256": "a25a038be4047c59fb1b79af591cef32ceb8dbd14f3cc985f89ad71572fdc8c8",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/fist-1.ogg",
+        "bytes": 1005,
+        "sha256": "00becceae6321e671b18e4b1a8d9092b9849963934be60a25e8bf2fdac5bae94",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/fist-2.ogg",
+        "bytes": 969,
+        "sha256": "6b29a1ae8c43fadc2c0ac85e89328fb12220da31c426de105c924bbbd7a1f7b7",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/fist-3.ogg",
+        "bytes": 851,
+        "sha256": "1295d2842fd51fc94763aea0f1b67e942b9b9e9f166c081b6b5428cea7206ba0",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/glaive-1.ogg",
+        "bytes": 1676,
+        "sha256": "e902dec1b86df7dc05c7f18048a718fa9f97e4c402b918df3401b937443d5965",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/glaive-2.ogg",
+        "bytes": 1634,
+        "sha256": "07ea8257223f986616663935b78d9be1ae695c397e68b345c2d37a142a8467c9",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/glaive-3.ogg",
+        "bytes": 1308,
+        "sha256": "229eadb952e19b740a346d85e341825c223d0b2f61d82b82f91d3cb4aa00cd9f",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/katana-1.ogg",
+        "bytes": 3567,
+        "sha256": "07d27fa6b5331abe21b684f7548ad2c9e4e9e9ff73e64efa7dc4b07be82cd709",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/katana-2.ogg",
+        "bytes": 3918,
+        "sha256": "ac67f3f1d3a43ef57e61635b586967b072e9cee2ce7a8a2713354d9d266edd97",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/katana-3.ogg",
+        "bytes": 3564,
+        "sha256": "dca8adb7e4222d63f399a69d11bb0ea335719daa2a3977ba23b06c4952c21a9a",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/monster-1.ogg",
+        "bytes": 3967,
+        "sha256": "42da499547a582f7925dc0d2f78d19726356796ffe45f27f7ff103fc452219ba",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/monster-2.ogg",
+        "bytes": 1442,
+        "sha256": "7d869e6518f56aeda33a7b9d44654710868fc0a893a30a93135b5422b527c81b",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/staff-1.ogg",
+        "bytes": 1186,
+        "sha256": "cd016bb169c1a9bf149b17798ea7855aa1d8a05041960aad8e4eeebe892152ed",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/staff-2.ogg",
+        "bytes": 1181,
+        "sha256": "169e1ade7a7fea125b4bdf19f1b9ba6e34ac4af8b659a34b7d12f98a4208be59",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "audio/weapon/staff-3.ogg",
+        "bytes": 3921,
+        "sha256": "c03a606c81d8cfa3e45fb5a115f590d75a53e9d97174956215e4ae5b236db6ff",
+        "mime": "audio/ogg"
+      },
+      {
+        "path": "index.html",
+        "bytes": 682,
+        "sha256": "67d3f467fe68af8d232be3f044163ef01aefc4a565ca96e56758f4ebb9313859",
+        "mime": "text/html"
+      },
+      {
+        "path": "lab/index.html",
+        "bytes": 664,
+        "sha256": "73d5a15a95de0f59a72922fc82d139a4ed1a5762052fd3e06f01e260971b8c8b",
+        "mime": "text/html"
+      },
+      {
+        "path": "release-compatibility.json",
+        "bytes": 258,
+        "sha256": "dff68f363cc654106abd4241c1e809c38248efb4ffded6d4c46927678dd3da66",
+        "mime": "application/json"
+      },
+      {
+        "path": "ui/map-journal-illustration.webp",
+        "bytes": 58744,
+        "sha256": "47bb1c6fb00b229773cc44cd61d3296f5d5ea68864644cd0a28a77315e58dc73",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-asha.webp",
+        "bytes": 37298,
+        "sha256": "a243128f38490cba339e7b08c268b8fad051d894b73c77398fe1c1baad15219d",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-koro.webp",
+        "bytes": 22528,
+        "sha256": "05c09a7d845ba95c0cad7fc030c021894e75cec85a4b7e0fd607207503e820e0",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-nyra.webp",
+        "bytes": 18972,
+        "sha256": "eb2270158712625c8540507122c3ec4bfd231882157c4c95ed9907f58589a6ce",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-sable.webp",
+        "bytes": 25822,
+        "sha256": "0bbb1bf1ead67a99f2b08de3853a05d04a4b808281551c16b4efa443dd6d30a1",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-solkar.webp",
+        "bytes": 36936,
+        "sha256": "6944e17cf2e85cb16f81d5937957ac0566942f80d8b7157444e31d74068f5843",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/portrait-vara.webp",
+        "bytes": 23232,
+        "sha256": "aece08cca998166edaf1e332e0898f7932e651642247eb5be1f6bdcd51bfdb9f",
+        "mime": "image/webp"
+      },
+      {
+        "path": "ui/world-map-game.webp",
+        "bytes": 698136,
+        "sha256": "ae6842605dc1c8c72cb6ce0a3befd1b98d98da9cf890106a371f71cab598c72e",
+        "mime": "image/webp"
+      }
+    ],
+    "errors": [
+      "Native asset actor-aren has no emitted GLB path/runtime URL.",
+      "Native asset actor-yara has no emitted GLB path/runtime URL.",
+      "Native asset actor-vara has no emitted GLB path/runtime URL.",
+      "Native asset actor-koro has no emitted GLB path/runtime URL.",
+      "Native asset actor-asha has no emitted GLB path/runtime URL.",
+      "Native asset actor-tali has no emitted GLB path/runtime URL.",
+      "Native asset actor-ruun has no emitted GLB path/runtime URL.",
+      "Native asset actor-luma has no emitted GLB path/runtime URL.",
+      "Native asset actor-sable has no emitted GLB path/runtime URL.",
+      "Native asset actor-nyra has no emitted GLB path/runtime URL.",
+      "Native asset actor-solkar has no emitted GLB path/runtime URL.",
+      "Native asset actor-ghor has no emitted GLB path/runtime URL.",
+      "Native asset actor-marek has no emitted GLB path/runtime URL.",
+      "Native asset actor-orun has no emitted GLB path/runtime URL.",
+      "Native asset actor-poacher-scout has no emitted GLB path/runtime URL.",
+      "Native asset actor-poacher-hunter has no emitted GLB path/runtime URL.",
+      "Native asset actor-corrupted-boar has no emitted GLB path/runtime URL.",
+      "Native asset actor-council-envoy has no emitted GLB path/runtime URL.",
+      "Native asset prop-greenwake-houses has no emitted GLB path/runtime URL.",
+      "Native asset prop-erya-edge-tree has no emitted GLB path/runtime URL.",
+      "Native asset prop-greenwake-rope-bridge has no emitted GLB path/runtime URL.",
+      "Native asset prop-root-arch has no emitted GLB path/runtime URL.",
+      "Native asset prop-hunter-cage has no emitted GLB path/runtime URL.",
+      "Native asset prop-heartroot-trunk has no emitted GLB path/runtime URL.",
+      "Native asset prop-grove-platform has no emitted GLB path/runtime URL.",
+      "Native asset prop-refuge-shelter has no emitted GLB path/runtime URL.",
+      "Native asset prop-training-post has no emitted GLB path/runtime URL.",
+      "Native asset prop-water-basin has no emitted GLB path/runtime URL.",
+      "Native asset prop-rainforest-canopy-tree has no emitted GLB path/runtime URL.",
+      "Native asset prop-vine-bridge has no emitted GLB path/runtime URL.",
+      "Native asset prop-ancient-canopy-shrine has no emitted GLB path/runtime URL.",
+      "Native asset prop-heartroot-branch has no emitted GLB path/runtime URL.",
+      "Native asset prop-monkey-rope-platform has no emitted GLB path/runtime URL.",
+      "Native asset prop-bamboo-cluster has no emitted GLB path/runtime URL.",
+      "Native asset prop-hunter-camp-structure has no emitted GLB path/runtime URL.",
+      "Native asset prop-tiger-cage has no emitted GLB path/runtime URL.",
+      "Native asset prop-broken-snare has no emitted GLB path/runtime URL.",
+      "Native asset prop-bamboo-footbridge has no emitted GLB path/runtime URL.",
+      "Native asset prop-moonpine-tree has no emitted GLB path/runtime URL.",
+      "Native asset prop-buried-wolf-temple has no emitted GLB path/runtime URL.",
+      "Native asset prop-temple-chain-anchor has no emitted GLB path/runtime URL.",
+      "Native asset prop-snow-ridge-rock has no emitted GLB path/runtime URL.",
+      "Native asset prop-moonpine-log-bridge has no emitted GLB path/runtime URL.",
+      "Native asset prop-mistveil-reed-cluster has no emitted GLB path/runtime URL.",
+      "Native asset prop-hunter-extraction-rig has no emitted GLB path/runtime URL.",
+      "Native asset prop-mire-bank-rock has no emitted GLB path/runtime URL.",
+      "Native asset prop-root-cavern-mouth has no emitted GLB path/runtime URL.",
+      "Native asset prop-black-sap-filter-drum has no emitted GLB path/runtime URL.",
+      "Native asset prop-sunmane-stone-terrace has no emitted GLB path/runtime URL.",
+      "Native asset prop-migration-gate has no emitted GLB path/runtime URL.",
+      "Native asset prop-water-allotment-gate has no emitted GLB path/runtime URL.",
+      "Native asset prop-plains-stone-arch has no emitted GLB path/runtime URL.",
+      "Native asset prop-savanna-acacia has no emitted GLB path/runtime URL.",
+      "Native asset prop-map-table has no emitted GLB path/runtime URL.",
+      "Native asset prop-heartroot-fragment-stone has no emitted GLB path/runtime URL.",
+      "Native asset prop-heartroot-root-column has no emitted GLB path/runtime URL.",
+      "Native asset prop-six-fragment-shrine has no emitted GLB path/runtime URL.",
+      "Native asset prop-root-crown-altar has no emitted GLB path/runtime URL.",
+      "Native asset prop-hollow-cavern-rock has no emitted GLB path/runtime URL.",
+      "Native asset prop-root-tether-anchor has no emitted GLB path/runtime URL.",
+      "Native asset actor-orun-crowned-beast has no emitted GLB path/runtime URL.",
+      "Environment recipe greenwake-environment has a component without verified native output bytes: prop-greenwake-houses.",
+      "Environment recipe greenwake-environment has a component without verified native output bytes: prop-erya-edge-tree.",
+      "Environment recipe greenwake-environment has a component without verified native output bytes: prop-greenwake-rope-bridge.",
+      "Environment recipe greenwake-environment has a component without verified native output bytes: prop-root-arch.",
+      "Environment recipe greenwake-environment has a component without verified native output bytes: prop-hunter-cage.",
+      "Environment recipe greenwake-environment has no verified scene qualification evidence.",
+      "Environment recipe the-grove-environment has a component without verified native output bytes: prop-heartroot-trunk.",
+      "Environment recipe the-grove-environment has a component without verified native output bytes: prop-grove-platform.",
+      "Environment recipe the-grove-environment has a component without verified native output bytes: prop-refuge-shelter.",
+      "Environment recipe the-grove-environment has a component without verified native output bytes: prop-training-post.",
+      "Environment recipe the-grove-environment has a component without verified native output bytes: prop-water-basin.",
+      "Environment recipe the-grove-environment has no verified scene qualification evidence.",
+      "Environment recipe whispering-canopy-environment has a component without verified native output bytes: prop-rainforest-canopy-tree.",
+      "Environment recipe whispering-canopy-environment has a component without verified native output bytes: prop-vine-bridge.",
+      "Environment recipe whispering-canopy-environment has a component without verified native output bytes: prop-ancient-canopy-shrine.",
+      "Environment recipe whispering-canopy-environment has a component without verified native output bytes: prop-heartroot-branch.",
+      "Environment recipe whispering-canopy-environment has a component without verified native output bytes: prop-monkey-rope-platform.",
+      "Environment recipe whispering-canopy-environment has no verified scene qualification evidence.",
+      "Environment recipe blood-bamboo-valley-environment has a component without verified native output bytes: prop-bamboo-cluster.",
+      "Environment recipe blood-bamboo-valley-environment has a component without verified native output bytes: prop-hunter-camp-structure.",
+      "Environment recipe blood-bamboo-valley-environment has a component without verified native output bytes: prop-tiger-cage.",
+      "Environment recipe blood-bamboo-valley-environment has a component without verified native output bytes: prop-broken-snare.",
+      "Environment recipe blood-bamboo-valley-environment has a component without verified native output bytes: prop-bamboo-footbridge.",
+      "Environment recipe blood-bamboo-valley-environment has no verified scene qualification evidence.",
+      "Environment recipe moonpine-ridge-environment has a component without verified native output bytes: prop-moonpine-tree.",
+      "Environment recipe moonpine-ridge-environment has a component without verified native output bytes: prop-buried-wolf-temple.",
+      "Environment recipe moonpine-ridge-environment has a component without verified native output bytes: prop-temple-chain-anchor.",
+      "Environment recipe moonpine-ridge-environment has a component without verified native output bytes: prop-snow-ridge-rock.",
+      "Environment recipe moonpine-ridge-environment has a component without verified native output bytes: prop-moonpine-log-bridge.",
+      "Environment recipe moonpine-ridge-environment has no verified scene qualification evidence.",
+      "Environment recipe mistveil-basin-environment has a component without verified native output bytes: prop-mistveil-reed-cluster.",
+      "Environment recipe mistveil-basin-environment has a component without verified native output bytes: prop-hunter-extraction-rig.",
+      "Environment recipe mistveil-basin-environment has a component without verified native output bytes: prop-mire-bank-rock.",
+      "Environment recipe mistveil-basin-environment has a component without verified native output bytes: prop-root-cavern-mouth.",
+      "Environment recipe mistveil-basin-environment has a component without verified native output bytes: prop-black-sap-filter-drum.",
+      "Environment recipe mistveil-basin-environment has no verified scene qualification evidence.",
+      "Environment recipe sunmane-expanse-environment has a component without verified native output bytes: prop-sunmane-stone-terrace.",
+      "Environment recipe sunmane-expanse-environment has a component without verified native output bytes: prop-migration-gate.",
+      "Environment recipe sunmane-expanse-environment has a component without verified native output bytes: prop-water-allotment-gate.",
+      "Environment recipe sunmane-expanse-environment has a component without verified native output bytes: prop-plains-stone-arch.",
+      "Environment recipe sunmane-expanse-environment has a component without verified native output bytes: prop-savanna-acacia.",
+      "Environment recipe sunmane-expanse-environment has no verified scene qualification evidence.",
+      "Environment recipe refuge-environment has a component without verified native output bytes: prop-refuge-shelter.",
+      "Environment recipe refuge-environment has a component without verified native output bytes: prop-map-table.",
+      "Environment recipe refuge-environment has a component without verified native output bytes: prop-training-post.",
+      "Environment recipe refuge-environment has a component without verified native output bytes: prop-heartroot-fragment-stone.",
+      "Environment recipe refuge-environment has no verified scene qualification evidence.",
+      "Environment recipe heartroot-hollow-environment has a component without verified native output bytes: prop-heartroot-root-column.",
+      "Environment recipe heartroot-hollow-environment has a component without verified native output bytes: prop-six-fragment-shrine.",
+      "Environment recipe heartroot-hollow-environment has a component without verified native output bytes: prop-root-crown-altar.",
+      "Environment recipe heartroot-hollow-environment has a component without verified native output bytes: prop-hollow-cavern-rock.",
+      "Environment recipe heartroot-hollow-environment has a component without verified native output bytes: prop-root-tether-anchor.",
+      "Environment recipe heartroot-hollow-environment has no verified scene qualification evidence.",
+      "Measured release benchmark or reference benchmark contract is missing."
+    ]
+  }
+}

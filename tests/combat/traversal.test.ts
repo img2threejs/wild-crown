@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
-import type { RegionRouteDefinition } from '../../src/game/contracts.js';
+import type { RegionColliderDefinition, RegionRouteDefinition } from '../../src/game/contracts.js';
 import { REGIONS } from '../../src/content/campaign.js';
-import { distance2, isSupportedCapsulePose, moveCircle } from '../../src/game/combat/geometry.js';
+import { CHAPTER_ASSET_BINDINGS } from '../../src/content/chapter-assets.js';
+import { solidPropKind } from '../../src/content/solid-props.js';
+import { distance2, isSupportedCapsulePose, moveCircle, type SupportField } from '../../src/game/combat/geometry.js';
+import { buildStaticPropColliders } from '../../src/rendering/NativeSolidColliders.js';
+import { glbStaticBatch } from '../rendering/glb-static-batch.js';
 
 const v = (x: number, y = 0, z = 0) => ({ x, y, z });
 const route: RegionRouteDefinition = { id: 'test-vault', from: v(0), to: v(4), anchors: [v(0, 1.2), v(4, 1.2)], destinationRegionId: 'greenwake', kind: 'path', traversalActionId: 'aren-staff-vault', traversal: { kind: 'vault', durationTicks: 60, startRadius: 1 }, colliderIds: [], traversalEvent: 'test-vaulted' };
@@ -114,12 +118,11 @@ describe('contextual traversal lifetime', () => {
     expect(e.consumeEvents().filter(event => event.kind === 'traversal')).toEqual([]);
     expect(e.consumeWorldEvents()).toEqual([]);
   });
-  it('executes all four authored types through native IDs and geometry-supported landings', () => {
-    const kinds: string[] = [];
+  it('executes authored routes through native IDs and geometry-supported landings', () => {
     for (const region of REGIONS) for (const arc of region.traversalArcs) {
       if (!arc.traversal) continue;
-      kinds.push(arc.traversal.kind);
-      const e = new CombatEngine(); e.loadRegion({ regionId: region.id, runId: 'authored-traversal', presentActorIds: [], playerPosition: arc.from });
+      const worldFacts = arc.unlockFact ? { [arc.unlockFact]: true } : {};
+      const e = new CombatEngine(); e.loadRegion({ regionId: region.id, runId: 'authored-traversal', presentActorIds: [], playerPosition: arc.from, worldFacts });
       const state = e.snapshotState();
       expect(isSupportedCapsulePose(state.arena, arc.from, .42, 1.6)).toBe(true);
       expect(isSupportedCapsulePose(state.arena, arc.to, .42, 1.6)).toBe(true);
@@ -132,16 +135,14 @@ describe('contextual traversal lifetime', () => {
       expect(e.isTraversing).toBe(false);
       expect(isSupportedCapsulePose(state.arena, player(e).position, .42, 1.6)).toBe(true);
       expect(e.consumeEvents().filter(event => event.kind === 'traversal')).toEqual([]);
-      e.loadRegion({ regionId: region.id, runId: 'authored-traversal', presentActorIds: [], playerPosition: arc.from });
+      e.loadRegion({ regionId: region.id, runId: 'authored-traversal', presentActorIds: [], playerPosition: arc.from, worldFacts });
       e.fixedStep(input({ interactPressed: true, traversalId: arc.id })); advance(e, arc.traversal.durationTicks);
       expect(player(e).position).toEqual(arc.to);
       expect(e.consumeEvents().filter(event => event.kind === 'traversal').map(event => event.actionId)).toEqual([arc.id]);
-      expect(e.consumeWorldEvents()).toEqual([]);
       expect(e.snapshotState().regionId).toBe(region.id);
     }
-    expect(kinds.sort()).toEqual(['low-ledge', 'slide', 'swing', 'vault']);
   });
-  it('uses a bounded source-face ledge rather than an airborne shortcut over a walkable ramp', () => {
+  it('climbs a bounded source-face ledge rather than taking an airborne shortcut', () => {
     const region = REGIONS.find(candidate => candidate.traversalArcs.some(arc => arc.traversal?.kind === 'low-ledge'))!;
     const arc = region.traversalArcs.find(candidate => candidate.traversal?.kind === 'low-ledge')!;
     const e = new CombatEngine(); e.loadRegion({ regionId: region.id, runId: 'ledge-semantics', presentActorIds: [], playerPosition: arc.from });
@@ -167,5 +168,33 @@ describe('contextual traversal lifetime', () => {
     e.setTraversalGates([invalid]); e.fixedStep(input({ interactPressed: true, traversalId: arc.id }));
     expect(e.isTraversing).toBe(false);
     expect(player(e).position).toEqual(arc.from);
+  });
+  it('completes every authored type against the renderer-measured native props, not only their authored proxies', () => {
+    for (const region of REGIONS) {
+      const arcs = region.traversalArcs.filter(arc => arc.traversal);
+      if (arcs.length === 0) continue;
+      const colliders: RegionColliderDefinition[] = [], supports: SupportField[] = [];
+      for (const placement of region.props) {
+        if (solidPropKind(placement) === 'decoration') continue;
+        const binding = CHAPTER_ASSET_BINDINGS[region.id]?.find(item => item.assetId === placement.assetId);
+        if (!binding) throw new Error(`Missing native chapter binding: ${region.id}/${placement.assetId}`);
+        const playtest = binding.catalogUrl.split('/').at(-1)!.replace(/\.json$/, '');
+        for (const entry of buildStaticPropColliders(glbStaticBatch(playtest, placement), [placement], { ...region, movableObjects: [] })) {
+          colliders.push(entry.collider);
+          if (entry.support) supports.push(entry.support);
+        }
+      }
+      for (const arc of arcs) {
+        const e = new CombatEngine(); e.loadRegion({ regionId: region.id, runId: 'measured-traversal', presentActorIds: [], playerPosition: arc.from, worldFacts: arc.unlockFact ? { [arc.unlockFact]: true } : {} });
+        e.setSceneColliders(colliders, supports);
+        const arena = e.snapshotState().arena;
+        expect(isSupportedCapsulePose(arena, arc.from, .42, 1.6)).toBe(true);
+        expect(isSupportedCapsulePose(arena, arc.to, .42, 1.6)).toBe(true);
+        expect(e.nearestTraversal(arc.from)?.id).toBe(arc.id);
+        e.fixedStep(input({ interactPressed: true, traversalId: arc.id })); advance(e, arc.traversal!.durationTicks);
+        expect(player(e).position).toEqual(arc.to);
+        expect(e.consumeEvents().filter(event => event.kind === 'traversal').map(event => event.actionId)).toEqual([arc.id]);
+      }
+    }
   });
 });

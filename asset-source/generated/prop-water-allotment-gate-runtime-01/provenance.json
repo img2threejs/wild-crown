@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-water-allotment-gate",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "292a1fcf-5cb1-4c31-9746-dfd4c4e78813"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00708,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-water-allotment-gate-model-01/tripo-out/prop-water-allotment-gate-model-292a1fcf/model.glb",
+      "sha256": "3b91a198e29744c78e9a5c159c338552af2add7c934ceda96d81ed30f6033708"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-water-allotment-gate-runtime-01/prop-water-allotment-gate.glb",
+    "sha256": "95438d07e9f14b74849f682602168a263183f5303b8e91b8b05b7b87c5b2a9bf",
+    "bytes": 2160752,
+    "vertices": 12472,
+    "triangles": 14005,
+    "boundsMin": [
+      -0.19637,
+      -0.4313,
+      -0.48863
+    ],
+    "boundsMax": [
+      0.19647,
+      0.43113,
+      0.48919
+    ],
+    "worldBoundsMin": [
+      -0.19637,
+      -0.4313,
+      -0.48863
+    ],
+    "worldBoundsMax": [
+      0.19647,
+      0.43113,
+      0.48919
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 7409827,
+      "toBytes": 802455
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 1610896,
+      "toBytes": 527928
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 3462501,
+      "toBytes": 261120
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1978119,
+      "trianglesAfter": 14005,
+      "relativeError": 0.0015436122193932533
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 1030815,
+      "verticesAfter": 12472
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

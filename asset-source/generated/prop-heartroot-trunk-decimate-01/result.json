@@ -1,0 +1,16 @@
+{
+  "task_id": "0726b9bd-a6c4-4a70-9e4a-a658f0989812",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-heartroot-trunk-decimate-01/tripo-out/prop-heartroot-trunk-decimate-01-0726b9bd",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-heartroot-trunk-decimate-01/tripo-out/prop-heartroot-trunk-decimate-01-0726b9bd/model.glb",
+  "preview": "asset-source/generated/prop-heartroot-trunk-decimate-01/tripo-out/prop-heartroot-trunk-decimate-01-0726b9bd/preview.png",
+  "started": "2026-10-11T09:34:04.253Z",
+  "finished": "2026-10-11T09:45:04.123Z"
+}

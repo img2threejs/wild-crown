@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-heartroot-root-column",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "70f9009a-4c03-449c-84c2-623b621d3f5c"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.00832,
+    "maxError": 0.02,
+    "simplifyFlags": [
+      "LockBorder"
+    ],
+    "uvWeight": 0.1,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-heartroot-root-column-model-01/tripo-out/prop-heartroot-root-column-model-70f9009a/model.glb",
+      "sha256": "153453b03fdb7a29d456f5b1beeae80403892d76605b4d4d0a167ec2b6a9f8c6"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb",
+    "sha256": "99de3cbd57986b32dc62a81b0eba038c97965f1789e5c11f46aad267915b67ef",
+    "bytes": 2335360,
+    "vertices": 11695,
+    "triangles": 15992,
+    "boundsMin": [
+      -0.40342,
+      -0.4888,
+      -0.39867
+    ],
+    "boundsMax": [
+      0.40277,
+      0.48827,
+      0.39888
+    ],
+    "worldBoundsMin": [
+      -0.40342,
+      -0.4888,
+      -0.39867
+    ],
+    "worldBoundsMax": [
+      0.40277,
+      0.48827,
+      0.39888
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 8591598,
+      "toBytes": 917582
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 1557457,
+      "toBytes": 506957
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 4859444,
+      "toBytes": 342523
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1922250,
+      "trianglesAfter": 15992,
+      "relativeError": 0.001952325808815658
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 993530,
+      "verticesAfter": 11695
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "f8a9fb8e-61d0-4515-9378-7e650655c2b3",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-root-cavern-mouth-decimate-01/tripo-out/prop-root-cavern-mouth-decimate-f8a9fb8e",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-root-cavern-mouth-decimate-01/tripo-out/prop-root-cavern-mouth-decimate-f8a9fb8e/model.glb",
+  "preview": "asset-source/generated/prop-root-cavern-mouth-decimate-01/tripo-out/prop-root-cavern-mouth-decimate-f8a9fb8e/preview.png",
+  "started": "2026-10-11T08:52:31.921Z",
+  "finished": "2026-10-11T09:01:27.414Z"
+}

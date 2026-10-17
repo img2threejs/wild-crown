@@ -1,6 +1,19 @@
 # WILD CROWN: THE BROKEN PACT — Production Master Plan
 
-Ngày lập: 2026-09-30. Trạng thái: kế hoạch thiết kế để duyệt và triển khai theo gate; chưa phải game đã được xây dựng.
+Ngày lập baseline: 2026-09-30. Status cập nhật: **2026-10-14 — local playtests đã implement; full campaign và release acceptance chưa hoàn thành**.
+
+## Trạng thái hiện hành — 2026-10-14
+
+Quyết định mới và kế hoạch thi công nằm tại [full remediation plan](../../.opencode/plans/2026-10-14-full-remediation.md), §User decisions/Phases 1–5, và [Bible cập nhật](../WILD-CROWN-GAME-DESIGN-BIBLE-CODEX-CLI.md) §0.1/§38. **Status này thay các hạn chế thiết kế cũ trong baseline phía dưới** (không free jump, dodge hai charge, không mana, một hero); không đọc chúng như runtime contract hiện hành.
+
+- **Đã implement local:** bốn hero Aren/Yara/Vesper/Sakda, Space free jump + double jump/air-step (8 mana mỗi lần accepted jump), F dodge 25 mana, mana cap 100 và grounded movement refill 4/mét. Nguồn: [combat.md](../features/combat.md), `src/game/heroes.ts`, `src/game/combat/PlayerSkills.ts`.
+- **Năm map Trials có roster hiện hành:** Greenwake (Ember Boar/Frost Sap-Stalker/Root Rammer), Canopy (Thornback Howler/Storm Hornbill/Mire Viper), Grove (Heartroot Sprig/Blighted Rootling/Hollowheart), Moonpine (Frostfang Tracker/Howl Scout/Ruun), Mistveil (Bog Lurker/Lantern Heron/Ghor). Nguồn: `src/game/combat/CombatTrials.ts`, `GroveContent.ts`, `MoonpineContent.ts`, `MistveilContent.ts`; [Grove status](../features/grove-playtest.md). Không dùng baseline “one optional practice” cho Grove hiện hành.
+- **UI local đã implement:** map select → hero select → map intro/load nền → loading scene nếu cần → skippable 4-second establishing shot → HUD. Simulation paused trong shot, Reduced Motion bỏ sweep. Nguồn: [application.md](../features/application.md#map-intro-and-establishing-shot), `src/app/GameApplication.ts`, `src/content/regionPresentation.ts`.
+- **Đã chốt / đang triển khai:** reaction/poise chung (Phase 1); real chapters có exploration/quests/dialogue/checkpoints/story boss/Cleanse→companion/Bond–Dominion/mid-chapter saves (Phases 2–3). Giữ Trials như replay riêng, không thay campaign; thêm Koro/Asha/Solkar/Orun trên nền roster hiện có, giữ story Ruun/Ghor. Authored data không phải end-to-end campaign acceptance.
+- **Asset/audio policy mới:** Tripo Acts I–IV có approved ceiling khoảng 3,000 credits, inspect concept/model trước paid step tiếp theo và log task; audio CC0/CC-BY có per-file source/license/author/SHA-256. Nguồn: remediation §User decisions/Phase 4. Budget approval không tự duyệt từng asset.
+- **Release vẫn blocked:** coordinator phải có automated gates + visual evidence và gửi user acceptance list trước `evidenceStatus=verified`; reference hardware/benchmarks/gamepad/accessibility và strict validator là gates Phase 5. Không claim 8–12h hay 60 FPS đã đo. Nguồn: [release-validation.md](../features/release-validation.md), remediation Phase 5.
+
+Các mục thiết kế/research/roadmap P0–P13 bên dưới giữ baseline lịch sử ngày 2026-09-30; các con số mục tiêu không thành measured facts chỉ vì đã có Trials. Player-facing copy vẫn English; engineering notes tiếng Việt được giữ.
 
 ## 0. Cách đọc và thẩm quyền
 
@@ -355,9 +368,11 @@ Không cần hỏi lại platform, asset route, historical Dominion, stylized ci
 
 ## 11. Bằng chứng planning và giới hạn
 
-Đã làm: đọc Bible; khảo sát repository; hai nhánh chuyên môn + cross-critique + sanity check; tra official upstream tags/docs; tra official Tripo docs; tạo ba concept bằng Codex GenImage và xem trực tiếp.
+**Bằng chứng planning lịch sử (2026-09-30):** đã đọc Bible; khảo sát repository; hai nhánh chuyên môn + cross-critique + sanity check; tra official upstream tags/docs và Tripo docs; tạo ba concept bằng Codex GenImage và xem trực tiếp.
 
-Chưa làm: cài 2.0.0/plugins, gọi Tripo trả phí, tạo mesh/rig production, benchmark game, đạt Environment/Jev/rig gates, build/deploy game. Không có code gameplay được sửa trong planning này.
+**Giới hạn của lượt planning đó:** chưa cài 2.0.0/plugins, gọi Tripo trả phí, tạo mesh/rig production, benchmark game, đạt Environment/Jev/rig gates hoặc build/deploy game; không có code gameplay được sửa trong chính lượt planning. Đây không phải claim “repository hôm nay chưa code/run gameplay”.
+
+**Status hiện tại (2026-10-14):** implementation/evidence local được mô tả trong [application.md](../features/application.md), [combat.md](../features/combat.md), [grove-playtest.md](../features/grove-playtest.md). Không tái công bố historical test counts như kết quả chạy hôm nay. Full chapter completion, reaction system acceptance, licensed audio completion, user asset acceptance và measured release benchmarks vẫn theo gates của [remediation plan](../../.opencode/plans/2026-10-14-full-remediation.md); [release validator](../features/release-validation.md) không được làm yếu để thông qua.
 
 Nguồn upstream:
 - https://github.com/img2threejs/img2threejs/tree/v2.0.0

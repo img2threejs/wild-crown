@@ -102,7 +102,7 @@ Orun's last apprentice and Aren's guardian, Yara is both a mentor and a particip
 
 ### Vara — the scout
 
-A stylized hornbill is the Bible's suggested species. Vara brings Sky to Aren and remains when Aren can no longer command. She represents vision: scouting, marking threats and weaknesses, warning of off-screen attacks, revealing concealed enemies, and reading pounce landings. Her loyalty establishes that companionship can survive the loss of supernatural authority.
+A stylized harpy eagle is the Bible's suggested species (Storm Harpy; canonical `harpy-eagle`). Vara brings Sky to Aren and remains when Aren can no longer command. She represents vision: scouting, marking threats and weaknesses, warning of off-screen attacks, revealing concealed enemies, and reading pounce landings. Her loyalty establishes that companionship can survive the loss of supernatural authority.
 
 ### Koro — leader of the monkeys
 

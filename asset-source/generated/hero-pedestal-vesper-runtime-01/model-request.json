@@ -1,0 +1,13 @@
+{
+  "inputFile": "asset-source/generated/hero-pedestal-vesper-runtime-01/reference/tripo-out/hero-pedestal-vesper-reference-0-8557ecf6/generated_image.png",
+  "inputTaskId": "8557ecf6-9caa-4a4c-be08-a23892f7a648",
+  "parameters": {
+    "face_limit": 30000,
+    "geometry_quality": "detailed",
+    "texture_quality": "detailed",
+    "pbr": true
+  },
+  "estimatedCredits": 60,
+  "approval": "Explicit user approval for four image-to-3D jobs; total additional estimate 260 credits including four image edits. No paid retries.",
+  "command": "env PATH=/Users/hoainho/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin tripo make 'asset-source/generated/hero-pedestal-vesper-runtime-01/reference/tripo-out/hero-pedestal-vesper-reference-0-8557ecf6/generated_image.png' -p face_limit=30000 -p geometry_quality=detailed -p texture_quality=detailed -p pbr=true --name hero-pedestal-vesper-model-01 --out 'asset-source/generated/hero-pedestal-vesper-runtime-01/tripo-out' --timeout 1200 --json --no-open"
+}

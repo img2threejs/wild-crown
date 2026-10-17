@@ -1,0 +1,1510 @@
+{
+  "schemaVersion": 1,
+  "originalModelTask": "f5c49b45-1eee-47e7-84fc-e6e592ae5c29",
+  "tasks": {
+    "rig": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
+    "a": "579a27cd-1f53-4e60-987a-7d1d01236e0b",
+    "b": "61519f46-5e06-4ee6-ac15-4cd856414cbc",
+    "c": "75b3e41f-4fae-4871-af27-55699b6a970a",
+    "d": "851be4be-001a-49c0-b64d-a81c4d005d09",
+    "e": "13b1a6ab-eda4-4274-8520-bdc212de8673"
+  },
+  "sources": {
+    "a": "asset-source/generated/actor-yara-hero-anim-a-01/tripo-out/actor-yara-hero-anim-a-01-579a27cd/model.glb",
+    "b": "asset-source/generated/actor-yara-hero-anim-b-01/tripo-out/actor-yara-hero-anim-b-01-61519f46/model.glb",
+    "c": "asset-source/generated/actor-yara-hero-anim-c-01/tripo-out/actor-yara-hero-anim-c-01-75b3e41f/model.glb",
+    "d": "asset-source/generated/actor-yara-hero-anim-d-01/tripo-out/actor-yara-hero-anim-d-01-851be4be/model.glb",
+    "e": "asset-source/generated/actor-yara-hero-anim-e-01/tripo-out/actor-yara-hero-anim-e-01-13b1a6ab/model.glb"
+  },
+  "presets": {
+    "a": [
+      "idle",
+      "walk",
+      "run",
+      "cast_a_spell",
+      "shoot"
+    ],
+    "b": [
+      "jump",
+      "dive",
+      "hurt",
+      "cheer",
+      "defeat_02"
+    ],
+    "c": [
+      "fire",
+      "pitch_baseball",
+      "basketball_shot",
+      "golf",
+      "dig"
+    ],
+    "d": [
+      "lift_heavy",
+      "standing_relax",
+      "run_upstairs",
+      "flip",
+      "sing_02"
+    ],
+    "e": [
+      "football_pass",
+      "victory_celebration",
+      "dance_02",
+      "dance_04",
+      "sing_04"
+    ]
+  },
+  "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
+  "outputHash": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31",
+  "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
+  "grip": {
+    "staffDiagonalDegrees": 0,
+    "staffToMiddleFingerDegrees": 75.76603924438858,
+    "staffToPrincipalAxisDegrees": 90,
+    "middleFingerHand": [
+      -0.132633,
+      0.974967,
+      -0.17846
+    ],
+    "staffAxisHand": [
+      0.758689,
+      0.24491,
+      -0.603664
+    ],
+    "palmHand": [
+      0.014573,
+      0.047026,
+      0.009131
+    ],
+    "shaftRadiusRig": 0.01195,
+    "metacarpalHand": [
+      -0.29332,
+      0.955823,
+      0.019135
+    ],
+    "thumbSideHand": [
+      0.758689,
+      0.24491,
+      -0.603664
+    ],
+    "palmNormalHand": [
+      0.581682,
+      0.162549,
+      0.79701
+    ]
+  },
+  "credits": {
+    "rig": 25,
+    "a": 50,
+    "b": 50,
+    "c": 50,
+    "d": 50,
+    "e": 50
+  },
+  "mixamo": {
+    "falling-back": {
+      "file": "asset-source/mixamo/reactions/falling-back.fbx",
+      "sha256": "248ab54bdab4fdfab8a1a1703c38618ffacafbaf90f9d7baeec0abcbef49b7d8",
+      "durationSeconds": 2.6,
+      "frames": 79,
+      "facingDegrees": 84.11
+    },
+    "react-forward": {
+      "file": "asset-source/mixamo/reactions/react-forward.fbx",
+      "sha256": "2fc20a6ebc26cd0dac6b66649e10527d060dd78067bdaff0ce56fc6acc75530f",
+      "durationSeconds": 3.6667,
+      "frames": 111,
+      "facingDegrees": 84.11
+    },
+    "getting-up-stomach": {
+      "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx",
+      "sha256": "ead02bf768fb1d97870f820aa7b199bd199f702b59af36ea1cd6108f32250675",
+      "durationSeconds": 8.6,
+      "frames": 259,
+      "facingDegrees": 84.11
+    },
+    "getting-up-knocked": {
+      "file": "asset-source/mixamo/reactions/getting-up-knocked.fbx",
+      "sha256": "d3247fb0b39bd891e613dd53fad0a15298a5d30feebfffeadd7cb98680143451",
+      "durationSeconds": 2.7,
+      "frames": 82,
+      "facingDegrees": 84.11
+    }
+  },
+  "creditTotal": 275,
+  "evidenceStatus": "blocked",
+  "clips": [
+    {
+      "clip": "aren-idle",
+      "source": {
+        "donor": "a",
+        "animation": "idle"
+      },
+      "sim": {
+        "totalTicks": 240
+      },
+      "window": [
+        2,
+        6
+      ],
+      "loop": {
+        "overlapSeconds": 0.4
+      },
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      }
+    },
+    {
+      "clip": "aren-walk",
+      "source": {
+        "donor": "a",
+        "animation": "walk"
+      },
+      "sim": {
+        "totalTicks": 142
+      },
+      "window": [
+        0,
+        2.3666665554
+      ],
+      "loop": {
+        "overlapSeconds": 0.1
+      },
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "follow": 0.5,
+        "pitchPerUnit": 90,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      }
+    },
+    {
+      "clip": "aren-run",
+      "source": {
+        "donor": "a",
+        "animation": "run"
+      },
+      "sim": {
+        "totalTicks": 76
+      },
+      "window": [
+        0,
+        1.26666665
+      ],
+      "loop": {
+        "overlapSeconds": 0.1
+      },
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "follow": 0.45,
+        "pitchPerUnit": 50,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "hand": [
+              0.19,
+              -0.1,
+              0.03
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "clip": "aren-jump",
+      "source": {
+        "donor": "b",
+        "animation": "jump"
+      },
+      "sim": {
+        "totalTicks": 42
+      },
+      "window": [
+        0,
+        2.23333335
+      ],
+      "airborne": true,
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "follow": 0.25,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "w": 0.9
+          }
+        ]
+      }
+    },
+    {
+      "clip": "aren-forward-left-dive-roll",
+      "source": {
+        "donor": "b",
+        "animation": "dive"
+      },
+      "sim": {
+        "totalTicks": 42
+      },
+      "window": [
+        0.15,
+        2.5
+      ],
+      "airborne": true,
+      "limits": "JOINT_LIMITS",
+      "arm": {
+        "follow": 0.3,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "w": 0.55
+          },
+          {
+            "t": 21,
+            "w": 0.2
+          },
+          {
+            "t": 42,
+            "w": 0.55
+          }
+        ]
+      }
+    },
+    {
+      "clip": "aren-hit",
+      "source": {
+        "donor": "b",
+        "animation": "hurt"
+      },
+      "sim": {
+        "totalTicks": 24
+      },
+      "window": [
+        0,
+        1.4
+      ],
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "aren-cheer",
+      "source": {
+        "donor": "b",
+        "animation": "cheer"
+      },
+      "sim": {
+        "totalTicks": 300
+      },
+      "window": [
+        0,
+        5
+      ],
+      "limits": "JOINT_LIMITS"
+    },
+    {
+      "clip": "aren-defeat",
+      "source": {
+        "donor": "b",
+        "animation": "defeat_02"
+      },
+      "sim": {
+        "totalTicks": 360
+      },
+      "window": [
+        0,
+        8.46666622
+      ],
+      "limits": "JOINT_LIMITS"
+    },
+    {
+      "clip": "aren-knockdown",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:falling-back",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/falling-back.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.2
+            ],
+            [
+              6,
+              0.5
+            ],
+            [
+              17,
+              0.85
+            ],
+            [
+              30,
+              1.6
+            ],
+            [
+              48,
+              2.55
+            ],
+            [
+              90,
+              2.55
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "lie": {
+        "pose": "back",
+        "holdFrom": 48,
+        "fromIdle": 6
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.7346,
+      "floor": {
+        "liftMinMetres": -0.002,
+        "liftMaxMetres": 0.1594
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.034,
+        "lowestAfterMetres": 0.031,
+        "deepestIntoLimbBeforeMetres": 0.073,
+        "deepestIntoLimbAfterMetres": 0.014,
+        "framesTurned": 27,
+        "largestTurnDegrees": 24
+      }
+    },
+    {
+      "clip": "aren-knockdown-forward",
+      "sim": {
+        "totalTicks": 90
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:react-forward",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/react-forward.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.85
+            ],
+            [
+              12,
+              1.25
+            ],
+            [
+              22,
+              1.95
+            ],
+            [
+              30,
+              2.3
+            ],
+            [
+              48,
+              3.4
+            ],
+            [
+              90,
+              3.4
+            ]
+          ],
+          "retarget": {},
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "lie": {
+        "pose": "stomach",
+        "holdFrom": 48,
+        "fromIdle": 8
+      },
+      "travel": {
+        "maxMetres": 0.62
+      },
+      "travelScale": 0.7427,
+      "floor": {
+        "liftMinMetres": 0.0221,
+        "liftMaxMetres": 0.1605
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.675,
+        "lowestAfterMetres": 0.004,
+        "deepestIntoLimbBeforeMetres": 0.083,
+        "deepestIntoLimbAfterMetres": 0.021,
+        "framesTurned": 31,
+        "largestTurnDegrees": 56
+      }
+    },
+    {
+      "clip": "aren-getup",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:getting-up-knocked",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-knocked.fbx"
+          },
+          "keys": [
+            [
+              0,
+              0.25
+            ],
+            [
+              66,
+              2
+            ]
+          ],
+          "retarget": {
+            "yaw": 13.1
+          },
+          "ticks": [
+            0
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "getup": {
+        "from": "aren-knockdown",
+        "blend": 10,
+        "travel": [
+          10,
+          40
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "take": {
+          "liftMinMetres": -0.0146,
+          "liftMaxMetres": 0.1137
+        },
+        "final": {
+          "liftMinMetres": -0.0411,
+          "liftMaxMetres": 0.0401
+        }
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.275,
+        "lowestAfterMetres": 0.013,
+        "deepestIntoLimbBeforeMetres": 0.101,
+        "deepestIntoLimbAfterMetres": 0.023,
+        "framesTurned": 43,
+        "largestTurnDegrees": 44
+      }
+    },
+    {
+      "clip": "aren-getup-forward",
+      "sim": {
+        "totalTicks": 66
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              0,
+              2.45
+            ],
+            [
+              36,
+              3.3
+            ]
+          ],
+          "retarget": {
+            "yaw": 6.5
+          },
+          "ticks": [
+            0
+          ]
+        },
+        {
+          "source": {
+            "donor": "m:getting-up-stomach",
+            "animation": "mixamo.com",
+            "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx"
+          },
+          "keys": [
+            [
+              36,
+              4.25
+            ],
+            [
+              66,
+              5.05
+            ]
+          ],
+          "retarget": {
+            "yaw": 6.5
+          },
+          "ticks": [
+            36
+          ]
+        }
+      ],
+      "limits": "JOINT_LIMITS",
+      "getup": {
+        "from": "aren-knockdown-forward",
+        "blend": 8,
+        "travel": [
+          8,
+          46
+        ],
+        "idleFrom": 50
+      },
+      "floor": {
+        "take": {
+          "liftMinMetres": -0.0227,
+          "liftMaxMetres": 0.1242
+        },
+        "final": {
+          "liftMinMetres": 0,
+          "liftMaxMetres": 0.0399
+        }
+      },
+      "staff": {
+        "lowestBeforeMetres": -0.515,
+        "lowestAfterMetres": 0.031,
+        "deepestIntoLimbBeforeMetres": 0.022,
+        "deepestIntoLimbAfterMetres": 0,
+        "framesTurned": 34,
+        "largestTurnDegrees": 32
+      }
+    },
+    {
+      "clip": "yara-thornshot-1",
+      "source": {
+        "donor": "a",
+        "animation": "cast_a_spell"
+      },
+      "sim": {
+        "totalTicks": 26,
+        "activeTick": 9
+      },
+      "window": [
+        2,
+        3
+      ],
+      "mirror": true,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          2.2,
+          2.8
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 9,
+            "pose": "carry",
+            "staff": [
+              0,
+              74
+            ]
+          },
+          {
+            "t": 26,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-thornshot-2",
+      "source": {
+        "donor": "a",
+        "animation": "cast_a_spell"
+      },
+      "sim": {
+        "totalTicks": 28,
+        "activeTick": 10
+      },
+      "window": [
+        2,
+        3.2
+      ],
+      "contact": {
+        "joints": [
+          "RightHand"
+        ],
+        "search": [
+          2.2,
+          2.8
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 5,
+            "pose": "guard"
+          },
+          {
+            "t": 10,
+            "pose": "thrust"
+          },
+          {
+            "t": 17,
+            "pose": "thrust"
+          },
+          {
+            "t": 28,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-thornshot-3",
+      "source": {
+        "donor": "c",
+        "animation": "basketball_shot"
+      },
+      "sim": {
+        "totalTicks": 34
+      },
+      "window": [
+        0,
+        1
+      ],
+      "keys": [
+        [
+          0,
+          1.55
+        ],
+        [
+          6,
+          1.85
+        ],
+        [
+          10,
+          2.25
+        ],
+        [
+          16,
+          2.8
+        ],
+        [
+          34,
+          3.6
+        ]
+      ],
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "gw": 0
+          },
+          {
+            "t": 5,
+            "pose": "overhead",
+            "gw": 1,
+            "grip": -0.26,
+            "hand": [
+              0.1,
+              0.2,
+              0.06
+            ],
+            "staff": [
+              0,
+              52
+            ]
+          },
+          {
+            "t": 10,
+            "hand": [
+              0.22,
+              0.22,
+              0.05
+            ],
+            "staff": [
+              0,
+              36
+            ]
+          },
+          {
+            "t": 18,
+            "hand": [
+              0.22,
+              0.2,
+              0.05
+            ],
+            "staff": [
+              0,
+              40
+            ]
+          },
+          {
+            "t": 34,
+            "pose": "carry",
+            "gw": 0
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-spike",
+      "source": {
+        "donor": "c",
+        "animation": "golf"
+      },
+      "sim": {
+        "totalTicks": 63
+      },
+      "window": [
+        0,
+        1
+      ],
+      "keys": [
+        [
+          0,
+          6.3
+        ],
+        [
+          14,
+          7.4
+        ],
+        [
+          22,
+          8
+        ],
+        [
+          40,
+          8.6
+        ],
+        [
+          63,
+          9.4
+        ]
+      ],
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 12,
+            "hand": [
+              0.05,
+              -0.13,
+              0.15
+            ],
+            "staff": [
+              -55,
+              -12
+            ]
+          },
+          {
+            "t": 20,
+            "hand": [
+              0.22,
+              -0.2,
+              0.06
+            ],
+            "staff": [
+              8,
+              -26
+            ]
+          },
+          {
+            "t": 28,
+            "hand": [
+              0.22,
+              -0.2,
+              0.06
+            ],
+            "staff": [
+              8,
+              -32
+            ]
+          },
+          {
+            "t": 63,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-charge",
+      "source": {
+        "donor": "d",
+        "animation": "standing_relax"
+      },
+      "sim": {
+        "totalTicks": 90
+      },
+      "window": [
+        4,
+        7.5
+      ],
+      "loop": {
+        "overlapSeconds": 0.3
+      },
+      "sway": {
+        "joints": [
+          "Spine1",
+          "Spine2",
+          "Head"
+        ],
+        "amplitude": 0.02
+      },
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "hand": [
+              0.08,
+              0.235,
+              0.05
+            ],
+            "staff": [
+              0,
+              84
+            ],
+            "gw": 1,
+            "grip": -0.24
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-eruption",
+      "sim": {
+        "totalTicks": 76
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "d",
+            "animation": "standing_relax"
+          },
+          "window": [
+            4,
+            6
+          ]
+        },
+        {
+          "source": {
+            "donor": "c",
+            "animation": "dig"
+          },
+          "window": [
+            0.3,
+            1.5
+          ],
+          "ticks": [
+            26,
+            76
+          ]
+        },
+        {
+          "source": {
+            "donor": "d",
+            "animation": "standing_relax"
+          },
+          "window": [
+            4,
+            6
+          ],
+          "ticks": [
+            60,
+            76
+          ]
+        }
+      ],
+      "crossfadeTicks": 8,
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "gw": 0
+          },
+          {
+            "t": 14,
+            "hand": [
+              0.1,
+              0.2,
+              0.06
+            ],
+            "staff": [
+              0,
+              82
+            ],
+            "gw": 1,
+            "grip": -0.26
+          },
+          {
+            "t": 26,
+            "hand": [
+              0.1,
+              0.2,
+              0.06
+            ],
+            "staff": [
+              0,
+              84
+            ]
+          },
+          {
+            "t": 36,
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
+          },
+          {
+            "t": 48,
+            "pose": "plant"
+          },
+          {
+            "t": 70,
+            "pose": "carry",
+            "gw": 0
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-seed-charge",
+      "source": {
+        "donor": "c",
+        "animation": "fire"
+      },
+      "sim": {
+        "totalTicks": 90
+      },
+      "window": [
+        0.1,
+        1.5
+      ],
+      "loop": {
+        "overlapSeconds": 0.3
+      },
+      "sway": {
+        "joints": [
+          "Spine1",
+          "Spine2",
+          "Head"
+        ],
+        "amplitude": 0.015
+      },
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "hand": [
+              0.21,
+              -0.06,
+              0.05
+            ],
+            "staff": [
+              0,
+              14
+            ],
+            "gw": 1,
+            "grip": 0.36
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-sap-lance",
+      "source": {
+        "donor": "a",
+        "animation": "cast_a_spell"
+      },
+      "sim": {
+        "totalTicks": 30
+      },
+      "window": [
+        0,
+        1
+      ],
+      "keys": [
+        [
+          0,
+          2.2
+        ],
+        [
+          16,
+          2.45
+        ],
+        [
+          30,
+          3.3
+        ]
+      ],
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "hand": [
+              0.21,
+              -0.06,
+              0.05
+            ],
+            "staff": [
+              0,
+              14
+            ],
+            "gw": 1,
+            "grip": 0.36
+          },
+          {
+            "t": 8,
+            "hand": [
+              0.12,
+              -0.07,
+              0.06
+            ],
+            "staff": [
+              0,
+              14
+            ]
+          },
+          {
+            "t": 16,
+            "hand": [
+              0.3,
+              -0.02,
+              0.04
+            ],
+            "staff": [
+              0,
+              6
+            ]
+          },
+          {
+            "t": 22,
+            "hand": [
+              0.3,
+              -0.02,
+              0.04
+            ]
+          },
+          {
+            "t": 30,
+            "pose": "carry",
+            "gw": 0
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-seed-storm",
+      "source": {
+        "donor": "e",
+        "animation": "dance_04"
+      },
+      "sim": {
+        "totalTicks": 60
+      },
+      "window": [
+        4.3,
+        5.8
+      ],
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 10,
+            "hand": [
+              0,
+              0.02,
+              0.27
+            ],
+            "staff": [
+              -90,
+              12
+            ]
+          },
+          {
+            "t": 46,
+            "hand": [
+              0,
+              0.02,
+              0.27
+            ],
+            "staff": [
+              -90,
+              12
+            ]
+          },
+          {
+            "t": 60,
+            "pose": "carry"
+          }
+        ]
+      },
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-binding-vines",
+      "source": {
+        "donor": "c",
+        "animation": "pitch_baseball"
+      },
+      "sim": {
+        "totalTicks": 54,
+        "activeTick": 18
+      },
+      "window": [
+        0.9,
+        2.5
+      ],
+      "mirror": true,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          1.6,
+          2.1
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 18,
+            "pose": "carry",
+            "staff": [
+              0,
+              72
+            ]
+          },
+          {
+            "t": 54,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-cleanse",
+      "sim": {
+        "totalTicks": 108
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "d",
+            "animation": "standing_relax"
+          },
+          "window": [
+            4,
+            6
+          ]
+        },
+        {
+          "source": {
+            "donor": "c",
+            "animation": "dig"
+          },
+          "window": [
+            0.3,
+            1.5
+          ],
+          "ticks": [
+            24,
+            108
+          ]
+        },
+        {
+          "source": {
+            "donor": "d",
+            "animation": "standing_relax"
+          },
+          "window": [
+            4,
+            6
+          ],
+          "ticks": [
+            92,
+            108
+          ]
+        }
+      ],
+      "crossfadeTicks": 12,
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "gw": 0
+          },
+          {
+            "t": 22,
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.28,
+            "staff": [
+              0,
+              86
+            ]
+          },
+          {
+            "t": 80,
+            "pose": "plant",
+            "staff": [
+              0,
+              86
+            ]
+          },
+          {
+            "t": 100,
+            "pose": "carry",
+            "gw": 0
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-heartroot-bloom",
+      "sim": {
+        "totalTicks": 156
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "d",
+            "animation": "standing_relax"
+          },
+          "window": [
+            4,
+            6
+          ]
+        },
+        {
+          "source": {
+            "donor": "e",
+            "animation": "victory_celebration"
+          },
+          "window": [
+            0.6,
+            3.4
+          ],
+          "ticks": [
+            14,
+            156
+          ]
+        }
+      ],
+      "crossfadeTicks": 8,
+      "arm": {
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 16,
+            "pose": "high"
+          },
+          {
+            "t": 120,
+            "pose": "high"
+          },
+          {
+            "t": 130,
+            "pose": "high",
+            "staff": [
+              0,
+              100
+            ]
+          },
+          {
+            "t": 134,
+            "hand": [
+              0.26,
+              0.04,
+              0.05
+            ],
+            "staff": [
+              0,
+              -18
+            ]
+          },
+          {
+            "t": 148,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "aren-air-step",
+      "sim": {
+        "totalTicks": 60
+      },
+      "parts": [
+        {
+          "source": {
+            "donor": "d",
+            "animation": "run_upstairs"
+          },
+          "window": [
+            0,
+            0.8
+          ],
+          "ticks": [
+            0,
+            60
+          ]
+        },
+        {
+          "source": {
+            "donor": "d",
+            "animation": "flip"
+          },
+          "keys": [
+            [
+              0,
+              0.9
+            ],
+            [
+              26,
+              1.2
+            ],
+            [
+              38,
+              2.2
+            ],
+            [
+              60,
+              3.4
+            ]
+          ],
+          "ticks": [
+            14,
+            60
+          ]
+        },
+        {
+          "source": {
+            "donor": "b",
+            "animation": "jump"
+          },
+          "window": [
+            1.2,
+            2.2
+          ],
+          "ticks": [
+            40,
+            60
+          ]
+        }
+      ],
+      "airborne": true,
+      "crossfadeTicks": 4,
+      "pin": {
+        "maxVertical": 0.08
+      },
+      "arm": {
+        "follow": 0.3,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry",
+            "w": 0.8
+          },
+          {
+            "t": 14,
+            "w": 0.8
+          },
+          {
+            "t": 24,
+            "w": 0.2
+          },
+          {
+            "t": 44,
+            "w": 0.2
+          },
+          {
+            "t": 54,
+            "w": 0.8
+          },
+          {
+            "t": 60,
+            "w": 0.8
+          }
+        ]
+      },
+      "limits": "COMBAT_LIMITS"
+    }
+  ]
+}

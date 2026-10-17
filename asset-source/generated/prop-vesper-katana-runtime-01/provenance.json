@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-vesper-katana",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "fca9127c-62c2-4fe3-81a1-7ffc6fa8c40b",
+    "decimate": "b88adf6d-e632-4c14-ba67-1c80f6e90e1c"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-vesper-katana-decimate-01/tripo-out/prop-vesper-katana-decimate-01-b88adf6d/model.glb",
+      "sha256": "15c6868b7595c75f40e0573d5816e96b2087016e0998477b5c71ab71e61a49b7"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-vesper-katana-runtime-01/prop-vesper-katana.glb",
+    "sha256": "6fffbcb31f32e0175dd4a4ad36aabd20072bd9f0fbf2bf23270e1a4761f4338d",
+    "bytes": 5068584,
+    "vertices": 12929,
+    "triangles": 9842,
+    "boundsMin": [
+      -0.39769,
+      -0.10819,
+      -0.4898
+    ],
+    "boundsMax": [
+      0.3974,
+      0.1083,
+      0.48922
+    ],
+    "worldBoundsMin": [
+      -0.39769,
+      -0.10819,
+      -0.4898
+    ],
+    "worldBoundsMax": [
+      0.3974,
+      0.1083,
+      0.48922
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3604255,
+      "toBytes": 1547318
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4484598,
+      "toBytes": 1425859
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18222478,
+      "toBytes": 1620604
+    }
+  ],
+  "simplification": null,
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

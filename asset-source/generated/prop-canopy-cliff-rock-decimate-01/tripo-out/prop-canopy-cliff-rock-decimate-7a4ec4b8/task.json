@@ -1,0 +1,23 @@
+{
+  "task_id": "7a4ec4b8-f6d3-45fe-85d7-cf7b87a4dae9",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "input": {
+    "bake": true,
+    "quad": false,
+    "face_limit": 14000,
+    "original_model_id": "c857af89-634e-42a7-bf30-b9cd77aa23df"
+  },
+  "output_fields": [
+    "model_url",
+    "rendered_image_url"
+  ],
+  "credits_consumed": 30,
+  "created_at": "2026-10-11T03:31:59.474555Z",
+  "completed_at": "2026-10-11T03:38:07.361168Z",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ]
+}

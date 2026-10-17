@@ -1,0 +1,13 @@
+{
+  "task_id": "e84f9256-416c-4056-bdd4-b49644e1d196",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-frost-sap-stalker-anim-a-01/tripo-out/actor-frost-sap-stalker-anim-a-0-2-e84f9256",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-frost-sap-stalker-anim-a-01/tripo-out/actor-frost-sap-stalker-anim-a-0-2-e84f9256/model.glb",
+  "started": "2026-10-10T11:32:31.374Z",
+  "finished": "2026-10-10T11:32:43.965Z"
+}

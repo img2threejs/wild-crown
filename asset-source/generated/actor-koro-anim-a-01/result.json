@@ -1,0 +1,13 @@
+{
+  "task_id": "e17c7257-3fd9-4065-b620-94fb83674254",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 20,
+  "output_dir": "asset-source/generated/actor-koro-anim-a-01/tripo-out/actor-koro-anim-a-01-e17c7257",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-koro-anim-a-01/tripo-out/actor-koro-anim-a-01-e17c7257/model.glb",
+  "started": "2026-10-11T09:17:50.400Z",
+  "finished": "2026-10-11T09:18:06.458Z"
+}

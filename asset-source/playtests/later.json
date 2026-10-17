@@ -1,0 +1,1409 @@
+[
+  {
+    "id": "sunmane-expanse-environment",
+    "sourceType": "composed-recipe",
+    "kind": "environment",
+    "proceduralRecipeId": "sunmane-expanse-environment",
+    "componentAssetIds": [
+      "prop-migration-gate",
+      "prop-plains-stone-arch",
+      "prop-savanna-acacia",
+      "prop-sunmane-stone-terrace",
+      "prop-water-allotment-gate"
+    ],
+    "runtimeUrl": null,
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/manifest.json#sunmane-expanse-environment",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "refuge-environment",
+    "sourceType": "composed-recipe",
+    "kind": "environment",
+    "proceduralRecipeId": "refuge-environment",
+    "componentAssetIds": [
+      "prop-canopy-fern-cluster",
+      "prop-heartroot-fragment-stone",
+      "prop-map-table",
+      "prop-refuge-shelter",
+      "prop-training-post",
+      "prop-water-basin"
+    ],
+    "runtimeUrl": null,
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/manifest.json#refuge-environment",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "heartroot-hollow-environment",
+    "sourceType": "composed-recipe",
+    "kind": "environment",
+    "proceduralRecipeId": "heartroot-hollow-environment",
+    "componentAssetIds": [
+      "prop-heartroot-root-column",
+      "prop-hollow-cavern-rock",
+      "prop-root-crown-altar",
+      "prop-root-tether-anchor",
+      "prop-six-fragment-shrine"
+    ],
+    "runtimeUrl": null,
+    "lodIds": [],
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/manifest.json#heartroot-hollow-environment",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-luma",
+    "actorId": "luma",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "db82ff09-e650-4575-8912-b7274ed3cb0a",
+    "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
+    "outputHash": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "scale": 2.473
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-sable",
+    "actorId": "sable",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "9bcdfa94-80e0-457e-95a5-30ef3993145c",
+    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+    "outputHash": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "scale": 2.457
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-nyra",
+    "actorId": "nyra",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_4",
+    "tripoSourceTask": "ed043464-0230-4df6-9ebd-5885209e9064",
+    "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
+    "outputHash": "9465f6efcfd6642629fcc288dec58b3e30ac8085e925cdfb633204d542c931f3",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 2.198
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-nyra-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-solkar",
+    "actorId": "solkar",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "99fc95a7-5394-4858-912e-c20e36af99b3",
+    "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
+    "outputHash": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 3.207
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-solkar-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-orun",
+    "actorId": "orun",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "biped",
+    "castSocketBone": "mixamorig:Head",
+    "tripoSourceTask": "7cfe411b-54b9-4263-9a3f-0ac909d2d771",
+    "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+    "outputHash": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -0.9981,
+        "y": 0,
+        "z": -0.0618
+      },
+      "scale": 2.144
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "orun-root-tether": "orun-root-tether",
+      "orun-back-handspring": "orun-back-handspring",
+      "orun-cartwheel-counter": "orun-cartwheel-counter"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "orun-root-tether": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "orun-back-handspring": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "orun-cartwheel-counter": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-orun-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-orun-crowned-beast",
+    "actorId": "orun",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_0",
+    "tripoSourceTask": "63146190-47f6-4f28-9618-393cd4a68cb6",
+    "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
+    "outputHash": "13193d422eaf1218778b3c8a6c164f581205a258eb95f70839b3fb6771ea8298",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 6.739
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-council-envoy",
+    "actorId": "council-envoy",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "ffb63eca-c530-421b-811e-d7045cbfa175",
+    "runtimeUrl": "/asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb",
+    "outputHash": "21b797cf6b2626296386eca9457d7aeb5049af25e9e88a9240bc6c580ef23a51",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "scale": 2.189
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-council-envoy-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-sunmane-stone-terrace",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "c2851644-8802-4b21-807b-e4934d5136d1",
+    "runtimeUrl": "/asset-source/generated/prop-sunmane-stone-terrace-runtime-01/prop-sunmane-stone-terrace.glb",
+    "outputHash": "fc1108a8201e6113f98c8c985cc00c47fbc8a2bc6f42ca769a574034e7f382af",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 12.185,
+      "originOffset": {
+        "x": 0,
+        "y": 1.08739,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-sunmane-stone-terrace-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-migration-gate",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "bf3d1bab-9235-48fa-9c3f-00864ea97f89",
+    "runtimeUrl": "/asset-source/generated/prop-migration-gate-runtime-01/prop-migration-gate-articulated.glb",
+    "outputHash": "77f37b77b7b63fd2fe9054b9f82a7a06d19f00ef8e2fd5798cba5f52a3165f8b",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 8.33,
+      "originOffset": {
+        "x": 0,
+        "y": 3.15157,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-migration-gate-runtime-01/provenance-articulated.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-water-allotment-gate",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "292a1fcf-5cb1-4c31-9746-dfd4c4e78813",
+    "runtimeUrl": "/asset-source/generated/prop-water-allotment-gate-runtime-01/prop-water-allotment-gate.glb",
+    "outputHash": "95438d07e9f14b74849f682602168a263183f5303b8e91b8b05b7b87c5b2a9bf",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 5.113,
+      "originOffset": {
+        "x": 0,
+        "y": 2.20524,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-water-allotment-gate-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-plains-stone-arch",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "46661232-d7d4-48cf-b6ac-39c647d0b92b",
+    "runtimeUrl": "/asset-source/generated/prop-plains-stone-arch-runtime-01/prop-plains-stone-arch.glb",
+    "outputHash": "a36819ac2d46692c59e3f0c6a095a64bdc7302881cec9013bdf1454a9402cb2b",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 10.23,
+      "originOffset": {
+        "x": 0,
+        "y": 3.99891,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-plains-stone-arch-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-savanna-acacia",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "d69e7b23-5d6e-4d4f-a202-53a4c3f17dd6",
+    "runtimeUrl": "/asset-source/generated/prop-savanna-acacia-runtime-01/prop-savanna-acacia.glb",
+    "outputHash": "a31bf1c7c6637e1ce1252ef6c590d2984a32ee7c4e21b2b9844d3031295c74b2",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 11.403,
+      "originOffset": {
+        "x": 0,
+        "y": 4.50658,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-savanna-acacia-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-map-table",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "0dca4158-5917-4195-8a92-a058e6cfeb8a",
+    "runtimeUrl": "/asset-source/generated/prop-map-table-runtime-01/prop-map-table.glb",
+    "outputHash": "924e1281730d63b269db5d39b1c1ec6563606d40223dbd2d7b13cc31ab08d23b",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 2.455,
+      "originOffset": {
+        "x": 0,
+        "y": 0.62222,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-map-table-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-heartroot-fragment-stone",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "3d5426f6-dfae-485a-83bf-0fe061de0775",
+    "runtimeUrl": "/asset-source/generated/prop-heartroot-fragment-stone-runtime-01/prop-heartroot-fragment-stone.glb",
+    "outputHash": "1d8ff4a75c588d03f2a6884cb60be8c9b35dd593f1d49db759bc7827bf235cbf",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 2.247,
+      "originOffset": {
+        "x": 0,
+        "y": 1.09894,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-heartroot-fragment-stone-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-heartroot-root-column",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "70f9009a-4c03-449c-84c2-623b621d3f5c",
+    "runtimeUrl": "/asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb",
+    "outputHash": "99de3cbd57986b32dc62a81b0eba038c97965f1789e5c11f46aad267915b67ef",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 10.235,
+      "originOffset": {
+        "x": 0,
+        "y": 5.00287,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-heartroot-root-column-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-six-fragment-shrine",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "e4f5d546-142b-4c03-9770-c2b4f724f17f",
+    "runtimeUrl": "/asset-source/generated/prop-six-fragment-shrine-runtime-01/prop-six-fragment-shrine.glb",
+    "outputHash": "30fde41fd063369f9600ccc5b48d2af6649a4649bf2545283d9c122e2ca526d9",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 6.125,
+      "originOffset": {
+        "x": 0,
+        "y": 0.82369,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-six-fragment-shrine-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-root-crown-altar",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "ca91572d-eb8f-4007-860f-30aaeb8dfb8a",
+    "runtimeUrl": "/asset-source/generated/prop-root-crown-altar-runtime-01/prop-root-crown-altar.glb",
+    "outputHash": "bbabd257d859a287e617fca717cf42e6ce00c53fc2e97cd750931a6f6adfb92d",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 4.084,
+      "originOffset": {
+        "x": 0,
+        "y": 1.25591,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-root-crown-altar-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-hollow-cavern-rock",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "d1a4cd94-0220-43f6-bc96-31e5e3fbbd49",
+    "runtimeUrl": "/asset-source/generated/prop-hollow-cavern-rock-runtime-01/prop-hollow-cavern-rock.glb",
+    "outputHash": "a75f5a0d3fe74c06f6291cd90d38963281e1ec4322f691a41355429a61a49839",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 7.144,
+      "originOffset": {
+        "x": 0,
+        "y": 1.79622,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-hollow-cavern-rock-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-root-tether-anchor",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "393f7e03-0c08-4403-a3d0-7c16a472f528",
+    "runtimeUrl": "/asset-source/generated/prop-root-tether-anchor-runtime-01/prop-root-tether-anchor.glb",
+    "outputHash": "74aee811ab2e8984a3611427b05a3202c506a2593fdd93bc91781a8f61ee9ef5",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": -1,
+        "y": 0,
+        "z": 0
+      },
+      "scale": 2.862,
+      "originOffset": {
+        "x": 0,
+        "y": 1.39863,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-root-tether-anchor-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-bird-nest",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "8d18fc27-e807-48b0-b9f3-250c66900ce6",
+    "runtimeUrl": "/asset-source/generated/prop-bird-nest-runtime-01/prop-bird-nest.glb",
+    "outputHash": "737efa48e650e9b90f91c29278dab7d453a649117dd7b1bf4f2fe9bc16085bca",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 1.224,
+      "originOffset": {
+        "x": 0,
+        "y": 0.27146,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-bird-nest-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "prop-seed-supply-basket",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "8e67c5ba-5683-4699-bd00-6a39e2a4bd95",
+    "runtimeUrl": "/asset-source/generated/prop-seed-supply-basket-runtime-01/prop-seed-supply-basket.glb",
+    "outputHash": "93ce0dbcc3518de68d61bfff8ff9c40998759d0d36963ffcc32eebabe175fdd5",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 0.665,
+      "originOffset": {
+        "x": 0,
+        "y": 0.29501,
+        "z": 0
+      }
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-seed-supply-basket-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-ridge-elder-scout",
+    "actorId": "ridge-elder-scout",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "9bcdfa94-80e0-457e-95a5-30ef3993145c",
+    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+    "outputHash": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "scale": 2.457
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-ridge-young-scout",
+    "actorId": "ridge-young-scout",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "rigFamily": "quadruped",
+    "castSocketBone": "tripo::Head_3",
+    "tripoSourceTask": "db82ff09-e650-4575-8912-b7274ed3cb0a",
+    "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
+    "outputHash": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": -1
+      },
+      "scale": 2.473
+    },
+    "actionToClipMapping": {
+      "monster-idle": "monster-idle",
+      "monster-walk": "monster-walk",
+      "monster-run": "monster-run",
+      "monster-slash": "monster-slash",
+      "monster-shoot": "monster-shoot",
+      "monster-jump": "monster-jump",
+      "monster-hurt": "monster-hurt",
+      "monster-turn": "monster-turn",
+      "monster-dive": "monster-dive",
+      "monster-roar": "monster-roar",
+      "monster-death": "monster-death",
+      "monster-spawn": "monster-spawn",
+      "monster-tail": "monster-tail",
+      "monster-knockdown": "monster-knockdown",
+      "monster-getup": "monster-getup"
+    },
+    "rootMotion": {
+      "monster-idle": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-walk": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-run": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-slash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-shoot": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-jump": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-hurt": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-turn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-death": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-spawn": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-tail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-knockdown": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "monster-getup": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      }
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
+    "evidenceStatus": "blocked"
+  },
+  {
+    "id": "actor-roost-hornbill",
+    "actorId": "roost-hornbill",
+    "sourceType": "native-glb",
+    "kind": "character",
+    "tripoSourceTask": "a60d75d8-a3e1-4c60-8d23-476157a25dc9",
+    "runtimeUrl": "/asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb",
+    "outputHash": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
+    "lodIds": [],
+    "coordinateTransform": {
+      "forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "scale": 0.68
+    },
+    "requiredActionIds": [],
+    "actionToClipMapping": {},
+    "playtestAnimation": {
+      "rigFamily": "avian",
+      "actionIds": [
+        "wild-crown:actor-idle"
+      ],
+      "torsoBoneNames": [
+        "tripo::Spine_1"
+      ],
+      "headBoneName": "tripo::Head_0",
+      "wingRootNames": [
+        "bone_11",
+        "bone_16"
+      ],
+      "wingSecondaryBoneNames": [
+        "bone_12",
+        "bone_17"
+      ]
+    },
+    "sockets": [],
+    "provenance": "asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/provenance.json",
+    "evidenceStatus": "blocked"
+  }
+]

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-buried-wolf-temple",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "46896211-aece-4cd6-ad5e-b7fec7f77005",
+    "decimate": "fd793910-7d4e-409b-bf64-da53ef341b18"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.5,
+    "maxError": 0.02,
+    "maxTexture": 1536,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-buried-wolf-temple-decimate-01/tripo-out/prop-buried-wolf-temple-decimate-fd793910/model.glb",
+      "sha256": "b327e3d1283ae67849c5a49150ea850d85065200f1e78709c9032dfb71b3e982"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-buried-wolf-temple-runtime-01/prop-buried-wolf-temple.glb",
+    "sha256": "da4eee96e452bf1ff4a6dbd929b0adab3e1cdcb5076aa51a5bf5207643e6cb6d",
+    "bytes": 3952712,
+    "vertices": 19283,
+    "triangles": 12232,
+    "boundsMin": [
+      -0.36696,
+      -0.33028,
+      -0.48962
+    ],
+    "boundsMax": [
+      0.36446,
+      0.33222,
+      0.4888
+    ],
+    "worldBoundsMin": [
+      -0.36696,
+      -0.33028,
+      -0.48962
+    ],
+    "worldBoundsMax": [
+      0.36446,
+      0.33222,
+      0.4888
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4355099,
+      "toBytes": 1041824
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 6045005,
+      "toBytes": 1105255
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 16576941,
+      "toBytes": 1039718
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 24693,
+      "trianglesAfter": 12345,
+      "relativeError": 0.0034434874542057514
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 26906,
+      "trianglesAfter": 24697,
+      "removed": 2209,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 24697,
+      "trianglesAfter": 24693,
+      "removed": 4
+    },
+    {
+      "trianglesBefore": 12345,
+      "trianglesAfter": 12232,
+      "removed": 113
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 32173,
+      "verticesAfter": 19283
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

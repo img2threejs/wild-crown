@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-hunter-extraction-rig",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "08c8d41a-02c4-4dfe-bf2a-559560df07f0",
+    "decimate": "25375459-8147-46e2-bdd3-6a2022b1f29d"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.5,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-hunter-extraction-rig-decimate-01/tripo-out/prop-hunter-extraction-rig-decim-25375459/model.glb",
+      "sha256": "b8936beb4dc058055a05fcf9c06e9d99727de0b47024a0d99e6fcbeceef94698"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-hunter-extraction-rig-runtime-01/prop-hunter-extraction-rig.glb",
+    "sha256": "3e7edc383ad9dccf08feea93efcfcfe75cfcdfc0f63bb6f048fe230806c67b15",
+    "bytes": 2232668,
+    "vertices": 14565,
+    "triangles": 9327,
+    "boundsMin": [
+      -0.29816,
+      -0.48428,
+      -0.49012
+    ],
+    "boundsMax": [
+      0.29828,
+      0.48421,
+      0.48988
+    ],
+    "worldBoundsMin": [
+      -0.29816,
+      -0.48428,
+      -0.49012
+    ],
+    "worldBoundsMax": [
+      0.29828,
+      0.48421,
+      0.48988
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4573296,
+      "toBytes": 564412
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5116925,
+      "toBytes": 497335
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18052018,
+      "toBytes": 590845
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 18717,
+      "trianglesAfter": 9357,
+      "relativeError": 0.004256451968103647
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 18997,
+      "trianglesAfter": 18995,
+      "removed": 2,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 18995,
+      "trianglesAfter": 18717,
+      "removed": 278
+    },
+    {
+      "trianglesBefore": 9357,
+      "trianglesAfter": 9327,
+      "removed": 30
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 27770,
+      "verticesAfter": 14565
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

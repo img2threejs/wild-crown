@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-vara",
+  "candidateNumber": 1,
+  "candidateCount": 1,
+  "sourceModel": {
+    "path": "asset-source/generated/actor-vara-model-01/tripo-out/actor-vara-model-01-f50fa0c8/model.glb",
+    "sha256": "7e4402814e6206fdd7c56c3b2500f133e038fac949bb4eb320b5329818b992f0",
+    "bytes": 63059968
+  },
+  "taskId": "a60d75d8-a3e1-4c60-8d23-476157a25dc9",
+  "generationTask": {
+    "type": "animate_rig",
+    "status": "success",
+    "spec": "tripo",
+    "topology": "avian",
+    "outputFormat": "glb",
+    "creditsConsumed": 25
+  },
+  "selectedChainCredits": 100,
+  "allCreativeAttemptsCredits": 105,
+  "output": {
+    "path": "model.glb",
+    "sha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
+    "bytes": 83079120,
+    "sceneNodes": 38,
+    "bones": 35,
+    "meshes": 1,
+    "vertices": 1000395,
+    "skins": 1,
+    "animations": 0,
+    "runtimeLoad": "Parsed and rendered in project asset-lab with GLTFLoader; native hash matched the file SHA-256."
+  },
+  "assessment": {
+    "evidenceStatus": "incomplete",
+    "rigQuality": "not-evaluated-under-motion",
+    "animationQuality": "not-evaluated-no-clips",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "modelReady": false,
+    "runtimeManifestUpdated": false,
+    "limitations": [
+      "The GLB contains a 35-bone, one-skin avian rig, but no animation clips; successful rig generation does not establish deform quality.",
+      "The 1,000,395-vertex mesh remains too heavy for a production character without validated LODs.",
+      "No flight/perch/idle actions, contact/profile controls, character gates, collision/scale, or reviewer approval were supplied."
+    ]
+  }
+}

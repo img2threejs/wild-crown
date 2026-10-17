@@ -1,0 +1,16 @@
+{
+  "task_id": "3dfc389e-2db5-4931-9366-78794d58daf2",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-grove-platform-decimate-01/tripo-out/prop-grove-platform-decimate-01-3dfc389e",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-grove-platform-decimate-01/tripo-out/prop-grove-platform-decimate-01-3dfc389e/model.glb",
+  "preview": "asset-source/generated/prop-grove-platform-decimate-01/tripo-out/prop-grove-platform-decimate-01-3dfc389e/preview.png",
+  "started": "2026-10-11T09:10:35.628Z",
+  "finished": "2026-10-11T09:18:28.332Z"
+}

@@ -1,0 +1,46 @@
+{
+  "assetId": "roots",
+  "name": "Roots",
+  "sourceUrl": "https://polyhaven.com/a/roots",
+  "apiUrl": "https://api.polyhaven.com/files/roots",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Dario Barresi, Dimitrios Savva",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 1.67,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/roots/roots_diff_1k.jpg",
+      "sourceSha256": "0093e1ffafc90d1013cf3f28b40e295171e9d7e0e00da59ba3d9e94fb7569e58",
+      "sourceBytes": 958071,
+      "sha256": "0093e1ffafc90d1013cf3f28b40e295171e9d7e0e00da59ba3d9e94fb7569e58",
+      "md5": "3715e98ec20991f2f194f07b41ba2f18",
+      "bytes": 958071
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/roots/roots_nor_gl_1k.jpg",
+      "sourceSha256": "8dcbb042fb451d6fbabb6ceb1773ddd93cde1623a3dd890829a12ec18385e74d",
+      "sourceBytes": 1353394,
+      "sha256": "8dcbb042fb451d6fbabb6ceb1773ddd93cde1623a3dd890829a12ec18385e74d",
+      "md5": "c482d2231e668cc39c11347984816756",
+      "bytes": 1353394
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/roots/roots_arm_1k.jpg",
+      "sourceSha256": "48f7663de14a8b13451195e42e0efefe8d2037a5f5d65059073a70bde8617589",
+      "sourceBytes": 845404,
+      "sha256": "48f7663de14a8b13451195e42e0efefe8d2037a5f5d65059073a70bde8617589",
+      "md5": "b5227561d56a182cb7b170f5110c0bce",
+      "bytes": 845404
+    }
+  }
+}

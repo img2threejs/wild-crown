@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-root-cavern-mouth",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "493fd439-8e83-417b-bd73-a85c7a3a7125",
+    "decimate": "f8a9fb8e-61d0-4515-9378-7e650655c2b3"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.6,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-root-cavern-mouth-decimate-01/tripo-out/prop-root-cavern-mouth-decimate-f8a9fb8e/model.glb",
+      "sha256": "2199afdf46090b22fbfa930e2c4729b2b6b92150614826a75dbe631130ddbaea"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb",
+    "sha256": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901",
+    "bytes": 2218952,
+    "vertices": 14662,
+    "triangles": 11620,
+    "boundsMin": [
+      -0.39243,
+      -0.3732,
+      -0.49087
+    ],
+    "boundsMax": [
+      0.39452,
+      0.37344,
+      0.48993
+    ],
+    "worldBoundsMin": [
+      -0.39243,
+      -0.3732,
+      -0.49087
+    ],
+    "worldBoundsMax": [
+      0.39452,
+      0.37344,
+      0.48993
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3466469,
+      "toBytes": 457491
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3993473,
+      "toBytes": 412340
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 20950508,
+      "toBytes": 738432
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 19401,
+      "trianglesAfter": 11638,
+      "relativeError": 0.0012206104584038258
+    }
+  ],
+  "floatingCull": [
+    {
+      "trianglesBefore": 19437,
+      "trianglesAfter": 19415,
+      "removed": 22,
+      "distance": 0.012
+    }
+  ],
+  "slivers": [
+    {
+      "trianglesBefore": 19415,
+      "trianglesAfter": 19401,
+      "removed": 14
+    },
+    {
+      "trianglesBefore": 11638,
+      "trianglesAfter": 11620,
+      "removed": 18
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 20897,
+      "verticesAfter": 14662
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

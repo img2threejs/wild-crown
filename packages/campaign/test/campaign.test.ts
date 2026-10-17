@@ -26,7 +26,9 @@ function eligible(runId = 'eligible-run'): CampaignState {
 
 test('new run encodes canon leaders, leaderless Sky, and Vara envoy', () => {
   const state = createNewRun('canon-run');
-  assert.equal(state.schemaVersion, 1);
+  assert.equal(state.schemaVersion, 2);
+  assert.deepEqual(Object.keys(state.world.companions), ['vara', 'koro', 'asha', 'sable', 'nyra', 'solkar']);
+  assert.ok(Object.values(state.world.companions).every((companion) => !companion.recruited && companion.bondLevel === 0 && companion.dominionLevel === 0));
   assert.equal(Object.keys(state.world.factions).length, 6);
   assert.equal(Object.keys(state.world.regions).length, 5);
   assert.equal(state.world.factions.sky.leaderId, null);
@@ -133,8 +135,10 @@ test('checkpoint imports reject malformed, future, prior-schema, mismatched, and
   const checkpoint = createCheckpoint(current);
   const malformed = { ...checkpoint, world: { ...checkpoint.world, regionalObligations: { canopy_water_seed_accord: true } } };
   const crossFactionRepresentative = { ...checkpoint, world: { ...checkpoint.world, factions: { ...checkpoint.world.factions, canopy: { ...checkpoint.world.factions.canopy, representative: { id: 'ghor', source: 'envoy', present: true, willing: true } } } } };
-  assert.deepEqual(importCheckpoint(current, { ...checkpoint, schemaVersion: 2 }), { accepted: false, reason: 'future_schema' });
+  assert.deepEqual(importCheckpoint(current, { ...checkpoint, schemaVersion: 3 }), { accepted: false, reason: 'future_schema' });
   assert.deepEqual(importCheckpoint(current, { ...checkpoint, schemaVersion: 0 }), { accepted: false, reason: 'schema_mismatch' });
+  // A schema-1 label on a schema-2 world is not silently accepted: schema 1 is strictly the pre-companion shape.
+  assert.deepEqual(importCheckpoint(current, { ...checkpoint, schemaVersion: 1 }), { accepted: false, reason: 'invalid_snapshot' });
   assert.deepEqual(importCheckpoint(current, { ...checkpoint, runId: 'another-run' }), { accepted: false, reason: 'run_mismatch' });
   assert.deepEqual(importCheckpoint(current, malformed), { accepted: false, reason: 'invalid_snapshot' });
   assert.deepEqual(importCheckpoint(current, crossFactionRepresentative), { accepted: false, reason: 'invalid_snapshot' });

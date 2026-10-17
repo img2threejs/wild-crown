@@ -55,7 +55,8 @@
     ];
     const acceptedEffects = effects.emitAll(cues);
     effects.update(SMOKE_CLOCK.snapshot);
-    const visibleBeams = scene.getObjectByName('story-effects').children.filter(child => child instanceof THREE.Mesh && child.geometry instanceof THREE.CylinderGeometry && child.visible && child.material instanceof THREE.MeshBasicMaterial && child.material.opacity > 0).length;
+    let visibleBeams = 0;
+    scene.getObjectByName('story-effects').traverse(child => { if (child instanceof THREE.Mesh && child.name === 'vfx-beam' && child.visible && child.material.uniforms.uAlpha.value > 0) visibleBeams++; });
     document.body.dataset.visibleStoryBeams = String(visibleBeams);
     if (acceptedEffects !== 5 || effects.activeCount !== 5 || visibleBeams !== 2) throw new Error('Expected five active cues with both tether and bond beams visible at the smoke snapshot.');
     const metadata = document.querySelector('#runtime-metadata');

@@ -1,0 +1,13 @@
+{
+  "task_id": "760b2591-37fd-4696-8b00-9d91e6bfc650",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 50,
+  "output_dir": "asset-source/generated/actor-grove-rootling-anim-a-01/tripo-out/actor-grove-rootling-anim-a-01-760b2591",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-grove-rootling-anim-a-01/tripo-out/actor-grove-rootling-anim-a-01-760b2591/model.glb",
+  "started": "2026-10-11T09:39:46.713Z",
+  "finished": "2026-10-11T09:40:02.180Z"
+}

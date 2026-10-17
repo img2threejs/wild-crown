@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-solkar",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "7db4a6d2-3fa1-4f59-b46e-9fae1759a07e",
+    "decimate": "8c24233a-73af-4689-b944-7a0a8a1c011e",
+    "rig": "99fc95a7-5394-4858-912e-c20e36af99b3",
+    "animA": "ee476e29-fc4d-4623-8e83-6745b48aee70"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place",
+    "simplifyRatio": null,
+    "maxError": null,
+    "maxTexture": 2048
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-solkar-anim-a-01/tripo-out/actor-solkar-anim-a-01-ee476e29/model.glb",
+      "sha256": "2c51f5308871a5a4e2046a3af2dba982cf15652496906ad075d716a1ea7b500e"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar.glb",
+    "sha256": "6c0642903731d796c23a42a9046c732ab3b037475651bbe1c6e725eac536582f",
+    "bytes": 7218152,
+    "vertices": 30077,
+    "triangles": 24662,
+    "boundsMin": [
+      -0.49103,
+      0,
+      -0.17008
+    ],
+    "boundsMax": [
+      0.49103,
+      0.65727,
+      0.17008
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 19
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3753792,
+      "toBytes": 1485872
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4809398,
+      "toBytes": 1700974
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 18438231,
+      "toBytes": 2276696
+    }
+  ],
+  "simplification": null,
+  "compaction": [],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

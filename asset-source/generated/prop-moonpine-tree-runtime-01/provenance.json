@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-moonpine-tree",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "c2ceca53-4a7f-4c76-80c8-f60644ebc1ad",
+    "decimate": "b687a3d1-75c2-4ca6-bb86-b720420017b5"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": null,
+    "retarget": null,
+    "simplifyRatio": 0.32,
+    "maxError": 0.3,
+    "simplifyFlags": [
+      "Prune",
+      "Permissive"
+    ],
+    "uvWeight": 0.5,
+    "maxTexture": 1024,
+    "pruneSlivers": [
+      {
+        "aspect": 0.003,
+        "edgeFractionOfDiagonal": 0.03
+      },
+      {
+        "aspect": 0.02,
+        "edgeFractionOfDiagonal": 0.12
+      }
+    ],
+    "cullToSourceDistance": 0.012
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-moonpine-tree-decimate-01/tripo-out/prop-moonpine-tree-decimate-01-b687a3d1/model.glb",
+      "sha256": "8fd623d9dc58ca1cfac062cf1f5f4373148b2dddcf7976c0b8568267abd0887f"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-moonpine-tree-runtime-01/prop-moonpine-tree.glb",
+    "sha256": "ca44a540c63f320a549ec4c1802f05453ee77925ded73ac9ba52fc2df2e4c418",
+    "bytes": 2425604,
+    "vertices": 10515,
+    "triangles": 6928,
+    "boundsMin": [
+      -0.20204,
+      -0.48998,
+      -0.212
+    ],
+    "boundsMax": [
+      0.20264,
+      0.49006,
+      0.21185
+    ],
+    "worldBoundsMin": [
+      -0.20204,
+      -0.48998,
+      -0.212
+    ],
+    "worldBoundsMax": [
+      0.20264,
+      0.49006,
+      0.21185
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 4131977,
+      "toBytes": 556609
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 5209535,
+      "toBytes": 637881
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 19562926,
+      "toBytes": 809421
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 21658,
+      "trianglesAfter": 6929,
+      "relativeError": 0.0036431048065423965
+    }
+  ],
+  "floatingCull": [],
+  "slivers": [
+    {
+      "trianglesBefore": 6929,
+      "trianglesAfter": 6928,
+      "removed": 1
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 28642,
+      "verticesAfter": 10515
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "task_id": "6ef4431e-4f6a-4649-9475-ab3df19b8227",
+  "type": "animate_rig",
+  "status": "success",
+  "credits_consumed": 25,
+  "output_dir": "asset-source/generated/actor-lantern-heron-rig-01/tripo-out/actor-lantern-heron-rig-01-6ef4431e",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/actor-lantern-heron-rig-01/tripo-out/actor-lantern-heron-rig-01-6ef4431e/model.glb",
+  "preview": "asset-source/generated/actor-lantern-heron-rig-01/tripo-out/actor-lantern-heron-rig-01-6ef4431e/preview.png",
+  "started": "2026-10-11T08:58:54.443Z",
+  "finished": "2026-10-11T08:59:29.223Z"
+}

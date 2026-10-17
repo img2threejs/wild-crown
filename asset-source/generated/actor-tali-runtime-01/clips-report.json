@@ -1,0 +1,889 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-tali",
+  "generator": "scripts/assets/author-quadruped-clips.mjs",
+  "input": {
+    "path": "asset-source/generated/actor-tali-runtime-01/actor-tali.glb",
+    "sha256": "15f34f4164d2e38d4c7580304f17d01a98509e78f8c4485551ee2304faabad70",
+    "bytes": 5425364
+  },
+  "output": {
+    "path": "asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
+    "sha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5",
+    "bytes": 6027360
+  },
+  "headAxis": "-Z",
+  "suggestedCoordinateTransformForward": {
+    "x": 0,
+    "y": 0,
+    "z": -1
+  },
+  "body": {
+    "heightUnits": 0.6738,
+    "lengthUnits": 0.9809,
+    "boundsMin": [
+      -0.2102,
+      0,
+      -0.4905
+    ],
+    "boundsMax": [
+      0.2102,
+      0.6738,
+      0.4905
+    ]
+  },
+  "fps": 30,
+  "personality": {
+    "id": "actor-tali",
+    "label": "playful-cub",
+    "amp": 1.3,
+    "tusk": 1,
+    "headBias": 0,
+    "spine": 1.8,
+    "tail": 1.7,
+    "leap": 0.5,
+    "mass": 0.6,
+    "hold": 0.7,
+    "legSwing": 1.45,
+    "jumpTuck": 1.3,
+    "rigOptions": {
+      "explicit": {
+        "hips": "tripo::0_Left_Limb_0",
+        "torso": [
+          "tripo::0_Left_Limb_1",
+          "tripo::Spine_0"
+        ],
+        "neck": [
+          "tripo::Head_0"
+        ],
+        "head": [
+          "tripo::Head_1"
+        ],
+        "tail": [
+          "bone_1",
+          "bone_2",
+          "tripo::Tail_0",
+          "tripo::Tail_1",
+          "tripo::Tail_2"
+        ],
+        "legs": {
+          "FL": [
+            "tripo::0_Left_Limb_2",
+            "tripo::0_Left_Limb_3",
+            "tripo::0_Left_Limb_4",
+            "tripo::0_Left_Limb_5",
+            "tripo::0_Left_Limb_6"
+          ],
+          "FR": [
+            "bone_17",
+            "bone_18",
+            "bone_19",
+            "bone_20",
+            "bone_21"
+          ],
+          "HL": [
+            "tripo::1_Left_Limb_0",
+            "repair::HL_1",
+            "repair::HL_2",
+            "repair::HL_3",
+            "repair::HL_4"
+          ],
+          "HR": [
+            "tripo::0_Right_Limb_0",
+            "tripo::0_Right_Limb_1",
+            "tripo::0_Right_Limb_2",
+            "tripo::0_Right_Limb_3",
+            "tripo::0_Right_Limb_4"
+          ]
+        }
+      }
+    },
+    "groundGuard": true,
+    "strike": 1,
+    "swing": 0.9,
+    "whip": 1.4,
+    "howl": 1.2,
+    "yawCap": 0.9,
+    "dive": 0.7,
+    "authoredWalk": true,
+    "seconds": {
+      "monster-walk": 0.45,
+      "monster-run": 0.4
+    },
+    "extraClips": [
+      "tali-play",
+      "tali-nuzzle"
+    ],
+    "ikGait": {
+      "walk": {
+        "stride": 0.4,
+        "lift": 0.15,
+        "duty": 0.55,
+        "sway": 8,
+        "tailYaw": 20,
+        "tailUp": 4,
+        "dip": 0.05,
+        "bob": 0.02
+      },
+      "run": {
+        "stride": 0.65,
+        "lift": 0.22,
+        "duty": 0.45,
+        "sway": 10,
+        "tailYaw": 22,
+        "tailUp": 10,
+        "dip": 0.07,
+        "bob": 0.03
+      }
+    }
+  },
+  "rig": {
+    "root": "tripo::Root",
+    "hips": "tripo::0_Left_Limb_0",
+    "torso": [
+      "tripo::0_Left_Limb_1",
+      "tripo::Spine_0"
+    ],
+    "neck": [
+      "tripo::Head_0"
+    ],
+    "head": [
+      "tripo::Head_1"
+    ],
+    "tail": [
+      "bone_1",
+      "bone_2",
+      "tripo::Tail_0",
+      "tripo::Tail_1",
+      "tripo::Tail_2"
+    ],
+    "legs": {
+      "FL": [
+        "tripo::0_Left_Limb_2",
+        "tripo::0_Left_Limb_3",
+        "tripo::0_Left_Limb_4",
+        "tripo::0_Left_Limb_5",
+        "tripo::0_Left_Limb_6"
+      ],
+      "FR": [
+        "bone_17",
+        "bone_18",
+        "bone_19",
+        "bone_20",
+        "bone_21"
+      ],
+      "HL": [
+        "tripo::1_Left_Limb_0",
+        "repair::HL_1",
+        "repair::HL_2",
+        "repair::HL_3",
+        "repair::HL_4"
+      ],
+      "HR": [
+        "tripo::0_Right_Limb_0",
+        "tripo::0_Right_Limb_1",
+        "tripo::0_Right_Limb_2",
+        "tripo::0_Right_Limb_3",
+        "tripo::0_Right_Limb_4"
+      ]
+    },
+    "headTipJoint": "tripo::Head_1",
+    "probes": {
+      "snout": {
+        "joint": "tripo::Head_1",
+        "localOffset": [
+          -0.16495,
+          0.16807,
+          0.00874
+        ]
+      },
+      "tailTip": {
+        "joint": "tripo::Tail_2",
+        "localOffset": [
+          0.01636,
+          0.04907,
+          0
+        ]
+      }
+    }
+  },
+  "walkClip": {
+    "preserved": true,
+    "name": "preset:quadruped:walk",
+    "periodFrames": 77,
+    "replacedBy": "monster-walk",
+    "note": "The raw Tripo preset stays in the GLB for provenance; the manifest binds monster-walk to the authored ikGait clip."
+  },
+  "clips": {
+    "monster-idle": {
+      "durationSeconds": 3,
+      "frames": 91,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "measuredStrikeTime": 0.556,
+        "peakHeadSpeedUnitsPerSecond": 0.369,
+        "peakHeadDisplacementTime": 0.711,
+        "peakHeadDisplacementBodyHeights": 0.324,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.433
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.956
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.922
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.922
+          }
+        },
+        "rootMeanRiseBodyHeights": 0
+      }
+    },
+    "monster-run": {
+      "durationSeconds": 0.4,
+      "frames": 13,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "measuredStrikeTime": 0.583,
+        "peakHeadSpeedUnitsPerSecond": 1.818,
+        "peakHeadDisplacementTime": 0.25,
+        "peakHeadDisplacementBodyHeights": 0.177,
+        "rootPeakBodyHeights": -0.0707,
+        "rootPeakTime": 0.25,
+        "rootMinBodyHeights": -0.0993,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.2178,
+            "atNormalizedTime": 0.75
+          },
+          "FR": {
+            "maxBodyHeights": 0.2178,
+            "atNormalizedTime": 0.25
+          },
+          "HL": {
+            "maxBodyHeights": 0.2178,
+            "atNormalizedTime": 0.25
+          },
+          "HR": {
+            "maxBodyHeights": 0.2178,
+            "atNormalizedTime": 0.75
+          }
+        },
+        "rootMeanRiseBodyHeights": -0.085,
+        "planting": {
+          "plantedSpeedUnitsPerSecond": 2.4332,
+          "strideUnits": 0.4055,
+          "stanceFraction": 0.417,
+          "maxSlidePercent": 0.7,
+          "meanSlidePercent": 0.4
+        }
+      }
+    },
+    "monster-slash": {
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "windupEnd": 0.35,
+        "strike": 0.45,
+        "followThroughEnd": 0.7
+      },
+      "measured": {
+        "measuredStrikeTime": 0.444,
+        "peakHeadSpeedUnitsPerSecond": 9.594,
+        "peakHeadDisplacementTime": 0.361,
+        "peakHeadDisplacementBodyHeights": 0.887,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.306
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.694
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.722
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.472
+          }
+        }
+      }
+    },
+    "monster-shoot": {
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "rearEnd": 0.4,
+        "expel": 0.5,
+        "holdEnd": 0.65
+      },
+      "measured": {
+        "measuredStrikeTime": 0.5,
+        "peakHeadSpeedUnitsPerSecond": 8.667,
+        "peakHeadDisplacementTime": 0.476,
+        "peakHeadDisplacementBodyHeights": 0.927,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.5
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.5
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.476
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.524
+          }
+        }
+      }
+    },
+    "monster-jump": {
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.28,
+        "takeoff": 0.3,
+        "peak": 0.5,
+        "touchdown": 0.7,
+        "compressionBottom": 0.78
+      },
+      "measured": {
+        "measuredStrikeTime": 0.313,
+        "peakHeadSpeedUnitsPerSecond": 5.22,
+        "peakHeadDisplacementTime": 0.396,
+        "peakHeadDisplacementBodyHeights": 0.849,
+        "rootPeakBodyHeights": 0.5,
+        "rootPeakTime": 0.5,
+        "rootMinBodyHeights": -0.0833,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.682,
+            "atNormalizedTime": 0.5
+          },
+          "FR": {
+            "maxBodyHeights": 0.682,
+            "atNormalizedTime": 0.5
+          },
+          "HL": {
+            "maxBodyHeights": 0.708,
+            "atNormalizedTime": 0.5
+          },
+          "HR": {
+            "maxBodyHeights": 0.708,
+            "atNormalizedTime": 0.5
+          }
+        }
+      }
+    },
+    "monster-hurt": {
+      "durationSeconds": 0.7,
+      "frames": 22,
+      "loop": false,
+      "semanticKeyTimes": {
+        "flinch": 0.2,
+        "hold": 0.52
+      },
+      "measured": {
+        "measuredStrikeTime": 0.286,
+        "peakHeadSpeedUnitsPerSecond": 6.129,
+        "peakHeadDisplacementTime": 0.19,
+        "peakHeadDisplacementBodyHeights": 0.61,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.19
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.143
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.19
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.476
+          }
+        }
+      }
+    },
+    "monster-turn": {
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "measuredStrikeTime": 0.9,
+        "peakHeadSpeedUnitsPerSecond": 1.119,
+        "peakHeadDisplacementTime": 0.633,
+        "peakHeadDisplacementBodyHeights": 0.411,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.0998,
+            "atNormalizedTime": 0.233
+          },
+          "FR": {
+            "maxBodyHeights": 0.0998,
+            "atNormalizedTime": 0.733
+          },
+          "HL": {
+            "maxBodyHeights": 0.0998,
+            "atNormalizedTime": 0.733
+          },
+          "HR": {
+            "maxBodyHeights": 0.0998,
+            "atNormalizedTime": 0.233
+          }
+        },
+        "rootMeanRiseBodyHeights": 0,
+        "meanBodyYawDegrees": 0
+      }
+    },
+    "monster-dive": {
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.22,
+        "strike": 0.4,
+        "recoverStart": 0.55
+      },
+      "measured": {
+        "measuredStrikeTime": 0.367,
+        "peakHeadSpeedUnitsPerSecond": 5.767,
+        "peakHeadDisplacementTime": 0.3,
+        "peakHeadDisplacementBodyHeights": 0.495,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.16,
+            "atNormalizedTime": 0.333
+          },
+          "FR": {
+            "maxBodyHeights": 0.16,
+            "atNormalizedTime": 0.333
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.233
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.467
+          }
+        }
+      }
+    },
+    "monster-roar": {
+      "durationSeconds": 2,
+      "frames": 61,
+      "loop": false,
+      "semanticKeyTimes": {
+        "stamp": 0.2,
+        "shakeStart": 0.25,
+        "shakeEnd": 0.8
+      },
+      "measured": {
+        "measuredStrikeTime": 0.017,
+        "peakHeadSpeedUnitsPerSecond": 4.232,
+        "peakHeadDisplacementTime": 0.317,
+        "peakHeadDisplacementBodyHeights": 0.881,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.14,
+            "atNormalizedTime": 0.083
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.417
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.45
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.983
+          }
+        },
+        "stampLeg": "FL",
+        "stampLiftBodyHeights": 0.14,
+        "stampContactTime": 0.2
+      }
+    },
+    "monster-death": {
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.08,
+        "buckle": 0.4,
+        "topple": 0.62,
+        "rest": 0.8
+      },
+      "measured": {
+        "measuredStrikeTime": 0.021,
+        "peakHeadSpeedUnitsPerSecond": 5.48,
+        "peakHeadDisplacementTime": 0.646,
+        "peakHeadDisplacementBodyHeights": 0.821,
+        "rootPeakBodyHeights": 0.0589,
+        "rootPeakTime": 0.479,
+        "rootMinBodyHeights": -0.0632,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.2285,
+            "atNormalizedTime": 0.646
+          },
+          "FR": {
+            "maxBodyHeights": 0.5711,
+            "atNormalizedTime": 0.646
+          },
+          "HL": {
+            "maxBodyHeights": 0.2032,
+            "atNormalizedTime": 0.646
+          },
+          "HR": {
+            "maxBodyHeights": 0.5965,
+            "atNormalizedTime": 0.646
+          }
+        },
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.01,
+          "final": -0.01
+        },
+        "heldFromTime": 0.854,
+        "rootDropBodyHeights": 0.0632
+      }
+    },
+    "monster-spawn": {
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "risen": 0.4,
+        "alert": 0.54,
+        "shake": 0.72,
+        "idle": 1
+      },
+      "measured": {
+        "measuredStrikeTime": 0.595,
+        "peakHeadSpeedUnitsPerSecond": 2.894,
+        "peakHeadDisplacementTime": 0.5,
+        "peakHeadDisplacementBodyHeights": 0.872,
+        "rootPeakBodyHeights": 0.0406,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": -0.0079,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.06,
+            "atNormalizedTime": 0.452
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.571
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.19
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.262
+          }
+        },
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.01,
+          "final": -0.0027
+        },
+        "heldFromTime": 0.952,
+        "rootDropBodyHeights": 0.0079,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        }
+      }
+    },
+    "monster-knockdown": {
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.08,
+        "buckle": 0.3,
+        "topple": 0.45,
+        "rest": 0.62
+      },
+      "measured": {
+        "measuredStrikeTime": 0.028,
+        "peakHeadSpeedUnitsPerSecond": 4.862,
+        "peakHeadDisplacementTime": 0.5,
+        "peakHeadDisplacementBodyHeights": 0.842,
+        "rootPeakBodyHeights": 0.0529,
+        "rootPeakTime": 0.306,
+        "rootMinBodyHeights": -0.1148,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.3477,
+            "atNormalizedTime": 0.528
+          },
+          "FR": {
+            "maxBodyHeights": 0.4676,
+            "atNormalizedTime": 0.528
+          },
+          "HL": {
+            "maxBodyHeights": 0.2203,
+            "atNormalizedTime": 0.528
+          },
+          "HR": {
+            "maxBodyHeights": 0.4876,
+            "atNormalizedTime": 0.528
+          }
+        },
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.0015,
+          "final": -0.001
+        },
+        "heldFromTime": 0.556,
+        "rootDropBodyHeights": 0.1148
+      }
+    },
+    "monster-getup": {
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "sternal": 0.24,
+        "frontLegs": 0.44,
+        "hindLegs": 0.62,
+        "stand": 0.75,
+        "idle": 1
+      },
+      "measured": {
+        "measuredStrikeTime": 0.708,
+        "peakHeadSpeedUnitsPerSecond": 5.306,
+        "peakHeadDisplacementTime": 0.438,
+        "peakHeadDisplacementBodyHeights": 1.138,
+        "rootPeakBodyHeights": 0.0581,
+        "rootPeakTime": 0.208,
+        "rootMinBodyHeights": -0.1146,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.3476,
+            "atNormalizedTime": 0
+          },
+          "FR": {
+            "maxBodyHeights": 0.4676,
+            "atNormalizedTime": 0
+          },
+          "HL": {
+            "maxBodyHeights": 0.2203,
+            "atNormalizedTime": 0
+          },
+          "HR": {
+            "maxBodyHeights": 0.4876,
+            "atNormalizedTime": 0
+          }
+        },
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.0027,
+          "final": -0.0027
+        },
+        "heldFromTime": 1,
+        "rootDropBodyHeights": 0.1146,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        }
+      }
+    },
+    "monster-walk": {
+      "durationSeconds": 0.4667,
+      "frames": 15,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "measuredStrikeTime": 0.643,
+        "peakHeadSpeedUnitsPerSecond": 0.957,
+        "peakHeadDisplacementTime": 0.286,
+        "peakHeadDisplacementBodyHeights": 0.124,
+        "rootPeakBodyHeights": -0.0501,
+        "rootPeakTime": 0.286,
+        "rootMinBodyHeights": -0.0695,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0.1496,
+            "atNormalizedTime": 0.786
+          },
+          "FR": {
+            "maxBodyHeights": 0.1496,
+            "atNormalizedTime": 0.286
+          },
+          "HL": {
+            "maxBodyHeights": 0.1496,
+            "atNormalizedTime": 0.286
+          },
+          "HR": {
+            "maxBodyHeights": 0.1496,
+            "atNormalizedTime": 0.786
+          }
+        },
+        "rootMeanRiseBodyHeights": -0.06,
+        "planting": {
+          "plantedSpeedUnitsPerSecond": 1.05,
+          "strideUnits": 0.245,
+          "stanceFraction": 0.5,
+          "maxSlidePercent": 1,
+          "meanSlidePercent": 0.5
+        }
+      }
+    },
+    "monster-tail": {
+      "durationSeconds": 1.3,
+      "frames": 40,
+      "loop": false,
+      "semanticKeyTimes": {
+        "windupEnd": 0.36,
+        "strike": 0.5,
+        "followThroughEnd": 0.8
+      },
+      "measured": {
+        "measuredStrikeTime": 0.487,
+        "peakHeadSpeedUnitsPerSecond": 1.709,
+        "peakHeadDisplacementTime": 0.538,
+        "peakHeadDisplacementBodyHeights": 0.133,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.538
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.333
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.333
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.333
+          }
+        }
+      }
+    },
+    "tali-play": {
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "measuredStrikeTime": 0.896,
+        "peakHeadSpeedUnitsPerSecond": 0.693,
+        "peakHeadDisplacementTime": 0.75,
+        "peakHeadDisplacementBodyHeights": 0.292,
+        "rootPeakBodyHeights": 0.03,
+        "rootPeakTime": 0.25,
+        "rootMinBodyHeights": 0,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.292
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.229
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.292
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.708
+          }
+        },
+        "rootMeanRiseBodyHeights": 0.015
+      }
+    },
+    "tali-nuzzle": {
+      "durationSeconds": 2.4,
+      "frames": 73,
+      "loop": false,
+      "semanticKeyTimes": {
+        "lean": 0.25,
+        "rub": 0.55,
+        "release": 0.85
+      },
+      "measured": {
+        "measuredStrikeTime": 0.639,
+        "peakHeadSpeedUnitsPerSecond": 1.749,
+        "peakHeadDisplacementTime": 0.556,
+        "peakHeadDisplacementBodyHeights": 0.324,
+        "rootPeakBodyHeights": 0,
+        "rootPeakTime": 0,
+        "rootMinBodyHeights": -0.02,
+        "footDeviation": {
+          "FL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.083
+          },
+          "FR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0
+          },
+          "HL": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.708
+          },
+          "HR": {
+            "maxBodyHeights": 0,
+            "atNormalizedTime": 0.708
+          }
+        }
+      }
+    }
+  }
+}

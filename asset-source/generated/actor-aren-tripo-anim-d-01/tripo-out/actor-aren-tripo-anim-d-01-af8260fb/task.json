@@ -1,0 +1,26 @@
+{
+  "task_id": "af8260fb-fb18-4a74-ad54-6bcfcd021a33",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animations": [
+      "preset:biped:golf",
+      "preset:biped:pitch_baseball",
+      "preset:biped:lift_heavy",
+      "preset:biped:dig",
+      "preset:biped:volleyball"
+    ],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "75e69cb6-d7ad-4db3-83a1-6e08389132f6"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 50,
+  "created_at": "2026-10-11T13:36:27.462589Z",
+  "completed_at": "2026-10-11T13:36:38.428291Z",
+  "files": [
+    "model.glb"
+  ]
+}

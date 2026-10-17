@@ -1,0 +1,26 @@
+{
+  "task_id": "0ea3e070-b33c-40ad-9d98-f3ffd61111a8",
+  "type": "animate_retarget",
+  "status": "success",
+  "input": {
+    "animations": [
+      "preset:biped:run_upstairs",
+      "preset:biped:football_pass",
+      "preset:biped:flee_02",
+      "preset:biped:basketball_shot",
+      "preset:biped:shovel"
+    ],
+    "out_format": "glb",
+    "animate_in_place": true,
+    "original_model_id": "75e69cb6-d7ad-4db3-83a1-6e08389132f6"
+  },
+  "output_fields": [
+    "model_url"
+  ],
+  "credits_consumed": 50,
+  "created_at": "2026-10-11T13:36:47.285052Z",
+  "completed_at": "2026-10-11T13:36:54.471568Z",
+  "files": [
+    "model.glb"
+  ]
+}

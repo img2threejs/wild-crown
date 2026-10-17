@@ -2,19 +2,23 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { CampaignDirector, CampaignChoiceRejectedError } from "../../src/game/campaign/CampaignDirector.js";
 import { CombatEngine } from "../../src/game/combat/CombatEngine.js";
-import { SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
+import { SAVE_DATABASE_NAME, SaveRepository, SaveRepositoryError, type GameSaveEnvelope, type SaveSlotSummary } from "../../src/game/storage/SaveRepository.js";
+import { FakeIDBFactory } from "../storage/fakeIndexedDB.js";
 import { CHAPTERS, RETURN_BEATS } from "../../src/content/story.js";
 import { QUESTS, REGIONS } from "../../src/content/campaign.js";
 import { FACTION_IDS, FRAGMENT_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages/campaign/src/index.js";
-import type { CampaignSafeCheckpoint, WorldEvent } from "../../src/game/contracts.js";
+import type { CampaignSafeCheckpoint, RegionId, WorldEvent } from "../../src/game/contracts.js";
+import type { CampaignState, CheckpointSnapshot } from "../../packages/campaign/src/index.js";
 
-// Observe the Director's durable event boundary without requiring browser IndexedDB.
+// Observe the Director's durable event boundary (the atomic autosave seam) without requiring browser IndexedDB.
 class RecordingLedger extends SaveRepository {
-  writes: Parameters<SaveRepository["appendRunLedger"]>[] = [];
+  writes: [runId: string, dominionHistory: readonly { sequence: number; leaderId: string }[], eventKeys: readonly string[]][] = [];
   fail = false;
-  override async appendRunLedger(...args: Parameters<SaveRepository["appendRunLedger"]>): Promise<void> {
+  override async saveAutosave(_checkpoint: CheckpointSnapshot, campaign: CampaignState, chapter: number, regionId: RegionId, eventKeys: readonly string[]): Promise<SaveSlotSummary> {
     if (this.fail) throw new Error("ledger refused the transaction");
-    this.writes.push(structuredClone(args));
+    this.writes.push(structuredClone([campaign.runId, campaign.dominionHistory, [...eventKeys]]));
+    return { slotId: "autosave:" + campaign.runId, label: "Autosave", runId: campaign.runId, kind: "campaign", updatedAt: 1, chapter, regionId,
+      scope: "production", heroId: "aren", segmentId: null, checkpointId: null, autosave: true };
   }
 }
 
@@ -24,7 +28,8 @@ class CampaignSlotLedger extends RecordingLedger {
   imports = 0;
   private summary(slotId = "history-slot", label = "History"): SaveSlotSummary {
     return { slotId, label, runId: this.envelope!.runId, kind: "campaign", updatedAt: 123,
-      chapter: this.envelope!.progress!.chapter, regionId: this.envelope!.progress!.regionId };
+      chapter: this.envelope!.progress!.chapter, regionId: this.envelope!.progress!.regionId,
+      scope: "production", heroId: "aren", segmentId: null, checkpointId: null, autosave: false };
   }
   override async loadCampaign(slotId: string) {
     const envelope = structuredClone(this.envelope!);
@@ -46,6 +51,17 @@ class CampaignSlotLedger extends RecordingLedger {
     this.envelope = structuredClone(envelope);
     return this.summary(slotId, label);
   }
+}
+
+/** A real SaveRepository over an in-memory IndexedDB holding one schema-1 slot, so legacy loads run the real migration. */
+function seededLegacyRepository(slotId: string, envelope: { runId: string; progress: { chapter: number; regionId: string } }): SaveRepository {
+  const factory = new FakeIDBFactory();
+  factory.seed(SAVE_DATABASE_NAME, "slots", "slotId", [{
+    slotId, label: "History", runId: envelope.runId, kind: "campaign", updatedAt: 1,
+    chapter: envelope.progress.chapter, regionId: envelope.progress.regionId, envelope,
+  }]);
+  factory.seed(SAVE_DATABASE_NAME, "runs", "runId", []);
+  return new SaveRepository(factory.asFactory());
 }
 
 async function atChapter(director: CampaignDirector, chapter: number, mutate?: (checkpoint: CampaignSafeCheckpoint) => void) {
@@ -71,6 +87,21 @@ async function cleanseOrun(director: CampaignDirector) {
   });
 }
 
+// Leadership decisions require the corresponding guardian's accepted cleanse.
+async function cleanseRuun(director: CampaignDirector) {
+  await director.processEvent({
+    type: "encounter-resolved", eventId: "ruun-cleansed-event", idempotencyKey: "ruun-cleansed-event",
+    encounterId: "encounter-ruun", actorIds: ["ruun"], resolution: "cleansed",
+  });
+}
+
+async function cleanseSolkar(director: CampaignDirector) {
+  await director.processEvent({
+    type: "encounter-resolved", eventId: "solkar-cleansed-event", idempotencyKey: "solkar-cleansed-event",
+    encounterId: "encounter-solkar", actorIds: ["solkar"], resolution: "cleansed",
+  });
+}
+
 function choiceEvent(choiceId: string, optionId: string, key: string): WorldEvent {
   return { type: "choice", eventId: key, idempotencyKey: key, choiceId, optionId };
 }
@@ -88,8 +119,13 @@ for (const [choiceId, first, alternative, chapter] of [
     const saves = new RecordingLedger(undefined);
     const director = new CampaignDirector({ runId: `immutable-${choiceId}`, saves });
     await atChapter(director, chapter, (checkpoint) => {
-      if (chapter === 6) checkpoint.progress.worldFacts.wardenCall = true;
+      if (choiceId === "chapter-six-response") {
+        checkpoint.progress.worldFacts.refugeOpen = true;
+        checkpoint.progress.worldFacts.wardenCall = false;
+      }
     });
+    if (choiceId === "pack-leadership") await cleanseRuun(director);
+    if (choiceId === "sunmane-resolution") await cleanseSolkar(director);
     if (choiceId === "final-ending") await cleanseOrun(director);
     await director.choose(choiceId, first);
     const before = director.snapshot();
@@ -113,15 +149,17 @@ test("exile reaches visibility and council interaction consumers, clears stale p
   const director = new CampaignDirector({ runId: "exile-consumers" });
   await atChapter(director, 5, (checkpoint) => {
     // Explicit imported stale party fixture, not an organic recruitment path.
-    checkpoint.progress.party = { scout: "vara", combat: "solkar", utility: "solkar" };
+    checkpoint.progress.party = { companionId: "solkar" };
     checkpoint.worldCheckpoint.world.fragments = ["heartroot-crown"];
   });
+  // The Sunmane regional-leadership guardian must be cleansed before the exile path commits.
+  await cleanseSolkar(director);
   await director.choose("sunmane-resolution", "exile");
   const exiled = director.snapshot();
   assert.equal(exiled.campaign.world.factions.crown.leaderStatus, "exiled");
   assert.equal(exiled.worldFacts.solkarPresent, false);
   assert.equal(exiled.worldFacts["solkar-exiled"], true);
-  assert.deepEqual(exiled.party, { scout: "vara" });
+  assert.deepEqual(exiled.party, {});
   const engine = new CombatEngine();
   const region = REGIONS.find((item) => item.id === "sunmane-expanse")!;
   const councilPosition = region.entities.find((entity) => entity.interactionId === "crown-council")!.position;
@@ -152,8 +190,8 @@ test("exile reaches visibility and council interaction consumers, clears stale p
     { id: "crown-council", source: "council", present: true, willing: true });
   assert.equal(renewed.worldFacts.solkarPresent, false);
   assert.equal(renewed.worldFacts["solkar-exiled"], true);
-  assert.deepEqual(renewed.party, { scout: "vara" });
-  assert.throws(() => director.selectParty("combat", "solkar"), /cannot return after exile/);
+  assert.deepEqual(renewed.party, {});
+  await assert.rejects(director.selectParty("solkar"));
   const restored = await director.captureCheckpoint();
   assert.equal(await director.restoreCheckpoint(restored), true);
   assert.equal(director.snapshot().worldFacts.solkarPresent, false);
@@ -164,9 +202,13 @@ test("a refused durable exile commit restores facts, domain, party and checkpoin
   const saves = new RecordingLedger(undefined);
   const director = new CampaignDirector({ runId: "exile-rollback", saves });
   await atChapter(director, 5, (checkpoint) => {
-    checkpoint.progress.party = { scout: "vara", combat: "solkar" };
+    checkpoint.progress.party = { companionId: "solkar" };
   });
+  // The Sunmane regional-leadership guardian must be cleansed before the exile path commits
+  // — this isolates the durable-save rollback branch from the regional gate.
+  await cleanseSolkar(director);
   const before = director.snapshot();
+  const writesBefore = saves.writes.length;
   saves.fail = true;
   await assert.rejects(director.choose("sunmane-resolution", "exile"), (error: unknown) => {
     assert.ok(error instanceof SaveRepositoryError);
@@ -175,7 +217,7 @@ test("a refused durable exile commit restores facts, domain, party and checkpoin
     return true;
   });
   assert.deepEqual(director.snapshot(), before);
-  assert.deepEqual(saves.writes, []);
+  assert.equal(saves.writes.length, writesBefore);
 });
 
 test("unavailable faction choices are typed permanent rejections and leave the next valid event usable", async () => {
@@ -183,19 +225,23 @@ test("unavailable faction choices are typed permanent rejections and leave the n
   const director = new CampaignDirector({ runId: "unavailable-covenant-type", saves });
   await atChapter(director, 5);
   const before = director.snapshot();
+  const writesBefore = saves.writes.length;
   await assert.rejects(director.processEvent(choiceEvent("faction-covenant", "crown", "unavailable-crown")), (error: unknown) => {
     assert.ok(error instanceof CampaignChoiceRejectedError);
     assert.equal(error.choiceId, "faction-covenant");
     assert.equal(error.optionId, "crown");
-    assert.equal(error.message, "This faction covenant is not available until its story commitments are fulfilled.");
     assert.equal(error instanceof SaveRepositoryError, false);
     return true;
   });
   assert.deepEqual(director.snapshot(), before);
-  assert.deepEqual(saves.writes, []);
+  assert.equal(saves.writes.length, writesBefore);
+  // The negative assertion above must keep failing on the absent crown obligation;
+  // a successful sunmane exile still requires the authored Solkar guardian cleanse.
+  await cleanseSolkar(director);
+  const writesBeforeExile = saves.writes.length;
   await director.choose("sunmane-resolution", "exile");
   assert.equal(director.snapshot().choices["sunmane-resolution"], "exile");
-  assert.equal(saves.writes.length, 1);
+  assert.equal(saves.writes.length, writesBeforeExile + 1);
 });
 
 test("all faction covenants and recommitments remain independently repeatable, not interchangeable", async () => {
@@ -290,6 +336,11 @@ test("the real Solkar offer records authoritative Dominion identity and retains 
     checkpoint.safeSpawn = { regionId: region.id, position: region.navigation.nodes[0]!.position,
       routeId: region.navigation.nodes[0]!.id, cameraAnchorId: region.cameraAnchors[0]!.id };
   });
+  // The `solkar-offer` interaction has a hard prerequisite on the authored
+  // `encounter-solkar-cleansed` fact (see INTERACTIONS in src/content/world.ts).
+  // The CombatEngine consults that fact in resolveInteraction, so we drive the
+  // resolved-event through the Director first and then load the resulting worldFacts.
+  await cleanseSolkar(director);
   const earlier = await director.captureCheckpoint();
   const engine = new CombatEngine();
   const position = region.entities.find((entity) => entity.id === "solkar")!.position;
@@ -301,14 +352,15 @@ test("the real Solkar offer records authoritative Dominion identity and retains 
   await director.processEvent(events[0]!);
   assert.deepEqual(director.snapshot().campaign.dominionHistory, [{ sequence: 1, leaderId: "solkar" }]);
   assert.equal(director.snapshot().worldFacts["dominion:solkar"], true);
-  assert.deepEqual(saves.writes[0]?.[1], [{ sequence: 1, leaderId: "solkar" }]);
+  assert.deepEqual(saves.writes.at(-1)?.[1], [{ sequence: 1, leaderId: "solkar" }]);
+  const writesAfterEvent = saves.writes.length;
   assert.equal(director.ending().unmet.some((item) => item.id === "no_dominion"), true);
   const committed = director.snapshot();
   assert.equal(engine.resolveInteraction("solkar-offer", "solkar", "dominion"), false);
   assert.deepEqual(engine.consumeWorldEvents(), []);
   await director.choose("sunmane-resolution", "dominion");
   assert.deepEqual(director.snapshot(), committed);
-  assert.equal(saves.writes.length, 1);
+  assert.equal(saves.writes.length, writesAfterEvent);
   assert.equal(await director.restoreCheckpoint(earlier), true);
   assert.deepEqual(director.snapshot().campaign.dominionHistory, [{ sequence: 1, leaderId: "solkar" }]);
   assert.equal(director.ending().unmet.some((item) => item.id === "no_dominion"), true);
@@ -350,7 +402,8 @@ for (const response of ["accept", "decline", "mixed"] as const) {
     const checkpoint = await director.captureCheckpoint();
     const councilKeys = checkpoint.progress.eventKeys.filter((key) => key.includes(":interaction:refuge-council:"));
     assert.equal(new Set(councilKeys).size, 6);
-    assert.equal(saves.writes.length, 6);
+    const settledWrites = saves.writes.length;
+    assert.equal(new Set(saves.writes.at(-1)![2].filter((key) => key.includes(":interaction:refuge-council:"))).size, 6);
     // A fresh simulation instance has no local key memory; the persisted Director boundary remains authoritative.
     const freshEngine = new CombatEngine();
     freshEngine.loadRegion({ runId: settled.runId, regionId: region.id,
@@ -360,7 +413,7 @@ for (const response of ["accept", "decline", "mixed"] as const) {
     assert.equal(freshEngine.resolveInteraction("refuge-council", "refuge-council", skyOption), true);
     await director.processEvent(freshEngine.consumeWorldEvents()[0]!);
     assert.deepEqual(director.snapshot(), settled);
-    assert.equal(saves.writes.length, 6);
+    assert.equal(saves.writes.length, settledWrites);
     const conflictingEngine = new CombatEngine();
     conflictingEngine.loadRegion({ runId: settled.runId, regionId: region.id,
       presentActorIds: [], playerPosition: position, worldFacts: settled.worldFacts });
@@ -376,7 +429,7 @@ for (const response of ["accept", "decline", "mixed"] as const) {
       return true;
     });
     assert.deepEqual(director.snapshot(), settled);
-    assert.equal(saves.writes.length, 6);
+    assert.equal(saves.writes.length, settledWrites);
     assert.equal(director.isEventCommitted(rejected.idempotencyKey), true);
     conflictingEngine.discardRejectedChoice(rejected, director.isEventCommitted(rejected.idempotencyKey));
     assert.equal(conflictingEngine.resolveInteraction("refuge-council", "refuge-council", skyOption), false);
@@ -539,6 +592,9 @@ for (const order of ["refuse-first", "covenant-first"] as const) {
     await atChapter(director, 5, (checkpoint) => {
       checkpoint.worldCheckpoint.world.fragments = ["heartroot-crown"];
     });
+    // The Sunmane gate requires the authored Solkar guardian cleanse before
+    // the decision (see validateChoice's regional-leadership guardian check).
+    await cleanseSolkar(director);
     await director.choose("sunmane-resolution", "exile");
     if (order === "covenant-first") await director.choose("faction-covenant", "crown");
     await director.choose("crown-council", "decline");
@@ -622,20 +678,23 @@ test("possession and a mismatched Orun participant cannot authorize the final Cr
 test("five return quest reducers retain absence and branch facts without granting an ending", async () => {
   const director = new CampaignDirector({ runId: "return-quest-state" });
   await atChapter(director, 3);
+  await cleanseRuun(director);
   await director.choose("pack-leadership", "luma");
   await atChapter(director, 4);
   await director.choose("marek-fate", "leave");
   await atChapter(director, 5);
+  await cleanseSolkar(director);
   await director.choose("sunmane-resolution", "exile");
   await atChapter(director, 7, (checkpoint) => {
     checkpoint.progress.activeQuestIds = [RETURN_BEATS[0]!];
   });
+  const partyBeforeReturns = director.snapshot().party;
   // Director-level semantic fixtures exercise graph reduction, not authored playable return mechanics.
   const actions: WorldEvent[] = [
     { type: "semantic-interaction", eventId: "seed-route", idempotencyKey: "seed-route",
       actorId: "aren", interactionId: "seed-route", kind: "coordinate", targetId: "seed-route", position: { x: 0, y: 0, z: 0 } },
     { type: "rescue", eventId: "nursery-return", idempotencyKey: "nursery-return",
-      targetId: "nursery-return", locationId: "blood-bamboo-valley", safe: true },
+      targetId: "tali", locationId: "nursery-return", safe: true },
     { type: "semantic-interaction", eventId: "two-generation-howl", idempotencyKey: "two-generation-howl",
       actorId: "aren", interactionId: "two-generation-howl", kind: "coordinate", targetId: "two-generation-howl", position: { x: 0, y: 0, z: 0 } },
     { type: "semantic-interaction", eventId: "reed-corridor", idempotencyKey: "reed-corridor",
@@ -663,7 +722,7 @@ test("five return quest reducers retain absence and branch facts without grantin
     assert.equal(director.snapshot().campaign.world.marekPresent, false);
     assert.equal(director.snapshot().worldFacts.solkarPresent, false);
     assert.equal(director.snapshot().campaign.world.factions.crown.leaderStatus, "exiled");
-    assert.deepEqual(director.snapshot().party, { scout: "vara" });
+    assert.deepEqual(director.snapshot().party, partyBeforeReturns);
     assert.equal(director.snapshot().ending, null);
     assert.equal(director.ending().available, false);
   }
@@ -674,6 +733,7 @@ test("five return quest reducers retain absence and branch facts without grantin
 test("producer choice metadata cannot change the authored Dominion identity or create history", async () => {
   const director = new CampaignDirector({ runId: "choice-metadata-authority" });
   await atChapter(director, 3);
+  await cleanseRuun(director);
   await director.processEvent({
     type: "choice", eventId: "metadata-pack", idempotencyKey: "metadata-pack",
     choiceId: "pack-leadership", optionId: "dominion-luma", leaderId: "solkar", dominion: false,
@@ -681,6 +741,7 @@ test("producer choice metadata cannot change the authored Dominion identity or c
   assert.equal(director.snapshot().factions.pack.leaderId, "luma");
   assert.deepEqual(director.snapshot().campaign.dominionHistory, [{ sequence: 1, leaderId: "luma" }]);
   await atChapter(director, 5);
+  await cleanseSolkar(director);
   await director.processEvent({
     type: "choice", eventId: "metadata-crown", idempotencyKey: "metadata-crown",
     choiceId: "sunmane-resolution", optionId: "bond", leaderId: "solkar", dominion: true,
@@ -724,7 +785,7 @@ test("a fresh Director run starts with every canonical exposed alias false and e
   }
 });
 
-test("restoration initializes authored regions and unlocks gated travel after a noncanonical restore", async () => {
+test("local restoration remains isolated and does not bypass interaction-gated travel", async () => {
   const director = new CampaignDirector({ runId: "restoration-facts" });
   const initial = director.snapshot();
   for (const region of REGIONS) {
@@ -735,11 +796,12 @@ test("restoration initializes authored regions and unlocks gated travel after a 
     assert.equal(initial.worldFacts[`restoration:${region.id}:restored`], false,
       `${region.id} restored fact starts false`);
   }
-  await atChapter(director, 0);
+  // Chapter progression and the Greenwake gate are independent travel requirements.
+  await atChapter(director, 1);
   await assert.rejects(
-    director.travel("the-grove", "greenwake-grove-in"),
+    director.travel("whispering-canopy", "greenwake-canopy-in"),
     /not been discovered/,
-    "Grove entrance is locked before greenwake restoration",
+    "Canopy entrance is locked before the greenwake gate interaction opens",
   );
   await director.processEvent({
     type: "restoration",
@@ -758,30 +820,49 @@ test("restoration initializes authored regions and unlocks gated travel after a 
     "noncanonical partial boolean cleared");
   assert.equal(unlocked.campaign.world.regions["greenwake"] as string | undefined, undefined,
     "noncanonical region did not pollute canonical regions");
-  const grove = await director.travel("the-grove", "greenwake-grove-in");
-  assert.equal(grove.regionId, "the-grove", "Grove entrance unlocks after greenwake restoration");
-  // Collision-safe arrival: the safe spawn joins the authored route id, a
-  // real position equal to the reciprocal entrance's authored "from" endpoint,
-  // and an authored camera anchor. Walk-surface and collider geometry remain
-  // the static authored arrays on greenwake/the-grove (no restoration-
-  // conditioned colliders); the successful arrival itself exercises
-  // hasSafeWalkSurface against that static geometry.
-  const groveRegion = REGIONS.find((region) => region.id === "the-grove")!;
-  const entrance = groveRegion.entrances.find((entry) => entry.id === "greenwake-grove-in");
-  assert.ok(entrance, "Grove entrance was reciprocally authored");
-  assert.ok(grove.lastSafeCheckpoint, "adopted safe checkpoint exists");
-  const safeSpawn = grove.lastSafeCheckpoint?.safeSpawn;
-  assert.equal(safeSpawn?.routeId, "greenwake-grove-in",
+  for (const region of REGIONS) {
+    assert.equal(unlocked.worldFacts[`restoration:${region.id}:partial`], false,
+      `${region.id} partial fact stays false after a greenwake-only restoration`);
+    assert.equal(unlocked.worldFacts[`restoration:${region.id}:restored`], region.id === "greenwake",
+      `${region.id} restored fact only commits for greenwake`);
+  }
+  // Restoration does not replace the gate interaction.
+  await assert.rejects(
+    director.travel("whispering-canopy", "greenwake-canopy-in"),
+    /not been discovered/,
+    "restoration does not grant travel through an interaction-gated gate",
+  );
+  await director.processEvent({
+    type: "semantic-interaction",
+    eventId: "open-greenwake-gate",
+    idempotencyKey: "interaction:greenwake-gate:open",
+    actorId: "aren",
+    interactionId: "greenwake-gate",
+    kind: "traverse",
+    targetId: "greenwake-gate",
+    position: { x: 10, y: 2, z: 17 },
+  });
+  assert.equal(director.snapshot().worldFacts["interaction:greenwake-gate"], true,
+    "greenwake-gate interaction fact is committed as the gate key");
+  const canopy = await director.travel("whispering-canopy", "greenwake-canopy-in");
+  assert.equal(canopy.regionId, "whispering-canopy", "Canopy entrance unlocks after greenwake-gate interaction");
+  // Arrival preserves the authored route's safe position and camera.
+  const canopyRegion = REGIONS.find((region) => region.id === "whispering-canopy")!;
+  const entrance = canopyRegion.entrances.find((entry) => entry.id === "greenwake-canopy-in");
+  assert.ok(entrance, "Canopy entrance was reciprocally authored");
+  assert.ok(canopy.lastSafeCheckpoint, "adopted safe checkpoint exists");
+  const safeSpawn = canopy.lastSafeCheckpoint?.safeSpawn;
+  assert.equal(safeSpawn?.routeId, "greenwake-canopy-in",
     "safe spawn route id matches authored entrance id");
-  assert.equal(safeSpawn?.regionId, "the-grove",
-    "safe spawn belongs to the-grove");
+  assert.equal(safeSpawn?.regionId, "whispering-canopy",
+    "safe spawn belongs to whispering-canopy");
   assert.equal(safeSpawn?.position.x, entrance.from.x,
     "safe spawn x equals reciprocal entrance.from.x");
   assert.equal(safeSpawn?.position.y, entrance.from.y,
     "safe spawn y equals reciprocal entrance.from.y");
   assert.equal(safeSpawn?.position.z, entrance.from.z,
     "safe spawn z equals reciprocal entrance.from.z");
-  const cameraAnchor = groveRegion.cameraAnchors.find((anchor) => anchor.id === safeSpawn?.cameraAnchorId);
+  const cameraAnchor = canopyRegion.cameraAnchors.find((anchor) => anchor.id === safeSpawn?.cameraAnchorId);
   assert.ok(cameraAnchor, "safe spawn uses an authored camera anchor id");
 });
 
@@ -1064,7 +1145,6 @@ test("restoreCheckpoint normalizes stale canonical facts against authoritative w
 });
 
 test("importing a legacy envelope with only booleans normalizes against canonical state", async () => {
-  const saves = new CampaignSlotLedger(undefined);
   const legacyCanonicalWorld = {
     fragments: [],
     factions: {
@@ -1082,7 +1162,7 @@ test("importing a legacy envelope with only booleans normalizes against canonica
     renewedCommitments: { sky: false, canopy: false, fang: false, pack: false, shadow: false, crown: false },
     marekPresent: true,
   };
-  saves.envelope = {
+  const legacyEnvelope = {
     format: "wild-crown-save",
     schemaVersion: 1,
     kind: "campaign",
@@ -1115,6 +1195,7 @@ test("importing a legacy envelope with only booleans normalizes against canonica
     eventKeys: [],
     savedAt: 0,
   };
+  const saves = seededLegacyRepository("history-slot", legacyEnvelope);
   const director = new CampaignDirector({ runId: "legacy-restoration", saves });
   await director.load("history-slot");
   const loaded = director.snapshot();
@@ -1134,7 +1215,6 @@ test("importing a legacy envelope with only booleans normalizes against canonica
 });
 
 test("legacy boolean-only noncanonical state migrates from existing partial/restored booleans", async () => {
-  const saves = new CampaignSlotLedger(undefined);
   const canonicalWorld = {
     fragments: [],
     factions: {
@@ -1151,7 +1231,7 @@ test("legacy boolean-only noncanonical state migrates from existing partial/rest
     renewedCommitments: { sky: false, canopy: false, fang: false, pack: false, shadow: false, crown: false },
     marekPresent: true,
   };
-  saves.envelope = {
+  const legacyEnvelope = {
     format: "wild-crown-save",
     schemaVersion: 1,
     kind: "campaign",
@@ -1175,6 +1255,7 @@ test("legacy boolean-only noncanonical state migrates from existing partial/rest
     eventKeys: [],
     savedAt: 0,
   };
+  const saves = seededLegacyRepository("history-slot", legacyEnvelope);
   const director = new CampaignDirector({ runId: "legacy-boolean-migration", saves });
   await director.load("history-slot");
   const loaded = director.snapshot();

@@ -1,0 +1,19 @@
+{
+  "task_id": "a09f6ce8-ef29-4e55-9612-c2f1716bc1e6",
+  "type": "text_to_image",
+  "status": "success",
+  "input": {
+    "prompt": "Single fully visible static game prop concept for original Wild Crown: an empty nonlethal hunter trap cage found at the Greenwake forest edge. Stylized cinematic 3D, clear sturdy silhouette, broad sculpted timber and bamboo forms, moderate painterly texture, warm weathered wood with restrained dark iron bindings, not photorealistic. Compact rectangular woven-lattice cage, one hinged front door standing open, clearly visible empty interior, simple safe rounded edges, complete base and roof. Plain neutral gray studio background, centered three-quarter view with generous margin. No animal inside, no blood, gore, injury, people, forest scene, extra traps, text, logos, magic or cropped parts.",
+    "model_version": "seedream_v4"
+  },
+  "output_fields": [
+    "generated_image_url"
+  ],
+  "credits_consumed": 5,
+  "created_at": "2026-10-06T03:10:31.800265Z",
+  "completed_at": "2026-10-06T03:10:44.454196Z",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ]
+}

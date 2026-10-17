@@ -1,0 +1,13 @@
+{
+  "task_id": "b6b08685-7e13-4c58-a803-7874ee88aa47",
+  "type": "animate_retarget",
+  "status": "success",
+  "credits_consumed": 10,
+  "output_dir": "asset-source/generated/actor-ghor-mire-maw-anim-a-01/tripo-out/actor-ghor-mire-maw-anim-a-01-b6b08685",
+  "files": [
+    "model.glb"
+  ],
+  "model_file": "asset-source/generated/actor-ghor-mire-maw-anim-a-01/tripo-out/actor-ghor-mire-maw-anim-a-01-b6b08685/model.glb",
+  "started": "2026-10-11T09:00:01.488Z",
+  "finished": "2026-10-11T09:00:12.687Z"
+}

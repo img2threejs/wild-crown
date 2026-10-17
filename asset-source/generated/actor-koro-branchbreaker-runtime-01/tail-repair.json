@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-koro-branchbreaker",
+  "generator": "scripts/assets/repair-biped-tail-weights.mjs",
+  "reason": "Tripo rig v1.0 biped without tail joints: the tail vertices were bound to the left calf / foot, so the tail swung with every stride.",
+  "input": {
+    "sha256": "7384e3d7844cfdf9532ef0866394177bc1eaad90d89866321d6942be6accaca8",
+    "bytes": 7682836
+  },
+  "output": {
+    "sha256": "20ef5c688a6cfe6d0f127aa538f4e0c50f40366faa589f416d7390eb09251260",
+    "bytes": 7682836
+  },
+  "box": [
+    -0.25,
+    -0.1,
+    0.04,
+    0.4,
+    -0.35,
+    0.2
+  ],
+  "reboundTo": "Hip",
+  "verticesRebound": 669,
+  "previousDominantJoint": {
+    "L_CalfTwist02": 207,
+    "L_Foot": 189,
+    "L_ForearmTwist02": 7,
+    "L_Hand": 152,
+    "Waist": 114
+  }
+}

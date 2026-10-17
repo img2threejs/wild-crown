@@ -1,0 +1,40 @@
+{
+  "assetId": "grass_path_2",
+  "name": "Grass Path 2",
+  "sourceUrl": "https://polyhaven.com/a/grass_path_2",
+  "apiUrl": "https://api.polyhaven.com/files/grass_path_2",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "author": "Rob Tuytel",
+  "resolution": "1024x1024",
+  "format": "jpg",
+  "physicalSizeMeters": 1,
+  "colorSpace": {
+    "diffuse.jpg": "sRGB",
+    "normal.jpg": "linear (OpenGL +Y)",
+    "arm.jpg": "linear (R ambient occlusion, G roughness, B metalness)"
+  },
+  "files": {
+    "diffuse.jpg": {
+      "polyHavenMap": "Diffuse",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_path_2/grass_path_2_diff_1k.jpg",
+      "sha256": "7f30b163739435c11f500f3818c7bb4922bab5f2734cc9ba6dd36817f0c9a8ab",
+      "md5": "48cebe95af233211c9469a9bfe2f42f2",
+      "bytes": 716010
+    },
+    "normal.jpg": {
+      "polyHavenMap": "nor_gl",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_path_2/grass_path_2_nor_gl_1k.jpg",
+      "sha256": "4f6e911619d4c79a6bc340a64eac1e5fcbae8e54ea2674ed1892f6a9a1dfb5fa",
+      "md5": "aa04d930b6af2bd7e3252e31776822bd",
+      "bytes": 831959
+    },
+    "arm.jpg": {
+      "polyHavenMap": "arm",
+      "sourceUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grass_path_2/grass_path_2_arm_1k.jpg",
+      "sha256": "0fd19818f13c18ef2c3621bc91a3aeda9262a964ffed0bb20611980fceb09fe3",
+      "md5": "707c614eee91685bebb8af64cb74dc08",
+      "bytes": 201977
+    }
+  }
+}

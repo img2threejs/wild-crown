@@ -1,17 +1,17 @@
 ---
 title: "WILD CROWN: THE BROKEN PACT"
 subtitle: "Game Design & Story Bible — Codex CLI Planning Source"
-version: "1.0"
+version: "1.1"
 language: "vi-VN"
-status: "Pre-production concept"
-project: "img2threejs showcase"
+status: "Local playtests implemented; full campaign and release acceptance pending — 2026-10-14"
+project: "Wild Crown: The Broken Pact — standalone desktop web game"
 document_owner: "Hoai-Nho Nguyen"
 ---
 
 # WILD CROWN: THE BROKEN PACT
 ## Vương Miện Hoang Lâm: Khế Ước Tan Vỡ
 
-> **Tài liệu nguồn duy nhất để planning trong Codex CLI.**  
+> **Game Design Bible — đọc cùng code hiện hành và remediation plan.**
 > Tài liệu này tổng hợp story, world building, gameplay loop, camera, movement, combat, hệ thống né skill, companion, boss, progression, technical architecture và phạm vi vertical slice đầu tiên.
 
 ---
@@ -20,18 +20,34 @@ document_owner: "Hoai-Nho Nguyen"
 
 Tài liệu được viết để dùng theo ba mục đích:
 
-1. Là **Game Design Bible** thống nhất ý tưởng trước khi code.
-2. Là **source of truth** để Codex CLI breakdown thành Epic, Feature, Task và Acceptance Criteria.
-3. Là phạm vi kiểm soát để showcase img2threejs không phát triển thành một open-world quá lớn ngay từ đầu.
+1. Là **Game Design Bible** cho story và thiết kế đã được người dùng chốt.
+2. Là nguồn để breakdown Epic, Feature, Task và Acceptance Criteria; các claim implementation phải đối chiếu code và feature docs.
+3. Là phạm vi kiểm soát cho game desktop web độc lập, không tự mở rộng thành seamless open world.
 
 Khi dùng với Codex CLI:
 
 - Không yêu cầu Codex implement toàn bộ game trong một lần.
 - Yêu cầu Codex đọc tài liệu, xác nhận phạm vi và tạo implementation plan theo từng milestone.
-- Ưu tiên vertical slice trước.
-- Mọi hệ thống gameplay phải có thể mở rộng thành full game, nhưng chỉ implement phần thật sự cần cho showcase đầu tiên.
+- Dùng [full remediation plan 2026-10-14](../.opencode/plans/2026-10-14-full-remediation.md) cho thứ tự triển khai hiện hành; The First Pact là gate trung gian, không thay thế full campaign.
+- Tái dùng hệ thống đã có; không xây lại movement/combat chỉ vì prompt greybox lịch sử bên dưới.
 - Toàn bộ game logic nên viết bằng TypeScript và tách khỏi rendering càng nhiều càng tốt.
 - Mọi con số về timing, khoảng cách và cooldown trong tài liệu là baseline để playtest, không phải giá trị bất biến.
+
+## 0.1. Design lock và trạng thái ngày 2026-10-14
+
+**Quyết định người dùng:** giữ bốn hero **Aren, Yara, Vesper, Sakda**; giữ free jump bằng Space, double jump/air-step, dodge dùng mana và roster monster hiện tại. Thêm boss của Bible **trên nền roster đó**, không thay monster hiện có. Chapters phải là chapter thật; Trials là chế độ replay riêng. Nguồn quyết định và công việc còn lại: [full remediation plan](../.opencode/plans/2026-10-14-full-remediation.md), §User decisions và Phases 1–5.
+
+Trong bản này:
+
+| Nhãn | Ý nghĩa / bằng chứng hiện hành |
+|---|---|
+| **Đã implement — local playtest** | Năm map với native GLB candidates, bốn hero/kits, combat trials, jump/air-step, mana dodge và UI entry flow. Nguồn: [application.md](features/application.md), [combat.md](features/combat.md), `src/app/AssetPlaytests.ts`, `src/game/heroes.ts`. Không đồng nghĩa release-verified. |
+| **Authored data / runtime nền** | Chapter, quest, dialogue, encounter và save systems đã có trong `src/content/story.ts`, `src/content/levels/`, `src/game/campaign/`, `src/game/storage/`. Có data không chứng minh đã chơi trọn campaign. |
+| **Đã chốt — đang triển khai / planned** | Reaction system chung (Phase 1), real chapters + companion verbs (Phases 2–3), licensed audio (Phase 4), benchmark/accessibility/asset acceptance (Phase 5). Chưa claim hoàn thành hoặc nghiệm thu. |
+| **Blocked — release acceptance** | Candidate GLB vẫn chưa được user duyệt danh sách acceptance và chưa được phép đổi `evidenceStatus` thành `verified`; benchmark/reference hardware và production gates phải có bằng chứng thật. Nguồn: plan §User decisions, [release-validation.md](features/release-validation.md). |
+
+Các phần story/campaign §§7–11, companion/progression, The First Pact và milestone/prompt bên dưới là **thiết kế/acceptance target**, trừ claim được đánh dấu implemented và dẫn nguồn cụ thể. Mục tiêu 8–12 giờ, timing baseline và performance target không phải số đo đã đạt. Mọi copy hướng tới người chơi vẫn là **English**; headings/engineering notes tiếng Việt trong Bible được giữ.
+
 
 ---
 
@@ -95,6 +111,7 @@ Vertical slice không xây toàn bộ game. Nó chứng minh:
 
 - Camera 2.75D.
 - Movement 3D theo camera-relative input.
+- Free jump bằng Space và double jump/air-step; contextual traversal là hệ thống bổ sung.
 - Combat arena.
 - Soft targeting.
 - Dodge bằng animation nhào lộn.
@@ -123,7 +140,6 @@ Chưa làm:
 - Toàn bộ companion.
 - Day/night system hoàn chỉnh.
 - Free climbing.
-- Free jump.
 - Mount system đầy đủ.
 - Physics destruction quy mô lớn.
 
@@ -280,9 +296,22 @@ Một con vật bị Black Sap không mất hoàn toàn bản chất. Nó bị c
 
 # 5. Nhân vật
 
-## 5.1. Aren — Nhân vật chính
+## 5.0. Bốn playable heroes — roster hiện hành
 
-Tên và giới tính có thể tùy chỉnh về sau. Tên tạm: **Aren**.
+**Đã implement trong local map entry.** Chọn hero trước khi vào map; hero không đổi giữa run, retry giữ lựa chọn. Cả bốn dùng chung player slot `aren`, nhưng kit, native render variant, vũ khí và VFX khác nhau; Yara NPC được bỏ khỏi scene khi chơi Yara. Nguồn: [application.md — Map progress and entry-only heroes](features/application.md#map-progress-and-entry-only-heroes), `src/game/heroes.ts`, `src/game/combat/HeroProfiles.ts`.
+
+| Hero | Vai trò / vũ khí / element | Kit hiện hành | Dodge (F) | Vitality |
+|---|---|---|---|---:|
+| Aren — Warden of the Wild | Close-range striker; Warden glaive; arcane/lightning | Warden Blade → Crescent Wave; Heavy/Thunder Cleave; Sigil Bolt/Barrage; Root Tether/Cleanse; Warden’s Judgement | Dive | 120 |
+| Yara — Heartroot Mage | Ranged spellcaster/controller; Heartroot staff; heartroot | Thornshot/Twin Thorns/Bloom Burst; Root Spike/Heartroot Eruption; Sap Lance/Seed Storm; Binding Vines/Cleanse; Heartroot Bloom | Petal Step | 85 |
+| Vesper — Moonshade Blade | Samurai assassin; katana; umbral | Moonlit Iai/Crescent Rift; Shadow Step/Thousand Cuts; Kunai Fan/Shade Swap; Severing Shadow/Cleanse; Crimson Requiem; Death Mark + Backstab | Mist Blink | 80 |
+| Sakda — Ember Fist | Muay Thai brawler; không vũ khí; ember | Eight Limbs; Tempest Stomp/Flying Knee; Echo Wave/Resonating Strike/Hundred Elbows; Iron Clinch/Cleanse; Tiger’s Wrath; Flurry | Guard Dash | 115 |
+
+Chi tiết behavior/cost/cancel rules: [combat.md — Playable heroes](features/combat.md#playable-heroes-profiles-and-the-kit-seam); implementation: `PlayerArsenal.ts`, `HeartrootSkills.ts`, `kits/VesperKit.ts`, `kits/SakdaKit.ts` trong `src/game/combat/`. Bốn lựa chọn gameplay không xóa vai trò Aren trong truyện và Yara trong backstory; tích hợp chúng vào full chapter flow thuộc remediation Phases 2–3.
+
+## 5.1. Aren — Warden của tuyến truyện chính, playable hero
+
+**Aren** là một trong bốn hero authored hiện hành; không có character customization trong local selector (`src/game/heroes.ts`).
 
 ### Nguồn gốc
 
@@ -312,21 +341,12 @@ Qua hành trình, Aren học được rằng:
 - Staff combat.
 - Acrobatics.
 
-### Warden Staff
+### Warden glaive và Warden Staff trong truyện
 
-Vũ khí có hai trạng thái:
+**Hiện hành:** Aren chiến đấu bằng native Warden glaive (`prop-warden-glaive`), dùng Warden Blade, Heavy/Thunder Cleave, Sigil và Judgement; Root Tether/Cleanse vẫn là động từ cốt lõi. Nguồn: `src/game/heroes.ts`, [combat.md — Warden Arsenal](features/combat.md#warden-arsenal).
 
-- Dạng ngắn khi di chuyển và nhào lộn.
-- Dạng dài khi chiến đấu.
+**Authored story:** Yara trao Warden Staff ở prologue (`src/content/story.ts`, objective `prologue:take-staff`). Không coi beat này là bằng chứng đã có vũ khí tự đổi giữa hai chiều dài. Staff Vault thuộc contextual traversal có affordance; không thay cho Space jump (§13.4).
 
-Công dụng:
-
-- Light/Heavy attack.
-- Root Tether.
-- Staff Vault.
-- Counter.
-- Cleanse.
-- Kết nối Heartroot fragment.
 
 ## 5.2. Yara
 
@@ -339,13 +359,15 @@ Vai trò:
 - Người có trách nhiệm trong sự ra đời của Root Crown.
 - Nhân vật chuộc lỗi.
 
+**Playable kit đã implement:** Heartroot mage dùng staff riêng, homing thorns, roots/lane attacks, Sap Lance, Seed Storm, Binding Vines, Cleanse và Heartroot Bloom; Petal Step là dodge dùng mana. Nguồn: §5.0 và [combat.md — Yara](features/combat.md#yara--heartroot-kit).
+
 Câu nói cốt lõi:
 
 > “A Warden does not tame the wild. A Warden listens until the wild chooses to answer.”
 
 ## 5.3. Vara — Chim scout
 
-Loài gợi ý: hornbill stylized.
+Loài gợi ý: harpy eagle stylized (Storm Harpy; canonical species `harpy-eagle`).
 
 Vai trò gameplay:
 
@@ -486,6 +508,18 @@ Marek khai thác Black Sap để:
 
 Marek có thể được cứu hoặc bỏ mặc. Nếu được cứu, hắn cung cấp thông tin về Heartroot Hollow.
 
+## 5.14. Vesper — Moonshade Blade
+
+Ronin từ Shadow clans vùng biên Erya, rời clan sau lệnh tấn công một ngôi làng từ chối Root Crown. Vesper đi cùng Aren và Yara vì họ hỏi các sinh vật đang chạy trốn điều gì, thay vì chỉ ra lệnh đánh gục chúng.
+
+**Playable kit đã implement:** samurai assassin nhanh, vitality thấp; dùng katana, blink, backstab và Death Mark để tạo burst. Mist Blink là né dùng mana, không bỏ qua collider. Nguồn biography/kit: `src/game/heroes.ts`, [combat.md — Vesper](features/combat.md#vesper--moonshade-blade-kit-umbral).
+
+## 5.15. Sakda — Ember Fist
+
+Tu sĩ lang thang từ Ember temples, rời cloister khi Black Sap lan vào temple groves. Sakda không mang vũ khí: tay, khuỷu, gối và chân là tám điểm tiếp xúc của lối đánh Muay Thai.
+
+**Playable kit đã implement:** brawler cận chiến; Flurry nối skill với Eight Limbs, Echo Wave đánh dấu để Resonating Strike tiếp cận, Flying Knee tạo áp lực và Guard Dash cho shield. Nguồn biography/kit: `src/game/heroes.ts`, [combat.md — Sakda](features/combat.md#sakda--ember-fist-kit-ember).
+
 ---
 
 # 6. Quy tắc giao tiếp với động vật
@@ -514,6 +548,12 @@ Trong cảnh quan trọng, game có thể chuyển cảm giác thành câu ngắ
 ---
 
 # 7. Cấu trúc cốt truyện
+
+**Status:** các Act/Chapter bên dưới là tuyến truyện đã authored và mục tiêu full campaign, không phải mô tả năm map Trials đã hoàn thành campaign. `src/content/story.ts` giữ chapter/quest/required-beat data; `src/app/StoryChapters.ts` chỉ chiếu chapter labels vào selector.
+
+**Trials hiện hành:** Greenwake → Canopy → Grove → Moonpine → Mistveil; đánh gục monster theo stage để mở gate, rồi đến waystone mới hoàn thành map. Unlock local lưu riêng, không ghi campaign saves/rewards/restoration. Ruun và Ghor trong Trials chưa chứng minh story settlement/companion ceremony đã chơi end-to-end.
+
+**Real chapters đã chốt, planned (Phases 2–3):** exploration → quests/dialogue → checkpoint → story boss → Cleanse → companion → Bond/Dominion choice, với mid-chapter save/continue. Act I đi Prologue/Greenwake → Canopy/Koro → Blood Bamboo/Asha ba phase, Tali và hunter camp → Grove hub; Acts II–IV tiếp tục Moonpine, Mistveil, Sunmane, Fall of the Grove, return/coalition, Heartroot Hollow/Orun, ba endings và credits. Trials được giữ riêng cho replay. Blood Bamboo, Sunmane, Fall of the Grove, Living Pact và Heartroot Hollow hiện là **Coming Soon** trong local selector. Nguồn: [application.md — Local story-map playtests](features/application.md#local-story-map-playtests-greenwake-whispering-canopy-the-grove-moonpine-ridge-mistveil-basin), [remediation Phases 2–3](../.opencode/plans/2026-10-14-full-remediation.md).
 
 # PROLOGUE — THE NIGHT OF A THOUSAND ROARS
 
@@ -1485,42 +1525,30 @@ Người chơi cảm nhận:
 - Lên là đi sâu.
 - Xuống là tiến gần camera.
 
-## 13.2. Exploration state
+## 13.2. Exploration state — implemented
 
-- Jog → run tự động khi giữ hướng.
-- Không cần sprint trong vertical slice.
-- Turn theo velocity.
-- Cho contextual traversal.
-- Camera ưu tiên hướng đi.
+- WASD hoặc arrow keys; input camera-relative, diagonal normalized.
+- Walk mặc định; giữ Shift để run, không tự tăng từ jog sang sprint theo thời gian giữ phím.
+- Facing theo hướng locomotion; gait theo swept speed thực tế, không chỉ theo phím Shift.
+- Space jump độc lập; E kích hoạt contextual traversal đúng affordance.
 
-## 13.3. Combat state
+Nguồn: [combat.md — Movement controls](features/combat.md#aren-keyboard-movement-and-animation-controls), `src/game/combat/HeroProfiles.ts`, `src/game/combat/CombatEngine.ts`.
 
-- Strafe quanh target chính.
-- Giữ mặt về mục tiêu.
-- Tốc độ lùi thấp hơn tiến.
-- Không tự động sprint.
-- Dodge theo input.
-- Hard lock chỉ boss/elite.
+## 13.3. Combat state — implemented
 
-## 13.4. Không có free jump
+- Movement không tự strafe hoặc giữ mặt về soft target; chạy vẫn dùng Shift khi đang có boss target.
+- Dodge theo input movement hoặc facing cuối nếu đứng yên; không tự chọn đường né an toàn.
+- Facing/target assist của từng attack theo kit; không biến locomotion thành hard lock.
 
-Dùng contextual traversal:
+Nguồn: [combat.md](features/combat.md), `src/game/combat/CombatEngine.ts`, `src/game/heroes.ts`.
 
-- Vault thân cây.
-- Leo ledge thấp.
-- Slide dưới rễ.
-- Swing dây leo.
-- Staff Vault.
-- Bước qua đá.
-- Dùng Koro tạo anchor.
+## 13.4. Free jump, double jump/air-step và contextual traversal
 
-Lý do:
+**Đã implement:** Space là jump tự do theo input, không cần contextual anchor. “Free” là tự do kích hoạt, **không phải miễn mana**: jump tốn **8 mana**, Space lần hai khi airborne (hoặc queue trong anticipation) tốn thêm **8 mana** một lần để double jump/air-step. Steering còn hoạt động trong air; đứng yên nhảy tại chỗ. Native `aren-air-step` và VFX có style riêng cho bốn hero.
 
-- Giảm camera complexity.
-- Pet không phải giải bài toán nhảy tự do.
-- Tránh phá level.
-- Animation được kiểm soát.
-- Phù hợp showcase.
+Simulation kiểm tra support, headroom, landing và capsule sweep; jump không xuyên solids hoặc sealed trial gates. E/Vault/Low Ledge/Slide/Swing là traversal có route metadata, tồn tại **song song**, không thay thế Space.
+
+Nguồn: [combat.md — Movement controls và Contextual traversal](features/combat.md), `src/game/combat/PlayerSkills.ts` (`jump.manaCost`), `CombatEngine.ts` (`startPlayerJump`, boosted jump), `src/content/levels/act-i.ts`.
 
 ---
 
@@ -1541,25 +1569,20 @@ Mỗi đòn nguy hiểm:
 
 ## 14.2. Input
 
-Một nút Dodge kết hợp movement direction.
+**Hiện hành:** F (Dodge binding mặc định) kết hợp movement direction; nếu đứng yên dùng facing cuối. Space dành riêng cho Jump. Có remap keyboard/gamepad; legacy Dodge=Space migrate sang F.
 
 ```text
-Dodge + Direction
+F + Direction → Dive / Petal Step / Mist Blink / Guard Dash theo hero
+Space → Jump; Space lần hai → Double jump / Air-step
 ```
 
-Game chọn animation theo:
+Player quyết định hướng; trajectory được collision-check, không tự đổi sang đường escape khác. Các evasion profiles ở §14.3 vẫn là vocabulary authored cho explicit directional/contextual actions, không phải claim F tự đọc loại boss skill để chọn mọi animation.
 
-- Hướng input.
-- Hướng boss.
-- Loại attack.
-- Khoảng cách cần đi.
-- Địa hình.
-- Có contextual anchor hay không.
-- Dodge chain state.
-
-Người chơi quyết định hướng. Hệ thống chỉ chọn animation phù hợp.
+Nguồn: [combat.md — Evasion and combat](features/combat.md#evasion-and-combat), `src/game/heroes.ts`, `src/game/combat/CombatEngine.ts`.
 
 ## 14.3. Các kiểu né
+
+Các mô tả/timing baseline dưới đây là thiết kế Wild Flow; action IDs đã có trong `src/game/combat/evasion.ts`, nhưng native clip acceptance của đủ bộ vẫn là gate riêng. Default F và kit behavior hiện hành xem §14.2/§5.0.
 
 ### Quick Step
 
@@ -1638,14 +1661,24 @@ Dùng cho:
 - Contextual obstacle.
 - Special boss mechanic.
 
-## 14.4. Dodge charges
+## 14.4. Mana thay cho dodge charges — implemented
 
-MVP:
+- Mỗi dodge F tốn **25 mana** cho cả Dive, Petal Step, Mist Blink và Guard Dash.
+- Mana cap **100**; grounded Walk/Run displacement có input hồi **4 mana/mét**. Idle, blocked motion, Dive và airborne Jump không hồi mana.
+- Không còn hệ hai charge/recharge. Action readiness dùng funds, cooldown, recovery và state gates của engine; không đủ mana hoặc đang locked/cooling down thì không tạo dodge mới.
+- Perfect Dodge dùng reward/window riêng; không hứa hoàn dodge charge hay mana.
 
-- 2 charges.
-- Mỗi charge hồi 1.5–2.0 s.
-- Perfect Dodge hoàn lại một phần hoặc toàn bộ.
-- Không dùng stamina bar trong vertical slice.
+| Shared slot | Cost hiện hành |
+|---|---:|
+| Jump / lần double jump | 8 / thêm 8 mana |
+| Light combo | 0; riêng Aren Crescent Wave spawn tốn 10 mana |
+| K tap / charged release | 12 / 20 mana |
+| L tap / charged release | 15 / 35 mana |
+| Q interrupt / Cleanse | 20 / 30 mana |
+| U ultimate | 100 Instinct; không mana |
+| F dodge | 25 mana |
+
+Sakda Resonating Strike trên echo-mark là recast **không mana**; các hero passives không thay giá dodge. Nguồn: [combat.md — Mana và hero kits](features/combat.md), `src/game/combat/PlayerSkills.ts`, `kits/SakdaKit.ts`. Cost chỉ thu khi action hợp lệ/được chấp nhận; readiness không do renderer tự suy đoán.
 
 ## 14.5. Dodge phases
 
@@ -1725,22 +1758,21 @@ Ví dụ:
 
 ## 15.1. Player actions
 
-- Light Attack.
-- Heavy Attack.
-- Charged Heavy.
-- Root Tether.
-- Dodge.
-- Pet Command.
-- Cleanse.
-- Contextual Interaction.
+- J: Light combo theo hero.
+- K tap / hold-release: Heavy / charged skill theo hero.
+- L tap / hold-release: ranged / charged ranged skill theo hero.
+- Q: interrupt ability trên windup hợp lệ hoặc Cleanse trên exposed corrupted target.
+- U: ultimate khi đủ Instinct và điều kiện của kit.
+- F: mana dodge; Space: jump/double jump.
+- Companion command và E/contextual interaction.
+
+Đã implement trong local playtest; labels/kit mapping xem §5.0, costs xem §14.4. Nguồn: `src/game/heroes.ts`, [combat.md](features/combat.md).
 
 ## 15.2. Light combo
 
-Ba hit:
+**Hiện hành:** Aren có bốn bước Warden Blade; bước ba xoay quét, bước bốn phóng Crescent Wave nếu đủ mana. Yara có ba bước Thornshot → Twin Thorns → Bloom Burst; Vesper có bốn Moonlit Iai bước cuối Crescent Rift; Sakda có bốn Eight Limbs bước cuối roundhouse + ember ring.
 
-1. Quét ngang.
-2. Quét ngược.
-3. Đâm hoặc quét diện rộng.
+Nguồn: `src/game/heroes.ts`, `src/game/combat/PlayerSkills.ts`, [combat.md — Warden Arsenal và hero kits](features/combat.md). Không dùng bộ “ba hit staff” cũ làm contract chung cho cả bốn hero.
 
 Mục đích:
 
@@ -1839,6 +1871,25 @@ Anticipation
 
 Không để weapon collider hoạt động liên tục.
 
+## 15.8. Physical reactions và poise — đã chốt, Phase 1 đang triển khai
+
+**Baseline trước cutover:** combat đã có hit-stop, flinch presentation, một số interrupt/stagger và swept wind push; riêng Sakda Tiger’s Wrath có knockback riêng. Đó chưa phải hệ reaction/poise chung cho mọi actor. Nguồn: [combat.md — Warden Arsenal và Sakda](features/combat.md), `src/game/combat/CombatEngine.ts`, `kits/SakdaKit.ts`.
+
+**Target Phase 1:** simulation sở hữu `reaction`, thay `hitReact` bằng clean cutover; renderer/audio chỉ consume snapshot/cues, tuyệt đối không dịch actor hoặc quyết định stun bằng animation.
+
+| Reaction | Behavior đã chốt để implement |
+|---|---|
+| Flinch | Light hit, không displacement, tối đa 12 world ticks. |
+| Stagger | Ngắt windup không có armour, slide nhỏ. |
+| Knockback | Eased push 0.8–4 m theo attack weight, swept against solids; wall impact kết thúc sớm và phát cue. |
+| Knockdown → Getup | Knockback rồi nằm ít nhất 40 ticks, đứng dậy với brief i-frames. |
+| Launch | Heavy finisher lên light enemies tạo vertical arc rồi knockdown. |
+| Stun / poise break | Dazed 90–180 ticks theo size, không act, nhận bonus damage; boss có poise phases và stun ngắn hơn. |
+
+Boss committed attack có super-armour, chỉ nhận flinch overlay; player có stagger/knockback/knockdown theo attack weight và hero weight class, getup i-frames và dodge-cancel sau delay ngắn. Snapshot contract: `kind`, world-XZ push `direction`, hit `side` (front/back/left/right), `strength`, `progress`, `durationTicks`, restart `serial`; hostile `poise` là normalized 0..1 buildup cho UI dưới HP.
+
+Cues: `reaction-start`, `wall-impact`, `poise-break`, `getup`. Presentation target gồm directional hit clips, slide/tumble, knockdown/getup, stun loop/daze VFX và camera/hit-stop theo strength. Đây là **interface/design target**, không phải claim full simulation/rendering acceptance đã pass. Nguồn: [remediation Phase 1](../.opencode/plans/2026-10-14-full-remediation.md); fixed wave contract `local://wc-wave1.md` (engineering dispatch, không phải portable release evidence).
+
 ---
 
 # 16. Enemy AI và encounter readability
@@ -1920,6 +1971,20 @@ Không cho mọi enemy đánh cùng lúc.
 - Claw scrape.
 - Wind-up.
 - Directional warning.
+
+## 16.5. Monster roster hiện hành — giữ lại cùng story bosses
+
+**Đã implement trong local Trials.** Mỗi map có ba stage; defeat mở đúng gate, cuối route đến waystone mới Stage Complete. Thú bị đánh gục chuyển neutral/downed, không phải combat giết thú.
+
+| Map | Roster theo thứ tự stage | Nguồn runtime đã đối chiếu |
+|---|---|---|
+| Greenwake | Ember Boar; Frost Sap-Stalker; Root Rammer | `src/game/combat/CombatTrials.ts` |
+| Whispering Canopy | Thornback Howler; Storm Hornbill; Mire Viper | `src/game/combat/CombatTrials.ts` |
+| The Grove | Heartroot Sprig; Blighted Rootling; Hollowheart, the Sapbound Guardian | `src/game/combat/GroveContent.ts`; [grove-playtest.md](features/grove-playtest.md) |
+| Moonpine Ridge | Frostfang (runtime label **Frostfang Tracker**); Howl Scout; Ruun, the Chained Howl | `src/game/combat/MoonpineContent.ts` |
+| Mistveil Basin | Bog Lurker; Lantern Heron; Ghor, the Mire Maw | `src/game/combat/MistveilContent.ts` |
+
+“Boss” chip trên final Trial stage là difficulty role, không thay danh sách story bosses §19. **Planned chapters:** giữ roster này và thêm Koro/Asha/Solkar/Orun với story encounters; Ruun/Ghor đã có local candidate encounter nhưng vẫn cần chapter context, choices và acceptance của story version. Nguồn quyết định: [remediation §User decisions và Phases 2–3](../.opencode/plans/2026-10-14-full-remediation.md).
 
 ---
 
@@ -2039,6 +2104,8 @@ Dominion không được thiết kế như “nút ác”. Nó phải hấp dẫ
 ---
 
 # 19. Boss design summary
+
+**Sáu story bosses giữ nguyên:** Koro, Asha, Ruun, Ghor, Solkar, Orun. Encounter data đã authored (`src/game/combat/content.ts`); không đồng nghĩa đã có full campaign native scenes nghiệm thu. Ruun/Ghor có local Trials candidates (§16.5); Koro xuất hiện như ally/scenery không chứng minh Canopy boss fight. Asha ba phase và Orun finale phải được tích hợp vào real chapters. Phases 2–3 của [remediation plan](../.opencode/plans/2026-10-14-full-remediation.md) bổ sung boss assets/runtime **trên nền** monster roster, không thay Howler bằng Koro hoặc Root Rammer bằng Asha.
 
 ## Koro
 
@@ -2269,14 +2336,16 @@ Mỗi region từ corrupted sang restored sẽ thêm:
 
 ## 25.1. HUD tối thiểu
 
-- Player vitality.
-- Dodge charges.
-- Instinct Meter.
+- Player vitality theo hero.
+- Mana / maxMana, skill cost và readiness do engine cung cấp; không có dodge charges.
+- Instinct Meter; ultimate theo hero.
 - Companion ability.
 - Boss Ferocity.
 - Corruption state.
 - Soft target ring.
 - Off-screen warning.
+- Trial roster/current monster HP, boss chip, stage/gate notices và destination; **implemented** trong local HUD (`src/app/AssetPlaytests.ts`, [reference-ui.md](features/reference-ui.md)).
+- Poise buildup dưới hostile HP và reaction feedback: **Phase 1 target**, không claim đã nghiệm thu (§15.8).
 
 ## 25.2. Depth readability
 
@@ -2300,6 +2369,19 @@ Nên hỗ trợ:
 - Wider Perfect Dodge window.
 - Hold/toggle lock-on.
 - Subtitle cho Echo Sense phrase.
+
+## 25.4. Map intro → loading scene → establishing shot — implemented local flow
+
+```text
+Title / New Game → Map Select → Hero Select → Map Intro
+→ Loading scene nếu world chưa ready → Establishing shot → Gameplay HUD
+```
+
+Map intro dùng intro beats/threat line/art/atmosphere của `src/content/regionPresentation.ts`; world bắt đầu load **phía sau intro**. Continue/Skip/Enter/Space/Esc rời intro; ready rồi thì reveal ngay, chưa ready thì loading scene tiếp quản. Load failure hiện error, không giả thành công.
+
+Loading scene có phase/detail, progress từ work thật và lore theo progress; `null` là indeterminate, không timer giả. Establishing shot dài **4 giây**, camera sweep tới normal gameplay framing; simulation paused, gameplay input disabled, chỉ skip được. Reduced Motion/OS preference bỏ sweep; kết thúc shot mới hiện HUD và chạy simulation. Retry/Play Again không lặp map intro; production campaign giữ opening dialogue riêng.
+
+Nguồn: [application.md — Forest preparation / Map intro](features/application.md#map-intro-and-establishing-shot), [reference-ui.md](features/reference-ui.md#map-intro-loading-scene-and-establishing-shot), `src/app/GameApplication.ts`, `src/content/regionPresentation.ts`. Implementation không phải production-browser/native-asset acceptance; status xem §0.1.
 
 ---
 
@@ -2563,6 +2645,8 @@ interface BossPhaseDefinition {
 
 # 28. Vertical slice — The First Pact
 
+**Planned curated story slice / acceptance target.** Năm map Trials hiện tại không thay thế flow Forest Entry → Asha Bond này. Tái dùng bốn hero/movement/mana combat đã có; chapter integration, boss assets và ceremony theo remediation Phases 2–3.
+
 ## 28.1. Flow
 
 ### Segment 1 — Forest Entry
@@ -2617,6 +2701,7 @@ Bắt buộc:
 
 - Player locomotion.
 - Combat locomotion.
+- Space free jump và double jump/air-step.
 - Soft target.
 - Dodge selection.
 - Perfect Dodge.
@@ -2676,7 +2761,7 @@ Aren:
 - Idle.
 - Jog/run.
 - Combat strafe.
-- Light 1–3.
+- Aren Light 1–4; kit-specific chains của Yara/Vesper/Sakda (§5.0).
 - Heavy.
 - Charged heavy.
 - Root Tether.
@@ -2733,6 +2818,8 @@ Vara:
 
 # 29. Milestone plan
 
+Roadmap dưới đây là milestone/acceptance reference, không phải status report; kế hoạch thi công hiện hành là [full remediation plan 2026-10-14](../.opencode/plans/2026-10-14-full-remediation.md). Không dựng lại greybox hoặc charge system đã bị bỏ.
+
 ## Milestone 0 — Design lock
 
 Deliverables:
@@ -2780,7 +2867,7 @@ Deliverables:
 - Back Handspring.
 - Staff Vault placeholder.
 - Invulnerability window.
-- Dodge charge.
+- Mana dodge và movement-earned mana (§14.4).
 - Perfect Dodge.
 
 Acceptance:
@@ -2916,8 +3003,8 @@ Features:
 - Camera-relative input.
 - Ground projection.
 - Slope.
-- Combat strafe.
-- Traversal.
+- Walk/Run theo input, facing theo locomotion.
+- Free jump/double jump/air-step cùng contextual traversal.
 - Collision recovery.
 
 ## EPIC-EVASION — Wild Flow Evasion
@@ -2926,7 +3013,7 @@ Features:
 
 - Direction resolver.
 - Dodge profiles.
-- Charge system.
+- Mana cost/readiness, cooldown và grounded movement refill.
 - I-frame.
 - Chain dodge.
 - Perfect Dodge.
@@ -2943,6 +3030,7 @@ Features:
 - Ferocity.
 - Root Tether.
 - Cleanse.
+- Shared physical reactions/poise (Phase 1, §15.8).
 
 ## EPIC-AI — Encounter AI
 
@@ -3018,7 +3106,7 @@ Features:
 - I-frame chỉ active trong window config.
 - Dodge không xuyên collider.
 - Có thể queue counter trong cancel window.
-- Nếu không còn charge, input không tạo dodge mới.
+- Nếu không đủ 25 mana hoặc còn cooldown/lock, input không tạo dodge mới; không trừ tiền cho rejected input.
 - Perfect Dodge chỉ kích hoạt khi attack hit window giao với evasion window.
 
 ## Boss Pounce
@@ -3141,7 +3229,7 @@ Vertical slice được xem là hoàn thành khi:
 
 # 34. Codex CLI — Master planning prompt
 
-Sử dụng prompt dưới đây sau khi đặt file này trong repository:
+Prompt mẫu cho một bounded work package; không phải chỉ thị reset phạm vi về slice. Luôn đọc §0.1 và [remediation plan hiện hành](../.opencode/plans/2026-10-14-full-remediation.md) trước khi dùng.
 
 ```text
 You are the lead gameplay architect for the Wild Crown showcase built with
@@ -3159,10 +3247,10 @@ Your task:
 2. Identify reusable systems, scene setup, asset loading, animation utilities,
    controls, camera helpers, VFX helpers, performance utilities, and coding
    conventions.
-3. Compare the current codebase against the vertical-slice requirements in the
-   design bible.
-4. Produce a phased implementation plan for only "The First Pact" vertical
-   slice.
+3. Compare current code and checked feature docs against the assigned acceptance
+   criteria; distinguish local Trials, authored campaign data and release evidence.
+4. Follow .opencode/plans/2026-10-14-full-remediation.md for the current full-game
+   work; "The First Pact" remains an intermediate story-slice gate.
 5. Break the work into:
    - milestones
    - epics
@@ -3185,8 +3273,9 @@ Your task:
 8. Keep gameplay simulation separated from Three.js presentation.
 9. Make attack timings, dodge timings, boss phases, telegraphs, and companion
    abilities data-driven.
-10. Do not add free jump, seamless open world, multiplayer, crafting, or other
-    out-of-scope systems.
+10. Preserve the four heroes, Space jump/double jump, mana dodge and current map
+    monsters; add story bosses alongside them. Do not add seamless open world,
+    multiplayer, crafting, or other unapproved systems.
 11. Do not start implementation until you have:
     - documented assumptions
     - identified blocking questions that cannot be resolved from the repository
@@ -3214,6 +3303,8 @@ G. Risks and assumptions
 ---
 
 # 35. Codex CLI — Prompt cho milestone đầu tiên
+
+Prompt greybox lịch sử cho isolated risk lab, không mô tả status game hiện hành. Không áp giới hạn “no combat” lên application/Trials đã implement; scope current work theo §0.1.
 
 ```text
 Using WILD-CROWN-GAME-DESIGN-BIBLE-CODEX-CLI.md as the source of truth,
@@ -3247,6 +3338,8 @@ patches.
 
 # 36. Codex CLI — Prompt cho Evasion prototype
 
+Prompt verification/implementation mẫu; reuse mana/input/collision đã có, không quay lại dodge charges. Native placeholders trong isolated debug lab không đủ điều kiện production asset acceptance.
+
 ```text
 Using the design bible as source of truth, implement Milestone 2:
 Wild Flow Evasion prototype.
@@ -3255,8 +3348,8 @@ Scope:
 
 - Dodge input plus movement direction.
 - Data-driven EvasionProfile.
-- Two dodge charges.
-- Recharge timing.
+- Dodge costs 25 mana; cap 100 and supported Walk/Run earns 4 mana/metre.
+- Engine-owned cooldown, recovery and funds readiness; no charge/recharge system.
 - Quick Step left/right.
 - Forward Shoulder Roll.
 - Back Handspring.
@@ -3280,7 +3373,7 @@ Add reproducible test scenarios for:
 1. Dodge against a straight line attack.
 2. Dodge against a delayed second hit.
 3. Collision near arena walls.
-4. Dodge chaining with one and two charges.
+4. Dodge funds/cooldown rejection, movement refill and no idle refill.
 5. Perfect Dodge timing.
 6. Counter input buffering.
 ```
@@ -3288,6 +3381,8 @@ Add reproducible test scenarios for:
 ---
 
 # 37. Codex CLI — Prompt cho Asha boss
+
+Story-boss integration target của Phase 2; native candidates chỉ được release sau asset acceptance. Greybox geometry trong isolated lab không thay thế required GLB khi vào production runtime.
 
 ```text
 Implement the greybox Asha boss encounter from the design bible.
@@ -3343,8 +3438,8 @@ gameplay implementation on final art.
 2. Gameplay là 3D thật.
 3. Camera là guided 2.5D/2.75D, góc ba phần tư.
 4. Không có camera orbit tự do trong vertical slice.
-5. Không có free jump.
-6. Traversal dùng contextual animation.
+5. Space là free jump và double jump/air-step; mỗi lần accepted jump tốn 8 mana, không phải jump miễn phí.
+6. Contextual traversal dùng E/affordance, tồn tại song song với jump tự do.
 7. Né skill là core mechanic.
 8. Có nhiều animation né, không chỉ roll.
 9. Perfect Dodge dẫn đến counter.
@@ -3356,6 +3451,14 @@ gameplay implementation on final art.
 15. Code TypeScript + Three.js, data-driven, module hóa.
 16. Greybox gameplay phải hoàn thành trước art polish.
 17. Không mở rộng scope ngoài Bible nếu chưa có quyết định mới.
+18. Bốn playable heroes: Aren, Yara, Vesper, Sakda; entry-only selection, không tự thêm customization.
+19. Dodge dùng 25 mana, không hai charge; mana hồi từ grounded movement (§14.4).
+20. Giữ monster roster của năm map (§16.5); thêm Bible story bosses trên nền roster, không thay thế.
+21. Trials/replay tách campaign; chapters thật có exploration/quests/dialogue/checkpoints/story boss/Cleanse/companion/Bond–Dominion và mid-chapter saves.
+22. Physical reactions/poise là ưu tiên Phase 1; simulation authoritative, presentation chỉ consume.
+23. GLB candidates/automated gates không tự thành `verified`; user duyệt acceptance list trước release flips.
+
+Nguồn decisions 18–23 và current work: [full remediation plan — User decisions, Phases 1–5](../.opencode/plans/2026-10-14-full-remediation.md). Costs/entry rules đã đối chiếu `src/game/combat/PlayerSkills.ts`, `src/app/GameApplication.ts` và [combat.md](features/combat.md).
 
 ---
 

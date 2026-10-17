@@ -1,16 +1,29 @@
-export { CampaignDirector, CampaignChoiceRejectedError } from "./CampaignDirector.js";
+export { CampaignDirector, CampaignChoiceRejectedError, CampaignSupersededError } from "./CampaignDirector.js";
 export type { CampaignDirectorOptions } from "./CampaignDirector.js";
+export {
+  AUTOSAVE_SLOT_PREFIX,
+  autosaveSlotId,
+  ChapterMigrationError,
+  deriveSegmentId,
+  isAutosaveSlotId,
+  LEGACY_LAYOUT_REVISION,
+} from "./session.js";
+export { PACT_AUTHORITY, PACT_OPTION_IDS, RECRUITMENT_RULES } from "./authority.js";
+export type { PactAuthority, RecruitmentRule } from "./authority.js";
 export {
   SaveRepository,
   SaveRepositoryError,
+  CANDIDATE_SAVE_DATABASE_NAME,
   SAVE_DATABASE_NAME,
   SAVE_DATABASE_VERSION,
   SAVE_FORMAT_SCHEMA_VERSION,
+  LEGACY_SAVE_FORMAT_SCHEMA_VERSION,
 } from "../storage/SaveRepository.js";
 export type {
   GameSaveEnvelope,
   CampaignProgressRecord,
   SaveErrorCode,
+  SaveRepositoryOptions,
   SaveSettingsRecord,
   SaveSlotRecord,
   SaveSlotSummary,

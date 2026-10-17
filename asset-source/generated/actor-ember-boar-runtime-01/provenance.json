@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-ember-boar",
+  "generator": "Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)",
+  "tasks": {
+    "model": "231bab10-019e-4351-bd96-1f3014db7f0d",
+    "decimate": "470036e0-1f44-4d9c-8fb5-997e5d50caa9",
+    "rig": "38098a37-4355-4c9c-b970-4137867b2c28",
+    "animA": "4050559b-70ff-4ff1-be8b-3f1f0f63a1b9"
+  },
+  "settings": {
+    "model": "tripo-v3.1",
+    "geometry_quality": "detailed",
+    "texture_quality": "extreme",
+    "pbr": true,
+    "rig": "rig v2.5 quadruped (tripo spec)",
+    "retarget": "animate_in_place"
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/actor-ember-boar-anim-a-01/tripo-out/actor-ember-boar-anim-a-01-2-4050559b/model.glb",
+      "sha256": "d1b09079a76778808584b86cf9a3d781b52f68a9b4e04c37d09c7b80d25e24cf"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar.glb",
+    "sha256": "38b19a13159dab3d38975b4b0d39eaeb6866369c68cad672e8f8023f6e7839bf",
+    "bytes": 6721240,
+    "vertices": 30735,
+    "boundsMin": [
+      -0.19093942642211914,
+      -1.4901161193847656e-7,
+      -0.4903017282485962
+    ],
+    "boundsMax": [
+      0.19093944132328033,
+      0.6044816970825195,
+      0.4903016686439514
+    ]
+  },
+  "clips": [
+    {
+      "name": "preset:quadruped:walk",
+      "durationSeconds": 2.6,
+      "channels": 22
+    }
+  ],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3044026,
+      "toBytes": 1270482
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 4124282,
+      "toBytes": 1475424
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 17508214,
+      "toBytes": 2175534
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local Greenwake playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

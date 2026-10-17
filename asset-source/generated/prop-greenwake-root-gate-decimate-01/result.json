@@ -1,0 +1,16 @@
+{
+  "task_id": "b66c5e89-c8ca-42da-8238-883d0d4b641a",
+  "type": "highpoly_to_lowpoly",
+  "status": "success",
+  "credits_consumed": 30,
+  "output_dir": "asset-source/generated/prop-greenwake-root-gate-decimate-01/tripo-out/prop-greenwake-root-gate-decimat-b66c5e89",
+  "files": [
+    "model.glb",
+    "rendered_image.webp",
+    "preview.png"
+  ],
+  "model_file": "asset-source/generated/prop-greenwake-root-gate-decimate-01/tripo-out/prop-greenwake-root-gate-decimat-b66c5e89/model.glb",
+  "preview": "asset-source/generated/prop-greenwake-root-gate-decimate-01/tripo-out/prop-greenwake-root-gate-decimat-b66c5e89/preview.png",
+  "started": "2026-10-10T11:44:21.662Z",
+  "finished": "2026-10-10T11:50:14.482Z"
+}
