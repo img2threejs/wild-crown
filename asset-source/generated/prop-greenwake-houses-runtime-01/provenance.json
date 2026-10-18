@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-greenwake-houses",
+  "generator": "scripts/assets/build-greenwake-runtime-asset.mjs",
+  "tasks": {},
+  "settings": {
+    "operation": "recondition-existing-native-glb",
+    "simplifyRatio": null,
+    "maxError": 0.01,
+    "simplifyFlags": [
+      "LockBorder",
+      "Prune"
+    ],
+    "maxTexture": 2048
+  },
+  "runtimeCandidateGeometry": {
+    "version": 1,
+    "recipe": "CandidateGeometrySimplifier: static target 8000 triangles, deforming ratio 0.05, relative error 0.01, LockBorder + Prune; original selected vertex bytes and skinned bounds retained."
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb",
+      "sha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+    "sha256": "8fa4ef9ac7079f8611b993d9676a593703383b1292f8cd0fda8841f6a3911b90",
+    "bytes": 3410452,
+    "vertices": 10591,
+    "triangles": 8139,
+    "boundsMin": [
+      -0.23522,
+      -0.27738,
+      -0.48485
+    ],
+    "boundsMax": [
+      0.23649,
+      0.27593,
+      0.48532
+    ],
+    "worldBoundsMin": [
+      -0.23522,
+      -0.27738,
+      -0.48485
+    ],
+    "worldBoundsMax": [
+      0.23649,
+      0.27593,
+      0.48532
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3538297,
+      "toBytes": 1240091
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 3041366,
+      "toBytes": 1031934
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 6011807,
+      "toBytes": 699622
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1917035,
+      "trianglesAfter": 8139,
+      "relativeError": 0.009950985200703144
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 1030014,
+      "verticesAfter": 10591
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

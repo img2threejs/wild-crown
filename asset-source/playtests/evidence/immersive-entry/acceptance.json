@@ -1,0 +1,327 @@
+{
+  "issue": 130,
+  "title": "Immersive title, narrative entry, truthful loading and native prop response",
+  "baseline": "a380076",
+  "integratesNativeAttackPR": 132,
+  "observedAt": "2026-10-18T16:26:01.580Z",
+  "coordinator": "main session; sole integration and review owner",
+  "independentReview": false,
+  "acceptance": {
+    "nativeTitle": {
+      "passed": true,
+      "evidence": [
+        "native-plates.json",
+        "title.webp",
+        "entry-ui.mp4"
+      ],
+      "implementation": "2560x1440 actual native Greenwake pre-rendered plate; former TitleStage removed, CSS drift only."
+    },
+    "narrative": {
+      "passed": true,
+      "evidence": [
+        "intro.webp",
+        "story.webp",
+        "integrated-entry-ui.json",
+        "integrated-accessibility.json"
+      ],
+      "behavior": "Complete text immediately; native portrait/hero crest/story crown, real Continue/Skip/next line/Skip Cinematic."
+    },
+    "truthfulLoading": {
+      "passed": true,
+      "evidence": [
+        "loading.webp",
+        "integrated-entry-ui.json"
+      ],
+      "heldAsset": "actor-yara-runtime-01/actor-yara.glb",
+      "heldSeconds": 14,
+      "observedProgress": 54,
+      "detail": "Loaded 41 of 49 scene assets",
+      "noGameplayWhileHeld": true
+    },
+    "bridgeDiagnosis": {
+      "passed": true,
+      "original": "/asset-source/ui/maps/greenwake.jpg",
+      "finding": "The reported figure is baked into the old CSS background still, not a live actor/support simulation. Entry replaced with actual native scenery-only plate; gameplay camera/support solver not bypassed."
+    },
+    "nativeResponses": {
+      "passed": true,
+      "evidence": [
+        "native-contacts.mp4",
+        "integrated-environment.json",
+        "integrated-crate-break.json",
+        "integrated-house.json",
+        "integrated-tree.json"
+      ],
+      "fixture": "Real GameApplication/native Greenwake. Hero positioned once near each inspected object, then actual keyboard K/J; no damage/camera override. Tree final contact used a supported unobstructed eastern approach; earlier western approach correctly occluded.",
+      "crate": {
+        "health": [
+          80,
+          57.39821230287386,
+          0
+        ],
+        "finalImpactSerial": 9,
+        "broken": true,
+        "collidersRemaining": 0,
+        "worldFactsUnchangedDuringIsolatedBreak": true
+      },
+      "house": {
+        "health": [
+          180,
+          148.06631625844435
+        ],
+        "stationary": true,
+        "neverCollapsed": true
+      },
+      "tree": {
+        "health": [
+          137.50327288559308,
+          130.29672147522
+        ],
+        "stationary": true
+      },
+      "firstPlayFactDifference": [
+        "checkpoint:prologue-run-entry; ordinary first-game checkpoint, not prop destruction"
+      ]
+    },
+    "measuredBottlenecks": {
+      "passed": true,
+      "evidence": [
+        "integrated-before-production.json",
+        "integrated-after-production.json",
+        "integrated-before-lifetimes.json",
+        "integrated-after-lifetimes.json",
+        "path-broadphase-differential.json",
+        "native-client-geometry-equivalence.json"
+      ],
+      "method": "Sequential one-browser production cold/warm pair; viewport1568x817 DPR1; same Aren/Koro Greenwake UI route; 2s hero-preview + 1s intro dwell both; separate clean CPU/frame, sampled CPU, all-pass GL and real GPU query windows. Fresh cold HTTP/storage clear, warm cache. Three separate normal title/new-run lifecycle cycles. No recording/App handles during performance windows.",
+      "hardware": {
+        "cpu": "Apple M1",
+        "ramBytes": 17179869184,
+        "os": "Darwin 23.5.0 arm64",
+        "browser": "Brave Chromium 155.0.8059.85"
+      },
+      "before": {
+        "cold": {
+          "titleReadyMs": 1769.7207080000007,
+          "bootMs": 24192.5,
+          "titleScriptMs": 147.33699999999993,
+          "titleTaskMs": 334.981,
+          "titleP95": 16.700000000000728,
+          "titleHeap": 9670852,
+          "titleBytes": 20123217,
+          "gameScriptMs": 5172.625,
+          "gameTaskMs": 5185.701999999999,
+          "gameP95": 116.70000000000437,
+          "gameHeap": 24679672,
+          "gameBytes": 489588431,
+          "gameLongTasks": 43,
+          "gpu": {
+            "available": true,
+            "scenario": "Separate actual WebGL GPU query window around application RAF callbacks; not CPU wall time.",
+            "actualWindowMs": 5143.5,
+            "measuredCallbacks": 43,
+            "validSamples": 43,
+            "disjoint": false,
+            "pendingAfterDrain": 0,
+            "medianMs": 32.056791,
+            "p95Ms": 34.281666
+          },
+          "gl": {
+            "scenario": "Separate instrumented all-pass GL count window; not the clean CPU/frame-time window.",
+            "samples": 43,
+            "actualWindowMs": 5018.699999988079,
+            "medianDrawCalls": 80,
+            "medianTriangles": 1158061,
+            "renderer": "WebKit WebGL",
+            "vendor": "WebKit",
+            "minDrawCalls": 80,
+            "maxDrawCalls": 80
+          }
+        },
+        "warm": {
+          "titleReadyMs": 2114.037666999997,
+          "bootMs": 23883.29999999702,
+          "titleScriptMs": 151.996,
+          "titleTaskMs": 344.40499999999986,
+          "titleP95": 16.799999999999272,
+          "titleHeap": 9964768,
+          "titleBytes": 43570,
+          "gameScriptMs": 5173.791,
+          "gameTaskMs": 5186.847,
+          "gameP95": 116.80000000000291,
+          "gameHeap": 24846496,
+          "gameBytes": 509129536,
+          "gameLongTasks": 42
+        }
+      },
+      "after": {
+        "cold": {
+          "titleReadyMs": 877.592874999973,
+          "bootMs": 8257.79999999702,
+          "titleScriptMs": 17.784999999999997,
+          "titleTaskMs": 207.385,
+          "titleP95": 16.700000000000273,
+          "titleHeap": 6409448,
+          "titleBytes": 1519560,
+          "gameScriptMs": 1692.8229999999996,
+          "gameTaskMs": 1772.6290000000001,
+          "gameP95": 16.700000000000728,
+          "gameHeap": 22968704,
+          "gameBytes": 142422703,
+          "gameLongTasks": 0,
+          "gpu": {
+            "available": true,
+            "scenario": "Separate actual WebGL GPU query window around application RAF callbacks; not CPU wall time.",
+            "actualWindowMs": 5001.399999991059,
+            "measuredCallbacks": 299,
+            "validSamples": 299,
+            "disjoint": false,
+            "pendingAfterDrain": 0,
+            "medianMs": 19.729791,
+            "p95Ms": 20.742416
+          },
+          "gl": {
+            "scenario": "Separate instrumented all-pass GL count window; not the clean CPU/frame-time window.",
+            "samples": 301,
+            "actualWindowMs": 5015.300000005962,
+            "medianDrawCalls": 84,
+            "medianTriangles": 1160805,
+            "renderer": "WebKit WebGL",
+            "vendor": "WebKit",
+            "minDrawCalls": 84,
+            "maxDrawCalls": 84
+          }
+        },
+        "warm": {
+          "titleReadyMs": 744.9197920000879,
+          "bootMs": 8145,
+          "titleScriptMs": 15.761000000000012,
+          "titleTaskMs": 187.86500000000004,
+          "titleP95": 16.700000000000728,
+          "titleHeap": 6502336,
+          "titleBytes": 43415,
+          "gameScriptMs": 1751.544,
+          "gameTaskMs": 1834.5450000000003,
+          "gameP95": 16.700000000000728,
+          "gameHeap": 23132868,
+          "gameBytes": 141703201,
+          "gameLongTasks": 0
+        }
+      }
+    },
+    "preservedAuthority": {
+      "passed": true,
+      "evidence": [
+        "integrated-native-catalog-closure.json",
+        "path-broadphase-differential.json",
+        "integrated-accessibility.json"
+      ],
+      "notes": [
+        "CameraDirector remains sole gameplay-camera writer.",
+        "Native #131 queueTick -> native sync -> presentFrame and gate birth clock retained.",
+        "88 focused tests cover unchanged actor damage, protected support/quest bodies, pause and broken-body transitions.",
+        "Live OS Reduced Motion: zero running title animations; intro static with zero particles.",
+        "Real UI handler exercised with synthetic gamepad A/B samples; no physical controller claim.",
+        "English copy and visible candidate banner retained."
+      ]
+    },
+    "production": {
+      "passed": true,
+      "build": {
+        "command": "bun --bun node_modules/typescript/bin/tsc -b && bun --bun node_modules/vite/bin/vite.js build",
+        "exitCode": 0,
+        "wallSeconds": 8.62,
+        "viteSeconds": 2.68,
+        "modules": 331,
+        "mainJsKb": 2133.7,
+        "gzipKb": 620.89,
+        "warning": "Existing >500KB chunk warning"
+      },
+      "focused": {
+        "command": "bun test tests/ui/GameUI.test.ts tests/ui/regionScenes.test.ts tests/combat/environment-props.test.ts tests/combat/geometry.test.ts tests/combat/geometry-aerial.test.ts tests/combat/geometry-routes.test.ts tests/combat/geometry-support-collider.test.ts tests/rendering/candidate-geometry.test.ts",
+        "tests": 88,
+        "failures": 0,
+        "assertions": 38037,
+        "files": 8,
+        "wallSeconds": 0.44
+      },
+      "release": {
+        "command": "Node24.22.0 --test tests/release/*.test.mjs",
+        "tests": 236,
+        "failures": 0,
+        "wallSeconds": 4.56
+      },
+      "nativeCatalogHashes": {
+        "checked": 84,
+        "errors": 0
+      },
+      "pathDifferential": {
+        "cases": 2672,
+        "mutableTransitions": 6,
+        "mismatches": 0,
+        "baselineMs": 2412.455875,
+        "currentMs": 215.340917
+      },
+      "nativeGeometry": {
+        "assets": 5,
+        "result": "Exact ordered triangle attribute values and fitted bounds match existing client candidate simplification recipe; nodes/materials/texture bindings/skins/bind matrices retained."
+      }
+    }
+  },
+  "measurements": {
+    "beforeStart": "2026-10-18T15:57:53.221Z",
+    "beforeEnd": "2026-10-18T15:59:37.357Z",
+    "afterStart": "2026-10-18T16:13:52.510Z",
+    "afterEnd": "2026-10-18T16:14:58.165Z",
+    "baselineLifetimeEnd": "2026-10-18T16:01:44.998Z",
+    "currentLifetimeEnd": "2026-10-18T16:16:03.839Z"
+  },
+  "media": [
+    {
+      "file": "entry-ui.mp4",
+      "durationSeconds": 37.125,
+      "bytes": 10005916,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "width": 1280,
+      "height": 720,
+      "fps": "24/1",
+      "frames": 891,
+      "fastStart": true,
+      "sha256": "bd8dd706fd81d9459d25a709de86705774d457ad3d622456ae4c920fa0e21ec7"
+    },
+    {
+      "file": "native-contacts.mp4",
+      "durationSeconds": 20.083333,
+      "bytes": 8418041,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "width": 1280,
+      "height": 720,
+      "fps": "24/1",
+      "frames": 482,
+      "fastStart": true,
+      "sha256": "a380a62ac32cbc1e42b6633734a738ea356d9ddc1b23e755bf2fc299b471b523"
+    }
+  ],
+  "limits": [
+    "One cold/warm pair on one host; not fleet percentile, all-boss stress, locked-60fps or release certification.",
+    "Draws 80 -> 84 and triangles 1158061 -> 1160805: added native crates, not a batching reduction.",
+    "Used heap, backing storage and GPU timing are separate non-additive measurements.",
+    "Three after title returns: used heap13.44 ->14.38MB; DOM329 ->345 ->361. Baseline also +16 nodes/cycle. Not leak-free.",
+    "Candidate asset evidence remains blocked; offline native derivatives do not establish production qualification.",
+    "Production pageErrors empty. Favicon HTTP404; navigation audio ERR_ABORTED retained; audio playback not accepted.",
+    "QA exclusions: wrong dialogue selector, initial tutorial-blocked input, occluded western tree approach; final corrected actual scenarios used.",
+    "Prior full TypeScript test attempt:2320 pass and2 unrelated hero timing timeouts; prior focused hero timeout; unrelated Aren animation suite823 pass1 fail. Not rerun to confirm and no full-suite pass claimed.",
+    "Commercial Game1/2 binaries not supplied/decompiled; presentation reference only. No proprietary code/assets or paid generation.",
+    "Baseline browser-run promise did not resolve despite complete on-disk receipts; Eval timeout reset VM. Receipts recovered by final end markers and3 complete cycles; no scenario substituted."
+  ],
+  "usage": {
+    "mainInputTokens": null,
+    "mainCachedInputTokens": null,
+    "mainOutputTokens": null,
+    "workerRequests": 0,
+    "workerTokens": null,
+    "note": "No workers dispatched in this integration round; provider request/token counters unavailable. No quota/cost inference."
+  }
+}

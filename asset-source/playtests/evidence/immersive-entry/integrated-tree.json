@@ -1,0 +1,33 @@
+{
+  "id": "greenwake-entry-tree-west-front",
+  "material": "wood",
+  "position": {
+    "x": -19.5,
+    "y": 0,
+    "z": -8
+  },
+  "origin": {
+    "x": -19.5,
+    "y": 0,
+    "z": -8
+  },
+  "velocity": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "angularVelocity": {
+    "x": 0,
+    "z": 0
+  },
+  "sleeping": true,
+  "tiltX": 0,
+  "tiltZ": 0,
+  "health": 130.29672147522,
+  "damage": 0.06930913231985703,
+  "broken": false,
+  "radius": 1.4591834151505747,
+  "collisionHeight": 1.7860828122342423,
+  "impactSerial": 4,
+  "impactWorldTick": 6649
+}

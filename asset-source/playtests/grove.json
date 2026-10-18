@@ -1788,8 +1788,8 @@
     "sourceType": "native-glb",
     "kind": "prop",
     "tripoSourceTask": "35924b8e-36d8-4e0c-a766-7a702eeeae9e",
-    "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
-    "outputHash": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15",
+    "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+    "outputHash": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -1807,7 +1807,7 @@
     "requiredActionIds": [],
     "actionToClipMapping": {},
     "sockets": [],
-    "provenance": "asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/provenance.json",
+    "provenance": "asset-source/generated/prop-erya-edge-tree-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {

@@ -49,12 +49,6 @@ export interface HeroPreviewController {
   dispose(): void;
 }
 
-/** Live 3D diorama the application mounts behind the title card. */
-export interface TitleStageController {
-  update(dt: number): void;
-  dispose(): void;
-}
-
 export interface GameUIOptions {
   onAction: (action: UIAction) => void;
   initialViewModel?: GameViewModel;
@@ -62,8 +56,6 @@ export interface GameUIOptions {
   onPreviewHost?: (host: HTMLElement, companionId: CompanionId | null) => void | (() => void);
   /** Renderer integration for the hero-select stage; null when no 3D preview can be offered. */
   onHeroPreviewHost?: (host: HTMLElement) => HeroPreviewController | null;
-  /** Renderer integration for the title-screen diorama; null when WebGL is unavailable. */
-  onTitleStageHost?: (host: HTMLElement) => TitleStageController | null;
 }
 
 type HeroTab = 'role' | 'stats' | 'skills' | 'story';
@@ -160,20 +152,12 @@ function morphElement(current: Element, wanted: Element): void {
     current.value = wanted.value;
   } else morphChildren(current, wanted);
 }
-/** Dialogue text as groups of three words that fade in one after another (CSS only); plain text when motion is reduced. */
-function wordGroups(text: string, reduced: boolean): string {
-  if (reduced) return esc(text);
-  const words = text.split(/\s+/).filter(Boolean);
-  const groups: string[] = [];
-  for (let index = 0; index < words.length; index += 3) groups.push(words.slice(index, index + 3).join(' '));
-  return groups.map((group, index) => `<span class="wc-wg" style="--i:${Math.min(index, 14)}">${esc(group)}${index < groups.length - 1 ? ' ' : ''}</span>`).join('');
-}
-/** Circular crest of a speaker: companion portrait, hero crest, or a monogram. */
+/** Authored companion portraits and hero crests; the crown marks a story voice without inventing a character portrait. */
 function speakerCrest(speaker: string): string {
   const portrait = PORTRAIT_ASSETS[speaker as CompanionId];
   if (portrait) return `<span class="wc-portrait wc-dialogue__crest" style="background-image:url('${portrait}')" aria-hidden="true"></span>`;
   if (isHeroId(speaker)) return heroCrest(heroById(speaker), 'wc-hero-crest wc-dialogue__crest');
-  return `<span class="wc-dialogue__crest wc-dialogue__crest--mono" aria-hidden="true">${esc((speakerName[speaker] ?? speaker).charAt(0).toUpperCase())}</span>`;
+  return '<span class="wc-dialogue__crest wc-dialogue__crest--story" aria-hidden="true"><svg viewBox="0 0 64 44" focusable="false"><path d="M5 36 9 11l14 12L32 5l9 18 14-12 4 25Z M7 41h50" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>';
 }
 function controlBindingLabel(viewModel: GameViewModel, actionId: string): string {
   const device = viewModel.settings.controlGlyphs === 'gamepad' ? 'gamepad' : 'keyboard';
@@ -384,7 +368,11 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   // The OS preference is read once and kept current by the query's change event: asking per render forces a style flush.
   const motionQuery = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
   let osReducedMotion = motionQuery?.matches ?? false;
-  const onMotionPreference = (event: MediaQueryListEvent) => { osReducedMotion = event.matches; };
+  const onMotionPreference = (event: MediaQueryListEvent) => {
+    osReducedMotion = event.matches;
+    const current = deferredViewModel ?? vm;
+    if (current) render(current);
+  };
   motionQuery?.addEventListener?.('change', onMotionPreference);
   // Gate feedback lives in its own overlay so HUD re-renders never tear it down mid-pulse.
   const feedback = document.createElement('div');
@@ -453,8 +441,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   let lastGamepadButtons = new Set<number>();
   let selectedCompanion: CompanionId | null = null;
   let previewCleanup: (() => void) | null = null;
-  /** Active title-stage diorama and its release callback; null while the title screen is hidden. */
-  let titleStageCleanup: (() => void) | null = null;
   /** Hover/focus inspection of the map-select regions; rebound whenever the screen's markup is replaced. */
   let mapSelectCleanup: (() => void) | null = null;
   let pendingPreviewCleanups: (() => void)[] = [];
@@ -555,16 +541,14 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     </div>`);
   }
 
-  const titleLetters = (word: string, start: number) =>
-    Array.from(word).map((char, index) => `<span class="wc-title__letter" style="--i:${start + index}">${esc(char)}</span>`).join('');
   function titleState(): string {
-    return containerScreen('wc-state wc-title', `${reducedMotion ? '' : atmosphereMarkup('fireflies')}<div class="wc-title-stage-host" data-title-stage="true" data-title-stage-state="loading" aria-hidden="true"><div class="wc-title-stage-placeholder" data-title-stage-placeholder>Preparing the world…</div></div><section class="wc-panel wc-state__card wc-title__card"><svg class="wc-title__crest" viewBox="0 0 64 44" aria-hidden="true" focusable="false"><path pathLength="1" d="M5 36 9 11l14 12L32 5l9 18 14-12 4 25Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path pathLength="1" d="M7 41h50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><h1 class="wc-state__title wc-title__name" aria-label="Wild Crown"><span class="wc-title__word" aria-hidden="true">${titleLetters('WILD', 0)}</span><span class="wc-title__word" aria-hidden="true">${titleLetters('CROWN', 5)}</span></h1><p class="wc-title__subtitle">The Broken Pact</p><p class="wc-state__copy">Walk with the living world of Erya. Every bond is freely chosen, and every path leaves a mark.</p>${vm?.error ? `<p class="wc-error" role="alert">${esc(vm.error.message)}</p>` : ''}<div class="wc-stack">
+    return containerScreen('wc-state wc-title', `<img class="wc-title__art" src="/ui/greenwake-title.webp" width="2560" height="1440" alt="" fetchpriority="high" decoding="async">${reducedMotion ? '' : atmosphereMarkup('fireflies')}<section class="wc-title__card"><svg class="wc-title__crest" viewBox="0 0 64 44" aria-hidden="true" focusable="false"><path d="M5 36 9 11l14 12L32 5l9 18 14-12 4 25Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 41h50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><h1 class="wc-title__name"><span>Wild</span><span>Crown</span></h1><p class="wc-title__subtitle">The Broken Pact</p><p class="wc-title__invitation">The forest remembers every bond.<br>What will it remember of you?</p>${vm?.error ? `<p class="wc-error" role="alert">${esc(vm.error.message)}</p>` : ''}<div class="wc-stack">
       ${button(playerCopy.title.new_game, 'new-game', '', 'wc-action--primary')}
       ${vm?.session?.devModes ? `${button('Chapters (Candidate Assets)', 'enter-mode', 'data-mode="chapters"')}${button('Trials (Candidate Assets)', 'enter-mode', 'data-mode="trials"')}` : ''}
       ${button(playerCopy.title.continue, 'continue', vm?.saves.continueSlotId ? '' : 'disabled')}${button(playerCopy.title.load_game, 'load-screen')}
       ${button(playerCopy.title.settings, 'settings')}
       ${button(playerCopy.title.credits, 'credits')}
-    </div><p class="wc-label">Single-player story adventure · English</p></section>`);
+    </div><p class="wc-title__note">Single-player story adventure · English</p></section>`);
   }
 
   function mapSelectState(): string {
@@ -799,7 +783,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const settings = vm!.settings;
     const speakerLabels = settings.subtitleSpeakerLabels !== false;
     const total = beat?.lines.length ?? 0;
-    return containerScreen('wc-state wc-dialogue', `<section class="wc-panel wc-state__card wc-dialogue__card" data-size="${esc(settings.subtitleSize ?? 'medium')}" data-background="${esc(settings.subtitleBackground ?? 'translucent')}" aria-labelledby="wc-dialogue-heading"><h1 class="wc-sr" id="wc-dialogue-heading">Dialogue</h1><div class="wc-dialogue__speaker">${line ? speakerCrest(line.speaker) : ''}${speakerLabels ? `<p class="wc-dialogue__name">${esc(name)}</p>` : ''}${total > 1 ? `<p class="wc-dialogue__count" aria-hidden="true">${index + 1} / ${total}</p>` : ''}</div><p class="wc-dialogue-text">${wordGroups(line?.text ?? '', reducedMotion)}</p>${beat?.choices?.length ? `<div class="wc-choice">${beat.choices.map(choice => button(`<strong>${esc(choice.title)}</strong><small>${esc(choice.description)}</small>`, 'choose', `data-choice="${esc(choice.id)}" data-option="${esc(choice.id)}"`)).join('')}</div>` : ''}<div class="wc-actions">${button('Continue', 'dialogue-next', `data-beat="${esc(beat?.next ?? '')}"`, 'wc-action--primary')}${button('Skip Cinematic', 'skip-cinematic')}</div></section>`);
+    return containerScreen(`wc-state wc-dialogue${settings.subtitleBackground === 'off' ? ' wc-dialogue--off' : ''}`, `<section class="wc-dialogue__card" data-size="${esc(settings.subtitleSize ?? 'medium')}" data-background="${esc(settings.subtitleBackground ?? 'translucent')}" aria-labelledby="wc-dialogue-heading"><h1 class="wc-sr" id="wc-dialogue-heading">Dialogue</h1><div class="wc-dialogue__portrait">${line ? speakerCrest(line.speaker) : ''}</div><div class="wc-dialogue__body"><header class="wc-dialogue__speaker">${speakerLabels ? `<p class="wc-dialogue__name">${esc(name)}</p>` : ''}${total > 1 ? `<p class="wc-dialogue__count" aria-hidden="true">${index + 1} / ${total}</p>` : ''}</header><p class="wc-dialogue-text">${esc(line?.text ?? '')}</p>${beat?.choices?.length ? `<div class="wc-choice">${beat.choices.map(choice => button(`<strong>${esc(choice.title)}</strong><small>${esc(choice.description)}</small>`, 'choose', `data-choice="${esc(choice.id)}" data-option="${esc(choice.id)}"`)).join('')}</div>` : ''}<footer class="wc-actions">${button('Continue', 'dialogue-next', `data-beat="${esc(beat?.next ?? '')}"`, 'wc-action--primary')}${button('Skip Cinematic', 'skip-cinematic')}</footer></div></section>`);
   }
 
   function choiceState(): string {
@@ -1123,16 +1107,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const cleanup = options.onPreviewHost?.(host, companion);
     previewCleanup = typeof cleanup === 'function' ? cleanup : null;
   }
-  /** Title-screen diorama: mounted when the title layer is present, released when the player leaves the screen. */
-  function bindTitleStage(): void {
-    const previous = titleStageCleanup;
-    titleStageCleanup = null;
-    if (previous) previous();
-    const host = frontLayer().querySelector<HTMLElement>('[data-title-stage]');
-    if (!host) return;
-    const controller = options.onTitleStageHost?.(host) ?? null;
-    titleStageCleanup = controller ? () => controller.dispose() : null;
-  }
 
   function later(callback: () => void, milliseconds: number): void {
     transitionTimers.push(window.setTimeout(callback, milliseconds));
@@ -1168,8 +1142,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       if (hadScreen && !reducedMotion) pendingPreviewCleanups.push(leavingPreview);
       else leavingPreview();
     }
-    // Title stage lives only on the title screen; the cross-fade is the right moment to release it so a follow-up bindTitleStage runs cleanly.
-    if (key !== 'title' && titleStageCleanup) { titleStageCleanup(); titleStageCleanup = null; }
     outgoing.classList.remove('wc-enter', 'wc-crossfade');
     const motion = motionOf(key);
     incoming.setAttribute('data-screen', key);
@@ -1220,10 +1192,11 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   function render(next: GameViewModel) {
     if (destroyed) return;
     const signature = gameUiSignature(next);
+    const nextReduced = next.settings.reducedMotion || osReducedMotion;
     patchDestination(frontLayer(), next.hud.destination);
     patchObjectiveDestination(frontLayer(), next.objectiveHud?.destination);
     syncWheel(next);
-    if (signature === lastRenderSignature) return;
+    if (signature === lastRenderSignature && nextReduced === reducedMotion) return;
     if (pointerControl) {
       deferredViewModel = next;
       return;
@@ -1232,7 +1205,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     deferredRenderFrame = 0;
     deferredViewModel = null;
     lastRenderSignature = signature;
-    const nextReduced = next.settings.reducedMotion || osReducedMotion;
     if (nextReduced !== reducedMotion || frontKey === '') container.classList.toggle('wc-reduced-motion', nextReduced);
     reducedMotion = nextReduced;
     const key = screenKey(next);
@@ -1287,9 +1259,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       layer.replaceChildren(...staging.childNodes);
     }
     if (!keepPreview) bindPreview();
-    // Title stage: only the title screen has a [data-title-stage] host. Any other screen tears it down to free the GL context.
-    if (next.screen === 'title') bindTitleStage();
-    else if (titleStageCleanup) { titleStageCleanup(); titleStageCleanup = null; }
     // Map select: hover or focus on a region highlights it and swaps the side panel locally (no dispatch).
     mapSelectCleanup?.();
     mapSelectCleanup = null;
@@ -1523,7 +1492,6 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       destroyed = true;
       previewCleanup?.();
       previewCleanup = null;
-      if (titleStageCleanup) { titleStageCleanup(); titleStageCleanup = null; }
       mapSelectCleanup?.();
       mapSelectCleanup = null;
       flushPreviewCleanups();

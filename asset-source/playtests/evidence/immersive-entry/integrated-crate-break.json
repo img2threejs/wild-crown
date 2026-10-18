@@ -1,0 +1,40 @@
+{
+  "crate": {
+    "id": "environment-loose-greenwake-courtyard-crates",
+    "material": "loose-wood",
+    "position": {
+      "x": -16.71522898001587,
+      "y": 0.012634911366089827,
+      "z": -5.2529953840722134
+    },
+    "origin": {
+      "x": -16.8,
+      "y": 0,
+      "z": -6.2
+    },
+    "velocity": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "angularVelocity": {
+      "x": 0,
+      "z": 0
+    },
+    "sleeping": true,
+    "tiltX": 0,
+    "tiltZ": 0,
+    "health": 0,
+    "damage": 1,
+    "broken": true,
+    "radius": 0.5472297252438298,
+    "collisionHeight": 0.9436189545385112,
+    "impactSerial": 9,
+    "impactWorldTick": 2682
+  },
+  "collapsed": [
+    "environment-loose-greenwake-courtyard-crates"
+  ],
+  "remainingCrateColliders": [],
+  "worldFactsUnchanged": true
+}

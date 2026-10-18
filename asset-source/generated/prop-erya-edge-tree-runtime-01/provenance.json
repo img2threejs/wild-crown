@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-erya-edge-tree",
+  "generator": "scripts/assets/build-greenwake-runtime-asset.mjs",
+  "tasks": {},
+  "settings": {
+    "operation": "recondition-existing-native-glb",
+    "simplifyRatio": null,
+    "maxError": 0.01,
+    "simplifyFlags": [
+      "LockBorder",
+      "Prune"
+    ],
+    "maxTexture": 2048
+  },
+  "runtimeCandidateGeometry": {
+    "version": 1,
+    "recipe": "CandidateGeometrySimplifier: static target 8000 triangles, deforming ratio 0.05, relative error 0.01, LockBorder + Prune; original selected vertex bytes and skinned bounds retained."
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
+      "sha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+    "sha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5",
+    "bytes": 2622024,
+    "vertices": 9774,
+    "triangles": 8000,
+    "boundsMin": [
+      -0.40684,
+      -0.43201,
+      -0.48717
+    ],
+    "boundsMax": [
+      0.4034,
+      0.43229,
+      0.4896
+    ],
+    "worldBoundsMin": [
+      -0.40684,
+      -0.43201,
+      -0.48717
+    ],
+    "worldBoundsMax": [
+      0.4034,
+      0.43229,
+      0.4896
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3269315,
+      "toBytes": 1171110
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 1543731,
+      "toBytes": 482731
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 4614779,
+      "toBytes": 557204
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1874604,
+      "trianglesAfter": 8000,
+      "relativeError": 0.006994886323809624
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 1005314,
+      "verticesAfter": 9774
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

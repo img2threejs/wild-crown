@@ -39,7 +39,8 @@
       "prop-hunter-cage",
       "prop-greenwake-boulder-cluster",
       "prop-greenwake-bramble-wall",
-      "prop-mire-bank-rock"
+      "prop-mire-bank-rock",
+      "prop-wooden-crate-stack"
     ],
     "runtimeUrl": null,
     "lodIds": [],
@@ -1082,8 +1083,8 @@
     "sourceType": "native-glb",
     "kind": "character",
     "tripoSourceTask": "d77e80ae-120d-4f90-8e0a-a093bb22a05c",
-    "runtimeUrl": "/asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/model.glb",
-    "outputHash": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b",
+    "runtimeUrl": "/asset-source/generated/actor-yara-runtime-01/actor-yara.glb",
+    "outputHash": "bd8c0ae132f3794890d404050c55f49d4540c34a1d40a2e5202427642194c350",
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1110,7 +1111,7 @@
       ]
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/provenance.json",
+    "provenance": "asset-source/generated/actor-yara-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1198,12 +1199,28 @@
     "evidenceStatus": "blocked"
   },
   {
+    "id": "prop-wooden-crate-stack",
+    "sourceType": "native-glb",
+    "kind": "prop",
+    "tripoSourceTask": "87f6085b-64e2-41f4-bc17-46e5830d21a5",
+    "sourceHash": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb",
+    "runtimeUrl": "/asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+    "outputHash": "adff6b71619d4ca4698c3e855861553efd6c60430b31bb47043e40d988de8840",
+    "lodIds": [],
+    "requiredActionIds": [],
+    "coordinateTransform": { "forward": { "x": 0, "y": 0, "z": 1 }, "scale": 2.8 },
+    "actionToClipMapping": {},
+    "sockets": [],
+    "provenance": "asset-source/generated/prop-wooden-crate-stack-runtime-01/provenance.json",
+    "evidenceStatus": "blocked"
+  },
+  {
     "id": "prop-greenwake-houses",
     "sourceType": "native-glb",
     "kind": "prop",
     "tripoSourceTask": "3597ec6b-aa5e-429d-aecb-afe86c8e1299",
-    "runtimeUrl": "/asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb",
-    "outputHash": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48",
+    "runtimeUrl": "/asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+    "outputHash": "8fa4ef9ac7079f8611b993d9676a593703383b1292f8cd0fda8841f6a3911b90",
     "lodIds": [],
     "requiredActionIds": [],
     "coordinateTransform": {
@@ -1221,7 +1238,7 @@
     },
     "actionToClipMapping": {},
     "sockets": [],
-    "provenance": "asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/provenance.json",
+    "provenance": "asset-source/generated/prop-greenwake-houses-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1229,8 +1246,8 @@
     "sourceType": "native-glb",
     "kind": "prop",
     "tripoSourceTask": "35924b8e-36d8-4e0c-a766-7a702eeeae9e",
-    "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
-    "outputHash": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15",
+    "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+    "outputHash": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -1248,7 +1265,7 @@
     "requiredActionIds": [],
     "actionToClipMapping": {},
     "sockets": [],
-    "provenance": "asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/provenance.json",
+    "provenance": "asset-source/generated/prop-erya-edge-tree-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1283,8 +1300,8 @@
     "sourceType": "native-glb",
     "kind": "prop",
     "tripoSourceTask": "a05b0f03-f9e6-4a24-8333-af1ecc567151",
-    "runtimeUrl": "/asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/model.glb",
-    "outputHash": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d",
+    "runtimeUrl": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+    "outputHash": "e12209f48c7d01dcbac251dbcb909b2b3eaf74635539cb0948490723c862854b",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -1302,7 +1319,7 @@
     "requiredActionIds": [],
     "actionToClipMapping": {},
     "sockets": [],
-    "provenance": "asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/provenance.json",
+    "provenance": "asset-source/generated/prop-root-arch-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1310,8 +1327,8 @@
     "sourceType": "native-glb",
     "kind": "prop",
     "tripoSourceTask": "71bcf405-6681-4f30-b518-b5dfff21f14d",
-    "runtimeUrl": "/asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb",
-    "outputHash": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963",
+    "runtimeUrl": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+    "outputHash": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e",
     "lodIds": [],
     "requiredActionIds": [],
     "actionToClipMapping": {},
@@ -1329,7 +1346,7 @@
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/provenance.json",
+    "provenance": "asset-source/generated/prop-hunter-cage-runtime-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {

@@ -69,25 +69,22 @@ Open copy question (not changed here): the three stage titles ("Heartroot Practi
 
 Ids, speakers, delivery, conditions, quest/beat structure and the `NARRATIVE_CUES` table are untouched. `narrative-cues.ts` contains no player-facing copy and was not changed.
 
-## Region scenes (presentation layer added in this round)
+## Region scenes and immersive entry (#130)
 
-New files: `src/content/regionPresentation.ts` (copy, palette, atmosphere and art URL for the five maps; `artUrl` is the single place to swap in higher-resolution art), `src/ui/regionScenes.ts` (pure string builders) and `src/ui/region-scenes.css`.
+`src/content/regionPresentation.ts` owns copy, palette, atmosphere and art URLs. `src/ui/regionScenes.ts` renders escaped deterministic markup; `region-scenes.css` composes it without a second camera or WebGL scene.
 
-- `loadingSceneMarkup(model)`: full-bleed layered backdrop (art with a 38 s Ken-Burns drift, palette grade, bloom, shade, vignette), a CSS-only particle layer, chapter label, per-letter title reveal, tagline, one rotating lore line (`loreIndex` is wrapped modulo the lore list), and a thin rune progress bar with a glow head, percent, phase label and detail. `role="progressbar"` carries `aria-valuenow` only when progress is known; unknown progress is an indeterminate bar with `aria-valuetext="Preparing"`. The caller appends errors and recovery buttons inside `[data-scene-actions]`.
-- `loadingSceneProgressMarkup(model)`: the progress block alone (`[data-scene-progress]`). A caller that re-renders on every progress tick should patch this block in place; a full `innerHTML` replacement restarts the title reveal.
-- `mapIntroMarkup(model)`: letterbox bars slide in, then chapter label → title → tagline → story beats → threat line → “`<hero>` enters `<map>`” appear on strictly increasing CSS delays; Continue (`data-ui-action="intro-continue"`, `data-focus-key="intro-continue"`, primary) and Skip (`intro-skip`) are visible from 1.1 s so the sequence is never a gate.
-- Exit: add `.is-leaving` to the `.wc-scene` root. Content lifts and fades, the letterbox bars slide back out and the scene fades over 0.6 s (0.2 s plain fade in reduced motion).
-- Reduced motion: `reducedMotion: true` (settings) emits `wc-scene--static`, no particle layer, no drift class, no per-letter spans; `@media (prefers-reduced-motion: reduce)` resolves the same static frame for markup that was built with motion. The static frame keeps the art, grade, bloom, vignette, letterbox bars and all text.
-- No timers, listeners or `Math.random` in the module (asserted by the tests). Markup is deterministic: particle positions come from an integer hash of the particle index.
+- **Introduction:** the complete chapter heading, tagline, story beats and threat are readable on entry. Continue and Skip are immediately available; Enter, Space, Escape and gamepad A/B keep their existing application-owned behavior. Narrow or short windows scroll the whole story rather than hiding authored beats. No automatic narrative advance.
+- **Loading:** the same landscape carries actual application phases, asset counts/detail and clamped progress. `role="progressbar"` has `aria-valuenow` only for known progress; unknown progress remains indeterminate. There is no decorative countdown or claim of readiness before required assets, scene construction and GPU preparation finish.
+- **Dialogue:** full lines replace staggered word reveals. Authored portraits/hero crests and a neutral story crown identify speakers without invented character art. Continue, Skip, subtitle size/background/speaker labels and live announcements remain available.
+- **Motion:** only a slow plate drift and bounded CSS atmosphere (at most 24 particles). Operating-system and in-game Reduced Motion settle text immediately, suppress atmosphere and stop drift. An OS preference change also updates an already-mounted scene.
 
-Measured facts (from the committed source):
+### Bridge-framing diagnosis
 
-| Item | Value |
-|---|---|
-| Particle elements | fireflies 18, leaves 14, pollen 24, snow 24, mist 12 (8 banks + 4 lantern motes); cap 24 |
-| Keyframes | 20 `@keyframes` rules; the test asserts every one animates `transform` and `opacity` only |
-| CSS size | 21 677 bytes (4 986 gzipped) |
-| Markup size per scene | loading 3.6–4.5 KB (58–70 elements); intro 4.1–5.0 KB (57–69 elements) |
-| Backdrop art | the existing map-select captures `/asset-source/ui/maps/*.jpg` (960×540 for Greenwake and Canopy, 1200×675 for the others) |
+The reported Greenwake introduction image came from `/asset-source/ui/maps/greenwake.jpg`, a 960×540 still. `sceneBackdrop()` displayed it as a CSS background; no live actor, support solver or gameplay camera rendered behind that screen. The original image itself contains the small figure on the foreground bridge. Thus this screenshot is not evidence of a simulation actor penetrating the bridge. The replacement `/ui/greenwake-entry.webp` is a 2560×1440 capture of the actual native Greenwake scenery, with actors and weapons excluded from this landscape plate. Gameplay support/collision authority and CameraDirector ownership are not bypassed or patched to conceal a live positioning defect.
 
-Tests: `tests/ui/regionScenes.test.ts` (completeness and sync with `ASSET_PLAYTESTS`, escaping, aria values, intro action keys, delay ordering, reduced-motion markup, particle cap, unknown-region errors, no timers, transform/opacity-only keyframes).
+### Native runtime budget
+
+Five heavy Greenwake dependencies (Yara, houses, edge tree, hunter cage and root arch) now ship hash-bound native derivatives. `build-greenwake-runtime-asset.mjs --input=… --runtime-candidate --max-texture=2048` bakes the **existing** blocked-candidate client simplification recipe, compacts referenced native vertices and re-encodes embedded textures. It preserves native nodes, material bindings, skin/bind matrices and selected vertex values; it is not byte-identical original topology. The versioned GLB marker prevents repeating that client work. The small loose crate is the complete native wooden component extracted from the existing hash-bound filter-drum asset, including its enclosed bottom boards; no procedural box or metal drum substitute.
+
+Candidate evidence remains blocked. These operations are offline derivatives of existing assets, not paid generation or production qualification. Exact ordered-triangle attributes/bounds were compared against the actual client recipe for all five assets; a separate deterministic path-query differential preserves reachability through support boundaries and mutable collider transitions. Performance and browser/video acceptance are recorded with the issue's committed evidence, separately from this narrative review's historical map/story findings.
+

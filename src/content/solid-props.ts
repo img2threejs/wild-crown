@@ -25,7 +25,7 @@ const DECORATION_PREFIXES = [GREENWAKE_BOUNDARY_ID_PREFIX, CANOPY_BOUNDARY_ID_PR
 /** Only explicitly soft vegetation is passable; unknown props remain physical. Boundary dressing of the playtest regions is visual only. */
 export function solidPropKind(placement: WorldAssetPlacement): SolidPropKind {
   if (DECORATION_PREFIXES.some(prefix => placement.id.startsWith(prefix))) return 'decoration';
-  // Small loose rubble can be stepped over; it must never contribute a stationary collider or standable top.
+  // Explicitly small loose rubble/crate stacks never contribute a stationary collider or standable top.
   if (isLooseEnvironmentProp(placement)) return 'decoration';
   return PROFILES[placement.assetId] ?? 'solid';
 }

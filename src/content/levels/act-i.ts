@@ -22,6 +22,9 @@ export const ACT_I_REGIONS: readonly RegionDefinition[] = [
     id: "greenwake", authoringStatus: "unaccepted", name: "Greenwake", biome: "Forest-edge settlement and the Erya boundary", bounds: { min: v(-56, -1, -52), max: v(108, 14, 88) }, environmentRecipeId: "greenwake-environment",
     props: [
       prop("greenwake-yara-courtyard", "prop-greenwake-houses", v(-12, 0, -4), "ground"),
+      // Complete native wooden stacks; loose upright bodies without quest, route or support authority.
+      prop("environment-loose-greenwake-courtyard-crates", "prop-wooden-crate-stack", v(-16.8, 0, -6.2), "ground", 0.35),
+      prop("environment-loose-greenwake-clearing-crates", "prop-wooden-crate-stack", v(4.2, 0, -4.3), "ground", -0.5),
       // Reused native river stones: small, non-blocking loose bodies beside the first combat pocket.
       prop("environment-loose-greenwake-west", "prop-mire-bank-rock", v(5.05, 0, -2.4), "ground", 0.3, v(0.12, 0.12, 0.12)),
       prop("environment-loose-greenwake-east", "prop-mire-bank-rock", v(7.15, 0, -3.1), "ground", 1.1, v(0.14, 0.12, 0.13)),

@@ -76,20 +76,13 @@ function backdropMarkup(presentation: RegionPresentation, reducedMotion: boolean
   const drift = reducedMotion ? '' : ' wc-scene__art--drift';
   return `<div class="wc-scene__backdrop" aria-hidden="true">`
     + `<div class="wc-scene__art${drift}" style="background-image:url(&quot;${esc(artUrl(presentation.artUrl))}&quot;)"></div>`
-    + `<div class="wc-scene__grade"></div><div class="wc-scene__bloom"></div><div class="wc-scene__shade"></div><div class="wc-scene__vignette"></div>`
+    + `<div class="wc-scene__shade"></div><div class="wc-scene__vignette"></div>`
     + `</div>${reducedMotion ? '' : atmosphereMarkup(presentation.atmosphere)}`;
 }
 
-/** Title as visually-hidden text plus aria-hidden per-letter spans (staggered through `--i`); plain text when static. */
-function titleMarkup(title: string, reducedMotion: boolean, startSeconds: number, id: string): string {
-  if (reducedMotion) return `<h1 class="wc-scene__title" id="${id}">${esc(title)}</h1>`;
-  let index = 0;
-  const words = title.split(' ').map(word => {
-    const chars = Array.from(word).map(char => `<span class="wc-scene__char" style="--i:${index++}">${esc(char)}</span>`).join('');
-    index += 1;
-    return `<span class="wc-scene__word">${chars}</span>`;
-  }).join(' ');
-  return `<h1 class="wc-scene__title" id="${id}" style="--t0:${startSeconds}s"><span class="wc-scene__sr">${esc(title)}</span><span aria-hidden="true">${words}</span></h1>`;
+/** One readable heading from the first frame, including reduced motion. */
+function titleMarkup(title: string, id: string): string {
+  return `<h1 class="wc-scene__title" id="${id}">${esc(title)}</h1>`;
 }
 
 const clamp01 = (value: number): number => (Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0);
@@ -104,7 +97,7 @@ export function loadingSceneProgressMarkup(model: Pick<LoadingSceneModel, 'progr
     : 'aria-valuetext="Preparing"';
   return `<div class="wc-scene__progress${known ? '' : ' is-indeterminate'}" data-scene-progress style="--p:${ratio}">`
     + `<p class="wc-scene__phase"><span class="wc-scene__phase-label">${esc(model.phaseLabel)}</span><span class="wc-scene__percent" aria-hidden="true">${known ? `${percent}%` : '&middot;&middot;&middot;'}</span></p>`
-    + `<div class="wc-scene__bar-wrap"><div class="wc-scene__bar-track" role="progressbar" aria-label="Loading progress" aria-valuemin="0" aria-valuemax="100" ${trackAttrs}><span class="wc-scene__fill"></span></div><span class="wc-scene__head" aria-hidden="true"></span></div>`
+    + `<div class="wc-scene__bar-wrap"><div class="wc-scene__bar-track" role="progressbar" aria-label="Loading progress" aria-valuemin="0" aria-valuemax="100" ${trackAttrs}><span class="wc-scene__fill"></span></div></div>`
     + `<p class="wc-scene__detail" role="status" aria-live="polite">${esc(model.detail)}</p>`
     + `</div>`;
 }
@@ -123,7 +116,7 @@ export function loadingSceneMarkup(model: LoadingSceneModel): string {
   return `<section class="wc-scene wc-scene--loading wc-scene--${presentation.id}${mode}" data-region="${presentation.id}" data-atmosphere="${presentation.atmosphere}" style="${paletteStyle(presentation)}" aria-labelledby="${titleId}">`
     + backdropMarkup(presentation, model.reducedMotion)
     + `<div class="wc-scene__content">`
-    + `<header class="wc-scene__head-block"><p class="wc-scene__chapter"><span>${esc(presentation.chapterLabel)}</span></p>${titleMarkup(presentation.title, model.reducedMotion, 0.25, titleId)}`
+    + `<header class="wc-scene__head-block">${titleMarkup(presentation.title, titleId)}<p class="wc-scene__chapter">${esc(presentation.chapterLabel)}</p>`
     + `<p class="wc-scene__tagline">${esc(presentation.tagline)}</p></header>`
     + `<footer class="wc-scene__foot">`
     + `<p class="wc-scene__lore" data-scene-lore><span class="wc-scene__lore-mark" aria-hidden="true"></span><span>${esc(lore[loreIndex]!)}</span></p>`
@@ -133,39 +126,27 @@ export function loadingSceneMarkup(model: LoadingSceneModel): string {
     + `</footer></div></section>`;
 }
 
-/** Delays (seconds) for the intro sequence, so CSS only has to read `--d`. */
-const BAR_SECONDS = 0.9;
-const TITLE_START = 1.0;
-const SEQUENCE_STEP = 1.15;
 
 /**
- * Full-bleed cinematic intro: letterbox bars, chapter label, title, tagline, story beats, threat line and the hero line,
- * revealed in sequence through staggered CSS delays. Throws for an unknown region.
+ * Full-bleed chapter entry: native scenery, complete authored story beats and immediate Continue/Skip.
+ * The player controls the pace; no timed text reveal or automatic continuation.
  */
 export function mapIntroMarkup(model: MapIntroModel): string {
   const presentation = region(model.regionId);
   const reduced = model.reducedMotion;
   const titleId = `wc-intro-title-${presentation.id}`;
-  const titleChars = Array.from(presentation.title).length;
-  const titleEnd = TITLE_START + titleChars * 0.045 + 0.5;
-  const taglineAt = titleEnd + 0.1;
-  const beatsAt = taglineAt + 1.0;
   const beats = presentation.introBeats
-    .map((beat, index) => `<p class="wc-scene__beat" style="--d:${(beatsAt + index * SEQUENCE_STEP).toFixed(2)}s">${esc(beat)}</p>`)
+    .map(beat => `<p class="wc-scene__beat">${esc(beat)}</p>`)
     .join('');
-  const afterBeats = beatsAt + presentation.introBeats.length * SEQUENCE_STEP;
   const mode = reduced ? ' wc-scene--static' : '';
   return `<section class="wc-scene wc-scene--intro wc-scene--${presentation.id}${mode}" data-region="${presentation.id}" data-atmosphere="${presentation.atmosphere}" style="${paletteStyle(presentation)}" role="dialog" aria-modal="false" aria-labelledby="${titleId}">`
     + backdropMarkup(presentation, reduced)
-    + `<div class="wc-scene__letterbox wc-scene__letterbox--top" aria-hidden="true"></div><div class="wc-scene__letterbox wc-scene__letterbox--bottom" aria-hidden="true"></div>`
     + `<div class="wc-scene__content wc-scene__content--intro">`
-    + `<header class="wc-scene__head-block"><p class="wc-scene__chapter" style="--d:${(BAR_SECONDS * 0.55).toFixed(2)}s"><span>${esc(presentation.chapterLabel)}</span></p>`
-    + titleMarkup(presentation.title, reduced, TITLE_START, titleId)
-    + `<p class="wc-scene__tagline" style="--d:${taglineAt.toFixed(2)}s">${esc(presentation.tagline)}</p></header>`
-    + `<div class="wc-scene__story"><span class="wc-scene__rule" aria-hidden="true" style="--d:${taglineAt.toFixed(2)}s"></span>${beats}`
-    + `<p class="wc-scene__threat" style="--d:${afterBeats.toFixed(2)}s"><i aria-hidden="true"></i><span>${esc(presentation.threatLine)}</span></p></div>`
-    + `<p class="wc-scene__hero" style="--d:${(afterBeats + 0.6).toFixed(2)}s">${esc(model.heroName)} enters ${esc(presentation.title)}</p>`
-    + `<div class="wc-scene__actions wc-scene__actions--intro" style="--d:${(BAR_SECONDS + 0.2).toFixed(2)}s">`
+    + `<header class="wc-scene__head-block">${titleMarkup(presentation.title, titleId)}<p class="wc-scene__chapter">${esc(presentation.chapterLabel)}</p>`
+    + `<p class="wc-scene__tagline">${esc(presentation.tagline)}</p></header>`
+    + `<div class="wc-scene__story">${beats}<p class="wc-scene__threat">${esc(presentation.threatLine)}</p></div>`
+    + `<p class="wc-scene__hero">${esc(model.heroName)} enters ${esc(presentation.title)}</p>`
+    + `<div class="wc-scene__actions wc-scene__actions--intro">`
     + `<button type="button" class="wc-scene__btn wc-scene__btn--primary" data-ui-action="intro-continue" data-focus-key="intro-continue">Continue</button>`
     + `<button type="button" class="wc-scene__btn wc-scene__btn--quiet" data-ui-action="intro-skip" data-focus-key="intro-skip">Skip</button>`
     + `</div></div></section>`;

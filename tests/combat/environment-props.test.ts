@@ -12,6 +12,8 @@ const idle: CombatInput = { tick: 0, move: { x: 0, y: 0, z: 0 }, dodgePressed: f
 const stone: WorldAssetPlacement = { id: 'environment-loose-test', assetId: 'prop-mire-bank-rock', position: { x: 0, y: 0, z: -1.5 }, rotationY: 0, scale: { x: .12, y: .12, z: .12 }, placement: 'ground' };
 const tree: WorldAssetPlacement = { ...stone, id: 'test-tree', assetId: 'prop-erya-edge-tree', scale: { x: 1, y: 1, z: 1 } };
 const fern: WorldAssetPlacement = { ...tree, id: 'test-fern', assetId: 'prop-canopy-fern-cluster' };
+const house: WorldAssetPlacement = { ...tree, id: 'test-house', assetId: 'prop-greenwake-houses' };
+const crate: WorldAssetPlacement = { ...tree, id: 'environment-loose-crate-test', assetId: 'prop-wooden-crate-stack' };
 function regionWith(props: readonly WorldAssetPlacement[]): RegionDefinition { return { ...REGIONS[0]!, props, movableObjects: [], deliveries: [] }; }
 function fixture(props: readonly WorldAssetPlacement[] = [stone], hero: HeroId = 'aren', target = false) {
   const seed = createEngineState();
@@ -47,6 +49,49 @@ describe('skill-owned environmental force', () => {
     expect(prop.position.y).toBe(0);
     expect(prop.velocity).toEqual({ x: 0, y: 0, z: 0 });
     expect(prop.impactSerial).toBe(1);
+    expect(f.engine.snapshot().events).toEqual([]);
+  });
+
+  it('real melee scuffs a house without moving or collapsing its solid, even under repeated overwhelming force', () => {
+    const f = fixture([house]), prop = f.state.environment.props[0]!;
+    f.engine.setSceneColliders([{ id: 'native:test-house:0', kind: 'box', from: { x: 0, y: 1, z: -1.5 }, halfExtents: { x: .35, y: 1, z: .35 }, blocksMovement: true, blocksCamera: true }]);
+    const solids = structuredClone(f.state.arena.colliders);
+    f.step({ lightPressed: true }); f.step({}, 90);
+    expect(prop.damage).toBeGreaterThan(0);
+    for (let index = 0; index < 30; index++) {
+      expect(impactEnvironment(f.state.environment, f.state.arena, f.state.worldTick, `house-stress-${index}`, 1e6, { x: 0, y: 0, z: 0 }, () => true)).toBe(false);
+      stepEnvironment(f.state.environment, f.state.arena, f.state.worldTick + index + 1, 1);
+      expect(Math.abs(prop.tiltX) + Math.abs(prop.tiltZ)).toBeLessThan(.02);
+    }
+    expect(prop.damage).toBeLessThan(1);
+    expect(prop.broken).toBe(false);
+    expect(prop.position).toEqual(house.position);
+    expect(f.state.arena.colliders).toEqual(solids);
+    expect(f.engine.snapshot().events).toEqual([]);
+  });
+
+  it('melee pushes an upright native crate against a wall; pause freezes it, gravity settles it and a broken crate cannot be hit again', () => {
+    const f = fixture([crate]), prop = f.state.environment.props[0]!;
+    f.state.arena.colliders.push({ id: 'crate-wall', kind: 'box', from: { x: 0, y: 1, z: -2.7 }, halfExtents: { x: 3, y: 1, z: .005 }, blocksMovement: true, blocksCamera: true });
+    f.step({ lightPressed: true });
+    for (let tick = 0; tick < 80 && !prop.impactSerial; tick++) f.step();
+    expect(prop.damage).toBeGreaterThan(0);
+    expect(prop.position.z).toBeLessThan(crate.position.z);
+    const airborne = structuredClone(prop.position);
+    f.engine.setTimePolicy('paused'); f.step({}, 30);
+    expect(prop.position).toEqual(airborne);
+    f.engine.setTimePolicy('normal'); f.step({}, 180);
+    expect(prop.position.y).toBe(0);
+    expect(prop.position.z).toBeGreaterThan(-2.7 + .3);
+    expect(prop.sleeping).toBe(true);
+    expect([prop.tiltX, prop.tiltZ]).toEqual([0, 0]);
+    expect(impactEnvironment(f.state.environment, f.state.arena, f.state.worldTick, 'crate-break', 1e6, prop.position, () => true)).toBe(true);
+    expect(prop.broken).toBe(true);
+    expect(prop.sleeping).toBe(true);
+    expect(prop.velocity).toEqual({ x: 0, y: 0, z: 0 });
+    const serial = prop.impactSerial;
+    impactEnvironment(f.state.environment, f.state.arena, f.state.worldTick + 1, 'no-ghost-crate', 1e6, prop.position, () => true);
+    expect(prop.impactSerial).toBe(serial);
     expect(f.engine.snapshot().events).toEqual([]);
   });
 
@@ -208,20 +253,23 @@ describe('material, collision and traversal boundaries', () => {
     expect(prop).toEqual(resting);
   });
 
-  it('wakes settled rubble when its measured native support is removed', () => {
-    const f = fixture([{ ...stone, position: { ...stone.position, y: 1 } }]), prop = f.state.environment.props[0]!;
-    f.engine.setSceneColliders([], [{ id: 'support', ownerId: 'native-rock', kind: 'top', minX: -2, minZ: -3.5, cell: 4, cols: 1, rows: 1, minY: 0, maxY: 1, top: [1], bottom: [0], stand: [1] }]);
-    impactEnvironment(f.state.environment, f.state.arena, 1, 'supported', 12, prop.position, () => true);
-    prop.velocity = { x: 0, y: 0, z: 0 };
-    f.step({}, 10);
-    expect(prop.position.y).toBe(1);
-    expect(prop.sleeping).toBe(true);
-    f.engine.setSceneColliders([], []);
-    expect(prop.sleeping).toBe(false);
-    f.step({}, 120);
-    expect(prop.position.y).toBe(0);
-    expect(prop.sleeping).toBe(true);
-  });
+  for (const placement of [stone, crate]) {
+    it(`wakes the surviving ${placement.assetId} body when its measured support is removed`, () => {
+      const f = fixture([{ ...placement, position: { ...placement.position, y: 1 } }]), prop = f.state.environment.props[0]!;
+      f.engine.setSceneColliders([], [{ id: 'support', ownerId: 'native-rock', kind: 'top', minX: -2, minZ: -3.5, cell: 4, cols: 1, rows: 1, minY: 0, maxY: 1, top: [1], bottom: [0], stand: [1] }]);
+      impactEnvironment(f.state.environment, f.state.arena, 1, 'supported', 36, prop.position, () => true);
+      expect(prop.broken).toBe(placement === stone); // Fractured stones persist; a surviving crate must wake too.
+      prop.velocity = { x: 0, y: 0, z: 0 };
+      f.step({}, 10);
+      expect(prop.position.y).toBe(1);
+      expect(prop.sleeping).toBe(true);
+      f.engine.setSceneColliders([], []);
+      expect(prop.sleeping).toBe(false);
+      f.step({}, 120);
+      expect(prop.position.y).toBe(0);
+      expect(prop.sleeping).toBe(true);
+    });
+  }
 
   it('distinguishes rooted wood, crushed foliage and mobile rubble, protecting quest/support structures', () => {
     const bridge = { ...tree, id: 'bridge', assetId: 'prop-greenwake-rope-bridge' };

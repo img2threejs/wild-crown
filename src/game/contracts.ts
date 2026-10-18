@@ -369,7 +369,7 @@ export interface DodgePracticeSnapshot {
 /** Simulation-owned response of one native prop. Local damage is not a quest/world fact. */
 export interface EnvironmentPropSnapshot {
   readonly id: string;
-  readonly material: 'wood' | 'foliage' | 'stone' | 'loose-stone';
+  readonly material: 'wood' | 'structure' | 'foliage' | 'stone' | 'loose-stone' | 'loose-wood';
   readonly position: Vec3;
   readonly offset: Vec3;
   readonly tiltX: number;

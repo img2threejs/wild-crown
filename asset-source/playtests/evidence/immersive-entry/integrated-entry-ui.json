@@ -1,0 +1,33 @@
+{
+  "scenario": "Actual production UI with required Yara GLB held 14 seconds; functional readiness, not performance.",
+  "url": "http://127.0.0.1:5192/",
+  "intro": {
+    "heading": "Greenwake",
+    "buttons": [
+      {
+        "text": "Continue",
+        "opacity": "1",
+        "disabled": false
+      },
+      {
+        "text": "Skip",
+        "opacity": "1",
+        "disabled": false
+      }
+    ],
+    "art": "url(\"http://127.0.0.1:5192/ui/greenwake-entry.webp\")"
+  },
+  "waiting": {
+    "playingSurface": false,
+    "progress": "54",
+    "phase": "Gathering scene assets",
+    "detail": "Loaded 41 of 49 scene assets"
+  },
+  "requiredAssetObservedHeld": true,
+  "releasedAtWaitingCapture": false,
+  "ready": {
+    "released": true,
+    "dialogue": "Night in Greenwake. Every animal in the Erya has begun to run, and the roars beneath the roots do not stop."
+  },
+  "finalUrl": "http://127.0.0.1:5192/"
+}

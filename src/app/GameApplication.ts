@@ -11,10 +11,9 @@ import { ALL_COMPANION_SKILLS, companionSkillFor, type CompanionSkill } from '..
 import { isCompanionId } from '../game/companions/CompanionLoadout.js';
 import { ACTORS } from '../content/campaign.js';
 import { CHAPTER_RUNTIME, LAYOUT_MIGRATIONS, RELATIONSHIP_RULES } from '../content/chapters.js';
-import { mountGameUI, type GameUIInstance, type HeroPreviewController, type TitleStageController } from '../ui/GameUI.js';
+import { mountGameUI, type GameUIInstance, type HeroPreviewController } from '../ui/GameUI.js';
 import { GameRenderer, mountCompanionPreview, type CompanionPreviewHandle, type PreparedCompanionParty } from '../rendering/GameRenderer.js';
 import { mountHeroPreview, type HeroPreviewHandle } from '../rendering/HeroPreview.js';
-import { mountTitleStage, type TitleStageHandle } from '../rendering/TitleStage.js';
 import { MONSTER_LOCOMOTION } from '../rendering/MonsterAnimationProfiles.js';
 import { StoryPresentation } from '../effects/index.js';
 import { ENDINGS, STORY_DIALOGUE } from '../content/story.js';
@@ -156,7 +155,6 @@ export class GameApplication {
     private presentation: StoryPresentation | null = null;
     private readonly companionPreviews = new Map<CompanionPreviewHandle, HTMLElement>();
     private heroPreview: HeroPreviewHandle | null = null;
-    private titleStage: TitleStageHandle | null = null;
     private region: RegionDefinition | null = null;
     private activeCompanionId: CompanionId | undefined;
     private partyChanging = false;
@@ -251,7 +249,7 @@ export class GameApplication {
         this.updateBanner();
         this.overlay.append(this.inputHost);
         this.input = new RuntimeInput(this.inputHost);
-        this.ui = mountGameUI(this.overlay, { onAction: action => { void this.dispatch(action); }, onPreviewHost: (host, id) => this.preview(host, id), onHeroPreviewHost: host => this.mountHeroPreviewHost(host), onTitleStageHost: host => this.mountTitleStageHost(host) });
+        this.ui = mountGameUI(this.overlay, { onAction: action => { void this.dispatch(action); }, onPreviewHost: (host, id) => this.preview(host, id), onHeroPreviewHost: host => this.mountHeroPreviewHost(host) });
         this.damageNumbers = new DamageNumbers(this.overlay);
         this.monsterLabels = new MonsterLabels(this.overlay);
         this.bossIntro = new BossIntro(this.overlay);
@@ -808,28 +806,6 @@ export class GameApplication {
             dispose: () => {
                 canceled = true;
                 if (handle && this.heroPreview === handle) this.heroPreview = null;
-                handle?.dispose();
-                handle = null;
-            },
-        };
-    }
-    /**
-     * Title diorama: mounts once the candidate manifest is read. Until then (or without WebGL) the title keeps its painted
-     * fallback; a manifest failure leaves that fallback in place rather than printing an error over the title.
-     */
-    private mountTitleStageHost(host: HTMLElement): TitleStageController {
-        let handle: TitleStageHandle | null = null;
-        let canceled = false;
-        void this.manifestPromise.then(assets => {
-            if (canceled || this.disposed || !host.isConnected) return;
-            handle = mountTitleStage(host, { assets, reducedMotion: this.settings.reducedMotion });
-            this.titleStage = handle;
-        }).catch(() => undefined);
-        return {
-            update: dt => { handle?.stage.update(dt); },
-            dispose: () => {
-                canceled = true;
-                if (handle && this.titleStage === handle) this.titleStage = null;
                 handle?.dispose();
                 handle = null;
             },
@@ -2325,7 +2301,6 @@ export class GameApplication {
         const delta = this.previousTime ? Math.min(Math.max(0, now - this.previousTime), STEP * MAX_STEPS) : 0;
         this.previousTime = now;
         if (this.screen === 'hero-select' && this.heroPreview && !document.hidden) this.heroPreview.update(delta);
-        if (this.screen === 'title' && this.titleStage && !document.hidden) this.titleStage.stage.update(delta);
         if ((this.screen === 'companions' || this.screen === 'hero-select') && !document.hidden && delta > 0) {
             for (const [handle, host] of this.companionPreviews) {
                 if (!host.isConnected) {
