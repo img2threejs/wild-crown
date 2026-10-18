@@ -3,7 +3,7 @@
 // rig (identical bind pose required), optionally simplifies static triangle lists with
 // meshoptimizer, re-encodes embedded textures with macOS `sips` (JPEG for opaque maps), and
 // writes provenance with hashes and clip durations.
-// Usage: node scripts/assets/build-greenwake-runtime-asset.mjs <asset-id> [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>] [--base=model]
+// Usage: node scripts/assets/build-greenwake-runtime-asset.mjs <asset-id> [--input=<native-glb>] [--runtime-candidate] [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>] [--base=model]
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -13,8 +13,11 @@ import { MeshoptSimplifier } from 'meshoptimizer';
 
 const ROOT = resolve(new URL('../..', import.meta.url).pathname);
 const asset = process.argv[2];
-if (!asset) { console.error('Usage: build-greenwake-runtime-asset.mjs <asset-id> [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>]'); process.exit(2); }
+if (!asset) { console.error('Usage: build-greenwake-runtime-asset.mjs <asset-id> [--input=<native-glb>] [--runtime-candidate] [--simplify=<ratio>] [--max-error=<relative>] [--max-texture=<px>] [--revision=<n>] [--prune-slivers=<aspect[,aspect...]>] [--sliver-edge=<fraction[,fraction...]>] [--simplify-skinned] [--compact] [--cull-to-source=<distance>] [--simplify-flags=<Flag,...>] [--uv-weight=<w>]'); process.exit(2); }
 const option = name => process.argv.slice(3).find(arg => arg.startsWith(`--${name}=`))?.split('=')[1];
+// Recondition a hash-bound native input without requiring Tripo task sidecars.
+const inputPath = option('input');
+const runtimeCandidate = process.argv.includes('--runtime-candidate');
 const simplifyRatio = option('simplify') === undefined ? undefined : Number(option('simplify'));
 const maxTexture = Number(option('max-texture') ?? 2048);
 /** Relative (to mesh extent) geometric error the simplifier may introduce before stopping short of the ratio. */
@@ -24,7 +27,7 @@ const maxError = Number(option('max-error') ?? 0.02);
 const simplifyFlags = (option('simplify-flags') ?? 'LockBorder').split(',').filter(Boolean);
 /** With a weight > 0 the simplifier also tracks TEXCOORD_0, so collapses that would smear the baked texture cost more. */
 const uvWeight = Number(option('uv-weight') ?? 0);
-const allowSkinned = process.argv.includes('--simplify-skinned');
+const allowSkinned = runtimeCandidate || process.argv.includes('--simplify-skinned');
 /**
  * Tripo's decimator can grow thin rods of tiny triangles into empty space (the high-poly source has none). With this option
  * every triangle with a vertex farther than <distance> (model units, the decimated GLB is normalised to ~1 unit) from the
@@ -336,6 +339,17 @@ function compactVertices(source) {
     const count = source.json.accessors[primitive.attributes.POSITION].count;
     const used = new Uint8Array(count);
     for (const index of indices) used[index] = 1;
+    if (runtimeCandidate && primitive.attributes.JOINTS_0 !== undefined) {
+      // The live skinned simplifier retains the original bounds. Keep its six native extent vertices too,
+      // without drawing extra triangles, so compaction cannot alter NPC fitting or grounded placement.
+      const positions = accessorFloats(source, primitive.attributes.POSITION);
+      const extrema = [0, 0, 0, 0, 0, 0];
+      for (let i = 1; i < count; i++) for (let axis = 0; axis < 3; axis++) {
+        if (positions[i * 3 + axis] < positions[extrema[axis] * 3 + axis]) extrema[axis] = i;
+        if (positions[i * 3 + axis] > positions[extrema[axis + 3] * 3 + axis]) extrema[axis + 3] = i;
+      }
+      for (const index of extrema) used[index] = 1;
+    }
     const remap = new Uint32Array(count);
     let kept = 0;
     for (let i = 0; i < count; i++) if (used[i]) remap[i] = kept++;
@@ -405,11 +419,17 @@ async function simplifyStatic(source, ratio) {
   for (const mesh of json.meshes) for (const primitive of mesh.primitives) {
     if (primitive.indices === undefined || (primitive.mode ?? 4) !== 4) continue;
     const indices = accessorIndices(source, primitive.indices), positions = accessorFloats(source, primitive.attributes.POSITION);
-    const target = Math.max(3, Math.floor(indices.length * ratio / 3) * 3);
+    if (runtimeCandidate && indices.length / 3 <= 50_000) continue;
+    const effectiveRatio = runtimeCandidate
+      ? (primitive.attributes.WEIGHTS_0 !== undefined ? 0.05 : Math.min(0.05, 24_000 / indices.length))
+      : ratio;
+    const target = Math.max(3, Math.floor(indices.length * effectiveRatio / 3) * 3);
     const uvAccessor = primitive.attributes.TEXCOORD_0;
-    const [reduced, error] = uvWeight > 0 && uvAccessor !== undefined
-      ? MeshoptSimplifier.simplifyWithAttributes(indices, positions, 3, texcoords(source, uvAccessor), 2, [uvWeight, uvWeight], null, target, maxError, simplifyFlags)
-      : MeshoptSimplifier.simplify(indices, positions, 3, target, maxError, simplifyFlags);
+    const [reduced, error] = runtimeCandidate
+      ? MeshoptSimplifier.simplify(indices, positions, 3, target, 0.01, ['LockBorder', 'Prune'])
+      : uvWeight > 0 && uvAccessor !== undefined
+        ? MeshoptSimplifier.simplifyWithAttributes(indices, positions, 3, texcoords(source, uvAccessor), 2, [uvWeight, uvWeight], null, target, maxError, simplifyFlags)
+        : MeshoptSimplifier.simplify(indices, positions, 3, target, maxError, simplifyFlags);
     if (!Number.isFinite(error) || reduced.length % 3 !== 0 || reduced.length === 0) throw new Error('Simplification produced invalid geometry');
     const pad = (4 - length % 4) % 4;
     if (pad) { pieces.push(Buffer.alloc(pad)); length += pad; }
@@ -476,17 +496,18 @@ function multiply(a, b) {
   return out;
 }
 
-const rig = result('rig'), lod = result('decimate'), model = result('model');
+const rig = inputPath ? undefined : result('rig'), lod = inputPath ? undefined : result('decimate'), model = inputPath ? undefined : result('model');
 // Every retarget batch (anim-a, anim-b, ...) produced by the chain shares the rig; the first is the base.
 const anims = [];
-for (let code = 97; code <= 122 && result(`anim-${String.fromCharCode(code)}`); code++) anims.push(result(`anim-${String.fromCharCode(code)}`));
+if (!inputPath) for (let code = 97; code <= 122 && result(`anim-${String.fromCharCode(code)}`); code++) anims.push(result(`anim-${String.fromCharCode(code)}`));
 // Rigged assets without retarget batches (authored-only clip sets) start from the bare rig output.
 // `--base=model` starts a static prop from the high-poly model output instead of the Tripo decimation (Tripo's decimator collapsed the Ash Hunters' camp:
 // its thin bamboo frames and tents came back as floating fragments); the local meshoptimizer pass then does the reduction.
 const baseResult = option('base') === 'model' ? model : anims[0] ?? rig ?? lod;
 if (option('base') !== undefined && option('base') !== 'model') throw new Error('--base must be "model"');
-if (!baseResult) throw new Error(`No Tripo outputs for ${asset}`);
-const basePath = resolve(ROOT, baseResult.output_dir, 'model.glb');
+if (!inputPath && !baseResult) throw new Error(`No Tripo outputs for ${asset}`);
+const basePath = resolve(ROOT, inputPath ?? join(baseResult.output_dir, 'model.glb'));
+if (basePath === resolve(ROOT, 'asset-source/generated', `${asset}-runtime-${revisionTag}`, `${asset}.glb`)) throw new Error('Never overwrite the native input.');
 let built = parse(readFileSync(basePath));
 for (const donor of anims.slice(1)) built = mergeClips(built, parse(readFileSync(resolve(ROOT, donor.output_dir, 'model.glb'))));
 let floatingCull = null;
@@ -497,13 +518,14 @@ if (cullDistance !== undefined) {
 let slivers = null;
 if (sliverAspects) ({ built, report: slivers } = pruneSlivers(built));
 let simplification = null;
-if (simplifyRatio !== undefined) {
+if (simplifyRatio !== undefined || runtimeCandidate) {
   ({ built, report: simplification } = await simplifyStatic(built, simplifyRatio));
   // Edge collapses re-triangulate across the mesh and can create fresh needles, so prune once more.
   if (sliverAspects) { const again = pruneSlivers(built); built = again.built; slivers = [...slivers, ...again.report]; }
 }
 let compaction = null;
-if (compact) ({ built, report: compaction } = compactVertices(built));
+if (compact || runtimeCandidate) ({ built, report: compaction } = compactVertices(built));
+if (runtimeCandidate) for (const scene of built.json.scenes) scene.extras = { ...scene.extras, wildCrownCandidateGeometryBudget: 1 };
 const { packed, report: textures } = recodeTextures(built, maxTexture);
 const bytes = encode(packed.json, packed.bin);
 const outDir = resolve(ROOT, 'asset-source/generated', `${asset}-runtime-${revisionTag}`);
@@ -513,13 +535,20 @@ const bounds = meshBounds(packed.json);
 const rigTask = rig ? JSON.parse(readFileSync(resolve(ROOT, rig.output_dir, 'task.json'), 'utf8')) : undefined;
 const rigLabel = rigTask ? `rig ${rigTask.input?.model_version ?? 'v2.5'} ${rigTask.input?.topology ?? 'unknown'} (${rigTask.input?.spec ?? 'tripo'} spec)` : null;
 const provenance = {
-  schemaVersion: 1, assetId: asset, generator: 'Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)',
+  schemaVersion: 1, assetId: asset, generator: inputPath ? 'scripts/assets/build-greenwake-runtime-asset.mjs' : 'Tripo API via tripo-cli (scripts/assets/tripo-greenwake-chain.mjs)',
   tasks: {
     model: model?.task_id, decimate: lod?.task_id, rig: rig?.task_id,
     ...Object.fromEntries(anims.map((anim, index) => [`anim${String.fromCharCode(65 + index)}`, anim.task_id])),
   },
-  settings: { model: 'tripo-v3.1', geometry_quality: 'detailed', texture_quality: 'extreme', pbr: true, rig: rigLabel, retarget: rig ? 'animate_in_place' : null, simplifyRatio: simplifyRatio ?? null, maxError: simplifyRatio === undefined ? null : maxError, ...(simplifyRatio !== undefined && (simplifyFlags.join() !== 'LockBorder' || uvWeight) ? { simplifyFlags, uvWeight } : {}), maxTexture, ...(sliverAspects ? { pruneSlivers: sliverAspects.map((aspect, tier) => ({ aspect, edgeFractionOfDiagonal: sliverEdges[tier] })) } : {}), ...(cullDistance === undefined ? {} : { cullToSourceDistance: cullDistance }) },
-  inputs: { base: { path: baseResult.output_dir + '/model.glb', sha256: sha256(readFileSync(basePath)) } },
+  settings: {
+    ...(inputPath ? { operation: 'recondition-existing-native-glb' } : { model: 'tripo-v3.1', geometry_quality: 'detailed', texture_quality: 'extreme', pbr: true, rig: rigLabel, retarget: rig ? 'animate_in_place' : null }),
+    simplifyRatio: simplifyRatio ?? null, maxError: runtimeCandidate ? .01 : simplifyRatio === undefined ? null : maxError,
+    ...(runtimeCandidate ? { simplifyFlags: ['LockBorder', 'Prune'] } : simplifyRatio !== undefined && (simplifyFlags.join() !== 'LockBorder' || uvWeight) ? { simplifyFlags, uvWeight } : {}),
+    maxTexture, ...(sliverAspects ? { pruneSlivers: sliverAspects.map((aspect, tier) => ({ aspect, edgeFractionOfDiagonal: sliverEdges[tier] })) } : {}),
+    ...(cullDistance === undefined ? {} : { cullToSourceDistance: cullDistance }),
+  },
+  ...(runtimeCandidate ? { runtimeCandidateGeometry: { version: 1, recipe: 'CandidateGeometrySimplifier: static target 8000 triangles, deforming ratio 0.05, relative error 0.01, LockBorder + Prune; original selected vertex bytes and skinned bounds retained.' } } : {}),
+  inputs: { base: { path: inputPath ?? baseResult.output_dir + '/model.glb', sha256: sha256(readFileSync(basePath)) } },
   output: { path: `asset-source/generated/${asset}-runtime-${revisionTag}/${asset}.glb`, sha256: sha256(bytes), bytes: bytes.length, vertices: bounds.vertices, triangles: bounds.triangles, boundsMin: bounds.min, boundsMax: bounds.max, ...(bounds.world ? { worldBoundsMin: bounds.world.min, worldBoundsMax: bounds.world.max } : {}) },
   clips: clipDurations(packed.json), textures, simplification, ...(floatingCull ? { floatingCull } : {}), ...(slivers ? { slivers } : {}), ...(compaction ? { compaction } : {}),
   assessment: { evidenceStatus: 'blocked', productionAcceptance: 'NOT_ESTABLISHED', note: 'Local playtest candidate; deformation and clip quality require in-game visual review.' },

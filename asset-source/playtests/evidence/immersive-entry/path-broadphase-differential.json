@@ -1,0 +1,11 @@
+{
+  "scenario": "Deterministic exact-query differential, not a gameplay FPS benchmark.",
+  "seed": 130,
+  "cases": 2672,
+  "mutableTransitions": 6,
+  "acceptedBefore": 1422,
+  "acceptedAfter": 1422,
+  "baselineMs": 2412.4558749999997,
+  "currentMs": 215.340917,
+  "mismatches": []
+}

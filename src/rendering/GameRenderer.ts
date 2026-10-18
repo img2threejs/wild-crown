@@ -1439,7 +1439,7 @@ export class GameRenderer {
     this.sceneSupports.length = 0;
     for (const entry of this.nativeSolidEntries) {
       if (entry.visibleWhen && this.worldFacts[entry.visibleWhen] !== true) continue;
-      if (this.propResponses.brokenFoliageIds.has(entry.placementId)) continue;
+      if (this.propResponses.collapsedPropIds.has(entry.placementId)) continue;
       this.sceneColliders.push(entry.collider);
       if (entry.support && !this.sceneSupports.includes(entry.support)) this.sceneSupports.push(entry.support);
     }

@@ -1,0 +1,28 @@
+[
+  {
+    "file": "entry-ui.mp4",
+    "durationSeconds": 37.125,
+    "bytes": 10005916,
+    "codec": "h264",
+    "pixelFormat": "yuv420p",
+    "width": 1280,
+    "height": 720,
+    "fps": "24/1",
+    "frames": 891,
+    "fastStart": true,
+    "sha256": "bd8dd706fd81d9459d25a709de86705774d457ad3d622456ae4c920fa0e21ec7"
+  },
+  {
+    "file": "native-contacts.mp4",
+    "durationSeconds": 20.083333,
+    "bytes": 8418041,
+    "codec": "h264",
+    "pixelFormat": "yuv420p",
+    "width": 1280,
+    "height": 720,
+    "fps": "24/1",
+    "frames": 482,
+    "fastStart": true,
+    "sha256": "a380a62ac32cbc1e42b6633734a738ea356d9ddc1b23e755bf2fc299b471b523"
+  }
+]

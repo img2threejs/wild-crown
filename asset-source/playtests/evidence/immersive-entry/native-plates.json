@@ -1,0 +1,58 @@
+{
+  "source": "Actual GameRenderer/native Greenwake capture, not commercial/reference-image compositing.",
+  "captureBaseline": "2d86748",
+  "titleIncludes": "Native Aren with his actual weapon and Greenwake scenery.",
+  "entryIncludes": "Native scenery only; actors and weapons excluded.",
+  "finalResolution": [
+    2560,
+    1440
+  ],
+  "inputs": [
+    {
+      "role": "title-capture",
+      "file": "native-title-hero-v2.png",
+      "sha256": "9235636238835752227757ac5666fb28fdecf9ffa815f7479b89205bd8cf0323",
+      "bytes": 4230581
+    },
+    {
+      "role": "entry-capture",
+      "file": "native-entry-final.png",
+      "sha256": "dc8bba19bcddf613cf1078933474adb6981a5060d45563df37411661a1df74bb",
+      "bytes": 4045276
+    },
+    {
+      "role": "title-shipped",
+      "file": "greenwake-title.webp",
+      "sha256": "cd5b0fc5431fa620b9e84c912478ebb51cb84dff164e24478e6f9f99ef20c491",
+      "bytes": 543988
+    },
+    {
+      "role": "entry-shipped",
+      "file": "greenwake-entry.webp",
+      "sha256": "49a4cbc722c745d0037b7726187efb414ba77b1f40b18d8a06bd8a16be1cfb8f",
+      "bytes": 494150
+    }
+  ],
+  "entryDirection": {
+    "result": {
+      "type": "object",
+      "value": {
+        "camera": [
+          -23,
+          4,
+          2
+        ],
+        "target": [
+          -14,
+          1.8,
+          -8
+        ],
+        "fov": 45,
+        "heroVisible": false,
+        "weaponVisible": false,
+        "scenicInstances": 8
+      }
+    }
+  },
+  "note": "The historical initial title-direction probe predates final framing and is not presented as the final title camera."
+}

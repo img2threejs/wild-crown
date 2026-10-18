@@ -1,0 +1,5117 @@
+{
+  "label": "integrated-after",
+  "origin": "http://127.0.0.1:5192",
+  "start": "2026-10-18T16:13:52.510Z",
+  "viewport": {
+    "url": "http://127.0.0.1:5192/",
+    "width": 1568,
+    "height": 817,
+    "dpr": 1
+  },
+  "cold": {
+    "titleObservedReadyMs": 877.592874999973,
+    "titleWindow": {
+      "observedWindowMs": 5016.500000005961,
+      "frames": 302,
+      "frameMedianMs": 16.699999999999818,
+      "frameP95Ms": 16.700000000000273,
+      "frameMaxMs": 16.800000000000182,
+      "longTasks": 0,
+      "longTaskTotalMs": 0,
+      "longTaskMaxMs": 0,
+      "counterWindowMs": 5020.764000000781,
+      "scriptMs": 17.784999999999997,
+      "taskMs": 207.385,
+      "layoutMs": 0,
+      "recalcStyleMs": 92.722,
+      "heapUsedBytes": 6744840,
+      "heapTotalBytes": 11829248
+    },
+    "titlePaint": [
+      {
+        "name": "first-paint",
+        "startTime": 124
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 352
+      }
+    ],
+    "titleResources": {
+      "count": 15,
+      "transferBytes": 1519560,
+      "encodedBodyBytes": 1515060,
+      "entries": [
+        {
+          "path": "/assets/main-Bi5I-SwT.js",
+          "transferSize": 621194,
+          "encodedBodySize": 620894,
+          "decodedBodySize": 2133700,
+          "duration": 87.59999999403954,
+          "initiatorType": "script"
+        },
+        {
+          "path": "/assets/geometry-CuoBkIc6.js",
+          "transferSize": 152371,
+          "encodedBodySize": 152071,
+          "decodedBodySize": 585789,
+          "duration": 55.8999999910593,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/assets/main-BeZCHkvE.css",
+          "transferSize": 23664,
+          "encodedBodySize": 23364,
+          "decodedBodySize": 118880,
+          "duration": 37.79999999701977,
+          "initiatorType": "link"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 5.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 4.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 3.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/assets/barlow-latin-700-normal-A9pxMQ4z.woff2",
+          "transferSize": 23088,
+          "encodedBodySize": 22788,
+          "decodedBodySize": 22788,
+          "duration": 32.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2",
+          "transferSize": 22608,
+          "encodedBodySize": 22308,
+          "decodedBodySize": 22308,
+          "duration": 32.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-italic-BXpar-rJ.woff2",
+          "transferSize": 23456,
+          "encodedBodySize": 23156,
+          "decodedBodySize": 23156,
+          "duration": 32.69999998807907,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-400-normal-qiz4-Cze.woff2",
+          "transferSize": 22496,
+          "encodedBodySize": 22196,
+          "decodedBodySize": 22196,
+          "duration": 32.79999999701977,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-600-normal-DILqtrty.woff2",
+          "transferSize": 23072,
+          "encodedBodySize": 22772,
+          "decodedBodySize": 22772,
+          "duration": 33,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-500-normal-BPAOfeC8.woff2",
+          "transferSize": 22308,
+          "encodedBodySize": 22008,
+          "decodedBodySize": 22008,
+          "duration": 34,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/greenwake-title.webp",
+          "transferSize": 544288,
+          "encodedBodySize": 543988,
+          "decodedBodySize": 543988,
+          "duration": 9.5,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/favicon.ico",
+          "transferSize": 300,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 2.7000000029802322,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/favicon.ico",
+          "transferSize": 300,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 3.9000000059604645,
+          "initiatorType": "other"
+        }
+      ]
+    },
+    "titleHeap": {
+      "natural": {
+        "usedSize": 6774208,
+        "totalSize": 11829248,
+        "embedderHeapUsedSize": 11501368,
+        "backingStorageSize": 2739963
+      },
+      "afterForcedGc": {
+        "usedSize": 6409448,
+        "totalSize": 7372800,
+        "embedderHeapUsedSize": 2193280,
+        "backingStorageSize": 2735619
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 188,
+        "jsEventListeners": 34
+      }
+    },
+    "boot": {
+      "heroSelectedAtMs": 8379.90000000596,
+      "introAtMs": 8436.79999999702,
+      "introSkippedAtMs": 9474.90000000596,
+      "firstDialogueAtMs": 16637.70000000298,
+      "heroSelectionToDialogueMs": 8257.79999999702,
+      "declaredIntroDwellMs": 1000,
+      "declaredHeroPreviewDwellMs": 2000
+    },
+    "gameWindow": {
+      "observedWindowMs": 5002.800000005962,
+      "frames": 301,
+      "frameMedianMs": 16.69999999999709,
+      "frameP95Ms": 16.700000000000728,
+      "frameMaxMs": 16.80000000000291,
+      "longTasks": 0,
+      "longTaskTotalMs": 0,
+      "longTaskMaxMs": 0,
+      "counterWindowMs": 5012.730999995256,
+      "scriptMs": 1692.8229999999996,
+      "taskMs": 1772.6290000000001,
+      "layoutMs": 0,
+      "recalcStyleMs": 14.841999999999993,
+      "heapUsedBytes": 42841396,
+      "heapTotalBytes": 65257472
+    },
+    "gameResources": {
+      "count": 281,
+      "transferBytes": 121419010,
+      "encodedBodyBytes": 142422703,
+      "entries": [
+        {
+          "path": "/assets/main-Bi5I-SwT.js",
+          "transferSize": 621194,
+          "encodedBodySize": 620894,
+          "decodedBodySize": 2133700,
+          "duration": 87.59999999403954,
+          "initiatorType": "script"
+        },
+        {
+          "path": "/assets/geometry-CuoBkIc6.js",
+          "transferSize": 152371,
+          "encodedBodySize": 152071,
+          "decodedBodySize": 585789,
+          "duration": 55.8999999910593,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/assets/main-BeZCHkvE.css",
+          "transferSize": 23664,
+          "encodedBodySize": 23364,
+          "decodedBodySize": 118880,
+          "duration": 37.79999999701977,
+          "initiatorType": "link"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 5.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 4.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 3.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/assets/barlow-latin-700-normal-A9pxMQ4z.woff2",
+          "transferSize": 23088,
+          "encodedBodySize": 22788,
+          "decodedBodySize": 22788,
+          "duration": 32.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2",
+          "transferSize": 22608,
+          "encodedBodySize": 22308,
+          "decodedBodySize": 22308,
+          "duration": 32.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-italic-BXpar-rJ.woff2",
+          "transferSize": 23456,
+          "encodedBodySize": 23156,
+          "decodedBodySize": 23156,
+          "duration": 32.69999998807907,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-400-normal-qiz4-Cze.woff2",
+          "transferSize": 22496,
+          "encodedBodySize": 22196,
+          "decodedBodySize": 22196,
+          "duration": 32.79999999701977,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-600-normal-DILqtrty.woff2",
+          "transferSize": 23072,
+          "encodedBodySize": 22772,
+          "decodedBodySize": 22772,
+          "duration": 33,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-500-normal-BPAOfeC8.woff2",
+          "transferSize": 22308,
+          "encodedBodySize": 22008,
+          "decodedBodySize": 22008,
+          "duration": 34,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/greenwake-title.webp",
+          "transferSize": 544288,
+          "encodedBodySize": 543988,
+          "decodedBodySize": 543988,
+          "duration": 9.5,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/favicon.ico",
+          "transferSize": 300,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 2.7000000029802322,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/favicon.ico",
+          "transferSize": 300,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 3.9000000059604645,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/audio/ui/click-1.ogg",
+          "transferSize": 1022,
+          "encodedBodySize": 722,
+          "decodedBodySize": 722,
+          "duration": 8.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-2.ogg",
+          "transferSize": 552,
+          "encodedBodySize": 252,
+          "decodedBodySize": 252,
+          "duration": 9.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-3.ogg",
+          "transferSize": 541,
+          "encodedBodySize": 241,
+          "decodedBodySize": 241,
+          "duration": 9.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-1.ogg",
+          "transferSize": 1083,
+          "encodedBodySize": 783,
+          "decodedBodySize": 783,
+          "duration": 9,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-2.ogg",
+          "transferSize": 930,
+          "encodedBodySize": 630,
+          "decodedBodySize": 630,
+          "duration": 8.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-1.ogg",
+          "transferSize": 3186,
+          "encodedBodySize": 2886,
+          "decodedBodySize": 2886,
+          "duration": 8.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-2.ogg",
+          "transferSize": 3745,
+          "encodedBodySize": 3445,
+          "decodedBodySize": 3445,
+          "duration": 10.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/back-1.ogg",
+          "transferSize": 792,
+          "encodedBodySize": 492,
+          "decodedBodySize": 492,
+          "duration": 10.699999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/error-1.ogg",
+          "transferSize": 2272,
+          "encodedBodySize": 1972,
+          "decodedBodySize": 1972,
+          "duration": 10.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/open-1.ogg",
+          "transferSize": 1448,
+          "encodedBodySize": 1148,
+          "decodedBodySize": 1148,
+          "duration": 10.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/close-1.ogg",
+          "transferSize": 1424,
+          "encodedBodySize": 1124,
+          "decodedBodySize": 1124,
+          "duration": 10.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/toggle-1.ogg",
+          "transferSize": 1344,
+          "encodedBodySize": 1044,
+          "decodedBodySize": 1044,
+          "duration": 11.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/scroll-1.ogg",
+          "transferSize": 4590,
+          "encodedBodySize": 4290,
+          "decodedBodySize": 4290,
+          "duration": 12.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-2.ogg",
+          "transferSize": 1802,
+          "encodedBodySize": 1502,
+          "decodedBodySize": 1502,
+          "duration": 12.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-1.ogg",
+          "transferSize": 2111,
+          "encodedBodySize": 1811,
+          "decodedBodySize": 1811,
+          "duration": 12.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-1.ogg",
+          "transferSize": 2754,
+          "encodedBodySize": 2454,
+          "decodedBodySize": 2454,
+          "duration": 12.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-2.ogg",
+          "transferSize": 2587,
+          "encodedBodySize": 2287,
+          "decodedBodySize": 2287,
+          "duration": 12.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-1.ogg",
+          "transferSize": 1998,
+          "encodedBodySize": 1698,
+          "decodedBodySize": 1698,
+          "duration": 12.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-2.ogg",
+          "transferSize": 2636,
+          "encodedBodySize": 2336,
+          "decodedBodySize": 2336,
+          "duration": 13.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-1.ogg",
+          "transferSize": 3918,
+          "encodedBodySize": 3618,
+          "decodedBodySize": 3618,
+          "duration": 15.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-3.ogg",
+          "transferSize": 1950,
+          "encodedBodySize": 1650,
+          "decodedBodySize": 1650,
+          "duration": 15.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-2.ogg",
+          "transferSize": 3335,
+          "encodedBodySize": 3035,
+          "decodedBodySize": 3035,
+          "duration": 15,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-1.ogg",
+          "transferSize": 5157,
+          "encodedBodySize": 4857,
+          "decodedBodySize": 4857,
+          "duration": 15.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-2.ogg",
+          "transferSize": 6027,
+          "encodedBodySize": 5727,
+          "decodedBodySize": 5727,
+          "duration": 15.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-1.ogg",
+          "transferSize": 2462,
+          "encodedBodySize": 2162,
+          "decodedBodySize": 2162,
+          "duration": 15.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-2.ogg",
+          "transferSize": 1988,
+          "encodedBodySize": 1688,
+          "decodedBodySize": 1688,
+          "duration": 17.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-1.ogg",
+          "transferSize": 2388,
+          "encodedBodySize": 2088,
+          "decodedBodySize": 2088,
+          "duration": 17.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-2.ogg",
+          "transferSize": 2438,
+          "encodedBodySize": 2138,
+          "decodedBodySize": 2138,
+          "duration": 17.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-1.ogg",
+          "transferSize": 2156,
+          "encodedBodySize": 1856,
+          "decodedBodySize": 1856,
+          "duration": 17.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-2.ogg",
+          "transferSize": 2101,
+          "encodedBodySize": 1801,
+          "decodedBodySize": 1801,
+          "duration": 17.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-1.ogg",
+          "transferSize": 2225,
+          "encodedBodySize": 1925,
+          "decodedBodySize": 1925,
+          "duration": 16.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-2.ogg",
+          "transferSize": 2094,
+          "encodedBodySize": 1794,
+          "decodedBodySize": 1794,
+          "duration": 20.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-1.ogg",
+          "transferSize": 2336,
+          "encodedBodySize": 2036,
+          "decodedBodySize": 2036,
+          "duration": 20.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-2.ogg",
+          "transferSize": 2922,
+          "encodedBodySize": 2622,
+          "decodedBodySize": 2622,
+          "duration": 20.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-1.ogg",
+          "transferSize": 3044,
+          "encodedBodySize": 2744,
+          "decodedBodySize": 2744,
+          "duration": 20.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-2.ogg",
+          "transferSize": 2996,
+          "encodedBodySize": 2696,
+          "decodedBodySize": 2696,
+          "duration": 20.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-1.ogg",
+          "transferSize": 2732,
+          "encodedBodySize": 2432,
+          "decodedBodySize": 2432,
+          "duration": 20.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-2.ogg",
+          "transferSize": 2803,
+          "encodedBodySize": 2503,
+          "decodedBodySize": 2503,
+          "duration": 22.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-1.ogg",
+          "transferSize": 6618,
+          "encodedBodySize": 6318,
+          "decodedBodySize": 6318,
+          "duration": 23,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-2.ogg",
+          "transferSize": 6879,
+          "encodedBodySize": 6579,
+          "decodedBodySize": 6579,
+          "duration": 22.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-1.ogg",
+          "transferSize": 8120,
+          "encodedBodySize": 7820,
+          "decodedBodySize": 7820,
+          "duration": 22.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-2.ogg",
+          "transferSize": 7746,
+          "encodedBodySize": 7446,
+          "decodedBodySize": 7446,
+          "duration": 23.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-1.ogg",
+          "transferSize": 6755,
+          "encodedBodySize": 6455,
+          "decodedBodySize": 6455,
+          "duration": 23.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-1.ogg",
+          "transferSize": 4126,
+          "encodedBodySize": 3826,
+          "decodedBodySize": 3826,
+          "duration": 26.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-2.ogg",
+          "transferSize": 8251,
+          "encodedBodySize": 7951,
+          "decodedBodySize": 7951,
+          "duration": 26.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-2.ogg",
+          "transferSize": 6549,
+          "encodedBodySize": 6249,
+          "decodedBodySize": 6249,
+          "duration": 27.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-1.ogg",
+          "transferSize": 6366,
+          "encodedBodySize": 6066,
+          "decodedBodySize": 6066,
+          "duration": 27.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-2.ogg",
+          "transferSize": 2660,
+          "encodedBodySize": 2360,
+          "decodedBodySize": 2360,
+          "duration": 27.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-1.ogg",
+          "transferSize": 4796,
+          "encodedBodySize": 4496,
+          "decodedBodySize": 4496,
+          "duration": 27.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-2.ogg",
+          "transferSize": 3460,
+          "encodedBodySize": 3160,
+          "decodedBodySize": 3160,
+          "duration": 28.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-1.ogg",
+          "transferSize": 2054,
+          "encodedBodySize": 1754,
+          "decodedBodySize": 1754,
+          "duration": 28.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-2.ogg",
+          "transferSize": 1965,
+          "encodedBodySize": 1665,
+          "decodedBodySize": 1665,
+          "duration": 28.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-1.ogg",
+          "transferSize": 6352,
+          "encodedBodySize": 6052,
+          "decodedBodySize": 6052,
+          "duration": 29.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-2.ogg",
+          "transferSize": 6159,
+          "encodedBodySize": 5859,
+          "decodedBodySize": 5859,
+          "duration": 29.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-1.ogg",
+          "transferSize": 4945,
+          "encodedBodySize": 4645,
+          "decodedBodySize": 4645,
+          "duration": 30.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-2.ogg",
+          "transferSize": 2595,
+          "encodedBodySize": 2295,
+          "decodedBodySize": 2295,
+          "duration": 29.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-1.ogg",
+          "transferSize": 4626,
+          "encodedBodySize": 4326,
+          "decodedBodySize": 4326,
+          "duration": 33.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-1.ogg",
+          "transferSize": 2043,
+          "encodedBodySize": 1743,
+          "decodedBodySize": 1743,
+          "duration": 33.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-2.ogg",
+          "transferSize": 3436,
+          "encodedBodySize": 3136,
+          "decodedBodySize": 3136,
+          "duration": 34.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-2.ogg",
+          "transferSize": 3417,
+          "encodedBodySize": 3117,
+          "decodedBodySize": 3117,
+          "duration": 33.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-1.ogg",
+          "transferSize": 10412,
+          "encodedBodySize": 10112,
+          "decodedBodySize": 10112,
+          "duration": 36.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-2.ogg",
+          "transferSize": 7012,
+          "encodedBodySize": 6712,
+          "decodedBodySize": 6712,
+          "duration": 36.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stun-loop-1.ogg",
+          "transferSize": 7846,
+          "encodedBodySize": 7546,
+          "decodedBodySize": 7546,
+          "duration": 36.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-2.ogg",
+          "transferSize": 1934,
+          "encodedBodySize": 1634,
+          "decodedBodySize": 1634,
+          "duration": 36.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-1.ogg",
+          "transferSize": 1976,
+          "encodedBodySize": 1676,
+          "decodedBodySize": 1676,
+          "duration": 36.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-3.ogg",
+          "transferSize": 1608,
+          "encodedBodySize": 1308,
+          "decodedBodySize": 1308,
+          "duration": 36.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-1.ogg",
+          "transferSize": 3867,
+          "encodedBodySize": 3567,
+          "decodedBodySize": 3567,
+          "duration": 36.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-2.ogg",
+          "transferSize": 4218,
+          "encodedBodySize": 3918,
+          "decodedBodySize": 3918,
+          "duration": 37,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-3.ogg",
+          "transferSize": 3864,
+          "encodedBodySize": 3564,
+          "decodedBodySize": 3564,
+          "duration": 37.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-1.ogg",
+          "transferSize": 1486,
+          "encodedBodySize": 1186,
+          "decodedBodySize": 1186,
+          "duration": 37.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-2.ogg",
+          "transferSize": 1481,
+          "encodedBodySize": 1181,
+          "decodedBodySize": 1181,
+          "duration": 38.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-3.ogg",
+          "transferSize": 4221,
+          "encodedBodySize": 3921,
+          "decodedBodySize": 3921,
+          "duration": 38.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-1.ogg",
+          "transferSize": 1305,
+          "encodedBodySize": 1005,
+          "decodedBodySize": 1005,
+          "duration": 38.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-2.ogg",
+          "transferSize": 1269,
+          "encodedBodySize": 969,
+          "decodedBodySize": 969,
+          "duration": 37.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-3.ogg",
+          "transferSize": 1151,
+          "encodedBodySize": 851,
+          "decodedBodySize": 851,
+          "duration": 39.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-1.ogg",
+          "transferSize": 4267,
+          "encodedBodySize": 3967,
+          "decodedBodySize": 3967,
+          "duration": 40,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-2.ogg",
+          "transferSize": 1742,
+          "encodedBodySize": 1442,
+          "decodedBodySize": 1442,
+          "duration": 40.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-1.ogg",
+          "transferSize": 3635,
+          "encodedBodySize": 3335,
+          "decodedBodySize": 3335,
+          "duration": 40.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-2.ogg",
+          "transferSize": 3672,
+          "encodedBodySize": 3372,
+          "decodedBodySize": 3372,
+          "duration": 40.6000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-3.ogg",
+          "transferSize": 3791,
+          "encodedBodySize": 3491,
+          "decodedBodySize": 3491,
+          "duration": 41,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-4.ogg",
+          "transferSize": 3248,
+          "encodedBodySize": 2948,
+          "decodedBodySize": 2948,
+          "duration": 40.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-1.ogg",
+          "transferSize": 1996,
+          "encodedBodySize": 1696,
+          "decodedBodySize": 1696,
+          "duration": 40.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-2.ogg",
+          "transferSize": 2185,
+          "encodedBodySize": 1885,
+          "decodedBodySize": 1885,
+          "duration": 41.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-4.ogg",
+          "transferSize": 2114,
+          "encodedBodySize": 1814,
+          "decodedBodySize": 1814,
+          "duration": 41.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-3.ogg",
+          "transferSize": 1962,
+          "encodedBodySize": 1662,
+          "decodedBodySize": 1662,
+          "duration": 41.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-1.ogg",
+          "transferSize": 1082,
+          "encodedBodySize": 782,
+          "decodedBodySize": 782,
+          "duration": 49.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-2.ogg",
+          "transferSize": 1108,
+          "encodedBodySize": 808,
+          "decodedBodySize": 808,
+          "duration": 49.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-4.ogg",
+          "transferSize": 1085,
+          "encodedBodySize": 785,
+          "decodedBodySize": 785,
+          "duration": 49.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-3.ogg",
+          "transferSize": 1090,
+          "encodedBodySize": 790,
+          "decodedBodySize": 790,
+          "duration": 49.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-1.ogg",
+          "transferSize": 1823,
+          "encodedBodySize": 1523,
+          "decodedBodySize": 1523,
+          "duration": 49.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-2.ogg",
+          "transferSize": 1660,
+          "encodedBodySize": 1360,
+          "decodedBodySize": 1360,
+          "duration": 49.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-3.ogg",
+          "transferSize": 3015,
+          "encodedBodySize": 2715,
+          "decodedBodySize": 2715,
+          "duration": 50.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-1.ogg",
+          "transferSize": 5414,
+          "encodedBodySize": 5114,
+          "decodedBodySize": 5114,
+          "duration": 51.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-2.ogg",
+          "transferSize": 5014,
+          "encodedBodySize": 4714,
+          "decodedBodySize": 4714,
+          "duration": 51.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/ui/heroes/aren.png",
+          "transferSize": 181357,
+          "encodedBodySize": 181057,
+          "decodedBodySize": 181057,
+          "duration": 58.3999999910593,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/yara.png",
+          "transferSize": 216407,
+          "encodedBodySize": 216107,
+          "decodedBodySize": 216107,
+          "duration": 68.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/vesper.png",
+          "transferSize": 81098,
+          "encodedBodySize": 80798,
+          "decodedBodySize": 80798,
+          "duration": 68.69999998807907,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/sakda.png",
+          "transferSize": 112661,
+          "encodedBodySize": 112361,
+          "decodedBodySize": 112361,
+          "duration": 67.6000000089407,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-asha.webp",
+          "transferSize": 37598,
+          "encodedBodySize": 37298,
+          "decodedBodySize": 37298,
+          "duration": 66.3999999910593,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-koro.webp",
+          "transferSize": 22828,
+          "encodedBodySize": 22528,
+          "decodedBodySize": 22528,
+          "duration": 66.1000000089407,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-vara.webp",
+          "transferSize": 21154,
+          "encodedBodySize": 20854,
+          "decodedBodySize": 20854,
+          "duration": 66.19999998807907,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-sable.webp",
+          "transferSize": 26122,
+          "encodedBodySize": 25822,
+          "decodedBodySize": 25822,
+          "duration": 69.09999999403954,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-solkar.webp",
+          "transferSize": 37236,
+          "encodedBodySize": 36936,
+          "decodedBodySize": 36936,
+          "duration": 68.79999999701977,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-nyra.webp",
+          "transferSize": 19272,
+          "encodedBodySize": 18972,
+          "decodedBodySize": 18972,
+          "duration": 69.20000000298023,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/playtests/hero-pedestals.json",
+          "transferSize": 1258,
+          "encodedBodySize": 958,
+          "decodedBodySize": 3924,
+          "duration": 69.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+          "transferSize": 18468432,
+          "encodedBodySize": 18468132,
+          "decodedBodySize": 18468132,
+          "duration": 104.40000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+          "transferSize": 2139116,
+          "encodedBodySize": 2138816,
+          "decodedBodySize": 2138816,
+          "duration": 20.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/hero-pedestal-aren-runtime-01/hero-pedestal-aren.glb",
+          "transferSize": 13039372,
+          "encodedBodySize": 13039072,
+          "decodedBodySize": 13039072,
+          "duration": 64.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/music/title.ogg",
+          "transferSize": 347305,
+          "encodedBodySize": 347005,
+          "decodedBodySize": 347005,
+          "duration": 9.5,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/title.ogg",
+          "transferSize": 347305,
+          "encodedBodySize": 347005,
+          "decodedBodySize": 347005,
+          "duration": 9.900000005960464,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/ui/greenwake-entry.webp",
+          "transferSize": 494450,
+          "encodedBodySize": 494150,
+          "decodedBodySize": 494150,
+          "duration": 3.7000000029802322,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-normal-BLlBRtDv.woff2",
+          "transferSize": 23184,
+          "encodedBodySize": 22884,
+          "decodedBodySize": 22884,
+          "duration": 20.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 5.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 7.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 4.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/normal.jpg",
+          "transferSize": 1380768,
+          "encodedBodySize": 1380468,
+          "decodedBodySize": 1380468,
+          "duration": 17.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/arm.jpg",
+          "transferSize": 976750,
+          "encodedBodySize": 976450,
+          "decodedBodySize": 976450,
+          "duration": 13.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/normal.jpg",
+          "transferSize": 577463,
+          "encodedBodySize": 577163,
+          "decodedBodySize": 577163,
+          "duration": 11.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/arm.jpg",
+          "transferSize": 314280,
+          "encodedBodySize": 313980,
+          "decodedBodySize": 313980,
+          "duration": 8.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/normal.jpg",
+          "transferSize": 1416694,
+          "encodedBodySize": 1416394,
+          "decodedBodySize": 1416394,
+          "duration": 18.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/arm.jpg",
+          "transferSize": 848846,
+          "encodedBodySize": 848546,
+          "decodedBodySize": 848546,
+          "duration": 13.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/normal.jpg",
+          "transferSize": 832259,
+          "encodedBodySize": 831959,
+          "decodedBodySize": 831959,
+          "duration": 18.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/arm.jpg",
+          "transferSize": 202277,
+          "encodedBodySize": 201977,
+          "decodedBodySize": 201977,
+          "duration": 17.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/diffuse.jpg",
+          "transferSize": 1136012,
+          "encodedBodySize": 1135712,
+          "decodedBodySize": 1135712,
+          "duration": 9.799999997019768,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/diffuse.jpg",
+          "transferSize": 438191,
+          "encodedBodySize": 437891,
+          "decodedBodySize": 437891,
+          "duration": 6.9000000059604645,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/diffuse.jpg",
+          "transferSize": 1234367,
+          "encodedBodySize": 1234067,
+          "decodedBodySize": 1234067,
+          "duration": 10.5,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/diffuse.jpg",
+          "transferSize": 716310,
+          "encodedBodySize": 716010,
+          "decodedBodySize": 716010,
+          "duration": 8.300000011920929,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+          "transferSize": 3410752,
+          "encodedBodySize": 3410452,
+          "decodedBodySize": 3410452,
+          "duration": 13.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+          "transferSize": 1532208,
+          "encodedBodySize": 1531908,
+          "decodedBodySize": 1531908,
+          "duration": 5.0999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+          "transferSize": 1454392,
+          "encodedBodySize": 1454092,
+          "decodedBodySize": 1454092,
+          "duration": 5.0999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+          "transferSize": 2622324,
+          "encodedBodySize": 2622024,
+          "decodedBodySize": 2622024,
+          "duration": 6.9000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+          "transferSize": 3060532,
+          "encodedBodySize": 3060232,
+          "decodedBodySize": 3060232,
+          "duration": 8.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+          "transferSize": 2278504,
+          "encodedBodySize": 2278204,
+          "decodedBodySize": 2278204,
+          "duration": 6.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+          "transferSize": 9465144,
+          "encodedBodySize": 9464844,
+          "decodedBodySize": 9464844,
+          "duration": 39.6000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-yara-runtime-01/actor-yara.glb",
+          "transferSize": 6110892,
+          "encodedBodySize": 6110592,
+          "decodedBodySize": 6110592,
+          "duration": 14.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+          "transferSize": 7220452,
+          "encodedBodySize": 7220152,
+          "decodedBodySize": 7220152,
+          "duration": 15.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+          "transferSize": 7512116,
+          "encodedBodySize": 7511816,
+          "decodedBodySize": 7511816,
+          "duration": 18.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+          "transferSize": 8600536,
+          "encodedBodySize": 8600236,
+          "decodedBodySize": 8600236,
+          "duration": 19.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+          "transferSize": 7734976,
+          "encodedBodySize": 7734676,
+          "decodedBodySize": 7734676,
+          "duration": 15.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+          "transferSize": 7103728,
+          "encodedBodySize": 7103428,
+          "decodedBodySize": 7103428,
+          "duration": 15.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+          "transferSize": 300,
+          "encodedBodySize": 18468132,
+          "decodedBodySize": 18468132,
+          "duration": 14.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+          "transferSize": 300,
+          "encodedBodySize": 2138816,
+          "decodedBodySize": 2138816,
+          "duration": 9.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 722,
+          "decodedBodySize": 722,
+          "duration": 3.7000000029802322,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 252,
+          "decodedBodySize": 252,
+          "duration": 3,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 241,
+          "decodedBodySize": 241,
+          "duration": 3.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 783,
+          "decodedBodySize": 783,
+          "duration": 3.2999999970197678,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 630,
+          "decodedBodySize": 630,
+          "duration": 3.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2886,
+          "decodedBodySize": 2886,
+          "duration": 3.2999999970197678,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3445,
+          "decodedBodySize": 3445,
+          "duration": 3.7999999970197678,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/back-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 492,
+          "decodedBodySize": 492,
+          "duration": 3.7999999970197678,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/error-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1972,
+          "decodedBodySize": 1972,
+          "duration": 3.5999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/open-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1148,
+          "decodedBodySize": 1148,
+          "duration": 3.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/close-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1124,
+          "decodedBodySize": 1124,
+          "duration": 4.199999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/toggle-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1044,
+          "decodedBodySize": 1044,
+          "duration": 5.5999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/scroll-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4290,
+          "decodedBodySize": 4290,
+          "duration": 6.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1811,
+          "decodedBodySize": 1811,
+          "duration": 8,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1502,
+          "decodedBodySize": 1502,
+          "duration": 8.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2454,
+          "decodedBodySize": 2454,
+          "duration": 8.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2287,
+          "decodedBodySize": 2287,
+          "duration": 9.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1698,
+          "decodedBodySize": 1698,
+          "duration": 9.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2336,
+          "decodedBodySize": 2336,
+          "duration": 9.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1650,
+          "decodedBodySize": 1650,
+          "duration": 9.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3618,
+          "decodedBodySize": 3618,
+          "duration": 9.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3035,
+          "decodedBodySize": 3035,
+          "duration": 9.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4857,
+          "decodedBodySize": 4857,
+          "duration": 13.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5727,
+          "decodedBodySize": 5727,
+          "duration": 13.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2162,
+          "decodedBodySize": 2162,
+          "duration": 13.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1688,
+          "decodedBodySize": 1688,
+          "duration": 14.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2088,
+          "decodedBodySize": 2088,
+          "duration": 14.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2138,
+          "decodedBodySize": 2138,
+          "duration": 22.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1856,
+          "decodedBodySize": 1856,
+          "duration": 22.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1801,
+          "decodedBodySize": 1801,
+          "duration": 23.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1925,
+          "decodedBodySize": 1925,
+          "duration": 23.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1794,
+          "decodedBodySize": 1794,
+          "duration": 23.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2036,
+          "decodedBodySize": 2036,
+          "duration": 23.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2622,
+          "decodedBodySize": 2622,
+          "duration": 27.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2744,
+          "decodedBodySize": 2744,
+          "duration": 24.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2432,
+          "decodedBodySize": 2432,
+          "duration": 24.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2696,
+          "decodedBodySize": 2696,
+          "duration": 25,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2503,
+          "decodedBodySize": 2503,
+          "duration": 25,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6318,
+          "decodedBodySize": 6318,
+          "duration": 32.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6579,
+          "decodedBodySize": 6579,
+          "duration": 27.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7820,
+          "decodedBodySize": 7820,
+          "duration": 27.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7446,
+          "decodedBodySize": 7446,
+          "duration": 32,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6455,
+          "decodedBodySize": 6455,
+          "duration": 32.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7951,
+          "decodedBodySize": 7951,
+          "duration": 33.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3826,
+          "decodedBodySize": 3826,
+          "duration": 46.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6249,
+          "decodedBodySize": 6249,
+          "duration": 46.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6066,
+          "decodedBodySize": 6066,
+          "duration": 46.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2360,
+          "decodedBodySize": 2360,
+          "duration": 46.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4496,
+          "decodedBodySize": 4496,
+          "duration": 46.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3160,
+          "decodedBodySize": 3160,
+          "duration": 47.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1754,
+          "decodedBodySize": 1754,
+          "duration": 47.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1665,
+          "decodedBodySize": 1665,
+          "duration": 47.6000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6052,
+          "decodedBodySize": 6052,
+          "duration": 47.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5859,
+          "decodedBodySize": 5859,
+          "duration": 47.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4645,
+          "decodedBodySize": 4645,
+          "duration": 47.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2295,
+          "decodedBodySize": 2295,
+          "duration": 48.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4326,
+          "decodedBodySize": 4326,
+          "duration": 48.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3136,
+          "decodedBodySize": 3136,
+          "duration": 48.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1743,
+          "decodedBodySize": 1743,
+          "duration": 48.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3117,
+          "decodedBodySize": 3117,
+          "duration": 48.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 10112,
+          "decodedBodySize": 10112,
+          "duration": 49,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6712,
+          "decodedBodySize": 6712,
+          "duration": 49,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stun-loop-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7546,
+          "decodedBodySize": 7546,
+          "duration": 49.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1676,
+          "decodedBodySize": 1676,
+          "duration": 49.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1634,
+          "decodedBodySize": 1634,
+          "duration": 49.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1308,
+          "decodedBodySize": 1308,
+          "duration": 49.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3567,
+          "decodedBodySize": 3567,
+          "duration": 50,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3918,
+          "decodedBodySize": 3918,
+          "duration": 49.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3564,
+          "decodedBodySize": 3564,
+          "duration": 57.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1186,
+          "decodedBodySize": 1186,
+          "duration": 57.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1181,
+          "decodedBodySize": 1181,
+          "duration": 58.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3921,
+          "decodedBodySize": 3921,
+          "duration": 58.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1005,
+          "decodedBodySize": 1005,
+          "duration": 58.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 969,
+          "decodedBodySize": 969,
+          "duration": 58.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 851,
+          "decodedBodySize": 851,
+          "duration": 60.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3967,
+          "decodedBodySize": 3967,
+          "duration": 60.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1442,
+          "decodedBodySize": 1442,
+          "duration": 60.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3335,
+          "decodedBodySize": 3335,
+          "duration": 60.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3372,
+          "decodedBodySize": 3372,
+          "duration": 60.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3491,
+          "decodedBodySize": 3491,
+          "duration": 60.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2948,
+          "decodedBodySize": 2948,
+          "duration": 60.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1696,
+          "decodedBodySize": 1696,
+          "duration": 60.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1885,
+          "decodedBodySize": 1885,
+          "duration": 60.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1662,
+          "decodedBodySize": 1662,
+          "duration": 60.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1814,
+          "decodedBodySize": 1814,
+          "duration": 64.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 782,
+          "decodedBodySize": 782,
+          "duration": 66.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 808,
+          "decodedBodySize": 808,
+          "duration": 68.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 790,
+          "decodedBodySize": 790,
+          "duration": 68.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 785,
+          "decodedBodySize": 785,
+          "duration": 69,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1523,
+          "decodedBodySize": 1523,
+          "duration": 69.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1360,
+          "decodedBodySize": 1360,
+          "duration": 65.90000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2715,
+          "decodedBodySize": 2715,
+          "duration": 69.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5114,
+          "decodedBodySize": 5114,
+          "duration": 69.59999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4714,
+          "decodedBodySize": 4714,
+          "duration": 70.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-roar-1.ogg",
+          "transferSize": 2845,
+          "encodedBodySize": 2545,
+          "decodedBodySize": 2545,
+          "duration": 70.59999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-roar-2.ogg",
+          "transferSize": 6014,
+          "encodedBodySize": 5714,
+          "decodedBodySize": 5714,
+          "duration": 74.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-hurt-1.ogg",
+          "transferSize": 3821,
+          "encodedBodySize": 3521,
+          "decodedBodySize": 3521,
+          "duration": 74.09999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-hurt-2.ogg",
+          "transferSize": 3955,
+          "encodedBodySize": 3655,
+          "decodedBodySize": 3655,
+          "duration": 74.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-death-1.ogg",
+          "transferSize": 3213,
+          "encodedBodySize": 2913,
+          "decodedBodySize": 2913,
+          "duration": 74.40000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-death-2.ogg",
+          "transferSize": 4402,
+          "encodedBodySize": 4102,
+          "decodedBodySize": 4102,
+          "duration": 74,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-roar-1.ogg",
+          "transferSize": 5421,
+          "encodedBodySize": 5121,
+          "decodedBodySize": 5121,
+          "duration": 74.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-roar-2.ogg",
+          "transferSize": 4769,
+          "encodedBodySize": 4469,
+          "decodedBodySize": 4469,
+          "duration": 78,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-hurt-1.ogg",
+          "transferSize": 6619,
+          "encodedBodySize": 6319,
+          "decodedBodySize": 6319,
+          "duration": 76.59999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-hurt-2.ogg",
+          "transferSize": 5302,
+          "encodedBodySize": 5002,
+          "decodedBodySize": 5002,
+          "duration": 76.90000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-death-1.ogg",
+          "transferSize": 4193,
+          "encodedBodySize": 3893,
+          "decodedBodySize": 3893,
+          "duration": 77.40000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-death-2.ogg",
+          "transferSize": 6298,
+          "encodedBodySize": 5998,
+          "decodedBodySize": 5998,
+          "duration": 77.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-roar-1.ogg",
+          "transferSize": 5383,
+          "encodedBodySize": 5083,
+          "decodedBodySize": 5083,
+          "duration": 77.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-roar-2.ogg",
+          "transferSize": 3107,
+          "encodedBodySize": 2807,
+          "decodedBodySize": 2807,
+          "duration": 78.6000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-hurt-1.ogg",
+          "transferSize": 2704,
+          "encodedBodySize": 2404,
+          "decodedBodySize": 2404,
+          "duration": 78.59999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-hurt-2.ogg",
+          "transferSize": 2822,
+          "encodedBodySize": 2522,
+          "decodedBodySize": 2522,
+          "duration": 78.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-death-1.ogg",
+          "transferSize": 3719,
+          "encodedBodySize": 3419,
+          "decodedBodySize": 3419,
+          "duration": 78.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/music/combat-a.ogg",
+          "transferSize": 764867,
+          "encodedBodySize": 764567,
+          "decodedBodySize": 764567,
+          "duration": 76.5,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/combat-a.ogg",
+          "transferSize": 764867,
+          "encodedBodySize": 764567,
+          "decodedBodySize": 764567,
+          "duration": 81.59999999403954,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/ambience/forest.ogg",
+          "transferSize": 278347,
+          "encodedBodySize": 278047,
+          "decodedBodySize": 278047,
+          "duration": 82.20000000298023,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/ambience/forest.ogg",
+          "transferSize": 278347,
+          "encodedBodySize": 278047,
+          "decodedBodySize": 278047,
+          "duration": 82.40000000596046,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/greenwake-explore.ogg",
+          "transferSize": 930956,
+          "encodedBodySize": 930656,
+          "decodedBodySize": 930656,
+          "duration": 82.79999999701977,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/greenwake-explore.ogg",
+          "transferSize": 930956,
+          "encodedBodySize": 930656,
+          "decodedBodySize": 930656,
+          "duration": 83.3999999910593,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 581753,
+          "encodedBodySize": 581453,
+          "decodedBodySize": 581453,
+          "duration": 22.099999994039536,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 581753,
+          "encodedBodySize": 581453,
+          "decodedBodySize": 581453,
+          "duration": 22.700000002980232,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 90233,
+          "encodedBodySize": 89933,
+          "decodedBodySize": 89933,
+          "duration": 3.5,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 0,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 2.0999999940395355,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 450681,
+          "encodedBodySize": 450381,
+          "decodedBodySize": 450381,
+          "duration": 3.0999999940395355,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/asset-source/ui/heroes/aren.png",
+          "transferSize": 300,
+          "encodedBodySize": 181057,
+          "decodedBodySize": 181057,
+          "duration": 3.0999999940395355,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-koro.webp",
+          "transferSize": 300,
+          "encodedBodySize": 22528,
+          "decodedBodySize": 22528,
+          "duration": 2.7999999970197678,
+          "initiatorType": "css"
+        }
+      ]
+    },
+    "gameHeap": {
+      "natural": {
+        "usedSize": 42941328,
+        "totalSize": 65257472,
+        "embedderHeapUsedSize": 18222120,
+        "backingStorageSize": 117605764
+      },
+      "afterForcedGc": {
+        "usedSize": 22968704,
+        "totalSize": 25985024,
+        "embedderHeapUsedSize": 3749264,
+        "backingStorageSize": 62411565
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 354,
+        "jsEventListeners": 37
+      }
+    },
+    "navigationLongTasks": [
+      {
+        "start": 158.5,
+        "duration": 135
+      },
+      {
+        "start": 6849.29999999702,
+        "duration": 61
+      },
+      {
+        "start": 6910.79999999702,
+        "duration": 750
+      },
+      {
+        "start": 8436.90000000596,
+        "duration": 685
+      },
+      {
+        "start": 10122.29999999702,
+        "duration": 52
+      },
+      {
+        "start": 10496.20000000298,
+        "duration": 50
+      },
+      {
+        "start": 10574.59999999404,
+        "duration": 1529
+      },
+      {
+        "start": 12112.70000000298,
+        "duration": 140
+      },
+      {
+        "start": 12280.5,
+        "duration": 342
+      }
+    ],
+    "cpuProfile": {
+      "durationMs": 5083.836,
+      "samples": 3366,
+      "top": [
+        {
+          "functionName": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 2159
+        },
+        {
+          "functionName": "uh",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 266
+        },
+        {
+          "functionName": "bn",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 187
+        },
+        {
+          "functionName": "Wv",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 83
+        },
+        {
+          "functionName": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 51
+        },
+        {
+          "functionName": "uh",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 38
+        },
+        {
+          "functionName": "Ui",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 26
+        },
+        {
+          "functionName": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 24
+        },
+        {
+          "functionName": "uh",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 17
+        },
+        {
+          "functionName": "get companions",
+          "url": "http://127.0.0.1:5192/assets/main-Bi5I-SwT.js",
+          "line": 0,
+          "hits": 17
+        },
+        {
+          "functionName": "gh",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 3838,
+          "hits": 15
+        },
+        {
+          "functionName": "get companions",
+          "url": "http://127.0.0.1:5192/assets/main-Bi5I-SwT.js",
+          "line": 0,
+          "hits": 12
+        },
+        {
+          "functionName": "eH",
+          "url": "http://127.0.0.1:5192/assets/main-Bi5I-SwT.js",
+          "line": 65,
+          "hits": 12
+        },
+        {
+          "functionName": "",
+          "url": "http://127.0.0.1:5192/assets/main-Bi5I-SwT.js",
+          "line": 2293,
+          "hits": 9
+        },
+        {
+          "functionName": "updateMatrixWorld",
+          "url": "http://127.0.0.1:5192/assets/geometry-CuoBkIc6.js",
+          "line": 4,
+          "hits": 9
+        }
+      ]
+    },
+    "glWork": {
+      "scenario": "Separate instrumented all-pass GL count window; not the clean CPU/frame-time window.",
+      "samples": 301,
+      "actualWindowMs": 5015.300000005962,
+      "medianDrawCalls": 84,
+      "medianTriangles": 1160805,
+      "renderer": "WebKit WebGL",
+      "vendor": "WebKit",
+      "minDrawCalls": 84,
+      "maxDrawCalls": 84
+    },
+    "gpu": {
+      "available": true,
+      "scenario": "Separate actual WebGL GPU query window around application RAF callbacks; not CPU wall time.",
+      "actualWindowMs": 5001.399999991059,
+      "measuredCallbacks": 299,
+      "validSamples": 299,
+      "disjoint": false,
+      "pendingAfterDrain": 0,
+      "medianMs": 19.729791,
+      "p95Ms": 20.742416
+    }
+  },
+  "warm": {
+    "titleObservedReadyMs": 744.9197920000879,
+    "titleWindow": {
+      "observedWindowMs": 5002.0999999940395,
+      "frames": 301,
+      "frameMedianMs": 16.699999999999818,
+      "frameP95Ms": 16.700000000000728,
+      "frameMaxMs": 16.800000000000182,
+      "longTasks": 0,
+      "longTaskTotalMs": 0,
+      "longTaskMaxMs": 0,
+      "counterWindowMs": 5005.514999997104,
+      "scriptMs": 15.761000000000012,
+      "taskMs": 187.86500000000004,
+      "layoutMs": 0,
+      "recalcStyleMs": 84.393,
+      "heapUsedBytes": 6966176,
+      "heapTotalBytes": 12877824
+    },
+    "titlePaint": [
+      {
+        "name": "first-paint",
+        "startTime": 36
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 196
+      }
+    ],
+    "titleResources": {
+      "count": 13,
+      "transferBytes": 43415,
+      "encodedBodyBytes": 1515060,
+      "entries": [
+        {
+          "path": "/assets/main-Bi5I-SwT.js",
+          "transferSize": 300,
+          "encodedBodySize": 620894,
+          "decodedBodySize": 2133700,
+          "duration": 21.700000002980232,
+          "initiatorType": "script"
+        },
+        {
+          "path": "/assets/main-BeZCHkvE.css",
+          "transferSize": 300,
+          "encodedBodySize": 23364,
+          "decodedBodySize": 118880,
+          "duration": 15.299999997019768,
+          "initiatorType": "link"
+        },
+        {
+          "path": "/assets/geometry-CuoBkIc6.js",
+          "transferSize": 300,
+          "encodedBodySize": 152071,
+          "decodedBodySize": 585789,
+          "duration": 18.5,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 4.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 3.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 2.699999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/assets/barlow-latin-700-normal-A9pxMQ4z.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22788,
+          "decodedBodySize": 22788,
+          "duration": 13.700000002980232,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22308,
+          "decodedBodySize": 22308,
+          "duration": 14,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-400-normal-qiz4-Cze.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22196,
+          "decodedBodySize": 22196,
+          "duration": 14.799999997019768,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-italic-BXpar-rJ.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 23156,
+          "decodedBodySize": 23156,
+          "duration": 15,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-600-normal-DILqtrty.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22772,
+          "decodedBodySize": 22772,
+          "duration": 15.599999994039536,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-500-normal-BPAOfeC8.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22008,
+          "decodedBodySize": 22008,
+          "duration": 16,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/greenwake-title.webp",
+          "transferSize": 300,
+          "encodedBodySize": 543988,
+          "decodedBodySize": 543988,
+          "duration": 5.0999999940395355,
+          "initiatorType": "img"
+        }
+      ]
+    },
+    "titleHeap": {
+      "natural": {
+        "usedSize": 6994820,
+        "totalSize": 12877824,
+        "embedderHeapUsedSize": 11818632,
+        "backingStorageSize": 2741833
+      },
+      "afterForcedGc": {
+        "usedSize": 6502336,
+        "totalSize": 7372800,
+        "embedderHeapUsedSize": 2203936,
+        "backingStorageSize": 2735629
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 255,
+        "jsEventListeners": 34
+      }
+    },
+    "boot": {
+      "heroSelectedAtMs": 8177.79999999702,
+      "introAtMs": 8214.20000000298,
+      "introSkippedAtMs": 9286.09999999404,
+      "firstDialogueAtMs": 16322.79999999702,
+      "heroSelectionToDialogueMs": 8145,
+      "declaredIntroDwellMs": 1000,
+      "declaredHeroPreviewDwellMs": 2000
+    },
+    "gameWindow": {
+      "observedWindowMs": 5015.099999997019,
+      "frames": 302,
+      "frameMedianMs": 16.700000000000728,
+      "frameP95Ms": 16.700000000000728,
+      "frameMaxMs": 16.80000000000291,
+      "longTasks": 0,
+      "longTaskTotalMs": 0,
+      "longTaskMaxMs": 0,
+      "counterWindowMs": 5030.2900000097,
+      "scriptMs": 1751.544,
+      "taskMs": 1834.5450000000003,
+      "layoutMs": 0,
+      "recalcStyleMs": 17.118999999999996,
+      "heapUsedBytes": 40747684,
+      "heapTotalBytes": 89374720
+    },
+    "gameResources": {
+      "count": 276,
+      "transferBytes": 5990641,
+      "encodedBodyBytes": 141703201,
+      "entries": [
+        {
+          "path": "/assets/main-Bi5I-SwT.js",
+          "transferSize": 300,
+          "encodedBodySize": 620894,
+          "decodedBodySize": 2133700,
+          "duration": 21.700000002980232,
+          "initiatorType": "script"
+        },
+        {
+          "path": "/assets/main-BeZCHkvE.css",
+          "transferSize": 300,
+          "encodedBodySize": 23364,
+          "decodedBodySize": 118880,
+          "duration": 15.299999997019768,
+          "initiatorType": "link"
+        },
+        {
+          "path": "/assets/geometry-CuoBkIc6.js",
+          "transferSize": 300,
+          "encodedBodySize": 152071,
+          "decodedBodySize": 585789,
+          "duration": 18.5,
+          "initiatorType": "other"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 4.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 3.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 2.699999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/assets/barlow-latin-700-normal-A9pxMQ4z.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22788,
+          "decodedBodySize": 22788,
+          "duration": 13.700000002980232,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-condensed-latin-600-normal-DepVgxBB.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22308,
+          "decodedBodySize": 22308,
+          "duration": 14,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-400-normal-qiz4-Cze.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22196,
+          "decodedBodySize": 22196,
+          "duration": 14.799999997019768,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-italic-BXpar-rJ.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 23156,
+          "decodedBodySize": 23156,
+          "duration": 15,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-600-normal-DILqtrty.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22772,
+          "decodedBodySize": 22772,
+          "duration": 15.599999994039536,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/barlow-latin-500-normal-BPAOfeC8.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22008,
+          "decodedBodySize": 22008,
+          "duration": 16,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/greenwake-title.webp",
+          "transferSize": 300,
+          "encodedBodySize": 543988,
+          "decodedBodySize": 543988,
+          "duration": 5.0999999940395355,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/audio/ui/click-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 722,
+          "decodedBodySize": 722,
+          "duration": 10.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 252,
+          "decodedBodySize": 252,
+          "duration": 10.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 241,
+          "decodedBodySize": 241,
+          "duration": 10.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 783,
+          "decodedBodySize": 783,
+          "duration": 10.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 630,
+          "decodedBodySize": 630,
+          "duration": 10.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2886,
+          "decodedBodySize": 2886,
+          "duration": 10.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3445,
+          "decodedBodySize": 3445,
+          "duration": 11.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/back-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 492,
+          "decodedBodySize": 492,
+          "duration": 11.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/error-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1972,
+          "decodedBodySize": 1972,
+          "duration": 11.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/open-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1148,
+          "decodedBodySize": 1148,
+          "duration": 11.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/close-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1124,
+          "decodedBodySize": 1124,
+          "duration": 11.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/toggle-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1044,
+          "decodedBodySize": 1044,
+          "duration": 11.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/scroll-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4290,
+          "decodedBodySize": 4290,
+          "duration": 11.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1811,
+          "decodedBodySize": 1811,
+          "duration": 13.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1502,
+          "decodedBodySize": 1502,
+          "duration": 14.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2454,
+          "decodedBodySize": 2454,
+          "duration": 11.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2287,
+          "decodedBodySize": 2287,
+          "duration": 12.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1698,
+          "decodedBodySize": 1698,
+          "duration": 12.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2336,
+          "decodedBodySize": 2336,
+          "duration": 13.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1650,
+          "decodedBodySize": 1650,
+          "duration": 13.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3618,
+          "decodedBodySize": 3618,
+          "duration": 13.800000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3035,
+          "decodedBodySize": 3035,
+          "duration": 13.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4857,
+          "decodedBodySize": 4857,
+          "duration": 14,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5727,
+          "decodedBodySize": 5727,
+          "duration": 13.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2162,
+          "decodedBodySize": 2162,
+          "duration": 14.199999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1688,
+          "decodedBodySize": 1688,
+          "duration": 14.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2088,
+          "decodedBodySize": 2088,
+          "duration": 14.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2138,
+          "decodedBodySize": 2138,
+          "duration": 14.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1801,
+          "decodedBodySize": 1801,
+          "duration": 14.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1856,
+          "decodedBodySize": 1856,
+          "duration": 14.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1925,
+          "decodedBodySize": 1925,
+          "duration": 14.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1794,
+          "decodedBodySize": 1794,
+          "duration": 15.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2036,
+          "decodedBodySize": 2036,
+          "duration": 14.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2622,
+          "decodedBodySize": 2622,
+          "duration": 16.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2696,
+          "decodedBodySize": 2696,
+          "duration": 14.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2744,
+          "decodedBodySize": 2744,
+          "duration": 17.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2432,
+          "decodedBodySize": 2432,
+          "duration": 15.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6318,
+          "decodedBodySize": 6318,
+          "duration": 18.19999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2503,
+          "decodedBodySize": 2503,
+          "duration": 19.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6579,
+          "decodedBodySize": 6579,
+          "duration": 18.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7820,
+          "decodedBodySize": 7820,
+          "duration": 18.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7446,
+          "decodedBodySize": 7446,
+          "duration": 21,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7951,
+          "decodedBodySize": 7951,
+          "duration": 18.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6455,
+          "decodedBodySize": 6455,
+          "duration": 21,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3826,
+          "decodedBodySize": 3826,
+          "duration": 19.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6249,
+          "decodedBodySize": 6249,
+          "duration": 20.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6066,
+          "decodedBodySize": 6066,
+          "duration": 20.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2360,
+          "decodedBodySize": 2360,
+          "duration": 20.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4496,
+          "decodedBodySize": 4496,
+          "duration": 20.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3160,
+          "decodedBodySize": 3160,
+          "duration": 21.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1754,
+          "decodedBodySize": 1754,
+          "duration": 21.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1665,
+          "decodedBodySize": 1665,
+          "duration": 21.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6052,
+          "decodedBodySize": 6052,
+          "duration": 22,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5859,
+          "decodedBodySize": 5859,
+          "duration": 22,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4645,
+          "decodedBodySize": 4645,
+          "duration": 22,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2295,
+          "decodedBodySize": 2295,
+          "duration": 22.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4326,
+          "decodedBodySize": 4326,
+          "duration": 22,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3136,
+          "decodedBodySize": 3136,
+          "duration": 22.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1743,
+          "decodedBodySize": 1743,
+          "duration": 22.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3117,
+          "decodedBodySize": 3117,
+          "duration": 22.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 10112,
+          "decodedBodySize": 10112,
+          "duration": 22.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6712,
+          "decodedBodySize": 6712,
+          "duration": 23.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stun-loop-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7546,
+          "decodedBodySize": 7546,
+          "duration": 25.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1676,
+          "decodedBodySize": 1676,
+          "duration": 26,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1634,
+          "decodedBodySize": 1634,
+          "duration": 23.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1308,
+          "decodedBodySize": 1308,
+          "duration": 24.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3567,
+          "decodedBodySize": 3567,
+          "duration": 25.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3918,
+          "decodedBodySize": 3918,
+          "duration": 27.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3564,
+          "decodedBodySize": 3564,
+          "duration": 26.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1186,
+          "decodedBodySize": 1186,
+          "duration": 26.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1181,
+          "decodedBodySize": 1181,
+          "duration": 26.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3921,
+          "decodedBodySize": 3921,
+          "duration": 26.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1005,
+          "decodedBodySize": 1005,
+          "duration": 27.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 969,
+          "decodedBodySize": 969,
+          "duration": 26.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 851,
+          "decodedBodySize": 851,
+          "duration": 27,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3967,
+          "decodedBodySize": 3967,
+          "duration": 27,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3372,
+          "decodedBodySize": 3372,
+          "duration": 27,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1442,
+          "decodedBodySize": 1442,
+          "duration": 27.19999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3335,
+          "decodedBodySize": 3335,
+          "duration": 27.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3491,
+          "decodedBodySize": 3491,
+          "duration": 27,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2948,
+          "decodedBodySize": 2948,
+          "duration": 28.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1885,
+          "decodedBodySize": 1885,
+          "duration": 27.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1696,
+          "decodedBodySize": 1696,
+          "duration": 28.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1662,
+          "decodedBodySize": 1662,
+          "duration": 27.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1814,
+          "decodedBodySize": 1814,
+          "duration": 27.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 782,
+          "decodedBodySize": 782,
+          "duration": 29.19999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 808,
+          "decodedBodySize": 808,
+          "duration": 28.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 790,
+          "decodedBodySize": 790,
+          "duration": 28.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 785,
+          "decodedBodySize": 785,
+          "duration": 28.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1523,
+          "decodedBodySize": 1523,
+          "duration": 28.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1360,
+          "decodedBodySize": 1360,
+          "duration": 29.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2715,
+          "decodedBodySize": 2715,
+          "duration": 28.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5114,
+          "decodedBodySize": 5114,
+          "duration": 29,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4714,
+          "decodedBodySize": 4714,
+          "duration": 28.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/ui/heroes/aren.png",
+          "transferSize": 300,
+          "encodedBodySize": 181057,
+          "decodedBodySize": 181057,
+          "duration": 51.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/yara.png",
+          "transferSize": 300,
+          "encodedBodySize": 216107,
+          "decodedBodySize": 216107,
+          "duration": 65.40000000596046,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/vesper.png",
+          "transferSize": 300,
+          "encodedBodySize": 80798,
+          "decodedBodySize": 80798,
+          "duration": 65.20000000298023,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/ui/heroes/sakda.png",
+          "transferSize": 300,
+          "encodedBodySize": 112361,
+          "decodedBodySize": 112361,
+          "duration": 66.6000000089407,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-asha.webp",
+          "transferSize": 300,
+          "encodedBodySize": 37298,
+          "decodedBodySize": 37298,
+          "duration": 67.69999998807907,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-koro.webp",
+          "transferSize": 300,
+          "encodedBodySize": 22528,
+          "decodedBodySize": 22528,
+          "duration": 66.29999999701977,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-vara.webp",
+          "transferSize": 300,
+          "encodedBodySize": 20854,
+          "decodedBodySize": 20854,
+          "duration": 67.80000001192093,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-nyra.webp",
+          "transferSize": 300,
+          "encodedBodySize": 18972,
+          "decodedBodySize": 18972,
+          "duration": 68.20000000298023,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-sable.webp",
+          "transferSize": 300,
+          "encodedBodySize": 25822,
+          "decodedBodySize": 25822,
+          "duration": 68.5,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/ui/portrait-solkar.webp",
+          "transferSize": 300,
+          "encodedBodySize": 36936,
+          "decodedBodySize": 36936,
+          "duration": 67.70000000298023,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/playtests/hero-pedestals.json",
+          "transferSize": 1258,
+          "encodedBodySize": 958,
+          "decodedBodySize": 3924,
+          "duration": 76.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+          "transferSize": 300,
+          "encodedBodySize": 18468132,
+          "decodedBodySize": 18468132,
+          "duration": 38.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+          "transferSize": 300,
+          "encodedBodySize": 2138816,
+          "decodedBodySize": 2138816,
+          "duration": 11.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/hero-pedestal-aren-runtime-01/hero-pedestal-aren.glb",
+          "transferSize": 300,
+          "encodedBodySize": 13039072,
+          "decodedBodySize": 13039072,
+          "duration": 166.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/music/title.ogg",
+          "transferSize": 347305,
+          "encodedBodySize": 347005,
+          "decodedBodySize": 347005,
+          "duration": 8.199999988079071,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/title.ogg",
+          "transferSize": 347305,
+          "encodedBodySize": 347005,
+          "decodedBodySize": 347005,
+          "duration": 9.300000011920929,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/ui/greenwake-entry.webp",
+          "transferSize": 300,
+          "encodedBodySize": 494150,
+          "decodedBodySize": 494150,
+          "duration": 3.1000000089406967,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/assets/alegreya-latin-400-normal-BLlBRtDv.woff2",
+          "transferSize": 300,
+          "encodedBodySize": 22884,
+          "decodedBodySize": 22884,
+          "duration": 20.599999994039536,
+          "initiatorType": "css"
+        },
+        {
+          "path": "/asset-source/playtests/greenwake.json",
+          "transferSize": 16991,
+          "encodedBodySize": 16691,
+          "decodedBodySize": 181761,
+          "duration": 11.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/bamboo.json",
+          "transferSize": 18719,
+          "encodedBodySize": 18419,
+          "decodedBodySize": 203511,
+          "duration": 15,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/playtests/later.json",
+          "transferSize": 4705,
+          "encodedBodySize": 4405,
+          "decodedBodySize": 44854,
+          "duration": 6,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/normal.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 1380468,
+          "decodedBodySize": 1380468,
+          "duration": 8.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/arm.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 976450,
+          "decodedBodySize": 976450,
+          "duration": 7.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/normal.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 577163,
+          "decodedBodySize": 577163,
+          "duration": 5.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/arm.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 313980,
+          "decodedBodySize": 313980,
+          "duration": 4.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/normal.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 1416394,
+          "decodedBodySize": 1416394,
+          "duration": 7.9000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/arm.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 848546,
+          "decodedBodySize": 848546,
+          "duration": 7.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/normal.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 831959,
+          "decodedBodySize": 831959,
+          "duration": 6.9000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/arm.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 201977,
+          "decodedBodySize": 201977,
+          "duration": 5.300000011920929,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/leaves_forest_ground/diffuse.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 1135712,
+          "decodedBodySize": 1135712,
+          "duration": 6.100000008940697,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/forest_leaves_02/diffuse.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 437891,
+          "decodedBodySize": 437891,
+          "duration": 4.700000002980232,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/grass_path_2/diffuse.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 716010,
+          "decodedBodySize": 716010,
+          "duration": 6.4000000059604645,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/textures/greenwake/stony_dirt_path/diffuse.jpg",
+          "transferSize": 300,
+          "encodedBodySize": 1234067,
+          "decodedBodySize": 1234067,
+          "duration": 6.700000002980232,
+          "initiatorType": "img"
+        },
+        {
+          "path": "/asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+          "transferSize": 300,
+          "encodedBodySize": 3410452,
+          "decodedBodySize": 3410452,
+          "duration": 12.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+          "transferSize": 300,
+          "encodedBodySize": 1531908,
+          "decodedBodySize": 1531908,
+          "duration": 3.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+          "transferSize": 300,
+          "encodedBodySize": 1454092,
+          "decodedBodySize": 1454092,
+          "duration": 3.7000000029802322,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+          "transferSize": 300,
+          "encodedBodySize": 2622024,
+          "decodedBodySize": 2622024,
+          "duration": 4.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+          "transferSize": 300,
+          "encodedBodySize": 3060232,
+          "decodedBodySize": 3060232,
+          "duration": 5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+          "transferSize": 300,
+          "encodedBodySize": 2278204,
+          "decodedBodySize": 2278204,
+          "duration": 4.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+          "transferSize": 300,
+          "encodedBodySize": 9464844,
+          "decodedBodySize": 9464844,
+          "duration": 8.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-yara-runtime-01/actor-yara.glb",
+          "transferSize": 300,
+          "encodedBodySize": 6110592,
+          "decodedBodySize": 6110592,
+          "duration": 18.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+          "transferSize": 300,
+          "encodedBodySize": 7220152,
+          "decodedBodySize": 7220152,
+          "duration": 6.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+          "transferSize": 300,
+          "encodedBodySize": 7511816,
+          "decodedBodySize": 7511816,
+          "duration": 7.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+          "transferSize": 300,
+          "encodedBodySize": 8600236,
+          "decodedBodySize": 8600236,
+          "duration": 8.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+          "transferSize": 300,
+          "encodedBodySize": 7734676,
+          "decodedBodySize": 7734676,
+          "duration": 8,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+          "transferSize": 300,
+          "encodedBodySize": 7103428,
+          "decodedBodySize": 7103428,
+          "duration": 7.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+          "transferSize": 300,
+          "encodedBodySize": 18468132,
+          "decodedBodySize": 18468132,
+          "duration": 12.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+          "transferSize": 300,
+          "encodedBodySize": 2138816,
+          "decodedBodySize": 2138816,
+          "duration": 6.699999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 722,
+          "decodedBodySize": 722,
+          "duration": 4.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 252,
+          "decodedBodySize": 252,
+          "duration": 5.399999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/click-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 241,
+          "decodedBodySize": 241,
+          "duration": 5.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 783,
+          "decodedBodySize": 783,
+          "duration": 5.5999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/hover-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 630,
+          "decodedBodySize": 630,
+          "duration": 5.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2886,
+          "decodedBodySize": 2886,
+          "duration": 5.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/confirm-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3445,
+          "decodedBodySize": 3445,
+          "duration": 6.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/back-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 492,
+          "decodedBodySize": 492,
+          "duration": 5.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/error-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1972,
+          "decodedBodySize": 1972,
+          "duration": 6,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/open-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1148,
+          "decodedBodySize": 1148,
+          "duration": 6.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/close-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1124,
+          "decodedBodySize": 1124,
+          "duration": 7.5999999940395355,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/toggle-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1044,
+          "decodedBodySize": 1044,
+          "duration": 7.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/scroll-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4290,
+          "decodedBodySize": 4290,
+          "duration": 6.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1811,
+          "decodedBodySize": 1811,
+          "duration": 6.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/ui/transition-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1502,
+          "decodedBodySize": 1502,
+          "duration": 7.4000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2287,
+          "decodedBodySize": 2287,
+          "duration": 7.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2454,
+          "decodedBodySize": 2454,
+          "duration": 8,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1698,
+          "decodedBodySize": 1698,
+          "duration": 7.799999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2336,
+          "decodedBodySize": 2336,
+          "duration": 8.199999988079071,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-medium-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1650,
+          "decodedBodySize": 1650,
+          "duration": 8.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3035,
+          "decodedBodySize": 3035,
+          "duration": 7.9000000059604645,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3618,
+          "decodedBodySize": 3618,
+          "duration": 8.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4857,
+          "decodedBodySize": 4857,
+          "duration": 9.100000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/flesh-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5727,
+          "decodedBodySize": 5727,
+          "duration": 9.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2162,
+          "decodedBodySize": 2162,
+          "duration": 8.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2088,
+          "decodedBodySize": 2088,
+          "duration": 8.200000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1688,
+          "decodedBodySize": 1688,
+          "duration": 8.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2138,
+          "decodedBodySize": 2138,
+          "duration": 8.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1856,
+          "decodedBodySize": 1856,
+          "duration": 12,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1801,
+          "decodedBodySize": 1801,
+          "duration": 12.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1925,
+          "decodedBodySize": 1925,
+          "duration": 12.700000002980232,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/wood-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1794,
+          "decodedBodySize": 1794,
+          "duration": 13.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2036,
+          "decodedBodySize": 2036,
+          "duration": 13.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2622,
+          "decodedBodySize": 2622,
+          "duration": 19.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2744,
+          "decodedBodySize": 2744,
+          "duration": 19.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2696,
+          "decodedBodySize": 2696,
+          "duration": 19.899999991059303,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2432,
+          "decodedBodySize": 2432,
+          "duration": 20,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2503,
+          "decodedBodySize": 2503,
+          "duration": 20.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6318,
+          "decodedBodySize": 6318,
+          "duration": 20.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/bark-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6579,
+          "decodedBodySize": 6579,
+          "duration": 19.299999997019768,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7820,
+          "decodedBodySize": 7820,
+          "duration": 20.600000008940697,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-light-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7446,
+          "decodedBodySize": 7446,
+          "duration": 42.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6455,
+          "decodedBodySize": 6455,
+          "duration": 42.80000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-medium-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7951,
+          "decodedBodySize": 7951,
+          "duration": 42.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3826,
+          "decodedBodySize": 3826,
+          "duration": 42.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-heavy-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6249,
+          "decodedBodySize": 6249,
+          "duration": 43.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4496,
+          "decodedBodySize": 4496,
+          "duration": 43.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6066,
+          "decodedBodySize": 6066,
+          "duration": 43.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/stone-finisher-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2360,
+          "decodedBodySize": 2360,
+          "duration": 44.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/impact/finisher-layer-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3160,
+          "decodedBodySize": 3160,
+          "duration": 43.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1754,
+          "decodedBodySize": 1754,
+          "duration": 45.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockback-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1665,
+          "decodedBodySize": 1665,
+          "duration": 49.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6052,
+          "decodedBodySize": 6052,
+          "duration": 49.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/knockdown-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5859,
+          "decodedBodySize": 5859,
+          "duration": 49.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4645,
+          "decodedBodySize": 4645,
+          "duration": 50.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/getup-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2295,
+          "decodedBodySize": 2295,
+          "duration": 49.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4326,
+          "decodedBodySize": 4326,
+          "duration": 50.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stagger-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3136,
+          "decodedBodySize": 3136,
+          "duration": 54.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1743,
+          "decodedBodySize": 1743,
+          "duration": 50.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/poise-break-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3117,
+          "decodedBodySize": 3117,
+          "duration": 51.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 10112,
+          "decodedBodySize": 10112,
+          "duration": 52.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/wall-impact-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6712,
+          "decodedBodySize": 6712,
+          "duration": 53.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/react/stun-loop-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 7546,
+          "decodedBodySize": 7546,
+          "duration": 53.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1676,
+          "decodedBodySize": 1676,
+          "duration": 58.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1634,
+          "decodedBodySize": 1634,
+          "duration": 59.099999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/glaive-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1308,
+          "decodedBodySize": 1308,
+          "duration": 59.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3567,
+          "decodedBodySize": 3567,
+          "duration": 59.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3918,
+          "decodedBodySize": 3918,
+          "duration": 60.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1186,
+          "decodedBodySize": 1186,
+          "duration": 59.19999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/katana-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3564,
+          "decodedBodySize": 3564,
+          "duration": 60.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1181,
+          "decodedBodySize": 1181,
+          "duration": 62.900000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/staff-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3921,
+          "decodedBodySize": 3921,
+          "duration": 60.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1005,
+          "decodedBodySize": 1005,
+          "duration": 61.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 969,
+          "decodedBodySize": 969,
+          "duration": 62.400000005960464,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/fist-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 851,
+          "decodedBodySize": 851,
+          "duration": 62.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3967,
+          "decodedBodySize": 3967,
+          "duration": 62.599999994039536,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/weapon/monster-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1442,
+          "decodedBodySize": 1442,
+          "duration": 68.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3335,
+          "decodedBodySize": 3335,
+          "duration": 68.90000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3372,
+          "decodedBodySize": 3372,
+          "duration": 68.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3491,
+          "decodedBodySize": 3491,
+          "duration": 69,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/grass-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2948,
+          "decodedBodySize": 2948,
+          "duration": 69.3999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1696,
+          "decodedBodySize": 1696,
+          "duration": 70.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1662,
+          "decodedBodySize": 1662,
+          "duration": 70.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1885,
+          "decodedBodySize": 1885,
+          "duration": 71,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/dirt-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1814,
+          "decodedBodySize": 1814,
+          "duration": 70.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 782,
+          "decodedBodySize": 782,
+          "duration": 70.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 808,
+          "decodedBodySize": 808,
+          "duration": 70.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 790,
+          "decodedBodySize": 790,
+          "duration": 72.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/stone-4.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 785,
+          "decodedBodySize": 785,
+          "duration": 71.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1523,
+          "decodedBodySize": 1523,
+          "duration": 71.6000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 1360,
+          "decodedBodySize": 1360,
+          "duration": 71.69999998807907,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/wood-3.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2715,
+          "decodedBodySize": 2715,
+          "duration": 72.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5114,
+          "decodedBodySize": 5114,
+          "duration": 72.1000000089407,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/foot/land-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4714,
+          "decodedBodySize": 4714,
+          "duration": 71.70000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-roar-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2545,
+          "decodedBodySize": 2545,
+          "duration": 71.40000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-roar-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5714,
+          "decodedBodySize": 5714,
+          "duration": 76.30000001192093,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-hurt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3521,
+          "decodedBodySize": 3521,
+          "duration": 75.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-hurt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3655,
+          "decodedBodySize": 3655,
+          "duration": 74.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-death-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2913,
+          "decodedBodySize": 2913,
+          "duration": 74.59999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/beast-death-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4102,
+          "decodedBodySize": 4102,
+          "duration": 74.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-roar-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5121,
+          "decodedBodySize": 5121,
+          "duration": 74.90000000596046,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-roar-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 4469,
+          "decodedBodySize": 4469,
+          "duration": 76.09999999403954,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-hurt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 6319,
+          "decodedBodySize": 6319,
+          "duration": 76.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-hurt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5002,
+          "decodedBodySize": 5002,
+          "duration": 76.79999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-death-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3893,
+          "decodedBodySize": 3893,
+          "duration": 77,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/humanoid-death-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5998,
+          "decodedBodySize": 5998,
+          "duration": 77.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-roar-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 5083,
+          "decodedBodySize": 5083,
+          "duration": 79.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-roar-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2807,
+          "decodedBodySize": 2807,
+          "duration": 77.5,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-hurt-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2404,
+          "decodedBodySize": 2404,
+          "duration": 77.20000000298023,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-hurt-2.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 2522,
+          "decodedBodySize": 2522,
+          "duration": 78.29999999701977,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/vocal/canine-death-1.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 3419,
+          "decodedBodySize": 3419,
+          "duration": 78.8999999910593,
+          "initiatorType": "fetch"
+        },
+        {
+          "path": "/audio/music/combat-a.ogg",
+          "transferSize": 764867,
+          "encodedBodySize": 764567,
+          "decodedBodySize": 764567,
+          "duration": 75.5,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/combat-a.ogg",
+          "transferSize": 764867,
+          "encodedBodySize": 764567,
+          "decodedBodySize": 764567,
+          "duration": 77.70000000298023,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/ambience/forest.ogg",
+          "transferSize": 278347,
+          "encodedBodySize": 278047,
+          "decodedBodySize": 278047,
+          "duration": 78.29999999701977,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/ambience/forest.ogg",
+          "transferSize": 278347,
+          "encodedBodySize": 278047,
+          "decodedBodySize": 278047,
+          "duration": 79.79999999701977,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/greenwake-explore.ogg",
+          "transferSize": 930956,
+          "encodedBodySize": 930656,
+          "decodedBodySize": 930656,
+          "duration": 80.59999999403954,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/greenwake-explore.ogg",
+          "transferSize": 930956,
+          "encodedBodySize": 930656,
+          "decodedBodySize": 930656,
+          "duration": 80.80000001192093,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 300,
+          "encodedBodySize": 0,
+          "decodedBodySize": 0,
+          "duration": 41.29999999701977,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 581753,
+          "encodedBodySize": 581453,
+          "decodedBodySize": 581453,
+          "duration": 42.5,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 90233,
+          "encodedBodySize": 89933,
+          "decodedBodySize": 89933,
+          "duration": 3.7000000029802322,
+          "initiatorType": "audio"
+        },
+        {
+          "path": "/audio/music/layer-corrupted.ogg",
+          "transferSize": 516217,
+          "encodedBodySize": 515917,
+          "decodedBodySize": 515917,
+          "duration": 1.8999999910593033,
+          "initiatorType": "audio"
+        }
+      ]
+    },
+    "gameHeap": {
+      "natural": {
+        "usedSize": 41979984,
+        "totalSize": 89374720,
+        "embedderHeapUsedSize": 16271120,
+        "backingStorageSize": 117605692
+      },
+      "afterForcedGc": {
+        "usedSize": 23132868,
+        "totalSize": 26247168,
+        "embedderHeapUsedSize": 3632088,
+        "backingStorageSize": 62411554
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 426,
+        "jsEventListeners": 37
+      }
+    },
+    "navigationLongTasks": [
+      {
+        "start": 54.79999999701977,
+        "duration": 118
+      },
+      {
+        "start": 6240.70000000298,
+        "duration": 59
+      },
+      {
+        "start": 6702.0999999940395,
+        "duration": 103
+      },
+      {
+        "start": 6805.5999999940395,
+        "duration": 930
+      },
+      {
+        "start": 7736.20000000298,
+        "duration": 69
+      },
+      {
+        "start": 8239.40000000596,
+        "duration": 651
+      },
+      {
+        "start": 9314.70000000298,
+        "duration": 52
+      },
+      {
+        "start": 10170.79999999702,
+        "duration": 58
+      },
+      {
+        "start": 10253.90000000596,
+        "duration": 1565
+      },
+      {
+        "start": 11828.59999999404,
+        "duration": 140
+      },
+      {
+        "start": 11995,
+        "duration": 322
+      }
+    ]
+  },
+  "cycles": [],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "finalUrl": "http://127.0.0.1:5192/",
+  "end": "2026-10-18T16:14:58.165Z"
+}

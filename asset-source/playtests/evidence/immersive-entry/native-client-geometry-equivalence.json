@@ -1,0 +1,167 @@
+[
+  {
+    "assetId": "prop-greenwake-houses",
+    "clientReport": {
+      "meshes": 1,
+      "trianglesBefore": 1917035,
+      "trianglesAfter": 8139,
+      "verticesBefore": 1030014,
+      "verticesAfter": 10591,
+      "attributeBytesBefore": 55964868,
+      "attributeBytesAfter": 436580
+    },
+    "geometry": [
+      {
+        "triangles": 8139,
+        "orderedTriangleAttributeSha256": "c5e7681f02c3965feff1cd60ccc968f4ee516b3d2ddfeed47f04db16274647c9",
+        "bounds": {
+          "min": [
+            -0.23522217571735382,
+            -0.2773837149143219,
+            -0.48484593629837036
+          ],
+          "max": [
+            0.23649315536022186,
+            0.27593016624450684,
+            0.4853241443634033
+          ]
+        }
+      }
+    ],
+    "nativeSkins": 0,
+    "nativeAnimations": 0,
+    "nodesMaterialsTexturesAndSkinBindingsPreserved": true
+  },
+  {
+    "assetId": "prop-erya-edge-tree",
+    "clientReport": {
+      "meshes": 1,
+      "trianglesBefore": 1874604,
+      "trianglesAfter": 8000,
+      "verticesBefore": 1005314,
+      "verticesAfter": 9774,
+      "attributeBytesBefore": 54665296,
+      "attributeBytesAfter": 408768
+    },
+    "geometry": [
+      {
+        "triangles": 8000,
+        "orderedTriangleAttributeSha256": "73c09aef6e4d7765ffdf005baa1bd693787128e7c929dad29319f7254a5affdf",
+        "bounds": {
+          "min": [
+            -0.4068358242511749,
+            -0.4320083558559418,
+            -0.4871714115142822
+          ],
+          "max": [
+            0.4034005403518677,
+            0.4322890043258667,
+            0.4895973205566406
+          ]
+        }
+      }
+    ],
+    "nativeSkins": 0,
+    "nativeAnimations": 0,
+    "nodesMaterialsTexturesAndSkinBindingsPreserved": true
+  },
+  {
+    "assetId": "prop-hunter-cage",
+    "clientReport": {
+      "meshes": 1,
+      "trianglesBefore": 1899294,
+      "trianglesAfter": 10922,
+      "verticesBefore": 1029424,
+      "verticesAfter": 15010,
+      "attributeBytesBefore": 55733096,
+      "attributeBytesAfter": 611384
+    },
+    "geometry": [
+      {
+        "triangles": 10922,
+        "orderedTriangleAttributeSha256": "1a647d5b897593411f53d01639380c81e335c5479dbe54c55308db0f3063fea5",
+        "bounds": {
+          "min": [
+            -0.4861586391925812,
+            -0.3506104052066803,
+            -0.37643948197364807
+          ],
+          "max": [
+            0.48676738142967224,
+            0.34988582134246826,
+            0.37498629093170166
+          ]
+        }
+      }
+    ],
+    "nativeSkins": 0,
+    "nativeAnimations": 0,
+    "nodesMaterialsTexturesAndSkinBindingsPreserved": true
+  },
+  {
+    "assetId": "prop-root-arch",
+    "clientReport": {
+      "meshes": 1,
+      "trianglesBefore": 1997335,
+      "trianglesAfter": 7997,
+      "verticesBefore": 1028866,
+      "verticesAfter": 6256,
+      "attributeBytesBefore": 56891732,
+      "attributeBytesAfter": 296156
+    },
+    "geometry": [
+      {
+        "triangles": 7997,
+        "orderedTriangleAttributeSha256": "d56b17d30d79cb4ef3e67c0c5236130018534397f3c2bcbd6986875f6e5fe610",
+        "bounds": {
+          "min": [
+            -0.20213183760643005,
+            -0.3628920912742615,
+            -0.48800861835479736
+          ],
+          "max": [
+            0.20046043395996094,
+            0.36158686876296997,
+            0.48931223154067993
+          ]
+        }
+      }
+    ],
+    "nativeSkins": 0,
+    "nativeAnimations": 0,
+    "nodesMaterialsTexturesAndSkinBindingsPreserved": true
+  },
+  {
+    "assetId": "actor-yara",
+    "clientReport": {
+      "meshes": 1,
+      "trianglesBefore": 1957768,
+      "trianglesAfter": 97888,
+      "verticesBefore": 1014289,
+      "verticesAfter": 1014289,
+      "attributeBytesBefore": 76236244,
+      "attributeBytesAfter": 53917684
+    },
+    "geometry": [
+      {
+        "triangles": 97888,
+        "orderedTriangleAttributeSha256": "954218c575379979069ff73e38d0f69ddece0339a5b6d1a01ecb1e83f78851e1",
+        "bounds": {
+          "min": [
+            -0.11822167038917542,
+            -1.1920928955078125e-7,
+            -0.29116910696029663
+          ],
+          "max": [
+            0.11822168529033661,
+            1,
+            0.2911692261695862
+          ]
+        }
+      }
+    ],
+    "nativeSkins": 1,
+    "nativeAnimations": 0,
+    "nodesMaterialsTexturesAndSkinBindingsPreserved": true
+  }
+]

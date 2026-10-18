@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-hunter-cage",
+  "generator": "scripts/assets/build-greenwake-runtime-asset.mjs",
+  "tasks": {},
+  "settings": {
+    "operation": "recondition-existing-native-glb",
+    "simplifyRatio": null,
+    "maxError": 0.01,
+    "simplifyFlags": [
+      "LockBorder",
+      "Prune"
+    ],
+    "maxTexture": 2048
+  },
+  "runtimeCandidateGeometry": {
+    "version": 1,
+    "recipe": "CandidateGeometrySimplifier: static target 8000 triangles, deforming ratio 0.05, relative error 0.01, LockBorder + Prune; original selected vertex bytes and skinned bounds retained."
+  },
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb",
+      "sha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963"
+    }
+  },
+  "output": {
+    "path": "asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+    "sha256": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e",
+    "bytes": 3060232,
+    "vertices": 15010,
+    "triangles": 10922,
+    "boundsMin": [
+      -0.48616,
+      -0.35061,
+      -0.37644
+    ],
+    "boundsMax": [
+      0.48677,
+      0.34989,
+      0.37499
+    ],
+    "worldBoundsMin": [
+      -0.48616,
+      -0.35061,
+      -0.37644
+    ],
+    "worldBoundsMax": [
+      0.48677,
+      0.34989,
+      0.37499
+    ]
+  },
+  "clips": [],
+  "textures": [
+    {
+      "index": 0,
+      "from": "image/jpeg",
+      "fromBytes": 3940449,
+      "toBytes": 1362601
+    },
+    {
+      "index": 1,
+      "from": "image/jpeg",
+      "fromBytes": 2102665,
+      "toBytes": 702113
+    },
+    {
+      "index": 2,
+      "from": "image/png",
+      "fromBytes": 3522463,
+      "toBytes": 381974
+    }
+  ],
+  "simplification": [
+    {
+      "trianglesBefore": 1899294,
+      "trianglesAfter": 10922,
+      "relativeError": 0.009951733984053135
+    }
+  ],
+  "compaction": [
+    {
+      "verticesBefore": 1029424,
+      "verticesAfter": 15010
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  }
+}

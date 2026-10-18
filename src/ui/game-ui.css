@@ -374,40 +374,37 @@
 .wc-ending { text-align: left; }
 .wc-chapters__card .wc-meta { margin-top: 16px; }
 
-/* Title: the cartouche of the survey sheet over the illustrated world. The card sits in the left third so the diorama
- *  can fill the right two-thirds with the key-art composition; on narrow viewports the card re-centers and the diorama
- *  stays behind it. The painted fallback image (`.wc-title::before`) is what the title reads as in production when the
- *  3D diorama stays hidden because no candidate assets are available. */
-.wc-title { overflow: hidden; background: var(--wc-frame); backdrop-filter: none; --rs-glow: #f2c46d; }
-/* The approved painted world map is the title's living backdrop: brighter than a dimmed wallpaper, slowly drifting
- * (ui-motion.css), with golden motes over it. The 3D diorama replaces it only once release-verified assets exist. */
-.wc-title::before { content: ''; position: absolute; inset: -6%; pointer-events: none; background: url('/ui/world-map-game.webp') 62% 50% / cover no-repeat; filter: saturate(.95) brightness(.68) contrast(1.05); transform-origin: 70% 45%; }
-.wc-title > .wc-atmo { z-index: 0; }
-.wc-title::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10, 12, 8, .35) 0%, rgba(10, 12, 8, .15) 38%, transparent 64%), radial-gradient(ellipse 78% 90% at 50% 50%, transparent 28%, rgba(10, 12, 8, .82) 100%); }
-.wc-title__card { position: relative; z-index: 1; width: min(520px, 92vw); margin: 0 0 0 max(24px, 5vw); align-self: center; justify-self: start; }
-.wc-title__crest { display: block; width: 56px; height: 38px; margin: 0 0 14px; color: var(--wc-route); overflow: visible; }
-.wc-title__name { font-size: clamp(56px, 7.4vw, 96px); letter-spacing: .08em; }
-.wc-title__word { display: block; }
-.wc-title__letter { display: inline-block; }
-.wc-title__subtitle { margin: 8px 0 0; color: var(--wc-route); font: italic 400 clamp(20px, 2vw, 26px)/1.2 var(--wc-lore); }
-.wc-title .wc-stack .wc-action { justify-content: space-between; }
-.wc-title .wc-label { margin-top: 20px; }
+/* A native scene plate, not another WebGL context: the world is composed around a quiet, readable invitation. */
+.wc-title { place-items: center start; overflow: hidden auto; padding: clamp(32px, 7vh, 100px) clamp(28px, 7vw, 180px); background: #111e19; backdrop-filter: none; --rs-glow: #ecd391; --wc-accent: #e1c286; }
+.wc-title__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 64% center; pointer-events: none; }
+.wc-title > .wc-atmo { z-index: 1; }
+.wc-title::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6, 17, 13, .93), rgba(6, 17, 13, .73) 29%, rgba(6, 17, 13, .2) 58%, transparent 78%), linear-gradient(0deg, rgba(5, 14, 11, .6), transparent 36%); }
+.wc-title__card { position: relative; z-index: 2; width: min(410px, 100%); align-self: center; color: #f4ead4; }
+.wc-title__crest { display: block; width: 48px; height: 34px; margin: 0 0 18px; color: #e1c286; }
+.wc-title__name { margin: 0; color: #f4ead4; font: 600 clamp(64px, 7.2vw, 96px)/.9 var(--wc-display); letter-spacing: .035em; text-transform: uppercase; }
+.wc-title__name span { display: block; }
+.wc-title__subtitle { margin: 17px 0 0; color: #e1c286; font: italic 400 clamp(22px, 2vw, 28px)/1.2 var(--wc-lore); }
+.wc-title__invitation { margin: 25px 0 30px; color: #ddd9c8; font: 400 16px/1.6 var(--wc-sans); }
+.wc-title .wc-stack { max-width: 300px; gap: 4px; }
+.wc-title .wc-action { justify-content: space-between; min-height: 40px; padding: 8px 12px; color: #e8dfc9; background: transparent; border-color: transparent; border-radius: 2px; font-size: 16px; }
+.wc-title .wc-action--primary { margin-bottom: 10px; min-height: 48px; color: #17251a; background: #e1c286; border-color: #e1c286; font-weight: 700; }
+.wc-title .wc-action:not(:disabled):is(:hover, :focus-visible) { color: #fff5dc; background: #263c2e; border-color: #cdb77e; }
+.wc-title .wc-action--primary:not(:disabled):is(:hover, :focus-visible) { color: #102017; background: #f2dba6; border-color: #f2dba6; }
+.wc-title .wc-action:disabled { color: #a8b1a0; opacity: .65; }
+.wc-title__note { margin: 25px 0 0; color: #c3cdbb; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 @media (max-width: 760px) {
-  /* On narrow viewports the card re-centers; the diorama stays behind it but only the painted fallback is visible. */
-  .wc-title__card { margin: 0 auto; }
+  .wc-title { padding: 64px 28px 32px; }
+  .wc-title__art { object-position: 69% center; }
+  .wc-title::after { background: linear-gradient(90deg, rgba(6, 17, 13, .91), rgba(6, 17, 13, .55) 65%, rgba(6, 17, 13, .15)); }
+  .wc-title__name { font-size: clamp(56px, 12vw, 80px); }
 }
-
-/* Title diorama: the 3D living world behind the cartouche. The host sits full-bleed and behind every title child;
-   the title card stays interactive because the host is `pointer-events: none`. The fallback ::before image already
-   keeps the title usable when WebGL never reports ready or the device can't run the canvas. */
-.wc-title-stage-host { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 360ms var(--wc-ease-out, ease); background: transparent; }
-.wc-title-stage-host[data-title-stage-state="ready"] { opacity: 1; }
-.wc-title-stage-host[data-title-stage-state="error"] { opacity: 0; }
-.wc-title-stage-host > canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
-.wc-title-stage-placeholder { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--wc-frame-faint); font: italic 400 16px var(--wc-lore); }
-.wc-title-stage-placeholder[hidden] { display: none; }
-/* The cartouche sits above the canvas. */
-.wc-title > .wc-title__card { z-index: 2; }
+@media (max-height: 700px) and (min-width: 761px) {
+  .wc-title { padding-top: 48px; padding-bottom: 24px; }
+  .wc-title__crest { width: 36px; height: 24px; margin-bottom: 12px; }
+  .wc-title__name { font-size: 64px; }
+  .wc-title__invitation { margin: 18px 0; }
+  .wc-title__note { margin-top: 16px; }
+}
 
 /* ---------- Tutorial card ---------- */
 .wc-tutorial { position: absolute; z-index: 15; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(540px, calc(100% - 32px)); max-height: calc(100% - 32px); overflow-y: auto; padding: 24px 26px; pointer-events: auto; }

@@ -1,0 +1,51 @@
+{
+  "scenario": "Integrated actual GameApplication/native Greenwake; hero seeded once near courtyard crate, tutorial dismissed, then real keyboard K/K/J. No camera or damage override.",
+  "url": "http://127.0.0.1:5191/wc130-acceptance.html",
+  "tick": 1130,
+  "changed": [
+    {
+      "id": "environment-loose-greenwake-courtyard-crates",
+      "material": "loose-wood",
+      "position": {
+        "x": -16.8,
+        "y": 0,
+        "z": -5.964555912210946
+      },
+      "origin": {
+        "x": -16.8,
+        "y": 0,
+        "z": -6.2
+      },
+      "health": 57.39821230287386,
+      "damage": 0.2825223462140768,
+      "broken": false,
+      "impactSerial": 2,
+      "tilt": [
+        0,
+        0
+      ],
+      "sleeping": true
+    }
+  ],
+  "collapsed": [],
+  "crateColliders": [
+    {
+      "id": "native:environment-loose-greenwake-courtyard-crates:0",
+      "kind": "box",
+      "from": {
+        "x": -16.799999476236824,
+        "y": 0.47180949490007684,
+        "z": -6.199999923434945
+      },
+      "halfExtents": {
+        "x": 0.40030213955745353,
+        "y": 0.47180945963843435,
+        "z": 0.37311927037664994
+      },
+      "blocksMovement": false,
+      "blocksCamera": false
+    }
+  ],
+  "worldFactsUnchanged": false,
+  "rootedPositionsUnchanged": true
+}

@@ -1455,7 +1455,7 @@ export class CombatEngine {
     this.state.sceneColliders = colliders.slice();
     this.state.arena.supports = supports.slice();
     measureEnvironment(this.state.environment, colliders);
-    for (const prop of this.state.environment.props) if (prop.material === 'loose-stone' && prop.impactSerial) prop.sleeping = false;
+    for (const prop of this.state.environment.props) if ((prop.material === 'loose-stone' || prop.material === 'loose-wood' && !prop.broken) && prop.impactSerial) prop.sleeping = false;
     this.refreshCombatSolids();
   }
 
@@ -1644,7 +1644,7 @@ export class CombatEngine {
       for(let index=this.state.combatTrial.index;index<trials.length;index++){const gate=trials[index]!.gate;colliders.set(gate.id,gate);}
     }
     for (const prop of this.state.environment.props) {
-      if (!prop.broken || prop.material !== 'foliage') continue;
+      if (!prop.broken || prop.material !== 'foliage' && prop.material !== 'loose-wood') continue;
       for (const id of colliders.keys()) if (id.startsWith(`native:${prop.id}:`)) colliders.delete(id);
     }
     this.state.arena.colliders = [...colliders.values()];

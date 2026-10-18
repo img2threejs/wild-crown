@@ -1,0 +1,595 @@
+{
+  "baseline": "a380076",
+  "checked": 84,
+  "errors": [],
+  "entries": [
+    {
+      "catalog": "greenwake",
+      "id": "prop-warden-waystone",
+      "url": "/asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+      "bytes": 5682636,
+      "sha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-aren",
+      "url": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+      "bytes": 18468132,
+      "sha256": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-yara",
+      "url": "/asset-source/generated/actor-yara-runtime-01/actor-yara.glb",
+      "bytes": 6110592,
+      "sha256": "bd8c0ae132f3794890d404050c55f49d4540c34a1d40a2e5202427642194c350"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-vara",
+      "url": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+      "bytes": 7220152,
+      "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-wooden-crate-stack",
+      "url": "/asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+      "bytes": 1531908,
+      "sha256": "adff6b71619d4ca4698c3e855861553efd6c60430b31bb47043e40d988de8840"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-greenwake-houses",
+      "url": "/asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+      "bytes": 3410452,
+      "sha256": "8fa4ef9ac7079f8611b993d9676a593703383b1292f8cd0fda8841f6a3911b90"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-erya-edge-tree",
+      "url": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+      "bytes": 2622024,
+      "sha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-greenwake-rope-bridge",
+      "url": "/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+      "bytes": 9464844,
+      "sha256": "1a2b2d9730501274b6854b4a0d61eb55eec212622f6b272bdcfdc518fc58f1d5"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-root-arch",
+      "url": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+      "bytes": 2278204,
+      "sha256": "e12209f48c7d01dcbac251dbcb909b2b3eaf74635539cb0948490723c862854b"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-hunter-cage",
+      "url": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+      "bytes": 3060232,
+      "sha256": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-ember-boar",
+      "url": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "bytes": 7511816,
+      "sha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-frost-sap-stalker",
+      "url": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "bytes": 8600236,
+      "sha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-root-rammer",
+      "url": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "bytes": 7734676,
+      "sha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-greenwake-root-gate",
+      "url": "/asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+      "bytes": 6108204,
+      "sha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-greenwake-boulder-cluster",
+      "url": "/asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/prop-greenwake-boulder-cluster.glb",
+      "bytes": 1590292,
+      "sha256": "ba9a07310cd71ac30d0cc1b39d0ff700d12035b044df575eea66c430037ec484"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-greenwake-bramble-wall",
+      "url": "/asset-source/generated/prop-greenwake-bramble-wall-runtime-01/prop-greenwake-bramble-wall.glb",
+      "bytes": 2771928,
+      "sha256": "078858fc2aeeb9b9d4f1d3bfee477a8aeacc9d274c2ad04f1f9ab7fd85b8ecde"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-warden-glaive",
+      "url": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+      "bytes": 2138816,
+      "sha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-yara-hero",
+      "url": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
+      "bytes": 84556292,
+      "sha256": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-heartroot-focus-staff",
+      "url": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
+      "bytes": 49681812,
+      "sha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-vesper-hero",
+      "url": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
+      "bytes": 89287420,
+      "sha256": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-vesper-katana",
+      "url": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+      "bytes": 4845100,
+      "sha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "actor-sakda-hero",
+      "url": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
+      "bytes": 93648764,
+      "sha256": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5"
+    },
+    {
+      "catalog": "greenwake",
+      "id": "prop-mire-bank-rock",
+      "url": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+      "bytes": 1454092,
+      "sha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-aren",
+      "url": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+      "bytes": 18468132,
+      "sha256": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-vara",
+      "url": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+      "bytes": 7220152,
+      "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-greenwake-root-gate",
+      "url": "/asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+      "bytes": 6108204,
+      "sha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-warden-glaive",
+      "url": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+      "bytes": 2138816,
+      "sha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-warden-waystone",
+      "url": "/asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+      "bytes": 5682636,
+      "sha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-koro",
+      "url": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+      "bytes": 7103428,
+      "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-grove-rootling",
+      "url": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "bytes": 7553292,
+      "sha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-grove-blighted-rootling",
+      "url": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "bytes": 7553348,
+      "sha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-grove-hollowheart",
+      "url": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "bytes": 9507880,
+      "sha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-heartroot-trunk",
+      "url": "/asset-source/generated/prop-heartroot-trunk-runtime-01/prop-heartroot-trunk.glb",
+      "bytes": 5909272,
+      "sha256": "6c9361728819a197394bc75c908164bbbcd153ae27b608e7b0e780279433eaba"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-refuge-shelter",
+      "url": "/asset-source/generated/prop-refuge-shelter-runtime-01/prop-refuge-shelter.glb",
+      "bytes": 3500136,
+      "sha256": "2758244c4cbedf2982e2eff04056ea704456b986085817cc839c73b8266bfaf1"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-training-post",
+      "url": "/asset-source/generated/prop-training-post-runtime-01/prop-training-post.glb",
+      "bytes": 2188788,
+      "sha256": "4861706514b3d696c1687009f69b8ec6d040a9c0ee8f22adcdfe9621d80e64e1"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-water-basin",
+      "url": "/asset-source/generated/prop-water-basin-runtime-01/prop-water-basin.glb",
+      "bytes": 2150440,
+      "sha256": "b8fa405234741e7c7f1396a9186ecaf893a686ef42bfa167196dbb1e5b88e911"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-grove-platform",
+      "url": "/asset-source/generated/prop-grove-platform-runtime-01/prop-grove-platform.glb",
+      "bytes": 4727336,
+      "sha256": "b969c577f56cb1af7ebcb28d155f43c9aa8e5c11ee066999fd21cc18b4f870e9"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-erya-edge-tree",
+      "url": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+      "bytes": 2622024,
+      "sha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-greenwake-boulder-cluster",
+      "url": "/asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/prop-greenwake-boulder-cluster.glb",
+      "bytes": 1590292,
+      "sha256": "ba9a07310cd71ac30d0cc1b39d0ff700d12035b044df575eea66c430037ec484"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-canopy-fern-cluster",
+      "url": "/asset-source/generated/prop-canopy-fern-cluster-runtime-01/prop-canopy-fern-cluster.glb",
+      "bytes": 2155208,
+      "sha256": "e3296cb5527aab25c353b391f86b8a6f24b4daeb455b0591deafa558c7bb2a62"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-ancient-canopy-shrine",
+      "url": "/asset-source/generated/prop-ancient-canopy-shrine-runtime-01/prop-ancient-canopy-shrine.glb",
+      "bytes": 4153492,
+      "sha256": "af21b7f718795cbda9289a071f3c2ad5c58acdce02bbcc672342a6d430201987"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-canopy-cliff-rock",
+      "url": "/asset-source/generated/prop-canopy-cliff-rock-runtime-01/prop-canopy-cliff-rock.glb",
+      "bytes": 1844840,
+      "sha256": "947c088b727ca4c9a8edbb8659aae303024786c9d8c84409a3eba5a780c59805"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-mire-bank-rock",
+      "url": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+      "bytes": 1454092,
+      "sha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-root-cavern-mouth",
+      "url": "/asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb",
+      "bytes": 2218952,
+      "sha256": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-yara-hero",
+      "url": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
+      "bytes": 84556292,
+      "sha256": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-heartroot-focus-staff",
+      "url": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
+      "bytes": 49681812,
+      "sha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-vesper-hero",
+      "url": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
+      "bytes": 89287420,
+      "sha256": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc"
+    },
+    {
+      "catalog": "grove",
+      "id": "prop-vesper-katana",
+      "url": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+      "bytes": 4845100,
+      "sha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753"
+    },
+    {
+      "catalog": "grove",
+      "id": "actor-sakda-hero",
+      "url": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
+      "bytes": 93648764,
+      "sha256": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-aren",
+      "url": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
+      "bytes": 18468132,
+      "sha256": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-vara",
+      "url": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+      "bytes": 7220152,
+      "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-greenwake-root-gate",
+      "url": "/asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb",
+      "bytes": 6108204,
+      "sha256": "c6574067dd005d43ca6d1c6d93a44242f2adfefb173e411aa68adbfd4825f604"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-warden-glaive",
+      "url": "/asset-source/generated/prop-warden-glaive-runtime-01/prop-warden-glaive.glb",
+      "bytes": 2138816,
+      "sha256": "47ec712cadbc2c4d8c266e2ccca2b00a150e8686c8d4eea3ec5dea27869aa822"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-warden-waystone",
+      "url": "/asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb",
+      "bytes": 5682636,
+      "sha256": "831be2fcdf64d3791f6614b6c0087f0d0e04673f018c2ca13e873cd1891148ba"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-koro",
+      "url": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+      "bytes": 7103428,
+      "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-koro-branchbreaker",
+      "url": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "bytes": 8321680,
+      "sha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-asha",
+      "url": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "bytes": 8452636,
+      "sha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-tali",
+      "url": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
+      "bytes": 6027360,
+      "sha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-marek",
+      "url": "/asset-source/generated/actor-marek-runtime-01/actor-marek-animated.glb",
+      "bytes": 7739308,
+      "sha256": "0f0dbd0f500f76c92317483672038e4cb4c18e9f6afad9d3dfe43b43707dfee0"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-camp-hunter-melee",
+      "url": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+      "bytes": 8063020,
+      "sha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-camp-hunter-ranged",
+      "url": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+      "bytes": 7440172,
+      "sha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-nursery-cub",
+      "url": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
+      "bytes": 6027360,
+      "sha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-bamboo-grove-cluster",
+      "url": "/asset-source/generated/prop-bamboo-grove-cluster-runtime-01/prop-bamboo-grove-cluster.glb",
+      "bytes": 2656088,
+      "sha256": "a6d9d3beeeb811dc6c55962795cb07275953b2804318a5f5fa84b6b93224e75f"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-hunter-camp",
+      "url": "/asset-source/generated/prop-hunter-camp-runtime-01/prop-hunter-camp.glb",
+      "bytes": 2185864,
+      "sha256": "43592898cc2a3abf8032e52fe68b7842e1e73e6ef1a96cf125d5966d6a00d72d"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-ancient-bamboo-shrine",
+      "url": "/asset-source/generated/prop-ancient-bamboo-shrine-runtime-01/prop-ancient-bamboo-shrine.glb",
+      "bytes": 4074176,
+      "sha256": "e0e8788446740812af4ec8fd63f0ff7ab4e691d15066219a7e08cdbda5da51e8"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-black-sap-jaw-trap",
+      "url": "/asset-source/generated/prop-black-sap-jaw-trap-runtime-01/prop-black-sap-jaw-trap.glb",
+      "bytes": 2003888,
+      "sha256": "3fe666616a292d7c73bebfd8a27f656ab38b33ba3e8a8ad95beccec1d65d368f"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-erya-edge-tree",
+      "url": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+      "bytes": 2622024,
+      "sha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-rainforest-canopy-tree",
+      "url": "/asset-source/generated/prop-rainforest-canopy-tree-runtime-01/prop-rainforest-canopy-tree.glb",
+      "bytes": 2405424,
+      "sha256": "db9347f79497ca80bdd4b4abae3cbdfde35668f5d2986d269131d534ef5078bc"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-greenwake-boulder-cluster",
+      "url": "/asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/prop-greenwake-boulder-cluster.glb",
+      "bytes": 1590292,
+      "sha256": "ba9a07310cd71ac30d0cc1b39d0ff700d12035b044df575eea66c430037ec484"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-canopy-cliff-rock",
+      "url": "/asset-source/generated/prop-canopy-cliff-rock-runtime-01/prop-canopy-cliff-rock.glb",
+      "bytes": 1844840,
+      "sha256": "947c088b727ca4c9a8edbb8659aae303024786c9d8c84409a3eba5a780c59805"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-mire-bank-rock",
+      "url": "/asset-source/generated/prop-mire-bank-rock-runtime-01/prop-mire-bank-rock.glb",
+      "bytes": 1454092,
+      "sha256": "da90e23c3f4f985cf77fd3904c9162805adf4e4392fa255b8c9a9ce10bc9d85b"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-canopy-fern-cluster",
+      "url": "/asset-source/generated/prop-canopy-fern-cluster-runtime-01/prop-canopy-fern-cluster.glb",
+      "bytes": 2155208,
+      "sha256": "e3296cb5527aab25c353b391f86b8a6f24b4daeb455b0591deafa558c7bb2a62"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-greenwake-rope-bridge",
+      "url": "/asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb",
+      "bytes": 9464844,
+      "sha256": "1a2b2d9730501274b6854b4a0d61eb55eec212622f6b272bdcfdc518fc58f1d5"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-hunter-cage",
+      "url": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+      "bytes": 3060232,
+      "sha256": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-greenwake-bramble-wall",
+      "url": "/asset-source/generated/prop-greenwake-bramble-wall-runtime-01/prop-greenwake-bramble-wall.glb",
+      "bytes": 2771928,
+      "sha256": "078858fc2aeeb9b9d4f1d3bfee477a8aeacc9d274c2ad04f1f9ab7fd85b8ecde"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-root-arch",
+      "url": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+      "bytes": 2278204,
+      "sha256": "e12209f48c7d01dcbac251dbcb909b2b3eaf74635539cb0948490723c862854b"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-hunter-extraction-rig",
+      "url": "/asset-source/generated/prop-hunter-extraction-rig-runtime-01/prop-hunter-extraction-rig.glb",
+      "bytes": 2232668,
+      "sha256": "3e7edc383ad9dccf08feea93efcfcfe75cfcdfc0f63bb6f048fe230806c67b15"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-black-sap-filter-drum",
+      "url": "/asset-source/generated/prop-black-sap-filter-drum-runtime-01/prop-black-sap-filter-drum.glb",
+      "bytes": 1778764,
+      "sha256": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-root-cavern-mouth",
+      "url": "/asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb",
+      "bytes": 2218952,
+      "sha256": "57fd3a6f8dedf0f0c580068ea35a40c59878ddf56201a06b1657202a8285e901"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-yara-hero",
+      "url": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
+      "bytes": 84556292,
+      "sha256": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-heartroot-focus-staff",
+      "url": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
+      "bytes": 49681812,
+      "sha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-vesper-hero",
+      "url": "/asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb",
+      "bytes": 89287420,
+      "sha256": "cbf2d1855d4c202c5ff5680b7debd5126c2a5c7586b7b0be1cec4c8a3c3cf4cc"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "prop-vesper-katana",
+      "url": "/asset-source/generated/prop-vesper-katana-runtime-02/prop-vesper-katana.glb",
+      "bytes": 4845100,
+      "sha256": "23e9653aacd55c513ea4edb6eab19490b96c2b9ff911dc020c55bdd58423a753"
+    },
+    {
+      "catalog": "bamboo",
+      "id": "actor-sakda-hero",
+      "url": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
+      "bytes": 93648764,
+      "sha256": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5"
+    }
+  ]
+}

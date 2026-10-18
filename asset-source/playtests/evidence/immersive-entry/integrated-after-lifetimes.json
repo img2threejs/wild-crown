@@ -1,0 +1,217 @@
+{
+  "label": "integrated-after",
+  "origin": "http://127.0.0.1:5192",
+  "start": "2026-10-18T16:14:58.168Z",
+  "method": "Warm HTTP cache, cleared origin storage, real title/new-run cycles, explicit ElementHandle disposal, no App references or recording.",
+  "initial": {
+    "titleHeap": {
+      "natural": {
+        "usedSize": 6641040,
+        "totalSize": 11829248,
+        "embedderHeapUsedSize": 7991712,
+        "backingStorageSize": 2738647
+      },
+      "afterForcedGc": {
+        "usedSize": 6401052,
+        "totalSize": 7372800,
+        "embedderHeapUsedSize": 2134336,
+        "backingStorageSize": 2735586
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 188,
+        "jsEventListeners": 34
+      },
+      "connectedNodes": 186
+    },
+    "boot": {
+      "heroSelectedAtMs": 5862.29999999702,
+      "introAtMs": 5882.899999991059,
+      "introSkippedAtMs": 6919.79999999702,
+      "firstDialogueAtMs": 14211.20000000298,
+      "heroSelectionToDialogueMs": 8348.90000000596,
+      "declaredIntroDwellMs": 1000,
+      "declaredHeroPreviewDwellMs": 2000
+    },
+    "gameHeap": {
+      "natural": {
+        "usedSize": 38754348,
+        "totalSize": 97239040,
+        "embedderHeapUsedSize": 13951392,
+        "backingStorageSize": 117590113
+      },
+      "afterForcedGc": {
+        "usedSize": 22623640,
+        "totalSize": 25460736,
+        "embedderHeapUsedSize": 3467840,
+        "backingStorageSize": 62411532
+      },
+      "dom": {
+        "documents": 1,
+        "nodes": 354,
+        "jsEventListeners": 37
+      },
+      "connectedNodes": 275
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 1,
+      "titleHeap": {
+        "natural": {
+          "usedSize": 23338992,
+          "totalSize": 28606464,
+          "embedderHeapUsedSize": 10010040,
+          "backingStorageSize": 62413572
+        },
+        "afterForcedGc": {
+          "usedSize": 13437604,
+          "totalSize": 15499264,
+          "embedderHeapUsedSize": 3499712,
+          "backingStorageSize": 2741379
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 329,
+          "jsEventListeners": 34
+        },
+        "connectedNodes": 186
+      },
+      "gameHeap": {
+        "natural": {
+          "usedSize": 35642628,
+          "totalSize": 64471040,
+          "embedderHeapUsedSize": 13657872,
+          "backingStorageSize": 117592050
+        },
+        "afterForcedGc": {
+          "usedSize": 23453376,
+          "totalSize": 26771456,
+          "embedderHeapUsedSize": 3717384,
+          "backingStorageSize": 62411541
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 375,
+          "jsEventListeners": 37
+        },
+        "connectedNodes": 275
+      },
+      "timing": {
+        "heroSelectedAtMs": 22739.79999999702,
+        "introAtMs": 22763,
+        "introSkippedAtMs": 23849.5,
+        "firstDialogueAtMs": 30211.39999999106,
+        "heroSelectionToDialogueMs": 7471.5999999940395,
+        "declaredIntroDwellMs": 1000,
+        "declaredHeroPreviewDwellMs": 2000
+      }
+    },
+    {
+      "cycle": 2,
+      "titleHeap": {
+        "natural": {
+          "usedSize": 25076684,
+          "totalSize": 29655040,
+          "embedderHeapUsedSize": 10235016,
+          "backingStorageSize": 62413572
+        },
+        "afterForcedGc": {
+          "usedSize": 14060796,
+          "totalSize": 16809984,
+          "embedderHeapUsedSize": 3821528,
+          "backingStorageSize": 2741379
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 345,
+          "jsEventListeners": 34
+        },
+        "connectedNodes": 186
+      },
+      "gameHeap": {
+        "natural": {
+          "usedSize": 37494044,
+          "totalSize": 64471040,
+          "embedderHeapUsedSize": 12631872,
+          "backingStorageSize": 117591978
+        },
+        "afterForcedGc": {
+          "usedSize": 23911504,
+          "totalSize": 27557888,
+          "embedderHeapUsedSize": 3855672,
+          "backingStorageSize": 62411541
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 391,
+          "jsEventListeners": 37
+        },
+        "connectedNodes": 275
+      },
+      "timing": {
+        "heroSelectedAtMs": 38674.09999999404,
+        "introAtMs": 38699.39999999106,
+        "introSkippedAtMs": 39750.70000000298,
+        "firstDialogueAtMs": 46292.20000000298,
+        "heroSelectionToDialogueMs": 7618.100000008941,
+        "declaredIntroDwellMs": 1000,
+        "declaredHeroPreviewDwellMs": 2000
+      }
+    },
+    {
+      "cycle": 3,
+      "titleHeap": {
+        "natural": {
+          "usedSize": 24140948,
+          "totalSize": 30441472,
+          "embedderHeapUsedSize": 10383160,
+          "backingStorageSize": 62413572
+        },
+        "afterForcedGc": {
+          "usedSize": 14383760,
+          "totalSize": 16809984,
+          "embedderHeapUsedSize": 4066880,
+          "backingStorageSize": 2741379
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 361,
+          "jsEventListeners": 34
+        },
+        "connectedNodes": 186
+      },
+      "gameHeap": {
+        "natural": {
+          "usedSize": 27234032,
+          "totalSize": 86278144,
+          "embedderHeapUsedSize": 5986864,
+          "backingStorageSize": 62411750
+        },
+        "afterForcedGc": {
+          "usedSize": 24187964,
+          "totalSize": 26771456,
+          "embedderHeapUsedSize": 4072056,
+          "backingStorageSize": 62411541
+        },
+        "dom": {
+          "documents": 1,
+          "nodes": 407,
+          "jsEventListeners": 37
+        },
+        "connectedNodes": 275
+      },
+      "timing": {
+        "heroSelectedAtMs": 54814.29999999702,
+        "introAtMs": 54847.70000000298,
+        "introSkippedAtMs": 55884.09999999404,
+        "firstDialogueAtMs": 62690.29999999702,
+        "heroSelectionToDialogueMs": 7876,
+        "declaredIntroDwellMs": 1000,
+        "declaredHeroPreviewDwellMs": 2000
+      }
+    }
+  ],
+  "finalUrl": "http://127.0.0.1:5192/",
+  "end": "2026-10-18T16:16:03.839Z"
+}

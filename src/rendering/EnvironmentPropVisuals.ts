@@ -3,12 +3,12 @@ import type { EnvironmentPropSnapshot, WorldClockSnapshot } from '../game/contra
 import { DebrisFx } from '../effects/vfx/InstancedFx.js';
 import type { NativeStaticBatch } from './NativeAssetLoader.js';
 
-const COLORS = { wood: new Color(0x8b7451), foliage: new Color(0x5f743f), stone: new Color(0x797b76), 'loose-stone': new Color(0x797b76) };
+const COLORS = { wood: new Color(0x8b7451), structure: new Color(0x8b7451), 'loose-wood': new Color(0x8b7451), foliage: new Color(0x5f743f), stone: new Color(0x797b76), 'loose-stone': new Color(0x797b76) };
 
 /** Snapshot projection only: native instance transforms/scars plus a bounded, non-colliding chip pool. */
 export class EnvironmentPropVisuals {
   readonly debris = new DebrisFx(64);
-  readonly brokenFoliageIds = new Set<string>();
+  readonly collapsedPropIds = new Set<string>();
   private readonly serials = new Map<string, number>();
   private readonly applied = new Set<string>();
   private readonly seen = new Set<string>();
@@ -21,7 +21,7 @@ export class EnvironmentPropVisuals {
     scene.add(this.debris.mesh);
   }
 
-  /** Returns whether camera/native-solid visibility needs rebuilding after foliage collapses or restores. */
+  /** Returns whether camera/native-solid visibility needs rebuilding after a local prop collapses or restores. */
   update(props: readonly EnvironmentPropSnapshot[], clock: WorldClockSnapshot, reducedMotion: boolean): boolean {
     const rewind = this.lastWorldTick !== undefined && (clock.worldTick < this.lastWorldTick || clock.simulationTick < this.lastSimulationTick!);
     const baseline = this.lastWorldTick === undefined || rewind;
@@ -31,10 +31,10 @@ export class EnvironmentPropVisuals {
     let solidsChanged = false;
     for (const prop of props) {
       this.seen.add(prop.id);
-      const brokenFoliage = prop.broken && prop.material === 'foliage';
-      if (brokenFoliage !== this.brokenFoliageIds.has(prop.id)) {
+      const collapsed = prop.broken && (prop.material === 'foliage' || prop.material === 'loose-wood');
+      if (collapsed !== this.collapsedPropIds.has(prop.id)) {
         solidsChanged = true;
-        if (brokenFoliage) this.brokenFoliageIds.add(prop.id); else this.brokenFoliageIds.delete(prop.id);
+        if (collapsed) this.collapsedPropIds.add(prop.id); else this.collapsedPropIds.delete(prop.id);
       }
       const batches = this.batches.get(prop.id);
       if (batches) for (const batch of batches) batch.setPlacementResponse(prop.id, prop, reducedMotion);
@@ -57,7 +57,7 @@ export class EnvironmentPropVisuals {
       const batches = this.batches.get(id);
       if (batches) for (const batch of batches) batch.setPlacementResponse(id, undefined, reducedMotion);
       this.applied.delete(id); this.serials.delete(id);
-      if (this.brokenFoliageIds.delete(id)) solidsChanged = true;
+      if (this.collapsedPropIds.delete(id)) solidsChanged = true;
     }
     this.debris.update(clock.worldTimeSeconds);
     this.lastWorldTick = clock.worldTick; this.lastSimulationTick = clock.simulationTick;
@@ -69,7 +69,7 @@ export class EnvironmentPropVisuals {
       const batches = this.batches.get(id);
       if (batches) for (const batch of batches) batch.setPlacementResponse(id, undefined, false);
     }
-    this.applied.clear(); this.seen.clear(); this.serials.clear(); this.brokenFoliageIds.clear();
+    this.applied.clear(); this.seen.clear(); this.serials.clear(); this.collapsedPropIds.clear();
     this.lastWorldTick = this.lastSimulationTick = undefined;
     this.debris.clear();
   }

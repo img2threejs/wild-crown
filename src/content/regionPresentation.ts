@@ -48,7 +48,7 @@ export const REGION_PRESENTATION: Readonly<Record<RegionSceneId, RegionPresentat
     threatLine: 'Ember Boar, Frost Sap-Stalker and the Root Rammer prowl the paths, driven mad by the sap.',
     palette: { sky: '#1b3a2a', mid: '#0c2016', accent: '#8fdc9c', glow: '#52f08a' },
     atmosphere: 'pollen',
-    artUrl: `${MAP_ART}greenwake.jpg`,
+    artUrl: '/ui/greenwake-entry.webp',
   },
   canopy: {
     id: 'canopy',

@@ -1,0 +1,33 @@
+{
+  "id": "greenwake-yara-courtyard",
+  "material": "structure",
+  "position": {
+    "x": -12,
+    "y": 0,
+    "z": -4
+  },
+  "origin": {
+    "x": -12,
+    "y": 0,
+    "z": -4
+  },
+  "velocity": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "angularVelocity": {
+    "x": 0,
+    "z": 0
+  },
+  "sleeping": true,
+  "tiltX": 0,
+  "tiltZ": 0,
+  "health": 148.06631625844435,
+  "damage": 0.17740935411975367,
+  "broken": false,
+  "radius": 3.2403847691600087,
+  "collisionHeight": 3.3235809803009033,
+  "impactSerial": 3,
+  "impactWorldTick": 3763
+}

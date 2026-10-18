@@ -50,7 +50,7 @@ export const CHAPTER_ASSET_BINDINGS: Readonly<Partial<Record<RegionId, readonly 
     actor("actor-ember-boar", GREENWAKE, "corrupted-boar"),
     actor("actor-frost-sap-stalker", GREENWAKE, "corrupted-boar"),
     actor("actor-root-rammer", GREENWAKE, "corrupted-boar"),
-    ...props(GREENWAKE, "prop-greenwake-houses", "prop-erya-edge-tree", "prop-greenwake-rope-bridge", "prop-root-arch", "prop-hunter-cage"),
+    ...props(GREENWAKE, "prop-greenwake-houses", "prop-erya-edge-tree", "prop-greenwake-rope-bridge", "prop-root-arch", "prop-hunter-cage", "prop-wooden-crate-stack"),
   ],
   "whispering-canopy": [
     ...COMPANIONS,

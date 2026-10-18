@@ -2,18 +2,21 @@ import type { EnvironmentPropSnapshot, RegionColliderDefinition, RegionDefinitio
 import { groundHeightAt, isImpactPathClear, moveAerialCircle, pointInSector, type CombatArena } from './geometry.js';
 
 export const LOOSE_PROP_PREFIX = 'environment-loose-';
-export type EnvironmentMaterial = 'wood' | 'foliage' | 'stone' | 'loose-stone';
+export type EnvironmentMaterial = EnvironmentPropSnapshot['material'];
 interface MaterialResponse { health: number; resistance: number; mobility: number; radius: number; height: number }
 const MATERIALS: Record<EnvironmentMaterial, MaterialResponse> = {
   wood: { health: 140, resistance: .24, mobility: .025, radius: .65, height: 3 },
+  structure: { health: 180, resistance: 1.1, mobility: .04, radius: 3, height: 5 },
   foliage: { health: 16, resistance: 1, mobility: .22, radius: .45, height: .9 },
   stone: { health: 220, resistance: .1, mobility: 0, radius: .8, height: 1.2 },
   'loose-stone': { health: 18, resistance: .8, mobility: 1, radius: .18, height: .32 },
+  'loose-wood': { health: 80, resistance: .9, mobility: .72, radius: .43, height: .95 },
 };
 const ROOTED_WOOD: Record<string, true> = {
   'prop-erya-edge-tree': true, 'prop-moonpine-tree': true, 'prop-rainforest-canopy-tree': true,
   'prop-savanna-acacia': true, 'prop-heartroot-trunk': true, 'prop-bamboo-cluster': true, 'prop-bamboo-grove': true,
 };
+const STRUCTURES: Record<string, true> = { 'prop-greenwake-houses': true };
 const FOLIAGE: Record<string, true> = { 'prop-canopy-fern-cluster': true, 'prop-mistveil-reed-cluster': true };
 const STONE: Record<string, true> = {
   'prop-greenwake-boulder-cluster': true, 'prop-canopy-cliff-rock': true,
@@ -43,11 +46,14 @@ export interface EnvironmentState {
 export function emptyEnvironment(): EnvironmentState { return { props: [], contacts: [], sequence: 0 }; }
 
 export function isLooseEnvironmentProp(prop: WorldAssetPlacement): boolean {
-  return prop.id.startsWith(LOOSE_PROP_PREFIX) && STONE[prop.assetId] === true && Math.max(prop.scale.x, prop.scale.y, prop.scale.z) <= .16;
+  if (!prop.id.startsWith(LOOSE_PROP_PREFIX)) return false;
+  const scale = Math.max(prop.scale.x, prop.scale.y, prop.scale.z);
+  return prop.assetId === 'prop-wooden-crate-stack' ? scale <= 1.25 : STONE[prop.assetId] === true && scale <= .16;
 }
 
 function materialFor(prop: WorldAssetPlacement): EnvironmentMaterial | undefined {
-  if (isLooseEnvironmentProp(prop)) return 'loose-stone';
+  if (isLooseEnvironmentProp(prop)) return prop.assetId === 'prop-wooden-crate-stack' ? 'loose-wood' : 'loose-stone';
+  if (STRUCTURES[prop.assetId]) return 'structure';
   if (ROOTED_WOOD[prop.assetId]) return 'wood';
   if (FOLIAGE[prop.assetId]) return 'foliage';
   if (STONE[prop.assetId]) return 'stone';
@@ -57,11 +63,14 @@ function materialFor(prop: WorldAssetPlacement): EnvironmentMaterial | undefined
 /** Explicit material allowlist. Story props and conditional/native support placements never become loose bodies. */
 export function createEnvironment(region: RegionDefinition, protectedIds: ReadonlySet<string>): EnvironmentState {
   const protectedProps = new Set(protectedIds);
+  // A static house can flex/scuff even when it is an NPC interaction target. It never moves, collapses or changes a support.
+  // Explicitly moved/delivered structures remain protected by the ownership checks below.
+  for (const prop of region.props) if (STRUCTURES[prop.assetId]) protectedProps.delete(prop.id);
   for (const prop of region.movableObjects) protectedProps.add(prop.id);
   for (const delivery of region.deliveries ?? []) protectedProps.add(delivery.id);
   for (const collider of region.ground.colliders) {
-    // Collider-paired route dressing must remain precisely aligned with its authored blocker.
-    for (const prop of region.props) if (collider.id.includes(prop.id.replace(/-visual$/, ''))) protectedProps.add(prop.id);
+    // Route dressing stays aligned; a house's bounded cosmetic flex never changes its authored blocker.
+    for (const prop of region.props) if (!STRUCTURES[prop.assetId] && collider.id.includes(prop.id.replace(/-visual$/, ''))) protectedProps.add(prop.id);
   }
   const props: EnvironmentProp[] = [];
   for (const placement of region.props) {
@@ -124,6 +133,7 @@ export function impactEnvironment(environment: EnvironmentState, arena: CombatAr
   if (contact) contact.touchedAtWorldTick = worldTick;
   let changedCollider = false;
   for (const prop of environment.props) {
+    if (prop.broken && prop.material === 'loose-wood') continue;
     if (contact?.propIds.includes(prop.id) || !contains(prop) || !environmentReachable(prop, arena, origin)) continue;
     if (!contact) { contact = { key, touchedAtWorldTick: worldTick, propIds: [] }; environment.contacts.push(contact); }
     contact.propIds.push(prop.id);
@@ -133,16 +143,20 @@ export function impactEnvironment(environment: EnvironmentState, arena: CombatAr
     const distance = Math.max(0, Math.hypot(prop.position.x - origin.x, prop.position.z - origin.z) - prop.radius);
     const transferredDamage = damage / (1 + .18 * distance);
     const force = Math.min(4.5, .45 + Math.sqrt(transferredDamage) * .48);
-    prop.health = Math.max(0, prop.health - transferredDamage * profile.resistance);
+    prop.health = Math.max(prop.material === 'structure' ? profile.health * .45 : 0, prop.health - transferredDamage * profile.resistance);
     prop.damage = 1 - prop.health / profile.health;
-    if (prop.health === 0 && !prop.broken) { prop.broken = true; changedCollider ||= prop.material === 'foliage'; }
-    if (prop.material === 'loose-stone') {
+    if (prop.health === 0 && !prop.broken) { prop.broken = true; changedCollider ||= prop.material === 'foliage' || prop.material === 'loose-wood'; }
+    if (prop.material === 'loose-wood' && prop.broken) {
+      prop.sleeping = true;
+      prop.velocity.x = prop.velocity.y = prop.velocity.z = 0;
+    } else if (prop.material === 'loose-stone' || prop.material === 'loose-wood') {
       prop.sleeping = false;
-      prop.velocity.x += nx * force; prop.velocity.z += nz * force;
+      prop.velocity.x += nx * force * profile.mobility; prop.velocity.z += nz * force * profile.mobility;
       const speed = Math.hypot(prop.velocity.x, prop.velocity.z);
       if (speed > 4.5) { prop.velocity.x *= 4.5 / speed; prop.velocity.z *= 4.5 / speed; }
-      prop.velocity.y = Math.min(2.2, prop.velocity.y + force * .36);
-      prop.angularVelocity.x += nz * force; prop.angularVelocity.z -= nx * force;
+      prop.velocity.y = Math.min(2.2, prop.velocity.y + force * .36 * profile.mobility);
+      // Crate stacks use upright swept bodies: no visual rotation below a floor that their collision body cannot represent.
+      if (prop.material === 'loose-stone') { prop.angularVelocity.x += nz * force; prop.angularVelocity.z -= nx * force; }
     } else {
       prop.angularVelocity.x += nz * force * profile.mobility;
       prop.angularVelocity.z -= nx * force * profile.mobility;
@@ -159,8 +173,8 @@ export function stepEnvironment(environment: EnvironmentState, arena: CombatAren
   if (dt <= 0) return;
   for (let i = environment.contacts.length - 1; i >= 0; i--) if (worldTick - environment.contacts[i]!.touchedAtWorldTick > 600) environment.contacts.splice(i, 1);
   for (const prop of environment.props) {
-    if (!prop.impactSerial) continue;
-    if (prop.material === 'loose-stone' && !prop.sleeping) {
+    if (!prop.impactSerial || prop.broken && prop.material === 'loose-wood') continue;
+    if ((prop.material === 'loose-stone' || prop.material === 'loose-wood') && !prop.sleeping) {
       prop.velocity.y = Math.max(-8, prop.velocity.y - 9.8 * dt);
       motion.x = prop.velocity.x * dt; motion.y = prop.velocity.y * dt; motion.z = prop.velocity.z * dt;
       const moved = moveAerialCircle(arena, prop.position, motion, prop.radius, prop.collisionHeight);
@@ -169,7 +183,7 @@ export function stepEnvironment(environment: EnvironmentState, arena: CombatAren
       if (Math.abs(moved.z - prop.position.z - motion.z) > .005) prop.velocity.z *= -.2;
       const floor = groundHeightAt(arena, x, z, prop.position.y);
       if (floor === null || Math.hypot(x - prop.origin.x, z - prop.origin.z) > 4) {
-        // Small rubble never escapes the playable support or crosses a quest/traversal boundary.
+        // Loose bodies never escape playable support or cross a quest/traversal boundary.
         prop.velocity.x = prop.velocity.z = 0;
         x = prop.position.x; z = prop.position.z;
       }
@@ -186,11 +200,12 @@ export function stepEnvironment(environment: EnvironmentState, arena: CombatAren
         prop.sleeping = true;
       }
     }
+    if (prop.material === 'loose-wood') continue;
     const loose = prop.material === 'loose-stone';
     const spring = loose ? 0 : 55, damping = loose ? 4 : 8;
     prop.angularVelocity.x += (-spring * prop.tiltX - damping * prop.angularVelocity.x) * dt;
     prop.angularVelocity.z += (-spring * prop.tiltZ - damping * prop.angularVelocity.z) * dt;
-    const limit = loose ? Math.PI : prop.material === 'foliage' ? .55 : .045;
+    const limit = loose ? Math.PI : prop.material === 'foliage' ? .55 : prop.material === 'structure' ? .008 : .045;
     prop.tiltX = Math.max(-limit, Math.min(limit, prop.tiltX + prop.angularVelocity.x * dt));
     prop.tiltZ = Math.max(-limit, Math.min(limit, prop.tiltZ + prop.angularVelocity.z * dt));
     if (loose) {

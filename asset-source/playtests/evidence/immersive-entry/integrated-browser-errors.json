@@ -1,0 +1,94 @@
+{
+  "entries": [
+    {
+      "seq": 2,
+      "ts": 1792339103671,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5196/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5196/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 3,
+      "ts": 1792339103683,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5196/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5196/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 4,
+      "ts": 1792339103684,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5196/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5196/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 5,
+      "ts": 1792339103702,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5196/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5196/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 6,
+      "ts": 1792340046186,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 7,
+      "ts": 1792340086004,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 8,
+      "ts": 1792340108559,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 9,
+      "ts": 1792340140643,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 10,
+      "ts": 1792340298372,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 11,
+      "ts": 1792340298373,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    },
+    {
+      "seq": 12,
+      "ts": 1792340298430,
+      "type": "requestfailed",
+      "level": "error",
+      "text": "GET http://127.0.0.1:5192/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+      "location": "http://127.0.0.1:5192/audio/music/layer-corrupted.ogg"
+    }
+  ],
+  "nextSeq": 12,
+  "dropped": 0
+}

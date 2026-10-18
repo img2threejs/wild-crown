@@ -1,0 +1,99 @@
+{
+  "kind": "Actual GameApplication dev acceptance; synthetic Gamepad samples invoke real handler, not physical hardware.",
+  "views": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "scene": "WildCrownThe Broken PactThe forest remembers every bond.What will it remember of you?\n      New Game\n      Chapters (Candidate Assets)Trials (Candidate Assets)\n      ContinueLoad Game\n      Settings\n      Credits\n    Single-player story adventure · English",
+      "controls": [
+        {
+          "text": "New Game",
+          "disabled": false
+        },
+        {
+          "text": "Chapters (Candidate Assets)",
+          "disabled": false
+        },
+        {
+          "text": "Trials (Candidate Assets)",
+          "disabled": false
+        },
+        {
+          "text": "Continue",
+          "disabled": true
+        },
+        {
+          "text": "Load Game",
+          "disabled": false
+        },
+        {
+          "text": "Settings",
+          "disabled": false
+        },
+        {
+          "text": "Credits",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "scene": "GreenwakePrologueThe night of a thousand roars.Every creature in the forest is roaring at once, and not one of them is roaring at you.A harpy eagle has fallen with a fragment of Heartroot in her talons. The Warden Staff is waiting.Something beneath Erya is waking. The animals are fleeing it, not each other.Ember Boar, Frost Sap-Stalker and the Root Rammer prowl the paths, driven mad by the sap.Aren enters GreenwakeContinueSkip",
+      "controls": [
+        {
+          "text": "Continue",
+          "disabled": false
+        },
+        {
+          "text": "Skip",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "width": 960,
+      "height": 540,
+      "scrollWidth": 960,
+      "scene": "GreenwakePrologueThe night of a thousand roars.Every creature in the forest is roaring at once, and not one of them is roaring at you.A harpy eagle has fallen with a fragment of Heartroot in her talons. The Warden Staff is waiting.Something beneath Erya is waking. The animals are fleeing it, not each other.Ember Boar, Frost Sap-Stalker and the Root Rammer prowl the paths, driven mad by the sap.Aren enters GreenwakeContinueSkip",
+      "controls": [
+        {
+          "text": "Continue",
+          "disabled": false
+        },
+        {
+          "text": "Skip",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "scene": "DialogueNarrator1 / 2Night in Greenwake. Every animal in the Erya has begun to run, and the roars beneath the roots do not stop.ContinueSkip Cinematic",
+      "controls": [
+        {
+          "text": "Continue",
+          "disabled": false
+        },
+        {
+          "text": "Skip Cinematic",
+          "disabled": false
+        }
+      ]
+    }
+  ],
+  "liveReducedTitle": {
+    "classSet": "wc-ui wc-reduced-motion",
+    "running": []
+  },
+  "staticIntro": {
+    "static": true,
+    "particles": 0,
+    "heading": "Greenwake"
+  },
+  "afterGamepadB": "loading"
+}

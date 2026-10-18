@@ -208,7 +208,7 @@ export class NativeAssetLoader {
         const motionScale = reducedMotion && response?.material !== 'loose-stone' ? .2 : 1;
         const tiltX = (response?.tiltX ?? 0) * motionScale, tiltZ = (response?.tiltZ ?? 0) * motionScale;
         const amount = response?.damage ?? 0;
-        const crush = response?.broken ? response.material === 'foliage' ? .22 : response.material === 'loose-stone' ? .82 : 1 : 1;
+        const crush = response?.broken ? response.material === 'loose-wood' ? 0 : response.material === 'foliage' ? .22 : response.material === 'loose-stone' ? .82 : 1 : 1;
         const o = index * 7;
         // Zero means the authored scale; this cache also skips repeated paused/culled-frame uploads.
         if (responseValues[o] === dx && responseValues[o + 1] === dy && responseValues[o + 2] === dz
@@ -218,7 +218,7 @@ export class NativeAssetLoader {
         responseValues[o + 3] = tiltX; responseValues[o + 4] = tiltZ; responseValues[o + 5] = amount; responseValues[o + 6] = crush - 1;
         responseRotation.setFromEuler(responseEuler.set(tiltX, 0, tiltZ));
         responsePosition.set(base.x + dx, base.y + dy, base.z + dz);
-        const coreScale = response?.broken && response.material === 'loose-stone' ? .82 : 1;
+        const coreScale = response?.broken ? response.material === 'loose-wood' ? 0 : response.material === 'loose-stone' ? .82 : 1 : 1;
         responseScale.set(coreScale, crush, coreScale);
         responseMatrix.compose(responsePosition, responseRotation, responseScale);
         responseBack.makeTranslation(-base.x, -base.y, -base.z);
@@ -374,7 +374,7 @@ export class NativeAssetLoader {
           playtestRootMotion: playtestAnimation?.rootMotion,
           leases: 0, lastUsed: ++this.clock, evictWhenFree: false,
         });
-        if (this.options.simplifyBlockedCandidates && manifest.evidenceStatus === 'blocked') {
+        if (this.options.simplifyBlockedCandidates && manifest.evidenceStatus === 'blocked' && root.userData.wildCrownCandidateGeometryBudget !== 1) {
           void simplifyCandidateGeometry(root).then(finish, (error: unknown) => {
             disposeObject(root);
             reject(new NativeAssetError(manifest.id, 'candidate geometry simplification failed: ' + (error instanceof Error ? error.message : String(error))));

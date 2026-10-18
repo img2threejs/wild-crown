@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "assetId": "prop-wooden-crate-stack",
+  "generator": "scripts/assets/extract-wooden-crate.mjs",
+  "sourceType": "native-glb",
+  "method": "Complete connected wooden stack plus fully enclosed disconnected native bottom boards, seam-weld tolerance 0.000001. Original triangle order, selected position/normal/UV bytes and material images preserved. Node-only centering and grounding; no primitive substitute or metal-drum geometry.",
+  "inputs": {
+    "base": {
+      "path": "asset-source/generated/prop-black-sap-filter-drum-runtime-01/prop-black-sap-filter-drum.glb",
+      "sha256": "88b46c9f4a9d06fab41bd1e32426f3507aece46aed3e879e82c9590e95bd89bb"
+    },
+    "upstreamProvenance": "asset-source/generated/prop-black-sap-filter-drum-runtime-01/provenance.json",
+    "tripoSourceTask": "87f6085b-64e2-41f4-bc17-46e5830d21a5"
+  },
+  "extraction": {
+    "seedVertex": 3258,
+    "componentRoots": [
+      3258,
+      266,
+      286
+    ],
+    "triangles": 611,
+    "vertices": 1025,
+    "sourceBounds": {
+      "min": [
+        -0.25172916054725647,
+        -0.48949024081230164,
+        -0.4892423152923584
+      ],
+      "max": [
+        -0.020036984235048294,
+        -0.1524834781885147,
+        -0.29010194540023804
+      ]
+    },
+    "nodeTranslation": [
+      0.13588307239115238,
+      0.48949024081230164,
+      0.3896721303462982
+    ],
+    "sourceVertexMapSha256": "1a79adb8df0e9df447284e8a14cdf59a45ce83e26e4d5d4f1ccc55bdd407b4f2"
+  },
+  "output": {
+    "path": "asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+    "sha256": "adff6b71619d4ca4698c3e855861553efd6c60430b31bb47043e40d988de8840",
+    "bytes": 1531908
+  },
+  "maxTexture": 1024,
+  "textures": [
+    {
+      "index": 0,
+      "width": 1024,
+      "height": 1024,
+      "bytes": 501847,
+      "sha256": "e6171edddb5ba0cfed01657631b9eb52013c9f8f9abe4a1dde155bdf6775f43d",
+      "method": "Original embedded native image bytes, not re-encoded."
+    },
+    {
+      "index": 1,
+      "width": 1024,
+      "height": 1024,
+      "bytes": 517456,
+      "sha256": "becfa8804d834d2475e9f41550d76f43739aec5c9bcec15739e1df940fa55408",
+      "method": "Original embedded native image bytes, not re-encoded."
+    },
+    {
+      "index": 2,
+      "width": 1024,
+      "height": 1024,
+      "bytes": 470436,
+      "sha256": "3621a5af30c2aa04421e9f3461a0974a57fabffc5d0c4461f7afec2a4021fbf0",
+      "method": "Original embedded native image bytes, not re-encoded."
+    }
+  ],
+  "assessment": {
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "note": "Native authored two-crate stack retained as one small loose body; no rewards or quest authority."
+  }
+}

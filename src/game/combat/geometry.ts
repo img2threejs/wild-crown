@@ -128,9 +128,11 @@ export function groundHeightAt(arena: CombatArena, x: number, z: number, nearY: 
 }
 
 /** Prefer an accessible ramp over an overlapping flat floor; never change floor layers through a gap. */
-function groundedSurfaceHeightAt(arena: CombatArena, x: number, z: number, previousY: number): number | null {
+function groundedSurfaceHeightAt(arena: CombatArena, x: number, z: number, previousY: number, candidates?: PathCandidates): number | null {
   let bestY: number | null = null;
-  for (const surface of arena.surfaces) {
+  const surfaceCount = candidates?.surfaceCount ?? arena.surfaces.length;
+  for (let i = 0; i < surfaceCount; i++) {
+    const surface = arena.surfaces[candidates ? candidates.surfaces[i]! : i]!;
     if (!surface.walkable || !pointInPolygon(surface.points, x, z) || deckSuperseded(arena, surface)) continue;
     const height = surfaceHeight(surface, x, z);
     if (height === null) continue;
@@ -139,8 +141,9 @@ function groundedSurfaceHeightAt(arena: CombatArena, x: number, z: number, previ
   }
   const supports = arena.supports;
   if (supports !== undefined) {
-    for (let i = 0; i < supports.length; i++) {
-      const height = supportStandHeight(supports[i]!, x, z);
+    const supportCount = candidates?.supportCount ?? supports.length;
+    for (let i = 0; i < supportCount; i++) {
+      const height = supportStandHeight(supports[candidates ? candidates.supports[i]! : i]!, x, z);
       if (height === null || Math.abs(height - previousY) > MAX_WALK_STEP) continue;
       if (bestY === null || height > bestY) bestY = height;
     }
@@ -341,19 +344,73 @@ export function findEdgeDrop(arena: CombatArena, start: Vec3, delta: Vec3, radiu
 }
 
 
+// Synchronous, non-recursive sweeps share index buffers, never references to a departed region's geometry.
+// Grow only at a new high-water mark; clearing JS arrays on every path would reallocate their backing stores.
+interface PathCandidates {
+  colliders: Uint32Array; colliderCount: number;
+  surfaces: Uint32Array; surfaceCount: number;
+  supports: Uint32Array; supportCount: number;
+}
+const pathCandidates: PathCandidates = {
+  colliders: new Uint32Array(0), colliderCount: 0,
+  surfaces: new Uint32Array(0), surfaceCount: 0,
+  supports: new Uint32Array(0), supportCount: 0,
+};
+const pathPoint = { x: 0, y: 0, z: 0 };
+
 /** Test a straight grounded capsule path without allowing collision sliding to create a detour. */
 export function isCirclePathClear(arena: CombatArena, start: Vec3, end: Vec3, radius: number, height = 1.7): boolean {
   const distance = distance2(start, end);
   const stepSize = Math.max(0.005, Math.min(MAX_SWEEP_STEP, radius * 0.1));
   const steps = Math.max(1, Math.ceil(distance / stepSize));
-  let previousY = groundedSurfaceHeightAt(arena, start.x, start.z, start.y) ?? start.y;
+  const minX = Math.min(start.x, end.x) - Math.abs(radius), maxX = Math.max(start.x, end.x) + Math.abs(radius);
+  const minZ = Math.min(start.z, end.z) - Math.abs(radius), maxZ = Math.max(start.z, end.z) + Math.abs(radius);
+  if (pathCandidates.colliders.length < arena.colliders.length) pathCandidates.colliders = new Uint32Array(arena.colliders.length);
+  pathCandidates.colliderCount = 0;
+  for (let index = 0; index < arena.colliders.length; index++) {
+    const collider = arena.colliders[index]!;
+    if (!collider.blocksMovement) continue;
+    const half = collider.kind === 'box' ? collider.halfExtents : undefined;
+    const rx = half?.x ?? collider.radius ?? 0, rz = half?.z ?? collider.radius ?? 0;
+    const to = half ? collider.from : collider.to ?? collider.from;
+    if (Math.max(collider.from.x, to.x) + rx < minX || Math.min(collider.from.x, to.x) - rx > maxX
+      || Math.max(collider.from.z, to.z) + rz < minZ || Math.min(collider.from.z, to.z) - rz > maxZ) continue;
+    pathCandidates.colliders[pathCandidates.colliderCount++] = index;
+  }
+  if (pathCandidates.surfaces.length < arena.surfaces.length) pathCandidates.surfaces = new Uint32Array(arena.surfaces.length);
+  pathCandidates.surfaceCount = 0;
+  for (let index = 0; index < arena.surfaces.length; index++) {
+    const surface = arena.surfaces[index]!;
+    if (!surface.walkable || surface.points.length < 3) continue;
+    let left = Infinity, right = -Infinity, near = Infinity, far = -Infinity;
+    for (let vertex = 0; vertex < surface.points.length; vertex++) {
+      const point = surface.points[vertex]!;
+      left = Math.min(left, point.x); right = Math.max(right, point.x);
+      near = Math.min(near, point.z); far = Math.max(far, point.z);
+    }
+    if (right < minX || left > maxX || far < minZ || near > maxZ) continue;
+    pathCandidates.surfaces[pathCandidates.surfaceCount++] = index;
+  }
+  pathCandidates.supportCount = 0;
+  const supports = arena.supports;
+  if (supports !== undefined) {
+    if (pathCandidates.supports.length < supports.length) pathCandidates.supports = new Uint32Array(supports.length);
+    for (let index = 0; index < supports.length; index++) {
+      const field = supports[index]!;
+      if (field.minX > maxX || field.minX + field.cols * field.cell < minX
+        || field.minZ > maxZ || field.minZ + field.rows * field.cell < minZ) continue;
+      pathCandidates.supports[pathCandidates.supportCount++] = index;
+    }
+  }
+  let previousY = groundedSurfaceHeightAt(arena, start.x, start.z, start.y, pathCandidates) ?? start.y;
   for (let step = 1; step <= steps; step++) {
     const ratio = step / steps;
     const x = start.x + (end.x - start.x) * ratio;
     const z = start.z + (end.z - start.z) * ratio;
     if (x < arena.bounds.min.x + radius || x > arena.bounds.max.x - radius || z < arena.bounds.min.z + radius || z > arena.bounds.max.z - radius) return false;
-    const y = groundedSurfaceHeightAt(arena, x, z, previousY);
-    if (y === null || Math.abs(y - previousY) > MAX_WALK_STEP || blocked(arena, { x, y, z }, radius, previousY, height, true)) return false;
+    const y = groundedSurfaceHeightAt(arena, x, z, previousY, pathCandidates);
+    pathPoint.x = x; pathPoint.y = y ?? previousY; pathPoint.z = z;
+    if (y === null || Math.abs(y - previousY) > MAX_WALK_STEP || blocked(arena, pathPoint, radius, previousY, height, true, pathCandidates)) return false;
     previousY = y;
   }
   return true;
@@ -373,14 +430,16 @@ export function traversalRouteAt(arena: CombatArena, point: Vec3, radius = 0.75)
   return best;
 }
 
-function blocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number, stepping = false): boolean {
-  return authoredBlocked(arena, point, radius, previousY, actorHeight, stepping)
+function blocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number, stepping = false, candidates?: PathCandidates): boolean {
+  return authoredBlocked(arena, point, radius, previousY, actorHeight, stepping, candidates)
     || (arena.supports !== undefined && supportBlocked(arena.supports, point, radius, previousY, actorHeight, stepping));
 }
 
-function authoredBlocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number, stepping = false): boolean {
+function authoredBlocked(arena: CombatArena, point: Vec3, radius: number, previousY: number, actorHeight: number, stepping = false, candidates?: PathCandidates): boolean {
   if (arena.obstacles.some(rectangle => circleHits({ center: point, radius }, rectangle))) return true;
-  for (const collider of arena.colliders) {
+  const colliderCount = candidates?.colliderCount ?? arena.colliders.length;
+  for (let i = 0; i < colliderCount; i++) {
+    const collider = arena.colliders[candidates ? candidates.colliders[i]! : i]!;
     if (!collider.blocksMovement || !verticalOverlap(point.y, previousY, collider, actorHeight)) continue;
     // A measured deck is the walkway: the authored flat bridge floor beneath it never blocks the capsule resting on it.
     if (collider.walkSurfaceId !== undefined && deckColliderSuperseded(arena, collider.walkSurfaceId)) continue;

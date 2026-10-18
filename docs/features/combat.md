@@ -435,7 +435,7 @@ The native Yara/Heartroot fitting smoke completed in 7.23 s after this change; t
 
 The ranged camp hunter's crossbow repair removes detached clavicle/forearm weight islands while retaining connected wrist blends. Its native pose sheet was regenerated and inspected; the Bamboo asset suite passed all 83 tests, including rigid weapon distance across clips, manifest hashes, and byte-identical re-authoring. Generate these clips with Node **22.22.3**: Node 20.18.1 produced a different animation fingerprint. The current ranged animated GLB hash is `4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a`. Asset evidence remains `blocked` pending user approval; no paid generation was performed for this repair.
 
-## Offensive environmental response (#128)
+## Offensive environmental response (#128, #130)
 
 `EngineState.environment` owns local prop health, material resistance, impulse, position, angular response and sleep state. `CombatSnapshot.environmentProps` is its sparse presentation projection; `EnvironmentPropVisuals` never awards damage. No physics dependency or replacement prop mesh was introduced.
 
@@ -445,8 +445,10 @@ The ranged camp hunter's crossbow repair removes detached clavicle/forearm weigh
 | Soft fern/reeds | Deflection, accumulated damage and a flattened native remnant when crushed; broken foliage contributes no remaining native blocker. |
 | Large structural rock | Surface damage only; standable tops, decks and navigation do not move. |
 | Explicit small loose stones | Directional impulse, gravity, wall collision, ground friction and tumbling; a damaged chipped core remains visible. |
+| Native houses | Scuffs and at most 0.008 rad cosmetic flex; health stops at 45%, and the house never moves, collapses or changes its blockers/supports. |
+| Explicit small native wooden crate stacks | Upright swept impulse, gravity, settling and accumulated damage; break hides the original stack and removes its native colliders. No below-floor tumbling or quest/reward event. |
 
-Three existing `prop-mire-bank-rock` GLBs are placed as loose stones beside Greenwake's first combat pocket. Only the `environment-loose-` prefix **plus** the small-scale stone allowlist opts into this role. Native geometry measures their body bounds without creating a stationary actor/camera blocker or standable top. Loose travel is bounded to 4 m from its authored origin and supported playable space. Bodies sleep only after landing, never at a zero-speed airborne apex; native-support refresh wakes impacted bodies.
+Three existing `prop-mire-bank-rock` GLBs are loose stones beside Greenwake's first combat pocket; two native wooden stacks dress the courtyard and clearing. The `environment-loose-` prefix **plus** the small-scale stone/crate allowlist opts into this role. Native geometry measures body bounds without creating a stationary actor/camera blocker or standable top. Loose travel stays within 4 m and supported playable space. Surviving bodies sleep only after landing; native-support removal wakes them. Broken wooden stacks stay asleep and cannot receive further hits.
 
 ### Contact and authority
 
@@ -454,7 +456,7 @@ Three existing `prop-mire-bank-rock` GLBs are placed as loose stones beside Gree
 - Stable action/projectile/hazard contact identities deduplicate sustained windows. Distinct real pulses remain separate: Sakda's limb/ring and six Hundred Elbows contacts plus uppercut are not collapsed into one hit.
 - Material resistance and distance attenuate environmental damage. Narrow solid-volume visibility checks walls, terrain and measured supports; they do not run the expensive character movement/landing sweep for every force query.
 - A nearby eligible prop can be the target of Aren's heavy without manufacturing an actor. Empty-air rejection, mana/cooldowns and actor hit resolution remain unchanged. A real fused Bloomseed burst still resolves its existing offensive explosion; ordinary projectile expiry does not invent one.
-- Conditional/story interaction targets, movable/delivery objects, collider-paired route dressing and Greenwake's named corridor root cluster are protected. Bridges, gates, quest state, rewards, actor movement and `CameraDirector` retain their existing authority.
+- Conditional/story interaction targets, movable/delivery objects, collider-paired route dressing and Greenwake's named corridor root cluster are protected. A static house may scuff even when it is an NPC interaction target, because its position, blocker and support never change; explicitly movable/deliverable houses remain protected. Bridges, gates, quest state, rewards, actor movement and `CameraDirector` retain authority.
 
 ### Lifetime and presentation
 
@@ -470,4 +472,10 @@ Native instanced transforms and per-instance scar shading retain their response 
 - Production UI smoke entered Greenwake as Aren/Koro, accepted real K down/up input (mana **100 → 88**, heavy cooldown shown) and exercised Escape/Resume. This verifies boot/input, not an additional environmental-contact or campaign-save claim. Five audio requests reported `net::ERR_ABORTED`; audio playback was not accepted by this smoke.
 - [Captured transitions, source hashes, assertions and REA limitations](../../asset-source/playtests/evidence/environment-impact/acceptance.json); [moving native bodies](../../asset-source/playtests/evidence/environment-impact/moving.png), [settled damage](../../asset-source/playtests/evidence/environment-impact/after-settled.png), [Reduced Effects](../../asset-source/playtests/evidence/environment-impact/reduced.png).
 - This is bounded native prop response, **not** triangle fracture, tree uprooting, terrain deformation, loose-body-to-loose-body collision, a whole-roster native art pass or an FPS/release certification.
+
+### Integrated #130 acceptance
+
+The [immersive-entry evidence](../../asset-source/playtests/evidence/immersive-entry/acceptance.json) records the post-#131 integration. Actual keyboard contacts in the real GameApplication/native Greenwake scene scuffed the house (180 → 148.07 health), damaged a rooted tree without translation (137.50 → 130.30), and pushed then broke the courtyard crate (80 → 57.40 → 0; no remaining crate collider). Each material inspection seeded the hero near that object before real input; it did not override camera, damage or collision results. The isolated break left campaign facts unchanged. The earlier first-play interval also wrote the ordinary `checkpoint:prologue-run-entry` fact, which is not attributed to prop damage.
+
+The focused integrated gate passed 88 tests / 38,037 assertions across UI, environment, geometry and native candidate geometry; release tests passed 236/236, and TypeScript/Vite build passed. A 2,672-query differential plus six mutable collider/support transitions produced zero reachability mismatches. These are scoped gates, not a full-suite pass: previously observed unrelated hero timeout/animation failures remain disclosed in the acceptance receipt.
 

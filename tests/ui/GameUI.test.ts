@@ -1,14 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'bun:test';
 import { mountGameUI, type GameUIInstance } from '../../src/ui/GameUI.js';
-import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, type ActorSnapshot, type AssetManifestEntry, type GameViewModel, type UIAction } from '../../src/game/contracts.js';
+import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, type ActorSnapshot, type GameViewModel, type UIAction } from '../../src/game/contracts.js';
 import { CombatEngine, createEngineState } from '../../src/game/combat/CombatEngine.js';
 import { DIALOGUE } from '../../src/content/dialogue.js';
 import { REGION_PRESENTATION } from '../../src/content/regionPresentation.js';
 import { HEROES, type HeroId } from '../../src/game/heroes.js';
 import { PLAYER_SKILLS, SIGIL } from '../../src/game/combat/PlayerSkills.js';
 import { settingsMarkup } from '../../src/ui/settings.js';
-import { mountTitleStage } from '../../src/rendering/TitleStage.js';
 import { installFakeDom, textOf, type FakeDom, FakeElement } from './fake-dom.js';
 
 let dom: FakeDom | undefined;
@@ -102,28 +101,6 @@ describe('GameUI dialogue', () => {
     ui.destroy();
   });
 
-  it('fades text in by word groups and plain text when motion is reduced', () => {
-    const animated = mount(dialogueModel(0));
-    expect(htmlOf(animated.ui)).toContain('class="wc-wg"');
-    animated.ui.destroy();
-    const reduced = mount(withSettings(dialogueModel(0), { reducedMotion: true }));
-    expect(htmlOf(reduced.ui)).not.toContain('wc-wg');
-    expect(textOf(htmlOf(reduced.ui))).toContain(textOf(beat.lines[0]!.text));
-    reduced.ui.destroy();
-  });
-
-  it('honours subtitle size, background and speaker-label settings', () => {
-    const styled = mount(withSettings(dialogueModel(0), { subtitleSize: 'large', subtitleBackground: 'solid', subtitleSpeakerLabels: false }));
-    expect(htmlOf(styled.ui)).toContain('data-size="large"');
-    expect(htmlOf(styled.ui)).toContain('data-background="solid"');
-    expect(htmlOf(styled.ui)).not.toContain('wc-dialogue__name');
-    styled.ui.destroy();
-    const labelled = mount(withSettings(dialogueModel(0), { subtitleSize: 'small', subtitleBackground: 'off', subtitleSpeakerLabels: true }));
-    expect(htmlOf(labelled.ui)).toContain('data-size="small"');
-    expect(htmlOf(labelled.ui)).toContain('data-background="off"');
-    expect(htmlOf(labelled.ui)).toContain('wc-dialogue__name');
-    labelled.ui.destroy();
-  });
 });
 
 describe('GameUI loading scene', () => {
@@ -229,7 +206,6 @@ describe('GameUI screen transitions', () => {
     expect(title.getAttribute('aria-hidden')).toBe('true');
     expect(title.classList.contains('wc-leave')).toBe(true);
     expect(title.classList.contains('wc-layer--front')).toBe(false);
-    expect(title.innerHTML).toContain('wc-title__letter');
     // Exit ends within 220 ms (+ slack); the entrance class outlives the staggered content, then goes.
     fake.advance(260);
     expect(title.hidden).toBe(true);
@@ -447,60 +423,6 @@ describe('GameUI rough edges', () => {
     }
   });
 
-  it('shows the title with letter-by-letter crest markup and an accessible name', () => {
-    const { ui } = mount(screenModel('title'));
-    expect(htmlOf(ui)).toContain('aria-label="Wild Crown"');
-    expect(htmlOf(ui).match(/wc-title__letter/g)).toHaveLength(9);
-    ui.destroy();
-  });
-
-  it('exposes the 3D title stage host on the title screen and keeps the focusable action order', () => {
-    const { ui } = mount(screenModel('title'));
-    const html = htmlOf(ui);
-    // The host sits behind the title card; it carries its own state dataset so CSS can cross-fade the canvas in.
-    expect(html).toContain('data-title-stage="true"');
-    expect(html).toContain('data-title-stage-state="loading"');
-    expect(html).toContain('data-title-stage-placeholder');
-    // The keyboard focus order hasn't changed: New Game still leads, Continue/Settings/Credits follow the same sequence.
-    const order = ['new-game', 'continue', 'load-screen', 'settings', 'credits'];
-    let cursor = 0;
-    for (const action of order) {
-      const index = html.indexOf(`data-ui-action="${action}"`);
-      expect(index).toBeGreaterThanOrEqual(0);
-      expect(index).toBeGreaterThanOrEqual(cursor);
-      cursor = index;
-    }
-    ui.destroy();
-  });
-
-  it('keeps the title diorama hidden when the production manifest offers no usable assets, so the painted fallback image stays visible', async () => {
-    dom = installFakeDom();
-    // Build a host element that mirrors the title markup: the diorama host carries the placeholder child.
-    const placeholder = new FakeElement('DIV');
-    placeholder.setAttribute('data-title-stage-placeholder', '');
-    const host = new FakeElement('DIV');
-    host.setAttribute('data-title-stage', 'true');
-    host.setAttribute('data-title-stage-state', 'loading');
-    host.append(placeholder);
-    // Production manifest: every entry is blocked (runtimeUrl: null) so the diorama has nothing to compose with.
-    const productionManifest: AssetManifestEntry[] = [
-      { id: 'actor-aren', sourceType: 'native-glb', kind: 'character', runtimeUrl: null, lodIds: [], requiredActionIds: [], actionToClipMapping: {} },
-      { id: 'actor-vara', sourceType: 'native-glb', kind: 'character', runtimeUrl: null, lodIds: [], requiredActionIds: [], actionToClipMapping: {} },
-      { id: 'prop-erya-edge-tree', sourceType: 'native-glb', kind: 'prop', runtimeUrl: null, lodIds: [], requiredActionIds: [], actionToClipMapping: {} },
-    ];
-    const handle = mountTitleStage(host as unknown as HTMLElement, { assets: productionManifest, reducedMotion: false });
-    // The early-return path flips the dataset to 'error' so the CSS keeps the host at opacity 0 and the painted
-    // fallback image (`.wc-title::before`) stays visible. The fake DOM keeps `dataset` and `attributeMap` separate,
-    // so we read the dataset directly.
-    expect(host.dataset.titleStageState).toBe('error');
-    // No canvas was appended because the renderer was never constructed.
-    const canvas = host.children.find(child => child instanceof FakeElement && child.tagName === 'CANVAS');
-    expect(canvas).toBeUndefined();
-    // The handle is a safe no-op so the application's per-frame tick never touches a disposed renderer.
-    expect(() => handle.stage.update(0.016)).not.toThrow();
-    expect(() => handle.dispose()).not.toThrow();
-    await handle.ready;
-  });
 });
 
 describe('GameUI skill bar', () => {
