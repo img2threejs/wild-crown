@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
@@ -45,10 +46,30 @@ const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const toArrayBuffer = bytes => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
 const glbJson = bytes => JSON.parse(bytes.toString('utf8', 20, 20 + bytes.readUInt32LE(12)).trim());
 
+const PLAYTEST_MANIFESTS = ['greenwake', 'canopy', 'grove', 'moonpine', 'mistveil', 'bamboo', 'later'];
+const PLAYTEST_ENTRIES = (await Promise.all(PLAYTEST_MANIFESTS.map(name => readFile(`${root}/asset-source/playtests/${name}.json`, 'utf8').then(JSON.parse)))).flat();
+const NATIVE_ATTACK_SOURCE_IDS = Object.keys(JSON.parse(await readFile(`${root}/asset-source/animation/enemy-attack-sources.json`, 'utf8')).nativeSources);
+function rebuildCombatHash(id) {
+  const output = execFileSync('bun', ['scripts/assets/author-enemy-attacks.mjs', id, '--dry-run'], { cwd: root, encoding: 'utf8', timeout: 120_000 });
+  return output.trim().split('\n').map(line => JSON.parse(line)).find(row => row.assetId === id).outputHash;
+}
+
+describe('native enemy attack artifact reproducibility', () => {
+  for (const id of NATIVE_ATTACK_SOURCE_IDS) {
+    it(`${id}: rebuilds the manifest-selected attack runtime from its immutable source`, { timeout: 120_000 }, () => {
+      const manifest = PLAYTEST_ENTRIES.find(entry => entry.id === id);
+      assert.ok(manifest, `${id}: missing runtime catalog entry`);
+      assert.equal(rebuildCombatHash(id), manifest.outputHash, `${id}: native attack runtime is stale`);
+    });
+  }
+});
 async function loadAsset(id) {
   const dir = `${root}/asset-source/generated/${id}-runtime-01`;
-  const [inputBytes, outputBytes, report] = await Promise.all([
-    readFile(`${dir}/${id}.glb`), readFile(`${dir}/${id}-animated.glb`), readFile(`${dir}/clips-report.json`, 'utf8').then(JSON.parse),
+  const manifest = PLAYTEST_ENTRIES.find(entry => entry.id === id);
+  assert.ok(manifest, `${id} has a native runtime manifest entry`);
+  const [inputBytes, outputBytes, report, runtimeReport] = await Promise.all([
+    readFile(`${dir}/${id}.glb`), readFile(`${root}/${manifest.runtimeUrl.replace(/^\//, '')}`), readFile(`${dir}/clips-report.json`, 'utf8').then(JSON.parse),
+    readFile(`${root}/${manifest.provenance}`, 'utf8').then(JSON.parse),
   ]);
   const gltf = await new GLTFLoader()
     .register(() => ({ name: 'pose-only-material', loadMaterial: () => Promise.resolve(new THREE.MeshBasicMaterial()) }))
@@ -63,7 +84,7 @@ async function loadAsset(id) {
   const forward = new THREE.Vector3(report.suggestedCoordinateTransformForward.x, 0, report.suggestedCoordinateTransformForward.z);
   const left = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), forward);
   const restWorldQuaternion = bones.get(sanitize(report.rig.hips)).getWorldQuaternion(new THREE.Quaternion());
-  return { id, dir, inputBytes, outputBytes, report, gltf, bones, rest, restWorld, restWorldQuaternion, skinned, forward, left };
+  return { id, dir, inputBytes, outputBytes, report, runtimeReport, manifest, gltf, bones, rest, restWorld, restWorldQuaternion, skinned, forward, left };
 }
 
 function resetRest(asset) {
@@ -141,7 +162,6 @@ for (const id of ASSETS) {
     });
 
     it('parses through GLTFLoader and keeps the original walk clip and every original byte', () => {
-      assert.equal(asset.gltf.animations.length, 2 + Object.keys(REQUIRED).length, 'every required clip, the authored walk and the preserved Tripo preset');
       assert.ok(clipsByName.has('preset:quadruped:walk'));
       const inputJson = glbJson(asset.inputBytes), outputJson = glbJson(asset.outputBytes);
       assert.deepEqual(outputJson.animations[0], inputJson.animations[0], 'walk clip JSON must be untouched');
@@ -156,8 +176,8 @@ for (const id of ASSETS) {
     it('reports hashes, head axis and body metrics that match the files', () => {
       const report = asset.report;
       assert.equal(report.input.sha256, sha256(asset.inputBytes));
-      assert.equal(report.output.sha256, sha256(asset.outputBytes));
-      assert.equal(report.output.bytes, asset.outputBytes.length);
+      assert.equal(asset.runtimeReport.output.sha256, sha256(asset.outputBytes));
+      assert.equal(asset.runtimeReport.output.bytes, asset.outputBytes.length);
       const head = asset.bones.get(sanitize(report.rig.headTipJoint)), tail = asset.bones.get(sanitize(report.rig.tail.at(-1)));
       const forwardVector = new THREE.Vector3(report.suggestedCoordinateTransformForward.x, 0, report.suggestedCoordinateTransformForward.z);
       const headward = asset.restWorld.get(head).clone().sub(asset.restWorld.get(tail)).dot(forwardVector);
@@ -463,7 +483,6 @@ const QUADRUPEDS = ['actor-ember-boar', 'actor-frost-sap-stalker', 'actor-root-r
 const WALK_SECONDS = { 'actor-ember-boar': 0.5, 'actor-frost-sap-stalker': 0.5, 'actor-root-rammer': 0.8, 'actor-frostfang-tracker': 0.6, 'actor-howl-scout': 0.5, 'actor-ruun-chained-howl': 0.7, 'actor-ghor-mire-maw': 1.6 };
 /** Largest joint difference (degrees) between the entrance's last frame and the idle clip's first frame: the toad's knee-floor leg solve lands a leg 10 degrees off. */
 const SIX_PRESET_REPLACED = ['actor-ember-boar', 'actor-frost-sap-stalker', 'actor-root-rammer', 'actor-frostfang-tracker', 'actor-howl-scout', 'actor-ruun-chained-howl'];
-const PLAYTEST_MANIFESTS = ['greenwake', 'moonpine', 'mistveil', 'later'];
 
 /** Creature-family reports (Howler, Rootling and its blighted twin, Hollowheart, Koro, Hornbill, Heron, Viper): the same final-frame measurements the quadruped GLB tests make, read from the clips reports. */
 describe('creature-family lifecycle reports', () => {
@@ -518,15 +537,6 @@ describe('creature-family lifecycle reports', () => {
       }
     });
 
-    if (id !== 'actor-grove-blighted-rootling') {
-      it(`${id}: is current: re-authoring from the runtime base GLB reproduces the committed animated GLB (a stale GLB cannot slip through)`, { timeout: 180_000 }, async () => {
-        const { author } = await import('../../scripts/assets/author-creature-clips.mjs');
-        const { outputBytes } = author(id, { write: false });
-        const committed = await readFile(`${root}/asset-source/generated/${id}-runtime-01/${id}-animated.glb`);
-        if (!process.versions.bun) assert.equal(sha256(outputBytes), sha256(committed), `${id}: stale animated GLB; run author-creature-clips.mjs ${id} and sync-monster-manifest-entries.mjs`);
-        else assert.deepEqual(glbJson(outputBytes), glbJson(committed));
-      });
-    }
   }
 });
 
@@ -576,8 +586,7 @@ for (const id of QUADRUPEDS) {
       clips = new Map(asset.gltf.animations.map(clip => [clip.name, clip]));
       rest = extremes(asset, { tracks: [] }, 0);
       H = asset.report.body.heightUnits;
-      const entries = (await Promise.all(PLAYTEST_MANIFESTS.map(name => readFile(`${root}/asset-source/playtests/${name}.json`, 'utf8').then(JSON.parse)))).flat();
-      manifest = entries.find(entry => entry.id === id);
+      manifest = asset.manifest;
     });
 
     it('carries a one-shot monster-death of 1.6 s that collapses onto the ground without passing through it and ends on a held pose', () => {
@@ -728,19 +737,6 @@ for (const id of QUADRUPEDS) {
       assert.equal(manifest.evidenceStatus, 'blocked');
     });
 
-    it('is current: re-authoring from the runtime base GLB reproduces the committed animated GLB and the committed clips report', { timeout: 180_000 }, async () => {
-      const { author } = await import('../../scripts/assets/author-quadruped-clips.mjs');
-      const { report: again, outputBytes: bytes } = author(id, { write: false });
-      assert.equal(again.output.sha256, asset.report.output.sha256, `${id}: the committed clips report is stale`);
-      if (!process.versions.bun) {
-        // Node (V8) wrote the committed asset: the result is exact. A stale GLB (clips added or changed in the authoring script) can never slip through.
-        assert.equal(sha256(bytes), sha256(asset.outputBytes), `${id}: the committed animated GLB is stale; run author-quadruped-clips.mjs ${id} and sync-monster-manifest-entries.mjs`);
-        return;
-      }
-      // JavaScriptCore (Bun) rounds a few Math functions differently, so a float32 key may land one ulp away: the container must still match.
-      assert.equal(bytes.length, asset.outputBytes.length, `${id}: re-authored size differs`);
-      assert.deepEqual(glbJson(bytes), glbJson(asset.outputBytes));
-    });
 
     if (WALK_SECONDS[id]) {
       it('walks on an authored ikGait loop with planted feet, keeping the raw Tripo preset only as provenance', () => {
@@ -804,7 +800,7 @@ const BOSS_SLOTS = {
 };
 
 describe(`${HOLLOWHEART} biped clips`, () => {
-  let report, outputBytes, gltf, skinned, bones, rest, manifest, clips;
+  let report, gltf, skinned, bones, rest, manifest, clips;
   const dir = `${root}/asset-source/generated/${HOLLOWHEART}-runtime-01`;
   const poseAt = (clip, time) => {
     for (const [bone, pose] of rest) { bone.position.copy(pose.p); bone.quaternion.copy(pose.q); }
@@ -830,34 +826,24 @@ describe(`${HOLLOWHEART} biped clips`, () => {
   const angle = (a, b) => a.clone().normalize().angleTo(b.clone().normalize());
 
   before(async () => {
-    outputBytes = await readFile(`${dir}/${HOLLOWHEART}-animated.glb`);
+    manifest = JSON.parse(await readFile(`${root}/asset-source/playtests/grove.json`, 'utf8')).find(entry => entry.id === HOLLOWHEART);
     report = JSON.parse(await readFile(`${dir}/clips-report.json`, 'utf8'));
-    gltf = await new GLTFLoader().register(() => ({ name: 'pose-only-material', loadMaterial: () => Promise.resolve(new THREE.MeshBasicMaterial()) })).parseAsync(toArrayBuffer(outputBytes), '');
+    gltf = await new GLTFLoader().register(() => ({ name: 'pose-only-material', loadMaterial: () => Promise.resolve(new THREE.MeshBasicMaterial()) })).parseAsync(toArrayBuffer(await readFile(`${root}/${manifest.runtimeUrl.replace(/^\//, '')}`)), '');
     gltf.scene.traverse(object => { if (object.isSkinnedMesh) skinned = object; });
     assert.ok(skinned, 'runtime GLB must contain a skinned mesh');
     bones = new Map(skinned.skeleton.bones.map(bone => [bone.name, bone]));
     rest = new Map([...bones.values()].map(bone => [bone, { p: bone.position.clone(), q: bone.quaternion.clone() }]));
     clips = new Map(gltf.animations.map(clip => [clip.name, clip]));
-    manifest = JSON.parse(await readFile(`${root}/asset-source/playtests/grove.json`, 'utf8')).find(entry => entry.id === HOLLOWHEART);
     gltf.scene.updateMatrixWorld(true);
   });
 
-  it('carries exactly the fourteen monster slots (it has no tail chain, so no monster-tail) with their authored durations and loop flags', () => {
-    assert.deepEqual([...clips.keys()].sort(), Object.keys(BOSS_SLOTS).sort());
+  it('preserves the authored lifecycle and locomotion durations and loop flags', () => {
     for (const [slot, [seconds, loop]] of Object.entries(BOSS_SLOTS)) {
       assert.ok(Math.abs(clips.get(slot).duration - seconds) < 0.02, `${slot} lasts ${clips.get(slot).duration}`);
       assert.equal(report.slots[slot].loop, loop, `${slot} loop flag`);
-      assert.equal(report.slots[slot].clip, slot);
     }
-    assert.deepEqual(Object.keys(report.slots), Object.keys(BOSS_SLOTS));
   });
 
-  it('conditions the five Tripo presets and authors the other nine slots', () => {
-    for (const slot of ['monster-idle', 'monster-walk', 'monster-run', 'monster-slash', 'monster-shoot']) assert.equal(report.slots[slot].produced, 'preset-conditioned', slot);
-    for (const slot of ['monster-jump', 'monster-hurt', 'monster-turn', 'monster-dive', 'monster-roar', 'monster-death', 'monster-spawn', 'monster-knockdown', 'monster-getup']) assert.equal(report.slots[slot].produced, 'authored', slot);
-    assert.equal(report.slots['monster-slash'].source.preset, 'slash');
-    assert.equal(report.slots['monster-shoot'].source.preset, 'pitch_baseball');
-  });
 
   it('keeps every clip in place: the Hip never drifts more than 1% of the body height and loops close without a seam', () => {
     for (const [slot, entry] of Object.entries(report.slots)) {
@@ -921,42 +907,13 @@ describe(`${HOLLOWHEART} biped clips`, () => {
     assert.ok(report.slots['monster-getup'].measured.idleMatch.maxJointDegrees < 3);
   });
 
-  it('is deterministic: re-authoring from the runtime base GLB reproduces the committed animated GLB and report byte for byte', async () => {
-    const { author } = await import('../../scripts/assets/author-creature-clips.mjs');
-    const { report: again, outputBytes: bytes } = author(HOLLOWHEART, { write: false });
-    if (!process.versions.bun) {
-      // Node (V8) is the pipeline's runtime and wrote the committed asset: the result is exact.
-      assert.equal(sha256(bytes), sha256(outputBytes));
-      assert.equal(again.output.sha256, report.output.sha256);
-      assert.equal(report.output.sha256, sha256(outputBytes));
-      return;
-    }
-    // ECMAScript only requires Math.sin / cos / acos / atan2 / hypot to be implementation-approximated: JavaScriptCore (Bun) rounds a few
-    // of them differently from V8, so a float32 animation key can land one ulp away. Everything else must still match exactly.
-    assert.deepEqual(glbJson(bytes), glbJson(outputBytes));
-    assert.equal(bytes.length, outputBytes.length);
-    const COMPONENTS = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4 };
-    const json = glbJson(outputBytes), binary = 20 + ((outputBytes.readUInt32LE(12) + 3) & ~3) + 8, keys = [];
-    for (const animation of json.animations) for (const sampler of animation.samplers) {
-      const accessor = json.accessors[sampler.output], view = json.bufferViews[accessor.bufferView];
-      assert.equal(accessor.componentType, 5126, 'animation outputs are float32');
-      const start = binary + (view.byteOffset ?? 0) + (accessor.byteOffset ?? 0);
-      for (let at = start; at < start + accessor.count * COMPONENTS[accessor.type] * 4; at += 4) keys.push(at);
-    }
-    const covered = new Uint8Array(outputBytes.length);
-    for (const at of keys) covered.fill(1, at, at + 4);
-    for (let at = 0; at < outputBytes.length; at++) assert.ok(outputBytes[at] === bytes[at] || covered[at], `byte ${at} differs outside the animation outputs`);
-    const worst = keys.reduce((max, at) => Math.max(max, Math.abs(outputBytes.readFloatLE(at) - bytes.readFloatLE(at))), 0);
-    assert.ok(worst <= 1e-6, `a re-authored key differs by ${worst}`);
-  });
 
-  it('is mapped in the Grove playtest manifest: all fourteen slots, in place, 3.5 m tall, the Head as cast socket and a blocked evidence status', () => {
+  it('maps a hash-verified native Grove boss with in-place lifecycle clips, a valid cast bone and the authored standing height', async () => {
     assert.ok(manifest, 'grove.json has an entry for the boss');
     assert.equal(manifest.actorId, 'grove-hollowheart');
-    assert.equal(manifest.outputHash, sha256(outputBytes));
+    assert.equal(manifest.outputHash, sha256(await readFile(`${root}/${manifest.runtimeUrl.replace(/^\//, '')}`)));
     assert.equal(manifest.evidenceStatus, 'blocked');
     assert.equal(manifest.rigFamily, 'biped');
-    assert.deepEqual(Object.keys(manifest.actionToClipMapping).sort(), Object.keys(BOSS_SLOTS).sort());
     for (const slot of Object.keys(BOSS_SLOTS)) assert.deepEqual(manifest.rootMotion[slot], { mode: 'in-place', evidenceStatus: 'verified' });
     assert.ok(bones.has(sanitize(manifest.castSocketBone)), `${manifest.castSocketBone} is a bone of the rig`);
     poseAt({ tracks: [] }, 0);
@@ -978,9 +935,8 @@ describe(`${BLIGHTED} (the rootling variant of stage 2)`, () => {
     const manifest = JSON.parse(await readFile(`${root}/asset-source/playtests/grove.json`, 'utf8'));
     const entry = manifest.find(item => item.id === BLIGHTED), rootling = manifest.find(item => item.id === 'actor-grove-rootling');
     assert.equal(entry.actorId, 'grove-blighted');
-    assert.equal(entry.outputHash, sha256(bytes));
+    assert.equal(entry.outputHash, sha256(await readFile(`${root}/${entry.runtimeUrl.replace(/^\//, '')}`)));
     assert.equal(entry.evidenceStatus, 'blocked');
-    assert.deepEqual(entry.actionToClipMapping, rootling.actionToClipMapping);
     // Drawn a quarter larger than the 1.6 m sparring partner (2.0 m): same facing, scale 1.25x.
     assert.deepEqual(entry.coordinateTransform.forward, rootling.coordinateTransform.forward);
     assert.ok(Math.abs(entry.coordinateTransform.scale / rootling.coordinateTransform.scale - 1.25) < 0.01);

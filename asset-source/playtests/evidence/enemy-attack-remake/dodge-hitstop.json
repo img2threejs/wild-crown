@@ -1,0 +1,578 @@
+{
+  "perfectDodge": {
+    "before": {
+      "simulationTick": 73,
+      "worldTick": 73,
+      "worldTimeSeconds": 1.2166666666666666,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "after": {
+      "simulationTick": 74,
+      "worldTick": 74,
+      "worldTimeSeconds": 1.2333333333333334,
+      "timeScale": 0.25,
+      "policy": "perfect-dodge-slow"
+    },
+    "instinct": 20,
+    "playerAction": "aren-perfect-dodge-left",
+    "slowFrames": [
+      {
+        "clock": {
+          "simulationTick": 75,
+          "worldTick": 74.25,
+          "worldTimeSeconds": 1.2375,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 89,
+          "worldTick": 74.25,
+          "simulationTick": 75,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "commit",
+          "progress": 0.95,
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "meshPosition": [
+            6,
+            0,
+            -3
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 1.97,
+          "expectedNativeTime": 1.97,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 74.25
+          }
+        },
+        "shaderTime": 1.2375
+      },
+      {
+        "clock": {
+          "simulationTick": 76,
+          "worldTick": 74.5,
+          "worldTimeSeconds": 1.2416666666666667,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 90,
+          "worldTick": 74.5,
+          "simulationTick": 76,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "commit",
+          "progress": 0.9666666666666667,
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "meshPosition": [
+            6,
+            0,
+            -3
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 1.98,
+          "expectedNativeTime": 1.98,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 74.5
+          }
+        },
+        "shaderTime": 1.2416666666666667
+      },
+      {
+        "clock": {
+          "simulationTick": 77,
+          "worldTick": 74.75,
+          "worldTimeSeconds": 1.2458333333333333,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 91,
+          "worldTick": 74.75,
+          "simulationTick": 77,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "commit",
+          "progress": 0.9833333333333333,
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "meshPosition": [
+            6,
+            0,
+            -3
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 1.99,
+          "expectedNativeTime": 1.99,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 74.75
+          }
+        },
+        "shaderTime": 1.2458333333333333
+      },
+      {
+        "clock": {
+          "simulationTick": 78,
+          "worldTick": 75,
+          "worldTimeSeconds": 1.25,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 92,
+          "worldTick": 75,
+          "simulationTick": 78,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0,
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "meshPosition": [
+            6,
+            0,
+            -3
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2,
+          "expectedNativeTime": 2,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 75
+          }
+        },
+        "shaderTime": 1.25
+      },
+      {
+        "clock": {
+          "simulationTick": 79,
+          "worldTick": 75.25,
+          "worldTimeSeconds": 1.2541666666666667,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 93,
+          "worldTick": 75.25,
+          "simulationTick": 79,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.010416666666666666,
+          "position": {
+            "x": 6.069877124296869,
+            "y": 0,
+            "z": -3.0349385621484344
+          },
+          "meshPosition": [
+            6.069877124296869,
+            0,
+            -3.0349385621484344
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0104166666666665,
+          "expectedNativeTime": 2.0104166666666665,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 75.25
+          }
+        },
+        "shaderTime": 1.2541666666666667
+      },
+      {
+        "clock": {
+          "simulationTick": 80,
+          "worldTick": 75.5,
+          "worldTimeSeconds": 1.2583333333333333,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 94,
+          "worldTick": 75.5,
+          "simulationTick": 80,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.020833333333333332,
+          "position": {
+            "x": 6.139754248593737,
+            "y": 0,
+            "z": -3.0698771242968683
+          },
+          "meshPosition": [
+            6.139754248593737,
+            0,
+            -3.0698771242968683
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0208333333333335,
+          "expectedNativeTime": 2.0208333333333335,
+          "health": 100,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 75.5
+          }
+        },
+        "shaderTime": 1.2583333333333333
+      },
+      {
+        "clock": {
+          "simulationTick": 81,
+          "worldTick": 75.75,
+          "worldTimeSeconds": 1.2625,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 95,
+          "worldTick": 75.75,
+          "simulationTick": 81,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.03125,
+          "position": {
+            "x": 6.209631372890605,
+            "y": 0,
+            "z": -3.1048156864453027
+          },
+          "meshPosition": [
+            6.209631372890605,
+            0,
+            -3.1048156864453027
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.03125,
+          "expectedNativeTime": 2.03125,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 75.75
+          }
+        },
+        "shaderTime": 1.2625
+      },
+      {
+        "clock": {
+          "simulationTick": 82,
+          "worldTick": 76,
+          "worldTimeSeconds": 1.2666666666666666,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 96,
+          "worldTick": 76,
+          "simulationTick": 82,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.041666666666666664,
+          "position": {
+            "x": 6.279508497187473,
+            "y": 0,
+            "z": -3.1397542485937366
+          },
+          "meshPosition": [
+            6.279508497187473,
+            0,
+            -3.1397542485937366
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0416666666666665,
+          "expectedNativeTime": 2.0416666666666665,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 76
+          }
+        },
+        "shaderTime": 1.2666666666666666
+      },
+      {
+        "clock": {
+          "simulationTick": 83,
+          "worldTick": 76.25,
+          "worldTimeSeconds": 1.2708333333333333,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 97,
+          "worldTick": 76.25,
+          "simulationTick": 83,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.052083333333333336,
+          "position": {
+            "x": 6.349385621484342,
+            "y": 0,
+            "z": -3.174692810742171
+          },
+          "meshPosition": [
+            6.349385621484342,
+            0,
+            -3.174692810742171
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0520833333333335,
+          "expectedNativeTime": 2.0520833333333335,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 76.25
+          }
+        },
+        "shaderTime": 1.2708333333333333
+      },
+      {
+        "clock": {
+          "simulationTick": 84,
+          "worldTick": 76.5,
+          "worldTimeSeconds": 1.275,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 98,
+          "worldTick": 76.5,
+          "simulationTick": 84,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.0625,
+          "position": {
+            "x": 6.419262745781211,
+            "y": 0,
+            "z": -3.2096313728906054
+          },
+          "meshPosition": [
+            6.419262745781211,
+            0,
+            -3.2096313728906054
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0625,
+          "expectedNativeTime": 2.0625,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 76.5
+          }
+        },
+        "shaderTime": 1.275
+      },
+      {
+        "clock": {
+          "simulationTick": 85,
+          "worldTick": 76.75,
+          "worldTimeSeconds": 1.2791666666666666,
+          "timeScale": 0.25,
+          "policy": "perfect-dodge-slow"
+        },
+        "native": {
+          "frame": 99,
+          "worldTick": 76.75,
+          "simulationTick": 85,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.07291666666666667,
+          "position": {
+            "x": 6.489139870078079,
+            "y": 0,
+            "z": -3.2445699350390393
+          },
+          "meshPosition": [
+            6.489139870078079,
+            0,
+            -3.2445699350390393
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0729166666666665,
+          "expectedNativeTime": 2.0729166666666665,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 76.75
+          }
+        },
+        "shaderTime": 1.2791666666666666
+      },
+      {
+        "clock": {
+          "simulationTick": 86,
+          "worldTick": 77,
+          "worldTimeSeconds": 1.2833333333333332,
+          "timeScale": 1,
+          "policy": "normal"
+        },
+        "native": {
+          "frame": 100,
+          "worldTick": 77,
+          "simulationTick": 86,
+          "actorId": "corrupted-boar",
+          "actionId": "wild-crown:boar-charge",
+          "phase": "active",
+          "progress": 0.08333333333333333,
+          "position": {
+            "x": 6.5590169943749475,
+            "y": 0,
+            "z": -3.2795084971874737
+          },
+          "meshPosition": [
+            6.5590169943749475,
+            0,
+            -3.2795084971874737
+          ],
+          "rootXZError": 0,
+          "nativeAsset": "actor-ember-boar",
+          "nativeAction": "wild-crown:boar-charge",
+          "nativeTime": 2.0833333333333335,
+          "expectedNativeTime": 2.0833333333333335,
+          "health": 84,
+          "issues": [],
+          "fx": {
+            "capacity": 16,
+            "activeActors": 1,
+            "visibleTrails": 1,
+            "droppedCosmeticActors": 0,
+            "missingNativeAnchors": 0,
+            "sampledWorldTick": 77
+          }
+        },
+        "shaderTime": 1.2833333333333334
+      }
+    ],
+    "observedLastSlowPlayerVitality": 84
+  },
+  "hitStop": {
+    "observedFromActualLightHit": true,
+    "enemyHealthBefore": 160,
+    "enemyHealthAtContact": 151,
+    "worldBefore": 15,
+    "worldAfter": 15,
+    "nativeTimeBefore": 0.35,
+    "nativeTimeAfter": 0.35,
+    "skinMatrixDelta": 0,
+    "frozenSimulationFrames": 3,
+    "reaction": {
+      "kind": "flinch",
+      "direction": {
+        "x": -0.8944271909999159,
+        "y": 0,
+        "z": 0.4472135954999579
+      },
+      "side": "front",
+      "strength": 0.278125,
+      "progress": 0,
+      "durationTicks": 12,
+      "serial": 1
+    },
+    "cancellations": []
+  },
+  "scope": "Controlled real-engine inputs exercise actual Perfect Dodge slow policy and actual Light-hit hit-stop. The player takes damage during the captured slow tail; this proves clock synchronization, not invulnerability or encounter completion.",
+  "correction": "The original temporary healthAfter field came from the later fixture and was discarded; retained slow-frame snapshots are authoritative."
+}

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "issue": 131,
+  "status": "native-presentation-qualification-complete",
+  "scope": {
+    "attacks": 93,
+    "nativeBodies": 25,
+    "physicalAttackBodyPairs": 97,
+    "regions": 8,
+    "candidateCatalogs": 7,
+    "assetEvidence": "blocked/unverified; verified-production release gate unchanged",
+    "simulation": "No combat/campaign authority source changes; movement, swept collision, hazards, damage, quests and nonlethal subdual remain engine-owned."
+  },
+  "inventory": "inventory.json",
+  "nativeIntegrity": "native-integrity.json",
+  "poseAudit": "native-pose-audit.json",
+  "runtime": {
+    "receipt": "runtime-attacks.json",
+    "summary": {
+      "attacks": 93,
+      "regions": [
+        "whispering-canopy",
+        "moonpine-ridge",
+        "mistveil-basin",
+        "sunmane-expanse",
+        "heartroot-hollow",
+        "greenwake",
+        "blood-bamboo-valley",
+        "the-grove"
+      ],
+      "elapsedMs": 228622.40000000596,
+      "sampleCount": 14833,
+      "attackSamples": 12138,
+      "boneScaleChecks": 445879,
+      "constantJointPositionChecks": 412358,
+      "nativeTipAncestryChecks": 15353,
+      "emissions": 3194,
+      "incompletePhases": [],
+      "errors": [],
+      "maxBoneRelativeScaleError": 0,
+      "maxUnanimatedJointWorldShift": 1.135843454968586e-8,
+      "maxRootNonuniformScaleError": 0,
+      "maxRootXZError": 0,
+      "maxNativeClockError": 0,
+      "maxEffectBirthClockError": 0
+    },
+    "genuineForms": "genuine-aspects-possession.json",
+    "genuineCases": 8,
+    "skyConcurrentNativeOwners": 4,
+    "coalesced": "coalesced-first-frame.json",
+    "coalescedFixedSteps": 20,
+    "ownershipPauseUnload": "duplicate-ownership-pause-unload.json",
+    "timePolicies": "dodge-hitstop.json",
+    "airborneSubdual": "airborne-subdual.json",
+    "actualKeyboardAi": "normal-ui-combat.json",
+    "productionUi": "production-ui.json",
+    "emittedNativeClosure": "production-asset-closure.json",
+    "console": "browser-errors.json",
+    "gateFrameBirth": "gate-frame-birth.json"
+  },
+  "verification": [
+    {
+      "scope": "Integrated app/effects/rendering plus named combat/facing/trial suites",
+      "command": "bun test tests/app tests/effects tests/rendering/*.test.ts tests/combat/greenwake-monster-behaviour.test.ts tests/combat/combat-trials.test.ts tests/combat/canopy-trials.test.ts tests/combat/moonpine-trials.test.ts tests/combat/mistveil-trials.test.ts tests/combat/orun-duel.test.ts tests/combat/monster-facing.test.ts",
+      "pass": 960,
+      "fail": 0,
+      "files": 76,
+      "expectCalls": 484504,
+      "testElapsedSeconds": 140.59,
+      "note": "Before semantics-preserving recipe-regexp hoist and renderer-owned gate-clock repair; final focused gate and runtime proofs below cover those changes."
+    },
+    {
+      "scope": "Final actual application/effects after gate-clock repair",
+      "command": "bun test tests/app tests/effects",
+      "pass": 422,
+      "fail": 0,
+      "files": 33,
+      "expectCalls": 286869,
+      "testElapsedSeconds": 68.33
+    },
+    {
+      "scope": "Native authoring/physical offline Node gate",
+      "pass": 312,
+      "fail": 0,
+      "suites": 55,
+      "testElapsedSeconds": 28.607
+    },
+    {
+      "scope": "Final release-contract tests",
+      "command": "node --test tests/release/*.test.mjs",
+      "runtime": "Node 24.22.0",
+      "pass": 236,
+      "fail": 0,
+      "testElapsedSeconds": 4.586482
+    },
+    {
+      "scope": "Final production typecheck/build",
+      "command": "bun --bun node_modules/typescript/bin/tsc -b && bun --bun node_modules/vite/bin/vite.js build",
+      "status": "passed",
+      "modules": 332,
+      "viteElapsedSeconds": 8.85,
+      "mainChunk": "main-CqHP5rCx.js",
+      "warning": "Existing large-chunk warning remains; not a strict release-validation pass."
+    },
+    {
+      "scope": "Actual native asset pipeline",
+      "status": "passed",
+      "observed": "All 25 native rebakes, sync-monster-manifest-entries --check and five existing regional catalog CLI rebuilds. Actual built GLB SHA/magic and seven-catalog closure recorded separately."
+    }
+  ],
+  "testCounting": "Test gates overlap; do not sum their pass counts or claim a full-repository suite run.",
+  "performance": "matched-performance.json",
+  "media": "media.json",
+  "review": {
+    "owner": "main-session coordinator/integration owner",
+    "sweeps": [
+      {
+        "name": "Architecture, public contracts and persistence",
+        "result": "Single simulation authority retained. Runtime consumers migrated away from generic attack plans. No DB/save schema change. Actual seven-catalog/25-GLB producer-loader closure exercised; candidate requirements do not promote release evidence."
+      },
+      {
+        "name": "Behavior, geometry and edge cases",
+        "result": "All 93 actions traversed all four real-engine phases. Independent source-rest checks and actual GPU pose inspection cover proportions; real native gallery/region effects, normal keyboard/AI play, possession, coalescing, slow, hit-stop, offscreen pause and airborne subdual observed."
+      },
+      {
+        "name": "Lifetime, ownership and security boundary",
+        "result": "Per-instance bone roots; cue-owned bounded native emitters; pending cancellation cannot resurrect a slot; root rebinding preserves other live scopes. Scoped cancel, repeat/form transitions, pause and unload exercised. No new external service calls, asset purchases or production gate bypass."
+      }
+    ],
+    "defectCatchingQuestion": "Can coalescing, cancellation, model replacement or offscreen LOD make a current native pose emit for an old/foreign/unowned cast?",
+    "repairsObserved": [
+      "Candidate load requirements incorrectly rejected before actual required-clip validation.",
+      "Offscreen animation LOD/crossfade debt desynchronized attacking or paused skeletons.",
+      "A pending cancellation could be resurrected by the next snapshot.",
+      "A live model rebind on an incoming active cue dropped other live cast scopes.",
+      "Renderer-owned gate feedback inherited the previous frame clock."
+    ],
+    "repairRoundCount": null,
+    "repairCountLimit": "These are observed final qualification findings, not an asserted total project repair-round count.",
+    "outcome": "Accepted for this native presentation/candidate scope; no verified production asset, commercial-code reconstruction or full campaign completion claim."
+  },
+  "limits": [
+    "Base-Koro fruit-burst alternate mapping is native-pose-tested, not an independently exercised AI encounter; physical aliases are not duplicate rigs.",
+    "Controlled entry/placement is explicit in runtime receipts. Only the normal-ui clip is normal keyboard/AI gameplay; no hand-cleared campaign claim.",
+    "Perfect Dodge trace proves actual slow-policy/native/shader timing; the player takes damage during its captured tail, so it is not an invulnerability assertion.",
+    "Whole-page retained heap increases in the matched follow-up, and document/node counts differ. No leak-free or all-boss performance claim.",
+    "No supplied/decompiled Kena or Zenless Zone Zero commercial binary; prior reference lessons are observable choreography principles only.",
+    "Broader Koro/Ruun/Ghor encounter issues and the pre-existing Later catalog producer Orun knockdown/get-up block remain independent.",
+    "No new paid generation or model replacement."
+  ],
+  "publicationBoundary": "Qualification receipt only. Actual PR/check/review/merge and canonical-main synchronization are recorded in GitHub publication history, not invented here."
+}

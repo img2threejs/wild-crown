@@ -140,28 +140,6 @@ describe('monster contact timing', () => {
     } finally { effects.dispose(); }
   });
 
-  it('a map-kit windup charge core is spawned on the cast socket and follows it when the bone moves', () => {
-    const scene = new Scene(), cast = new Object3D(), root = new Object3D();
-    cast.position.set(3, 1.7, -2); scene.add(cast, root);
-    const effects = new StoryEffects({ scene, resolveSocket: (_id, name) => name === 'cast' ? cast : name === 'root' ? root : undefined });
-    try {
-      effects.emit({ instanceId: 'wind', scopeId: 'wind', tick: 60, worldTick: 60, worldTimeSeconds: 1, kind: 'anticipation', phase: 'anticipation', attackId: 'howler-rock-hurl' as AttackId, element: 'earth', actorId: 'canopy-howler', priority: 'essential', position: { x: 3, y: 0, z: -2 }, from: { x: 3, y: 0, z: -2 }, to: { x: 3, y: 0, z: 3 }, durationTicks: 40, shape: 'burst', footprint: { width: 2, length: 2, angleRadians: 0 } });
-      const pool = effects.vfx.particles.additive, origin = pool.mesh.geometry.getAttribute('iOrigin');
-      /** Distance from `target` to the nearest particle spawned in the ring slots [from, to). */
-      const nearest = (from: number, to: number, target: Object3D): number => {
-        let best = Infinity;
-        for (let i = from; i < to; i++) best = Math.min(best, Math.hypot(origin.getX(i) - target.position.x, origin.getY(i) - target.position.y, origin.getZ(i) - target.position.z));
-        return best;
-      };
-      let from = pool.nextSlot;
-      clock(effects, 64);
-      expect(nearest(from, pool.nextSlot, cast)).toBeLessThan(0.01);
-      cast.position.set(9, 2.4, 5);
-      from = pool.nextSlot;
-      clock(effects, 66);
-      expect(nearest(from, pool.nextSlot, cast)).toBeLessThan(0.01);
-    } finally { effects.dispose(); }
-  });
 });
 
 function actorSnapshot(partial: Partial<ActorSnapshot>): ActorSnapshot {

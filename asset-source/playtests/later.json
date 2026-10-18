@@ -171,10 +171,12 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "9bcdfa94-80e0-457e-95a5-30ef3993145c",
-    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
-    "outputHash": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131",
+    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+    "outputHash": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:ruun-track-charge"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -198,7 +200,8 @@
       "monster-spawn": "monster-spawn",
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:ruun-track-charge": "wild-crown:ruun-track-charge"
     },
     "rootMotion": {
       "monster-idle": {
@@ -260,10 +263,14 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:ruun-track-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-sable-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -274,10 +281,12 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_4",
     "tripoSourceTask": "ed043464-0230-4df6-9ebd-5885209e9064",
-    "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
-    "outputHash": "9465f6efcfd6642629fcc288dec58b3e30ac8085e925cdfb633204d542c931f3",
+    "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+    "outputHash": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:nyra-shadow-ambush"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -301,7 +310,8 @@
       "monster-spawn": "monster-spawn",
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:nyra-shadow-ambush": "wild-crown:nyra-shadow-ambush"
     },
     "rootMotion": {
       "monster-idle": {
@@ -363,10 +373,14 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:nyra-shadow-ambush": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-nyra-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-nyra-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -377,10 +391,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "99fc95a7-5394-4858-912e-c20e36af99b3",
-    "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
-    "outputHash": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+    "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+    "outputHash": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:solkar-commanding-roar",
+      "wild-crown:solkar-pride-rush",
+      "wild-crown:solkar-paw-slam"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -404,7 +422,10 @@
       "monster-spawn": "monster-spawn",
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:solkar-commanding-roar": "wild-crown:solkar-commanding-roar",
+      "wild-crown:solkar-pride-rush": "wild-crown:solkar-pride-rush",
+      "wild-crown:solkar-paw-slam": "wild-crown:solkar-paw-slam"
     },
     "rootMotion": {
       "monster-idle": {
@@ -466,10 +487,22 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:solkar-commanding-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:solkar-pride-rush": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:solkar-paw-slam": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-solkar-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-solkar-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -480,10 +513,19 @@
     "rigFamily": "biped",
     "castSocketBone": "mixamorig:Head",
     "tripoSourceTask": "7cfe411b-54b9-4263-9a3f-0ac909d2d771",
-    "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
-    "outputHash": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+    "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+    "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:orun-root-tether",
+      "wild-crown:orun-staff-combo",
+      "wild-crown:orun-cartwheel-counter",
+      "wild-crown:orun-back-handspring",
+      "wild-crown:orun-dive-roll",
+      "wild-crown:orun-companion-suppression",
+      "wild-crown:orun-root-surge",
+      "wild-crown:orun-crown-possession"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -0.9981,
@@ -507,7 +549,15 @@
       "monster-spawn": "monster-spawn",
       "orun-root-tether": "orun-root-tether",
       "orun-back-handspring": "orun-back-handspring",
-      "orun-cartwheel-counter": "orun-cartwheel-counter"
+      "orun-cartwheel-counter": "orun-cartwheel-counter",
+      "wild-crown:orun-root-tether": "wild-crown:orun-root-tether",
+      "wild-crown:orun-staff-combo": "wild-crown:orun-staff-combo",
+      "wild-crown:orun-cartwheel-counter": "wild-crown:orun-cartwheel-counter",
+      "wild-crown:orun-back-handspring": "wild-crown:orun-back-handspring",
+      "wild-crown:orun-dive-roll": "wild-crown:orun-dive-roll",
+      "wild-crown:orun-companion-suppression": "wild-crown:orun-companion-suppression",
+      "wild-crown:orun-root-surge": "wild-crown:orun-root-surge",
+      "wild-crown:orun-crown-possession": "wild-crown:orun-crown-possession"
     },
     "rootMotion": {
       "monster-idle": {
@@ -569,10 +619,42 @@
       "orun-cartwheel-counter": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-root-tether": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-staff-combo": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-cartwheel-counter": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-back-handspring": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-dive-roll": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-companion-suppression": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-root-surge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-crown-possession": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-orun-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-orun-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -583,10 +665,19 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_0",
     "tripoSourceTask": "63146190-47f6-4f28-9618-393cd4a68cb6",
-    "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
-    "outputHash": "13193d422eaf1218778b3c8a6c164f581205a258eb95f70839b3fb6771ea8298",
+    "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+    "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:orun-sky-aspect",
+      "wild-crown:orun-canopy-root",
+      "wild-crown:orun-canopy-aspect",
+      "wild-crown:orun-fang-aspect",
+      "wild-crown:orun-pack-aspect",
+      "wild-crown:orun-shadow-aspect",
+      "wild-crown:orun-crown-aspect",
+      "wild-crown:orun-crown-possession"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -610,7 +701,15 @@
       "monster-spawn": "monster-spawn",
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:orun-sky-aspect": "wild-crown:orun-sky-aspect",
+      "wild-crown:orun-canopy-root": "wild-crown:orun-canopy-root",
+      "wild-crown:orun-canopy-aspect": "wild-crown:orun-canopy-aspect",
+      "wild-crown:orun-fang-aspect": "wild-crown:orun-fang-aspect",
+      "wild-crown:orun-pack-aspect": "wild-crown:orun-pack-aspect",
+      "wild-crown:orun-shadow-aspect": "wild-crown:orun-shadow-aspect",
+      "wild-crown:orun-crown-aspect": "wild-crown:orun-crown-aspect",
+      "wild-crown:orun-crown-possession": "wild-crown:orun-crown-possession"
     },
     "rootMotion": {
       "monster-idle": {
@@ -672,10 +771,42 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-sky-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-canopy-root": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-canopy-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-fang-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-pack-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-shadow-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-crown-aspect": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-crown-possession": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

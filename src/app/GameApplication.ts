@@ -1271,7 +1271,7 @@ export class GameApplication {
                         this.input.clear();
                         const cues = this.combat.drainPresentationCues();
                         if (cues.length)
-                            this.presentation?.consumeTick(cues);
+                            this.presentation?.queueTick(cues);
                         this.combat.consumeEvents();
                         this.queueEvents(this.combat.consumeWorldEvents());
                         this.render();
@@ -2402,10 +2402,13 @@ export class GameApplication {
             this.maybeRevealBoss(snapshot);
             const camera = this.renderer.camera;
             camera.getWorldDirection(this.listenerForward);
-            this.presentation?.update(snapshot.worldClock, { position: camera.position, forward: this.listenerForward, up: camera.up });
-            this.presentation?.updateActors(snapshot.actors);
-            this.presentation?.updateCombat(snapshot, alpha);
-            for (const gate of this.renderer.drainGateOpenings()) this.presentation?.effects.impactBurst(gate, 'sap', 2.6);
+            const gateOpenings = this.renderer.drainGateOpenings();
+            if (gateOpenings.length && this.presentation) {
+                // Renderer-owned feedback is born now, not at the previous frame or queued cue.
+                this.presentation.effects.vfx.time = snapshot.worldClock.worldTick / 60;
+                for (const gate of gateOpenings) this.presentation.effects.impactBurst(gate, 'sap', 2.6);
+            }
+            this.presentation?.presentFrame(snapshot, alpha, { position: camera.position, forward: this.listenerForward, up: camera.up });
             this.ui.setGateContact(this.renderer.closestClosedGateDistance <= 1.5);
             this.renderer.updateWaystone(delta, snapshot.encounterStatus?.trial?.complete === true);
             this.damageNumbers.update(snapshot.worldClock, camera, this.root.clientWidth, this.root.clientHeight, this.settings.reducedMotion);
@@ -2518,7 +2521,7 @@ export class GameApplication {
         this.syncStoryState();
         const cues = this.combat.drainPresentationCues();
         if (cues.length)
-            this.presentation?.consumeTick(cues);
+            this.presentation?.queueTick(cues);
         const events = this.combat.consumeEvents();
         for (const event of events) {
             if (event.kind === 'companion' && event.actionId === 'vara-warning') this.ui.notify(event.message);

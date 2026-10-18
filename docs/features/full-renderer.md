@@ -8,8 +8,9 @@ The renderer owns Three.js presentation of the shared `RegionDefinition`, `Actor
 const renderer = new GameRenderer({ canvas, onProgress, lodPolicy? });
 await renderer.loadRegion(region, assetManifestEntries, environmentRecipeDefinition);
 await renderer.preloadActorVariant('orun', 'actor-orun-crowned-beast', manifest);
+presentation.queueTick(combatCues); // after each fixed step
 renderer.sync(combat.actors, combat, deltaSeconds, previousCombat, renderAlpha); // every RAF
-presentation.update(combat.worldClock);
+presentation.presentFrame(combat, renderAlpha); // native pose already evaluated; uploads effects last
 renderer.render(); // draw only after socket-bound presentation has sampled the pose
 renderer.syncWorldFacts(campaignFacts);
 renderer.getInputBasis();

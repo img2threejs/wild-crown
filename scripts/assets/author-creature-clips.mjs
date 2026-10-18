@@ -52,12 +52,12 @@ function howlerContext(rig, height) {
  * Biped pose from body-frame controls. ctl: { up, hip, torso, neck, head, arms: {L, R}, feet: {L, R} }.
  * arms.X = [forward, up, left] hand offset from the rest hand (units); feet.X = same for the foot (null = plant at rest).
  * arms.X.from (a joint) measures the offset from that joint's carried position (the pose before any arm / leg IK) instead of the rest hand;
- * ctl.feetCarried leaves the legs riding the body (a fall) instead of planting the feet at their rest spots: feet are carried by the hip
- * transform, offsets are measured from there, and a foot never goes below its rest sole height. ctx.lift adds body height (the floor guard).
+ * ctl.feetCarried (0..1, or a boolean for a fully carried fall) blends planted feet into the hip-carried pose and back without a landing snap.
+ * Offsets are measured from that pose; a carried foot never goes below its rest sole height. ctx.lift adds body height (the floor guard).
  */
-function bipedPose(ctx, ctl) {
+export function bipedPose(ctx, ctl) {
   const { rig, body } = ctx;
-  const pb = new PoseBuilder(rig);
+  const pb = new PoseBuilder(rig, ctx.preserveHingeFrame);
   if (ctl.up || ctx.lift) pb.translate(ctx.hip, V(0, (ctl.up ?? 0) + ctx.lift, 0));
   if (ctl.hip) pb.rotate(ctx.hip, body.euler(ctl.hip));
   const spread = (joints, angles, weights) => {
@@ -73,9 +73,11 @@ function bipedPose(ctx, ctl) {
   for (const side of ['L', 'R']) {
     const [thigh, calf, foot] = ctx.leg[side];
     const off = ctl.feet?.[side] ?? [0, 0, 0];
-    const target = body.at(ctl.feetCarried ? now.P[foot] : ctx.restP[foot], off[0], off[1], off[2]);
-    if (ctl.feetCarried) target.y = Math.max(target.y, ctx.restP[foot].y);
-    pb.reach(thigh, calf, foot, target, body.F, !ctl.feetCarried);
+    const carried = Math.max(0, Math.min(1, Number(ctl.feetCarried ?? 0)));
+    const base = carried === 0 ? ctx.restP[foot] : carried === 1 ? now.P[foot] : ctx.restP[foot].clone().lerp(now.P[foot], carried);
+    const target = body.at(base, off[0], off[1], off[2]);
+    if (carried) target.y = Math.max(target.y, ctx.restP[foot].y);
+    pb.reach(thigh, calf, foot, target, body.F, 1 - carried);
     const arm = ctl.arms?.[side];
     if (arm) {
       const [upper, lower, hand] = ctx.arm[side];
@@ -376,7 +378,7 @@ function hornbillContext(rig) {
 /** Wing pose: flap (degrees up, per joint cumulative lag), sweep (degrees back), pitch (leading edge). */
 function hornbillPose(ctx, ctl) {
   const { rig, body } = ctx;
-  const pb = new PoseBuilder(rig);
+  const pb = new PoseBuilder(rig, ctx.preserveHingeFrame);
   const pivot = ctx.restP[ctx.root];
   if (ctl.root) pb.rotateAbout(ctx.root, body.euler(ctl.root), V(pivot.x + 0.05, pivot.y + 0.35, pivot.z));
   // rootQ: a whole-body turn composed by the caller (e.g. pitch the torso level, then roll it onto its side) about the body centre (Spine_0).
@@ -778,9 +780,9 @@ const VIPER_LEVELS = [0.15, 0.07, 0.128, 0.119, 0.07, 0.07, 0.051, 0.047, 0.039,
  * Viper pose. ctl: { rear: [pitch, yaw, roll] of the neck/head about the neck base, head: [..] per head joint share,
  * wave: { amp, k, phase, from } travelling lateral wave down the spine chain, lash: tail-weighted extra yaw }.
  */
-function viperPose(ctx, ctl) {
+export function viperPose(ctx, ctl) {
   const { rig, body } = ctx;
-  const pb = new PoseBuilder(rig);
+  const pb = new PoseBuilder(rig, ctx.preserveHingeFrame);
   const qRear = body.euler((ctl.rear ?? [0, 0, 0]).map(v => v * ctx.gain)), qFall = new Quaternion();
   let shift;
   if (ctl.fall) {
@@ -2573,6 +2575,20 @@ const DEFS = {
   'actor-koro-branchbreaker': KORO_BRANCHBREAKER, 'actor-marek': MAREK, 'actor-camp-hunter-melee': HUNTER_MELEE, 'actor-camp-hunter-ranged': HUNTER_RANGED,
   'actor-vara-harpy': HARPY,
 };
+
+/** The same anatomical frame used by the base native author, reused by attack conditioning. */
+export function creatureRigContext(assetId, rig) {
+  if (assetId === 'actor-orun') {
+    const position = rig.json.accessors[rig.json.meshes[0].primitives[0].attributes.POSITION];
+    const ctx = mixamoContext(rig, position.max[1] - position.min[1]);
+    const lateral = rig.restP[ctx.leg.R[0]].clone().sub(rig.restP[ctx.leg.L[0]]).setY(0);
+    ctx.body = new BodyFrame(new Vector3(0, 1, 0).cross(lateral).normalize());
+    return ctx;
+  }
+  const def = DEFS[assetId === 'actor-grove-blighted-rootling' ? 'actor-grove-rootling' : assetId];
+  if (!def) throw new Error(`No creature anatomical frame for ${assetId}`);
+  return def.setup(rig);
+}
 
 // ---------------------------------------------------------------------------------------------
 // Sampling and measurement

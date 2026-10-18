@@ -3,7 +3,7 @@
 // and the clips report written by the authoring scripts, so a manifest never claims more than the files show.
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { Vector3 } from 'three';
 import { MONSTER_SLOTS, Rig, parseGlb, readAccessorAny } from './creature-rig-kit.mjs';
 
@@ -11,6 +11,23 @@ export const ROOT = resolve(new URL('../..', import.meta.url).pathname);
 export const read = path => JSON.parse(readFileSync(resolve(ROOT, path), 'utf8'));
 export const sha256 = path => createHash('sha256').update(readFileSync(resolve(ROOT, path))).digest('hex');
 export const round = (value, digits) => Number(value.toFixed(digits));
+
+const enemyAttackSources = read('asset-source/animation/enemy-attack-sources.json').nativeSources;
+
+/** Publishes one measured native attack artifact; shared by baking and catalog regeneration. Mutates entry. */
+export function bindNativeEnemyAttacks(entry, report) {
+  const actions = Object.keys(report.attacks).map(id => `wild-crown:${id}`);
+  entry.runtimeUrl = `/${report.output.path}`;
+  entry.outputHash = report.output.sha256;
+  entry.provenance = `${dirname(report.output.path)}/combat-clips-report.json`;
+  entry.requiredActionIds = [...new Set([...entry.requiredActionIds, ...actions])];
+  entry.rootMotion ??= {};
+  for (const action of actions) {
+    entry.actionToClipMapping[action] = action;
+    entry.rootMotion[action] = { mode: 'in-place', evidenceStatus: 'verified' };
+  }
+  return entry;
+}
 
 /** Looks an entry up in the given playtest manifests (first match wins); carried entries are copied verbatim. */
 export function carriedFrom(manifests) {
@@ -120,14 +137,22 @@ export function monsterEntry(id, spec) {
   const slots = spec.slots
     ? [...spec.slots, ...['monster-death', 'monster-spawn', 'monster-knockdown', 'monster-getup'].filter(slot => hasClip(slot) && !spec.slots.includes(slot))]
     : [...MONSTER_SLOTS, ...(hasClip('monster-tail') ? ['monster-tail'] : [])];
-  const mapping = slotMapping(id, report, slots);
-  return {
+  const mapping = slotMapping(id, report, slots), sourceHash = sha256(glb);
+  const entry = {
     id, actorId: spec.actorId, sourceType: 'native-glb', kind: 'character', rigFamily: spec.rigFamily, castSocketBone: report.castSocketBone ?? report.rig.headTipJoint,
-    tripoSourceTask: provenance.tasks.rig, runtimeUrl: `/${glb}`, outputHash: sha256(glb), lodIds: [], requiredActionIds: [],
+    tripoSourceTask: provenance.tasks.rig, runtimeUrl: `/${glb}`, outputHash: sourceHash, lodIds: [], requiredActionIds: [],
     coordinateTransform: transformFor(id, spec, provenance, glb, report), actionToClipMapping: mapping,
     rootMotion: Object.fromEntries(slots.map(slot => [slot, { mode: 'in-place', evidenceStatus: 'verified' }])),
     sockets: [], provenance: `${dir}/clips-report.json`, evidenceStatus: 'blocked',
   };
+  const source = enemyAttackSources[id];
+  if (!source) return entry;
+  if (source.runtimeUrl !== `/${glb}` || source.sha256 !== sourceHash) throw new Error(`${id}: immutable native attack source changed; update its provenance before publishing`);
+  const native = read(`${dir}/combat-clips-report.json`);
+  if (native.input.sha256 !== sourceHash || native.input.path !== glb || native.output.sha256 !== sha256(native.output.path)) {
+    throw new Error(`${id}: stale native attack artifact; run bun scripts/assets/author-enemy-attacks.mjs`);
+  }
+  return bindNativeEnemyAttacks(entry, native);
 }
 
 export function environmentEntry(id, componentAssetIds) {

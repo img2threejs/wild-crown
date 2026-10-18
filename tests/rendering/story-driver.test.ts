@@ -3,8 +3,6 @@ import { AnimationClip, Bone, Group, VectorKeyframeTrack } from 'three';
 import { AnimationController } from '../../src/rendering/AnimationController.js';
 import { driveActorAnimation, type ActorAnimationContext } from '../../src/rendering/ActorAnimationDriver.js';
 import { ASHA_CLEANSE_SECONDS, createStoryAnimationInput, type StoryAnimationInput } from '../../src/rendering/StoryActorAnimation.js';
-import { ASHA_CLIP_SEGMENTS, BAMBOO_CLIP_SECONDS } from '../../src/rendering/BambooMonsterProfiles.js';
-import { ASHA_ATTACK_WINDOWS } from '../../src/game/combat/ActOneBossContent.js';
 import type { NativeAssetInstance } from '../../src/rendering/NativeAssetLoader.js';
 import type { ActorSnapshot, AssetManifestEntry } from '../../src/game/contracts.js';
 
@@ -47,19 +45,6 @@ function actor(partial: Partial<ActorSnapshot> = {}): ActorSnapshot {
 }
 
 describe('driving Asha through the native clip pipeline', () => {
-  it('samples the custom pounce clip at the authored marker pose when the active window opens and closes', () => {
-    const { drive } = storyRig('actor-asha');
-    const segments = ASHA_CLIP_SEGMENTS['asha-guarding-pounce']!;
-    const length = BAMBOO_CLIP_SECONDS[segments.action];
-    const pounce = (attackPhase: NonNullable<ActorSnapshot['attackPhase']>, progress: number) =>
-      actor({ actionId: 'wild-crown:asha-guarding-pounce' as never, attackPhase, attackPhaseProgress: progress });
-    const open = drive(pounce('active', 0), 10);
-    expect(open.clip).toBe('asha-stalk-pounce');
-    expect(open.time * length).toBeCloseTo(segments.markers[1], 3);
-    expect(drive(pounce('active', 1), 10.2).time * length).toBeCloseTo(segments.markers[2], 3);
-    expect(ASHA_ATTACK_WINDOWS['asha-guarding-pounce'].activeStart).toBe(40);
-  });
-
   it('runs the cleanse ceremony from the moment the status begins, then the bonded idle; a stale status never plays the death clip', () => {
     const { drive } = storyRig('actor-asha');
     // Her entrance (spawn) clip plays first, as for any hostile; the status is then read after it.

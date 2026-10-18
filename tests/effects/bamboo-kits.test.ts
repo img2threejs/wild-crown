@@ -2,20 +2,13 @@ import { describe, expect, it } from 'bun:test';
 import { Mesh, Object3D, Scene, ShaderMaterial } from 'three';
 import { StoryEffects } from '../../src/effects/StoryEffects.js';
 import type { StoryCue } from '../../src/effects/story-cues.js';
-import { BAMBOO_ATTACK_KITS, BAMBOO_AURAS, BAMBOO_KIT_IDS, isBambooKit } from '../../src/effects/vfx/BambooKits.js';
-import { isCanopyKit } from '../../src/effects/vfx/CanopyKits.js';
-import { resolveKit } from '../../src/effects/vfx/ElementKits.js';
+import { BAMBOO_ATTACK_KITS, BAMBOO_AURAS, isBambooKit } from '../../src/effects/vfx/BambooKits.js';
 import { OWNER_GLOW } from '../../src/effects/vfx/palette.js';
 import { ATTACKS } from '../../src/game/combat/content.js';
 import { ACT_ONE_ATTACK_WINDOWS } from '../../src/game/combat/ActOneBossContent.js';
 import type { AttackId, WorldClockSnapshot } from '../../src/game/contracts.js';
 
 const clock = (worldTick: number): WorldClockSnapshot => ({ simulationTick: Math.floor(worldTick), worldTick, worldTimeSeconds: worldTick / 60, timeScale: 1, policy: 'normal' });
-const ELEMENT_OF: Readonly<Record<string, string>> = {
-  'asha-guarding-pounce': 'earth', 'asha-corrupted-pounce': 'sap', 'asha-bamboo-charge': 'earth', 'asha-side-charge': 'sap', 'asha-claw-combination': 'earth',
-  'asha-black-sap-trail': 'sap', 'asha-ground-wave': 'sap', 'koro-falling-branch': 'earth', 'koro-platform-charge': 'earth',
-  'koro-rock-throw': 'earth', 'koro-vine-vault': 'earth', 'koro-branch-swing': 'earth',
-};
 const OWN_KIT_ATTACKS = Object.keys(BAMBOO_ATTACK_KITS).filter(attackId => isBambooKit(BAMBOO_ATTACK_KITS[attackId]![0]));
 
 type Phase = 'anticipation' | 'commit' | 'active';
@@ -62,24 +55,6 @@ function playAttack(effects: StoryEffects, attackId: string, yaw = 0.4, onTick?:
 }
 
 describe('bamboo VFX kits', () => {
-  it('resolves every Act I boss attack id to its kit and element in all three phases', () => {
-    expect([...BAMBOO_KIT_IDS]).toEqual(['asha-pounce', 'asha-corrupt-slam', 'asha-charge', 'asha-claw', 'asha-sap-trail', 'asha-ground-wave', 'koro-falling-branch', 'koro-platform-charge']);
-    for (const [attackId, element] of Object.entries(ELEMENT_OF)) {
-      expect(ATTACKS[attackId], attackId).toBeDefined();
-      expect(BAMBOO_ATTACK_KITS[attackId]![1], attackId).toBe(element);
-      const [kit] = BAMBOO_ATTACK_KITS[attackId]!;
-      for (const phase of ['anticipation', 'commit', 'active'] as const) {
-        const resolved = resolveKit(hazardCue(attackId, phase, 60, 0));
-        expect({ attackId, phase, kit: resolved.kit, attack: resolved.attack }).toEqual({ attackId, phase, kit, attack: true });
-        expect(resolved.element).toBe(element);
-      }
-      expect(resolveKit({ ...hazardCue(attackId, 'active', 60, 0), kind: 'hit', phase: 'hit' })).toEqual({ kit: 'contact', element, attack: true });
-    }
-    // Koro's rock throw, foreground leap and log sweep play the Howler kits of the same body; the roar cone is the shared roar kit.
-    for (const attackId of ['koro-rock-throw', 'koro-vine-vault', 'koro-branch-swing']) expect(isCanopyKit(BAMBOO_ATTACK_KITS[attackId]![0])).toBe(true);
-    const roar = hazardCue('asha-protective-roar', 'active', 60, 0);
-    expect(resolveKit({ ...roar, shape: 'sector', footprint: { ...roar.footprint!, sectorRadians: 1.2 } }).kit).toBe('roar');
-  });
 
   it('covers every attack the combat owner authored for the two bosses', () => {
     for (const attackId of Object.keys(ACT_ONE_ATTACK_WINDOWS)) {

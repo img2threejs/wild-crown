@@ -1,0 +1,3941 @@
+{
+  "schemaVersion": 1,
+  "scope": "97 physical native attack/body pairs; catalog aliases are not counted as additional rigs. Regions/actors, actual baked clips/hashes, native sockets, actual effect kits and simulation phase contracts are joined here. Coverage distinguishes the 97-pair pose audit from actual per-body real-engine observations; not every alternate body mapping is an independently authored AI encounter.",
+  "referenceBoundary": "No Kena or Zenless Zone Zero commercial binary supplied/decompiled; no proprietary assets copied; no paid generation.",
+  "contactPolicy": "Committed simulation hazards/projectiles own movement and hits. Native body accents follow current evaluated bones/equipped weapons; only confirmed hit cues create hit feedback. No renderer-created damage.",
+  "rows": [
+    {
+      "attackId": "boar-charge",
+      "assetId": "actor-ember-boar",
+      "catalogAliases": [],
+      "authoredActorId": "corrupted-boar",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:boar-charge",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "motion": "tusk-charge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "charge",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 24,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "boar-sap-thrash",
+      "assetId": "actor-ember-boar",
+      "catalogAliases": [],
+      "authoredActorId": "corrupted-boar",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:boar-sap-thrash",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "motion": "sap-thrash",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "tripo::Spine_1",
+        "tip": "tripo::Spine_2"
+      },
+      "vfxKit": "sap-burst",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 12,
+        "recovery": 45
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "boar-pounce",
+      "assetId": "actor-ember-boar",
+      "catalogAliases": [],
+      "authoredActorId": "corrupted-boar",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:boar-pounce",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "motion": "tusk-pounce",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "slam",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 9,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "boar-ember-lance",
+      "assetId": "actor-ember-boar",
+      "catalogAliases": [],
+      "authoredActorId": "corrupted-boar",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:boar-ember-lance",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "motion": "ember-breath",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "ember-lance",
+      "element": "fire",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 18,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "boar-gale-scythe",
+      "assetId": "actor-ember-boar",
+      "catalogAliases": [],
+      "authoredActorId": "corrupted-boar",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:boar-gale-scythe",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "motion": "tusk-scythe",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "gale",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 18,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sap-vein-snap",
+      "assetId": "actor-frost-sap-stalker",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-sap-stalker",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:sap-vein-snap",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "outputHash": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "motion": "vein-snap",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "fissure",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 8,
+        "recovery": 42
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sap-vein-thrash",
+      "assetId": "actor-frost-sap-stalker",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-sap-stalker",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:sap-vein-thrash",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "outputHash": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "motion": "sap-stamp",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_2",
+        "tip": "bone_20"
+      },
+      "vfxKit": "sap-burst",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 12,
+        "recovery": 45
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sap-stalker-frost-bloom",
+      "assetId": "actor-frost-sap-stalker",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-sap-stalker",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:sap-stalker-frost-bloom",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "outputHash": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "motion": "frost-stamp",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_2",
+        "tip": "bone_20"
+      },
+      "vfxKit": "frost-bloom",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 15,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sap-stalker-venom-mist",
+      "assetId": "actor-frost-sap-stalker",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-sap-stalker",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:sap-stalker-venom-mist",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "outputHash": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "motion": "venom-exhale",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "venom-mist",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "root-rammer-low-wave",
+      "assetId": "actor-root-rammer",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-root-rammer",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:root-rammer-low-wave",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "outputHash": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "motion": "root-stamp",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_2",
+        "tip": "tripo::0_Right_Limb_3"
+      },
+      "vfxKit": "fissure",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 10,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "root-rammer-slam",
+      "assetId": "actor-root-rammer",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-root-rammer",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:root-rammer-slam",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "outputHash": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "motion": "antler-slam",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "slam",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 9,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "root-rammer-cinder-burst",
+      "assetId": "actor-root-rammer",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-root-rammer",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:root-rammer-cinder-burst",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "outputHash": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "motion": "cinder-stamp",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_2",
+        "tip": "tripo::0_Right_Limb_3"
+      },
+      "vfxKit": "cinder-burst",
+      "element": "fire",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 18,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "root-rammer-gale-sweep",
+      "assetId": "actor-root-rammer",
+      "catalogAliases": [],
+      "authoredActorId": "greenwake-root-rammer",
+      "encounters": [
+        {
+          "id": "greenwake-boar",
+          "region": "greenwake"
+        }
+      ],
+      "runtimeRegion": "greenwake",
+      "nativeClip": "wild-crown:root-rammer-gale-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "outputHash": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "motion": "tail-sweep",
+      "socket": "tail",
+      "anatomicalAnchor": {
+        "base": "tripo::Tail_0",
+        "tip": "bone_32"
+      },
+      "vfxKit": "gale",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howler-rock-hurl",
+      "assetId": "actor-thornback-howler",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-howler",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:howler-rock-hurl",
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+      "outputHash": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+      "motion": "rock-hurl",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-rock-hurl",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 10,
+        "recovery": 40
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howler-leap-slam",
+      "assetId": "actor-thornback-howler",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-howler",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:howler-leap-slam",
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+      "outputHash": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+      "motion": "leap-slam",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-leap-slam",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 9,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howler-branch-sweep",
+      "assetId": "actor-thornback-howler",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-howler",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:howler-branch-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+      "outputHash": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+      "motion": "branch-sweep",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-branch-sweep",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 12,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-sky-dive",
+      "assetId": "actor-storm-hornbill",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-sky-dive",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "outputHash": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "motion": "talon-dive",
+      "socket": "feet",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_1",
+        "tip": "tripo::0_Right_Limb_2"
+      },
+      "vfxKit": "orun-sky-dive",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 50,
+        "commit": 15,
+        "active": 18,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "hollow-sky-echo-1",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        },
+        {
+          "region": "heartroot-hollow",
+          "actorId": "hollow-sky-echo-2",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        },
+        {
+          "region": "heartroot-hollow",
+          "actorId": "hollow-sky-echo-3",
+          "phases": [
+            "windup",
+            "commit",
+            "active"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "hornbill-dive-bomb",
+      "assetId": "actor-storm-hornbill",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-hornbill",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:hornbill-dive-bomb",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "outputHash": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "motion": "talon-dive",
+      "socket": "feet",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_1",
+        "tip": "tripo::0_Right_Limb_2"
+      },
+      "vfxKit": "hornbill-dive-bomb",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 20,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hornbill-feather-volley",
+      "assetId": "actor-storm-hornbill",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-hornbill",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:hornbill-feather-volley",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "outputHash": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "motion": "feather-volley",
+      "socket": "wings",
+      "anatomicalAnchor": {
+        "base": "bone_13",
+        "tip": "bone_14"
+      },
+      "vfxKit": "hornbill-feather-volley",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 10,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hornbill-gale-flap",
+      "assetId": "actor-storm-hornbill",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-hornbill",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:hornbill-gale-flap",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "outputHash": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "motion": "wing-gust",
+      "socket": "wings",
+      "anatomicalAnchor": {
+        "base": "bone_13",
+        "tip": "bone_14"
+      },
+      "vfxKit": "hornbill-gale-flap",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "viper-venom-spit",
+      "assetId": "actor-mire-viper",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-mire-viper",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:viper-venom-spit",
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+      "outputHash": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+      "motion": "venom-spit",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_4",
+        "tip": "tripo::Head_5"
+      },
+      "vfxKit": "viper-venom-spit",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "viper-tail-lash",
+      "assetId": "actor-mire-viper",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-mire-viper",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:viper-tail-lash",
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+      "outputHash": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+      "motion": "tail-lash",
+      "socket": "tail",
+      "anatomicalAnchor": {
+        "base": "tripo::Tail_8",
+        "tip": "tripo::Tail_9"
+      },
+      "vfxKit": "viper-tail-lash",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "viper-strike-lunge",
+      "assetId": "actor-mire-viper",
+      "catalogAliases": [],
+      "authoredActorId": "canopy-mire-viper",
+      "encounters": [
+        {
+          "id": "canopy-trials",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:viper-strike-lunge",
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+      "outputHash": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+      "motion": "bite-lunge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_4",
+        "tip": "tripo::Head_5"
+      },
+      "vfxKit": "viper-strike-lunge",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 36,
+        "commit": 12,
+        "active": 8,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-fruit-burst",
+      "assetId": "actor-koro",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-fruit-burst",
+      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+      "outputHash": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
+      "motion": "fruit-scatter",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "koro-fruit-burst",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 18,
+        "recovery": 45
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": false,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-falling-branch",
+      "assetId": "actor-koro",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-falling-branch",
+      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+      "outputHash": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
+      "motion": "canopy-shake",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "koro-falling-branch",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 16,
+        "recovery": 32
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": false,
+      "genuineRuntime": [
+        {
+          "region": "the-grove",
+          "actorId": "koro__party_companion",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "sprig-seed-toss",
+      "assetId": "actor-grove-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-sprig",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:sprig-seed-toss",
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "outputHash": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+      "motion": "seed-toss",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "sprig-seed-toss",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 14,
+        "active": 10,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sprig-ground-ripple",
+      "assetId": "actor-grove-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-sprig",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:sprig-ground-ripple",
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "outputHash": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+      "motion": "root-tap",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "sprig-ground-ripple",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 14,
+        "active": 14,
+        "recovery": 56
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "sprig-petal-sweep",
+      "assetId": "actor-grove-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-sprig",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:sprig-petal-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "outputHash": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+      "motion": "petal-sweep",
+      "socket": "hand-left",
+      "anatomicalAnchor": {
+        "base": "L_Forearm",
+        "tip": "L_Hand"
+      },
+      "vfxKit": "sprig-petal-sweep",
+      "element": "spirit",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 14,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "blighted-seed-lob",
+      "assetId": "actor-grove-blighted-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-blighted",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:blighted-seed-lob",
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "outputHash": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+      "motion": "ichor-lob",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "sprig-seed-toss",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 58,
+        "commit": 14,
+        "active": 10,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "blighted-ground-pulse",
+      "assetId": "actor-grove-blighted-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-blighted",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:blighted-ground-pulse",
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "outputHash": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+      "motion": "blight-stamp",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "sprig-ground-ripple",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 56,
+        "commit": 14,
+        "active": 14,
+        "recovery": 52
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "blighted-lash-sweep",
+      "assetId": "actor-grove-blighted-rootling",
+      "catalogAliases": [],
+      "authoredActorId": "grove-blighted",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:blighted-lash-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "outputHash": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+      "motion": "bough-lash",
+      "socket": "hand-left",
+      "anatomicalAnchor": {
+        "base": "L_Forearm",
+        "tip": "L_Hand"
+      },
+      "vfxKit": "sprig-petal-sweep",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 58,
+        "commit": 14,
+        "active": 12,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hollowheart-leap-smash",
+      "assetId": "actor-grove-hollowheart",
+      "catalogAliases": [],
+      "authoredActorId": "grove-hollowheart",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:hollowheart-leap-smash",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "outputHash": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "motion": "guardian-smash",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "hollowheart-leap-smash",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 72,
+        "commit": 16,
+        "active": 10,
+        "recovery": 62
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hollowheart-antler-sweep",
+      "assetId": "actor-grove-hollowheart",
+      "catalogAliases": [],
+      "authoredActorId": "grove-hollowheart",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:hollowheart-antler-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "outputHash": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "motion": "antler-sweep",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "NeckTwist02",
+        "tip": "Head"
+      },
+      "vfxKit": "hollowheart-antler-sweep",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 64,
+        "commit": 14,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hollowheart-ichor-hurl",
+      "assetId": "actor-grove-hollowheart",
+      "catalogAliases": [],
+      "authoredActorId": "grove-hollowheart",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:hollowheart-ichor-hurl",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "outputHash": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "motion": "ichor-hurl-heavy",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "hollowheart-ichor-hurl",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 68,
+        "commit": 14,
+        "active": 10,
+        "recovery": 56
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "hollowheart-heartlight-burst",
+      "assetId": "actor-grove-hollowheart",
+      "catalogAliases": [],
+      "authoredActorId": "grove-hollowheart",
+      "encounters": [
+        {
+          "id": "grove-defence",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "the-grove",
+      "nativeClip": "wild-crown:hollowheart-heartlight-burst",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "outputHash": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "motion": "heartlight-release",
+      "socket": "chest",
+      "anatomicalAnchor": {
+        "base": "Spine01",
+        "tip": "Spine02"
+      },
+      "vfxKit": "hollowheart-heartlight-burst",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 70,
+        "commit": 15,
+        "active": 14,
+        "recovery": 58
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "frostfang-pack-rush",
+      "assetId": "actor-frostfang-tracker",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-frostfang",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:frostfang-pack-rush",
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+      "outputHash": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+      "motion": "frost-rush",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "frostfang-pack-rush",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 18,
+        "recovery": 46
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "frostfang-ice-bite",
+      "assetId": "actor-frostfang-tracker",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-frostfang",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:frostfang-ice-bite",
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+      "outputHash": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+      "motion": "ice-bite",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "frostfang-ice-bite",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 40,
+        "commit": 12,
+        "active": 8,
+        "recovery": 46
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "frostfang-frost-breath",
+      "assetId": "actor-frostfang-tracker",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-frostfang",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:frostfang-frost-breath",
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+      "outputHash": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+      "motion": "frost-breath",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_1",
+        "tip": "tripo::Head_2"
+      },
+      "vfxKit": "frostfang-frost-breath",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 14,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howl-scout-flank-pounce",
+      "assetId": "actor-howl-scout",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-scout",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:howl-scout-flank-pounce",
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+      "outputHash": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+      "motion": "flank-pounce",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_2",
+        "tip": "tripo::0_Right_Limb_3"
+      },
+      "vfxKit": "howl-scout-flank-pounce",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 9,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howl-scout-claw-rake",
+      "assetId": "actor-howl-scout",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-scout",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:howl-scout-claw-rake",
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+      "outputHash": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+      "motion": "claw-rake",
+      "socket": "paw-left",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Left_Limb_2",
+        "tip": "tripo::0_Left_Limb_3"
+      },
+      "vfxKit": "howl-scout-claw-rake",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 38,
+        "commit": 12,
+        "active": 8,
+        "recovery": 42
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "howl-scout-low-howl",
+      "assetId": "actor-howl-scout",
+      "catalogAliases": [],
+      "authoredActorId": "moonpine-scout",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:howl-scout-low-howl",
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+      "outputHash": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+      "motion": "low-howl",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "howl-scout-low-howl",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ruun-track-charge",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "ruun",
+      "encounters": [
+        {
+          "id": "encounter-ruun",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:ruun-track-charge",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "tracking-charge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_1"
+      },
+      "vfxKit": "ruun-track-charge",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 15,
+        "recovery": 60
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ruun-pack-call",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "ruun",
+      "encounters": [
+        {
+          "id": "encounter-ruun",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:ruun-pack-call",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "pack-call",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_1"
+      },
+      "vfxKit": "ruun-pack-call",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 72,
+        "commit": 15,
+        "active": 18,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ruun-claw-arc",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "ruun",
+      "encounters": [
+        {
+          "id": "encounter-ruun",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:ruun-claw-arc",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "claw-sweep",
+      "socket": "paw-right",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_3",
+        "tip": "tripo::0_Right_Limb_4"
+      },
+      "vfxKit": "ruun-claw-arc",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 8,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "chained-ruun-chain-pounce",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "moonpine-ruun",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:chained-ruun-chain-pounce",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "chain-pounce",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_3",
+        "tip": "tripo::0_Right_Limb_4"
+      },
+      "vfxKit": "chained-ruun-chain-pounce",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 15,
+        "active": 10,
+        "recovery": 56
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "chained-ruun-howl-shockwave",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "moonpine-ruun",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:chained-ruun-howl-shockwave",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "chain-howl",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_1"
+      },
+      "vfxKit": "chained-ruun-howl-shockwave",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 14,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "chained-ruun-breaking-ice",
+      "assetId": "actor-ruun-chained-howl",
+      "catalogAliases": [
+        "actor-ruun"
+      ],
+      "authoredActorId": "moonpine-ruun",
+      "encounters": [
+        {
+          "id": "moonpine-trials",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:chained-ruun-breaking-ice",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "motion": "ice-break-slam",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_3",
+        "tip": "tripo::0_Right_Limb_4"
+      },
+      "vfxKit": "chained-ruun-breaking-ice",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 14,
+        "recovery": 52
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "bog-lurker-tongue-lash",
+      "assetId": "actor-bog-lurker",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-lurker",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:bog-lurker-tongue-lash",
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+      "outputHash": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+      "motion": "tongue-lash",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_0",
+        "tip": "tripo::Head_0"
+      },
+      "vfxKit": "bog-lurker-tongue-lash",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 12,
+        "active": 8,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "bog-lurker-bubble-pool",
+      "assetId": "actor-bog-lurker",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-lurker",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:bog-lurker-bubble-pool",
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+      "outputHash": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+      "motion": "bubble-exhale",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_0",
+        "tip": "tripo::Head_0"
+      },
+      "vfxKit": "bog-lurker-bubble-pool",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "bog-lurker-mud-hop",
+      "assetId": "actor-bog-lurker",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-lurker",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:bog-lurker-mud-hop",
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+      "outputHash": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+      "motion": "mud-hop",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_4",
+        "tip": "bone_36"
+      },
+      "vfxKit": "bog-lurker-mud-hop",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 9,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "lantern-heron-spear-dive",
+      "assetId": "actor-lantern-heron",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-heron",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:lantern-heron-spear-dive",
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+      "outputHash": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+      "motion": "beak-dive",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_4",
+        "tip": "tripo::Head_5"
+      },
+      "vfxKit": "lantern-heron-spear-dive",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 20,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "lantern-heron-mist-gust",
+      "assetId": "actor-lantern-heron",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-heron",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:lantern-heron-mist-gust",
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+      "outputHash": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+      "motion": "mist-wingbeat",
+      "socket": "wings",
+      "anatomicalAnchor": {
+        "base": "bone_26",
+        "tip": "bone_27"
+      },
+      "vfxKit": "lantern-heron-mist-gust",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 10,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "lantern-heron-flare-burst",
+      "assetId": "actor-lantern-heron",
+      "catalogAliases": [],
+      "authoredActorId": "mistveil-heron",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:lantern-heron-flare-burst",
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+      "outputHash": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+      "motion": "lantern-flare",
+      "socket": "chest",
+      "anatomicalAnchor": {
+        "base": "tripo::Spine_0",
+        "tip": "tripo::Spine_0"
+      },
+      "vfxKit": "lantern-heron-flare-burst",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 12,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ghor-hammering-charge",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "ghor",
+      "encounters": [
+        {
+          "id": "encounter-ghor",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:ghor-hammering-charge",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "armored-charge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_1"
+      },
+      "vfxKit": "ghor-hammering-charge",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 72,
+        "commit": 18,
+        "active": 18,
+        "recovery": 63
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ghor-stonefall",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "ghor",
+      "encounters": [
+        {
+          "id": "encounter-ghor",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:ghor-stonefall",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "stone-shake",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "tripo::Spine_1",
+        "tip": "tripo::Spine_2"
+      },
+      "vfxKit": "ghor-stonefall",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 18,
+        "active": 15,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ghor-overhead-slam",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "ghor",
+      "encounters": [
+        {
+          "id": "encounter-ghor",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:ghor-overhead-slam",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "foreleg-slam",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_1",
+        "tip": "bone_23"
+      },
+      "vfxKit": "ghor-overhead-slam",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 12,
+        "recovery": 57
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "mire-maw-tail-sweep",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "mistveil-ghor",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:mire-maw-tail-sweep",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "marsh-tail-sweep",
+      "socket": "tail",
+      "anatomicalAnchor": {
+        "base": "tripo::Tail_3",
+        "tip": "tripo::Tail_4"
+      },
+      "vfxKit": "mire-maw-tail-sweep",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "mire-maw-bite-lunge",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "mistveil-ghor",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:mire-maw-bite-lunge",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "maw-lunge",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_1"
+      },
+      "vfxKit": "mire-maw-bite-lunge",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 12,
+        "active": 8,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "mire-maw-black-river-wave",
+      "assetId": "actor-ghor-mire-maw",
+      "catalogAliases": [
+        "actor-ghor"
+      ],
+      "authoredActorId": "mistveil-ghor",
+      "encounters": [
+        {
+          "id": "mistveil-trials",
+          "region": "mistveil-basin"
+        }
+      ],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:mire-maw-black-river-wave",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "motion": "river-surge",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_1",
+        "tip": "bone_23"
+      },
+      "vfxKit": "mire-maw-black-river-wave",
+      "element": "poison",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 16,
+        "recovery": 56
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-fruit-burst",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-fruit-burst",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "fruit-scatter",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "koro-fruit-burst",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 12,
+        "active": 18,
+        "recovery": 45
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-rock-throw",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-rock-throw",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "rock-hurl-heavy",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-rock-hurl",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 30,
+        "commit": 12,
+        "active": 8,
+        "recovery": 22
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-falling-branch",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-falling-branch",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "canopy-shake",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "koro-falling-branch",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 16,
+        "recovery": 32
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-platform-charge",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-platform-charge",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "knuckle-charge",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "Spine01",
+        "tip": "Spine02"
+      },
+      "vfxKit": "koro-platform-charge",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 36,
+        "commit": 10,
+        "active": 28,
+        "recovery": 22
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-vine-vault",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-vine-vault",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "vine-vault",
+      "socket": "hands",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-leap-slam",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 40,
+        "commit": 12,
+        "active": 10,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "koro-branch-swing",
+      "assetId": "actor-koro-branchbreaker",
+      "catalogAliases": [],
+      "authoredActorId": "koro",
+      "encounters": [
+        {
+          "id": "encounter-koro",
+          "region": "whispering-canopy"
+        }
+      ],
+      "runtimeRegion": "whispering-canopy",
+      "nativeClip": "wild-crown:koro-branch-swing",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "motion": "log-sweep",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "R_Forearm",
+        "tip": "R_Hand"
+      },
+      "vfxKit": "howler-branch-sweep",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 32,
+        "commit": 12,
+        "active": 10,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-guarding-pounce",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-guarding-pounce",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "stalking-pounce",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_6",
+        "tip": "tripo::0_Right_Limb_7"
+      },
+      "vfxKit": "asha-pounce",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 26,
+        "commit": 14,
+        "active": 20,
+        "recovery": 21
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-corrupted-pounce",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-corrupted-pounce",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "corrupted-slam",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_6",
+        "tip": "tripo::0_Right_Limb_7"
+      },
+      "vfxKit": "asha-corrupt-slam",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 44,
+        "commit": 10,
+        "active": 16,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-bamboo-charge",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-bamboo-charge",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "bamboo-charge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "asha-charge",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 29,
+        "commit": 8,
+        "active": 42,
+        "recovery": 14
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-claw-combination",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-claw-combination",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "double-claw",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_6",
+        "tip": "tripo::0_Right_Limb_7"
+      },
+      "vfxKit": "asha-claw",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 30,
+        "commit": 12,
+        "active": 8,
+        "recovery": 22
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-side-charge",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-side-charge",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "side-charge",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_1",
+        "tip": "tripo::0_Right_Limb_2"
+      },
+      "vfxKit": "asha-charge",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 34,
+        "commit": 10,
+        "active": 24,
+        "recovery": 22
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-protective-roar",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-protective-roar",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "protective-roar",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "asha-protective-roar",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 12,
+        "active": 18,
+        "recovery": 24
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-black-sap-trail",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-black-sap-trail",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "sap-tail-lash",
+      "socket": "tail",
+      "anatomicalAnchor": {
+        "base": "tripo::1_Left_Limb_2",
+        "tip": "tripo::1_Left_Limb_3"
+      },
+      "vfxKit": "asha-sap-trail",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 36,
+        "commit": 12,
+        "active": 16,
+        "recovery": 28
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "asha-ground-wave",
+      "assetId": "actor-asha",
+      "catalogAliases": [],
+      "authoredActorId": "asha",
+      "encounters": [
+        {
+          "id": "encounter-asha",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:asha-ground-wave",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "motion": "corruption-stamp",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_6",
+        "tip": "tripo::0_Right_Limb_7"
+      },
+      "vfxKit": "asha-ground-wave",
+      "element": "sap",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 14,
+        "active": 16,
+        "recovery": 36
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "poacher-hunter-spear",
+      "assetId": "actor-camp-hunter-melee",
+      "catalogAliases": [],
+      "authoredActorId": "hunter-melee-west",
+      "encounters": [
+        {
+          "id": "camp-hunters",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:poacher-hunter-spear",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+      "outputHash": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
+      "motion": "spear-thrust",
+      "socket": "hand-left",
+      "anatomicalAnchor": {
+        "base": "mixamorig:LeftForeArm",
+        "tip": "mixamorig:LeftHand"
+      },
+      "vfxKit": "poacher-hunter-spear",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 12,
+        "active": 8,
+        "recovery": 42
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "poacher-hunter-east-spear",
+      "assetId": "actor-camp-hunter-melee",
+      "catalogAliases": [],
+      "authoredActorId": "hunter-melee-east",
+      "encounters": [
+        {
+          "id": "camp-hunters",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:poacher-hunter-east-spear",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+      "outputHash": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
+      "motion": "spear-sweep",
+      "socket": "hand-left",
+      "anatomicalAnchor": {
+        "base": "mixamorig:LeftForeArm",
+        "tip": "mixamorig:LeftHand"
+      },
+      "vfxKit": "poacher-hunter-east-spear",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 8,
+        "recovery": 42
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "poacher-scout-net",
+      "assetId": "actor-camp-hunter-ranged",
+      "catalogAliases": [],
+      "authoredActorId": "hunter-ranged",
+      "encounters": [
+        {
+          "id": "camp-hunters",
+          "region": "blood-bamboo-valley"
+        }
+      ],
+      "runtimeRegion": "blood-bamboo-valley",
+      "nativeClip": "wild-crown:poacher-scout-net",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+      "outputHash": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05",
+      "motion": "net-release",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "poacher-scout-net",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 9,
+        "recovery": 42
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "ruun-track-charge",
+      "assetId": "actor-sable",
+      "catalogAliases": [],
+      "authoredActorId": "ruun",
+      "encounters": [
+        {
+          "id": "encounter-ruun",
+          "region": "moonpine-ridge"
+        }
+      ],
+      "runtimeRegion": "moonpine-ridge",
+      "nativeClip": "wild-crown:ruun-track-charge",
+      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+      "outputHash": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+      "motion": "tracking-charge",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "ruun-track-charge",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 15,
+        "recovery": 60
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": false,
+      "genuineRuntime": [
+        {
+          "region": "the-grove",
+          "actorId": "sable__party_companion",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "nyra-shadow-ambush",
+      "assetId": "actor-nyra",
+      "catalogAliases": [],
+      "authoredActorId": "nyra",
+      "encounters": [],
+      "runtimeRegion": "mistveil-basin",
+      "nativeClip": "wild-crown:nyra-shadow-ambush",
+      "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+      "outputHash": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b",
+      "motion": "shadow-lunge",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "bone_21",
+        "tip": "bone_22"
+      },
+      "vfxKit": "nyra-shadow-ambush",
+      "element": "umbral",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 36,
+        "commit": 12,
+        "active": 8,
+        "recovery": 45
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "solkar-commanding-roar",
+      "assetId": "actor-solkar",
+      "catalogAliases": [],
+      "authoredActorId": "solkar",
+      "encounters": [
+        {
+          "id": "encounter-solkar",
+          "region": "sunmane-expanse"
+        }
+      ],
+      "runtimeRegion": "sunmane-expanse",
+      "nativeClip": "wild-crown:solkar-commanding-roar",
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+      "outputHash": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+      "motion": "dominion-roar",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "solkar-commanding-roar",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 15,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "solkar-pride-rush",
+      "assetId": "actor-solkar",
+      "catalogAliases": [],
+      "authoredActorId": "solkar",
+      "encounters": [
+        {
+          "id": "encounter-solkar",
+          "region": "sunmane-expanse"
+        }
+      ],
+      "runtimeRegion": "sunmane-expanse",
+      "nativeClip": "wild-crown:solkar-pride-rush",
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+      "outputHash": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+      "motion": "pride-pounce",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_2",
+        "tip": "tripo::Head_3"
+      },
+      "vfxKit": "solkar-pride-rush",
+      "element": "fire",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 12,
+        "recovery": 57
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "solkar-paw-slam",
+      "assetId": "actor-solkar",
+      "catalogAliases": [],
+      "authoredActorId": "solkar",
+      "encounters": [
+        {
+          "id": "encounter-solkar",
+          "region": "sunmane-expanse"
+        }
+      ],
+      "runtimeRegion": "sunmane-expanse",
+      "nativeClip": "wild-crown:solkar-paw-slam",
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+      "outputHash": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+      "motion": "paw-slam",
+      "socket": "paw-right",
+      "anatomicalAnchor": {
+        "base": "tripo::0_Right_Limb_3",
+        "tip": "tripo::0_Right_Limb_4"
+      },
+      "vfxKit": "solkar-paw-slam",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 9,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-root-tether",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-root-tether",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "staff-tether",
+      "socket": "weapon-tip",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-root-tether",
+      "element": "heartroot",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 48,
+        "commit": 12,
+        "active": 10,
+        "recovery": 44
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-staff-combo",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-staff-combo",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "staff-combo",
+      "socket": "weapon-edge",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-staff-combo",
+      "element": "heartroot",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 36,
+        "commit": 10,
+        "active": 36,
+        "recovery": 40
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-cartwheel-counter",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-cartwheel-counter",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "cartwheel-counter",
+      "socket": "weapon-edge",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-cartwheel-counter",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 30,
+        "commit": 10,
+        "active": 8,
+        "recovery": 40
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-back-handspring",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-back-handspring",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "back-handspring",
+      "socket": "feet",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightLeg",
+        "tip": "mixamorig:RightFoot"
+      },
+      "vfxKit": "orun-back-handspring",
+      "element": "wind",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 24,
+        "commit": 8,
+        "active": 6,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-dive-roll",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-dive-roll",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "dive-roll",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "mixamorig:Spine1",
+        "tip": "mixamorig:Spine2"
+      },
+      "vfxKit": "orun-dive-roll",
+      "element": "earth",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 42,
+        "commit": 12,
+        "active": 18,
+        "recovery": 40
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-companion-suppression",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-companion-suppression",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "staff-ground-slam",
+      "socket": "weapon-tip",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-companion-suppression",
+      "element": "umbral",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 10,
+        "recovery": 50
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-root-surge",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        },
+        {
+          "id": "encounter-fall",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-root-surge",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "root-wave-cast",
+      "socket": "weapon-tip",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-root-surge",
+      "element": "heartroot",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 66,
+        "commit": 18,
+        "active": 12,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-crown-possession",
+      "assetId": "actor-orun",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        },
+        {
+          "id": "encounter-fall",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-crown-possession",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "outputHash": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "motion": "possession-grasp",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "mixamorig:RightForeArm",
+        "tip": "mixamorig:RightHand"
+      },
+      "vfxKit": "orun-crown-possession",
+      "element": "umbral",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 72,
+        "commit": 18,
+        "active": 8,
+        "recovery": 60
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": false,
+      "genuineRuntime": [
+        {
+          "region": "the-grove",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        },
+        {
+          "region": "the-grove",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-sky-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-sky-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "sky-invocation",
+      "socket": "crown",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_0"
+      },
+      "vfxKit": "orun-sky-aspect",
+      "element": "lightning",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 12,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-canopy-root",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-canopy-root",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "root-rend",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "bone_37",
+        "tip": "bone_38"
+      },
+      "vfxKit": "orun-canopy-root",
+      "element": "heartroot",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 60,
+        "commit": 15,
+        "active": 50,
+        "recovery": 30
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    },
+    {
+      "attackId": "orun-canopy-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-canopy-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "root-rend-heavy",
+      "socket": "paws",
+      "anatomicalAnchor": {
+        "base": "bone_37",
+        "tip": "bone_38"
+      },
+      "vfxKit": "orun-canopy-aspect",
+      "element": "heartroot",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 84,
+        "commit": 15,
+        "active": 15,
+        "recovery": 48
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-fang-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-fang-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "fang-pounce",
+      "socket": "head",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_0"
+      },
+      "vfxKit": "orun-fang-aspect",
+      "element": "gold",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 54,
+        "commit": 15,
+        "active": 14,
+        "recovery": 51
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-pack-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-pack-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "pack-stamp",
+      "socket": "paw-right",
+      "anatomicalAnchor": {
+        "base": "bone_37",
+        "tip": "bone_38"
+      },
+      "vfxKit": "orun-pack-aspect",
+      "element": "ice",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 120,
+        "commit": 18,
+        "active": 15,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-shadow-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-shadow-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "shadow-coil",
+      "socket": "shoulders",
+      "anatomicalAnchor": {
+        "base": "tripo::Spine_2",
+        "tip": "tripo::Spine_3"
+      },
+      "vfxKit": "orun-shadow-aspect",
+      "element": "umbral",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 110,
+        "commit": 18,
+        "active": 15,
+        "recovery": 54
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-crown-aspect",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-crown-aspect",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "crown-roar",
+      "socket": "mouth",
+      "anatomicalAnchor": {
+        "base": "tripo::Head_0",
+        "tip": "tripo::Head_0"
+      },
+      "vfxKit": "orun-crown-aspect",
+      "element": "fire",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 78,
+        "commit": 18,
+        "active": 18,
+        "recovery": 72
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": [
+        {
+          "region": "heartroot-hollow",
+          "actorId": "orun",
+          "phases": [
+            "windup",
+            "commit",
+            "active",
+            "recovery"
+          ]
+        }
+      ]
+    },
+    {
+      "attackId": "orun-crown-possession",
+      "assetId": "actor-orun-crowned-beast",
+      "catalogAliases": [],
+      "authoredActorId": "orun",
+      "encounters": [
+        {
+          "id": "encounter-orun",
+          "region": "heartroot-hollow"
+        },
+        {
+          "id": "encounter-fall",
+          "region": "the-grove"
+        }
+      ],
+      "runtimeRegion": "heartroot-hollow",
+      "nativeClip": "wild-crown:orun-crown-possession",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "outputHash": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "motion": "possession-grasp",
+      "socket": "hand-right",
+      "anatomicalAnchor": {
+        "base": "bone_37",
+        "tip": "bone_38"
+      },
+      "vfxKit": "orun-crown-possession",
+      "element": "umbral",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "phaseTicks": {
+        "windup": 72,
+        "commit": 18,
+        "active": 8,
+        "recovery": 60
+      },
+      "nativePoseAudit": true,
+      "controlledRuntimeBody": true,
+      "genuineRuntime": []
+    }
+  ]
+}

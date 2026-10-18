@@ -66,9 +66,9 @@ for (const manifestPath of manifests) {
   const marks = [...original.matchAll(/"id": "([^"]+)"/g)].map(match => ({ id: match[1], index: match.index }));
   const patches = [];
   for (const entry of intended) {
-    const match = /^\/(asset-source\/generated\/(actor-[a-z-]+)-runtime-\d+)\/\2-animated\.glb$/.exec(entry.runtimeUrl ?? '');
+    const match = /^\/(asset-source\/generated\/(actor-[a-z-]+)-runtime-\d+)\/\2-(animated|combat)\.glb$/.exec(entry.runtimeUrl ?? '');
     if (!match || entry.kind !== 'character') continue;
-    const glb = resolve(ROOT, entry.runtimeUrl.slice(1)), reportPath = resolve(ROOT, match[1], 'clips-report.json');
+    const glb = resolve(ROOT, entry.runtimeUrl.slice(1)), reportPath = resolve(ROOT, match[1], match[3] === 'combat' ? 'combat-clips-report.json' : 'clips-report.json');
     if (!existsSync(glb) || !existsSync(reportPath)) throw new Error(`${manifestPath} ${entry.id}: runtime GLB or clip report is missing`);
     const report = JSON.parse(readFileSync(reportPath, 'utf8'));
     if (!report.slots && !report.clips) continue; // not a monster clip report (heroes, props)
@@ -80,6 +80,7 @@ for (const manifestPath of manifests) {
       }
     }
     const hash = sha256(glb), added = SLOTS.filter(slot => !(slot in mapping) && clipFor(report, slot)).map(slot => [slot, clipFor(report, slot)]);
+    if (report.attacks && report.output.sha256 !== hash) throw new Error(`${manifestPath} ${entry.id}: native attack artifact does not match its measured report; rebake before syncing`);
     const patch = { id: entry.id, hash: entry.outputHash !== hash ? { from: entry.outputHash, to: hash } : undefined, added, authoredWalk };
     if (!patch.hash && !added.length && !authoredWalk) continue;
     if (patch.hash) { differences.push(`${manifestPath} ${entry.id}: outputHash ${patch.hash.from} -> ${hash}`); entry.outputHash = hash; }

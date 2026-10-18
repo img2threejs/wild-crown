@@ -1,0 +1,2213 @@
+{
+  "preparation": {
+    "hp": 2,
+    "downed": false,
+    "events": [
+      {
+        "simulation": 15,
+        "world": 15,
+        "before": 160,
+        "after": 151,
+        "downed": false
+      },
+      {
+        "simulation": 112,
+        "world": 109,
+        "before": 151,
+        "after": 142,
+        "downed": false
+      },
+      {
+        "simulation": 209,
+        "world": 203,
+        "before": 142,
+        "after": 133,
+        "downed": false
+      },
+      {
+        "simulation": 306,
+        "world": 297,
+        "before": 133,
+        "after": 124,
+        "downed": false
+      },
+      {
+        "simulation": 403,
+        "world": 391,
+        "before": 124,
+        "after": 115,
+        "downed": false
+      },
+      {
+        "simulation": 500,
+        "world": 485,
+        "before": 115,
+        "after": 106,
+        "downed": false
+      },
+      {
+        "simulation": 597,
+        "world": 579,
+        "before": 106,
+        "after": 97,
+        "downed": false
+      },
+      {
+        "simulation": 694,
+        "world": 673,
+        "before": 97,
+        "after": 88,
+        "downed": false
+      },
+      {
+        "simulation": 791,
+        "world": 767,
+        "before": 88,
+        "after": 79,
+        "downed": false
+      },
+      {
+        "simulation": 888,
+        "world": 861,
+        "before": 79,
+        "after": 70,
+        "downed": false
+      },
+      {
+        "simulation": 985,
+        "world": 955,
+        "before": 70,
+        "after": 61,
+        "downed": false
+      },
+      {
+        "simulation": 1082,
+        "world": 1049,
+        "before": 61,
+        "after": 52,
+        "downed": false
+      },
+      {
+        "simulation": 1179,
+        "world": 1143,
+        "before": 52,
+        "after": 43,
+        "downed": false
+      },
+      {
+        "simulation": 1276,
+        "world": 1237,
+        "before": 43,
+        "after": 34,
+        "downed": false
+      },
+      {
+        "simulation": 1373,
+        "world": 1331,
+        "before": 34,
+        "after": 20,
+        "downed": false
+      },
+      {
+        "simulation": 1470,
+        "world": 1425,
+        "before": 20,
+        "after": 11,
+        "downed": false
+      },
+      {
+        "simulation": 1567,
+        "world": 1519,
+        "before": 11,
+        "after": 2,
+        "downed": false
+      }
+    ],
+    "clock": {
+      "simulationTick": 1807,
+      "worldTick": 1756,
+      "worldTimeSeconds": 29.266666666666666,
+      "timeScale": 1,
+      "policy": "normal"
+    }
+  },
+  "observed": {
+    "before": {
+      "hp": 2,
+      "trial": {
+        "index": 0,
+        "status": "fighting"
+      },
+      "clock": {
+        "simulationTick": 1807,
+        "worldTick": 1756,
+        "worldTimeSeconds": 29.266666666666666,
+        "timeScale": 1,
+        "policy": "normal"
+      }
+    },
+    "rows": [
+      {
+        "simulation": 1808,
+        "world": 1757,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.018518518518518517,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.02592592592592592,
+        "root": [
+          13.039770275359848,
+          0.03584021828197241,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7348715097423388,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1809,
+        "world": 1758,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.037037037037037035,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.05185185185185184,
+        "root": [
+          13.039770275359848,
+          0.025035782048601886,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7854313917826398,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1810,
+        "world": 1759,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.05555555555555555,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.07777777777777777,
+        "root": [
+          13.039770275359848,
+          0.017416637654690537,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8197063691788853,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1811,
+        "world": 1760,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.07407407407407407,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.10370370370370369,
+        "root": [
+          13.039770275359848,
+          0.012092384997935872,
+          -1.7461862269851625
+        ],
+        "hipY": 0.84524254116929,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1812,
+        "world": 1761,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.09259259259259259,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.12962962962962962,
+        "root": [
+          13.039770275359848,
+          0.008387825623272858,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8658612670328952,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1813,
+        "world": 1762,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.1111111111111111,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.15555555555555553,
+        "root": [
+          13.039770275359848,
+          0.0058155386424170626,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8837199711448616,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1814,
+        "world": 1763,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.12962962962962962,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.18148148148148147,
+        "root": [
+          13.039770275359848,
+          0.004031215122540851,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8855452324652487,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1815,
+        "world": 1764,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.14814814814814814,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.20740740740740737,
+        "root": [
+          13.039770275359848,
+          0.002794065682839308,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8848900752714185,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1816,
+        "world": 1765,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.16666666666666666,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.2333333333333333,
+        "root": [
+          13.039770275359848,
+          0.0019364908440471316,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8829103949604175,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1817,
+        "world": 1766,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.18518518518518517,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.25925925925925924,
+        "root": [
+          13.039770275359848,
+          0.001342096717991944,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8796262470442763,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1818,
+        "world": 1767,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.2037037037037037,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.28518518518518515,
+        "root": [
+          13.039770275359848,
+          0.000930137495476386,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8756327275250361,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1819,
+        "world": 1768,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.2222222222222222,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.31111111111111106,
+        "root": [
+          13.039770275359848,
+          0.0006446263799862899,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8711574175857384,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1820,
+        "world": 1769,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.24074074074074073,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.337037037037037,
+        "root": [
+          13.039770275359848,
+          0.00044675336903259174,
+          -1.7461862269851625
+        ],
+        "hipY": 0.866385326179798,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1821,
+        "world": 1770,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.25925925925925924,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.36296296296296293,
+        "root": [
+          13.039770275359848,
+          0.00030961859903156947,
+          -1.7461862269851625
+        ],
+        "hipY": 0.861490680564496,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1822,
+        "world": 1771,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.2777777777777778,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.3888888888888889,
+        "root": [
+          13.039770275359848,
+          0.00021457838807066392,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8567610215874231,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1823,
+        "world": 1772,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.2962962962962963,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.41481481481481475,
+        "root": [
+          13.039770275359848,
+          0.00014871157980500513,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8522279819907097,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1824,
+        "world": 1773,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.3148148148148148,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.4407407407407407,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8474749699694901,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1825,
+        "world": 1774,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.3333333333333333,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.4666666666666666,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8429455120774092,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1826,
+        "world": 1775,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.35185185185185186,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.4925925925925926,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8382585210986911,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1827,
+        "world": 1776,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.37037037037037035,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.5185185185185185,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.833509396138625,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1828,
+        "world": 1777,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.3888888888888889,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.5444444444444444,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8287291574411534,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1829,
+        "world": 1778,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.4074074074074074,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.5703703703703703,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8239488917220958,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1830,
+        "world": 1779,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.42592592592592593,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.5962962962962962,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8192185452280016,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1831,
+        "world": 1780,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.4444444444444444,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.6222222222222221,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8145993610868785,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1832,
+        "world": 1781,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.46296296296296297,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.6481481481481481,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8101119172372783,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1833,
+        "world": 1782,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.48148148148148145,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.674074074074074,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8057842408453939,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1834,
+        "world": 1783,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.7,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8016437096631156,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1835,
+        "world": 1784,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5185185185185185,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.7259259259259259,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7978234809629335,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1836,
+        "world": 1785,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5370370370370371,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.7518518518518519,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7942665807291241,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1837,
+        "world": 1786,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5555555555555556,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.7777777777777778,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7909899868659391,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1838,
+        "world": 1787,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5740740740740741,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.8037037037037037,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7880090848678725,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1839,
+        "world": 1788,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.5925925925925926,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.8296296296296295,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7854025416292975,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1840,
+        "world": 1789,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.6111111111111112,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.8555555555555556,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7831833918700372,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1841,
+        "world": 1790,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.6296296296296297,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.8814814814814814,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7812874383561886,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1842,
+        "world": 1791,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.6481481481481481,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.9074074074074073,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7797102783033693,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1843,
+        "world": 1792,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.6666666666666666,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.9333333333333332,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7784451666344915,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1844,
+        "world": 1793,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.6851851851851852,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.9592592592592593,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7775830915211275,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1845,
+        "world": 1794,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7037037037037037,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 0.9851851851851852,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7769707330522896,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1846,
+        "world": 1795,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7222222222222222,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.011111111111111,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.776575966670051,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1847,
+        "world": 1796,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7407407407407407,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.037037037037037,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7763634013197388,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1848,
+        "world": 1797,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7592592592592593,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.0629629629629629,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7763023928144431,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1849,
+        "world": 1798,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7777777777777778,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.0888888888888888,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7763238857633445,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1850,
+        "world": 1799,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.7962962962962963,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.1148148148148147,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.776653962715368,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1851,
+        "world": 1800,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.8148148148148148,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.1407407407407406,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7774793627915286,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1852,
+        "world": 1801,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.8333333333333334,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.1666666666666667,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7789902561780202,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1853,
+        "world": 1802,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.8518518518518519,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.1925925925925924,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7814505330978243,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1854,
+        "world": 1803,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.8703703703703703,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.2185185185185183,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7843518055188288,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1855,
+        "world": 1804,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.8888888888888888,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.2444444444444442,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7874764714997058,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1856,
+        "world": 1805,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.9074074074074074,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.2703703703703704,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7906027714481565,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1857,
+        "world": 1806,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.9259259259259259,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.2962962962962963,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7933629259369204,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1858,
+        "world": 1807,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.9444444444444444,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.3222222222222222,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7953970847573416,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1859,
+        "world": 1808,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.9629629629629629,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.348148148148148,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7967368318179887,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1860,
+        "world": 1809,
+        "hp": 2,
+        "downed": false,
+        "phase": "windup",
+        "progress": 0.9814814814814815,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.374074074074074,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7974320824805156,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1861,
+        "world": 1810,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.4,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7975913008821061,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1862,
+        "world": 1811,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.06666666666666667,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.44,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8829762338853263,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1863,
+        "world": 1812,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.13333333333333333,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.48,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9645458403879511,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1864,
+        "world": 1813,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.2,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.52,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.0390101312112114,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1865,
+        "world": 1814,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.26666666666666666,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.56,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.10339213653508,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1866,
+        "world": 1815,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.3333333333333333,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.5999999999999999,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1551120935104975,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1867,
+        "world": 1816,
+        "hp": 2,
+        "downed": false,
+        "phase": "commit",
+        "progress": 0.4,
+        "nativeAction": "wild-crown:boar-pounce",
+        "nativeTime": 1.64,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1897642156356625,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1868,
+        "world": 1817,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1897642156356625,
+        "hitStop": {
+          "remainingTicks": 3,
+          "strength": 0.42857142857142855
+        },
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1869,
+        "world": 1817,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.010833333494763385,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1897642156356625,
+        "hitStop": {
+          "remainingTicks": 2,
+          "strength": 0.42857142857142855
+        },
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1870,
+        "world": 1817,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.010833333494763385,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1897642156356625,
+        "hitStop": {
+          "remainingTicks": 1,
+          "strength": 0.42857142857142855
+        },
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1871,
+        "world": 1817,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.010833333494763385,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1897642156356625,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1872,
+        "world": 1818,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.016666666915021958,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1745163583533569,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1873,
+        "world": 1819,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.03333333383004036,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.1296528749803154,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1874,
+        "world": 1820,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.05000000074505877,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.0828561085587043,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1875,
+        "world": 1821,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.06666666766007717,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 1.0339837571276074,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1876,
+        "world": 1822,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.08333333457509913,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9836037950001836,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1877,
+        "world": 1823,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.10000000149011753,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9313446243445389,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1878,
+        "world": 1824,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.11666666840513594,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8799643513976829,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1879,
+        "world": 1825,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.1333333353201579,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.83508395881752,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1880,
+        "world": 1826,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.15000000223517632,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8352965102183485,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1881,
+        "world": 1827,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.1666666691501947,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8355064531729458,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1882,
+        "world": 1828,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.18333333606521313,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8350133604132762,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1883,
+        "world": 1829,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.20000000298023507,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8344978699093445,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1884,
+        "world": 1830,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.2166666698952535,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8317996544689635,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1885,
+        "world": 1831,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.23333333681027188,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8290391931834281,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1886,
+        "world": 1832,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.2500000037252903,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8238542974205029,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1887,
+        "world": 1833,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.26666667064031224,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.818572392414879,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1888,
+        "world": 1834,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.2833333375553307,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8102553559550089,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1889,
+        "world": 1835,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.3000000044703491,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8018486914848063,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1890,
+        "world": 1836,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.31666667138536747,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.789925594695864,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1891,
+        "world": 1837,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.3333333383003894,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7779550650378094,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1892,
+        "world": 1838,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.35000000521540786,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.76237898014836,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1893,
+        "world": 1839,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.36666667213042625,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.746790500148335,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1894,
+        "world": 1840,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.3833333390454482,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7280156602967945,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1895,
+        "world": 1841,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.4000000059604666,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7092373336369645,
+        "heroAction": "aren-light-1"
+      },
+      {
+        "simulation": 1896,
+        "world": 1842,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.41666667287548503,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6885433002190762,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1897,
+        "world": 1843,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.4333333397905034,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6678403421531439,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1898,
+        "world": 1844,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.45000000670552537,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6671281419900615,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1899,
+        "world": 1845,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.46666667362054376,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6663963961747015,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1900,
+        "world": 1846,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.4833333405355622,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6626829179271436,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1901,
+        "world": 1847,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5000000074505806,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6589475023647423,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1902,
+        "world": 1848,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5166666743656025,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6746930859832119,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1903,
+        "world": 1849,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5333333412806209,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6904235266828131,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1904,
+        "world": 1850,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5500000081956393,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7020389265511048,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1905,
+        "world": 1851,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5666666751106578,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7136417029161134,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1906,
+        "world": 1852,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.5833333420256798,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7296847699583368,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1907,
+        "world": 1853,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6000000089406982,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7457125531981107,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1908,
+        "world": 1854,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6166666758557166,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7665528757109457,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1909,
+        "world": 1855,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6333333427707385,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7873748497760558,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1910,
+        "world": 1856,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6500000096857569,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8065140025860658,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1911,
+        "world": 1857,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6666666766007753,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8256314315467066,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1912,
+        "world": 1858,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.6833333435157937,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9010712664299622,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1913,
+        "world": 1859,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7000000104308157,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9764856251817419,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1914,
+        "world": 1860,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7166666773458341,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9796502776650445,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1915,
+        "world": 1861,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7333333442608525,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9828145325515624,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1916,
+        "world": 1862,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7500000111758709,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9787998007214732,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1917,
+        "world": 1863,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7666666780908928,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9747850436993964,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1918,
+        "world": 1864,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.7833333450059112,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9567064031389675,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1919,
+        "world": 1865,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8000000119209296,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.9386277625785374,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1920,
+        "world": 1866,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8166666788359481,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.897108041744317,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1921,
+        "world": 1867,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8333333457509701,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.8555882237134605,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1922,
+        "world": 1868,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8500000126659885,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.7638934655249144,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1923,
+        "world": 1869,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8666666795810068,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.6721987056847429,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1924,
+        "world": 1870,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.8833333464960288,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.5749620124755422,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1925,
+        "world": 1871,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.9000000134110472,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.47772549956016896,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1926,
+        "world": 1872,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.9166666803260656,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.46115088672815574,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1927,
+        "world": 1873,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.933333347241084,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.444576277811376,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1928,
+        "world": 1874,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.950000014156106,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.4345703373086991,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1929,
+        "world": 1875,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.9666666810711244,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.42456441792980826,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1930,
+        "world": 1876,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 0.9833333479861428,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.4228972602454475,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1931,
+        "world": 1877,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 1.0000000149011612,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.42123010375521464,
+        "heroAction": "aren-idle"
+      },
+      {
+        "simulation": 1932,
+        "world": 1878,
+        "hp": 0,
+        "downed": true,
+        "nativeAction": "monster-death",
+        "nativeTime": 1.0166666818161831,
+        "root": [
+          13.039770275359848,
+          0,
+          -1.7461862269851625
+        ],
+        "hipY": 0.42089855557775424,
+        "heroAction": "aren-idle"
+      }
+    ],
+    "after": {
+      "trial": {
+        "index": 1,
+        "status": "approach"
+      },
+      "mesh": [
+        {
+          "name": "tripo_node_231bab10-019e-4351-bd96-1f3014db7f0d",
+          "bounds": {
+            "min": [
+              11.563546453817274,
+              -0.014201270369402996,
+              -2.9310918094670466
+            ],
+            "max": [
+              14.211899362834187,
+              0.9723692223885976,
+              -0.8692662619742022
+            ]
+          },
+          "finiteBones": true
+        },
+        {
+          "name": "vfx-cleanse-shell",
+          "bounds": {
+            "min": [
+              11.563546453817274,
+              -0.014201270369402996,
+              -2.9310918094670466
+            ],
+            "max": [
+              14.211899362834187,
+              0.9723692223885976,
+              -0.8692662619742022
+            ]
+          },
+          "finiteBones": true
+        }
+      ],
+      "fx": {
+        "capacity": 16,
+        "activeActors": 0,
+        "visibleTrails": 0,
+        "droppedCosmeticActors": 0,
+        "missingNativeAnchors": 0,
+        "sampledWorldTick": 1878
+      }
+    }
+  },
+  "video": {
+    "path": "/tmp/wild-crown-131-airborne-subdual.mp4",
+    "durationMs": 5689,
+    "frames": 41,
+    "bytes": 5840343
+  }
+}

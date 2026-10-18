@@ -1,0 +1,20 @@
+{
+  "before": {
+    "scope": "Actual GameApplication render path with one injected renderer gate-opening feedback event; no simulation/hit/progression injection.",
+    "result": {
+      "expectedTick": 5,
+      "expectedBirth": 0.08333333333333333,
+      "actualBirth": 0.06666666666666667,
+      "clockError": 0.016666666666666663
+    }
+  },
+  "after": {
+    "scope": "Actual GameApplication render path with one injected renderer gate-opening feedback event; no simulation/hit/progression injection.",
+    "result": {
+      "expectedTick": 1980,
+      "expectedBirth": 33,
+      "actualBirth": 33,
+      "clockError": 0
+    }
+  }
+}

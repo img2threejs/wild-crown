@@ -1,5 +1,5 @@
 import type { ActionId, ActorSnapshot, AssetManifestEntry } from '../game/contracts';
-import { BAMBOO_HOP_HEIGHT, BAMBOO_STORY_ASSETS } from './BambooMonsterProfiles';
+import { BAMBOO_STORY_ASSETS } from './BambooMonsterProfiles';
 import { createMutableSample, createStoryAnimationState, resolveStoryAnimation, trackStoryAnimation, type MutableAnimationSample, type StoryAnimationInput, type StoryAnimationState } from './StoryActorAnimation';
 import type { ReactionPose } from './ReactionPresenter';
 import {
@@ -65,6 +65,7 @@ interface DriverState {
   deathLift: number | undefined;
   /** Reused sample of a monster's reaction clip (stagger, knockback, knockdown, get-up, stun): the frame allocates nothing. */
   readonly reactionSample: { -readonly [K in keyof MonsterAnimationSample]: MonsterAnimationSample[K] };
+  readonly monsterSample: { -readonly [K in keyof MonsterAnimationSample]: MonsterAnimationSample[K] };
   /** Story-clip memory (status and line start times) and the reused sample the story resolver writes into. */
   readonly story: StoryAnimationState;
   readonly storySample: MutableAnimationSample;
@@ -77,6 +78,7 @@ function createDriverState(): DriverState {
     monsterSeen: false, spawnStartedAt: undefined, spawnDone: false, defeated: false, deathStartedAt: undefined,
     lastVitalityRatio: undefined, bossRoarDone: false, bossRoarStartedAt: undefined, airborne: 0, deathLift: undefined,
     reactionSample: { actionId: 'monster-hurt', phase: 'active', normalizedTime: 0, loopRate: 1 },
+    monsterSample: { actionId: 'monster-idle', phase: 'idle', normalizedTime: 0, loopRate: 1 },
     story: createStoryAnimationState(), storySample: createMutableSample(),
   };
 }
@@ -119,28 +121,8 @@ const AIR_STEP_ACTION = 'aren-air-step';
 /** Normalized `aren-air-step` time at the start of each jump phase: rising 0→0.50, falling 0.50→0.82, landing 0.82→1. */
 const AIR_STEP_PHASE_START = { rising: 0, falling: 0.5, landing: 0.82 } as const;
 const AIR_STEP_PHASE_SPAN = { rising: 0.5, falling: 0.32, landing: 0.18 } as const;
-/** Presentation-only hop height (m) for the authored airborne segment of a `monster-jump` attack, by native asset id. */
-const MONSTER_HOP_HEIGHT: Readonly<Record<string, number>> = {
-  ...BAMBOO_HOP_HEIGHT,
-  'actor-ember-boar': 0.3, 'actor-frost-sap-stalker': 0.32, 'actor-root-rammer': 0.38, 'actor-thornback-howler': 0.3,
-  'actor-howl-scout': 0.34, 'actor-ruun-chained-howl': 0.42, 'actor-bog-lurker': 0.26, 'actor-ghor-mire-maw': 0.5,
-};
-const HOP_FALLBACK_PER_SCALE = 0.1, HOP_FALLBACK_MIN = 0.15, HOP_FALLBACK_MAX = 0.45;
 
-/**
- * Vertical offset (m) over the jump clip's authored airborne segment (0.3–0.7), not over the damaging phase.
- * Slam clips land as active contact begins; restarting a hop during active would lift the body away from its impact. Hovering avians keep their own flight curve.
- */
-export function monsterHopHeight(actor: ActorSnapshot, assetId: string, sample: Pick<MonsterAnimationSample, 'actionId' | 'normalizedTime'> | undefined, manifest?: AssetManifestEntry): number {
-  if (sample?.actionId !== 'monster-jump' || (actor.attackPhase !== 'commit' && actor.attackPhase !== 'active') || MONSTER_HOVER[assetId] || actor.downed) return 0;
-  const time = sample.normalizedTime;
-  if (time <= 0.3 || time >= 0.7) return 0;
-  const height = MONSTER_HOP_HEIGHT[assetId]
-    ?? Math.max(HOP_FALLBACK_MIN, Math.min(HOP_FALLBACK_MAX, (manifest?.coordinateTransform?.scale ?? 2) * HOP_FALLBACK_PER_SCALE));
-  return height * Math.sin(Math.PI * (time - 0.3) / 0.4);
-}
-
-/** Presentation-only: selects and samples the native clip for one actor snapshot. Returns the drawn vertical offset (m) to add to the root: a monster's hop, or the fall of a defeated flyer / hopper to the ground over its death clip. */
+/** Samples the native pose. Returns only the root offset for a defeated flyer's fall; living attack arcs are already authored in the skeleton. */
 export function driveActorAnimation(instance: NativeAssetInstance, actor: ActorSnapshot, previous: ActorSnapshot | undefined, context: ActorAnimationContext): number {
   const { interpolate, alpha, loopTimeSeconds, manifest } = context;
   let state = states.get(instance);
@@ -164,7 +146,7 @@ export function driveActorAnimation(instance: NativeAssetInstance, actor: ActorS
     return 0;
   }
   if (actor.allegiance !== 'player') {
-    const generic = resolveMonsterAnimation(actor, instance.assetId, state.gait);
+    const generic = resolveMonsterAnimation(actor, instance.assetId, state.gait, state.monsterSample);
     if (generic) {
       // Story cast (Asha, Tali, Marek, Koro): a nonlethal chapter status, a stance or a line gesture replaces the generic locomotion / idle clip.
       let resolved: MonsterAnimationSample = generic;
@@ -194,7 +176,7 @@ export function driveActorAnimation(instance: NativeAssetInstance, actor: ActorS
       else if (state.overlayActive) { instance.animation.setOverlay(undefined); state.overlayActive = false; }
       instance.animation.setBlendSeconds(MONSTER_BLEND_SECONDS);
       instance.animation.play(sample.actionId, sample.phase, sample.normalizedTime, loopTimeSeconds, sample.loopRate);
-      return monsterPresentationLift(instance.assetId, actor, state, sample, loopTimeSeconds, monsterHopHeight(actor, instance.assetId, sample, manifest));
+      return monsterPresentationLift(instance.assetId, actor, state, sample, loopTimeSeconds);
     }
   }
   const reaction = context.reaction;
@@ -294,18 +276,17 @@ function driveMonsterLifecycle(instance: NativeAssetInstance, actor: ActorSnapsh
 }
 
 /**
- * Vertical presentation offset (m) of a monster on top of the renderer's own hover height: the jump-slot hop while it lives and, once it is
- * defeated, the height it had when it was struck (hover + hop of the last living frame, `airborne`) falling to the ground over the death clip:
- * constant acceleration, ground contact at DEATH_GROUND_CONTACT of the clip, then 0 for good. A monster restored already defeated has no height to fall from.
+ * Vertical presentation offset (m) of a defeated flyer: retain its last living hover height (`airborne`), then fall with
+ * constant acceleration to the ground over the native death clip. A monster restored already defeated has no height to fall from.
  */
-function monsterPresentationLift(assetId: string, actor: ActorSnapshot, state: DriverState, sample: MonsterAnimationSample, clock: number | undefined, hop: number): number {
+function monsterPresentationLift(assetId: string, actor: ActorSnapshot, state: DriverState, sample: MonsterAnimationSample, clock: number | undefined): number {
   if (sample.actionId === 'monster-death') {
     state.deathLift ??= state.airborne;
     return state.deathLift * (1 - deathFallShare(sample.normalizedTime));
   }
   state.deathLift = undefined;
-  state.airborne = (MONSTER_HOVER[assetId] && clock !== undefined ? monsterHoverHeight(actor, assetId, clock) : 0) + hop;
-  return hop;
+  state.airborne = MONSTER_HOVER[assetId] && clock !== undefined ? monsterHoverHeight(actor, assetId, clock) : 0;
+  return 0;
 }
 
 /**

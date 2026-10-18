@@ -1081,7 +1081,10 @@
       "vara:hurt": "vara:hurt"
     },
     "rootMotion": {
-      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara-sky-survey": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "vara:idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1199,10 +1202,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_2",
     "tripoSourceTask": "8eee0d3d-8245-49f8-8fb0-3b09d50ba542",
-    "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb",
-    "outputHash": "d6f1ed18598400615b60bd0f7a9f652cdc970d7aad3c5c7a27a58d9f98f766fa",
+    "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+    "outputHash": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:frostfang-pack-rush",
+      "wild-crown:frostfang-ice-bite",
+      "wild-crown:frostfang-frost-breath"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1226,7 +1233,10 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:frostfang-pack-rush": "wild-crown:frostfang-pack-rush",
+      "wild-crown:frostfang-ice-bite": "wild-crown:frostfang-ice-bite",
+      "wild-crown:frostfang-frost-breath": "wild-crown:frostfang-frost-breath"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1288,10 +1298,22 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:frostfang-pack-rush": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:frostfang-ice-bite": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:frostfang-frost-breath": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-frostfang-tracker-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-frostfang-tracker-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1302,10 +1324,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "2586c7ef-ee3d-44f0-a94c-bdd97c01b0ff",
-    "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb",
-    "outputHash": "327c04a6a41ab094f05bc1ce7f8d750abbac407edde18e00e9ad92774ce0597c",
+    "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+    "outputHash": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:howl-scout-flank-pounce",
+      "wild-crown:howl-scout-claw-rake",
+      "wild-crown:howl-scout-low-howl"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -0.6763,
@@ -1329,7 +1355,10 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:howl-scout-flank-pounce": "wild-crown:howl-scout-flank-pounce",
+      "wild-crown:howl-scout-claw-rake": "wild-crown:howl-scout-claw-rake",
+      "wild-crown:howl-scout-low-howl": "wild-crown:howl-scout-low-howl"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1391,10 +1420,22 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:howl-scout-flank-pounce": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:howl-scout-claw-rake": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:howl-scout-low-howl": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-howl-scout-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-howl-scout-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1405,10 +1446,17 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_1",
     "tripoSourceTask": "da50b1d7-c80f-4a42-88c1-b37d79c50ba2",
-    "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb",
-    "outputHash": "d00f5bec3cb0ecb235ed2b15f122666839f5ffb5423d641e353eb1918831ab15",
+    "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+    "outputHash": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:ruun-track-charge",
+      "wild-crown:ruun-pack-call",
+      "wild-crown:ruun-claw-arc",
+      "wild-crown:chained-ruun-chain-pounce",
+      "wild-crown:chained-ruun-howl-shockwave",
+      "wild-crown:chained-ruun-breaking-ice"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1432,7 +1480,13 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:ruun-track-charge": "wild-crown:ruun-track-charge",
+      "wild-crown:ruun-pack-call": "wild-crown:ruun-pack-call",
+      "wild-crown:ruun-claw-arc": "wild-crown:ruun-claw-arc",
+      "wild-crown:chained-ruun-chain-pounce": "wild-crown:chained-ruun-chain-pounce",
+      "wild-crown:chained-ruun-howl-shockwave": "wild-crown:chained-ruun-howl-shockwave",
+      "wild-crown:chained-ruun-breaking-ice": "wild-crown:chained-ruun-breaking-ice"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1494,10 +1548,34 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:ruun-track-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:ruun-pack-call": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:ruun-claw-arc": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:chained-ruun-chain-pounce": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:chained-ruun-howl-shockwave": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:chained-ruun-breaking-ice": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-ruun-chained-howl-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-ruun-chained-howl-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

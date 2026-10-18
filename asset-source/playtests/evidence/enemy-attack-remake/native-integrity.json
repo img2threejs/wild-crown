@@ -1,0 +1,734 @@
+{
+  "schemaVersion": 1,
+  "method": "Independent original-versus-runtime GLB byte and JSON comparison; original binary prefix includes mesh attributes, skin weights and inverse bind matrices.",
+  "models": 25,
+  "newAnimations": 97,
+  "failures": [],
+  "rows": [
+    {
+      "assetId": "actor-ember-boar",
+      "input": {
+        "path": "asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
+        "sha256": "b7dffb9d61b34c53f96cab9f0e5b26bbc7a1138eceabd2d08791d4f7e22da439"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+        "sha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+        "bytes": 7511816
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7022168,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 5,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-frost-sap-stalker",
+      "input": {
+        "path": "asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
+        "sha256": "b86f0274f55c3a0b41ede1ea5361de88bb307369decc5d3ee07d44e274759e85"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+        "sha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+        "bytes": 8600236
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7994860,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 4,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-root-rammer",
+      "input": {
+        "path": "asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
+        "sha256": "c26c7d3d3e67acd02aca904426b016f8d6fc50243a878bf128771ecef6dd2284"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+        "sha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+        "bytes": 7734676
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7292636,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 4,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-thornback-howler",
+      "input": {
+        "path": "asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
+        "sha256": "eb5b9c1086562039527f1b1cf6f43828e624b7d91223b7d6522d5a5f6d4492a9"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+        "sha256": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+        "bytes": 7958884
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7521152,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-storm-hornbill",
+      "input": {
+        "path": "asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
+        "sha256": "362813aeead1086dbc505324ac07a6231e18dc7dde481c461ad52b096e4ca5d9"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+        "sha256": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+        "bytes": 7437440
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7156988,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 4,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-mire-viper",
+      "input": {
+        "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
+        "sha256": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+        "sha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+        "bytes": 7899524
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7701256,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-koro",
+      "input": {
+        "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
+        "sha256": "c6985e814b630be140030ea03c5679e4a9ca6d558184f2e34567a41f1d1b048d"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+        "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
+        "bytes": 7103428
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 6800460,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 2,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-grove-rootling",
+      "input": {
+        "path": "asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb",
+        "sha256": "e481cdd09e6595dc07d0b6d8ba63593c45f5b59379082ddd47e5e6773498bae4"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+        "sha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+        "bytes": 7553292
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7115900,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-grove-blighted-rootling",
+      "input": {
+        "path": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb",
+        "sha256": "9ffcd7e26cecbee7dd78d2967cfd9c13f3cd1ae796c0bd61b2775cfe2e7ea9aa"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+        "sha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+        "bytes": 7553348
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7115900,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-grove-hollowheart",
+      "input": {
+        "path": "asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb",
+        "sha256": "c9ade57f76cb5cacbdc26093ac28cfb1e76d5f1fc1707260f90851716d87a62b"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+        "sha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+        "bytes": 9507880
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 8976904,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 4,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-frostfang-tracker",
+      "input": {
+        "path": "asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb",
+        "sha256": "d6f1ed18598400615b60bd0f7a9f652cdc970d7aad3c5c7a27a58d9f98f766fa"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+        "sha256": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+        "bytes": 8205168
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7823644,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-howl-scout",
+      "input": {
+        "path": "asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb",
+        "sha256": "327c04a6a41ab094f05bc1ce7f8d750abbac407edde18e00e9ad92774ce0597c"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+        "sha256": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+        "bytes": 7365496
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 6968460,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-ruun-chained-howl",
+      "input": {
+        "path": "asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb",
+        "sha256": "d00f5bec3cb0ecb235ed2b15f122666839f5ffb5423d641e353eb1918831ab15"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+        "sha256": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+        "bytes": 8712816
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 8015588,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 6,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-bog-lurker",
+      "input": {
+        "path": "asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
+        "sha256": "1cd5b7583f7f34e70f743d89cf6e11712e98a968ba312a7b2c7879a754741b7a"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+        "sha256": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+        "bytes": 6717204
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 6188692,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-lantern-heron",
+      "input": {
+        "path": "asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
+        "sha256": "a2931e33b358a70363433676e7dbcd58b9a8b2b02678d4e651a6ab8ad2f4e046"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+        "sha256": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+        "bytes": 8097208
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7533688,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-ghor-mire-maw",
+      "input": {
+        "path": "asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
+        "sha256": "5e61fa266a60e6ed0ec66fbd61df7faf663d4ee89e870e3dea737567f3b4819b"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+        "sha256": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+        "bytes": 8135916
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7406496,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 6,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-koro-branchbreaker",
+      "input": {
+        "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
+        "sha256": "a56f21ab1e7d431dfbcde7a165fd9c47fecc6023325b435224aaf5314f5f9a23"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+        "sha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+        "bytes": 8321680
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7604420,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 6,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-asha",
+      "input": {
+        "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb",
+        "sha256": "e93dfa349cb64e7ef27a1e056481a3d9b4ffac0801616788eff092bccc94f265"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+        "sha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+        "bytes": 8452636
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7380072,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 8,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-camp-hunter-melee",
+      "input": {
+        "path": "asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb",
+        "sha256": "5813fe9afd11cee22d542f1c87135299b9f59c5b1169737473404e2a2c8747dd"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+        "sha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
+        "bytes": 8063020
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7866872,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 2,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-camp-hunter-ranged",
+      "input": {
+        "path": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb",
+        "sha256": "9da66e5ba2fb6e82d5b6117255200e15852408616cec510a70553130d5611d72"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+        "sha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05",
+        "bytes": 7440172
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7304288,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 1,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-sable",
+      "input": {
+        "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+        "sha256": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+        "sha256": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+        "bytes": 6502048
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 6281692,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 1,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-nyra",
+      "input": {
+        "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
+        "sha256": "9465f6efcfd6642629fcc288dec58b3e30ac8085e925cdfb633204d542c931f3"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+        "sha256": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b",
+        "bytes": 5526808
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 5276140,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 1,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-solkar",
+      "input": {
+        "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
+        "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+        "sha256": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+        "bytes": 8015636
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7592288,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 3,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-orun",
+      "input": {
+        "path": "asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+        "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+        "sha256": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+        "bytes": 7178600
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 6649368,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 8,
+      "newScaleChannels": 0
+    },
+    {
+      "assetId": "actor-orun-crowned-beast",
+      "input": {
+        "path": "asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
+        "sha256": "13193d422eaf1218778b3c8a6c164f581205a258eb95f70839b3fb6771ea8298"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+        "sha256": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+        "bytes": 8858348
+      },
+      "inputHashMatches": true,
+      "outputHashMatches": true,
+      "preserved": {
+        "nodes": true,
+        "meshes": true,
+        "skins": true,
+        "materials": true,
+        "textures": true,
+        "images": true
+      },
+      "originalBinaryBytes": 7879004,
+      "originalBinaryPrefixIdentical": true,
+      "originalAccessorsPreserved": true,
+      "originalBufferViewsPreserved": true,
+      "originalAnimationsPreserved": true,
+      "newAnimationCount": 8,
+      "newScaleChannels": 0
+    }
+  ]
+}

@@ -42,7 +42,7 @@ function lifecycleRig(assetId = BOAR): LifecycleRig {
     new AnimationClip('slash', 1, [track([0, 0, 0, 0, 0, 0])]),
   ];
   const policy = { mode: 'in-place', evidenceStatus: 'verified' };
-  const names = { 'monster-idle': 'idle', 'monster-death': 'death', 'monster-spawn': 'spawn', 'monster-roar': 'roar', 'monster-hurt': 'hurt', 'monster-slash': 'slash' };
+  const names = { 'monster-idle': 'idle', 'monster-death': 'death', 'monster-spawn': 'spawn', 'monster-roar': 'roar', 'monster-hurt': 'hurt', 'wild-crown:boar-gale-scythe': 'slash' };
   const manifest = {
     id: assetId, requiredActionIds: Object.keys(names), actionToClipMapping: names,
     rootMotion: Object.fromEntries(Object.keys(names).map(slot => [slot, policy])),

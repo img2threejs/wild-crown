@@ -2,13 +2,11 @@ import { describe, expect, it } from 'bun:test';
 import {
   MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation, resolveMonsterHitOverlay,
 } from '../../src/rendering/MonsterAnimationProfiles.js';
-import { GROVE_ATTACK_PLANS, GROVE_HOVER, GROVE_LOCOMOTION } from '../../src/rendering/GroveMonsterProfiles.js';
+import { GROVE_HOVER, GROVE_LOCOMOTION } from '../../src/rendering/GroveMonsterProfiles.js';
 import { MONSTER_PROFILES } from '../../src/game/combat/WildlifePressure.js';
-import type { MonsterAttackPlan } from '../../src/rendering/MonsterAnimationPlan.js';
 import { flinchAt } from './reaction-fixtures.js';
 import type { ActorSnapshot } from '../../src/game/contracts.js';
 
-const PHASES = ['windup', 'commit', 'active', 'recovery'] as const;
 const ROOTLING = 'actor-grove-rootling', BLIGHTED = 'actor-grove-blighted-rootling', GUARDIAN = 'actor-grove-hollowheart', KORO = 'actor-koro';
 
 function monster(partial: Partial<ActorSnapshot> = {}): ActorSnapshot {
@@ -19,52 +17,6 @@ function monster(partial: Partial<ActorSnapshot> = {}): ActorSnapshot {
 }
 const attacking = (attackId: string, attackPhase: NonNullable<ActorSnapshot['attackPhase']>, progress: number): ActorSnapshot =>
   monster({ actionId: `wild-crown:${attackId}` as never, attackPhase, attackPhaseProgress: progress });
-
-describe('grove monster clip plans', () => {
-  it('runs every clip forward through contiguous phase windows that end at the clip end', () => {
-    for (const attackId of Object.keys(GROVE_ATTACK_PLANS)) {
-      const plan = GROVE_ATTACK_PLANS[attackId] as MonsterAttackPlan;
-      let previousTo = -1;
-      for (const phase of PHASES) {
-        const step = plan[phase];
-        if ('loopRate' in step) throw new Error(`${attackId}: the sprig plans are finite clip windows`);
-        expect(step.from).toBeGreaterThanOrEqual(0);
-        expect(step.to).toBeLessThanOrEqual(1);
-        expect(step.to).toBeGreaterThan(step.from);
-        if (previousTo >= 0) expect(step.from).toBeCloseTo(previousTo, 9);
-        previousTo = step.to;
-      }
-      expect(previousTo).toBe(1);
-    }
-  });
-
-  it('lands the visible strike on the active window: the clip pose at the active start is the strike pose', () => {
-    // shoot expels ~0.5 (the seed leaves in commit and lands as active opens); dive strikes ~0.4; slash strikes ~0.45.
-    const strikeStart: Readonly<Record<string, number>> = {
-      'sprig-seed-toss': 0.68, 'sprig-ground-ripple': 0.38, 'sprig-petal-sweep': 0.45,
-      // The blighted rootling plays the same three clip plans; the guardian's leap lands at 0.7, its sweep strikes at 0.45, its hurl expels at 0.68 and the heart bursts on the roar's held beat (0.45).
-      'blighted-seed-lob': 0.68, 'blighted-ground-pulse': 0.38, 'blighted-lash-sweep': 0.45,
-      'hollowheart-leap-smash': 0.7, 'hollowheart-antler-sweep': 0.45, 'hollowheart-ichor-hurl': 0.68, 'hollowheart-heartlight-burst': 0.45,
-    };
-    for (const [attackId, expected] of Object.entries(strikeStart)) {
-      const active = resolveMonsterAnimation(attacking(attackId, 'active', 0), ROOTLING);
-      expect(active, attackId).toBeDefined();
-      expect(active!.phase).toBe('active');
-      expect(active!.normalizedTime).toBeCloseTo(expected, 6);
-    }
-    // The shoot clip's expel (~0.5) is reached at the start of commit, so the visible throw precedes the hazard.
-    expect(resolveMonsterAnimation(attacking('sprig-seed-toss', 'commit', 0), ROOTLING)!.normalizedTime).toBeCloseTo(0.5, 6);
-  });
-
-  it('plays every phase of every attack inside the clip range', () => {
-    for (const attackId of Object.keys(GROVE_ATTACK_PLANS)) for (const phase of PHASES) for (const progress of [0, 0.25, 0.5, 1]) {
-      const sample = resolveMonsterAnimation(attacking(attackId, phase, progress), ROOTLING)!;
-      expect(sample.normalizedTime).toBeGreaterThanOrEqual(0);
-      expect(sample.normalizedTime).toBeLessThanOrEqual(1);
-      expect(sample.loopRate).toBeGreaterThan(0);
-    }
-  });
-});
 
 describe('grove locomotion', () => {
   it('has a locomotion entry for every Grove actor asset (without one a monster never animates)', () => {

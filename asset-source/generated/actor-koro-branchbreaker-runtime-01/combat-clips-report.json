@@ -1,0 +1,832 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-koro-branchbreaker",
+  "generator": "scripts/assets/author-enemy-attacks.mjs",
+  "method": "continuous conditioned native skeletal motion with anatomical action mechanics",
+  "input": {
+    "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
+    "sha256": "a56f21ab1e7d431dfbcde7a165fd9c47fecc6023325b435224aaf5314f5f9a23"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+    "sha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+    "bytes": 8321680
+  },
+  "preserved": [
+    "meshes",
+    "skins",
+    "materials",
+    "textures",
+    "node bind transforms"
+  ],
+  "animationScaleChannelsAdded": 0,
+  "nativeHeight": 0.9811276830077986,
+  "groundUnits": -0.04512494130757179,
+  "anchors": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "attacks": {
+    "koro-fruit-burst": {
+      "clip": "wild-crown:koro-fruit-burst",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "fruit-scatter",
+      "socket": "hand-right",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-shoot",
+          "from": 0,
+          "to": 0.5,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "monster-shoot",
+          "from": 0.5,
+          "to": 0.68,
+          "ease": "in"
+        },
+        "active": {
+          "action": "monster-shoot",
+          "from": 0.68,
+          "to": 0.85,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-shoot",
+          "from": 0.85,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 17.3139838,
+        "maxFloorCorrection": 0.045632,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    },
+    "koro-rock-throw": {
+      "clip": "wild-crown:koro-rock-throw",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "rock-hurl-heavy",
+      "socket": "hand-right",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-shoot",
+          "from": 0,
+          "to": 0.5,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "monster-shoot",
+          "from": 0.5,
+          "to": 0.68,
+          "ease": "in"
+        },
+        "active": {
+          "action": "monster-shoot",
+          "from": 0.68,
+          "to": 0.85,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-shoot",
+          "from": 0.85,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 17.3139838,
+        "maxFloorCorrection": 0.045632,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    },
+    "koro-falling-branch": {
+      "clip": "wild-crown:koro-falling-branch",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "canopy-shake",
+      "socket": "hands",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-roar",
+          "from": 0,
+          "to": 0.25,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "monster-roar",
+          "from": 0.25,
+          "to": 0.4,
+          "ease": "in"
+        },
+        "active": {
+          "action": "monster-roar",
+          "from": 0.4,
+          "to": 0.8,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-roar",
+          "from": 0.8,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 21.0529878,
+        "maxFloorCorrection": 0.0459933,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    },
+    "koro-platform-charge": {
+      "clip": "wild-crown:koro-platform-charge",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "knuckle-charge",
+      "socket": "shoulders",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-run",
+          "loopRate": 0.35,
+          "toLoopRate": 0.9
+        },
+        "commit": {
+          "action": "monster-run",
+          "loopRate": 1.6,
+          "toLoopRate": 2.4
+        },
+        "active": {
+          "action": "monster-dive",
+          "from": 0.3,
+          "to": 0.62,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-dive",
+          "from": 0.62,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 6.4786382,
+        "maxFloorCorrection": 0.045632,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    },
+    "koro-vine-vault": {
+      "clip": "wild-crown:koro-vine-vault",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "vine-vault",
+      "socket": "hands",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-jump",
+          "from": 0,
+          "to": 0.3,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "monster-jump",
+          "from": 0.3,
+          "to": 0.7,
+          "ease": "in"
+        },
+        "active": {
+          "action": "monster-jump",
+          "from": 0.7,
+          "to": 0.85,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-jump",
+          "from": 0.85,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 30.4359566,
+        "maxFloorCorrection": 0.0454264,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    },
+    "koro-branch-swing": {
+      "clip": "wild-crown:koro-branch-swing",
+      "produced": "authored",
+      "durationSeconds": 4,
+      "loop": false,
+      "motion": "log-sweep",
+      "socket": "hand-right",
+      "phaseEnds": [
+        0.35,
+        0.5,
+        0.75,
+        1
+      ],
+      "frames": 121,
+      "sourcePlan": {
+        "windup": {
+          "action": "monster-slash",
+          "from": 0,
+          "to": 0.3,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "monster-slash",
+          "from": 0.3,
+          "to": 0.45,
+          "ease": "in"
+        },
+        "active": {
+          "action": "monster-slash",
+          "from": 0.45,
+          "to": 0.74,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "monster-slash",
+          "from": 0.74,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "metrics": {
+        "maxRootHorizontalDrift": 0,
+        "maxJointStepDegrees": 11.7475455,
+        "maxFloorCorrection": 0.0456739,
+        "lowestSkinnedHeight": 0,
+        "maxNonBaseTranslationDelta": 0
+      }
+    }
+  },
+  "inheritedProvenance": {
+    "path": "asset-source/generated/actor-koro-branchbreaker-runtime-01/clips-report.json",
+    "sha256": "7657756893aae10ba4ce31e3643060a512d751219ea59e1ab0935a071152937a"
+  },
+  "inPlaceAnchorBone": "Hip",
+  "slots": {
+    "monster-idle": {
+      "clip": "monster-idle",
+      "produced": "preset-conditioned",
+      "durationSeconds": 3,
+      "frames": 91,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "idle",
+        "anchors": null,
+        "window": [
+          3,
+          6
+        ],
+        "crossfadeSeconds": 0.6
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0376,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0028,
+          -0.0019
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.119,
+        "peakStrikeTime": 0.889,
+        "loopClosureStepDegrees": 0.196,
+        "maxInteriorStepDegrees": 1.861
+      }
+    },
+    "monster-walk": {
+      "clip": "monster-walk",
+      "produced": "preset-conditioned",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "walk",
+        "anchors": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            2.3667
+          ]
+        ],
+        "window": null,
+        "crossfadeSeconds": 0.4
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0062,
+        "maxMeshCentroidWanderUnits": 0.0569,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0063,
+          0.0889
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.246,
+        "peakStrikeTime": 0.917,
+        "loopClosureStepDegrees": 0.507,
+        "maxInteriorStepDegrees": 28.588
+      }
+    },
+    "monster-run": {
+      "clip": "monster-run",
+      "produced": "preset-conditioned",
+      "durationSeconds": 0.6,
+      "frames": 19,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "run",
+        "anchors": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1.2667
+          ]
+        ],
+        "window": null,
+        "crossfadeSeconds": 0.25
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0.0099,
+        "maxMeshCentroidWanderUnits": 0.1543,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.067,
+          0.1192
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 9.225,
+        "peakStrikeTime": 0.944,
+        "loopClosureStepDegrees": 12.254,
+        "maxInteriorStepDegrees": 48.141
+      }
+    },
+    "monster-slash": {
+      "clip": "monster-slash",
+      "produced": "preset-conditioned",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "slash",
+        "anchors": [
+          [
+            0,
+            0.95
+          ],
+          [
+            0.3,
+            1.6
+          ],
+          [
+            0.45,
+            2.15
+          ],
+          [
+            0.62,
+            2.45
+          ],
+          [
+            1,
+            3.35
+          ]
+        ],
+        "window": null,
+        "crossfadeSeconds": null
+      },
+      "limbFloor": {
+        "joints": [
+          "R_Clavicle",
+          "R_Upperarm",
+          "R_Forearm",
+          "R_Hand",
+          "Spine02",
+          "Spine01",
+          "Waist"
+        ],
+        "worstShareTowardRest": 0.3712
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.3018,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0454,
+          0.0046
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 20.048,
+        "peakStrikeTime": 0.444
+      }
+    },
+    "monster-shoot": {
+      "clip": "monster-shoot",
+      "produced": "preset-conditioned",
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {},
+      "source": {
+        "preset": "pitch_baseball",
+        "anchors": [
+          [
+            0,
+            0.3
+          ],
+          [
+            0.5,
+            1.95
+          ],
+          [
+            0.7,
+            2.2
+          ],
+          [
+            1,
+            3.2
+          ]
+        ],
+        "window": null,
+        "crossfadeSeconds": null
+      },
+      "limbFloor": {
+        "joints": [
+          "R_Clavicle",
+          "R_Upperarm",
+          "R_Forearm",
+          "R_Hand",
+          "Spine02",
+          "Spine01",
+          "Waist"
+        ],
+        "worstShareTowardRest": 0.4742
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.19,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0494,
+          0.0106
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 22.081,
+        "peakStrikeTime": 0.476
+      }
+    },
+    "monster-jump": {
+      "clip": "monster-jump",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.28,
+        "takeoff": 0.3,
+        "peak": 0.5,
+        "touchdown": 0.7,
+        "compressionBottom": 0.78
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.1872,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0981,
+          0.2943
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 14.735,
+        "peakStrikeTime": 0.292
+      }
+    },
+    "monster-hurt": {
+      "clip": "monster-hurt",
+      "produced": "authored",
+      "durationSeconds": 0.7,
+      "frames": 22,
+      "loop": false,
+      "semanticKeyTimes": {
+        "flinch": 0.2,
+        "hold": 0.52
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.055,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0343,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 4.306,
+        "peakStrikeTime": 0.048
+      }
+    },
+    "monster-turn": {
+      "clip": "monster-turn",
+      "produced": "authored",
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": true,
+      "semanticKeyTimes": {},
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0151,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0116,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 0.603,
+        "peakStrikeTime": 0.5,
+        "loopClosureStepDegrees": 23.268,
+        "maxInteriorStepDegrees": 27.331
+      }
+    },
+    "monster-dive": {
+      "clip": "monster-dive",
+      "produced": "authored",
+      "durationSeconds": 1,
+      "frames": 31,
+      "loop": false,
+      "semanticKeyTimes": {
+        "crouchEnd": 0.22,
+        "strike": 0.4,
+        "recoverStart": 0.55
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.2,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0883,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 8.523,
+        "peakStrikeTime": 0.4
+      }
+    },
+    "monster-roar": {
+      "clip": "monster-roar",
+      "produced": "authored",
+      "durationSeconds": 2,
+      "frames": 61,
+      "loop": false,
+      "semanticKeyTimes": {
+        "stamp": 0.2,
+        "shakeStart": 0.25,
+        "shakeEnd": 0.8
+      },
+      "measured": {
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.0456,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          0,
+          0.0328
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 5.714,
+        "peakStrikeTime": 0.267
+      }
+    },
+    "monster-death": {
+      "clip": "monster-death",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "buckle": 0.42,
+        "fall": 0.66,
+        "rest": 0.82
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.01,
+          "final": -0.01
+        },
+        "heldFromTime": 0.833,
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.1202,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0774,
+          0.0208
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.917,
+        "peakStrikeTime": 0.646
+      }
+    },
+    "monster-spawn": {
+      "clip": "monster-spawn",
+      "produced": "authored",
+      "durationSeconds": 1.4,
+      "frames": 43,
+      "loop": false,
+      "semanticKeyTimes": {
+        "risen": 0.4,
+        "alert": 0.54,
+        "shake": 0.7,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.046,
+          "final": -0.046
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.08,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.117,
+          0
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.336,
+        "peakStrikeTime": 0.667
+      }
+    },
+    "monster-knockdown": {
+      "clip": "monster-knockdown",
+      "produced": "authored",
+      "durationSeconds": 1.2,
+      "frames": 37,
+      "loop": false,
+      "semanticKeyTimes": {
+        "recoil": 0.1,
+        "buckle": 0.32,
+        "fall": 0.45,
+        "rest": 0.62
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": 0,
+          "final": 0
+        },
+        "heldFromTime": 0.611,
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.1072,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.0548,
+          0.0288
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 1.788,
+        "peakStrikeTime": 0.389
+      }
+    },
+    "monster-getup": {
+      "clip": "monster-getup",
+      "produced": "authored",
+      "durationSeconds": 1.6,
+      "frames": 49,
+      "loop": false,
+      "semanticKeyTimes": {
+        "side": 0.18,
+        "sit": 0.34,
+        "kneel": 0.52,
+        "crouch": 0.72,
+        "stand": 0.86,
+        "idle": 1
+      },
+      "measured": {
+        "floorContactBodyHeights": {
+          "lowestOverClip": -0.046,
+          "final": -0.046
+        },
+        "heldFromTime": 1,
+        "idleMatch": {
+          "maxJointDegrees": 0,
+          "rootOffsetUnits": 0
+        },
+        "maxHipsDriftUnits": 0,
+        "maxMeshCentroidWanderUnits": 0.109,
+        "maxRootBoneTravelUnits": 0,
+        "hipHeightRangeUnits": [
+          -0.1601,
+          0.041
+        ],
+        "peakStrikeSpeedUnitsPerSecond": 2.86,
+        "peakStrikeTime": 0.5
+      }
+    }
+  }
+}

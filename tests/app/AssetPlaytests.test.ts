@@ -1,4 +1,7 @@
 import { afterEach, describe, expect, it } from 'bun:test';
+import { readFileSync } from 'node:fs';
+import { AssetGateError, assertCandidateEntry } from '../../src/app/AssetGate.js';
+import enemySources from '../../asset-source/animation/enemy-attack-sources.json';
 import { CANOPY_PLAYTEST, GREENWAKE_PLAYTEST, assetPlaytestFromSearch, type AssetPlaytest } from '../../src/app/AssetPlaytests.js';
 import { GameApplication } from '../../src/app/GameApplication.js';
 import { PRODUCTION_SESSION, trialsSession } from '../../src/app/SessionConfig.js';
@@ -119,6 +122,21 @@ describe('per-region playtest asset gate', () => {
     expect(recipe.regionId).toBe('whispering-canopy');
     expect(recipe.assetPlacementIds.slice().sort()).toEqual(region.props.map(prop => prop.id).sort());
     expect(recipe.groundSurfaceIds).toHaveLength(9);
+  });
+
+  it('loads authored native clip contracts without admitting unmapped clips or claiming release verification', () => {
+    const entries = new Map<string, AssetManifestEntry>();
+    for (const map of ['greenwake', 'canopy', 'grove', 'moonpine', 'mistveil', 'bamboo', 'later']) {
+      const manifest = JSON.parse(readFileSync(new URL(`../../asset-source/playtests/${map}.json`, import.meta.url), 'utf8')) as AssetManifestEntry[];
+      for (const entry of manifest) entries.set(entry.id, entry);
+    }
+    for (const assetId of Object.keys(enemySources.nativeSources)) {
+      const entry = entries.get(assetId)!;
+      assertCandidateEntry(entry, 'character', 'native attack');
+      const action = entry.requiredActionIds[0]!, missingMapping = { ...entry.actionToClipMapping, [action]: null };
+      expect(() => assertCandidateEntry({ ...entry, actionToClipMapping: missingMapping }, 'character', 'native attack')).toThrow(AssetGateError);
+      expect(() => assertCandidateEntry({ ...entry, evidenceStatus: 'verified' }, 'character', 'native attack')).toThrow(AssetGateError);
+    }
   });
 });
 
