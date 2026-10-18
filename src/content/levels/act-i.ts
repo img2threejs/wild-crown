@@ -22,6 +22,10 @@ export const ACT_I_REGIONS: readonly RegionDefinition[] = [
     id: "greenwake", authoringStatus: "unaccepted", name: "Greenwake", biome: "Forest-edge settlement and the Erya boundary", bounds: { min: v(-56, -1, -52), max: v(108, 14, 88) }, environmentRecipeId: "greenwake-environment",
     props: [
       prop("greenwake-yara-courtyard", "prop-greenwake-houses", v(-12, 0, -4), "ground"),
+      // Reused native river stones: small, non-blocking loose bodies beside the first combat pocket.
+      prop("environment-loose-greenwake-west", "prop-mire-bank-rock", v(5.05, 0, -2.4), "ground", 0.3, v(0.12, 0.12, 0.12)),
+      prop("environment-loose-greenwake-east", "prop-mire-bank-rock", v(7.15, 0, -3.1), "ground", 1.1, v(0.14, 0.12, 0.13)),
+      prop("environment-loose-greenwake-north", "prop-mire-bank-rock", v(6.25, 0, -4.7), "ground", 2.2, v(0.11, 0.1, 0.12)),
       prop("greenwake-erya-edge", "prop-erya-edge-tree", v(17, 0, -9), "ground", -0.22, v(1.5, 1.5, 1.5)),
       prop("greenwake-entry-tree-west", "prop-erya-edge-tree", v(-19, 0, -14), "ground", -0.18, v(0.6, 0.6, 0.6)),
       prop("greenwake-entry-tree-center", "prop-erya-edge-tree", v(-13, 0, -14), "ground", 0.31, v(0.6, 0.6, 0.6)),

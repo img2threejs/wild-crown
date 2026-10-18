@@ -29,6 +29,7 @@ import { createChapterCombatState, resolveChapterTriggers, trapSnapshots, trapAr
 import { appendCue, emitWorldEvent as emitWorldEventTo, pushEvent } from './EngineEffects.js';
 import { liveAttackOf as liveAttackIn, monsterAttackProgress as monsterAttackIn, reactToCompanionHit } from './HitReactions.js';
 import { movableObjectOccupied, movableObjectPathClear, pointInPolygonXZ } from './MovableObjects.js';
+import { createEnvironment, emptyEnvironment, environmentCone, environmentDisk, environmentLane, environmentReachable, impactEnvironment, measureEnvironment, snapshotEnvironment, stepEnvironment, type EnvironmentProp, type EnvironmentState } from './EnvironmentProps.js';
 import { actorCollisionBody, isAerialSpecies, isLargeSpecies } from './ActorBody.js';
 import { ORUN_ENCOUNTER_ID, ORUN_SKY_ECHO_IDS, ORUN_TUNING, ORUN_VINE_ROUTE } from './OrunBossContent.js';
 import { createOrunState, enterOrunPhase, noteOrunCoreStrike, noteOrunHazardDamage, noteOrunPressure, onOrunCleansed, onOrunInterrupted, onOrunPossessionEnded, orunCleanseBlock, orunEvadesStrike, orunGraspResisted, orunSnapshot, orunVineRoute, resetOrunForCheckpoint, updateOrun, type OrunHost } from './OrunPhases.js';
@@ -162,7 +163,8 @@ export interface LiveTelegraph { id: string; attackId: AttackId; sourceId: Actor
 /** One confirmed player hit on a hostile; `stagger` picks how the target's current attack reacts. */
 interface PlayerStrike { action: string; clip: ActionId; damage: number; stopTicks: number; element: AttackElement; stagger: 'interrupt' | 'idle' | 'none'; instinct: number; counter: boolean; direction?: Vec3; /** Weight, poise damage and knockback; derived from the damage when absent. */ hit?: HitSpec }
 export interface CombatEvent { id: string; tick: number; kind: 'cue'|'damage'|'perfect-dodge'|'counter-open'|'action'|'companion'|'traversal'|'world'|'attack-interrupted'; actorId?: ActorId; targetId?: ActorId; actionId?: string; attackId?: AttackId; message: string; worldEvent?: WorldEvent; damage?: { readonly targetId: ActorId; readonly amount: number; readonly position: Vec3; readonly worldTick: number } }
-export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; skillReadyAt?: Partial<Record<PlayerSkillId, number>>; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; wildlifeCombat?:WildlifeCombatState; playerSlow?:PlayerSlow; combatTrial?:CombatTrialState; chapter?: ChapterCombatState; }
+/** Older checkpoints lack local environmental state. */
+export interface EncounterCheckpoint { tick: number; worldTick: number; lastAttackTick: number; attackSelectionWorldOffset?: number; counterUntil: number; actors: CombatActor[]; player: PlayerResources; skillReadyAt?: Partial<Record<PlayerSkillId, number>>; phaseIndex: number; phaseLatch: number; phaseActionFlags: string[]; rewardEmitted: boolean; companions: CompanionRosterState; wildlifeCombat?:WildlifeCombatState; playerSlow?:PlayerSlow; combatTrial?:CombatTrialState; chapter?: ChapterCombatState; environment?:EnvironmentState; }
 export interface PlayerResources { vitality: number; maxVitality: number; instinct: number; mana: number; maxMana: number; }
 export interface PendingImpact { activeAt: number; activeUntil: number; target: ActorId; action: string; range: number; radius: number; damage: number; interrupt: boolean; counter:boolean; startVitality: number; resolved: boolean; interactionId?:string; interactionPosition?:Vec3; }
 /** A companion (Vara) damage strike queued by applyStormTalonStrike; the engine applies it this tick via applyHostileDamage. */
@@ -182,6 +184,7 @@ export interface EngineState {
   /** Accepted skill deadlines on the simulation clock; family variants share the selected cast's deadline. */
   skillReadyAt: Partial<Record<PlayerSkillId, number>>;
   movableObjects: LiveMovableObject[];
+  environment: EnvironmentState;
   sceneColliders: readonly RegionColliderDefinition[];
   combatObstacles: CombatObstacleSnapshot[];
   events: CombatEvent[]; worldEvents: WorldEvent[]; seenWorldKeys: string[]; perfectDodgeKeys: string[]; phaseIndex: number; phaseLatch: number; phaseActionFlags:string[];
@@ -273,6 +276,8 @@ export interface AttackImpact { targetId: ActorId; damage: number; avoided: bool
 
 export class CombatEngine {
   private state: EngineState;
+  /** A restored impact keeps its physical state but cannot re-emit cosmetic chips. Not serialized gameplay state. */
+  private environmentPresentationBaseline = -Infinity;
   /** Scratch step for trial-monster arena clamping. */
   private readonly monsterStep = { dx: 0, dz: 0 };
   private readonly jumpLandings: number[] = [];
@@ -307,11 +312,12 @@ export class CombatEngine {
   };
   /** Current explicit lock state (player-pressed). `undefined` when not actively held/toggled. The implicit `targetId` lives on EngineState. */
   private explicitLock?: { targetId: ActorId; startedTick: number };
-  constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); this.syncKit(); this.refreshCombatSolids(); this.cancelTraversal(); }
+  constructor(seed?: EngineStateSeed) { this.state = seed ? hydrateEngineState(seed) : createEngineState(); this.environmentPresentationBaseline=this.state.worldTick; this.syncKit(); this.refreshCombatSolids(); this.cancelTraversal(); }
   startNewRun(runId: string): void {
     this.resetSideQuestActivities();
     this.dodgeTraining = undefined;
     this.state = createEngineState();
+    this.environmentPresentationBaseline=this.state.worldTick;
     this.state.runId = runId;
     this.explicitLock = undefined;
     this.syncKit();
@@ -448,6 +454,7 @@ export class CombatEngine {
   private kitBeginAction(spec: KitActionSpec): void {
     const s = this.state, player = this.playerActor();
     if (!player) return;
+    s.environment.actionKey = `kit:${++s.environment.sequence}`;
     s.pendingImpact = undefined; s.swing = undefined; s.cast = undefined;
     if (spec.light) { s.lightIndex = spec.light.step; s.lightChainFrom = s.tick + spec.totalTicks - spec.light.chainEarlyTicks; s.lightChainUntil = s.tick + spec.totalTicks + spec.light.chainLateTicks; }
     else s.lightIndex = 0;
@@ -521,12 +528,22 @@ export class CombatEngine {
       spendMana: skill => engine.spendMana(skill),
       restoreMana: amount => { const resources = engine.state.player; resources.mana = Math.min(resources.maxMana, resources.mana + amount); },
       addInstinct: amount => { const resources = engine.state.player; resources.instinct = Math.min(100, resources.instinct + amount); },
-      strikeHostile: (target, strike) => engine.strikeHostile(target, { ...strike, counter: false }),
-      strikeDisk: (centre, radius, strike, hitIds) => engine.kitStrikeArea(actor =>
-        distance2(centre, actor.position) <= radius + actor.radius && !engine.projectileWallHit(vec(centre.x, centre.y + 0.8, centre.z), engine.chestOf(actor), 0.05), strike, hitIds),
-      strikeLane: (from, to, width, strike, hitIds) => engine.kitStrikeArea(actor =>
-        segmentDistanceXZ(from, to, actor.position).distance <= width / 2 + actor.radius && !engine.projectileWallHit(vec(from.x, from.y + 0.9, from.z), engine.chestOf(actor), 0.05), strike, hitIds),
+      strikeHostile: (target, strike) => {
+        const accepted = engine.strikeHostile(target, { ...strike, counter: false });
+        // Projectile sweeps already resolve their physical contacts; callbacks must not award a second prop hit.
+        if (accepted && !strike.direction) engine.impactProps(engine.kitImpactKey(strike, false), strike.damage, target.position, prop => environmentDisk(prop, target.position, .65));
+        return accepted;
+      },
+      strikeDisk: (centre, radius, strike, hitIds) => {
+        engine.impactProps(engine.kitImpactKey(strike, hitIds === undefined), strike.damage, centre, prop => environmentDisk(prop, centre, radius));
+        return engine.kitStrikeArea(actor => distance2(centre, actor.position) <= radius + actor.radius && !engine.projectileWallHit(vec(centre.x, centre.y + 0.8, centre.z), engine.chestOf(actor), 0.05), strike, hitIds);
+      },
+      strikeLane: (from, to, width, strike, hitIds) => {
+        engine.impactProps(engine.kitImpactKey(strike, hitIds === undefined), strike.damage, from, prop => environmentLane(prop, from, to, width));
+        return engine.kitStrikeArea(actor => segmentDistanceXZ(from, to, actor.position).distance <= width / 2 + actor.radius && !engine.projectileWallHit(vec(from.x, from.y + 0.9, from.z), engine.chestOf(actor), 0.05), strike, hitIds);
+      },
       strikeCone: (origin, facing, reach, arcDegrees, strike, hitIds) => {
+        engine.impactProps(engine.kitImpactKey(strike, hitIds === undefined), strike.damage, origin, prop => environmentCone(prop, origin, facing, reach, arcDegrees), facing);
         const full = arcDegrees >= 360, halfArc = Math.cos(arcDegrees * Math.PI / 360);
         return engine.kitStrikeArea(actor => {
           const dx = actor.position.x - origin.x, dz = actor.position.z - origin.z, distance = Math.hypot(dx, dz);
@@ -671,6 +688,9 @@ export class CombatEngine {
     this.state.runId=input.runId;
     this.state.timePolicy='normal';this.state.slowMotionRemainingTicks=0;this.state.slowMotionElapsedTicks=0;this.state.worldTimeScale=1;this.state.accumulator=0;
     this.state.worldFacts=structuredClone(input.worldFacts??{});
+    this.state.environment = createEnvironment(region, new Set(INTERACTIONS.filter(interaction => interaction.regionId === region.id).map(interaction => interaction.targetId)));
+    this.environmentPresentationBaseline=this.state.worldTick;
+    measureEnvironment(this.state.environment, this.state.sceneColliders);
     this.state.movableObjects=region.movableObjects.map(definition=>{
       const settled=input.worldFacts?.[definition.movedFactId]===true&&!ENCOUNTER_RESETTABLE_OBJECT_IDS.includes(definition.id);
       return {objectId:definition.id,position:copy(settled?definition.to:definition.from),phase:settled?'settled':'resting',authored:structuredClone(definition)};
@@ -747,6 +767,7 @@ export class CombatEngine {
     this.state.runId=input.runId;
     // Prepared scene geometry remains authoritative when entering its encounter.
     if(input.actors||mustLoadRegion)this.state.arena=arenaFromRegion(region,this.state.arena.cameraBasis);
+    if (input.actors && mustLoadRegion) this.state.environment = createEnvironment(region, new Set(INTERACTIONS.filter(interaction => interaction.regionId === region.id).map(interaction => interaction.targetId)));
     this.state.combatObstacles = [];
     this.refreshCombatSolids();
     let player=this.playerActor();
@@ -1133,6 +1154,7 @@ export class CombatEngine {
       this.updatePhase();
       this.updateCombatTrial();
     }
+    stepEnvironment(this.state.environment, this.state.arena, this.state.worldTick, worldScale);
     if(this.state.actionRecoveryUntil>0&&this.state.tick>=this.state.actionRecoveryUntil&&this.state.actionId!=='idle')this.finishAction();
     if(slowMotionActive&&this.state.timePolicy==='perfect-dodge-slow'){
       this.state.slowMotionRemainingTicks=Math.max(0,this.state.slowMotionRemainingTicks-1);
@@ -1175,6 +1197,7 @@ export class CombatEngine {
       actors,
       movableObjects:this.movableObjectSnapshots(),
       combatObstacles: structuredClone(this.state.combatObstacles),
+      environmentProps: snapshotEnvironment(this.state.environment, this.environmentPresentationBaseline),
       worldClock:{simulationTick:this.state.tick,worldTick:this.state.worldTick,worldTimeSeconds:this.state.worldTick*FIXED_STEP_SECONDS,timeScale:this.state.worldTimeScale,policy:this.state.timePolicy},
       player:{heroId:this.state.heroId,vitality:this.state.player.vitality,maxVitality:this.state.player.maxVitality,instinct:this.state.player.instinct,mana:this.state.player.mana,maxMana:this.state.player.maxMana,...this.playerSnapshotExtras()},
       skills:this.playerSkills(),
@@ -1213,6 +1236,7 @@ export class CombatEngine {
     this.dodgeTraining = undefined;
     this.cancelTraversal();
     this.state = hydrateEngineState(JSON.parse(serialized) as EngineStateSeed);
+    this.environmentPresentationBaseline=this.state.worldTick;
     this.syncKit();
     this.refreshCombatSolids();
     this.cancelTraversal();
@@ -1248,7 +1272,7 @@ export class CombatEngine {
     return structuredClone(event);
   }
   private captureEncounterCheckpoint(): EncounterCheckpoint {
-    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), skillReadyAt:{...this.state.skillReadyAt}, phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState), wildlifeCombat:structuredClone(this.state.wildlifeCombat), playerSlow:structuredClone(this.state.playerSlow), combatTrial:structuredClone(this.state.combatTrial), chapter:structuredClone(this.state.chapter) };
+    return { tick: this.state.tick, worldTick:this.state.worldTick, lastAttackTick:this.state.lastAttackTick, attackSelectionWorldOffset:this.state.attackSelectionWorldOffset, counterUntil:this.state.counterUntil, actors: this.state.actors.map(cloneActor), player: structuredClone(this.state.player), skillReadyAt:{...this.state.skillReadyAt}, phaseIndex: this.state.phaseIndex, phaseLatch: this.state.phaseLatch, phaseActionFlags:[...this.state.phaseActionFlags], rewardEmitted: this.state.rewardEmitted, companions: structuredClone(this.state.companionState), wildlifeCombat:structuredClone(this.state.wildlifeCombat), playerSlow:structuredClone(this.state.playerSlow), combatTrial:structuredClone(this.state.combatTrial), chapter:structuredClone(this.state.chapter), environment:structuredClone(this.state.environment) };
   }
   resetToCheckpoint(): void {
     this.resetSideQuestActivities();
@@ -1260,6 +1284,10 @@ export class CombatEngine {
     this.setTimePolicy('normal');
     this.state.tick = checkpoint.tick;
     const worldOffset=this.state.worldTick-checkpoint.worldTick;
+    this.environmentPresentationBaseline=this.state.worldTick;
+    this.state.environment = structuredClone(checkpoint.environment ?? emptyEnvironment());
+    for (const prop of this.state.environment.props) if (prop.impactWorldTick >= 0) prop.impactWorldTick += worldOffset;
+    for (const contact of this.state.environment.contacts) contact.touchedAtWorldTick += worldOffset;
     this.state.actors = checkpoint.actors.map(cloneActor);
     for(const actor of this.state.actors){
       actor.recoveringUntil=shiftDeadline(actor.recoveringUntil,worldOffset);
@@ -1426,6 +1454,8 @@ export class CombatEngine {
     this.state.arena.colliders = this.state.arena.colliders.filter(collider => !previous.some(solid => solid.id === collider.id));
     this.state.sceneColliders = colliders.slice();
     this.state.arena.supports = supports.slice();
+    measureEnvironment(this.state.environment, colliders);
+    for (const prop of this.state.environment.props) if (prop.material === 'loose-stone' && prop.impactSerial) prop.sleeping = false;
     this.refreshCombatSolids();
   }
 
@@ -1555,7 +1585,9 @@ export class CombatEngine {
     if(id==='dive'||id==='jump'||id==='light'||sigil)return '';
     if((this.state.heroId==='yara'||this.kit)&&(id==='heavy'||id==='charged_heavy'))return '';
     const target=targetId&&this.actorForId(targetId);
-    if(!target||!target.visible||target.downed||id!=='cleanse'&&target.allegiance!=='hostile'&&!target.possessed)return 'No target';
+    if(!target||!target.visible||target.downed||id!=='cleanse'&&target.allegiance!=='hostile'&&!target.possessed){
+      return (id==='heavy'||id==='charged_heavy')&&this.environmentTarget(id)?'':'No target';
+    }
     if(id==='cleanse'&&(target.corruption??0)<=0&&!target.possessed)return 'No corruption';
     if(id==='cleanse'){const sealed=this.cleanseBlockFor(target);if(sealed)return sealed;}
     if(id==='root_tether'&&!acceptsTether(this.state,target)&&!this.state.telegraphs.some(telegraph=>telegraph.sourceId===target.id&&(telegraph.phase==='windup'||telegraph.phase==='commit')))return 'Wait for windup';
@@ -1611,7 +1643,35 @@ export class CombatEngine {
       const trials=this.trials();
       for(let index=this.state.combatTrial.index;index<trials.length;index++){const gate=trials[index]!.gate;colliders.set(gate.id,gate);}
     }
+    for (const prop of this.state.environment.props) {
+      if (!prop.broken || prop.material !== 'foliage') continue;
+      for (const id of colliders.keys()) if (id.startsWith(`native:${prop.id}:`)) colliders.delete(id);
+    }
     this.state.arena.colliders = [...colliders.values()];
+  }
+
+  private impactProps(key: string, damage: number, origin: Vec3, contains: (prop: EnvironmentProp) => boolean, direction?: Vec3): void {
+    if (impactEnvironment(this.state.environment, this.state.arena, this.state.worldTick, key, damage, origin, contains, direction)) this.refreshCombatSolids();
+  }
+
+  /** No hit-id list means an intentional new pulse; tracked windows retain one group through hit-stop and rendering. */
+  private kitImpactKey(strike: KitStrike, pulse: boolean): string {
+    const key = `kit:${this.state.environment.actionKey}:${strike.action}:${strike.clip}:${strike.damage}:${strike.hit?.poise ?? 0}`;
+    return pulse ? `${key}:${this.state.tick}` : key;
+  }
+
+  /** Environmental heavy casts still need an eligible, reachable object in front of the hero; empty-air rejection remains. */
+  private environmentTarget(action: 'heavy' | 'charged_heavy'): EnvironmentProp | undefined {
+    const player = this.playerActor();
+    if (!player) return undefined;
+    const strike = targetedStrike(action);
+    let best: EnvironmentProp | undefined, bestDistance = Infinity;
+    for (const prop of this.state.environment.props) {
+      const distance = distance2(player.position, prop.position);
+      if (distance >= bestDistance || !environmentCone(prop, player.position, player.facing, strike.range + strike.radius, 110) || !environmentReachable(prop, this.state.arena, player.position)) continue;
+      best = prop; bestDistance = distance;
+    }
+    return best;
   }
 
   private expireCombatObstacles(): void {
@@ -2671,6 +2731,7 @@ export class CombatEngine {
     s.lightIndex=step;s.lightChainFrom=s.tick+spec.ticks-CHAIN_EARLY_TICKS;s.lightChainUntil=s.tick+spec.ticks+CHAIN_LATE_TICKS;
     s.actionId=action;s.actionUntil=s.tick+spec.ticks-LIGHT_LOCK_MARGIN_TICKS;s.actionRecoveryUntil=s.tick+spec.ticks;s.actionCancelable=false;
     s.pendingImpact=undefined;s.cast=undefined;
+    s.environment.actionKey = `light:${++s.environment.sequence}`;
     s.swing={step:step as PlayerSwing['step'],startedTick:s.tick,hitIds:[],counter,waveSpawned:false,slashed:false,baseFacing:copy(player.facing)};
     player.actionId=this.playerClip(action);player.actionStartedTick=s.tick;player.normalizedTime=0;player.actionEndsTick=s.tick+spec.ticks;
     player.phase='anticipation';player.targetId=target?.id;player.velocity=vec(0,0,0);
@@ -2729,6 +2790,7 @@ export class CombatEngine {
       if(this.spendManaAmount(CRESCENT_WAVE.manaCost))this.spawnCrescentWave(player);
     }
     if(elapsed>=spec.activeFrom&&elapsed<=spec.activeTo){
+      this.impactProps(s.environment.actionKey ?? `light:${swing.startedTick}`, spec.damage, player.position, prop => environmentCone(prop, player.position, player.facing, spec.reach, spec.arc * 180 / Math.PI), player.facing);
       const halfArc=Math.cos(spec.arc/2),full=spec.arc>=2*Math.PI;
       for(const actor of s.actors){
         if(!this.isPlayerHostileTarget(actor)||swing.hitIds.includes(actor.id))continue;
@@ -2842,6 +2904,7 @@ export class CombatEngine {
       if(!target)continue;
       const loss=this.applyHostileDamage(target,strike.damage,strike.sourceId,strike.attackId,strike.attackId as AttackId);
       if(loss===null)continue;
+      if (loss > 0) this.impactProps(`companion:${strike.sourceId}:${strike.attackId}:${this.state.worldTick}`, loss, target.position, prop => environmentDisk(prop, target.position, .75), vec(strike.dirX, 0, strike.dirZ));
       reactToCompanionHit(this.state,target,hit('light',strike.poise,strike.knockback),strike.dirX,strike.dirZ);
     }
   }
@@ -3020,6 +3083,7 @@ export class CombatEngine {
   private heartrootBurst(position:Vec3,radius:number,damage:number,clip:string):void{
     const player=this.playerActor();
     if(!player)return;
+    this.impactProps(`heartroot:${clip}:${this.state.tick}`, damage, position, prop => environmentDisk(prop, position, radius));
     this.queuePresentationCue({kind:'bloom',phase:'hit',actorId:player.id,actionId:clip as ActionId,position:copy(position),footprint:{width:radius*2,length:radius*2},durationTicks:36,element:'heartroot',intensity:1.5,priority:'essential',shape:'burst'});
     for(const actor of this.state.actors){
       if(!this.isPlayerHostileTarget(actor)||distance2(position,actor.position)>radius+actor.radius)continue;
@@ -3032,6 +3096,7 @@ export class CombatEngine {
   private heartrootLane(player:CombatActor,range:number,width:number,damage:number,beam:boolean):void{
     const from=this.chestOf(player),destination=vec(from.x+player.facing.x*range,from.y,from.z+player.facing.z*range);
     const to=this.projectileWallHit(from,destination,width/2)??destination;
+    this.impactProps(`heartroot-lane:${this.state.tick}`, damage, player.position, prop => environmentLane(prop, from, to, width), player.facing);
     this.queuePresentationCue({kind:beam?'beam':'root-eruption',phase:'active',actorId:player.id,actionId:player.actionId,position:vec((from.x+to.x)/2,player.position.y,(from.z+to.z)/2),from,to,footprint:{width,length:distance2(from,to),angleRadians:yawOf(player.facing)},durationTicks:30,element:'heartroot',intensity:1.5,priority:'essential',shape:beam?'beam':'trail'});
     for(const actor of this.state.actors){
       if(!this.isPlayerHostileTarget(actor)||segmentDistanceXZ(from,to,actor.position).distance>width/2+actor.radius)continue;
@@ -3173,6 +3238,7 @@ export class CombatEngine {
       }
       if(first){
         const impact=vec(from.x+(end.x-from.x)*firstT,from.y+(end.y-from.y)*firstT,from.z+(end.z-from.z)*firstT);
+        this.impactProps(`projectile:${projectile.id}`, projectile.damage, from, prop => environmentLane(prop, from, impact, projectile.radius * 2), projectile.direction);
         this.queueProjectileImpact(projectile,impact,first.id,1);
         projectile.position=impact;
         if(projectile.callbackId)this.kit?.onProjectileHit?.(projectile,first,impact);
@@ -3191,6 +3257,7 @@ export class CombatEngine {
         else this.strikeHostile(actor,{action:'crescent_wave',clip:impactAction,damage:projectile.damage,stopTicks:CRESCENT_WAVE.hitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false,direction:projectile.direction,hit:AREN_HITS.crescent_wave});
       }
     }
+    this.impactProps(`projectile:${projectile.id}`, projectile.damage, from, prop => environmentLane(prop, from, end, projectile.radius * 2), projectile.direction);
     if(wall){this.queueProjectileImpact(projectile,wall,undefined,0.6);finished=true;}
     projectile.position=end;
     projectile.ageTicks+=worldScale;
@@ -3246,6 +3313,7 @@ export class CombatEngine {
     const s=this.state,pending=s.pendingLightning,player=this.playerActor();
     if(!pending||!player||s.tick<pending.atTick)return;
     s.pendingLightning=undefined;
+    this.impactProps(`thunder:${s.tick}`, THUNDER_CLEAVE.damage, pending.position, prop => environmentDisk(prop, pending.position, THUNDER_CLEAVE.radius));
     this.queuePresentationCue({kind:'lightning',phase:'active',actorId:player.id,position:copy(pending.position),footprint:{width:THUNDER_CLEAVE.radius*2,length:THUNDER_CLEAVE.radius*2},durationTicks:THUNDER_CLEAVE.cueTicks,intensity:2,element:'lightning',priority:'essential',shape:'burst'});
     for(const actor of s.actors){
       if(!this.isPlayerHostileTarget(actor)||distance2(pending.position,actor.position)>THUNDER_CLEAVE.radius+actor.radius)continue;
@@ -3328,6 +3396,7 @@ export class CombatEngine {
       const mark=marks[index]!;
       if(s.tick<mark.detonateAtTick){marks[kept++]=mark;continue;}
       this.queuePresentationCue({kind:'judgement-mark',phase:'hit',actorId:s.playerId,scopeId:mark.id,position:copy(mark.position),footprint:{width:JUDGEMENT.markRadius,length:JUDGEMENT.markRadius,angleRadians:mark.angleRadians},intensity:1.2,element:'arcane',priority:'essential',shape:'burst'});
+      this.impactProps(`mark:${mark.id}`, JUDGEMENT.markDamage, mark.position, prop => environmentDisk(prop, mark.position, JUDGEMENT.markRadius));
       for(const actor of s.actors){
         if(!this.isPlayerHostileTarget(actor)||distance2(mark.position,actor.position)>JUDGEMENT.markRadius+actor.radius)continue;
         this.strikeHostile(actor,{action:'judgement',clip:ACTION_CLIPS.judgement!,damage:JUDGEMENT.markDamage,stopTicks:JUDGEMENT.detonationHitStopTicks,element:'arcane',stagger:'none',instinct:0,counter:false,hit:AREN_HITS.judgement});
@@ -3364,24 +3433,29 @@ export class CombatEngine {
       return this.startHeartrootCast(player,action==='heavy'?'root-spike':'root-eruption',action==='heavy'?HEARTROOT.spikeTicks:HEARTROOT.eruptionTicks);
     }
     if(this.skillReason(playerSkillId(action),targetId,counter))return false;
-    const target=targetId===undefined?undefined:this.actorForId(targetId);
-    if(!target||!target.visible||target.downed)return false;
-    if(action==='cleanse'&&(target.corruption??0)<=0&&!target.possessed)return false;
+    const candidate=targetId===undefined?undefined:this.actorForId(targetId);
+    const heavy=action==='heavy'||action==='charged_heavy';
+    const actorTarget=candidate&&candidate.visible&&!candidate.downed&&(!heavy||candidate.allegiance==='hostile'||candidate.possessed)?candidate:undefined;
+    const target=actorTarget??(heavy?this.environmentTarget(action==='charged_heavy'?'charged_heavy':'heavy'):undefined);
+    if(!target)return false;
+    if(action==='cleanse'&&(!actorTarget||(actorTarget.corruption??0)<=0&&!actorTarget.possessed))return false;
     if(action==='root_tether'){
-      const telegraph=this.state.telegraphs.find(item=>item.sourceId===target.id&&(item.phase==='windup'||item.phase==='commit'));
-      if(!telegraph&&!acceptsTether(this.state,target))return false;
+      if(!actorTarget)return false;
+      const telegraph=this.state.telegraphs.find(item=>item.sourceId===actorTarget.id&&(item.phase==='windup'||item.phase==='commit'));
+      if(!telegraph&&!acceptsTether(this.state,actorTarget))return false;
     }
     if(this.kit&&action==='root_tether'){
-      if(!this.spendMana('root_tether'))return false;
+      if(!actorTarget||!this.spendMana('root_tether'))return false;
       this.state.targetId=target.id;
-      const accepted=this.kit.startTether(target);
+      const accepted=this.kit.startTether(actorTarget);
       if(!accepted)delete this.state.skillReadyAt.root_tether;
       return accepted;
     }
     if(!this.spendMana(playerSkillId(action)))return false;
-    this.state.targetId=target.id;this.state.lightIndex=0;
+    this.state.targetId=actorTarget?.id;this.state.lightIndex=0;
+    this.state.environment.actionKey=`heavy:${++this.state.environment.sequence}`;
     const attack=targetedStrike(action),duration=attack.ticks;
-    if(this.state.heroId==='aren'&&(action==='heavy'||action==='charged_heavy'))this.beginLunge(action==='heavy'?HEAVY_LUNGE:CHARGED_LUNGE,attack.activeAt,target.id);
+    if(actorTarget&&this.state.heroId==='aren'&&heavy)this.beginLunge(action==='heavy'?HEAVY_LUNGE:CHARGED_LUNGE,attack.activeAt,actorTarget.id);
     this.state.actionId=action;
     this.state.actionUntil=this.state.tick+duration;
     this.state.actionRecoveryUntil=this.state.actionUntil+attack.recoveryTicks;
@@ -3390,14 +3464,14 @@ export class CombatEngine {
     player.actionStartedTick=this.state.tick;player.normalizedTime=0;
     player.actionEndsTick=this.state.actionRecoveryUntil;
     player.phase='anticipation';
-    player.targetId=target.id;
+    player.targetId=actorTarget?.id;
     player.facing=facingFrom(sub(target.position,player.position));
     const activeAt=this.state.tick+attack.activeAt;
     const attackId=`aren-${action}` as AttackId;
     const cue=action==='cleanse'?'Root light gathers around the target.':'Staff draws back before the strike.';
     this.state.telegraphs.push({id:`${this.state.runId}:${this.state.tick}:${action}`,attackId,sourceId:player.id,targetPosition:copy(target.position),phase:'windup',remainingTicks:activeAt-this.state.tick,cue});
     this.emit('cue',action==='cleanse'?'Cleanse: stay within reach until the pulse completes.':`Aren prepares ${action.replaceAll('_',' ')}.`,player.id,target.id,action,attackId);
-    this.state.pendingImpact={activeAt,activeUntil:activeAt+6,target:target.id,action,range:attack.range,radius:attack.radius,damage:attack.damage,interrupt:attack.interrupt,counter,startVitality:this.state.player.vitality,resolved:false};
+    this.state.pendingImpact={activeAt,activeUntil:activeAt+6,target:target.id,action,range:attack.range,radius:attack.radius,damage:attack.damage,interrupt:attack.interrupt,counter,startVitality:this.state.player.vitality,resolved:false,...(!actorTarget?{interactionPosition:copy(target.position)}:{})};
     if(action==='cleanse')this.kit?.onSharedSkill?.('cleanse');
     return true;
   }
@@ -3690,6 +3764,7 @@ export class CombatEngine {
     for(const hazard of this.state.hazards){
       if(this.state.worldTick<hazard.activeFrom||this.state.worldTick>=hazard.activeUntil)continue;
       const attack=ATTACKS[hazard.attackId];
+      if (hazard.damage > 0 && hazard.attackId !== 'orun-crown-possession') this.impactProps(`hazard:${hazard.id}`, Math.round(hazard.damage * (hazard.damageScale ?? 1)), hazard.kind === 'cone' ? hazard.origin : hazard.target, prop => hazardThreatens(hazard, prop), hazard.direction);
       if(!hazard.activePresentationEmitted){
         hazard.activePresentationEmitted=true;
         this.spawnCombatObstacles(hazard, attack);
@@ -3803,7 +3878,10 @@ export class CombatEngine {
   private resolvePlayerImpact(p:PendingImpact):void{
     if(this.playerIsDown())return;
     const player=this.playerActor();
-    if(player&&(p.action==='heavy'||p.action==='charged_heavy'))this.queueHeavySlash(player,p);
+    if(player&&(p.action==='heavy'||p.action==='charged_heavy')){
+      this.impactProps(this.state.environment.actionKey ?? `heavy:${p.activeAt}`, p.damage, player.position, prop => environmentCone(prop, player.position, player.facing, p.range+p.radius, p.action==='charged_heavy'?160:137), player.facing);
+      this.queueHeavySlash(player,p);
+    }
     const target=this.state.actors.find(actor=>actor.id===p.target);
     const objectTarget=!target&&(p.action==='heavy'||p.action==='charged_heavy')?this.state.movableObjects.find(object=>object.objectId===p.target&&object.phase==='resting'&&object.authored.playerInteractionId===p.interactionId):undefined;
     const targetPosition=target?.position??objectTarget?.position??p.interactionPosition;
@@ -4691,6 +4769,7 @@ export function createEngineState():EngineState{
     schemaVersion:3,tick:0,worldTick:0,worldTimeScale:1,timePolicy:'normal',slowMotionRemainingTicks:0,slowMotionElapsedTicks:0,accumulator:0,regionId:'greenwake',runId:'unstarted',encounter:null,worldFacts:{},
     actors:[player],playerId:'aren',heroId:'aren',player:{vitality:PLAYER_MAX_VITALITY,maxVitality:PLAYER_MAX_VITALITY,instinct:0,mana:MAX_MANA,maxMana:MAX_MANA},
     movableObjects:[],
+    environment:emptyEnvironment(),
     skillReadyAt:{},
     sceneColliders:[],combatObstacles:[],
     arena:{bounds:{min:vec(-12,0,-12),max:vec(12,12,12)},groundY:0,surfaces:[],colliders:[],routes:[],obstacles:[],cameraBasis:{forward:vec(0,0,-1),right:vec(1,0,0)},traversalAffordances:[]},
@@ -4724,6 +4803,7 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   state.arena={...base.arena,...seed.arena};
   state.sceneColliders=structuredClone(seed.sceneColliders??[]);
   state.combatObstacles=structuredClone(seed.combatObstacles??[]);
+  state.environment=structuredClone(seed.environment??emptyEnvironment());
   state.hazards=seed.hazards??[];
   state.telegraphs=seed.telegraphs??[];
   state.events=seed.events??[];
@@ -4842,7 +4922,7 @@ function jumpPosition(from:Vec3,to:Vec3,elapsed:number,flightTicks:number,apex:n
   return vec(from.x+(to.x-from.x)*u,from.y+(to.y-from.y)*u+4*apex*u*(1-u),from.z+(to.z-from.z)*u);
 }
 function add(a:Vec3,b:Vec3):Vec3{return{x:a.x+b.x,y:a.y+b.y,z:a.z+b.z};}
-function hazardThreatens(h:LiveHazard,a:CombatActor):boolean{
+function hazardThreatens(h:LiveHazard,a:Pick<CombatActor,'position'|'collisionHeight'|'radius'>):boolean{
   const bodyTop=a.position.y+a.collisionHeight;
   const groundY=ATTACKS[h.attackId]?.element?h.target.y:h.origin.y;
   const hazardBottom=groundY-.15;

@@ -86,5 +86,5 @@ export function glbStaticBatch(playtest: string, placement: WorldAssetPlacement)
   mesh.setMatrixAt(0, placed.multiply(model));
   const root = new Group();
   root.add(mesh);
-  return { assetId: placement.assetId, root, instanceCount: 1, drawnInstanceCount: 1, lodIds: [], setPlacementVisible() {}, updateOcclusion() {}, dispose() { geometry.dispose(); } };
+  return { assetId: placement.assetId, root, instanceCount: 1, drawnInstanceCount: 1, lodIds: [], setPlacementVisible() {}, setPlacementResponse() {}, updateOcclusion() {}, dispose() { geometry.dispose(); } };
 }

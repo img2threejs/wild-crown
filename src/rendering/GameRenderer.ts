@@ -21,6 +21,7 @@ import { arenaFromRegion, groundHeightAt, type CombatArena, type SupportField } 
 import { ContactShadows, GROUNDED_FADE, HOVER_FADE, contactShadowOpacity, measureFootprint, type ContactFootprint } from './ContactShadows';
 import { FootGrounding, groundNormalAt, type GroundHeightFn } from './FootGrounding';
 import { CombatObstacleVisuals } from '../effects/CombatObstacleVisuals';
+import { EnvironmentPropVisuals } from './EnvironmentPropVisuals';
 import { ActorHitFlash } from '../effects/vfx/HitFlash';
 import { ActorBodies } from '../effects/vfx/ActorBounds';
 import { PostFX } from './PostFX';
@@ -48,6 +49,7 @@ const SPIN_ACTION_ID = 'aren-light-3';
 /** The player's steering heading turns at most 16 rad/s (0.27 rad per tick); a per-tick turn up to this is followed exactly, a larger one (an attack or dodge setting the heading outright) eases in. */
 const STEERED_TURN_MAX = 0.4;
 const EMPTY_COMBAT_OBSTACLES = Object.freeze([]);
+const EMPTY_ENVIRONMENT_PROPS = Object.freeze([]);
 /** Actions during which the feet leave the ground by design (jumps, rolls, vaults, slides, flips, defeat): no foot grounding. */
 const OFF_GROUND_ACTION = /jump|air-step|dive|roll|vault|slide|cartwheel|handspring|defeat/;
 /** Hero actions that are plain locomotion or standing: the gaze and the stance foot-lock run only in these. */
@@ -143,6 +145,7 @@ export class GameRenderer {
   private readonly resizeObserver: ResizeObserver;
   private afterimages: PoseAfterimages | null = null;
   private readonly obstacleVisuals: CombatObstacleVisuals;
+  private readonly propResponses: EnvironmentPropVisuals;
   private readonly orunPresentation: OrunPresentation;
   private nativeSolidEntries: NativeSolidCollider[] = [];
   private readonly sceneColliders: RegionColliderDefinition[] = [];
@@ -228,6 +231,7 @@ export class GameRenderer {
     this.cameraDirector = new CameraDirector(this.scene);
     this.camera = this.cameraDirector.camera;
     this.obstacleVisuals = new CombatObstacleVisuals(this.scene);
+    this.propResponses = new EnvironmentPropVisuals(this.scene, this.placementBatches);
     this.orunPresentation = new OrunPresentation(this.scene);
     this.postFx = new PostFX(this.renderer, this.scene, this.camera, { pixelRatioCap: this.pixelRatioCap });
     this.scene.add(new AmbientLight(0xffffff, 0.05));
@@ -529,6 +533,7 @@ export class GameRenderer {
       this.entityRoots.clear();
       this.actorRoots.clear();
       this.actorManifests.clear();
+      this.propResponses.clear();
       this.placementBatches.clear();
       this.movableProps.clear();
       this.migrationGates.clear();
@@ -823,6 +828,7 @@ export class GameRenderer {
     if (this.atmosphere) updateRegionShafts(this.postFx, this.atmosphere, this.camera);
     if (player) this.afterimages?.update(player, combat.worldClock, this.reducedMotion || !this.motionBlur);
     this.obstacleVisuals.update(combat.combatObstacles ?? EMPTY_COMBAT_OBSTACLES, combat.worldClock, this.reducedMotion);
+    if (this.propResponses.update(combat.environmentProps ?? EMPTY_ENVIRONMENT_PROPS, combat.worldClock, this.reducedMotion)) this.applyPlacementVisibility();
     this.orunPresentation.sync(combat, this.reducedMotion);
     this.trialGates?.update(combat.trialGates ?? []);
     this.trialGates?.animate(this.renderWorldTimeSeconds, active?.root.position ?? player?.position);
@@ -1346,6 +1352,7 @@ export class GameRenderer {
     this.orunWeapon = null;
     this.hitFlash.dispose();
     this.obstacleVisuals.dispose();
+    this.propResponses.dispose();
     this.orunPresentation.dispose();
     this.trialGates?.dispose(); this.trialGates = null;
     this.waystone?.dispose(); this.waystone = null;
@@ -1422,6 +1429,7 @@ export class GameRenderer {
     this.sceneSupports.length = 0;
     for (const entry of this.nativeSolidEntries) {
       if (entry.visibleWhen && this.worldFacts[entry.visibleWhen] !== true) continue;
+      if (this.propResponses.brokenFoliageIds.has(entry.placementId)) continue;
       this.sceneColliders.push(entry.collider);
       if (entry.support && !this.sceneSupports.includes(entry.support)) this.sceneSupports.push(entry.support);
     }
