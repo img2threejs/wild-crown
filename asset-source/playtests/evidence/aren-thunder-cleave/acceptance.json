@@ -153,8 +153,9 @@
       "referenceHardwareCertified": false,
       "gpuMeasured": false,
       "totalFrameTimeMeasured": false,
-      "afterCaptureOverlappedBackgroundBuild": true,
-      "notControlledBenchmark": true
+      "notControlledBenchmark": true,
+      "backgroundBuildStartedBeforeCapture": true,
+      "machineLoadIsolated": false
     }
   },
   "scenarios": {
@@ -388,7 +389,8 @@
       "command": "bun test tests/effects/thunder-cleave.test.ts tests/effects/warden-fx.test.ts tests/effects/hit-impact.test.ts tests/combat/warden-arsenal.test.ts tests/rendering/aren-clip-sim-timing.test.ts",
       "pass": 82,
       "fail": 0,
-      "expectCalls": 8675
+      "expectCalls": 8675,
+      "elapsedSeconds": 4.81
     },
     "build": {
       "command": "npm run build",
@@ -425,11 +427,11 @@
     "expandedTimeoutCause": "Not established. Effects and native get-up suites passed separately; no full-suite pass claim.",
     "releaseValidatorUnit": {
       "command": "node --test tests/release/*.test.mjs",
-      "runtime": "Node 22.22.3",
       "pass": 236,
       "fail": 0,
       "elapsedSeconds": 9.87,
-      "notProductionReleaseCertification": true
+      "notProductionReleaseCertification": true,
+      "runtime": "Node 22.22.3"
     }
   },
   "nativeAssets": [
@@ -494,5 +496,7 @@
     "No automatic art approval or roster rollout",
     "Expanded combined runners timed out at 180s/90s; root cause not established. Effects 320/0 and native get-up 13/0 passed separately. Test counts overlap."
   ],
-  "createdAt": "2026-10-18T05:16:09.146Z"
+  "createdAt": "2026-10-18T05:16:09.146Z",
+  "pullRequest": "https://github.com/img2threejs/wild-crown/pull/127",
+  "implementationCommit": "65a2d4ef5abe1b741aee0d35ddde1cd7a6875f98"
 }
