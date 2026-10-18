@@ -1,7 +1,7 @@
-import { AnimationClip, BufferAttribute, BufferGeometry, Group, InstancedBufferAttribute, InstancedMesh, InterleavedBuffer, InterleavedBufferAttribute, LoadingManager, Matrix4, Object3D, PropertyBinding, Quaternion, SkinnedMesh, Texture, Vector3, type Camera, type Material } from 'three';
+import { AnimationClip, BufferAttribute, BufferGeometry, Euler, Group, InstancedBufferAttribute, InstancedMesh, InterleavedBuffer, InterleavedBufferAttribute, LoadingManager, Matrix4, Object3D, PropertyBinding, Quaternion, SkinnedMesh, Texture, Vector3, type Camera, type Material } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
-import type { AssetManifestEntry, WorldAssetPlacement } from '../game/contracts';
+import type { AssetManifestEntry, EnvironmentPropSnapshot, WorldAssetPlacement } from '../game/contracts';
 import { DEFAULT_FOLIAGE_LIMITS, InstanceVisibility, type FoliageLimits } from './InstanceVisibility';
 import { AnimationController } from './AnimationController';
 import { simplifyCandidateGeometry } from './CandidateGeometrySimplifier';
@@ -13,6 +13,8 @@ export interface NativeAssetInstance { readonly assetId: string; readonly root: 
 export interface NativeStaticBatch {
   readonly assetId: string; readonly root: Group; readonly instanceCount: number; readonly lodIds: readonly string[];
   setPlacementVisible(placementId: string, visible: boolean): void; updateOcclusion(camera: Camera, target: Vector3, dt?: number): void; dispose(): void;
+  /** Projects an authoritative local response onto one instance; undefined restores its authored pose/material. */
+  setPlacementResponse(placementId: string, response: EnvironmentPropSnapshot | undefined, reducedMotion: boolean): void;
   /** Instances drawn right now (neither hidden by a world fact nor culled by the foliage view-distance limit). */
   readonly drawnInstanceCount: number;
   /** Pushes the current occlusion fade forward one frame; returns whether any alpha was re-uploaded. Allocation free. */
@@ -94,6 +96,14 @@ export class NativeAssetLoader {
     const staticMeshes: InstancedMesh[] = [];
     const attributes: InstancedBufferAttribute[] = [];
     const matricesByMesh: Matrix4[][] = [];
+    const baseMatricesByMesh: Matrix4[][] = [];
+    const damage = new Float32Array(placements.length);
+    const damageAttributes: InstancedBufferAttribute[] = [];
+    const responseValues = new Float64Array(placements.length * 7);
+    const responseMatrix = new Matrix4(), responseBack = new Matrix4();
+    const responseRotation = new Quaternion(), responseEuler = new Euler();
+    const responsePosition = new Vector3(), responseScale = new Vector3();
+    let responseBoundsExpanded = false;
     const placementIndices = new Map(placements.map((placement, index) => [placement.id, index]));
     const positions = placements.map((placement) => new Vector3(placement.position.x, placement.position.y, placement.position.z));
     const visibility = new InstanceVisibility(positions);
@@ -110,6 +120,9 @@ export class NativeAssetLoader {
         const geometry = shallowCloneGeometry(mesh.geometry);
         const attribute = new InstancedBufferAttribute(visibility.alpha, 1);
         geometry.setAttribute('instanceOpacity', attribute);
+        const damageAttribute = new InstancedBufferAttribute(damage, 1);
+        geometry.setAttribute('instanceDamage', damageAttribute);
+        damageAttributes.push(damageAttribute);
         if (variationArrays) {
           // Three-component tint (rgb), three-component scale jitter (x, y, z), two-component lean (x, z) and a phase float. The
           // vertex shader reads them when `instanceTint` is bound; setting the attribute unconditionally is safe even when the
@@ -149,7 +162,7 @@ export class NativeAssetLoader {
           const sz = placement.scale.z * (variation ? variation[2]! : 1);
           const scale = new Vector3(sx, sy, sz);
           const matrix = new Matrix4().compose(positions[index]!, rotation, scale).multiply(localMatrix);
-          matrices.push(matrix.clone());
+          matrices.push(matrix);
           batch.setMatrixAt(index, matrix);
         }
         batch.instanceMatrix.needsUpdate = true;
@@ -157,6 +170,7 @@ export class NativeAssetLoader {
         staticMeshes.push(batch);
         attributes.push(attribute);
         matricesByMesh.push(matrices);
+        baseMatricesByMesh.push([]);
       });
       if (!staticMeshes.length) throw new NativeAssetError(manifest.id, 'GLB has no static mesh for instancing');
     } catch (error) {
@@ -184,6 +198,48 @@ export class NativeAssetLoader {
         const index = placementIndices.get(placementId);
         if (released || index === undefined) return;
         if (visibility.setFactVisible(index, visible)) writeInstance(index);
+      },
+      setPlacementResponse: (placementId, response, reducedMotion) => {
+        const index = placementIndices.get(placementId);
+        if (released || index === undefined) return;
+        const placement = placements[index]!, base = placement.position;
+        const offset = response?.offset;
+        const dx = offset?.x ?? 0, dy = offset?.y ?? 0, dz = offset?.z ?? 0;
+        const motionScale = reducedMotion && response?.material !== 'loose-stone' ? .2 : 1;
+        const tiltX = (response?.tiltX ?? 0) * motionScale, tiltZ = (response?.tiltZ ?? 0) * motionScale;
+        const amount = response?.damage ?? 0;
+        const crush = response?.broken ? response.material === 'foliage' ? .22 : response.material === 'loose-stone' ? .82 : 1 : 1;
+        const o = index * 7;
+        // Zero means the authored scale; this cache also skips repeated paused/culled-frame uploads.
+        if (responseValues[o] === dx && responseValues[o + 1] === dy && responseValues[o + 2] === dz
+          && responseValues[o + 3] === tiltX && responseValues[o + 4] === tiltZ && responseValues[o + 5] === amount && responseValues[o + 6] === crush - 1) return;
+        const damageChanged = responseValues[o + 5] !== amount;
+        responseValues[o] = dx; responseValues[o + 1] = dy; responseValues[o + 2] = dz;
+        responseValues[o + 3] = tiltX; responseValues[o + 4] = tiltZ; responseValues[o + 5] = amount; responseValues[o + 6] = crush - 1;
+        responseRotation.setFromEuler(responseEuler.set(tiltX, 0, tiltZ));
+        responsePosition.set(base.x + dx, base.y + dy, base.z + dz);
+        const coreScale = response?.broken && response.material === 'loose-stone' ? .82 : 1;
+        responseScale.set(coreScale, crush, coreScale);
+        responseMatrix.compose(responsePosition, responseRotation, responseScale);
+        responseBack.makeTranslation(-base.x, -base.y, -base.z);
+        responseMatrix.multiply(responseBack);
+        positions[index]!.set(base.x + dx, base.y + dy, base.z + dz);
+        for (let meshIndex = 0; meshIndex < staticMeshes.length; meshIndex++) {
+          const matrix = matricesByMesh[meshIndex]![index]!;
+          const originals = baseMatricesByMesh[meshIndex]!;
+          const original = originals[index] ?? (originals[index] = matrix.clone());
+          matrix.copy(original).premultiply(responseMatrix);
+          if (!responseBoundsExpanded) {
+            const sphere = staticMeshes[meshIndex]!.boundingSphere;
+            if (sphere) sphere.radius += 6; // Simulation bounds loose travel to 4 m; rooted deflection stays below this margin.
+          }
+        }
+        responseBoundsExpanded = true;
+        if (damageChanged) {
+          damage[index] = amount;
+          for (const attribute of damageAttributes) attribute.needsUpdate = true;
+        }
+        writeInstance(index);
       },
       updateOcclusion: (camera, target, dt) => {
         if (released) return;
@@ -439,8 +495,8 @@ function cloneFadingMaterial(
         ? `\nuniform float uWorldWind;\nuniform float uReducedMotion;\nuniform float uFoliageMeshHeight;\nvarying float vSwayHeight;`
         : '';
       shader.vertexShader = shader.vertexShader
-        .replace('#include <common>', '#include <common>\nattribute float instanceOpacity;\nvarying float vInstanceOpacity;' + variationHeader + windHeader)
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvInstanceOpacity = instanceOpacity;' + (hasVariation
+        .replace('#include <common>', '#include <common>\nattribute float instanceOpacity;\nattribute float instanceDamage;\nvarying float vInstanceOpacity;\nvarying float vInstanceDamage;\nvarying vec3 vDamagePosition;' + variationHeader + windHeader)
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvInstanceOpacity = instanceOpacity;vInstanceDamage = instanceDamage;vDamagePosition = position;' + (hasVariation
           ? `
 vInstanceTint = instanceTint;
 vInstanceScaleJitter = instanceScaleJitter;
@@ -469,8 +525,8 @@ vec3 leaned = vec3(cz * transformed.x - sz * transformed.y, sz * transformed.x +
 transformed = vec3(leaned.x, cx * leaned.y - sx * leaned.z, sx * leaned.y + cx * leaned.z);`
           : ''));
       shader.fragmentShader = shader.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying float vInstanceOpacity;' + (hasVariation ? '\nvarying vec3 vInstanceTint;varying vec3 vInstanceScaleJitter;varying vec2 vInstanceLean;varying float vInstancePhase;' : '') + (hasWind ? '\nvarying float vSwayHeight;' : '') + (dither ? '\n' + DITHER_GLSL : ''))
-        .replace('#include <color_fragment>', (hasVariation ? 'diffuseColor.rgb *= vInstanceTint;' : '') + '\n#include <color_fragment>')
+        .replace('#include <common>', '#include <common>\nvarying float vInstanceOpacity;\nvarying float vInstanceDamage;\nvarying vec3 vDamagePosition;' + (hasVariation ? '\nvarying vec3 vInstanceTint;varying vec3 vInstanceScaleJitter;varying vec2 vInstanceLean;varying float vInstancePhase;' : '') + (hasWind ? '\nvarying float vSwayHeight;' : '') + (dither ? '\n' + DITHER_GLSL : ''))
+        .replace('#include <color_fragment>', (hasVariation ? 'diffuseColor.rgb *= vInstanceTint;' : '') + '\n#include <color_fragment>\nfloat impactScar = smoothstep(0.89, 0.99, abs(sin(vDamagePosition.x * 21.0 + vDamagePosition.z * 9.0 + sin(vDamagePosition.y * 17.0) * 2.0)));\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.17, 0.12, 0.085), vInstanceDamage * (0.28 + 0.65 * impactScar));')
         .replace('#include <opaque_fragment>', (dither ? 'if (vInstanceOpacity < 0.999 && vInstanceOpacity <= wcBayer(gl_FragCoord.xy)) discard;' : 'diffuseColor.a *= vInstanceOpacity;') + '\n#include <opaque_fragment>');
       if (hasWind) {
         shader.uniforms.uWorldWind = worldWind;
@@ -479,7 +535,7 @@ transformed = vec3(leaned.x, cx * leaned.y - sx * leaned.z, sx * leaned.y + cx *
         shader.uniforms.uFoliageMeshHeight = { value: Math.max(FOLIAGE_MESH_HEIGHT_FALLBACK, meshHeight) };
       }
     };
-    const programKey = 'wild-crown-instance-' + (hasVariation ? 'var-' : 'flat-') + (hasWind ? 'wind-' : '') + (dither ? 'dither-fade-v1' : 'occlusion-fade-v3');
+    const programKey = 'wild-crown-instance-damage-v1-' + (hasVariation ? 'var-' : 'flat-') + (hasWind ? 'wind-' : '') + (dither ? 'dither-fade-v1' : 'occlusion-fade-v3');
     shaderMaterial.customProgramCacheKey = () => programKey;
     return cloned;
   };

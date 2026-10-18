@@ -1,0 +1,2344 @@
+{
+  "schemaVersion": 1,
+  "issue": "https://github.com/img2threejs/wild-crown/issues/128",
+  "scope": "Finite native environmental-force replay; not commercial-game reconstruction, art/release certification or a real-time performance benchmark.",
+  "references": {
+    "commercialGames": [
+      "Kena: Bridge of Spirits",
+      "Zenless Zone Zero"
+    ],
+    "commercialLimit": "Historical visual references only. Neither commercial binary was provided or decompiled with REA.",
+    "web": {
+      "url": "https://victorzakharov.github.io/last-stand/",
+      "evidenceId": "ev_716f05d40b19450555bdee7fc6455453c3def4661c9e6619f16faa717aaa6b34",
+      "appSha256": "2e0d47a68e9631845affc1a27e87613881014a0d241c5f676088706c49bbd3de",
+      "observed": "Shipped application/Three.js dependency graph, not a proven environmental-destruction algorithm."
+    }
+  },
+  "sourceHashes": {
+    "src/content/levels/act-i.ts": "9fb0a213555df91691d6ef5d7fe4d6552bb38e7da3adec1685d1b71bc616ecc1",
+    "src/content/solid-props.ts": "424ad20a9bbfb68e37ffc31a2bf59675392d5e8ea31c1e496f373f6f9b075b6e",
+    "src/game/contracts.ts": "7cb62bf940c7f727bdcaf3edd72ef7a334fd9295dcc86f10f131ee1c0ccf9160",
+    "src/game/combat/CombatEngine.ts": "d9cd06c4b22cc11ffc253d514954f756b040bf0a666e1f281a7f8ac950deb6a4",
+    "src/game/combat/EnvironmentProps.ts": "f3c3965d1059d1d25e4940727297a0e9ae28008f5439cbc71150ecb177f4db0c",
+    "src/game/combat/geometry.ts": "81ce47edf1971332824f8cf39d04b4c1059f8d7f815fa770ca3f1e09ec5ce763",
+    "src/rendering/EnvironmentPropVisuals.ts": "6bf28c5fa02c11eecb5daad42a0ac6512d391e98f6c041e02d65adf1c376ef20",
+    "src/rendering/GameRenderer.ts": "28735a48266b9c4433730faf7a2889d78e7cb4650feafb9ce1362c9bd9c807ee",
+    "src/rendering/NativeAssetLoader.ts": "33f87d1575095cb7e40d228b85058340353abc290c2f4068bf0b1fcd70bc9741",
+    "src/rendering/NativeSolidColliders.ts": "dc175de1a82db586ecab2cc3b085c74da75c0315e4eecdab35460d995092c723"
+  },
+  "checks": {
+    "all_replay_steps_completed": true,
+    "anticipation_has_no_damage": true,
+    "heavy_is_one_contact": true,
+    "lightning_is_separate_contact": true,
+    "actor_damage_unchanged": true,
+    "mana_unchanged": true,
+    "hit_stop_holds_world": true,
+    "unfrozen_motion_changes_pose": true,
+    "pause_without_hit_stop_holds_pose": true,
+    "loose_native_matrices_move": true,
+    "damage_reaches_native_material": true,
+    "settled_bodies_sleep": true,
+    "reduced_keeps_physical_damage": true,
+    "native_assets_loaded_without_missing_actor": true,
+    "reset_clears_local_state": true
+  },
+  "tests": {
+    "command": "bun test tests/combat/environment-props.test.ts tests/combat/mana-skills.test.ts tests/combat/heartroot-skills.test.ts tests/combat/vesper-kit.test.ts tests/combat/sakda-kit.test.ts tests/combat/run-reset.test.ts tests/rendering/NativeSolidColliders.test.ts tests/effects/thunder-cleave.test.ts",
+    "passed": 143,
+    "failed": 0,
+    "expects": 1841,
+    "seconds": 15.51
+  },
+  "native": {
+    "composition": "Production CombatEngine, GameRenderer, StoryPresentation; canonical Greenwake native candidate manifest; deterministic fixed-step buttons; hostile AI disabled for paired replay.",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "evidence": [
+      {
+        "evidenceId": "ev_04ed380ad6782c83cb2aa35f8e77bb9bffbb90d49363bd0d6cc29bb85a960edf",
+        "durationMs": 46800,
+        "completeness": {
+          "equality_eligible": false,
+          "missing_sections": [
+            "events"
+          ],
+          "status": "incomplete",
+          "truncated_sections": []
+        },
+        "limitations": [
+          "Artifact identity is unavailable for this observation.",
+          "Event sequence records provider receipt order; simultaneous browser causality is not inferred.",
+          "Network content is retained only when selected; Playwright response-body bytes are API results and are not guaranteed to match wire bytes.",
+          "Request bytes are limited to what Playwright exposes; not_exposed does not establish body absence or multipart file coverage.",
+          "Network content reads settle within 5 seconds each and the observer does not request bodies from unfinished responses.",
+          "Playwright scenario events do not expose request initiator stacks; receipt order does not prove causality.",
+          "Storage values are hashed only after declared-secret redaction.",
+          "Shared-context network capture excludes requests without a known root or descendant Page frame.",
+          "CDP attachment cannot recover pre-attach events or guarantee launch-time context options.",
+          "Browser host platform and architecture were not observed."
+        ]
+      },
+      {
+        "evidenceId": "ev_693b375a2f6a0b312d3e6f4482ce46d078139b582f4a3110ef65ea7252c1990c",
+        "durationMs": 6551,
+        "completeness": {
+          "equality_eligible": false,
+          "missing_sections": [
+            "events"
+          ],
+          "status": "incomplete",
+          "truncated_sections": []
+        },
+        "limitations": [
+          "Artifact identity is unavailable for this observation.",
+          "Event sequence records provider receipt order; simultaneous browser causality is not inferred.",
+          "Network content is retained only when selected; Playwright response-body bytes are API results and are not guaranteed to match wire bytes.",
+          "Request bytes are limited to what Playwright exposes; not_exposed does not establish body absence or multipart file coverage.",
+          "Network content reads settle within 5 seconds each and the observer does not request bodies from unfinished responses.",
+          "Playwright scenario events do not expose request initiator stacks; receipt order does not prove causality.",
+          "Storage values are hashed only after declared-secret redaction.",
+          "CDP attachment cannot recover pre-attach events or guarantee launch-time context options.",
+          "Browser host platform and architecture were not observed."
+        ]
+      }
+    ],
+    "controlAndImpact": [
+      {
+        "step": "native-ready",
+        "status": "completed",
+        "data": {
+          "label": "native baseline",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 1,
+            "worldTick": 1,
+            "worldTimeSeconds": 0.016666666666666666,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "control-disabled",
+        "status": "completed",
+        "data": {
+          "label": "native baseline",
+          "environmentEnabled": false,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 1,
+            "worldTick": 1,
+            "worldTimeSeconds": 0.016666666666666666,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "control-charge",
+        "status": "completed",
+        "data": {
+          "label": "charged — no environmental damage yet",
+          "environmentEnabled": false,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 56,
+            "worldTick": 56,
+            "worldTimeSeconds": 0.9333333333333333,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy-charge",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "control-contact",
+        "status": "completed",
+        "data": {
+          "label": "real heavy contact",
+          "environmentEnabled": false,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 111,
+            "worldTick": 111,
+            "worldTimeSeconds": 1.8499999999999999,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "control-lightning",
+        "status": "completed",
+        "data": {
+          "label": "real delayed lightning",
+          "environmentEnabled": false,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 132,
+            "worldTick": 123,
+            "worldTimeSeconds": 2.05,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-enabled",
+        "status": "completed",
+        "data": {
+          "label": "native baseline",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 1,
+            "worldTick": 1,
+            "worldTimeSeconds": 0.016666666666666666,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-charge-no-damage",
+        "status": "completed",
+        "data": {
+          "label": "charged — no environmental damage yet",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 56,
+            "worldTick": 56,
+            "worldTimeSeconds": 0.9333333333333333,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy-charge",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-real-heavy-contact",
+        "status": "completed",
+        "data": {
+          "label": "real heavy contact",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 111,
+            "worldTick": 111,
+            "worldTimeSeconds": 1.8499999999999999,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.01587278621865997,
+                "z": -2.451652801224673
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.01587278621865997,
+                "z": -0.051652801224673084
+              },
+              "tiltX": -0.04820928114302791,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.015191475920895295,
+                "z": -3.1497602726197713
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.015191475920895295,
+                "z": -0.04976027261977123
+              },
+              "tiltX": -0.04644292111178616,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.013973584904931058,
+                "z": -4.746377242019871
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.013973584904931058,
+                "z": -0.04637724201987048
+              },
+              "tiltX": -0.04328542588521221,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0.10374286770820618,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-physical-motion",
+        "status": "completed",
+        "data": {
+          "label": "five additional fixed steps",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 116,
+            "worldTick": 111,
+            "worldTimeSeconds": 1.8499999999999999,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.01587278621865997,
+                "z": -2.451652801224673
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.01587278621865997,
+                "z": -0.051652801224673084
+              },
+              "tiltX": -0.04820928114302791,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.015191475920895295,
+                "z": -3.1497602726197713
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.015191475920895295,
+                "z": -0.04976027261977123
+              },
+              "tiltX": -0.04644292111178616,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.013973584904931058,
+                "z": -4.746377242019871
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.013973584904931058,
+                "z": -0.04637724201987048
+              },
+              "tiltX": -0.04328542588521221,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0.10374286770820618,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-pause-freeze",
+        "status": "completed",
+        "data": {
+          "label": "pause: physical state unchanged through 30 inputs",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 116,
+            "worldTick": 111,
+            "worldTimeSeconds": 1.8499999999999999,
+            "timeScale": 0,
+            "policy": "paused"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.01587278621865997,
+                "z": -2.451652801224673
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.01587278621865997,
+                "z": -0.051652801224673084
+              },
+              "tiltX": -0.04820928114302791,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.015191475920895295,
+                "z": -3.1497602726197713
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.015191475920895295,
+                "z": -0.04976027261977123
+              },
+              "tiltX": -0.04644292111178616,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.013973584904931058,
+                "z": -4.746377242019871
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.013973584904931058,
+                "z": -0.04637724201987048
+              },
+              "tiltX": -0.04328542588521221,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0.10374286770820618,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-delayed-lightning",
+        "status": "completed",
+        "data": {
+          "label": "real delayed lightning",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 132,
+            "worldTick": 123,
+            "worldTimeSeconds": 2.05,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.4275099509366477,
+              "tiltZ": 0.03713416261852295,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.183838659077873,
+                "y": 0.013981344730068838,
+                "z": -3.71884728468785
+              },
+              "offset": {
+                "x": 0.033838659077872535,
+                "y": 0.013981344730068838,
+                "z": -0.6188472846878499
+              },
+              "tiltX": -0.43067080776971284,
+              "tiltZ": -0.03158274847268168,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.254212284275713,
+                "y": 0.010597107583519038,
+                "z": -5.211791110641854
+              },
+              "offset": {
+                "x": 0.004212284275713074,
+                "y": 0.010597107583519038,
+                "z": -0.5117911106418536
+              },
+              "tiltX": -0.4187926787765929,
+              "tiltZ": -0.0039314653239988975,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0.671581506729126,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-settled-damage",
+        "status": "completed",
+        "data": {
+          "label": "settled — persistent local damage",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 312,
+            "worldTick": 294,
+            "worldTimeSeconds": 4.9,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.7124551525359696,
+              "tiltZ": 0.5570085291543584,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.501372287479114,
+                "y": 0,
+                "z": -4.2666871078706885
+              },
+              "offset": {
+                "x": 0.35137228747911387,
+                "y": 0,
+                "z": -1.1666871078706884
+              },
+              "tiltX": -0.9687178208962369,
+              "tiltZ": -0.47373790151512546,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.2823615360148075,
+                "y": 0,
+                "z": -5.413749506174329
+              },
+              "offset": {
+                "x": 0.03236153601480751,
+                "y": 0,
+                "z": -0.7137495061743291
+              },
+              "tiltX": -1.1638817547645908,
+              "tiltZ": -0.0589715658876784,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 1.242760181427002,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-reduced-readable",
+        "status": "completed",
+        "data": {
+          "label": "reduced setting — physical damage remains",
+          "environmentEnabled": true,
+          "reducedMotion": true,
+          "clock": {
+            "simulationTick": 312,
+            "worldTick": 294,
+            "worldTimeSeconds": 4.9,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.7124551525359696,
+              "tiltZ": 0.5570085291543584,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.501372287479114,
+                "y": 0,
+                "z": -4.2666871078706885
+              },
+              "offset": {
+                "x": 0.35137228747911387,
+                "y": 0,
+                "z": -1.1666871078706884
+              },
+              "tiltX": -0.9687178208962369,
+              "tiltZ": -0.47373790151512546,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.2823615360148075,
+                "y": 0,
+                "z": -5.413749506174329
+              },
+              "offset": {
+                "x": 0.03236153601480751,
+                "y": 0,
+                "z": -0.7137495061743291
+              },
+              "tiltX": -1.1638817547645908,
+              "tiltZ": -0.0589715658876784,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 1.242760181427002,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-native-visibility",
+        "status": "completed",
+        "data": {
+          "label": "native visibility preserves physical pose",
+          "environmentEnabled": true,
+          "reducedMotion": true,
+          "clock": {
+            "simulationTick": 312,
+            "worldTick": 294,
+            "worldTimeSeconds": 4.9,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.7124551525359696,
+              "tiltZ": 0.5570085291543584,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.501372287479114,
+                "y": 0,
+                "z": -4.2666871078706885
+              },
+              "offset": {
+                "x": 0.35137228747911387,
+                "y": 0,
+                "z": -1.1666871078706884
+              },
+              "tiltX": -0.9687178208962369,
+              "tiltZ": -0.47373790151512546,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.2823615360148075,
+                "y": 0,
+                "z": -5.413749506174329
+              },
+              "offset": {
+                "x": 0.03236153601480751,
+                "y": 0,
+                "z": -0.7137495061743291
+              },
+              "tiltX": -1.1638817547645908,
+              "tiltZ": -0.0589715658876784,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 1.242760181427002,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "environment-reset-clears-local-damage",
+        "status": "completed",
+        "data": {
+          "label": "native baseline",
+          "environmentEnabled": true,
+          "reducedMotion": true,
+          "clock": {
+            "simulationTick": 1,
+            "worldTick": 1,
+            "worldTimeSeconds": 0.016666666666666666,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 100,
+          "enemyHP": 1000,
+          "cueKinds": [],
+          "props": [],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785
+              }
+            ],
+            "instanceMatrixDelta": 0,
+            "materialDamage": 0
+          },
+          "errors": []
+        }
+      }
+    ],
+    "postRestFix": [
+      {
+        "step": "scenario_start",
+        "status": "completed",
+        "data": {
+          "label": "pause: physical state unchanged through 30 inputs",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 121,
+            "worldTick": 112,
+            "worldTimeSeconds": 1.8666666666666667,
+            "timeScale": 0,
+            "policy": "paused"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.029023350215097717,
+                "z": -2.5027064880644647
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.029023350215097717,
+                "z": -0.10270648806446481
+              },
+              "tiltX": -0.09320461020985396,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.02766072961956837,
+                "z": -3.198943382057386
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.02766072961956837,
+                "z": -0.09894338205738595
+              },
+              "tiltX": -0.08978964748278659,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.025224947587639893,
+                "z": -4.792216560206639
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.025224947587639893,
+                "z": -0.09221656020663893
+              },
+              "tiltX": -0.08368515671141027,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -2.699719744009563,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -2.600803582260025,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -2.4239838495718837,
+                  "z": 0
+                }
+              }
+            ],
+            "instanceMatrixDelta": 0.11296272277832031,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "current-unfrozen-motion",
+        "status": "completed",
+        "data": {
+          "label": "five additional fixed steps",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 126,
+            "worldTick": 117,
+            "worldTimeSeconds": 1.95,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.053942836863953125,
+                "z": -2.7492286218552944
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.053942836863953125,
+                "z": -0.34922862185529446
+              },
+              "tiltX": -0.27699080556943423,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.04917366477960041,
+                "z": -3.4364330881990113
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.04917366477960041,
+                "z": -0.3364330881990112
+              },
+              "tiltX": -0.26684202350135605,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.04064842766785072,
+                "z": -5.013560154184094
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.04064842766785072,
+                "z": -0.3135601541840938
+              },
+              "tiltX": -0.24870034775648034,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.912064621039933,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.8420076850375844,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.7167758879501547,
+                  "z": 0
+                }
+              }
+            ],
+            "instanceMatrixDelta": 0.379364013671875,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "current-pause-without-hit-stop",
+        "status": "completed",
+        "data": {
+          "label": "pause: physical state unchanged through 30 inputs",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 126,
+            "worldTick": 117,
+            "worldTimeSeconds": 1.95,
+            "timeScale": 0,
+            "policy": "paused"
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 964,
+          "cueKinds": [
+            "slash",
+            "hit"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.05,
+                "y": 0.053942836863953125,
+                "z": -2.7492286218552944
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.053942836863953125,
+                "z": -0.34922862185529446
+              },
+              "tiltX": -0.27699080556943423,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.15,
+                "y": 0.04917366477960041,
+                "z": -3.4364330881990113
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.04917366477960041,
+                "z": -0.3364330881990112
+              },
+              "tiltX": -0.26684202350135605,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.25,
+                "y": 0.04064842766785072,
+                "z": -5.013560154184094
+              },
+              "offset": {
+                "x": 0,
+                "y": 0.04064842766785072,
+                "z": -0.3135601541840938
+              },
+              "tiltX": -0.24870034775648034,
+              "tiltZ": 0,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 1,
+              "impactWorldTick": 111
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.912064621039933,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.8420076850375844,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.7167758879501547,
+                  "z": 0
+                }
+              }
+            ],
+            "instanceMatrixDelta": 0.379364013671875,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "current-delayed-lightning",
+        "status": "completed",
+        "data": {
+          "label": "real delayed lightning",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 132,
+            "worldTick": 123,
+            "worldTimeSeconds": 2.05,
+            "timeScale": 0,
+            "policy": "normal"
+          },
+          "hitStop": {
+            "remainingTicks": 9,
+            "strength": 1
+          },
+          "playerAction": "aren-charged-heavy",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.4275099509366477,
+              "tiltZ": 0.03713416261852295,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.183838659077873,
+                "y": 0.013981344730068838,
+                "z": -3.71884728468785
+              },
+              "offset": {
+                "x": 0.033838659077872535,
+                "y": 0.013981344730068838,
+                "z": -0.6188472846878499
+              },
+              "tiltX": -0.43067080776971284,
+              "tiltZ": -0.03158274847268168,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.254212284275713,
+                "y": 0.010597107583519038,
+                "z": -5.211791110641854
+              },
+              "offset": {
+                "x": 0.004212284275713074,
+                "y": 0.010597107583519038,
+                "z": -0.5117911106418536
+              },
+              "tiltX": -0.4187926787765929,
+              "tiltZ": -0.0039314653239988975,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -1.221202906086466,
+                  "z": 2.228049757111377
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -2.3059331139928774,
+                  "z": -1.8949649083609006
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": false,
+                "angularVelocity": {
+                  "x": -3.193262914352527,
+                  "z": -0.23588791943993387
+                }
+              }
+            ],
+            "instanceMatrixDelta": 0.671581506729126,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "current-settled-physical-rest",
+        "status": "completed",
+        "data": {
+          "label": "settled — persistent local damage",
+          "environmentEnabled": true,
+          "reducedMotion": false,
+          "clock": {
+            "simulationTick": 312,
+            "worldTick": 294,
+            "worldTimeSeconds": 4.9,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.712434918630911,
+              "tiltZ": 0.5569904975381996,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.501372287479114,
+                "y": 0,
+                "z": -4.2666871078706885
+              },
+              "offset": {
+                "x": 0.35137228747911387,
+                "y": 0,
+                "z": -1.1666871078706884
+              },
+              "tiltX": -0.9686991589697393,
+              "tiltZ": -0.47371827421930895,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.2823615360148075,
+                "y": 0,
+                "z": -5.413749506174329
+              },
+              "offset": {
+                "x": 0.03236153601480751,
+                "y": 0,
+                "z": -0.7137495061743291
+              },
+              "tiltX": -1.1638650865093754,
+              "tiltZ": -0.05894934185018737,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              }
+            ],
+            "instanceMatrixDelta": 1.2427597045898438,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      },
+      {
+        "step": "current-reduced-readable-damage",
+        "status": "completed",
+        "data": {
+          "label": "reduced setting — physical damage remains",
+          "environmentEnabled": true,
+          "reducedMotion": true,
+          "clock": {
+            "simulationTick": 312,
+            "worldTick": 294,
+            "worldTimeSeconds": 4.9,
+            "timeScale": 1,
+            "policy": "normal"
+          },
+          "playerAction": "aren-idle",
+          "mana": 80,
+          "enemyHP": 946,
+          "cueKinds": [
+            "slash",
+            "hit",
+            "lightning",
+            "projectile-impact"
+          ],
+          "props": [
+            {
+              "id": "environment-loose-greenwake-west",
+              "material": "loose-stone",
+              "position": {
+                "x": 5.01021339719444,
+                "y": 0,
+                "z": -3.0259234835750655
+              },
+              "offset": {
+                "x": -0.03978660280555957,
+                "y": 0,
+                "z": -0.6259234835750656
+              },
+              "tiltX": -0.712434918630911,
+              "tiltZ": 0.5569904975381996,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-east",
+              "material": "loose-stone",
+              "position": {
+                "x": 7.501372287479114,
+                "y": 0,
+                "z": -4.2666871078706885
+              },
+              "offset": {
+                "x": 0.35137228747911387,
+                "y": 0,
+                "z": -1.1666871078706884
+              },
+              "tiltX": -0.9686991589697393,
+              "tiltZ": -0.47371827421930895,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            },
+            {
+              "id": "environment-loose-greenwake-north",
+              "material": "loose-stone",
+              "position": {
+                "x": 6.2823615360148075,
+                "y": 0,
+                "z": -5.413749506174329
+              },
+              "offset": {
+                "x": 0.03236153601480751,
+                "y": 0,
+                "z": -0.7137495061743291
+              },
+              "tiltX": -1.1638650865093754,
+              "tiltZ": -0.05894934185018737,
+              "damage": 1,
+              "broken": true,
+              "impactSerial": 2,
+              "impactWorldTick": 123
+            }
+          ],
+          "native": {
+            "actorCount": 6,
+            "propCount": 121,
+            "loadedAssetIds": [
+              "prop-greenwake-houses",
+              "prop-mire-bank-rock",
+              "prop-erya-edge-tree",
+              "prop-hunter-cage",
+              "prop-root-arch",
+              "prop-greenwake-rope-bridge",
+              "actor-yara",
+              "actor-vara",
+              "actor-ember-boar",
+              "actor-frost-sap-stalker",
+              "actor-root-rammer",
+              "actor-aren"
+            ],
+            "assetErrors": [],
+            "missingActorAssets": [],
+            "measuredLooseBodies": [
+              {
+                "id": "environment-loose-greenwake-west",
+                "radius": 0.3689793543669948,
+                "height": 0.26916294726816936,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-east",
+                "radius": 0.44086149654954215,
+                "height": 0.26916294726816936,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              },
+              {
+                "id": "environment-loose-greenwake-north",
+                "radius": 0.3962663698222529,
+                "height": 0.22430245605680785,
+                "sleeping": true,
+                "angularVelocity": {
+                  "x": 0,
+                  "z": 0
+                }
+              }
+            ],
+            "instanceMatrixDelta": 1.2427597045898438,
+            "materialDamage": 1
+          },
+          "errors": []
+        }
+      }
+    ],
+    "images": [
+      {
+        "file": "before-control.png",
+        "sourceEvidenceId": "ev_04ed380ad6782c83cb2aa35f8e77bb9bffbb90d49363bd0d6cc29bb85a960edf",
+        "stepId": "control-lightning",
+        "sha256": "c1178cdb50e674032ee77bc0be730053eab56f174aefb0f8ae077aa1f0239544",
+        "bytes": 1659722,
+        "mediaType": "image/png"
+      },
+      {
+        "file": "moving.png",
+        "sourceEvidenceId": "ev_693b375a2f6a0b312d3e6f4482ce46d078139b582f4a3110ef65ea7252c1990c",
+        "stepId": "current-unfrozen-motion",
+        "sha256": "e742ec0d392d47c15deb6c123cf768f1efe484444290f764b3ba53bc6e88774c",
+        "bytes": 1704159,
+        "mediaType": "image/png"
+      },
+      {
+        "file": "after-settled.png",
+        "sourceEvidenceId": "ev_693b375a2f6a0b312d3e6f4482ce46d078139b582f4a3110ef65ea7252c1990c",
+        "stepId": "current-settled-physical-rest",
+        "sha256": "be3df5a11b68d6066c2ae904f26c0106d080bcae15565d18fe0b9057b09ff7d4",
+        "bytes": 1703092,
+        "mediaType": "image/png"
+      },
+      {
+        "file": "reduced.png",
+        "sourceEvidenceId": "ev_693b375a2f6a0b312d3e6f4482ce46d078139b582f4a3110ef65ea7252c1990c",
+        "stepId": "current-reduced-readable-damage",
+        "sha256": "5444d85f62abaa1ab23ca2b483fa4648e7fcbe0c97636ba06f6d6709fe41e54b",
+        "bytes": 1703961,
+        "mediaType": "image/png"
+      }
+    ]
+  },
+  "productionUI": {
+    "flow": "Map selector → Enter Greenwake → Aren & Koro → skip introduction → How to Play Continue → K down/up → Escape/Resume.",
+    "observedManaBefore": 100,
+    "observedManaAfter": 88,
+    "observedHeavyCooldown": "2s",
+    "scope": "Boot, native assets, actual heavy input and pause UI only; paired environment contacts are proven by the controlled native replay.",
+    "audio": "Five audio requestfailed events with net::ERR_ABORTED were observed; audio playback was not verified."
+  },
+  "limitations": [
+    "Authored small loose bodies only: three reused Greenwake river stones; rooted wood bends but does not uproot; rock supports and quest/traversal structures remain authoritative.",
+    "Damage/crush/chipped-core projection is not mesh fracture, loose-body-to-loose-body collision or terrain deformation.",
+    "Local state serializes with the engine and resets with its checkpoint/region lifetime; campaign continue keeps existing safe-checkpoint policy, not permanent destruction facts.",
+    "All requested browser actions and retained DOM/image artifacts completed, but REA reports completeness missing events, including when events were not requested. Tool issue reported; no global trace equality or reconstruction certification is claimed.",
+    "The 48,247,012-byte complete REA bundle was exported locally; this file is a compact derived projection, not a canonical Evidence bundle.",
+    "Temporary native forensic controls are removed from the delivered game."
+  ],
+  "gates": {
+    "productionBuild": {
+      "command": "bun run build",
+      "passed": true,
+      "observed": "TypeScript and Vite completed; existing >500 kB chunk warning remains."
+    },
+    "releaseValidatorUnits": {
+      "command": "node --test tests/release/*.test.mjs",
+      "passed": 236,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 14525.133792,
+      "releaseCertification": false
+    }
+  }
+}

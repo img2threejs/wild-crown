@@ -216,6 +216,31 @@ export function isAerialCirclePathClear(arena: CombatArena, start: Vec3, end: Ve
   return true;
 }
 
+const impactRayPoint = { x: 0, y: 0, z: 0 };
+
+/** Force visibility is a narrow solid-volume query, not a character movement/landing plan. */
+export function isImpactPathClear(arena: CombatArena, start: Vec3, end: Vec3): boolean {
+  const radius = .06, height = .12;
+  for (let endpoint = 0; endpoint < 2; endpoint++) {
+    const point = endpoint === 0 ? start : end;
+    if (point.x < arena.bounds.min.x + radius || point.x > arena.bounds.max.x - radius || point.z < arena.bounds.min.z + radius || point.z > arena.bounds.max.z - radius || point.y < arena.bounds.min.y || point.y + height > arena.bounds.max.y) return false;
+  }
+  const dx = end.x - start.x, dy = end.y - start.y, dz = end.z - start.z;
+  // Overlapping query discs cover thin blockers; do not repeat a capsule sweep at every sample.
+  const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy, dz) / radius));
+  let previousY = start.y;
+  for (let step = 0; step <= steps; step++) {
+    impactRayPoint.x = start.x + dx * step / steps;
+    impactRayPoint.y = start.y + dy * step / steps;
+    impactRayPoint.z = start.z + dz * step / steps;
+    if (blocked(arena, impactRayPoint, radius, previousY, height)) return false;
+    const floor = groundHeightAt(arena, impactRayPoint.x, impactRayPoint.z, impactRayPoint.y, false);
+    if (floor !== null && floor > impactRayPoint.y + 1e-6) return false;
+    previousY = impactRayPoint.y;
+  }
+  return true;
+}
+
 /**
  * A planned landing: the centre stands on a standable top at exactly `point.y`, the rounded capsule and its headroom are clear
  * (the sweeps of {@link blocked}), and every rim sample has ground under it: authored ground within 0.15 of the foot, or an

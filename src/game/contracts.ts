@@ -366,6 +366,20 @@ export interface DodgePracticeSnapshot {
   readonly phase: "idle" | "warning" | "strike" | "recovery";
 }
 
+/** Simulation-owned response of one native prop. Local damage is not a quest/world fact. */
+export interface EnvironmentPropSnapshot {
+  readonly id: string;
+  readonly material: 'wood' | 'foliage' | 'stone' | 'loose-stone';
+  readonly position: Vec3;
+  readonly offset: Vec3;
+  readonly tiltX: number;
+  readonly tiltZ: number;
+  readonly damage: number;
+  readonly broken: boolean;
+  readonly impactSerial: number;
+  readonly impactWorldTick: number;
+}
+
 export interface CombatSnapshot {
   actors: readonly ActorSnapshot[];
   movableObjects: readonly MovableObjectSnapshot[];
@@ -375,6 +389,7 @@ export interface CombatSnapshot {
   readonly nurseryEscortActive?: boolean;
   readonly worldClock: WorldClockSnapshot;
   readonly combatObstacles?: readonly CombatObstacleSnapshot[];
+  readonly environmentProps?: readonly EnvironmentPropSnapshot[];
   readonly skills: readonly PlayerSkillSnapshot[];
   readonly encounterStatus?: EncounterStatusSnapshot;
   readonly trialGates?: readonly TrialGateSnapshot[];

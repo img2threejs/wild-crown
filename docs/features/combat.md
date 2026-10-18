@@ -409,3 +409,40 @@ A standalone canonical Bamboo engine smoke measured Asha's first shelter charge 
 The native Yara/Heartroot fitting smoke completed in 7.23 s after this change; the prior measured construction took 12.19 s (11.05 s under CPU profiling). These are individual local observations, not a release benchmark. All 34 weapon tests passed, including wrist preservation, fist clearance, pose sampling, and repeated equip/dispose, without increasing their timeouts.
 
 The ranged camp hunter's crossbow repair removes detached clavicle/forearm weight islands while retaining connected wrist blends. Its native pose sheet was regenerated and inspected; the Bamboo asset suite passed all 83 tests, including rigid weapon distance across clips, manifest hashes, and byte-identical re-authoring. Generate these clips with Node **22.22.3**: Node 20.18.1 produced a different animation fingerprint. The current ranged animated GLB hash is `4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a`. Asset evidence remains `blocked` pending user approval; no paid generation was performed for this repair.
+
+## Offensive environmental response (#128)
+
+`EngineState.environment` owns local prop health, material resistance, impulse, position, angular response and sleep state. `CombatSnapshot.environmentProps` is its sparse presentation projection; `EnvironmentPropVisuals` never awards damage. No physics dependency or replacement prop mesh was introduced.
+
+| Eligible native material | Physical response |
+|---|---|
+| Rooted wood/bamboo | Brief bounded spring deflection and accumulated surface scars; the root and its collision/support authority remain fixed. |
+| Soft fern/reeds | Deflection, accumulated damage and a flattened native remnant when crushed; broken foliage contributes no remaining native blocker. |
+| Large structural rock | Surface damage only; standable tops, decks and navigation do not move. |
+| Explicit small loose stones | Directional impulse, gravity, wall collision, ground friction and tumbling; a damaged chipped core remains visible. |
+
+Three existing `prop-mire-bank-rock` GLBs are placed as loose stones beside Greenwake's first combat pocket. Only the `environment-loose-` prefix **plus** the small-scale stone allowlist opts into this role. Native geometry measures their body bounds without creating a stationary actor/camera blocker or standable top. Loose travel is bounded to 4 m from its authored origin and supported playable space. Bodies sleep only after landing, never at a zero-speed airborne apex; native-support refresh wakes impacted bodies.
+
+### Contact and authority
+
+- Aren's active light/heavy windows, actual delayed Thunder Cleave and Judgement detonations, Heartroot lanes/bursts, swept projectiles, Vesper/Sakda kit strikes, confirmed Vara damage and active offensive hazards transfer force through their real shapes. Support, anticipation, cosmetic cues and Orun possession do not.
+- Stable action/projectile/hazard contact identities deduplicate sustained windows. Distinct real pulses remain separate: Sakda's limb/ring and six Hundred Elbows contacts plus uppercut are not collapsed into one hit.
+- Material resistance and distance attenuate environmental damage. Narrow solid-volume visibility checks walls, terrain and measured supports; they do not run the expensive character movement/landing sweep for every force query.
+- A nearby eligible prop can be the target of Aren's heavy without manufacturing an actor. Empty-air rejection, mana/cooldowns and actor hit resolution remain unchanged. A real fused Bloomseed burst still resolves its existing offensive explosion; ordinary projectile expiry does not invent one.
+- Conditional/story interaction targets, movable/delivery objects, collider-paired route dressing and Greenwake's named corridor root cluster are protected. Bridges, gates, quest state, rewards, actor movement and `CameraDirector` retain their existing authority.
+
+### Lifetime and presentation
+
+Physics advances only on scaled world time, freezes under pause/hit-stop and resumes with slow motion. Engine serialization preserves local health, momentum and pose; restore baselines prevent old contacts from replaying chips. Encounter checkpoint/region replacement restores its own local baseline. Campaign Continue retains the existing safe-checkpoint policy: this is not a new permanent destruction world fact or save format.
+
+Native instanced transforms and per-instance scar shading retain their response through visibility changes and LOD projection. A bounded 64-slot secondary chip pool is cosmetic and non-colliding. Reduced Motion/Effects suppresses chips and reduces rooted deflection, but does not hide damage or undo loose-body displacement.
+
+### Exercised evidence and limits
+
+- **143 tests / 0 failures**, 1,841 assertions across the environmental, four-hero, run-reset, native-collider and Thunder Cleave suites. Regression coverage includes thin walls/stacked floors, genuine multi-hit pulses, zero-damage/support suppression, serialization, retry, airborne apex, resting bodies and removed native support.
+- Final TypeScript + Vite production build passed; the existing large-chunk warning remains. Release-validator unit tests passed **236 / 236**. These validator tests do not certify the current candidate native assets for release.
+- REA controlled the actual `CombatEngine` + `GameRenderer` + `StoryPresentation` native Greenwake fixture. Paired environmental response on/off retained the same actor HP **1000 → 964 → 946** and mana **100 → 80**. Contact advanced prop serial 1, delayed lightning serial 2; native matrices/materials changed, bodies settled, pause outside hit-stop held their exact pose, and Reduced Effects kept their damage/displacement. Native asset errors and missing actor assets were empty.
+- Production UI smoke entered Greenwake as Aren/Koro, accepted real K down/up input (mana **100 → 88**, heavy cooldown shown) and exercised Escape/Resume. This verifies boot/input, not an additional environmental-contact or campaign-save claim. Five audio requests reported `net::ERR_ABORTED`; audio playback was not accepted by this smoke.
+- [Captured transitions, source hashes, assertions and REA limitations](../../asset-source/playtests/evidence/environment-impact/acceptance.json); [moving native bodies](../../asset-source/playtests/evidence/environment-impact/moving.png), [settled damage](../../asset-source/playtests/evidence/environment-impact/after-settled.png), [Reduced Effects](../../asset-source/playtests/evidence/environment-impact/reduced.png).
+- This is bounded native prop response, **not** triangle fracture, tree uprooting, terrain deformation, loose-body-to-loose-body collision, a whole-roster native art pass or an FPS/release certification.
+

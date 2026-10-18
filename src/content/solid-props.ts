@@ -4,6 +4,7 @@ import { GROVE_BOUNDARY_ID_PREFIX, GROVE_SOLID_PROFILES } from '../game/combat/G
 import { MISTVEIL_BOUNDARY_ID_PREFIX, MISTVEIL_SOLID_PROFILES } from '../game/combat/MistveilContent.js';
 import { MOONPINE_BOUNDARY_ID_PREFIX, MOONPINE_SOLID_PROFILES } from '../game/combat/MoonpineContent.js';
 import type { WorldAssetPlacement } from '../game/contracts.js';
+import { isLooseEnvironmentProp } from '../game/combat/EnvironmentProps.js';
 
 export type SolidPropKind = 'trunk' | 'solid' | 'arch' | 'platform' | 'decoration';
 const PROFILES: Readonly<Record<string, SolidPropKind>> = {
@@ -24,6 +25,8 @@ const DECORATION_PREFIXES = [GREENWAKE_BOUNDARY_ID_PREFIX, CANOPY_BOUNDARY_ID_PR
 /** Only explicitly soft vegetation is passable; unknown props remain physical. Boundary dressing of the playtest regions is visual only. */
 export function solidPropKind(placement: WorldAssetPlacement): SolidPropKind {
   if (DECORATION_PREFIXES.some(prefix => placement.id.startsWith(prefix))) return 'decoration';
+  // Small loose rubble can be stepped over; it must never contribute a stationary collider or standable top.
+  if (isLooseEnvironmentProp(placement)) return 'decoration';
   return PROFILES[placement.assetId] ?? 'solid';
 }
 

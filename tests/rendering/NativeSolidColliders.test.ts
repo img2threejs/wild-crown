@@ -12,7 +12,7 @@ function fixture(assetId: string, geometries: BufferGeometry[], options: Partial
   const root = new Group(), material = new MeshBasicMaterial();
   const world = new Matrix4().compose(new Vector3(placement.position.x, placement.position.y, placement.position.z), new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), placement.rotationY), new Vector3(placement.scale.x, placement.scale.y, placement.scale.z)).multiply(nativeLocal);
   for (const geometry of geometries) { const mesh = new InstancedMesh(geometry, material, 1); mesh.setMatrixAt(0, world); root.add(mesh); }
-  const batch: NativeStaticBatch = { assetId, root, instanceCount: 1, drawnInstanceCount: 1, lodIds: [], setPlacementVisible() {}, updateOcclusion() {}, dispose() { for (const g of geometries) g.dispose(); material.dispose(); root.traverse(node => { if (node instanceof InstancedMesh) node.dispose(); }); } };
+  const batch: NativeStaticBatch = { assetId, root, instanceCount: 1, drawnInstanceCount: 1, lodIds: [], setPlacementVisible() {}, setPlacementResponse() {}, updateOcclusion() {}, dispose() { for (const g of geometries) g.dispose(); material.dispose(); root.traverse(node => { if (node instanceof InstancedMesh) node.dispose(); }); } };
   const entries = buildStaticPropColliders(batch, [placement], { ...REGIONS[0]!, movableObjects: [] });
   const arena = { ...createEngineState().arena, bounds: { min: { x: -30, y: -5, z: -30 }, max: { x: 30, y: 20, z: 30 } }, colliders: entries.map(entry => entry.collider), supports: entries.flatMap(entry => entry.support ? [entry.support] : []) };
   const sweep = (x: number, y = 0, aerial = false) => (aerial ? moveAerialCircle : moveCircle)(arena, { x, y, z: -4 }, { x: 0, y: 0, z: 8 }, 0.42, 1.6);
@@ -22,6 +22,16 @@ function fixture(assetId: string, geometries: BufferGeometry[], options: Partial
 const tree = () => [new BoxGeometry(0.4, 4, 0.4).translate(0, 2, 0), new BoxGeometry(5, 2, 5).translate(0, 4, 0)];
 
 describe('native scene solids', () => {
+  it('measures loose rubble without adding a stationary movement blocker, camera obstacle or standable top', () => {
+    const f = fixture('prop-mire-bank-rock', [new BoxGeometry(3, 2, 3).translate(0, 1, 0)], { id: 'environment-loose-test', scale: { x: .12, y: .12, z: .12 } });
+    try {
+      expect(f.sweep(0).z).toBeCloseTo(4);
+      expect(f.entries[0]!.collider.halfExtents!.x).toBeCloseTo(.18);
+      expect(f.entries.every(entry => !entry.collider.blocksMovement && !entry.collider.blocksCamera && !entry.support)).toBe(true);
+      expect(groundHeightAt(f.arena, 0, 0, 1)).toBe(0);
+    } finally { f.dispose(); }
+  });
+
   it('blocks a tree trunk during grounded and aerial motion but leaves the space below its canopy clear', () => {
     const f = fixture('prop-erya-edge-tree', tree());
     try { expect(f.sweep(0).z).toBeLessThan(-0.6); expect(f.sweep(0, 0.8, true).z).toBeLessThan(-0.6); expect(f.sweep(1.2).z).toBeCloseTo(4); } finally { f.dispose(); }

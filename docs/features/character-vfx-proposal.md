@@ -1,6 +1,6 @@
 # Proposal: Character VFX — Dark, Living, Forceful
 
-**Trạng thái:** đã triển khai một proof Aren Thunder Cleave ([issue #126](https://github.com/img2threejs/wild-crown/issues/126), [PR #127](https://github.com/img2threejs/wild-crown/pull/127)); chưa nghiệm thu proposal toàn bộ hero/companion và chưa duyệt nhân rộng art direction.
+**Trạng thái:** đã triển khai proof Aren Thunder Cleave ([issue #126](https://github.com/img2threejs/wild-crown/issues/126), [PR #127](https://github.com/img2threejs/wild-crown/pull/127)) và phản ứng vật thể/môi trường theo simulation ([issue #128](https://github.com/img2threejs/wild-crown/issues/128)); chưa nghiệm thu proposal VFX toàn bộ hero/companion và chưa duyệt nhân rộng art direction.
 
 ## 1. Mục tiêu và phạm vi
 
@@ -182,3 +182,15 @@ Chọn **Dark, Living, Forceful**: tối ở chất liệu và khoảng nghỉ; 
 - Hai lệnh mở rộng gộp thêm weapon/audio/story-animation timeout ở **180s / 90s**; effect suite chạy riêng và native get-up chạy riêng đều pass. Chưa kết luận nguyên nhân của timeout hoặc tuyên bố full-suite pass.
 - CPU presentation p95 quan sát trong paired capture: **9.80ms → 8.30ms**, sau warm-up 150 bước; 247 render samples gồm frame setup, không tính screenshot readback. Không cô lập tải nền trong capture nên **không coi đây là benchmark tải máy được kiểm soát**. Đây là thời gian CPU submit/render của fixture headless, không phải total frame time/GPU time; không chứng minh mục tiêu hiệu năng toàn proposal hoặc phần cứng tham chiếu.
 - [Trace, guard checks, hash và giới hạn](../../asset-source/playtests/evidence/aren-thunder-cleave/acceptance.json). Đã kiểm tra get-up immunity và zero-damage suppression bằng focused suite; targeted strike này không có block path để giả lập. Canopy, đông hiệu ứng, toàn roster và art/release verification của native assets **chưa được chứng nhận bởi proof này**.
+
+## 11. Bổ sung lực tác động môi trường — issue #128
+
+Đây là phần simulation bổ sung, không còn chỉ là presentation của proposal ban đầu. Skill tấn công thật truyền lực và hư hại tới vật thể native trong phạm vi tiếp xúc: đá rời bật/dịch chuyển/lăn rồi lắng xuống, cây có gốc rung lệch ngắn, cây mềm bị ép xuống và bề mặt lưu dấu hư hại. Không dùng camera shake hoặc particle thay cho chuyển động vật thể.
+
+- Giữ damage/timing/mana/cooldown của nhân vật; tách từng contact/pulse thật và không gây damage từ windup, hỗ trợ hoặc VFX trang trí. Pause, hit-stop, slow motion, restore và reset theo simulation.
+- Bảo vệ cầu, cổng, support, vật thể nhiệm vụ/delivery/movable và các cụm rễ đỡ đường. Không biến toàn bản đồ thành môi trường phá hủy được; cây lớn không bị bật gốc, terrain không bị biến dạng và chưa có mesh fracture.
+- Tái sử dụng native GLB, thêm ba viên đá rời tại Greenwake; không generation trả phí, không thay native bằng proxy và không nâng trạng thái candidate/blocked thành release-verified.
+- **Nguồn REA:** lịch sử chỉ cung cấp Kena và Zenless Zone Zero làm tham chiếu hình ảnh, không có binary để decompile. Lần này REA quan sát bundle Last Stand/Three.js và trực tiếp ghi replay native Wild Crown. Không suy diễn thuật toán phá hủy của hai game thương mại từ những bằng chứng đó.
+- Đối chứng native bật/tắt môi trường giữ HP **1000 → 964 → 946**, mana **100 → 80**. REA ghi được instance matrix dịch chuyển, material hư hại, hai contact riêng của melee/lightning, pause ngoài hit-stop và trạng thái hư hại còn rõ khi bật Reduced Effects. **143 test pass / 0 fail**; không cộng các bộ test trước đó vào tổng này.
+- [Hợp đồng simulation và giới hạn](combat.md#offensive-environmental-response-128), [trace/hashes/giới hạn của REA](../../asset-source/playtests/evidence/environment-impact/acceptance.json), [đối chứng không phản ứng môi trường](../../asset-source/playtests/evidence/environment-impact/before-control.png), [vật thể đang chuyển động](../../asset-source/playtests/evidence/environment-impact/moving.png), [hư hại sau khi lắng xuống](../../asset-source/playtests/evidence/environment-impact/after-settled.png).
+

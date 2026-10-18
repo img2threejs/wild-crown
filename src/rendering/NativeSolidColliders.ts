@@ -3,6 +3,7 @@ import type { RegionColliderDefinition, RegionDefinition, WorldAssetPlacement } 
 import { solidPropKind, supportKind } from '../content/solid-props.js';
 import type { SupportField } from '../game/combat/geometry.js';
 import type { NativeStaticBatch } from './NativeAssetLoader.js';
+import { isLooseEnvironmentProp } from '../game/combat/EnvironmentProps.js';
 import { measureSupportField } from './NativeSupportFields.js';
 
 export interface NativeSolidCollider {
@@ -39,7 +40,8 @@ export function buildNativePropColliders(root: Object3D, placement: WorldAssetPl
 function buildPropColliders(root: Object3D, placements: readonly WorldAssetPlacement[], region: RegionDefinition, instanced: boolean): NativeSolidCollider[] {
   if (!placements.length) return [];
   const kind = solidPropKind(placements[0]!);
-  if (kind === 'decoration') return [];
+  const loose = isLooseEnvironmentProp(placements[0]!);
+  if (kind === 'decoration' && !loose) return [];
   const meshes: { mesh: Mesh; local: Matrix4 }[] = [];
   const position = new Vector3(), scale = new Vector3(), rotation = new Quaternion();
   const placementMatrix = (placement: WorldAssetPlacement) => new Matrix4().compose(
@@ -63,7 +65,10 @@ function buildPropColliders(root: Object3D, placements: readonly WorldAssetPlace
   if (complete.isEmpty()) return [];
   const parts: Box3[] = [];
   const height = complete.max.y - complete.min.y;
-  if (kind === 'trunk') {
+  if (loose) {
+    // A non-blocking measurement carrier gives small rubble its actual native dimensions, not a guessed proxy mesh.
+    parts.push(complete);
+  } else if (kind === 'trunk') {
     const wood = new Box3();
     const top = complete.min.y + height * 0.3;
     for (const { mesh, local } of meshes) {
@@ -136,7 +141,7 @@ function buildPropColliders(root: Object3D, placements: readonly WorldAssetPlace
     const field = supportMode === 'none' ? null : measureSupportField('native-support:' + placement.id, placement.id, supportMode,
       meshes.map(({ mesh, local }) => ({ geometry: mesh.geometry, matrix: new Matrix4().multiplyMatrices(matrix, local) })));
     // A measured rock top blocks through its field (real sides, real overhangs); its proxy box then only occludes the camera.
-    const blocksMovement = !(field && supportMode === 'top');
+    const blocksMovement = !loose && !(field && supportMode === 'top');
     const entries: NativeSolidCollider[] = [];
     for (let i = 0; i < parts.length; i++) {
       worldBox.copy(parts[i]!).applyMatrix4(matrix);
@@ -146,7 +151,7 @@ function buildPropColliders(root: Object3D, placements: readonly WorldAssetPlace
         collider: { id: `native:${placement.id}:${i}`, kind: 'box',
           from: { x: center.x, y: center.y, z: center.z },
           halfExtents: { x: size.x / 2, y: size.y / 2, z: size.z / 2 },
-          blocksMovement, blocksCamera: true } });
+          blocksMovement, blocksCamera: !loose } });
     }
     if (field) {
       // The field travels with the placement's first entry; a deck without rails gets a non-blocking proxy to carry it.
