@@ -1087,7 +1087,10 @@
       "vara:hurt": "vara:hurt"
     },
     "rootMotion": {
-      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara-sky-survey": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "vara:idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1205,10 +1208,13 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "4f67bf43-fda9-4f9d-96dd-7ae31f5f31cd",
-    "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
-    "outputHash": "c6985e814b630be140030ea03c5679e4a9ca6d558184f2e34567a41f1d1b048d",
+    "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+    "outputHash": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-falling-branch"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1227,13 +1233,27 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:koro-fruit-burst": "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-falling-branch": "wild-crown:koro-falling-branch"
     },
     "rootMotion": {
-      "koro-throw": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-push": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-distract": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-search": { "mode": "in-place", "evidenceStatus": "verified" },
+      "koro-throw": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-push": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-distract": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-search": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "monster-idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1257,10 +1277,18 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-fruit-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-falling-branch": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-koro-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-koro-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1271,10 +1299,14 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "21b55cfd-3355-496e-bba4-95de869a4154",
-    "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb",
-    "outputHash": "e481cdd09e6595dc07d0b6d8ba63593c45f5b59379082ddd47e5e6773498bae4",
+    "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+    "outputHash": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:sprig-seed-toss",
+      "wild-crown:sprig-ground-ripple",
+      "wild-crown:sprig-petal-sweep"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1297,7 +1329,10 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:sprig-seed-toss": "wild-crown:sprig-seed-toss",
+      "wild-crown:sprig-ground-ripple": "wild-crown:sprig-ground-ripple",
+      "wild-crown:sprig-petal-sweep": "wild-crown:sprig-petal-sweep"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1355,10 +1390,22 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:sprig-seed-toss": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:sprig-ground-ripple": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:sprig-petal-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-grove-rootling-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-grove-rootling-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1369,10 +1416,14 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "21b55cfd-3355-496e-bba4-95de869a4154",
-    "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb",
-    "outputHash": "9ffcd7e26cecbee7dd78d2967cfd9c13f3cd1ae796c0bd61b2775cfe2e7ea9aa",
+    "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+    "outputHash": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:blighted-seed-lob",
+      "wild-crown:blighted-ground-pulse",
+      "wild-crown:blighted-lash-sweep"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1395,7 +1446,10 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:blighted-seed-lob": "wild-crown:blighted-seed-lob",
+      "wild-crown:blighted-ground-pulse": "wild-crown:blighted-ground-pulse",
+      "wild-crown:blighted-lash-sweep": "wild-crown:blighted-lash-sweep"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1453,10 +1507,22 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:blighted-seed-lob": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:blighted-ground-pulse": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:blighted-lash-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1467,10 +1533,15 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "2875c803-d0ea-48ad-85bd-c43f27015e24",
-    "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb",
-    "outputHash": "c9ade57f76cb5cacbdc26093ac28cfb1e76d5f1fc1707260f90851716d87a62b",
+    "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+    "outputHash": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:hollowheart-leap-smash",
+      "wild-crown:hollowheart-antler-sweep",
+      "wild-crown:hollowheart-ichor-hurl",
+      "wild-crown:hollowheart-heartlight-burst"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1493,7 +1564,11 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:hollowheart-leap-smash": "wild-crown:hollowheart-leap-smash",
+      "wild-crown:hollowheart-antler-sweep": "wild-crown:hollowheart-antler-sweep",
+      "wild-crown:hollowheart-ichor-hurl": "wild-crown:hollowheart-ichor-hurl",
+      "wild-crown:hollowheart-heartlight-burst": "wild-crown:hollowheart-heartlight-burst"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1551,10 +1626,26 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:hollowheart-leap-smash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hollowheart-antler-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hollowheart-ichor-hurl": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hollowheart-heartlight-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-grove-hollowheart-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-grove-hollowheart-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

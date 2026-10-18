@@ -1118,10 +1118,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_0",
     "tripoSourceTask": "ca2a89d9-30d3-4a72-9175-6eb67d849af2",
-    "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
-    "outputHash": "1cd5b7583f7f34e70f743d89cf6e11712e98a968ba312a7b2c7879a754741b7a",
+    "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+    "outputHash": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:bog-lurker-tongue-lash",
+      "wild-crown:bog-lurker-bubble-pool",
+      "wild-crown:bog-lurker-mud-hop"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1144,7 +1148,10 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:bog-lurker-tongue-lash": "wild-crown:bog-lurker-tongue-lash",
+      "wild-crown:bog-lurker-bubble-pool": "wild-crown:bog-lurker-bubble-pool",
+      "wild-crown:bog-lurker-mud-hop": "wild-crown:bog-lurker-mud-hop"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1202,10 +1209,22 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:bog-lurker-tongue-lash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:bog-lurker-bubble-pool": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:bog-lurker-mud-hop": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1216,10 +1235,14 @@
     "rigFamily": "avian",
     "castSocketBone": "tripo::Head_5",
     "tripoSourceTask": "6ef4431e-4f6a-4649-9475-ab3df19b8227",
-    "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
-    "outputHash": "a2931e33b358a70363433676e7dbcd58b9a8b2b02678d4e651a6ab8ad2f4e046",
+    "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+    "outputHash": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:lantern-heron-spear-dive",
+      "wild-crown:lantern-heron-mist-gust",
+      "wild-crown:lantern-heron-flare-burst"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1243,7 +1266,10 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:lantern-heron-spear-dive": "wild-crown:lantern-heron-spear-dive",
+      "wild-crown:lantern-heron-mist-gust": "wild-crown:lantern-heron-mist-gust",
+      "wild-crown:lantern-heron-flare-burst": "wild-crown:lantern-heron-flare-burst"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1305,10 +1331,22 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:lantern-heron-spear-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:lantern-heron-mist-gust": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:lantern-heron-flare-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1319,10 +1357,17 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_1",
     "tripoSourceTask": "ab27cb96-5c43-42ff-9215-39bd63f3eae9",
-    "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
-    "outputHash": "5e61fa266a60e6ed0ec66fbd61df7faf663d4ee89e870e3dea737567f3b4819b",
+    "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+    "outputHash": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:ghor-hammering-charge",
+      "wild-crown:ghor-stonefall",
+      "wild-crown:ghor-overhead-slam",
+      "wild-crown:mire-maw-tail-sweep",
+      "wild-crown:mire-maw-bite-lunge",
+      "wild-crown:mire-maw-black-river-wave"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -0.9249,
@@ -1346,7 +1391,13 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:ghor-hammering-charge": "wild-crown:ghor-hammering-charge",
+      "wild-crown:ghor-stonefall": "wild-crown:ghor-stonefall",
+      "wild-crown:ghor-overhead-slam": "wild-crown:ghor-overhead-slam",
+      "wild-crown:mire-maw-tail-sweep": "wild-crown:mire-maw-tail-sweep",
+      "wild-crown:mire-maw-bite-lunge": "wild-crown:mire-maw-bite-lunge",
+      "wild-crown:mire-maw-black-river-wave": "wild-crown:mire-maw-black-river-wave"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1408,10 +1459,34 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:ghor-hammering-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:ghor-stonefall": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:ghor-overhead-slam": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:mire-maw-tail-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:mire-maw-bite-lunge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:mire-maw-black-river-wave": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

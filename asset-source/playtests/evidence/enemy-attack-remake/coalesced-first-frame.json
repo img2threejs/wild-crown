@@ -1,0 +1,233 @@
+{
+  "scope": "20 actual fixed steps coalesced before one native synchronization/presentation/render; controlled real-engine attack, no fabricated hit/cue.",
+  "before": {
+    "frame": 55,
+    "worldTick": 54,
+    "simulationTick": 54,
+    "actorId": "canopy-howler",
+    "actionId": "wild-crown:howler-leap-slam",
+    "phase": "commit",
+    "progress": 0,
+    "position": {
+      "x": -46,
+      "y": 0,
+      "z": -26
+    },
+    "meshPosition": [
+      -46,
+      0,
+      -26
+    ],
+    "rootXZError": 0,
+    "nativeAsset": "actor-thornback-howler",
+    "nativeAction": "wild-crown:howler-leap-slam",
+    "nativeTime": 1.4,
+    "expectedNativeTime": 1.4,
+    "health": 100,
+    "issues": [],
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 2,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 54
+    }
+  },
+  "beforePresent": {
+    "simulationTick": 74,
+    "worldTick": 74,
+    "worldTimeSeconds": 1.2333333333333334,
+    "timeScale": 1,
+    "policy": "normal"
+  },
+  "after": {
+    "frame": 56,
+    "worldTick": 74,
+    "simulationTick": 74,
+    "actorId": "canopy-howler",
+    "actionId": "wild-crown:howler-leap-slam",
+    "phase": "active",
+    "progress": 0.8888888888888888,
+    "position": {
+      "x": -48.912176030182444,
+      "y": 0,
+      "z": -27.941450686788308
+    },
+    "meshPosition": [
+      -48.912176030182444,
+      0,
+      -27.941450686788308
+    ],
+    "rootXZError": 0,
+    "nativeAsset": "actor-thornback-howler",
+    "nativeAction": "wild-crown:howler-leap-slam",
+    "nativeTime": 2.888888888888889,
+    "expectedNativeTime": 2.888888888888889,
+    "health": 83,
+    "issues": [],
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 74
+    }
+  },
+  "shaderTime": 1.2333333333333334,
+  "cues": [
+    {
+      "kind": "active",
+      "phase": "active",
+      "phaseStartedAtWorldTick": 66,
+      "actorId": "canopy-howler",
+      "targetId": "aren",
+      "scopeId": "canopy-howler:howler-leap-slam:0",
+      "attackId": "howler-leap-slam",
+      "position": {
+        "x": -51.8243520603649,
+        "y": 0,
+        "z": -29.882901373576605
+      },
+      "from": {
+        "x": -46,
+        "y": 0,
+        "z": -26
+      },
+      "to": {
+        "x": -51.8243520603649,
+        "y": 0,
+        "z": -29.882901373576605
+      },
+      "shape": "burst",
+      "footprint": {
+        "width": 4,
+        "length": 4,
+        "angleRadians": -2.1587989303424644
+      },
+      "durationTicks": 9,
+      "priority": "essential",
+      "instanceId": "wc131-native-howler-leap-slam-0:canopy-trials:cue:66:4",
+      "tick": 66,
+      "worldTick": 66,
+      "worldTimeSeconds": 1.1
+    },
+    {
+      "kind": "reaction-start",
+      "phase": "hit",
+      "actorId": "aren",
+      "targetId": "aren",
+      "scopeId": "aren:reaction:1",
+      "position": {
+        "x": -51.8243520603649,
+        "y": 0,
+        "z": -29.882901373576605
+      },
+      "to": {
+        "x": -52.65640235470274,
+        "y": 0,
+        "z": -30.437601569801835
+      },
+      "reactionKind": "flinch",
+      "intensity": 0.5,
+      "priority": "essential",
+      "shape": "burst",
+      "instanceId": "wc131-native-howler-leap-slam-0:canopy-trials:cue:66:5",
+      "tick": 66,
+      "worldTick": 66,
+      "worldTimeSeconds": 1.1
+    },
+    {
+      "kind": "hit",
+      "phase": "hit",
+      "actorId": "canopy-howler",
+      "targetId": "aren",
+      "scopeId": "canopy-howler:howler-leap-slam:0",
+      "attackId": "howler-leap-slam",
+      "position": {
+        "x": -51.47489093674301,
+        "y": 0.8800000000000001,
+        "z": -29.649927291162008
+      },
+      "from": {
+        "x": -46,
+        "y": 0,
+        "z": -26
+      },
+      "to": {
+        "x": -52.30694123108085,
+        "y": 0.8800000000000001,
+        "z": -30.20462748738724
+      },
+      "shape": "burst",
+      "footprint": {
+        "width": 4,
+        "length": 4,
+        "angleRadians": -2.1587989303424644
+      },
+      "confirmedDamage": 17,
+      "durationTicks": 9,
+      "priority": "essential",
+      "instanceId": "wc131-native-howler-leap-slam-0:canopy-trials:cue:66:7",
+      "tick": 66,
+      "worldTick": 66,
+      "worldTimeSeconds": 1.1
+    },
+    {
+      "kind": "landing",
+      "phase": "landing",
+      "actorId": "canopy-howler",
+      "targetId": "aren",
+      "scopeId": "canopy-howler:howler-leap-slam:0",
+      "position": {
+        "x": -48.912176030182444,
+        "y": 0,
+        "z": -27.941450686788308
+      },
+      "footprint": {
+        "width": 3.2,
+        "length": 3.2
+      },
+      "shape": "ring",
+      "durationTicks": 24,
+      "intensity": 0.5,
+      "priority": "essential",
+      "instanceId": "wc131-native-howler-leap-slam-0:canopy-trials:cue:66:8",
+      "tick": 66,
+      "worldTick": 66,
+      "worldTimeSeconds": 1.1
+    }
+  ],
+  "effects": [
+    {
+      "frame": 56,
+      "worldTick": 74,
+      "vfxTime": 1.2333333333333334,
+      "actorId": "canopy-howler",
+      "actionId": "wild-crown:howler-leap-slam",
+      "position": [
+        -49.1643450715307,
+        0.49085059064400727,
+        -28.715036193629548
+      ],
+      "nativeTip": [
+        -49.1643450715307,
+        0.49085059064400727,
+        -28.715036193629548
+      ],
+      "socketError": 0
+    }
+  ],
+  "fx": {
+    "capacity": 16,
+    "activeActors": 1,
+    "visibleTrails": 0,
+    "droppedCosmeticActors": 0,
+    "missingNativeAnchors": 0,
+    "sampledWorldTick": 74
+  },
+  "rendererIssues": [],
+  "assetErrors": [],
+  "webglLost": false
+}

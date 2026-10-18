@@ -8,26 +8,29 @@ The presentation runtime is a consumer of the combat owner's transient `presenta
 const presentation = new StoryPresentation({
   scene: renderer.scene,
   resolveSocket: (actorId, socketName) => renderer.resolveSocket(actorId, socketName),
+  resolveActorRoot: actorId => renderer.resolveActorRoot(actorId),
   audioListener: rendererAudioListener,
   reducedEffects: settings.reducedMotion,
 });
 
-// Call after draining CombatEngine.drainPresentationCues() for this fixed-step tick.
-presentation.consumeTick(cues);
+// Fixed steps queue facts; they do not sample a potentially stale skeleton.
+presentation.queueTick(cues);
 
-// Pass the complete engine-owned clock; never derive effect time from RAF delta.
-presentation.update(snapshot.worldClock, {
+// Every rendered frame: pose first, then consume/update/upload, then draw.
+renderer.sync(snapshot.actors, snapshot, deltaSeconds, previousSnapshot, renderAlpha);
+presentation.presentFrame(snapshot, renderAlpha, {
   position: listenerPosition,
   forward: cameraForward,
   up: cameraUp,
 });
+renderer.render();
 
 // Call from a real pointer or keyboard user activation. Gamepad polling alone
 // is not assumed to satisfy every browser's transient-activation policy.
 await presentation.unlockAudio();
 ```
 
-consumeTick is separate from durable-world-event processing. Simulation tick owns cue identity/order; every cue carries engine-stamped worldTick (including exact quarter ticks) and worldTimeSeconds. VFX age and expire entirely in the authoritative 60-Hz world-tick domain: current worldTick >= cue.worldTick + durationTicks. Seconds remain informational, not an expiry comparator. No epsilon, RAF delta, or arbitrary clock rounding is used. Slow motion erodes at the authored rate and zero-scale pause freezes effects. Sound cues remain one-shot on consumption; ambience/menu audio are not replayed or rate-scaled per update. Authoritative cancellation stops scopes on interrupt/death/load; the application cancels cinematic/region lifetimes and disposes on renderer destruction.
+`queueTick` is separate from durable-world-event processing. `presentFrame` consumes the ordered queue only after the current native pose is evaluated, preserves original cue birth ticks, restores the current world clock for pose-following emitters, then uploads effects last. Simulation tick owns cue identity/order; every cue carries engine-stamped worldTick (including exact quarter ticks) and worldTimeSeconds. VFX age and expire entirely in the authoritative 60-Hz world-tick domain: current worldTick >= cue.worldTick + durationTicks. Seconds remain informational, not an expiry comparator. No epsilon, RAF delta, or arbitrary clock rounding is used. Slow motion erodes at the authored rate and zero-scale pause freezes effects. Sound cues remain one-shot on consumption; ambience/menu audio are not replayed or rate-scaled per frame. Cancellation clears pending scoped facts and live native emitters as well as pooled cue effects/audio. The lower-level immediate cue/actor/clock methods remain available to the isolated cue-only audio/VFX fixtures; native gameplay uses the queued frame path.
 
 StoryCue retains its simulation tick/instanceId identity and carries required engine worldTick and worldTimeSeconds, semantic kind, explicit phase, optional actor/target/attack/action/scope IDs, world position/endpoints, authored footprint in meters and 60-Hz world-tick duration/priority/shape. Never derive a cue or timing from animation names, actor health, resource bars or VFX output. Active is a real hazard-phase transition emitted whether the attack hits or misses; hit remains an actual impact only. Engine hydration migrates legacy cue timestamps; consumers do not infer a missing worldTick.
 
@@ -63,7 +66,7 @@ The trial monsters additionally emit `roar-cone` (scope `<actorId>:roar`, sector
 
 ### Warden Arsenal (Sprint 1.5)
 
-`StoryPresentation.updateCombat(snapshot, alpha)` (call every rendered frame after `update` and `updateActors`) drives the Warden Arsenal (`src/effects/vfx/Warden*.ts`); the cue kinds `slash`, `sigil`, `projectile`, `projectile-impact`, `lightning`, `judgement`, `judgement-mark` and Aren's `hit` cues with element `arcane`/`lightning` are routed to `WardenCues`. Everything ages on the authoritative world clock, so hit-stop (world scale 0) freezes sparks, flashes, trail and projectiles together and releases them afterwards; presentation never writes simulation state.
+`StoryPresentation.presentFrame(snapshot, alpha)` drives the Warden Arsenal (`src/effects/vfx/Warden*.ts`) alongside current-pose enemy emitters before the final GPU upload. The cue kinds `slash`, `sigil`, `projectile`, `projectile-impact`, `lightning`, `judgement`, `judgement-mark` and Aren's `hit` cues with element `arcane`/`lightning` are routed to `WardenCues`. Everything ages on the authoritative world clock, so hit-stop (world scale 0) freezes sparks, flashes, trail and projectiles together and releases them afterwards; presentation never writes simulation state.
 
 | Piece | Behaviour |
 | --- | --- |

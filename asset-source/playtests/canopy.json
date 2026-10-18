@@ -1081,7 +1081,10 @@
       "vara:hurt": "vara:hurt"
     },
     "rootMotion": {
-      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara-sky-survey": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "vara:idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1199,10 +1202,14 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "39e6d691-ca03-4017-9f2d-3d972eca2404",
-    "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
-    "outputHash": "eb5b9c1086562039527f1b1cf6f43828e624b7d91223b7d6522d5a5f6d4492a9",
+    "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+    "outputHash": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:howler-rock-hurl",
+      "wild-crown:howler-leap-slam",
+      "wild-crown:howler-branch-sweep"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1225,7 +1232,10 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:howler-rock-hurl": "wild-crown:howler-rock-hurl",
+      "wild-crown:howler-leap-slam": "wild-crown:howler-leap-slam",
+      "wild-crown:howler-branch-sweep": "wild-crown:howler-branch-sweep"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1283,10 +1293,22 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:howler-rock-hurl": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:howler-leap-slam": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:howler-branch-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-thornback-howler-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-thornback-howler-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1297,10 +1319,15 @@
     "rigFamily": "avian",
     "castSocketBone": "tripo::Head_0",
     "tripoSourceTask": "d4e8f94b-2aea-4fe3-a819-af13901f7190",
-    "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
-    "outputHash": "362813aeead1086dbc505324ac07a6231e18dc7dde481c461ad52b096e4ca5d9",
+    "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+    "outputHash": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:orun-sky-dive",
+      "wild-crown:hornbill-dive-bomb",
+      "wild-crown:hornbill-feather-volley",
+      "wild-crown:hornbill-gale-flap"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1324,7 +1351,11 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:orun-sky-dive": "wild-crown:orun-sky-dive",
+      "wild-crown:hornbill-dive-bomb": "wild-crown:hornbill-dive-bomb",
+      "wild-crown:hornbill-feather-volley": "wild-crown:hornbill-feather-volley",
+      "wild-crown:hornbill-gale-flap": "wild-crown:hornbill-gale-flap"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1386,10 +1417,26 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:orun-sky-dive": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hornbill-dive-bomb": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hornbill-feather-volley": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:hornbill-gale-flap": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-storm-hornbill-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-storm-hornbill-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1400,10 +1447,14 @@
     "rigFamily": "serpentine",
     "castSocketBone": "tripo::Head_1",
     "tripoSourceTask": "8efed69c-61f4-4398-9cef-1d6e64adc8a9",
-    "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
-    "outputHash": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
+    "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+    "outputHash": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:viper-venom-spit",
+      "wild-crown:viper-tail-lash",
+      "wild-crown:viper-strike-lunge"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1427,7 +1478,10 @@
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "monster-tail": "monster-tail"
+      "monster-tail": "monster-tail",
+      "wild-crown:viper-venom-spit": "wild-crown:viper-venom-spit",
+      "wild-crown:viper-tail-lash": "wild-crown:viper-tail-lash",
+      "wild-crown:viper-strike-lunge": "wild-crown:viper-strike-lunge"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1489,10 +1543,22 @@
       "monster-tail": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:viper-venom-spit": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:viper-tail-lash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:viper-strike-lunge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-mire-viper-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-mire-viper-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

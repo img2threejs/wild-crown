@@ -315,8 +315,47 @@ export class BodyFrame {
 
 const fromTo = (a, b) => new Quaternion().setFromUnitVectors(a.clone().normalize(), b.clone().normalize());
 
+const hingeBasis = new Matrix4();
+function hingeWorldRotation(direction, normal, wantedDirection, wantedNormal, worldQ) {
+  const x = direction.clone().normalize(), y = normal.clone().cross(x).normalize();
+  const rest = new Quaternion().setFromRotationMatrix(hingeBasis.makeBasis(x, y, normal));
+  x.copy(wantedDirection).normalize(); y.copy(wantedNormal).cross(x).normalize();
+  return new Quaternion().setFromRotationMatrix(hingeBasis.makeBasis(x, y, wantedNormal)).multiply(rest.invert()).multiply(worldQ).normalize();
+}
+
+/** Fixed-length anatomical two-bone reach. A signed hinge frame removes shortest-arc roll flips at the rest-axis antipode. */
+export function solveHingedTwoBone(S, E, H, target, hint, upperQ, lowerQ) {
+  const first = E.clone().sub(S), second = H.clone().sub(E), l1 = first.length(), l2 = second.length();
+  if (l1 < 1e-9 || l2 < 1e-9) throw new Error('A native hinge needs two positive-length anatomical bones');
+  const nativeAxis = H.clone().sub(S), nativeNormal = first.clone().cross(second);
+  if (nativeAxis.lengthSq() < 1e-18) nativeAxis.copy(first);
+  nativeAxis.normalize();
+  if (nativeNormal.lengthSq() < 1e-8 * l1 * l1 * l2 * l2) nativeNormal.copy(hint ?? new Vector3(0, 0, 1)).cross(nativeAxis);
+  if (nativeNormal.lengthSq() < 1e-10) nativeNormal.set(Math.abs(nativeAxis.x) < .8 ? 1 : 0, 0, Math.abs(nativeAxis.x) < .8 ? 0 : 1).cross(nativeAxis);
+  nativeNormal.normalize();
+  const axis = target.clone().sub(S), reach = axis.length();
+  if (reach < 1e-9) axis.copy(nativeAxis); else axis.multiplyScalar(1 / reach);
+  const smaller = Math.min(l1, l2), distance = clamp(reach, Math.abs(l1 - l2) + smaller * 1e-4, l1 + l2 - smaller * .06);
+  const pole = (hint ?? first).clone().addScaledVector(axis, -(hint ?? first).dot(axis));
+  if (pole.lengthSq() < 1e-10) pole.copy(axis).cross(nativeNormal);
+  if (pole.lengthSq() < 1e-10) {
+    pole.set(Math.abs(axis.x) < .8 ? 1 : 0, 0, Math.abs(axis.x) < .8 ? 0 : 1);
+    pole.addScaledVector(axis, -pole.dot(axis));
+  }
+  pole.normalize();
+  const normal = pole.clone().cross(axis).normalize();
+  const along = (l1 * l1 - l2 * l2 + distance * distance) / (2 * distance), height = Math.sqrt(Math.max(0, l1 * l1 - along * along));
+  const elbow = S.clone().addScaledVector(axis, along).addScaledVector(pole, height), end = S.clone().addScaledVector(axis, distance);
+  return {
+    upper: hingeWorldRotation(first, nativeNormal, elbow.clone().sub(S), normal, upperQ),
+    lower: hingeWorldRotation(second, nativeNormal, end.clone().sub(elbow), normal, lowerQ),
+    end,
+  };
+}
+
 export class PoseBuilder {
-  constructor(rig) { this.rig = rig; this.inc = new Increments(); this.translations = new Map(); this.ik = []; }
+  /** Wide attack arcs lock the anatomical hinge frame; conditioned lifecycle poses retain minimal-swing joint rotations. */
+  constructor(rig, preserveHingeFrame = false) { this.rig = rig; this.preserveHingeFrame = preserveHingeFrame; this.inc = new Increments(); this.translations = new Map(); this.ik = []; }
   rotate(joint, q) { this.inc.add(joint, q); return this; }
   /** Rotates a root-level joint about a world pivot (its own origin moves accordingly). */
   rotateAbout(joint, q, pivot) {
@@ -369,24 +408,37 @@ export class PoseBuilder {
       const { upper, lower, end, target, hint, keepEndWorld } = entry;
       const state = rig.world(rig.pose(this.inc.map, this.translations));
       const S = state.P[upper], E = state.P[lower], H = state.P[end];
-      const l1 = E.distanceTo(S), l2 = H.distanceTo(E);
-      const toTarget = target.clone().sub(S);
-      const d = clamp(toTarget.length(), Math.abs(l1 - l2) + 1e-4, l1 + l2 - 1e-4);
-      const axis = toTarget.clone().normalize();
-      const along = (l1 * l1 - l2 * l2 + d * d) / (2 * d), height = Math.sqrt(Math.max(0, l1 * l1 - along * along));
-      let pole = (hint ?? E.clone().sub(S)).clone();
-      pole.addScaledVector(axis, -pole.dot(axis));
-      if (pole.lengthSq() < 1e-10) pole = new Vector3(0, 1, 0).addScaledVector(axis, -axis.y);
-      pole.normalize();
-      const elbow = S.clone().addScaledVector(axis, along).addScaledVector(pole, height);
-      const q1 = fromTo(E.clone().sub(S), elbow.clone().sub(S));
+      if (!this.preserveHingeFrame) {
+        const l1 = E.distanceTo(S), l2 = H.distanceTo(E);
+        const toTarget = target.clone().sub(S);
+        const d = clamp(toTarget.length(), Math.abs(l1 - l2) + 1e-4, l1 + l2 - 1e-4);
+        const axis = toTarget.clone().normalize();
+        const along = (l1 * l1 - l2 * l2 + d * d) / (2 * d), height = Math.sqrt(Math.max(0, l1 * l1 - along * along));
+        let pole = (hint ?? E.clone().sub(S)).clone();
+        pole.addScaledVector(axis, -pole.dot(axis));
+        if (pole.lengthSq() < 1e-10) pole = new Vector3(0, 1, 0).addScaledVector(axis, -axis.y);
+        pole.normalize();
+        const elbow = S.clone().addScaledVector(axis, along).addScaledVector(pole, height);
+        const q1 = fromTo(E.clone().sub(S), elbow.clone().sub(S));
+        this.inc.add(upper, q1);
+        const handAfter = S.clone().add(H.clone().sub(S).applyQuaternion(q1));
+        const q2 = fromTo(handAfter.clone().sub(elbow), S.clone().addScaledVector(axis, d).sub(elbow));
+        this.inc.add(lower, q2);
+        if (keepEndWorld) {
+          const after = rig.world(rig.pose(this.inc.map, this.translations));
+          this.inc.add(end, rig.restWQ[end].clone().multiply(after.Q[end].clone().invert()));
+        }
+        continue;
+      }
+      const reached = solveHingedTwoBone(S, E, H, target, hint, state.Q[upper], state.Q[lower]);
+      const q1 = reached.upper.clone().multiply(state.Q[upper].clone().invert());
       this.inc.add(upper, q1);
-      const handAfter = S.clone().add(H.clone().sub(S).applyQuaternion(q1));
-      const q2 = fromTo(handAfter.clone().sub(elbow), S.clone().addScaledVector(axis, d).sub(elbow));
-      this.inc.add(lower, q2);
+      const carriedLower = q1.clone().multiply(state.Q[lower]);
+      this.inc.add(lower, reached.lower.clone().multiply(carriedLower.invert()));
       if (keepEndWorld) {
         const after = rig.world(rig.pose(this.inc.map, this.translations));
-        this.inc.add(end, rig.restWQ[end].clone().multiply(after.Q[end].clone().invert()));
+        const wanted = after.Q[end].clone().slerp(rig.restWQ[end], Number(keepEndWorld));
+        this.inc.add(end, wanted.multiply(after.Q[end].clone().invert()));
       }
     }
     return rig.pose(this.inc.map, this.translations);

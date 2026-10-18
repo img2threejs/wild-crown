@@ -397,8 +397,6 @@ describe('roars and pressure', () => {
 });
 
 describe('monster animation profile', () => {
-  const trialAttackIds = GREENWAKE_COMBAT_TRIALS.flatMap(trial => trial.attackIds);
-  const allAttackIds = [...trialAttackIds, 'boar-pounce', 'boar-sap-thrash', 'sap-vein-thrash', 'root-rammer-slam'];
   const assets = ['actor-ember-boar', 'actor-frost-sap-stalker', 'actor-root-rammer'];
   function actor(patch: Partial<ActorSnapshot> = {}): ActorSnapshot {
     return {
@@ -406,61 +404,11 @@ describe('monster animation profile', () => {
       actionId: 'wild-crown:actor-idle' as ActorSnapshot['actionId'], phase: 'idle', normalizedTime: 0, sockets: {}, interactionRequirements: [], visible: true, downed: false, possessed: false, ...patch,
     };
   }
-  const attack = (id: string, attackPhase: NonNullable<ActorSnapshot['attackPhase']>, attackPhaseProgress: number) => actor({ actionId: `wild-crown:${id}` as ActorSnapshot['actionId'], attackPhase, attackPhaseProgress });
-  const phases = ['windup', 'commit', 'active', 'recovery'] as const;
 
   it('only animates the three Greenwake monster assets', () => {
     expect(resolveMonsterAnimation(actor(), 'actor-corrupted-boar')).toBeUndefined();
     expect(resolveMonsterAnimation(actor(), 'actor-aren')).toBeUndefined();
     for (const asset of assets) expect(resolveMonsterAnimation(actor(), asset)).toBeDefined();
-  });
-
-  it('covers every attack id in every phase with a valid, moving, in-range sample', () => {
-    for (const asset of assets) for (const id of allAttackIds) {
-      for (const phase of phases) {
-        let previous: number | undefined;
-        for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
-          const sample = resolveMonsterAnimation(attack(id, phase, progress), asset);
-          expect(sample).toBeDefined();
-          expect(sample!.normalizedTime).toBeGreaterThanOrEqual(0);
-          expect(sample!.normalizedTime).toBeLessThanOrEqual(1);
-          expect(sample!.loopRate).toBeGreaterThan(0);
-          if (sample!.phase === 'active' && previous !== undefined) expect(sample!.normalizedTime).toBeGreaterThanOrEqual(previous);
-          previous = sample!.phase === 'active' ? sample!.normalizedTime : undefined;
-        }
-      }
-      // Windup is never a frozen frame: finite windows advance, looped windows keep a positive rate.
-      const first = resolveMonsterAnimation(attack(id, 'windup', 0), asset)!, last = resolveMonsterAnimation(attack(id, 'windup', 1), asset)!;
-      if (first.phase === 'active') expect(last.normalizedTime).toBeGreaterThan(first.normalizedTime);
-      else expect(last.loopRate).toBeGreaterThan(0);
-    }
-  });
-
-  it('gives every trial skill its own distinct clip plan on the intended slots', () => {
-    const signature = (id: string) => phases.map(phase => [0, 0.5, 1].map(progress => JSON.stringify(resolveMonsterAnimation(attack(id, phase, progress), 'actor-ember-boar'))).join('|')).join('/');
-    expect(new Set(allAttackIds.map(signature)).size).toBe(allAttackIds.length);
-    const slot = (id: string, phase: (typeof phases)[number]) => resolveMonsterAnimation(attack(id, phase, 0.5), 'actor-ember-boar')!.actionId;
-    expect(slot('boar-ember-lance', 'windup')).toBe('monster-shoot');
-    expect(slot('boar-gale-scythe', 'active')).toBe('monster-slash');
-    expect(slot('boar-charge', 'windup')).toBe('monster-run');
-    expect(slot('boar-charge', 'active')).toBe('monster-dive');
-    expect(slot('sap-stalker-frost-bloom', 'active')).toBe('monster-jump');
-    expect(slot('sap-stalker-venom-mist', 'windup')).toBe('monster-shoot');
-    expect(slot('sap-vein-snap', 'active')).toBe('monster-slash');
-    expect(slot('root-rammer-low-wave', 'active')).toBe('monster-jump');
-    expect(slot('root-rammer-cinder-burst', 'active')).toBe('monster-dive');
-    expect(slot('root-rammer-gale-sweep', 'windup')).toBe('monster-turn');
-  });
-
-  it('lands each clip strike pose on the hazard active window and eases out of recovery', () => {
-    const activeStart = (id: string) => resolveMonsterAnimation(attack(id, 'active', 0), 'actor-ember-boar')!;
-    for (const id of ['boar-gale-scythe', 'sap-vein-snap', 'sap-vein-thrash']) expect(Math.abs(activeStart(id).normalizedTime - 0.45)).toBeLessThanOrEqual(0.05);
-    for (const id of ['boar-ember-lance', 'sap-stalker-venom-mist']) expect(Math.abs(activeStart(id).normalizedTime - 0.5)).toBeLessThanOrEqual(0.05);
-    for (const id of ['root-rammer-cinder-burst', 'root-rammer-slam', 'boar-sap-thrash']) expect(Math.abs(activeStart(id).normalizedTime - 0.4)).toBeLessThanOrEqual(0.05);
-    for (const id of allAttackIds) {
-      const at = (progress: number) => resolveMonsterAnimation(attack(id, 'recovery', progress), 'actor-ember-boar')!.normalizedTime;
-      expect(at(1) - at(0.75)).toBeLessThan(at(0.25) - at(0));
-    }
   });
 
   it('selects locomotion loops by horizontal speed, with loop rate proportional to speed', () => {
@@ -480,10 +428,9 @@ describe('monster animation profile', () => {
     expect(resolveMonsterAnimation(actor({ velocity: vec(1.5, 0, 0), yawRate: 2 }), 'actor-ember-boar')!.actionId).toBe('monster-walk');
   });
 
-  it('plays hurt for stagger, roar during the pause, and lets attacks override exposure', () => {
+  it('plays the finite hurt pose while staggered', () => {
     const stagger = resolveMonsterAnimation(actor({ actionId: 'corrupted-boar-stagger' as ActorSnapshot['actionId'], normalizedTime: 0.4 }), 'actor-ember-boar')!;
     expect(stagger).toMatchObject({ actionId: 'monster-hurt', phase: 'active', normalizedTime: 0.4 });
-    expect(resolveMonsterAnimation({ ...attack('boar-charge', 'windup', 0.5), weakPointExposed: true }, 'actor-ember-boar')!.actionId).toBe('monster-run');
   });
 
   it('holds the dazed pose of the finite hurt clip for downed and exposed monsters instead of looping the flinch', () => {

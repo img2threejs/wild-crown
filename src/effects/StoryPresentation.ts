@@ -6,6 +6,7 @@ import type { CueCancellationReason, StoryCue } from './story-cues.js';
 import { StoryEffects, type StoryEffectsOptions } from './StoryEffects.js';
 import { ActorVfx } from './vfx/ActorVfx.js';
 import type { ImpactSink } from './vfx/ElementKits.js';
+import { EnemyAttackFx } from './vfx/EnemyAttackFx';
 
 export interface StoryPresentationOptions {
   readonly scene: THREE.Scene;
@@ -24,6 +25,9 @@ export class StoryPresentation {
   readonly effects: StoryEffects;
   readonly actors: ActorVfx;
   readonly audio: StoryAudio;
+  readonly enemies: EnemyAttackFx;
+  private pending: StoryCue[] = [];
+  private spare: StoryCue[] = [];
   private readonly resolveSocket?: StoryPresentationOptions['resolveSocket'];
   private readonly audioAnchor = new THREE.Vector3();
   private disposed = false;
@@ -33,6 +37,7 @@ export class StoryPresentation {
     this.effects = new StoryEffects({ scene: options.scene, resolveSocket: options.resolveSocket, resolveActorRoot: options.resolveActorRoot, reducedEffects: options.reducedEffects, capacity: options.capacity, impact: options.impact });
     this.actors = new ActorVfx(this.effects.vfx, options.resolveSocket, options.resolveActorRoot, actorId => this.effects.isCharging(actorId), options.impact);
     this.audio = new StoryAudio({ listener: options.audioListener, onPlayback: options.onPlayback });
+    this.enemies = new EnemyAttackFx(this.effects.vfx, options.resolveSocket, options.resolveActorRoot);
   }
 
   /** Call from a real pointer or keyboard activation; gamepad polling alone may not unlock WebAudio. */
@@ -43,18 +48,45 @@ export class StoryPresentation {
     let effects = 0;
     let sounds = 0;
     for (const cue of cues) {
-      if (cue.kind === 'cancel') {
-        if (!cue.cancellationReason) throw new Error('Cancellation cues require an authoritative reason.');
-        if (cue.scopeId) this.cancelScope(cue.scopeId, cue.cancellationReason);
-        else this.cancelAll(cue.cancellationReason);
-        continue;
-      }
-      if (this.effects.emit(cue)) effects++;
-      let position = cue.kind === 'anticipation' || cue.kind === 'commit' ? cue.from ?? cue.position : cue.position ?? cue.from;
-      if (!position && cue.actorId) position = this.resolveSocket?.(cue.actorId, 'root')?.getWorldPosition(this.audioAnchor);
-      if (this.audio.play(cue, position)) sounds++;
+      const accepted = this.consume(cue);
+      if (accepted & 1) effects++;
+      if (accepted & 2) sounds++;
     }
     return { effects, sounds };
+  }
+  /** Fixed steps enqueue immutable facts. Bone-dependent consumers run only after renderer.sync has posed the final snapshot. */
+  queueTick(cues: readonly StoryCue[]): void {
+    if (!this.disposed) for (const cue of cues) this.pending.push(cue);
+  }
+
+  presentFrame(snapshot: CombatSnapshot, alpha: number, listenerPose?: AudioListenerPose): void {
+    if (this.disposed) return;
+    if (listenerPose) this.audio.setListenerPose(listenerPose);
+    const queued = this.pending;
+    this.pending = this.spare; this.spare = queued;
+    try { for (const cue of queued) this.consume(cue); } finally { queued.length = 0; }
+    // Cue births retain their original tick, but current-pose emitters must not inherit an earlier queued cue's birth clock.
+    this.effects.vfx.time = snapshot.worldClock.worldTick / 60;
+    this.actors.setHero(snapshot.player.heroId);
+    this.updateActors(snapshot.actors);
+    this.effects.warden.updateCombat(snapshot, alpha);
+    this.enemies.update(snapshot.actors, snapshot.worldClock.worldTick);
+    // Last: age cue resources and upload every emitter written on this frame, including actor/weapon effects.
+    this.effects.update(snapshot.worldClock, listenerPose?.position);
+  }
+
+  private consume(cue: StoryCue): number {
+    if (cue.kind === 'cancel') {
+      if (!cue.cancellationReason) throw new Error('Cancellation cues require an authoritative reason.');
+      if (cue.scopeId) this.cancelScope(cue.scopeId, cue.cancellationReason);
+      else this.cancelAll(cue.cancellationReason);
+      return 0;
+    }
+    const accepted = this.effects.emit(cue);
+    if (accepted) this.enemies.consume(cue);
+    let position = cue.kind === 'anticipation' || cue.kind === 'commit' ? cue.from ?? cue.position : cue.position ?? cue.from;
+    if (!position && cue.actorId) position = this.resolveSocket?.(cue.actorId, 'root')?.getWorldPosition(this.audioAnchor);
+    return (accepted ? 1 : 0) | (this.audio.play(cue, position) ? 2 : 0);
   }
 
   /** Pass the authoritative scaled world clock; never derive VFX time from renderer delta. */
@@ -100,11 +132,17 @@ export class StoryPresentation {
   startBiomeAmbience(regionId: string): boolean { return this.audio.startBiomeAmbience(regionId); }
 
   cancelScope(scopeId: string, reason: CueCancellationReason): void {
+    let kept = 0;
+    for (const cue of this.pending) if (cue.scopeId !== scopeId) this.pending[kept++] = cue;
+    this.pending.length = kept;
+    this.enemies.cancelScope(scopeId);
     this.effects.cancelScope(scopeId, reason);
     this.audio.cancelScope(scopeId, reason);
   }
 
   cancelAll(reason: CueCancellationReason): void {
+    this.pending.length = 0;
+    this.enemies.clear();
     this.effects.cancelAll(reason);
     this.actors.clear();
     this.audio.cancelAll(reason);
@@ -119,6 +157,8 @@ export class StoryPresentation {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.pending.length = this.spare.length = 0;
+    this.enemies.dispose();
     this.actors.dispose();
     this.effects.dispose();
     this.audio.dispose();

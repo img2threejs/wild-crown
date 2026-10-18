@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:5194/",
+  "actions": [
+    "New Game",
+    "Select Aren with companion",
+    "Intro auto-completion",
+    "Continue candidate save",
+    "Skip Cinematic",
+    "Dismiss how-to-play",
+    "Hold D for 800 ms through actual input"
+  ],
+  "body": "AREN\nWARDEN OF THE WILD\nVitality\nMana\n\n100 / 100\nMove to Restore Mana\n\nInstinct\n\nTHE NIGHT OF A THOUSAND ROARS\nSTEP 1 OF 6\n\nHear the night of a thousand roars\n\nE Listen for the roars\n\nSearch the marked area\n\nPROLOGUE\n\nR\nCOMMAND\nAsha\nF\n25 MP\nDive\nREADY\nSPACE\n8 MP\nJump\nREADY\nJ\nFREE\nWarden Blade\nREADY\nK\n12 / 20 MP\nHeavy\nREADY\nL\n15 / 35 MP\nSigil Bolt\nREADY\nQ\n20 MP\nRoot Tether\nNo target\nU\nINSTINCT\nJudgement\nNeed full Instinct\nW A S D / ARROWS MOVE · SHIFT RUN · F DIVE · SPACE ×2 DOUBLE JUMP · PAUSE ESC\nCANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+  "errors": {
+    "entries": [],
+    "nextSeq": 0,
+    "dropped": 0
+  }
+}

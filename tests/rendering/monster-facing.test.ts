@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { AnimationClip, Bone, Group, Vector3, VectorKeyframeTrack } from 'three';
 import { AnimationController } from '../../src/rendering/AnimationController.js';
-import { driveActorAnimation, monsterHopHeight } from '../../src/rendering/ActorAnimationDriver.js';
-import { resolveMonsterAnimation } from '../../src/rendering/MonsterAnimationProfiles.js';
+import { driveActorAnimation } from '../../src/rendering/ActorAnimationDriver.js';
 import { NativeAssetLoader, type NativeAssetInstance } from '../../src/rendering/NativeAssetLoader.js';
 import type { ActorSnapshot, AssetManifestEntry } from '../../src/game/contracts.js';
 
@@ -268,55 +267,3 @@ describe('boosted jump clip selection', () => {
   });
 });
 
-describe('presentation-only monster hop', () => {
-  const monster = (patch: Partial<ActorSnapshot>) => actor({ id: 'm' as ActorSnapshot['id'], allegiance: 'hostile', actionId: 'wild-crown:howler-leap-slam' as ActorSnapshot['actionId'], attackPhase: 'active', ...patch });
-  const jump = { actionId: 'monster-jump' as const, normalizedTime: 0.5 };
-  const hop = (progress: number, asset = 'actor-thornback-howler', patch: Partial<ActorSnapshot> = {}, actionId: 'monster-jump' | 'monster-slash' = 'monster-jump') =>
-    monsterHopHeight(monster({ attackPhase: 'commit', attackPhaseProgress: progress, ...patch }), asset, { actionId, normalizedTime: 0.3 + progress * 0.4 });
-
-  it('is a symmetric arc over the authored flight, with no offset before takeoff or after landing', () => {
-    expect(hop(0)).toBeCloseTo(0, 9);
-    expect(hop(1)).toBeCloseTo(0, 9);
-    expect(hop(0.5)).toBeGreaterThan(0.05);
-    for (const progress of [0.1, 0.25, 0.4]) {
-      expect(hop(progress)).toBeCloseTo(hop(1 - progress), 9);
-      expect(hop(progress)).toBeGreaterThan(0);
-      expect(hop(progress)).toBeLessThan(hop(0.5));
-    }
-    expect(hop(0.25)).toBeLessThan(hop(0.4));
-    expect(hop(-0.5)).toBe(0);
-    expect(hop(1.5)).toBe(0);
-  });
-
-  it('applies during commit or active flight, never during anticipation, recovery or non-jump attacks', () => {
-    expect(hop(0.5, 'actor-thornback-howler', { attackPhase: 'active' })).toBeGreaterThan(0);
-    expect(hop(0.5, 'actor-thornback-howler', { attackPhase: 'windup' })).toBe(0);
-    expect(hop(0.5, 'actor-thornback-howler', { attackPhase: 'recovery' })).toBe(0);
-    expect(hop(0.5, 'actor-thornback-howler', {}, 'monster-slash')).toBe(0);
-    expect(hop(0.5, 'actor-thornback-howler', { downed: true })).toBe(0);
-    expect(monsterHopHeight(monster({ attackPhase: undefined }), 'actor-thornback-howler', jump)).toBe(0);
-  });
-
-  it('lands a howler leap before its damaging slam instead of starting a second hop at contact', () => {
-    const asset = 'actor-thornback-howler';
-    const flight = monster({ attackPhase: 'commit', attackPhaseProgress: 0.5 });
-    expect(monsterHopHeight(flight, asset, resolveMonsterAnimation(flight, asset))).toBeGreaterThan(0);
-    for (const progress of [0, 0.25, 0.5, 1]) {
-      const contact = monster({ attackPhase: 'active', attackPhaseProgress: progress });
-      expect(monsterHopHeight(contact, asset, resolveMonsterAnimation(contact, asset))).toBe(0);
-    }
-  });
-
-  it('is zero for hovering avians, which keep their own flight curve', () => {
-    expect(hop(0.5, 'actor-storm-hornbill')).toBe(0);
-  });
-
-  it('gives every asset a finite, plausible height (assets without a table entry use a scale-based fallback)', () => {
-    for (const asset of ['actor-ember-boar', 'actor-ghor-mire-maw', 'actor-unlisted']) {
-      const peak = hop(0.5, asset);
-      expect(Number.isFinite(peak)).toBe(true);
-      expect(peak).toBeGreaterThan(0.05);
-      expect(peak).toBeLessThan(1);
-    }
-  });
-});

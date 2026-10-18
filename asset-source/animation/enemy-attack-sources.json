@@ -1,0 +1,2589 @@
+{
+  "schemaVersion": 1,
+  "runtimeAliases": {
+    "actor-ruun": "actor-ruun-chained-howl",
+    "actor-ghor": "actor-ghor-mire-maw"
+  },
+  "nativeSources": {
+    "actor-ember-boar": {
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
+      "sha256": "b7dffb9d61b34c53f96cab9f0e5b26bbc7a1138eceabd2d08791d4f7e22da439",
+      "rigFamily": "quadruped"
+    },
+    "actor-frost-sap-stalker": {
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
+      "sha256": "b86f0274f55c3a0b41ede1ea5361de88bb307369decc5d3ee07d44e274759e85",
+      "rigFamily": "quadruped"
+    },
+    "actor-root-rammer": {
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
+      "sha256": "c26c7d3d3e67acd02aca904426b016f8d6fc50243a878bf128771ecef6dd2284",
+      "rigFamily": "quadruped"
+    },
+    "actor-thornback-howler": {
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
+      "sha256": "eb5b9c1086562039527f1b1cf6f43828e624b7d91223b7d6522d5a5f6d4492a9",
+      "rigFamily": "biped"
+    },
+    "actor-storm-hornbill": {
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
+      "sha256": "362813aeead1086dbc505324ac07a6231e18dc7dde481c461ad52b096e4ca5d9",
+      "rigFamily": "avian"
+    },
+    "actor-mire-viper": {
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
+      "sha256": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
+      "rigFamily": "serpentine"
+    },
+    "actor-koro": {
+      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
+      "sha256": "c6985e814b630be140030ea03c5679e4a9ca6d558184f2e34567a41f1d1b048d",
+      "rigFamily": "biped"
+    },
+    "actor-grove-rootling": {
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb",
+      "sha256": "e481cdd09e6595dc07d0b6d8ba63593c45f5b59379082ddd47e5e6773498bae4",
+      "rigFamily": "biped"
+    },
+    "actor-grove-blighted-rootling": {
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb",
+      "sha256": "9ffcd7e26cecbee7dd78d2967cfd9c13f3cd1ae796c0bd61b2775cfe2e7ea9aa",
+      "rigFamily": "biped"
+    },
+    "actor-grove-hollowheart": {
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb",
+      "sha256": "c9ade57f76cb5cacbdc26093ac28cfb1e76d5f1fc1707260f90851716d87a62b",
+      "rigFamily": "biped"
+    },
+    "actor-frostfang-tracker": {
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb",
+      "sha256": "d6f1ed18598400615b60bd0f7a9f652cdc970d7aad3c5c7a27a58d9f98f766fa",
+      "rigFamily": "quadruped"
+    },
+    "actor-howl-scout": {
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb",
+      "sha256": "327c04a6a41ab094f05bc1ce7f8d750abbac407edde18e00e9ad92774ce0597c",
+      "rigFamily": "quadruped"
+    },
+    "actor-ruun-chained-howl": {
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb",
+      "sha256": "d00f5bec3cb0ecb235ed2b15f122666839f5ffb5423d641e353eb1918831ab15",
+      "rigFamily": "quadruped"
+    },
+    "actor-bog-lurker": {
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
+      "sha256": "1cd5b7583f7f34e70f743d89cf6e11712e98a968ba312a7b2c7879a754741b7a",
+      "rigFamily": "quadruped"
+    },
+    "actor-lantern-heron": {
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
+      "sha256": "a2931e33b358a70363433676e7dbcd58b9a8b2b02678d4e651a6ab8ad2f4e046",
+      "rigFamily": "avian"
+    },
+    "actor-ghor-mire-maw": {
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
+      "sha256": "5e61fa266a60e6ed0ec66fbd61df7faf663d4ee89e870e3dea737567f3b4819b",
+      "rigFamily": "quadruped"
+    },
+    "actor-koro-branchbreaker": {
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
+      "sha256": "a56f21ab1e7d431dfbcde7a165fd9c47fecc6023325b435224aaf5314f5f9a23",
+      "rigFamily": "biped"
+    },
+    "actor-asha": {
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb",
+      "sha256": "e93dfa349cb64e7ef27a1e056481a3d9b4ffac0801616788eff092bccc94f265",
+      "rigFamily": "quadruped"
+    },
+    "actor-camp-hunter-melee": {
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb",
+      "sha256": "5813fe9afd11cee22d542f1c87135299b9f59c5b1169737473404e2a2c8747dd",
+      "rigFamily": "biped"
+    },
+    "actor-camp-hunter-ranged": {
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb",
+      "sha256": "9da66e5ba2fb6e82d5b6117255200e15852408616cec510a70553130d5611d72",
+      "rigFamily": "biped"
+    },
+    "actor-sable": {
+      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
+      "sha256": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131",
+      "rigFamily": "quadruped"
+    },
+    "actor-nyra": {
+      "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
+      "sha256": "9465f6efcfd6642629fcc288dec58b3e30ac8085e925cdfb633204d542c931f3",
+      "rigFamily": "quadruped"
+    },
+    "actor-solkar": {
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
+      "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+      "rigFamily": "quadruped"
+    },
+    "actor-orun": {
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
+      "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
+      "rigFamily": "biped"
+    },
+    "actor-orun-crowned-beast": {
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
+      "sha256": "13193d422eaf1218778b3c8a6c164f581205a258eb95f70839b3fb6771ea8298",
+      "rigFamily": "quadruped"
+    }
+  },
+  "phaseSources": {
+    "koro-fruit-burst": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ruun-track-charge": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ruun-pack-call": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ruun-claw-arc": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ghor-hammering-charge": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.3,
+        "toLoopRate": 0.8
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.4,
+        "toLoopRate": 2
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ghor-stonefall": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "ghor-overhead-slam": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "solkar-commanding-roar": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "solkar-pride-rush": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.4,
+        "toLoopRate": 1
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.5,
+        "toLoopRate": 2
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "solkar-paw-slam": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.4,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-root-tether": {
+      "windup": {
+        "action": "orun-root-tether",
+        "from": 0,
+        "to": 0.35,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "orun-root-tether",
+        "from": 0.35,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "orun-root-tether",
+        "from": 0.5,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "orun-root-tether",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-staff-combo": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "loopRate": 1.6
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-cartwheel-counter": {
+      "windup": {
+        "action": "orun-cartwheel-counter",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "orun-cartwheel-counter",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "orun-cartwheel-counter",
+        "from": 0.45,
+        "to": 0.7,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "orun-cartwheel-counter",
+        "from": 0.7,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-back-handspring": {
+      "windup": {
+        "action": "orun-back-handspring",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "orun-back-handspring",
+        "from": 0.25,
+        "to": 0.35,
+        "ease": "in"
+      },
+      "active": {
+        "action": "orun-back-handspring",
+        "from": 0.35,
+        "to": 0.45,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "orun-back-handspring",
+        "from": 0.45,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-dive-roll": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.3,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-companion-suppression": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-sky-aspect": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-sky-dive": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.36,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.36,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-canopy-root": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.35,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.35,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.75,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.75,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-canopy-aspect": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.35,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.35,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.75,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.75,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-fang-aspect": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-pack-aspect": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-shadow-aspect": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-crown-aspect": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.45,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-root-surge": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.35,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.35,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.75,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.75,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "orun-crown-possession": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "boar-charge": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "boar-sap-thrash": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.36,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.36,
+        "to": 0.5,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.5,
+        "to": 0.95,
+        "ease": "out"
+      }
+    },
+    "boar-pounce": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.5,
+        "to": 0.78,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.78,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "sap-vein-snap": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.14,
+        "to": 0.34,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.34,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.62,
+        "to": 0.92,
+        "ease": "out"
+      }
+    },
+    "sap-vein-thrash": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.08,
+        "to": 0.36,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.36,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "root-rammer-low-wave": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "root-rammer-slam": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.4,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "boar-ember-lance": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.38,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.38,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.75,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.75,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "boar-gale-scythe": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "sap-stalker-frost-bloom": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.42,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.42,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "sap-stalker-venom-mist": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.05,
+        "to": 0.34,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.34,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.45,
+        "to": 0.58,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.58,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "root-rammer-cinder-burst": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.25,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.55,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.55,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "root-rammer-gale-sweep": {
+      "windup": {
+        "action": "monster-turn",
+        "loopRate": 0.8,
+        "toLoopRate": 2.2
+      },
+      "commit": {
+        "action": "monster-turn",
+        "loopRate": 2.6
+      },
+      "active": {
+        "action": "monster-tail",
+        "from": 0.46,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-tail",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howler-rock-hurl": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howler-leap-slam": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.7,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.7,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howler-branch-sweep": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.74,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.74,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hornbill-dive-bomb": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.36,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.36,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hornbill-feather-volley": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.04,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.66,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.66,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hornbill-gale-flap": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.04,
+        "to": 0.32,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.32,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "viper-venom-spit": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.05,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.62,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.62,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "viper-tail-lash": {
+      "windup": {
+        "action": "monster-tail",
+        "from": 0,
+        "to": 0.36,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-tail",
+        "from": 0.36,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-tail",
+        "from": 0.5,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-tail",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "viper-strike-lunge": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.18,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.18,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "poacher-scout-net": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.4,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.4,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.58,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.58,
+        "to": 0.85,
+        "ease": "out"
+      }
+    },
+    "poacher-hunter-spear": {
+      "windup": {
+        "action": "hunter-thrust",
+        "from": 0,
+        "to": 0.39,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "hunter-thrust",
+        "from": 0.39,
+        "to": 0.44,
+        "ease": "in"
+      },
+      "active": {
+        "action": "hunter-thrust",
+        "from": 0.44,
+        "to": 0.5,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "hunter-thrust",
+        "from": 0.5,
+        "to": 0.8,
+        "ease": "out"
+      }
+    },
+    "poacher-hunter-east-spear": {
+      "windup": {
+        "action": "hunter-thrust",
+        "from": 0,
+        "to": 0.39,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "hunter-thrust",
+        "from": 0.39,
+        "to": 0.44,
+        "ease": "in"
+      },
+      "active": {
+        "action": "hunter-thrust",
+        "from": 0.44,
+        "to": 0.5,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "hunter-thrust",
+        "from": 0.5,
+        "to": 0.8,
+        "ease": "out"
+      }
+    },
+    "koro-rock-throw": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "koro-falling-branch": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "koro-platform-charge": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "koro-vine-vault": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.7,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.7,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "koro-branch-swing": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.74,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.74,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "asha-guarding-pounce": {
+      "windup": {
+        "action": "asha-stalk-pounce",
+        "from": 0,
+        "to": 0.27999999999999997,
+        "ease": "linear"
+      },
+      "commit": {
+        "action": "asha-stalk-pounce",
+        "from": 0.27999999999999997,
+        "to": 0.44,
+        "ease": "linear"
+      },
+      "active": {
+        "action": "asha-stalk-pounce",
+        "from": 0.44,
+        "to": 0.66,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "asha-stalk-pounce",
+        "from": 0.66,
+        "to": 0.9,
+        "ease": "linear"
+      }
+    },
+    "asha-corrupted-pounce": {
+      "windup": {
+        "action": "asha-corrupt-slam",
+        "from": 0,
+        "to": 0.39999999999999997,
+        "ease": "linear"
+      },
+      "commit": {
+        "action": "asha-corrupt-slam",
+        "from": 0.39999999999999997,
+        "to": 0.5,
+        "ease": "linear"
+      },
+      "active": {
+        "action": "asha-corrupt-slam",
+        "from": 0.5,
+        "to": 0.6399999999999999,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "asha-corrupt-slam",
+        "from": 0.6399999999999999,
+        "to": 0.9199999999999999,
+        "ease": "linear"
+      }
+    },
+    "asha-bamboo-charge": {
+      "windup": {
+        "action": "asha-bamboo-charge",
+        "from": 0,
+        "to": 0.3,
+        "ease": "linear"
+      },
+      "commit": {
+        "action": "asha-bamboo-charge",
+        "from": 0.3,
+        "to": 0.37999999999999995,
+        "ease": "linear"
+      },
+      "active": {
+        "action": "asha-bamboo-charge",
+        "from": 0.37999999999999995,
+        "to": 0.82,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "asha-bamboo-charge",
+        "from": 0.82,
+        "to": 0.96,
+        "ease": "linear"
+      }
+    },
+    "asha-claw-combination": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.06,
+        "to": 0.32,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.32,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.7,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.7,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "asha-side-charge": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "asha-protective-roar": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "asha-black-sap-trail": {
+      "windup": {
+        "action": "monster-tail",
+        "from": 0,
+        "to": 0.36,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-tail",
+        "from": 0.36,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-tail",
+        "from": 0.5,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-tail",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "asha-ground-wave": {
+      "windup": {
+        "action": "asha-corrupt-slam",
+        "from": 0,
+        "to": 0.39999999999999997,
+        "ease": "linear"
+      },
+      "commit": {
+        "action": "asha-corrupt-slam",
+        "from": 0.39999999999999997,
+        "to": 0.5,
+        "ease": "linear"
+      },
+      "active": {
+        "action": "asha-corrupt-slam",
+        "from": 0.5,
+        "to": 0.6399999999999999,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "asha-corrupt-slam",
+        "from": 0.6399999999999999,
+        "to": 1,
+        "ease": "linear"
+      }
+    },
+    "sprig-seed-toss": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "sprig-ground-ripple": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "sprig-petal-sweep": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.74,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.74,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "blighted-seed-lob": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "blighted-ground-pulse": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "blighted-lash-sweep": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.74,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.74,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hollowheart-leap-smash": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.7,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.7,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hollowheart-antler-sweep": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.74,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.74,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hollowheart-ichor-hurl": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.05,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "hollowheart-heartlight-burst": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.45,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "frostfang-pack-rush": {
+      "windup": {
+        "action": "monster-run",
+        "loopRate": 0.35,
+        "toLoopRate": 0.9
+      },
+      "commit": {
+        "action": "monster-run",
+        "loopRate": 1.6,
+        "toLoopRate": 2.4
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.3,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "frostfang-ice-bite": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.04,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "frostfang-frost-breath": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.05,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.66,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.66,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howl-scout-flank-pounce": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.7,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.7,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howl-scout-claw-rake": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.06,
+        "to": 0.32,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.32,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.7,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.7,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "howl-scout-low-howl": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "chained-ruun-chain-pounce": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "chained-ruun-howl-shockwave": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.3,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.45,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "chained-ruun-breaking-ice": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.25,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.55,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.55,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "bog-lurker-tongue-lash": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0,
+        "to": 0.46,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.46,
+        "to": 0.58,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.58,
+        "to": 0.78,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.78,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "bog-lurker-bubble-pool": {
+      "windup": {
+        "action": "monster-shoot",
+        "from": 0.05,
+        "to": 0.5,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-shoot",
+        "from": 0.5,
+        "to": 0.62,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-shoot",
+        "from": 0.62,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-shoot",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "bog-lurker-mud-hop": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.7,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.7,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "lantern-heron-spear-dive": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.36,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.36,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "lantern-heron-mist-gust": {
+      "windup": {
+        "action": "monster-slash",
+        "from": 0.04,
+        "to": 0.32,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-slash",
+        "from": 0.32,
+        "to": 0.45,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-slash",
+        "from": 0.45,
+        "to": 0.72,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-slash",
+        "from": 0.72,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "lantern-heron-flare-burst": {
+      "windup": {
+        "action": "monster-roar",
+        "from": 0,
+        "to": 0.25,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-roar",
+        "from": 0.25,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-roar",
+        "from": 0.4,
+        "to": 0.7,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-roar",
+        "from": 0.7,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "mire-maw-tail-sweep": {
+      "windup": {
+        "action": "monster-tail",
+        "from": 0,
+        "to": 0.36,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-tail",
+        "from": 0.36,
+        "to": 0.5,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-tail",
+        "from": 0.5,
+        "to": 0.8,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-tail",
+        "from": 0.8,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "mire-maw-bite-lunge": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.18,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.18,
+        "to": 0.38,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.38,
+        "to": 0.6,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.6,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "mire-maw-black-river-wave": {
+      "windup": {
+        "action": "monster-jump",
+        "from": 0,
+        "to": 0.3,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-jump",
+        "from": 0.3,
+        "to": 0.68,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-jump",
+        "from": 0.68,
+        "to": 0.85,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-jump",
+        "from": 0.85,
+        "to": 1,
+        "ease": "out"
+      }
+    },
+    "nyra-shadow-ambush": {
+      "windup": {
+        "action": "monster-dive",
+        "from": 0,
+        "to": 0.2,
+        "ease": "inOut"
+      },
+      "commit": {
+        "action": "monster-dive",
+        "from": 0.2,
+        "to": 0.4,
+        "ease": "in"
+      },
+      "active": {
+        "action": "monster-dive",
+        "from": 0.4,
+        "to": 0.62,
+        "ease": "linear"
+      },
+      "recovery": {
+        "action": "monster-dive",
+        "from": 0.62,
+        "to": 1,
+        "ease": "out"
+      }
+    }
+  },
+  "assetSourceOverrides": {
+    "actor-koro": {
+      "koro-falling-branch": {
+        "windup": {
+          "action": "koro-distract",
+          "from": 0,
+          "to": 0.35,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "koro-distract",
+          "from": 0.35,
+          "to": 0.5,
+          "ease": "in"
+        },
+        "active": {
+          "action": "koro-distract",
+          "from": 0.5,
+          "to": 0.75,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "koro-distract",
+          "from": 0.75,
+          "to": 1,
+          "ease": "out"
+        }
+      },
+      "koro-fruit-burst": {
+        "windup": {
+          "action": "koro-throw",
+          "from": 0,
+          "to": 0.35,
+          "ease": "inOut"
+        },
+        "commit": {
+          "action": "koro-throw",
+          "from": 0.35,
+          "to": 0.5,
+          "ease": "in"
+        },
+        "active": {
+          "action": "koro-throw",
+          "from": 0.5,
+          "to": 0.75,
+          "ease": "linear"
+        },
+        "recovery": {
+          "action": "koro-throw",
+          "from": 0.75,
+          "to": 1,
+          "ease": "out"
+        }
+      }
+    }
+  }
+}

@@ -42,6 +42,10 @@ import { solidPropKind } from '../content/solid-props';
 import { heroById, type HeroId } from '../game/heroes';
 import { HERO_COMBAT } from '../game/combat/HeroProfiles';
 import { WaystoneVisual, WAYSTONE_ASSET_ID } from './WaystoneVisual';
+import { enemyAttackAirborne } from './EnemyAttackPresentation';
+import enemyNativeAnchorSource from '../content/enemy-native-anchors.json';
+
+const ENEMY_NATIVE_ANCHORS: Readonly<Record<string, Readonly<Record<string, { readonly base: string; readonly tip: string }>>>> = enemyNativeAnchorSource;
 
 const STATIC_BATCH_CELL_SIZE = 16;
 /** Light 3 (Warden Blade spin): the simulation rotates Aren's facing a full turn across the swing. */
@@ -810,12 +814,13 @@ export class GameRenderer {
     this.syncedActors = actors;
     this.animationLod.updated = 0; this.animationLod.skipped = 0;
     this.syncActors(actors, prior, blend, dt);
-    // Simulation hit-stop holds the sampled pose; the real-time fades must not run out underneath it.
-    const frozen = (combat.hitStop?.remainingTicks ?? 0) > 0;
+    // Fades share the sampled actor's clock: hostile/ally world time, player simulation time.
+    const frozen = (combat.hitStop?.remainingTicks ?? 0) > 0 || combat.worldClock.policy === 'paused';
     for (const actor of actors) {
-      this.advanceAnimation(this.actorRoots.get(actor.id), dt, frozen);
+      const animationDt = actor.allegiance === 'player' ? dt : this.renderWorldDeltaSeconds;
+      this.advanceAnimation(this.actorRoots.get(actor.id), animationDt, frozen);
       const requested = actor.renderVariantId;
-      if (requested) this.advanceAnimation(this.actorVariants.get(actor.id)?.get(requested), dt, frozen);
+      if (requested) this.advanceAnimation(this.actorVariants.get(actor.id)?.get(requested), animationDt, frozen);
     }
     const player = actors.find((actor) => actor.id === 'aren') ?? actors.find((actor) => actor.allegiance === 'player');
     const base = player && this.actorRoots.get(player.id);
@@ -1064,12 +1069,12 @@ export class GameRenderer {
     shadows.end();
   }
 
-  /** Advances the fades of one instance; an instance that reused its pose this frame (animation LOD) owes the real time to its next update. */
+  /** A LOD-held instance owes only elapsed actor-clock time, never paused or hit-stop frames. */
   private advanceAnimation(instance: NativeAssetInstance | undefined, dt: number, frozen: boolean): void {
-    if (!instance) return;
+    if (!instance || frozen) return;
     const extras = this.actorExtras.get(instance);
     if (extras?.lodSkip) { extras.pendingDt += dt; return; }
-    instance.animation.update(extras ? dt + extras.pendingDt : dt, frozen);
+    instance.animation.update(extras ? dt + extras.pendingDt : dt);
     if (extras) extras.pendingDt = 0;
   }
 
@@ -1305,14 +1310,19 @@ export class GameRenderer {
     return weaponSocket ?? instance?.sockets[socketName] ?? (instance ? this.bodySocket(instance, socketName) : undefined) ?? (socketName === 'root' ? instance?.root : undefined);
   }
 
-  /** `fist-*`/`foot-*` sockets resolve to the mixamorig hand and foot bones (raw and glTF-sanitized names), cached per instance so lookups never traverse again. */
+  /** Hero body sockets and authored enemy anatomy are cached per actual instance, including variant swaps. */
   private bodySocket(instance: NativeAssetInstance, socketName: string): Object3D | undefined {
-    const boneName = BODY_SOCKET_BONES[socketName];
-    if (!boneName) return undefined;
     let cache = this.bodySockets.get(instance);
     if (!cache) { cache = new Map(); this.bodySockets.set(instance, cache); }
     let bone = cache.get(socketName);
     if (bone === undefined) {
+      let boneName = BODY_SOCKET_BONES[socketName];
+      if (!boneName && socketName.startsWith('enemy:')) {
+        const divider = socketName.lastIndexOf(':');
+        const pair = ENEMY_NATIVE_ANCHORS[instance.assetId]?.[socketName.slice(6, divider)];
+        boneName = pair?.[socketName.slice(divider + 1) as 'base' | 'tip'];
+      }
+      if (!boneName) { cache.set(socketName, null); return undefined; }
       bone = instance.root.getObjectByName(PropertyBinding.sanitizeNodeName(boneName)) ?? instance.root.getObjectByName(boneName) ?? null;
       cache.set(socketName, bone);
     }
@@ -1514,7 +1524,8 @@ export class GameRenderer {
     if (dodgeBlink) instance.root.visible = false;
     const position = actor.position;
     const prior = previous?.position;
-    const interpolate = previous && prior && previous.visible === actor.visible && !actor.downed
+    // Finite enemy poses and contact cues use the current authoritative tick: a delayed root/yaw would detach the posed strike from its hazard.
+    const interpolate = previous && prior && previous.visible === actor.visible && !actor.downed && !actor.attackPhase
       && Math.hypot(position.x - prior.x, position.y - prior.y, position.z - prior.z) < 4;
     if (interpolate) {
       instance.root.position.set(
@@ -1526,7 +1537,7 @@ export class GameRenderer {
     // Drawn height: the simulation snaps up and down stairs and ledges (up to 0.45 m in one tick); the drawn root absorbs the pop and settles. Feet and shadow keep reading the real ground.
     const motion = this.motionFor(instance);
     const hovering = MONSTER_HOVER[instance.assetId] !== undefined;
-    const onGround = !actor.downed && actor.jumpPhase === undefined && !OFF_GROUND_ACTION.test(actor.actionId);
+    const onGround = !actor.downed && actor.jumpPhase === undefined && !OFF_GROUND_ACTION.test(actor.actionId) && !enemyAttackAirborne(actor);
     instance.root.position.y = settleDrawnHeight(motion, instance.root.position.y, dt, onGround && !hovering, Boolean(interpolate));
     if (actor.allegiance !== 'player') {
       const hoverTarget = monsterHoverHeight(actor, instance.assetId, this.renderWorldTimeSeconds);
@@ -1616,7 +1627,7 @@ export class GameRenderer {
       reaction: reacting ? pose : undefined,
       story: this.storyInputFor(actor),
     });
-    // Presentation-only monster hop (jump-slot attack, active window); the simulation position is untouched.
+    // Only a defeated flyer's held fall offset remains outside native skeletal motion.
     if (hop !== 0) root.position.y += hop;
   }
 
@@ -1639,9 +1650,9 @@ export class GameRenderer {
   }
 
   /**
-   * Animation LOD: how much of the procedural layer an actor runs and whether its clip is re-evaluated this frame. The player and any actor that is
-   * reacting or attacking always update while visible; others update every frame within LOD_NEAR of the camera, every 2nd within LOD_FAR, every
-   * 4th beyond and every 6th while off-screen (their last pose is held; the real time they owe is replayed on the next update).
+   * Animation LOD: how much of the procedural layer an actor runs and whether its clip is re-evaluated this frame. Attacks always update, including
+   * off-screen bodies whose sockets feed presentation. Other critical actors update while visible; idle actors update every frame within LOD_NEAR,
+   * every 2nd within LOD_FAR, every 4th beyond and every 6th off-screen (their last pose is held; owed time is replayed on the next update).
    */
   private animationDetail(instance: NativeAssetInstance, actor: ActorSnapshot, extras: ActorExtras, bodyHeight: number): ProceduralDetail {
     const root = instance.root, camera = this.camera.position;
@@ -1652,7 +1663,7 @@ export class GameRenderer {
     const distance = Math.hypot(root.position.x - camera.x, root.position.y - camera.y, root.position.z - camera.z);
     // A ceremony in progress (cleanse, reunion, a cub in danger) always updates: its one-shot clips start on the frame the status begins.
     const critical = actor.allegiance === 'player' || actor.reaction !== undefined || actor.attackPhase !== undefined || actor.chapterStatus === 'cleansed' || actor.chapterStatus === 'reunion' || actor.chapterStatus === 'in-danger' || actor.job !== undefined;
-    const stride = visible ? critical || distance < LOD_NEAR ? LOD_STRIDE.near : distance < LOD_FAR ? LOD_STRIDE.mid : LOD_STRIDE.far : LOD_STRIDE.offscreen;
+    const stride = actor.attackPhase !== undefined ? LOD_STRIDE.near : visible ? critical || distance < LOD_NEAR ? LOD_STRIDE.near : distance < LOD_FAR ? LOD_STRIDE.mid : LOD_STRIDE.far : LOD_STRIDE.offscreen;
     const due = extras.lastDriven < 0 || this.presentationFrame - extras.lastDriven >= stride;
     extras.lodSkip = !due;
     if (due) { extras.lastDriven = this.presentationFrame; this.animationLod.updated += 1; } else this.animationLod.skipped += 1;

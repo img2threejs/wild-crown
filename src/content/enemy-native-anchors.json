@@ -1,0 +1,1608 @@
+{
+  "actor-ember-boar": {
+    "head": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "mouth": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "crown": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "tripo::Tail_1",
+      "tip": "tripo::Tail_2"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_1",
+      "tip": "tripo::0_Left_Limb_2"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_1",
+      "tip": "tripo::0_Left_Limb_2"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    }
+  },
+  "actor-frost-sap-stalker": {
+    "head": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "mouth": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "crown": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "chest": {
+      "base": "tripo::Spine_3",
+      "tip": "tripo::Spine_4"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_3",
+      "tip": "tripo::Spine_4"
+    },
+    "tail": {
+      "base": "tripo::Tail_1",
+      "tip": "tripo::Tail_2"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_4"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_4"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_3",
+      "tip": "tripo::1_Right_Limb_4"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "bone_20"
+    }
+  },
+  "actor-root-rammer": {
+    "head": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "mouth": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "crown": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "chest": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "tail": {
+      "base": "tripo::Tail_0",
+      "tip": "bone_32"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    }
+  },
+  "actor-thornback-howler": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-storm-hornbill": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "chest": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_0"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_0"
+    },
+    "tail": {
+      "base": "tripo::Tail_1",
+      "tip": "tripo::Tail_2"
+    },
+    "hand-left": {
+      "base": "bone_10",
+      "tip": "bone_11"
+    },
+    "hand-right": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "paw-left": {
+      "base": "bone_10",
+      "tip": "bone_11"
+    },
+    "paw-right": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "paws": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "hands": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "feet": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "wings": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "weapon-tip": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    },
+    "weapon-edge": {
+      "base": "bone_13",
+      "tip": "bone_14"
+    }
+  },
+  "actor-mire-viper": {
+    "head": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "mouth": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "crown": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "chest": {
+      "base": "tripo::Tail_8",
+      "tip": "tripo::Tail_9"
+    },
+    "shoulders": {
+      "base": "tripo::Tail_8",
+      "tip": "tripo::Tail_9"
+    },
+    "tail": {
+      "base": "tripo::Tail_8",
+      "tip": "tripo::Tail_9"
+    }
+  },
+  "actor-koro": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-grove-rootling": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-grove-blighted-rootling": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-grove-hollowheart": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-frostfang-tracker": {
+    "head": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "mouth": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "crown": {
+      "base": "tripo::Head_1",
+      "tip": "tripo::Head_2"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "tripo::1_Left_Limb_1",
+      "tip": "tripo::1_Left_Limb_2"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    }
+  },
+  "actor-howl-scout": {
+    "head": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "mouth": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "crown": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "chest": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "tail": {
+      "base": "tripo::Tail_0",
+      "tip": "bone_32"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    }
+  },
+  "actor-ruun-chained-howl": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "bone_25",
+      "tip": "bone_26"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    }
+  },
+  "actor-bog-lurker": {
+    "head": {
+      "base": "tripo::0_Right_Limb_0",
+      "tip": "tripo::Head_0"
+    },
+    "mouth": {
+      "base": "tripo::0_Right_Limb_0",
+      "tip": "tripo::Head_0"
+    },
+    "crown": {
+      "base": "tripo::0_Right_Limb_0",
+      "tip": "tripo::Head_0"
+    },
+    "chest": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_1"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_1"
+    },
+    "hand-left": {
+      "base": "bone_40",
+      "tip": "bone_44"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    },
+    "paw-left": {
+      "base": "bone_40",
+      "tip": "bone_44"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    },
+    "feet": {
+      "base": "tripo::1_Left_Limb_3",
+      "tip": "tripo::1_Left_Limb_5"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_4",
+      "tip": "bone_36"
+    }
+  },
+  "actor-lantern-heron": {
+    "head": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "mouth": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "crown": {
+      "base": "tripo::Head_4",
+      "tip": "tripo::Head_5"
+    },
+    "chest": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_0"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_0"
+    },
+    "tail": {
+      "base": "bone_12",
+      "tip": "bone_13"
+    },
+    "hand-left": {
+      "base": "bone_16",
+      "tip": "bone_17"
+    },
+    "hand-right": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "paw-left": {
+      "base": "bone_16",
+      "tip": "bone_17"
+    },
+    "paw-right": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "paws": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "hands": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "feet": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "wings": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "weapon-tip": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    },
+    "weapon-edge": {
+      "base": "bone_26",
+      "tip": "bone_27"
+    }
+  },
+  "actor-ghor-mire-maw": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "tripo::Tail_3",
+      "tip": "tripo::Tail_4"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_5"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_5"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    }
+  },
+  "actor-koro-branchbreaker": {
+    "head": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "mouth": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "crown": {
+      "base": "NeckTwist02",
+      "tip": "Head"
+    },
+    "chest": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "shoulders": {
+      "base": "Spine01",
+      "tip": "Spine02"
+    },
+    "hand-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "hand-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paw-left": {
+      "base": "L_Forearm",
+      "tip": "L_Hand"
+    },
+    "paw-right": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "paws": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "hands": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "feet": {
+      "base": "R_Calf",
+      "tip": "R_Foot"
+    },
+    "weapon-tip": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    },
+    "weapon-edge": {
+      "base": "R_Forearm",
+      "tip": "R_Hand"
+    }
+  },
+  "actor-asha": {
+    "head": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "mouth": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "crown": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "chest": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "shoulders": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "tail": {
+      "base": "tripo::1_Left_Limb_2",
+      "tip": "tripo::1_Left_Limb_3"
+    },
+    "hand-left": {
+      "base": "bone_23",
+      "tip": "bone_24"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    },
+    "paw-left": {
+      "base": "bone_23",
+      "tip": "bone_24"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    },
+    "feet": {
+      "base": "repair::HR_2",
+      "tip": "repair::HR_Paw"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_6",
+      "tip": "tripo::0_Right_Limb_7"
+    }
+  },
+  "actor-camp-hunter-melee": {
+    "head": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "mouth": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "crown": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "chest": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "shoulders": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "hand-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "hand-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paw-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "paw-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paws": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "hands": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "feet": {
+      "base": "mixamorig:RightLeg",
+      "tip": "mixamorig:RightFoot"
+    },
+    "weapon-tip": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "weapon-edge": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    }
+  },
+  "actor-camp-hunter-ranged": {
+    "head": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "mouth": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "crown": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "chest": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "shoulders": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "hand-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "hand-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paw-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "paw-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paws": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "hands": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "feet": {
+      "base": "mixamorig:RightLeg",
+      "tip": "mixamorig:RightFoot"
+    },
+    "weapon-tip": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "weapon-edge": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    }
+  },
+  "actor-sable": {
+    "head": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "mouth": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "crown": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "chest": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "tail": {
+      "base": "tripo::Tail_2",
+      "tip": "tripo::Tail_3"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_2",
+      "tip": "tripo::0_Right_Limb_3"
+    }
+  },
+  "actor-nyra": {
+    "head": {
+      "base": "tripo::Head_3",
+      "tip": "tripo::Head_4"
+    },
+    "mouth": {
+      "base": "tripo::Head_3",
+      "tip": "tripo::Head_4"
+    },
+    "crown": {
+      "base": "tripo::Head_3",
+      "tip": "tripo::Head_4"
+    },
+    "chest": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "shoulders": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "tripo::0_Right_Limb_2"
+    },
+    "tail": {
+      "base": "tripo::Tail_4",
+      "tip": "tripo::0_Left_Limb_0"
+    },
+    "hand-left": {
+      "base": "bone_16",
+      "tip": "bone_17"
+    },
+    "hand-right": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    },
+    "paw-left": {
+      "base": "bone_16",
+      "tip": "bone_17"
+    },
+    "paw-right": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    },
+    "paws": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    },
+    "hands": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    },
+    "feet": {
+      "base": "bone_29",
+      "tip": "bone_30"
+    },
+    "weapon-tip": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    },
+    "weapon-edge": {
+      "base": "bone_21",
+      "tip": "bone_22"
+    }
+  },
+  "actor-solkar": {
+    "head": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "mouth": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "crown": {
+      "base": "tripo::Head_2",
+      "tip": "tripo::Head_3"
+    },
+    "chest": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_1"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_0",
+      "tip": "tripo::Spine_1"
+    },
+    "tail": {
+      "base": "tripo::Tail_4",
+      "tip": "bone_37"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_4"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_4"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "feet": {
+      "base": "bone_28",
+      "tip": "bone_29"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    }
+  },
+  "actor-orun": {
+    "head": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "mouth": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "crown": {
+      "base": "mixamorig:Neck",
+      "tip": "mixamorig:Head"
+    },
+    "chest": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "shoulders": {
+      "base": "mixamorig:Spine1",
+      "tip": "mixamorig:Spine2"
+    },
+    "hand-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "hand-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paw-left": {
+      "base": "mixamorig:LeftForeArm",
+      "tip": "mixamorig:LeftHand"
+    },
+    "paw-right": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "paws": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "hands": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "feet": {
+      "base": "mixamorig:RightLeg",
+      "tip": "mixamorig:RightFoot"
+    },
+    "weapon-tip": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    },
+    "weapon-edge": {
+      "base": "mixamorig:RightForeArm",
+      "tip": "mixamorig:RightHand"
+    }
+  },
+  "actor-orun-crowned-beast": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_0"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_0"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_0"
+    },
+    "chest": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_2",
+      "tip": "tripo::Spine_3"
+    },
+    "tail": {
+      "base": "tripo::1_Left_Limb_0",
+      "tip": "tripo::1_Left_Limb_1"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    },
+    "paws": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    },
+    "hands": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_3",
+      "tip": "tripo::1_Right_Limb_4"
+    },
+    "weapon-tip": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    },
+    "weapon-edge": {
+      "base": "bone_37",
+      "tip": "bone_38"
+    }
+  },
+  "actor-ruun": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "bone_25",
+      "tip": "bone_26"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_2",
+      "tip": "tripo::0_Left_Limb_3"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_3",
+      "tip": "tripo::0_Right_Limb_4"
+    }
+  },
+  "actor-ghor": {
+    "head": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "mouth": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "crown": {
+      "base": "tripo::Head_0",
+      "tip": "tripo::Head_1"
+    },
+    "chest": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "shoulders": {
+      "base": "tripo::Spine_1",
+      "tip": "tripo::Spine_2"
+    },
+    "tail": {
+      "base": "tripo::Tail_3",
+      "tip": "tripo::Tail_4"
+    },
+    "hand-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_5"
+    },
+    "hand-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "paw-left": {
+      "base": "tripo::0_Left_Limb_3",
+      "tip": "tripo::0_Left_Limb_5"
+    },
+    "paw-right": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "paws": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "hands": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "feet": {
+      "base": "tripo::1_Right_Limb_2",
+      "tip": "tripo::1_Right_Limb_3"
+    },
+    "weapon-tip": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    },
+    "weapon-edge": {
+      "base": "tripo::0_Right_Limb_1",
+      "tip": "bone_23"
+    }
+  }
+}

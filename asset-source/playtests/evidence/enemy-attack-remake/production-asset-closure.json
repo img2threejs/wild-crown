@@ -1,0 +1,275 @@
+{
+  "origin": "http://127.0.0.1:5194",
+  "models": [
+    {
+      "assetId": "actor-ember-boar",
+      "url": "asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "status": 200,
+      "bytes": 7511816,
+      "magic": "glTF",
+      "sha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "expectedSha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2"
+    },
+    {
+      "assetId": "actor-frost-sap-stalker",
+      "url": "asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "status": 200,
+      "bytes": 8600236,
+      "magic": "glTF",
+      "sha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "expectedSha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7"
+    },
+    {
+      "assetId": "actor-root-rammer",
+      "url": "asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "status": 200,
+      "bytes": 7734676,
+      "magic": "glTF",
+      "sha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "expectedSha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365"
+    },
+    {
+      "assetId": "actor-thornback-howler",
+      "url": "asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+      "status": 200,
+      "bytes": 7958884,
+      "magic": "glTF",
+      "sha256": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+      "expectedSha256": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852"
+    },
+    {
+      "assetId": "actor-storm-hornbill",
+      "url": "asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "status": 200,
+      "bytes": 7437440,
+      "magic": "glTF",
+      "sha256": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "expectedSha256": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78"
+    },
+    {
+      "assetId": "actor-mire-viper",
+      "url": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+      "status": 200,
+      "bytes": 7899524,
+      "magic": "glTF",
+      "sha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+      "expectedSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
+    },
+    {
+      "assetId": "actor-koro",
+      "url": "asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+      "status": 200,
+      "bytes": 7103428,
+      "magic": "glTF",
+      "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
+      "expectedSha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7"
+    },
+    {
+      "assetId": "actor-grove-rootling",
+      "url": "asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "status": 200,
+      "bytes": 7553292,
+      "magic": "glTF",
+      "sha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+      "expectedSha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b"
+    },
+    {
+      "assetId": "actor-grove-blighted-rootling",
+      "url": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "status": 200,
+      "bytes": 7553348,
+      "magic": "glTF",
+      "sha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+      "expectedSha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a"
+    },
+    {
+      "assetId": "actor-grove-hollowheart",
+      "url": "asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "status": 200,
+      "bytes": 9507880,
+      "magic": "glTF",
+      "sha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "expectedSha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911"
+    },
+    {
+      "assetId": "actor-frostfang-tracker",
+      "url": "asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+      "status": 200,
+      "bytes": 8205168,
+      "magic": "glTF",
+      "sha256": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+      "expectedSha256": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1"
+    },
+    {
+      "assetId": "actor-howl-scout",
+      "url": "asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+      "status": 200,
+      "bytes": 7365496,
+      "magic": "glTF",
+      "sha256": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+      "expectedSha256": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa"
+    },
+    {
+      "assetId": "actor-ruun-chained-howl",
+      "url": "asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "status": 200,
+      "bytes": 8712816,
+      "magic": "glTF",
+      "sha256": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "expectedSha256": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c"
+    },
+    {
+      "assetId": "actor-bog-lurker",
+      "url": "asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+      "status": 200,
+      "bytes": 6717204,
+      "magic": "glTF",
+      "sha256": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+      "expectedSha256": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01"
+    },
+    {
+      "assetId": "actor-lantern-heron",
+      "url": "asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+      "status": 200,
+      "bytes": 8097208,
+      "magic": "glTF",
+      "sha256": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+      "expectedSha256": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18"
+    },
+    {
+      "assetId": "actor-ghor-mire-maw",
+      "url": "asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "status": 200,
+      "bytes": 8135916,
+      "magic": "glTF",
+      "sha256": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "expectedSha256": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f"
+    },
+    {
+      "assetId": "actor-koro-branchbreaker",
+      "url": "asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "status": 200,
+      "bytes": 8321680,
+      "magic": "glTF",
+      "sha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "expectedSha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27"
+    },
+    {
+      "assetId": "actor-asha",
+      "url": "asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+      "status": 200,
+      "bytes": 8452636,
+      "magic": "glTF",
+      "sha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
+      "expectedSha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c"
+    },
+    {
+      "assetId": "actor-camp-hunter-melee",
+      "url": "asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+      "status": 200,
+      "bytes": 8063020,
+      "magic": "glTF",
+      "sha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
+      "expectedSha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5"
+    },
+    {
+      "assetId": "actor-camp-hunter-ranged",
+      "url": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+      "status": 200,
+      "bytes": 7440172,
+      "magic": "glTF",
+      "sha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05",
+      "expectedSha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05"
+    },
+    {
+      "assetId": "actor-sable",
+      "url": "asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+      "status": 200,
+      "bytes": 6502048,
+      "magic": "glTF",
+      "sha256": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+      "expectedSha256": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b"
+    },
+    {
+      "assetId": "actor-nyra",
+      "url": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+      "status": 200,
+      "bytes": 5526808,
+      "magic": "glTF",
+      "sha256": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b",
+      "expectedSha256": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b"
+    },
+    {
+      "assetId": "actor-solkar",
+      "url": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+      "status": 200,
+      "bytes": 8015636,
+      "magic": "glTF",
+      "sha256": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+      "expectedSha256": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93"
+    },
+    {
+      "assetId": "actor-orun",
+      "url": "asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "status": 200,
+      "bytes": 7178600,
+      "magic": "glTF",
+      "sha256": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "expectedSha256": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21"
+    },
+    {
+      "assetId": "actor-orun-crowned-beast",
+      "url": "asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "status": 200,
+      "bytes": 8858348,
+      "magic": "glTF",
+      "sha256": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "expectedSha256": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f"
+    }
+  ],
+  "catalogs": [
+    {
+      "path": "/asset-source/playtests/greenwake.json",
+      "status": 200,
+      "nativeEntries": 3,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/canopy.json",
+      "status": 200,
+      "nativeEntries": 3,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/grove.json",
+      "status": 200,
+      "nativeEntries": 4,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/moonpine.json",
+      "status": 200,
+      "nativeEntries": 3,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/mistveil.json",
+      "status": 200,
+      "nativeEntries": 3,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/bamboo.json",
+      "status": 200,
+      "nativeEntries": 5,
+      "problems": []
+    },
+    {
+      "path": "/asset-source/playtests/later.json",
+      "status": 200,
+      "nativeEntries": 5,
+      "problems": []
+    }
+  ],
+  "failures": []
+}

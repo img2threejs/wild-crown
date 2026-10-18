@@ -1147,7 +1147,10 @@
       "vara:hurt": "vara:hurt"
     },
     "rootMotion": {
-      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara-sky-survey": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "vara:idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1337,10 +1340,16 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "38098a37-4355-4c9c-b970-4137867b2c28",
-    "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
-    "outputHash": "b7dffb9d61b34c53f96cab9f0e5b26bbc7a1138eceabd2d08791d4f7e22da439",
+    "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+    "outputHash": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:boar-charge",
+      "wild-crown:boar-sap-thrash",
+      "wild-crown:boar-pounce",
+      "wild-crown:boar-ember-lance",
+      "wild-crown:boar-gale-scythe"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1364,7 +1373,12 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:boar-charge": "wild-crown:boar-charge",
+      "wild-crown:boar-sap-thrash": "wild-crown:boar-sap-thrash",
+      "wild-crown:boar-pounce": "wild-crown:boar-pounce",
+      "wild-crown:boar-ember-lance": "wild-crown:boar-ember-lance",
+      "wild-crown:boar-gale-scythe": "wild-crown:boar-gale-scythe"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1426,10 +1440,30 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:boar-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:boar-sap-thrash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:boar-pounce": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:boar-ember-lance": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:boar-gale-scythe": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-ember-boar-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-ember-boar-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1440,10 +1474,15 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_2",
     "tripoSourceTask": "8e65e176-d473-40ba-8e7a-d9add5cb7332",
-    "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
-    "outputHash": "b86f0274f55c3a0b41ede1ea5361de88bb307369decc5d3ee07d44e274759e85",
+    "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+    "outputHash": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:sap-vein-snap",
+      "wild-crown:sap-vein-thrash",
+      "wild-crown:sap-stalker-frost-bloom",
+      "wild-crown:sap-stalker-venom-mist"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": 0,
@@ -1467,7 +1506,11 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:sap-vein-snap": "wild-crown:sap-vein-snap",
+      "wild-crown:sap-vein-thrash": "wild-crown:sap-vein-thrash",
+      "wild-crown:sap-stalker-frost-bloom": "wild-crown:sap-stalker-frost-bloom",
+      "wild-crown:sap-stalker-venom-mist": "wild-crown:sap-stalker-venom-mist"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1529,10 +1572,26 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:sap-vein-snap": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:sap-vein-thrash": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:sap-stalker-frost-bloom": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:sap-stalker-venom-mist": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-frost-sap-stalker-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-frost-sap-stalker-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1543,10 +1602,15 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_2",
     "tripoSourceTask": "e43837b6-6996-4f1a-9940-fb8c82105c5e",
-    "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
-    "outputHash": "c26c7d3d3e67acd02aca904426b016f8d6fc50243a878bf128771ecef6dd2284",
+    "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+    "outputHash": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:root-rammer-low-wave",
+      "wild-crown:root-rammer-slam",
+      "wild-crown:root-rammer-cinder-burst",
+      "wild-crown:root-rammer-gale-sweep"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1570,7 +1634,11 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:root-rammer-low-wave": "wild-crown:root-rammer-low-wave",
+      "wild-crown:root-rammer-slam": "wild-crown:root-rammer-slam",
+      "wild-crown:root-rammer-cinder-burst": "wild-crown:root-rammer-cinder-burst",
+      "wild-crown:root-rammer-gale-sweep": "wild-crown:root-rammer-gale-sweep"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1632,10 +1700,26 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:root-rammer-low-wave": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:root-rammer-slam": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:root-rammer-cinder-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:root-rammer-gale-sweep": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-root-rammer-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-root-rammer-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

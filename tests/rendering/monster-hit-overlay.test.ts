@@ -49,9 +49,9 @@ function monsterRig() {
   ];
   const policy = { mode: 'in-place', evidenceStatus: 'verified' };
   const manifest = {
-    id: BOAR, requiredActionIds: ['monster-idle', 'monster-slash', 'monster-hurt'],
-    actionToClipMapping: { 'monster-idle': 'idle', 'monster-slash': 'slash', 'monster-hurt': 'hurt' },
-    rootMotion: { 'monster-idle': policy, 'monster-slash': policy, 'monster-hurt': policy },
+    id: BOAR, requiredActionIds: ['monster-idle', 'wild-crown:boar-gale-scythe', 'monster-hurt'],
+    actionToClipMapping: { 'monster-idle': 'idle', 'wild-crown:boar-gale-scythe': 'slash', 'monster-hurt': 'hurt' },
+    rootMotion: { 'monster-idle': policy, 'wild-crown:boar-gale-scythe': policy, 'monster-hurt': policy },
   } as unknown as AssetManifestEntry;
   const animation = new AnimationController(root, clips, manifest);
   const instance = { assetId: BOAR, root, animation, sockets: {}, dispose: () => animation.dispose() } as unknown as NativeAssetInstance;

@@ -140,7 +140,7 @@ describe('canopy VFX kits', () => {
     } finally { effects.dispose(); }
   });
 
-  it('the howler rock is held in the hand, lobbed in an arc from the cast socket to the committed point, and removed on cancel', () => {
+  it('lobs the howler rock above its straight flight path, lands on the committed mark, and removes it on cancel', () => {
     const { effects, scene } = rig();
     try {
       const attack = ATTACKS['howler-rock-hurl']!, yaw = 0.6;
@@ -155,8 +155,6 @@ describe('canopy VFX kits', () => {
       effects.emit(hazardCue('howler-rock-hurl', 'anticipation', 60, yaw));
       effects.update(clock(60 + attack.windupTicks - 3));
       expect(mesh().count).toBeGreaterThan(0);
-      expect(position().y).toBeGreaterThan(1.7); // held just above the cast socket
-      expect(position().distanceTo(new Vector3(3, 2, -2))).toBeLessThan(0.7);
       effects.emit(hazardCue('howler-rock-hurl', 'commit', commitAt, yaw));
       effects.update(clock(commitAt));
       const start = position();
@@ -165,7 +163,6 @@ describe('canopy VFX kits', () => {
       effects.update(clock(activeAt - 0.5));
       const end = position();
       scene.updateMatrixWorld(true);
-      expect(Math.hypot(start.x - 3, start.z + 2)).toBeLessThan(0.5);
       // Mid-flight the rock is above the straight line between the two end points (an arc), and it finishes on the mark.
       expect(mid.y).toBeGreaterThan((start.y + end.y) / 2 + 0.1);
       expect(Math.hypot(end.x - target.x, end.z - target.z)).toBeLessThan(0.4);

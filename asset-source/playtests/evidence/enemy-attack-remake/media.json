@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "scope": "Real H.264 artifacts. Native gallery is in-place inspection; VFX montage uses CameraDirector inspection framing; normal UI uses keyboard/AI and normal camera; subdual uses controlled real-engine attacks. Encoding rate is not game performance.",
+  "videos": [
+    {
+      "name": "native-attacks.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1",
+          "nb_frames": "5354"
+        }
+      ],
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "223.083333",
+        "size": "55082688"
+      }
+    },
+    {
+      "name": "native-vfx.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1",
+          "nb_frames": "551"
+        }
+      ],
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "22.958333",
+        "size": "11870560"
+      }
+    },
+    {
+      "name": "normal-ui-combat.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1",
+          "nb_frames": "262"
+        }
+      ],
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "10.916667",
+        "size": "7102737"
+      }
+    },
+    {
+      "name": "airborne-subdual.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1",
+          "nb_frames": "137"
+        }
+      ],
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "5.708333",
+        "size": "2206755"
+      }
+    }
+  ]
+}

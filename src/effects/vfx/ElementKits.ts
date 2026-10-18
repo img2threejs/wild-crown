@@ -1,11 +1,13 @@
 import { Color, Vector3, type Object3D } from 'three';
 import { ATTACKS } from '../../game/combat/content.js';
-import { dangerFamily, type StoryCue } from '../story-cues.js';
+import type { StoryCue } from '../story-cues.js';
 import { BAMBOO_ATTACK_KITS, createBambooKits, type BambooKitId } from './BambooKits.js';
 import { CanopyKits, isCanopyKit, type CanopyKitId } from './CanopyKits.js';
 import { GROVE_ATTACK_KITS, createGroveKits, type GroveKitId } from './GroveKits.js';
 import { MISTVEIL_ATTACK_KITS, createMistveilKits, type MistveilKitId } from './MistveilKits.js';
 import { MOONPINE_ATTACK_KITS, createMoonpineKits, type MoonpineKitId } from './MoonpineKits.js';
+import { LATE_BOSS_ATTACK_KITS, createLateBossKits, type LateBossKitId } from './LateBossKits';
+import { enemyAttackPresentationForId } from '../../rendering/EnemyAttackPresentation';
 import { Footprint } from './footprint.js';
 import type { GroundSlot } from './GroundFx.js';
 import type { BeamSlot } from './RibbonFx.js';
@@ -47,7 +49,7 @@ export type KitId =
   | 'roar' | 'landing' | 'staff-hit' | 'contact' | 'gather' | 'beam' | 'pulse' | 'vein' | 'footprint'
   | 'sigil' | 'slash' | 'projectile' | 'projectile-impact' | 'lightning' | 'judgement' | 'judgement-mark' | 'player-hit'
   | 'cleanse' | 'root-lash' | HeartrootKitId | UmbralKitId | EmberKitId
-  | CanopyKitId | GroveKitId | MoonpineKitId | MistveilKitId | BambooKitId;
+  | CanopyKitId | GroveKitId | MoonpineKitId | MistveilKitId | BambooKitId | LateBossKitId;
 
 /** Kits driven by the Warden arsenal (`WardenCues`) rather than the monster element kits. */
 export const WARDEN_KITS: Readonly<Partial<Record<KitId, true>>> = {
@@ -81,9 +83,9 @@ const ATTACK_KITS: Readonly<Record<string, readonly [KitId, VfxElement]>> = {
   'viper-venom-spit': ['viper-venom-spit', 'poison'],
   'viper-tail-lash': ['viper-tail-lash', 'poison'],
   'viper-strike-lunge': ['viper-strike-lunge', 'poison'],
-  ...GROVE_ATTACK_KITS, ...MOONPINE_ATTACK_KITS, ...MISTVEIL_ATTACK_KITS, ...BAMBOO_ATTACK_KITS,
+  ...GROVE_ATTACK_KITS, ...MOONPINE_ATTACK_KITS, ...MISTVEIL_ATTACK_KITS, ...BAMBOO_ATTACK_KITS, ...LATE_BOSS_ATTACK_KITS,
 };
-const ELEMENT_KITS: Readonly<Record<string, KitId>> = { fire: 'cinder-burst', ice: 'frost-bloom', poison: 'venom-mist', wind: 'gale' };
+export function enemyAttackKit(attackId: string): readonly [KitId, VfxElement] | undefined { return ATTACK_KITS[attackId]; }
 const STORY_ELEMENTS: Readonly<Partial<Record<StoryCue['kind'], VfxElement>>> = {
   'restoration-water': 'ice', 'restoration-roots': 'earth', dominion: 'fire', possession: 'poison', grovebreak: 'fire', 'ending-dominion': 'fire', 'sap-vein': 'sap',
 };
@@ -96,6 +98,12 @@ const VENOM = new Color().setRGB(0.22, 0.42, 0.08);
 const AMBER = new Color().setRGB(0.5, 0.36, 0.1);
 
 export function resolveKit(cue: StoryCue): { kit: KitId; element: VfxElement; attack: boolean } {
+  const attackId = cue.attackId;
+  if (attackId && ATTACKS[attackId]) {
+    const authored = ATTACK_KITS[attackId];
+    if (!authored) throw new Error(`Missing authored enemy VFX kit: ${attackId}`);
+    return { kit: cue.phase === 'hit' ? 'contact' : authored[0], element: authored[1], attack: true };
+  }
   if (cue.element === 'heartroot') return { kit: resolveHeartrootKit(cue), element: 'heartroot', attack: false };
   if (cue.element === 'umbral') return { kit: resolveUmbralKit(cue), element: 'umbral', attack: false };
   if (cue.element === 'ember') return { kit: resolveEmberKit(cue), element: 'ember', attack: false };
@@ -106,17 +114,7 @@ export function resolveKit(cue: StoryCue): { kit: KitId; element: VfxElement; at
   const warden = WARDEN_CUE_KITS[cue.kind];
   if (warden) return { kit: warden, element: cue.element ?? 'arcane', attack: false };
   if (cue.kind === 'hit' && cue.actorId === 'aren' && (cue.element === 'arcane' || cue.element === 'lightning')) return { kit: 'player-hit', element: cue.element, attack: false };
-  const attackId = cue.attackId;
   if (attackId?.startsWith('aren-')) return { kit: cue.phase === 'hit' ? 'staff-hit' : 'gather', element: attackId.includes('tether') ? 'spirit' : 'arcane', attack: false };
-  if (attackId && ATTACKS[attackId]) {
-    if (cue.phase === 'hit') return { kit: 'contact', element: ATTACK_KITS[attackId]?.[1] ?? cue.element ?? 'earth', attack: true };
-    const authored = ATTACK_KITS[attackId];
-    if (authored) return { kit: authored[0], element: authored[1], attack: true };
-    if (cue.element) return { kit: ELEMENT_KITS[cue.element] ?? 'slam', element: cue.element, attack: true };
-    if (cue.shape === 'sector') return { kit: 'roar', element: 'earth', attack: true };
-    const family = dangerFamily(cue);
-    return { kit: family === 'sweep' ? 'charge' : family === 'wave' ? 'fissure' : 'slam', element: attackId.includes('sap') ? 'sap' : 'earth', attack: true };
-  }
   const element = STORY_ELEMENTS[cue.kind] ?? 'spirit';
   if (cue.kind === 'pounce') return { kit: 'slam', element: 'earth', attack: false };
   if (cue.kind === 'low-wave') return { kit: 'fissure', element: 'earth', attack: false };
@@ -177,7 +175,7 @@ export class CueKits {
 
   constructor(private readonly vfx: VfxSystem, private readonly resolveSocket?: SocketResolver, private impact?: ImpactSink, private readonly warden?: WardenFx) {
     this.canopy = new CanopyKits(vfx, resolveSocket, impact, this);
-    this.mapKits = [createGroveKits, createMoonpineKits, createMistveilKits, createBambooKits].map(create => create(vfx, resolveSocket, impact, this));
+    this.mapKits = [createGroveKits, createMoonpineKits, createMistveilKits, createBambooKits, createLateBossKits].map(create => create(vfx, resolveSocket, impact, this));
     this.heartroot = new HeartrootCues(vfx, warden);
     this.umbral = new UmbralCues(vfx, warden);
     this.ember = new EmberCues(vfx, warden);
@@ -211,7 +209,9 @@ export class CueKits {
     slot.phaseStart = cue.phaseStartedAtWorldTick ?? cue.worldTick;
     slot.acc.fill(0); slot.pulses = 0; slot.lastTime = time;
     slot.glow = (cue.actorId ? OWNER_GLOW[cue.actorId] : undefined) ?? slot.element;
-    slot.socket = cue.actorId ? this.resolveSocket?.(cue.actorId, 'cast') : undefined;
+    const anatomy = cue.attackId ? enemyAttackPresentationForId(cue.attackId) : undefined;
+    const weapon = cue.actorId && anatomy?.socket.startsWith('weapon-') ? this.resolveSocket?.(cue.actorId, 'weapon-tip') : undefined;
+    slot.socket = cue.actorId ? weapon ?? (anatomy ? this.resolveSocket?.(cue.actorId, `enemy:${anatomy.socket}:tip`) : this.resolveSocket?.(cue.actorId, 'cast')) : undefined;
     slot.hasFootprint = Boolean(cue.footprint && (cue.position || cue.to));
     slot.footprint.setFromCue(cue, slot.kit === 'pulse' ? 1.6 : 1.2);
     const target = cue.to ?? cue.position;

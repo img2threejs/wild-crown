@@ -1,0 +1,2653 @@
+{
+  "fixture": "controlled real engine activation; authored native world/colliders; no fabricated cues, hits or damage; not normal AI selection or campaign progression",
+  "both": [
+    {
+      "actorId": "hunter-melee-west",
+      "actionId": "wild-crown:poacher-hunter-spear",
+      "root": "6f2ed836-13fd-4502-a7f5-289420bf1a1f",
+      "rootVisible": true,
+      "cancelled": false,
+      "scopes": [
+        "hunter-melee-west:poacher-hunter-spear:0"
+      ],
+      "tips": [
+        {
+          "uuid": "632860a2-dca6-4436-9e67-87457758f8ad",
+          "belongsToRoot": true
+        }
+      ]
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "actionId": "wild-crown:poacher-hunter-east-spear",
+      "root": "8bf7ae46-5eb7-4606-ab0c-d605bfec2471",
+      "rootVisible": true,
+      "cancelled": false,
+      "scopes": [
+        "hunter-melee-east:poacher-hunter-east-spear:0"
+      ],
+      "tips": [
+        {
+          "uuid": "9648eb49-4347-4d1a-aa4a-f4fbf139673f",
+          "belongsToRoot": true
+        }
+      ]
+    }
+  ],
+  "afterWestCancel": [
+    {
+      "actorId": "hunter-melee-west",
+      "actionId": "wild-crown:poacher-hunter-spear",
+      "root": "6f2ed836-13fd-4502-a7f5-289420bf1a1f",
+      "rootVisible": true,
+      "cancelled": true,
+      "scopes": [],
+      "tips": [
+        {
+          "uuid": "632860a2-dca6-4436-9e67-87457758f8ad",
+          "belongsToRoot": true
+        }
+      ]
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "actionId": "wild-crown:poacher-hunter-east-spear",
+      "root": "8bf7ae46-5eb7-4606-ab0c-d605bfec2471",
+      "rootVisible": true,
+      "cancelled": false,
+      "scopes": [
+        "hunter-melee-east:poacher-hunter-east-spear:0"
+      ],
+      "tips": [
+        {
+          "uuid": "9648eb49-4347-4d1a-aa4a-f4fbf139673f",
+          "belongsToRoot": true
+        }
+      ]
+    }
+  ],
+  "emissions": [
+    {
+      "actorId": "hunter-melee-east",
+      "actionId": "wild-crown:poacher-hunter-east-spear"
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "actionId": "wild-crown:poacher-hunter-east-spear"
+    }
+  ],
+  "pause": {
+    "frames": 12,
+    "worldTickBefore": 62,
+    "worldTickAfter": 62,
+    "nativeTimesBefore": [
+      3,
+      2.25
+    ],
+    "nativeTimesAfter": [
+      3,
+      2.25
+    ],
+    "maxBoneMatrixDelta": 0
+  },
+  "clocks": [
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 0,
+      "phase": "windup",
+      "actual": 0,
+      "expected": 0,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 0,
+      "phase": "windup",
+      "actual": 0,
+      "expected": 0,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 1,
+      "phase": "windup",
+      "actual": 0.033333333333333326,
+      "expected": 0.033333333333333326,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 1,
+      "phase": "windup",
+      "actual": 0.029166666666666664,
+      "expected": 0.029166666666666664,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 2,
+      "phase": "windup",
+      "actual": 0.06666666666666665,
+      "expected": 0.06666666666666665,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 2,
+      "phase": "windup",
+      "actual": 0.05833333333333333,
+      "expected": 0.05833333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 3,
+      "phase": "windup",
+      "actual": 0.09999999999999999,
+      "expected": 0.09999999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 3,
+      "phase": "windup",
+      "actual": 0.0875,
+      "expected": 0.0875,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 4,
+      "phase": "windup",
+      "actual": 0.1333333333333333,
+      "expected": 0.1333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 4,
+      "phase": "windup",
+      "actual": 0.11666666666666665,
+      "expected": 0.11666666666666665,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 5,
+      "phase": "windup",
+      "actual": 0.16666666666666666,
+      "expected": 0.16666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 5,
+      "phase": "windup",
+      "actual": 0.14583333333333334,
+      "expected": 0.14583333333333334,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 6,
+      "phase": "windup",
+      "actual": 0.19999999999999998,
+      "expected": 0.19999999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 6,
+      "phase": "windup",
+      "actual": 0.175,
+      "expected": 0.175,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 7,
+      "phase": "windup",
+      "actual": 0.2333333333333333,
+      "expected": 0.2333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 7,
+      "phase": "windup",
+      "actual": 0.20416666666666666,
+      "expected": 0.20416666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 8,
+      "phase": "windup",
+      "actual": 0.2666666666666666,
+      "expected": 0.2666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 8,
+      "phase": "windup",
+      "actual": 0.2333333333333333,
+      "expected": 0.2333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 9,
+      "phase": "windup",
+      "actual": 0.3,
+      "expected": 0.3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 9,
+      "phase": "windup",
+      "actual": 0.26249999999999996,
+      "expected": 0.26249999999999996,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 10,
+      "phase": "windup",
+      "actual": 0.3333333333333333,
+      "expected": 0.3333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 10,
+      "phase": "windup",
+      "actual": 0.2916666666666667,
+      "expected": 0.2916666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 11,
+      "phase": "windup",
+      "actual": 0.36666666666666664,
+      "expected": 0.36666666666666664,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 11,
+      "phase": "windup",
+      "actual": 0.3208333333333333,
+      "expected": 0.3208333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 12,
+      "phase": "windup",
+      "actual": 0.39999999999999997,
+      "expected": 0.39999999999999997,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 12,
+      "phase": "windup",
+      "actual": 0.35,
+      "expected": 0.35,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 13,
+      "phase": "windup",
+      "actual": 0.43333333333333335,
+      "expected": 0.43333333333333335,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 13,
+      "phase": "windup",
+      "actual": 0.3791666666666666,
+      "expected": 0.3791666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 14,
+      "phase": "windup",
+      "actual": 0.4666666666666666,
+      "expected": 0.4666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 14,
+      "phase": "windup",
+      "actual": 0.4083333333333333,
+      "expected": 0.4083333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 15,
+      "phase": "windup",
+      "actual": 0.5,
+      "expected": 0.5,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 15,
+      "phase": "windup",
+      "actual": 0.4375,
+      "expected": 0.4375,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 16,
+      "phase": "windup",
+      "actual": 0.5333333333333332,
+      "expected": 0.5333333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 16,
+      "phase": "windup",
+      "actual": 0.4666666666666666,
+      "expected": 0.4666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 17,
+      "phase": "windup",
+      "actual": 0.5666666666666667,
+      "expected": 0.5666666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 17,
+      "phase": "windup",
+      "actual": 0.49583333333333335,
+      "expected": 0.49583333333333335,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 18,
+      "phase": "windup",
+      "actual": 0.6,
+      "expected": 0.6,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 18,
+      "phase": "windup",
+      "actual": 0.5249999999999999,
+      "expected": 0.5249999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 19,
+      "phase": "windup",
+      "actual": 0.6333333333333333,
+      "expected": 0.6333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 19,
+      "phase": "windup",
+      "actual": 0.5541666666666666,
+      "expected": 0.5541666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 20,
+      "phase": "windup",
+      "actual": 0.6666666666666666,
+      "expected": 0.6666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 20,
+      "phase": "windup",
+      "actual": 0.5833333333333334,
+      "expected": 0.5833333333333334,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 21,
+      "phase": "windup",
+      "actual": 0.7,
+      "expected": 0.7,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 21,
+      "phase": "windup",
+      "actual": 0.6124999999999999,
+      "expected": 0.6124999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 22,
+      "phase": "windup",
+      "actual": 0.7333333333333333,
+      "expected": 0.7333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 22,
+      "phase": "windup",
+      "actual": 0.6416666666666666,
+      "expected": 0.6416666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 23,
+      "phase": "windup",
+      "actual": 0.7666666666666667,
+      "expected": 0.7666666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 23,
+      "phase": "windup",
+      "actual": 0.6708333333333333,
+      "expected": 0.6708333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 24,
+      "phase": "windup",
+      "actual": 0.7999999999999999,
+      "expected": 0.7999999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 24,
+      "phase": "windup",
+      "actual": 0.7,
+      "expected": 0.7,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 25,
+      "phase": "windup",
+      "actual": 0.8333333333333333,
+      "expected": 0.8333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 25,
+      "phase": "windup",
+      "actual": 0.7291666666666666,
+      "expected": 0.7291666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 26,
+      "phase": "windup",
+      "actual": 0.8666666666666667,
+      "expected": 0.8666666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 26,
+      "phase": "windup",
+      "actual": 0.7583333333333332,
+      "expected": 0.7583333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 27,
+      "phase": "windup",
+      "actual": 0.9,
+      "expected": 0.9,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 27,
+      "phase": "windup",
+      "actual": 0.7875,
+      "expected": 0.7875,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 28,
+      "phase": "windup",
+      "actual": 0.9333333333333332,
+      "expected": 0.9333333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 28,
+      "phase": "windup",
+      "actual": 0.8166666666666667,
+      "expected": 0.8166666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 29,
+      "phase": "windup",
+      "actual": 0.9666666666666666,
+      "expected": 0.9666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 29,
+      "phase": "windup",
+      "actual": 0.8458333333333332,
+      "expected": 0.8458333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 30,
+      "phase": "windup",
+      "actual": 1,
+      "expected": 1,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 30,
+      "phase": "windup",
+      "actual": 0.875,
+      "expected": 0.875,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 31,
+      "phase": "windup",
+      "actual": 1.0333333333333334,
+      "expected": 1.0333333333333334,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 31,
+      "phase": "windup",
+      "actual": 0.9041666666666667,
+      "expected": 0.9041666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 32,
+      "phase": "windup",
+      "actual": 1.0666666666666664,
+      "expected": 1.0666666666666664,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 32,
+      "phase": "windup",
+      "actual": 0.9333333333333332,
+      "expected": 0.9333333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 33,
+      "phase": "windup",
+      "actual": 1.0999999999999999,
+      "expected": 1.0999999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 33,
+      "phase": "windup",
+      "actual": 0.9624999999999999,
+      "expected": 0.9624999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 34,
+      "phase": "windup",
+      "actual": 1.1333333333333333,
+      "expected": 1.1333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 34,
+      "phase": "windup",
+      "actual": 0.9916666666666667,
+      "expected": 0.9916666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 35,
+      "phase": "windup",
+      "actual": 1.1666666666666667,
+      "expected": 1.1666666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 35,
+      "phase": "windup",
+      "actual": 1.0208333333333333,
+      "expected": 1.0208333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 36,
+      "phase": "windup",
+      "actual": 1.2,
+      "expected": 1.2,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 36,
+      "phase": "windup",
+      "actual": 1.0499999999999998,
+      "expected": 1.0499999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 37,
+      "phase": "windup",
+      "actual": 1.2333333333333332,
+      "expected": 1.2333333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 37,
+      "phase": "windup",
+      "actual": 1.0791666666666666,
+      "expected": 1.0791666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 38,
+      "phase": "windup",
+      "actual": 1.2666666666666666,
+      "expected": 1.2666666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 38,
+      "phase": "windup",
+      "actual": 1.1083333333333332,
+      "expected": 1.1083333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 39,
+      "phase": "windup",
+      "actual": 1.3,
+      "expected": 1.3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 39,
+      "phase": "windup",
+      "actual": 1.1375,
+      "expected": 1.1375,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 40,
+      "phase": "windup",
+      "actual": 1.3333333333333333,
+      "expected": 1.3333333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 40,
+      "phase": "windup",
+      "actual": 1.1666666666666667,
+      "expected": 1.1666666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 41,
+      "phase": "windup",
+      "actual": 1.3666666666666665,
+      "expected": 1.3666666666666665,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 41,
+      "phase": "windup",
+      "actual": 1.1958333333333333,
+      "expected": 1.1958333333333333,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 42,
+      "phase": "commit",
+      "actual": 1.4,
+      "expected": 1.4,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 42,
+      "phase": "windup",
+      "actual": 1.2249999999999999,
+      "expected": 1.2249999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 43,
+      "phase": "commit",
+      "actual": 1.45,
+      "expected": 1.45,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 43,
+      "phase": "windup",
+      "actual": 1.2541666666666667,
+      "expected": 1.2541666666666667,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 44,
+      "phase": "commit",
+      "actual": 1.5,
+      "expected": 1.5,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 44,
+      "phase": "windup",
+      "actual": 1.2833333333333332,
+      "expected": 1.2833333333333332,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 45,
+      "phase": "commit",
+      "actual": 1.5499999999999998,
+      "expected": 1.5499999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 45,
+      "phase": "windup",
+      "actual": 1.3125,
+      "expected": 1.3125,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 46,
+      "phase": "commit",
+      "actual": 1.5999999999999999,
+      "expected": 1.5999999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 46,
+      "phase": "windup",
+      "actual": 1.3416666666666666,
+      "expected": 1.3416666666666666,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 47,
+      "phase": "commit",
+      "actual": 1.65,
+      "expected": 1.65,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 47,
+      "phase": "windup",
+      "actual": 1.3708333333333331,
+      "expected": 1.3708333333333331,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 48,
+      "phase": "commit",
+      "actual": 1.7,
+      "expected": 1.7,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 48,
+      "phase": "commit",
+      "actual": 1.4,
+      "expected": 1.4,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 49,
+      "phase": "commit",
+      "actual": 1.75,
+      "expected": 1.75,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 49,
+      "phase": "commit",
+      "actual": 1.45,
+      "expected": 1.45,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 50,
+      "phase": "commit",
+      "actual": 1.7999999999999998,
+      "expected": 1.7999999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 50,
+      "phase": "commit",
+      "actual": 1.5,
+      "expected": 1.5,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 51,
+      "phase": "commit",
+      "actual": 1.85,
+      "expected": 1.85,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 51,
+      "phase": "commit",
+      "actual": 1.5499999999999998,
+      "expected": 1.5499999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 52,
+      "phase": "commit",
+      "actual": 1.9,
+      "expected": 1.9,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 52,
+      "phase": "commit",
+      "actual": 1.5999999999999999,
+      "expected": 1.5999999999999999,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 53,
+      "phase": "commit",
+      "actual": 1.95,
+      "expected": 1.95,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 53,
+      "phase": "commit",
+      "actual": 1.65,
+      "expected": 1.65,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 54,
+      "phase": "active",
+      "actual": 2,
+      "expected": 2,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 54,
+      "phase": "commit",
+      "actual": 1.7,
+      "expected": 1.7,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 55,
+      "phase": "active",
+      "actual": 2.125,
+      "expected": 2.125,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 55,
+      "phase": "commit",
+      "actual": 1.75,
+      "expected": 1.75,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 56,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 56,
+      "phase": "commit",
+      "actual": 1.7999999999999998,
+      "expected": 1.7999999999999998,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 57,
+      "phase": "active",
+      "actual": 2.375,
+      "expected": 2.375,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 57,
+      "phase": "commit",
+      "actual": 1.85,
+      "expected": 1.85,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 58,
+      "phase": "active",
+      "actual": 2.5,
+      "expected": 2.5,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 58,
+      "phase": "commit",
+      "actual": 1.9,
+      "expected": 1.9,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 59,
+      "phase": "active",
+      "actual": 2.625,
+      "expected": 2.625,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 59,
+      "phase": "commit",
+      "actual": 1.95,
+      "expected": 1.95,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 60,
+      "phase": "active",
+      "actual": 2.75,
+      "expected": 2.75,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 60,
+      "phase": "active",
+      "actual": 2,
+      "expected": 2,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 61,
+      "phase": "active",
+      "actual": 2.875,
+      "expected": 2.875,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 61,
+      "phase": "active",
+      "actual": 2.125,
+      "expected": 2.125,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "phase": "recovery",
+      "actual": 3,
+      "expected": 3,
+      "error": 0
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "phase": "active",
+      "actual": 2.25,
+      "expected": 2.25,
+      "error": 0
+    }
+  ],
+  "lod": [
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 0,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 0,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 1,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 1,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 2,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 2,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 3,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 3,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 4,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 4,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 5,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 5,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 6,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 6,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 7,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 7,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 8,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 8,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 9,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 9,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 10,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 10,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 11,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 11,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 12,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 12,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 13,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 13,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 14,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 14,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 15,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 15,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 16,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 16,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 17,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 17,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 18,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 18,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 19,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 19,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 20,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 20,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 21,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 21,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 22,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 22,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 23,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 23,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 24,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 24,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 25,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 25,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 26,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 26,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 27,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 27,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 28,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 28,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 29,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 29,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 30,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 30,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 31,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 31,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 32,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 32,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 33,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 33,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 34,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 34,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 35,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 35,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 36,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 36,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 37,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 37,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 38,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 38,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 39,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 39,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 40,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 40,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 41,
+      "attackPhase": "windup",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 41,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 42,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 42,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 43,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 43,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 44,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 44,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 45,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 45,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 46,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 46,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 47,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 47,
+      "attackPhase": "windup",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 48,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 48,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 49,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 49,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 50,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 50,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 51,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 51,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 52,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 52,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 53,
+      "attackPhase": "commit",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 53,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 54,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 54,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 55,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 55,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 56,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 56,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 57,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 57,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 58,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 58,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 59,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 59,
+      "attackPhase": "commit",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 60,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 60,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 61,
+      "attackPhase": "active",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 61,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-west",
+      "worldTick": 62,
+      "attackPhase": "recovery",
+      "visible": true,
+      "detail": "full",
+      "skipped": false
+    },
+    {
+      "actorId": "hunter-melee-east",
+      "worldTick": 62,
+      "attackPhase": "active",
+      "visible": false,
+      "detail": "off",
+      "skipped": false
+    }
+  ],
+  "maxClockError": 0,
+  "offscreenAttackSamples": 84,
+  "skippedAttackSamples": 0,
+  "afterUnload": {
+    "capacity": 16,
+    "activeActors": 0,
+    "visibleTrails": 0,
+    "droppedCosmeticActors": 0,
+    "missingNativeAnchors": 0,
+    "sampledWorldTick": 62
+  },
+  "particlesAfterUnload": 0
+}

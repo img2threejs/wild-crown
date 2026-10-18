@@ -1,18 +1,12 @@
 import { describe, expect, it } from 'bun:test';
 import {
-  MONSTER_ATTACK_PLANS, MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation, resolveMonsterHitOverlay, settleMonsterHover,
+  MONSTER_HOVER, MONSTER_HURT_HOLD_TIME, ROAR_CLIP_WINDOW, monsterHoverHeight, resolveMonsterAnimation, resolveMonsterHitOverlay, settleMonsterHover,
 } from '../../src/rendering/MonsterAnimationProfiles.js';
-import type { MonsterAttackPlan } from '../../src/rendering/MonsterAnimationPlan.js';
 import { flinchAt } from './reaction-fixtures.js';
+import type { ActorSnapshot } from '../../src/game/contracts';
 
-/** Every canopy attack id the plans have to sample cleanly. */
-const ATTACK_IDS = [
-  'howler-rock-hurl', 'howler-leap-slam', 'howler-branch-sweep', 'hornbill-dive-bomb', 'hornbill-feather-volley', 'hornbill-gale-flap',
-  'viper-venom-spit', 'viper-tail-lash', 'viper-strike-lunge',
-] as const;
 const PHASES = ['windup', 'commit', 'active', 'recovery'] as const;
 const ASSET = { howler: 'actor-thornback-howler', hornbill: 'actor-storm-hornbill', viper: 'actor-mire-viper' } as const;
-const ACTOR_ASSET: Readonly<Record<string, string>> = { 'canopy-howler': ASSET.howler, 'canopy-hornbill': ASSET.hornbill, 'canopy-mire-viper': ASSET.viper };
 
 function monster(partial: Partial<ActorSnapshot> & { id?: string } = {}): ActorSnapshot {
   return {
@@ -24,53 +18,6 @@ const attacking = (attackId: string, attackPhase: NonNullable<ActorSnapshot['att
   monster({ id, actionId: `wild-crown:${attackId}` as never, attackPhase, attackPhaseProgress: progress });
 
 describe('canopy monster clip plans', () => {
-  it('finite plans run the clip forward through contiguous phase windows that end at the clip end', () => {
-    for (const attackId of ATTACK_IDS) {
-      const plan = MONSTER_ATTACK_PLANS[attackId] as MonsterAttackPlan;
-      const steps = PHASES.map(phase => plan[phase]);
-      if (steps.some(step => 'loopRate' in step)) throw new Error(`${attackId}: canopy attacks play finite clip windows`);
-      let previousTo = -1;
-      for (const step of steps) {
-        if ('loopRate' in step) throw new Error(`${attackId}: mixed loop/clip plan`);
-        expect(step.from).toBeGreaterThanOrEqual(0);
-        expect(step.to).toBeLessThanOrEqual(1);
-        expect(step.to).toBeGreaterThan(step.from);
-        if (previousTo >= 0) expect(step.from).toBeCloseTo(previousTo, 9);
-        previousTo = step.to;
-      }
-      expect(previousTo).toBe(1);
-    }
-  });
-
-  it('lands the visible strike on the active window: the clip pose at the active start is the strike pose', () => {
-    const strikeStart: Readonly<Record<string, number>> = {
-      // shoot expels ~0.5 (the throw/spit/darts leave in commit and land as active opens)
-      'howler-rock-hurl': 0.68, 'hornbill-feather-volley': 0.66, 'viper-venom-spit': 0.62,
-      // slash strike pose ~0.45, dive strike ~0.4, jump lands 0.7-0.85
-      'howler-branch-sweep': 0.45, 'hornbill-gale-flap': 0.45, 'hornbill-dive-bomb': 0.36, 'viper-strike-lunge': 0.38, 'howler-leap-slam': 0.7,
-    };
-    for (const [attackId, expected] of Object.entries(strikeStart)) {
-      const active = resolveMonsterAnimation(attacking(attackId, 'active', 0, ACTOR_OF(attackId)), ACTOR_ASSET[ACTOR_OF(attackId)]!);
-      expect(active, attackId).toBeDefined();
-      expect(active!.phase).toBe('active');
-      expect(active!.normalizedTime).toBeCloseTo(expected, 6);
-    }
-    // The shoot clip's expel (~0.5) is reached at the start of commit, so the visible throw precedes the hazard.
-    for (const attackId of ['howler-rock-hurl', 'hornbill-feather-volley', 'viper-venom-spit']) {
-      const commit = resolveMonsterAnimation(attacking(attackId, 'commit', 0, ACTOR_OF(attackId)), ACTOR_ASSET[ACTOR_OF(attackId)]!)!;
-      expect(commit.normalizedTime).toBeCloseTo(0.5, 6);
-    }
-  });
-
-  it('plays every phase of every canopy attack inside the clip range', () => {
-    for (const attackId of ATTACK_IDS) for (const phase of PHASES) for (const progress of [0, 0.25, 0.5, 1]) {
-      const sample = resolveMonsterAnimation(attacking(attackId, phase, progress, ACTOR_OF(attackId)), ACTOR_ASSET[ACTOR_OF(attackId)]!)!;
-      expect(sample.normalizedTime).toBeGreaterThanOrEqual(0);
-      expect(sample.normalizedTime).toBeLessThanOrEqual(1);
-      expect(sample.loopRate).toBeGreaterThan(0);
-    }
-  });
-
   it('uses the Greenwake slot logic for locomotion, turning, hurt, roar and idle on the new assets', () => {
     for (const asset of Object.values(ASSET)) {
       const id = asset === ASSET.howler ? 'canopy-howler' : asset === ASSET.hornbill ? 'canopy-hornbill' : 'canopy-mire-viper';
@@ -93,7 +40,6 @@ describe('canopy monster clip plans', () => {
   });
 });
 
-function ACTOR_OF(attackId: string): string { return attackId.startsWith('howler') ? 'canopy-howler' : attackId.startsWith('hornbill') ? 'canopy-hornbill' : 'canopy-mire-viper'; }
 
 describe('hornbill flight presentation (monsterHoverHeight)', () => {
   const profile = MONSTER_HOVER[ASSET.hornbill]!;
@@ -164,6 +110,18 @@ describe('hornbill flight presentation (monsterHoverHeight)', () => {
       expect(hover(attacking(DIVE, 'active', progress), t)).toBeCloseTo(0.6, 9);
     }
   });
+  it('brings Orun Sky Echo into the damaging lane rather than leaving its native hornbill at idle flight height', () => {
+    const dive = (phase: NonNullable<ActorSnapshot['attackPhase']>, progress: number) =>
+      attacking('orun-sky-dive', phase, progress, 'hollow-sky-echo-1');
+    for (const progress of [0, .25, .5, 1]) expect(hover(dive('active', progress), 0)).toBeCloseTo(profile.dive!.lowHeight, 9);
+    for (const [left, right] of [['windup', 'commit'], ['commit', 'active'], ['active', 'recovery']] as const) {
+      expect(hover(dive(left, 1), 0)).toBeCloseTo(hover(dive(right, 0), 0), 9);
+    }
+    const midway = hover(dive('commit', .5), 5);
+    for (let frame = 0; frame < 30; frame++) expect(hover(dive('commit', .5), 5)).toBe(midway);
+    expect(hover(dive('recovery', 1), 5)).toBeCloseTo(hover(monster({ id: 'hollow-sky-echo-1' }), 5), 9);
+  });
+
 
   it('other hornbill attacks keep the hover, and non-attack actions never use the swoop curve', () => {
     for (const attackId of ['hornbill-feather-volley', 'hornbill-gale-flap']) for (const phase of PHASES) {

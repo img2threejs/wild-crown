@@ -1,0 +1,162 @@
+{
+  "scope": "Retained coordinator browser history across baseline setup, final native roster/aspects and actual application smoke. Failed baseline setup attempts are explicitly excluded from accepted benchmark samples.",
+  "nativeRuntimeJavaScriptErrors": [],
+  "excludedBaselineSetupErrors": [
+    {
+      "seq": 5,
+      "type": "pageerror",
+      "text": "Error: The Warden glaive must be a single mesh.",
+      "scope": "Excluded cold baseline dependency identity setup failure; explicit Three deduplication and owned-server restart/reload preceded successful matched runs."
+    },
+    {
+      "seq": 7,
+      "type": "pageerror",
+      "text": "Error: The Warden glaive must be a single mesh.",
+      "scope": "Excluded cold baseline dependency identity setup failure; explicit Three deduplication and owned-server restart/reload preceded successful matched runs."
+    },
+    {
+      "seq": 8,
+      "type": "pageerror",
+      "text": "TypeError: Cannot set properties of undefined (setting 'visible')",
+      "scope": "Excluded QA source-ID lookup failure; replaced guessed ID with actual ATTACKS bossId before successful runs."
+    }
+  ],
+  "abortedNavigationRequests": [
+    {
+      "seq": 19,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 20,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 21,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/alegreya/files/alegreya-latin-400-italic.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 22,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 23,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 24,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 25,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 26,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/alegreya/files/alegreya-latin-400-italic.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 27,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 28,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 29,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 30,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 33,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 34,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 35,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/alegreya/files/alegreya-latin-400-italic.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 36,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 37,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 38,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 39,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 40,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/alegreya/files/alegreya-latin-400-italic.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 41,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 42,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff: net::ERR_ABORTED"
+    },
+    {
+      "seq": 43,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/audio/ambience/forest.ogg: net::ERR_ABORTED"
+    },
+    {
+      "seq": 44,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/audio/music/combat-a.ogg: net::ERR_ABORTED"
+    },
+    {
+      "seq": 45,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/audio/music/greenwake-explore.ogg: net::ERR_ABORTED"
+    },
+    {
+      "seq": 46,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2: net::ERR_ABORTED"
+    },
+    {
+      "seq": 47,
+      "type": "requestfailed",
+      "text": "GET http://127.0.0.1:5193/@fs[worktrees]/task-128-environment-impact/node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff: net::ERR_ABORTED"
+    }
+  ],
+  "dropped": 0
+}

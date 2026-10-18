@@ -131,15 +131,18 @@ export function regionAssetIds(region: RegionDefinition): Set<string> {
     ]);
 }
 
-/** Candidate GLB rules shared by Trials and candidate Chapters: native, local generated, hashed, explicitly unverified, no claimed clips. */
+/** Candidate GLBs stay unverified; required clip mappings are load contracts, checked against actual GLB clips by NativeAssetLoader. */
 export function assertCandidateEntry(entry: AssetManifestEntry, expectedKind: 'prop' | 'character', label: string): void {
     const id = entry.id;
     if (entry.evidenceStatus === 'verified') throw new AssetGateError('Candidate ' + label + ' asset ' + id + ' must remain explicitly unverified.');
     if (entry.kind !== expectedKind || entry.sourceType !== 'native-glb') throw new AssetGateError('Candidate ' + label + ' asset ' + id + ' must be a native ' + expectedKind + ' GLB.');
     if (!entry.runtimeUrl?.startsWith('/asset-source/generated/') || entry.runtimeUrl.includes('..')) throw new AssetGateError('Candidate ' + label + ' asset ' + id + ' must load from a local generated GLB.');
     if (!entry.outputHash || !/^[a-f0-9]{64}$/i.test(entry.outputHash)) throw new AssetGateError('Candidate ' + label + ' asset ' + id + ' requires the SHA-256 of its actual GLB bytes.');
-    if (entry.kind === 'character' && (!entry.actorId || entry.requiredActionIds.length > 0)) {
-        throw new AssetGateError('Candidate ' + label + ' character ' + id + ' must identify its actor and must not claim unverified action clips.');
+    if (entry.kind === 'character') {
+        if (!entry.actorId) throw new AssetGateError('Candidate ' + label + ' character ' + id + ' must identify its actor.');
+        for (const actionId of entry.requiredActionIds) {
+            if (!entry.actionToClipMapping[actionId]) throw new AssetGateError('Candidate ' + label + ' character ' + id + ' requires an exact native clip mapping for ' + actionId + '.');
+        }
     }
     if (entry.playtestAnimation && entry.evidenceStatus !== 'blocked') throw new AssetGateError('Playtest animation profiles must remain explicitly blocked from production acceptance.');
 }

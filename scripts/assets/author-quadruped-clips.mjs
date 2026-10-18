@@ -732,6 +732,13 @@ const PERSONALITIES = {
     authoredWalk: true, seconds: { 'monster-walk': 0.6, 'monster-run': 0.45 },
     ikGait: { walk: { stride: 0.5, lift: 0.14, duty: 0.6, sway: 4, tailYaw: 8, tailUp: 3, dip: 0.05, bob: 0.015 }, run: { stride: 0.72, lift: 0.22, duty: 0.45, sway: 6, tailYaw: 12, tailUp: 7, dip: 0.06, bob: 0.025 } } },
 };
+
+/** Retains the measured per-species repairs and explicit limb chains in all native attack authors. */
+export function quadrupedRigContext(assetId, json) {
+  const personality = PERSONALITIES[assetId];
+  if (!personality) throw new Error(`No quadruped anatomical frame for ${assetId}`);
+  return new QuadrupedRig(json, personality.rigOptions);
+}
 const NEUTRAL = { label: 'neutral', amp: 1, tusk: 1, headBias: 0, spine: 1, tail: 1, leap: 0.35, mass: 1, hold: 1, legSwing: 1.35, jumpTuck: 1 };
 
 /** Slows time inside [a, a + e] (slow-motion hold) and compresses the rest so the clip still ends at 1. */

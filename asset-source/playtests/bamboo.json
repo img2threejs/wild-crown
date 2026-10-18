@@ -1092,7 +1092,10 @@
       "vara:hurt": "vara:hurt"
     },
     "rootMotion": {
-      "vara-sky-survey": { "mode": "in-place", "evidenceStatus": "verified" },
+      "vara-sky-survey": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "vara:idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1210,10 +1213,13 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "4f67bf43-fda9-4f9d-96dd-7ae31f5f31cd",
-    "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
-    "outputHash": "c6985e814b630be140030ea03c5679e4a9ca6d558184f2e34567a41f1d1b048d",
+    "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+    "outputHash": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-falling-branch"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1232,13 +1238,27 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:koro-fruit-burst": "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-falling-branch": "wild-crown:koro-falling-branch"
     },
     "rootMotion": {
-      "koro-throw": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-push": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-distract": { "mode": "in-place", "evidenceStatus": "verified" },
-      "koro-search": { "mode": "in-place", "evidenceStatus": "verified" },
+      "koro-throw": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-push": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-distract": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "koro-search": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
       "monster-idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
@@ -1262,10 +1282,18 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-fruit-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-falling-branch": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-koro-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-koro-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1276,10 +1304,17 @@
     "rigFamily": "biped",
     "castSocketBone": "Head",
     "tripoSourceTask": "15e53325-7461-4f54-b742-b62955e793cc",
-    "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
-    "outputHash": "a56f21ab1e7d431dfbcde7a165fd9c47fecc6023325b435224aaf5314f5f9a23",
+    "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+    "outputHash": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-rock-throw",
+      "wild-crown:koro-falling-branch",
+      "wild-crown:koro-platform-charge",
+      "wild-crown:koro-vine-vault",
+      "wild-crown:koro-branch-swing"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1302,7 +1337,13 @@
       "monster-death": "monster-death",
       "monster-spawn": "monster-spawn",
       "monster-knockdown": "monster-knockdown",
-      "monster-getup": "monster-getup"
+      "monster-getup": "monster-getup",
+      "wild-crown:koro-fruit-burst": "wild-crown:koro-fruit-burst",
+      "wild-crown:koro-rock-throw": "wild-crown:koro-rock-throw",
+      "wild-crown:koro-falling-branch": "wild-crown:koro-falling-branch",
+      "wild-crown:koro-platform-charge": "wild-crown:koro-platform-charge",
+      "wild-crown:koro-vine-vault": "wild-crown:koro-vine-vault",
+      "wild-crown:koro-branch-swing": "wild-crown:koro-branch-swing"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1360,10 +1401,34 @@
       "monster-getup": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-fruit-burst": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-rock-throw": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-falling-branch": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-platform-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-vine-vault": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:koro-branch-swing": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-koro-branchbreaker-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-koro-branchbreaker-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1374,10 +1439,19 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "25e44787-7323-42e9-9244-8f50476bd92e",
-    "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb",
-    "outputHash": "e93dfa349cb64e7ef27a1e056481a3d9b4ffac0801616788eff092bccc94f265",
+    "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+    "outputHash": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:asha-guarding-pounce",
+      "wild-crown:asha-corrupted-pounce",
+      "wild-crown:asha-bamboo-charge",
+      "wild-crown:asha-claw-combination",
+      "wild-crown:asha-side-charge",
+      "wild-crown:asha-protective-roar",
+      "wild-crown:asha-black-sap-trail",
+      "wild-crown:asha-ground-wave"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1408,7 +1482,15 @@
       "asha-corrupt-slam": "asha-corrupt-slam",
       "asha-bamboo-charge": "asha-bamboo-charge",
       "asha-cleanse": "asha-cleanse",
-      "asha-bond-idle": "asha-bond-idle"
+      "asha-bond-idle": "asha-bond-idle",
+      "wild-crown:asha-guarding-pounce": "wild-crown:asha-guarding-pounce",
+      "wild-crown:asha-corrupted-pounce": "wild-crown:asha-corrupted-pounce",
+      "wild-crown:asha-bamboo-charge": "wild-crown:asha-bamboo-charge",
+      "wild-crown:asha-claw-combination": "wild-crown:asha-claw-combination",
+      "wild-crown:asha-side-charge": "wild-crown:asha-side-charge",
+      "wild-crown:asha-protective-roar": "wild-crown:asha-protective-roar",
+      "wild-crown:asha-black-sap-trail": "wild-crown:asha-black-sap-trail",
+      "wild-crown:asha-ground-wave": "wild-crown:asha-ground-wave"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1498,10 +1580,42 @@
       "asha-bond-idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-guarding-pounce": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-corrupted-pounce": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-bamboo-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-claw-combination": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-side-charge": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-protective-roar": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-black-sap-trail": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:asha-ground-wave": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-asha-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-asha-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1728,10 +1842,13 @@
     "rigFamily": "biped",
     "castSocketBone": "mixamorig:Head",
     "tripoSourceTask": "9a38661b-b345-4a40-97fd-88da980fd18f",
-    "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb",
-    "outputHash": "5813fe9afd11cee22d542f1c87135299b9f59c5b1169737473404e2a2c8747dd",
+    "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+    "outputHash": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:poacher-hunter-spear",
+      "wild-crown:poacher-hunter-east-spear"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1753,7 +1870,9 @@
       "monster-getup": "monster-getup",
       "hunter-thrust": "hunter-thrust",
       "hunter-subdue": "hunter-subdue",
-      "hunter-kneel-idle": "hunter-kneel-idle"
+      "hunter-kneel-idle": "hunter-kneel-idle",
+      "wild-crown:poacher-hunter-spear": "wild-crown:poacher-hunter-spear",
+      "wild-crown:poacher-hunter-east-spear": "wild-crown:poacher-hunter-east-spear"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1807,10 +1926,18 @@
       "hunter-kneel-idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:poacher-hunter-spear": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "wild-crown:poacher-hunter-east-spear": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-camp-hunter-melee-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-camp-hunter-melee-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -1821,10 +1948,12 @@
     "rigFamily": "biped",
     "castSocketBone": "mixamorig:Head",
     "tripoSourceTask": "77979fef-7284-4489-8f50-37c01bd845f2",
-    "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb",
-    "outputHash": "9da66e5ba2fb6e82d5b6117255200e15852408616cec510a70553130d5611d72",
+    "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+    "outputHash": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05",
     "lodIds": [],
-    "requiredActionIds": [],
+    "requiredActionIds": [
+      "wild-crown:poacher-scout-net"
+    ],
     "coordinateTransform": {
       "forward": {
         "x": -1,
@@ -1845,7 +1974,8 @@
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
       "hunter-subdue": "hunter-subdue",
-      "hunter-kneel-idle": "hunter-kneel-idle"
+      "hunter-kneel-idle": "hunter-kneel-idle",
+      "wild-crown:poacher-scout-net": "wild-crown:poacher-scout-net"
     },
     "rootMotion": {
       "monster-idle": {
@@ -1895,10 +2025,14 @@
       "hunter-kneel-idle": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "wild-crown:poacher-scout-net": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/clips-report.json",
+    "provenance": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/combat-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

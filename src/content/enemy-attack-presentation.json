@@ -1,0 +1,678 @@
+{
+  "schemaVersion": 1,
+  "phaseEnds": [
+    0.35,
+    0.5,
+    0.75,
+    1
+  ],
+  "attacks": {
+    "koro-fruit-burst": {
+      "assets": [
+        "actor-koro-branchbreaker",
+        "actor-koro"
+      ],
+      "motion": "fruit-scatter",
+      "socket": "hand-right"
+    },
+    "ruun-track-charge": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun",
+        "actor-sable"
+      ],
+      "motion": "tracking-charge",
+      "socket": "head"
+    },
+    "ruun-pack-call": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun"
+      ],
+      "motion": "pack-call",
+      "socket": "mouth"
+    },
+    "ruun-claw-arc": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun"
+      ],
+      "motion": "claw-sweep",
+      "socket": "paw-right"
+    },
+    "ghor-hammering-charge": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "armored-charge",
+      "socket": "head"
+    },
+    "ghor-stonefall": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "stone-shake",
+      "socket": "shoulders"
+    },
+    "ghor-overhead-slam": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "foreleg-slam",
+      "socket": "paws"
+    },
+    "solkar-commanding-roar": {
+      "assets": [
+        "actor-solkar"
+      ],
+      "motion": "dominion-roar",
+      "socket": "mouth"
+    },
+    "solkar-pride-rush": {
+      "assets": [
+        "actor-solkar"
+      ],
+      "motion": "pride-pounce",
+      "socket": "head"
+    },
+    "solkar-paw-slam": {
+      "assets": [
+        "actor-solkar"
+      ],
+      "motion": "paw-slam",
+      "socket": "paw-right"
+    },
+    "orun-root-tether": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "staff-tether",
+      "socket": "weapon-tip"
+    },
+    "orun-staff-combo": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "staff-combo",
+      "socket": "weapon-edge"
+    },
+    "orun-cartwheel-counter": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "cartwheel-counter",
+      "socket": "weapon-edge"
+    },
+    "orun-back-handspring": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "back-handspring",
+      "socket": "feet"
+    },
+    "orun-dive-roll": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "dive-roll",
+      "socket": "shoulders"
+    },
+    "orun-companion-suppression": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "staff-ground-slam",
+      "socket": "weapon-tip"
+    },
+    "orun-sky-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "sky-invocation",
+      "socket": "crown"
+    },
+    "orun-sky-dive": {
+      "assets": [
+        "actor-storm-hornbill"
+      ],
+      "motion": "talon-dive",
+      "socket": "feet"
+    },
+    "orun-canopy-root": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "root-rend",
+      "socket": "paws"
+    },
+    "orun-canopy-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "root-rend-heavy",
+      "socket": "paws"
+    },
+    "orun-fang-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "fang-pounce",
+      "socket": "head"
+    },
+    "orun-pack-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "pack-stamp",
+      "socket": "paw-right"
+    },
+    "orun-shadow-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "shadow-coil",
+      "socket": "shoulders"
+    },
+    "orun-crown-aspect": {
+      "assets": [
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "crown-roar",
+      "socket": "mouth"
+    },
+    "orun-root-surge": {
+      "assets": [
+        "actor-orun"
+      ],
+      "motion": "root-wave-cast",
+      "socket": "weapon-tip"
+    },
+    "orun-crown-possession": {
+      "assets": [
+        "actor-orun",
+        "actor-orun-crowned-beast"
+      ],
+      "motion": "possession-grasp",
+      "socket": "hand-right"
+    },
+    "boar-charge": {
+      "assets": [
+        "actor-ember-boar"
+      ],
+      "motion": "tusk-charge",
+      "socket": "head"
+    },
+    "boar-sap-thrash": {
+      "assets": [
+        "actor-ember-boar"
+      ],
+      "motion": "sap-thrash",
+      "socket": "shoulders"
+    },
+    "boar-pounce": {
+      "assets": [
+        "actor-ember-boar"
+      ],
+      "motion": "tusk-pounce",
+      "socket": "head"
+    },
+    "sap-vein-snap": {
+      "assets": [
+        "actor-frost-sap-stalker"
+      ],
+      "motion": "vein-snap",
+      "socket": "head"
+    },
+    "sap-vein-thrash": {
+      "assets": [
+        "actor-frost-sap-stalker"
+      ],
+      "motion": "sap-stamp",
+      "socket": "paws"
+    },
+    "root-rammer-low-wave": {
+      "assets": [
+        "actor-root-rammer"
+      ],
+      "motion": "root-stamp",
+      "socket": "paws"
+    },
+    "root-rammer-slam": {
+      "assets": [
+        "actor-root-rammer"
+      ],
+      "motion": "antler-slam",
+      "socket": "head"
+    },
+    "boar-ember-lance": {
+      "assets": [
+        "actor-ember-boar"
+      ],
+      "motion": "ember-breath",
+      "socket": "mouth"
+    },
+    "boar-gale-scythe": {
+      "assets": [
+        "actor-ember-boar"
+      ],
+      "motion": "tusk-scythe",
+      "socket": "head"
+    },
+    "sap-stalker-frost-bloom": {
+      "assets": [
+        "actor-frost-sap-stalker"
+      ],
+      "motion": "frost-stamp",
+      "socket": "paws"
+    },
+    "sap-stalker-venom-mist": {
+      "assets": [
+        "actor-frost-sap-stalker"
+      ],
+      "motion": "venom-exhale",
+      "socket": "mouth"
+    },
+    "root-rammer-cinder-burst": {
+      "assets": [
+        "actor-root-rammer"
+      ],
+      "motion": "cinder-stamp",
+      "socket": "paws"
+    },
+    "root-rammer-gale-sweep": {
+      "assets": [
+        "actor-root-rammer"
+      ],
+      "motion": "tail-sweep",
+      "socket": "tail"
+    },
+    "howler-rock-hurl": {
+      "assets": [
+        "actor-thornback-howler"
+      ],
+      "motion": "rock-hurl",
+      "socket": "hand-right"
+    },
+    "howler-leap-slam": {
+      "assets": [
+        "actor-thornback-howler"
+      ],
+      "motion": "leap-slam",
+      "socket": "hands"
+    },
+    "howler-branch-sweep": {
+      "assets": [
+        "actor-thornback-howler"
+      ],
+      "motion": "branch-sweep",
+      "socket": "hand-right"
+    },
+    "hornbill-dive-bomb": {
+      "assets": [
+        "actor-storm-hornbill"
+      ],
+      "motion": "talon-dive",
+      "socket": "feet"
+    },
+    "hornbill-feather-volley": {
+      "assets": [
+        "actor-storm-hornbill"
+      ],
+      "motion": "feather-volley",
+      "socket": "wings"
+    },
+    "hornbill-gale-flap": {
+      "assets": [
+        "actor-storm-hornbill"
+      ],
+      "motion": "wing-gust",
+      "socket": "wings"
+    },
+    "viper-venom-spit": {
+      "assets": [
+        "actor-mire-viper"
+      ],
+      "motion": "venom-spit",
+      "socket": "mouth"
+    },
+    "viper-tail-lash": {
+      "assets": [
+        "actor-mire-viper"
+      ],
+      "motion": "tail-lash",
+      "socket": "tail"
+    },
+    "viper-strike-lunge": {
+      "assets": [
+        "actor-mire-viper"
+      ],
+      "motion": "bite-lunge",
+      "socket": "head"
+    },
+    "poacher-scout-net": {
+      "assets": [
+        "actor-camp-hunter-ranged"
+      ],
+      "motion": "net-release",
+      "socket": "hand-right"
+    },
+    "poacher-hunter-spear": {
+      "assets": [
+        "actor-camp-hunter-melee"
+      ],
+      "motion": "spear-thrust",
+      "socket": "hand-left"
+    },
+    "poacher-hunter-east-spear": {
+      "assets": [
+        "actor-camp-hunter-melee"
+      ],
+      "motion": "spear-sweep",
+      "socket": "hand-left"
+    },
+    "koro-rock-throw": {
+      "assets": [
+        "actor-koro-branchbreaker"
+      ],
+      "motion": "rock-hurl-heavy",
+      "socket": "hand-right"
+    },
+    "koro-falling-branch": {
+      "assets": [
+        "actor-koro-branchbreaker",
+        "actor-koro"
+      ],
+      "motion": "canopy-shake",
+      "socket": "hands"
+    },
+    "koro-platform-charge": {
+      "assets": [
+        "actor-koro-branchbreaker"
+      ],
+      "motion": "knuckle-charge",
+      "socket": "shoulders"
+    },
+    "koro-vine-vault": {
+      "assets": [
+        "actor-koro-branchbreaker"
+      ],
+      "motion": "vine-vault",
+      "socket": "hands"
+    },
+    "koro-branch-swing": {
+      "assets": [
+        "actor-koro-branchbreaker"
+      ],
+      "motion": "log-sweep",
+      "socket": "hand-right"
+    },
+    "asha-guarding-pounce": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "stalking-pounce",
+      "socket": "paws"
+    },
+    "asha-corrupted-pounce": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "corrupted-slam",
+      "socket": "paws"
+    },
+    "asha-bamboo-charge": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "bamboo-charge",
+      "socket": "head"
+    },
+    "asha-claw-combination": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "double-claw",
+      "socket": "paws"
+    },
+    "asha-side-charge": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "side-charge",
+      "socket": "shoulders"
+    },
+    "asha-protective-roar": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "protective-roar",
+      "socket": "mouth"
+    },
+    "asha-black-sap-trail": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "sap-tail-lash",
+      "socket": "tail"
+    },
+    "asha-ground-wave": {
+      "assets": [
+        "actor-asha"
+      ],
+      "motion": "corruption-stamp",
+      "socket": "paws"
+    },
+    "sprig-seed-toss": {
+      "assets": [
+        "actor-grove-rootling"
+      ],
+      "motion": "seed-toss",
+      "socket": "hand-right"
+    },
+    "sprig-ground-ripple": {
+      "assets": [
+        "actor-grove-rootling"
+      ],
+      "motion": "root-tap",
+      "socket": "hands"
+    },
+    "sprig-petal-sweep": {
+      "assets": [
+        "actor-grove-rootling"
+      ],
+      "motion": "petal-sweep",
+      "socket": "hand-left"
+    },
+    "blighted-seed-lob": {
+      "assets": [
+        "actor-grove-blighted-rootling"
+      ],
+      "motion": "ichor-lob",
+      "socket": "hand-right"
+    },
+    "blighted-ground-pulse": {
+      "assets": [
+        "actor-grove-blighted-rootling"
+      ],
+      "motion": "blight-stamp",
+      "socket": "hands"
+    },
+    "blighted-lash-sweep": {
+      "assets": [
+        "actor-grove-blighted-rootling"
+      ],
+      "motion": "bough-lash",
+      "socket": "hand-left"
+    },
+    "hollowheart-leap-smash": {
+      "assets": [
+        "actor-grove-hollowheart"
+      ],
+      "motion": "guardian-smash",
+      "socket": "hands"
+    },
+    "hollowheart-antler-sweep": {
+      "assets": [
+        "actor-grove-hollowheart"
+      ],
+      "motion": "antler-sweep",
+      "socket": "head"
+    },
+    "hollowheart-ichor-hurl": {
+      "assets": [
+        "actor-grove-hollowheart"
+      ],
+      "motion": "ichor-hurl-heavy",
+      "socket": "hand-right"
+    },
+    "hollowheart-heartlight-burst": {
+      "assets": [
+        "actor-grove-hollowheart"
+      ],
+      "motion": "heartlight-release",
+      "socket": "chest"
+    },
+    "frostfang-pack-rush": {
+      "assets": [
+        "actor-frostfang-tracker"
+      ],
+      "motion": "frost-rush",
+      "socket": "head"
+    },
+    "frostfang-ice-bite": {
+      "assets": [
+        "actor-frostfang-tracker"
+      ],
+      "motion": "ice-bite",
+      "socket": "mouth"
+    },
+    "frostfang-frost-breath": {
+      "assets": [
+        "actor-frostfang-tracker"
+      ],
+      "motion": "frost-breath",
+      "socket": "mouth"
+    },
+    "howl-scout-flank-pounce": {
+      "assets": [
+        "actor-howl-scout"
+      ],
+      "motion": "flank-pounce",
+      "socket": "paws"
+    },
+    "howl-scout-claw-rake": {
+      "assets": [
+        "actor-howl-scout"
+      ],
+      "motion": "claw-rake",
+      "socket": "paw-left"
+    },
+    "howl-scout-low-howl": {
+      "assets": [
+        "actor-howl-scout"
+      ],
+      "motion": "low-howl",
+      "socket": "mouth"
+    },
+    "chained-ruun-chain-pounce": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun"
+      ],
+      "motion": "chain-pounce",
+      "socket": "paws"
+    },
+    "chained-ruun-howl-shockwave": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun"
+      ],
+      "motion": "chain-howl",
+      "socket": "mouth"
+    },
+    "chained-ruun-breaking-ice": {
+      "assets": [
+        "actor-ruun-chained-howl",
+        "actor-ruun"
+      ],
+      "motion": "ice-break-slam",
+      "socket": "paws"
+    },
+    "bog-lurker-tongue-lash": {
+      "assets": [
+        "actor-bog-lurker"
+      ],
+      "motion": "tongue-lash",
+      "socket": "mouth"
+    },
+    "bog-lurker-bubble-pool": {
+      "assets": [
+        "actor-bog-lurker"
+      ],
+      "motion": "bubble-exhale",
+      "socket": "mouth"
+    },
+    "bog-lurker-mud-hop": {
+      "assets": [
+        "actor-bog-lurker"
+      ],
+      "motion": "mud-hop",
+      "socket": "paws"
+    },
+    "lantern-heron-spear-dive": {
+      "assets": [
+        "actor-lantern-heron"
+      ],
+      "motion": "beak-dive",
+      "socket": "head"
+    },
+    "lantern-heron-mist-gust": {
+      "assets": [
+        "actor-lantern-heron"
+      ],
+      "motion": "mist-wingbeat",
+      "socket": "wings"
+    },
+    "lantern-heron-flare-burst": {
+      "assets": [
+        "actor-lantern-heron"
+      ],
+      "motion": "lantern-flare",
+      "socket": "chest"
+    },
+    "mire-maw-tail-sweep": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "marsh-tail-sweep",
+      "socket": "tail"
+    },
+    "mire-maw-bite-lunge": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "maw-lunge",
+      "socket": "mouth"
+    },
+    "mire-maw-black-river-wave": {
+      "assets": [
+        "actor-ghor-mire-maw",
+        "actor-ghor"
+      ],
+      "motion": "river-surge",
+      "socket": "paws"
+    },
+    "nyra-shadow-ambush": {
+      "assets": [
+        "actor-nyra"
+      ],
+      "motion": "shadow-lunge",
+      "socket": "paws"
+    }
+  }
+}

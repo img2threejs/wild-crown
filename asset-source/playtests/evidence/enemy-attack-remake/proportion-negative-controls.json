@@ -1,0 +1,1382 @@
+[
+  {
+    "attackId": "boar-pounce",
+    "sourceId": "corrupted-boar",
+    "attackFrames": 125,
+    "skinFrames": 125,
+    "boneScalesChecked": 3875,
+    "constantPositionsChecked": 3625,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 125,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "greenwake",
+    "nativeAssets": [
+      "actor-ember-boar"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 157,
+    "attackSampleCount": 126,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 33,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 156
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_231bab10-019e-4351-bd96-1f3014db7f0d",
+        "bounds": {
+          "min": [
+            4.791287892577223,
+            -0.000009450330020310815,
+            -3.9394637781192396
+          ],
+          "max": [
+            7.278222899867856,
+            1.4411759265826265,
+            -2.094282800800244
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "howler-leap-slam",
+    "sourceId": "canopy-howler",
+    "attackFrames": 122,
+    "skinFrames": 122,
+    "boneScalesChecked": 5002,
+    "constantPositionsChecked": 4758,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 244,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "whispering-canopy",
+    "nativeAssets": [
+      "actor-thornback-howler"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 154,
+    "attackSampleCount": 123,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 32,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 153
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_7fdedf2f-d9bd-45df-bd4c-dca0085e2c9d",
+        "bounds": {
+          "min": [
+            -49.920743468895935,
+            -0.2184541667866495,
+            -28.887957708460334
+          ],
+          "max": [
+            -48.10098469834859,
+            1.6490237550629354,
+            -27.11195225473532
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "viper-tail-lash",
+    "sourceId": "canopy-mire-viper",
+    "attackFrames": 130,
+    "skinFrames": 130,
+    "boneScalesChecked": 2340,
+    "constantPositionsChecked": 2210,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 130,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "whispering-canopy",
+    "nativeAssets": [
+      "actor-mire-viper"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 162,
+    "attackSampleCount": 131,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 35,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 161
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6",
+        "bounds": {
+          "min": [
+            45.2606151156058,
+            -0.07170873503265862,
+            -23.36865480516956
+          ],
+          "max": [
+            51.88756143391685,
+            3.7066899041839134,
+            -16.74170848685852
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "koro-fruit-burst",
+    "sourceId": "koro",
+    "attackFrames": 159,
+    "skinFrames": 159,
+    "boneScalesChecked": 6519,
+    "constantPositionsChecked": 6201,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 128,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "whispering-canopy",
+    "nativeAssets": [
+      "actor-koro-branchbreaker"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 160,
+    "attackSampleCount": 160,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 40,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 159
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_45a79510-d0f7-4986-8052-2eb73bab3281",
+        "bounds": {
+          "min": [
+            46.281075809627424,
+            -0.06899690898194082,
+            -24.32145970923453
+          ],
+          "max": [
+            47.76001602214514,
+            1.4258862181560366,
+            -23.19046192809296
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ruun-track-charge",
+    "sourceId": "ruun",
+    "attackFrames": 189,
+    "skinFrames": 189,
+    "boneScalesChecked": 6426,
+    "constantPositionsChecked": 4914,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 158,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "moonpine-ridge",
+    "nativeAssets": [
+      "actor-ruun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 190,
+    "attackSampleCount": 190,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 48,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 189
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_0335fbc1-b980-4633-b896-567e5ee1df25",
+        "bounds": {
+          "min": [
+            24.37785247731351,
+            13.02252108388421,
+            12.762746809833502
+          ],
+          "max": [
+            25.657571377804018,
+            15.198517786334225,
+            16.22702556508641
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ruun-pack-call",
+    "sourceId": "ruun",
+    "attackFrames": 189,
+    "skinFrames": 189,
+    "boneScalesChecked": 6426,
+    "constantPositionsChecked": 4914,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 158,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "moonpine-ridge",
+    "nativeAssets": [
+      "actor-ruun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 190,
+    "attackSampleCount": 190,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 47,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 189
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_0335fbc1-b980-4633-b896-567e5ee1df25",
+        "bounds": {
+          "min": [
+            24.377852477313507,
+            13.022520448087878,
+            5.262746933933084
+          ],
+          "max": [
+            25.62104772057859,
+            15.12423580947807,
+            8.733742082193821
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ruun-claw-arc",
+    "sourceId": "ruun",
+    "attackFrames": 142,
+    "skinFrames": 142,
+    "boneScalesChecked": 4828,
+    "constantPositionsChecked": 3692,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 142,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "moonpine-ridge",
+    "nativeAssets": [
+      "actor-ruun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 143,
+    "attackSampleCount": 143,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 36,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 142
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_0335fbc1-b980-4633-b896-567e5ee1df25",
+        "bounds": {
+          "min": [
+            24.377852477313507,
+            13.02252108388421,
+            6.762746912861056
+          ],
+          "max": [
+            25.657571377804015,
+            15.198517786334225,
+            10.227025398714353
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ghor-hammering-charge",
+    "sourceId": "ghor",
+    "attackFrames": 201,
+    "skinFrames": 201,
+    "boneScalesChecked": 8241,
+    "constantPositionsChecked": 7839,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 170,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "mistveil-basin",
+    "nativeAssets": [
+      "actor-ghor"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 202,
+    "attackSampleCount": 202,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 51,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 201
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_1e866ee5-1268-4aff-8ab3-9ac16f1e31a4",
+        "bounds": {
+          "min": [
+            58.48025132268883,
+            -1.0110533148665293,
+            14.084840733590651
+          ],
+          "max": [
+            65.95820741398775,
+            1.8113094864889345,
+            22.234524675567755
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ghor-stonefall",
+    "sourceId": "ghor",
+    "attackFrames": 177,
+    "skinFrames": 177,
+    "boneScalesChecked": 7257,
+    "constantPositionsChecked": 6903,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 177,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "mistveil-basin",
+    "nativeAssets": [
+      "actor-ghor"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 178,
+    "attackSampleCount": 178,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 45,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 177
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_1e866ee5-1268-4aff-8ab3-9ac16f1e31a4",
+        "bounds": {
+          "min": [
+            58.42614715976631,
+            -1.0110533148665293,
+            5.985207320373411
+          ],
+          "max": [
+            65.88029577743282,
+            1.8113094864889345,
+            14.23452464170782
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "ghor-overhead-slam",
+    "sourceId": "ghor",
+    "attackFrames": 183,
+    "skinFrames": 183,
+    "boneScalesChecked": 7503,
+    "constantPositionsChecked": 7137,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 304,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "mistveil-basin",
+    "nativeAssets": [
+      "actor-ghor"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 184,
+    "attackSampleCount": 184,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 46,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 1,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 183
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_1e866ee5-1268-4aff-8ab3-9ac16f1e31a4",
+        "bounds": {
+          "min": [
+            58.34035533996807,
+            -1.0110535149868984,
+            8.362012843975995
+          ],
+          "max": [
+            65.63593168902061,
+            1.84061751058118,
+            16.777653544754223
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "solkar-commanding-roar",
+    "sourceId": "solkar",
+    "attackFrames": 174,
+    "skinFrames": 174,
+    "boneScalesChecked": 6612,
+    "constantPositionsChecked": 6090,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 174,
+    "nativeTipChecks": 0,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "sunmane-expanse",
+    "nativeAssets": [
+      "actor-solkar"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 175,
+    "attackSampleCount": 175,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 0,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 174
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_7db4a6d2-3fa1-4f59-b46e-9fae1759a07e",
+        "bounds": {
+          "min": [
+            48.51577657368969,
+            8.997958234107092,
+            2.393193112006119
+          ],
+          "max": [
+            49.61991905079019,
+            11.117022315928725,
+            5.517903655010404
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "solkar-pride-rush",
+    "sourceId": "solkar",
+    "attackFrames": 183,
+    "skinFrames": 183,
+    "boneScalesChecked": 6954,
+    "constantPositionsChecked": 6405,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 183,
+    "nativeTipChecks": 0,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "sunmane-expanse",
+    "nativeAssets": [
+      "actor-solkar"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 184,
+    "attackSampleCount": 184,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 31,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 0,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 183
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_7db4a6d2-3fa1-4f59-b46e-9fae1759a07e",
+        "bounds": {
+          "min": [
+            48.338196056634104,
+            8.997929019295793,
+            7.766195571088868
+          ],
+          "max": [
+            49.67179466471996,
+            11.105068337965093,
+            10.725918279509147
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "solkar-paw-slam",
+    "sourceId": "solkar",
+    "attackFrames": 156,
+    "skinFrames": 156,
+    "boneScalesChecked": 5928,
+    "constantPositionsChecked": 5460,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 156,
+    "nativeTipChecks": 0,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "sunmane-expanse",
+    "nativeAssets": [
+      "actor-solkar"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 157,
+    "attackSampleCount": 157,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 0,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 156
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_7db4a6d2-3fa1-4f59-b46e-9fae1759a07e",
+        "bounds": {
+          "min": [
+            48.47404166863307,
+            8.99795823410709,
+            4.062152486177467
+          ],
+          "max": [
+            49.66527038827659,
+            11.117022315928724,
+            7.031752475761605
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-root-tether",
+    "sourceId": "orun",
+    "attackFrames": 113,
+    "skinFrames": 113,
+    "boneScalesChecked": 2599,
+    "constantPositionsChecked": 2373,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 113,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 145,
+    "attackSampleCount": 114,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 30,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 144
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.557106538975198,
+            -7.000021128059582,
+            -45.25915741316325
+          ],
+          "max": [
+            17.4763982516749,
+            -4.890480043620248,
+            -44.71619811179772
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-staff-combo",
+    "sourceId": "orun",
+    "attackFrames": 121,
+    "skinFrames": 121,
+    "boneScalesChecked": 2783,
+    "constantPositionsChecked": 2541,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 121,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 153,
+    "attackSampleCount": 122,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 35,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 152
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.53970272419636,
+            -7.000002263631936,
+            -43.78642541939532
+          ],
+          "max": [
+            17.41577896977887,
+            -4.889121589913213,
+            -43.23979018450194
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-cartwheel-counter",
+    "sourceId": "orun",
+    "attackFrames": 87,
+    "skinFrames": 87,
+    "boneScalesChecked": 2001,
+    "constantPositionsChecked": 1827,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 87,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 119,
+    "attackSampleCount": 88,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 25,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 118
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.539400933129407,
+            -7.000002263631936,
+            -42.78730086584474
+          ],
+          "max": [
+            17.415816294826755,
+            -4.888974052432338,
+            -42.235898345622054
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-back-handspring",
+    "sourceId": "orun",
+    "attackFrames": 67,
+    "skinFrames": 67,
+    "boneScalesChecked": 1541,
+    "constantPositionsChecked": 1407,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 67,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 99,
+    "attackSampleCount": 68,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 19,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 98
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.538579710488438,
+            -7.000002263631936,
+            -45.28968971212024
+          ],
+          "max": [
+            17.415919217434542,
+            -4.888720669371862,
+            -44.72530156465867
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-dive-roll",
+    "sourceId": "orun",
+    "attackFrames": 111,
+    "skinFrames": 111,
+    "boneScalesChecked": 2553,
+    "constantPositionsChecked": 2331,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 111,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 143,
+    "attackSampleCount": 112,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 31,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 142
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.54108021432443,
+            -7.000002263631936,
+            -37.70758471867693
+          ],
+          "max": [
+            17.41561231452602,
+            -4.890155158623313,
+            -37.182683413756514
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-companion-suppression",
+    "sourceId": "orun",
+    "attackFrames": 134,
+    "skinFrames": 134,
+    "boneScalesChecked": 3082,
+    "constantPositionsChecked": 2814,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 134,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 166,
+    "attackSampleCount": 135,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 35,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 165
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_bdc882cf-5947-4a1b-bb8f-19d9b0ef1747",
+        "bounds": {
+          "min": [
+            16.538579786175482,
+            -7.000002263631936,
+            -45.289690102515216
+          ],
+          "max": [
+            17.415919102025917,
+            -4.888720662044146,
+            -44.72530197357922
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-sky-aspect",
+    "sourceId": "orun",
+    "attackFrames": 134,
+    "skinFrames": 134,
+    "boneScalesChecked": 5896,
+    "constantPositionsChecked": 5628,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 134,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun-crowned-beast"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 166,
+    "attackSampleCount": 135,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 35,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 165
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_cdb276fc-a51f-42a5-bedb-ceb58a3ff3c7",
+        "bounds": {
+          "min": [
+            15.571366471880102,
+            -7.026520495472964,
+            -48.357438490872894
+          ],
+          "max": [
+            18.428639497892114,
+            -1.8264017785745015,
+            -41.72575391848477
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-sky-dive",
+    "sourceId": "hollow-sky-echo-1",
+    "attackFrames": 112,
+    "skinFrames": 112,
+    "boneScalesChecked": 2352,
+    "constantPositionsChecked": 2240,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 112,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-storm-hornbill"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 144,
+    "attackSampleCount": 113,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 30,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 143
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_f93f896c-4d1c-40cf-9b39-ace27366793b",
+        "bounds": {
+          "min": [
+            0.4419179150078574,
+            -4.633956752419552,
+            -39.73993866690252
+          ],
+          "max": [
+            3.5680262137539733,
+            -2.0214933588764206,
+            -38.18167452567719
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-canopy-root",
+    "sourceId": "orun",
+    "attackFrames": 154,
+    "skinFrames": 154,
+    "boneScalesChecked": 6776,
+    "constantPositionsChecked": 6468,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 308,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun-crowned-beast"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 186,
+    "attackSampleCount": 155,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 42,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 185
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_cdb276fc-a51f-42a5-bedb-ceb58a3ff3c7",
+        "bounds": {
+          "min": [
+            15.571370731931458,
+            -7.020473934713993,
+            -48.347576588017944
+          ],
+          "max": [
+            18.428517279822756,
+            -1.9866780470057765,
+            -41.68778341385075
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  },
+  {
+    "attackId": "orun-canopy-aspect",
+    "sourceId": "orun",
+    "attackFrames": 161,
+    "skinFrames": 161,
+    "boneScalesChecked": 7084,
+    "constantPositionsChecked": 6762,
+    "maxBoneRelativeScaleError": 0,
+    "maxUnanimatedJointWorldShift": 0,
+    "maxRootNonuniformScaleError": 0,
+    "invisibleFrames": 0,
+    "nativeTipChecks": 322,
+    "foreignTipChecks": 0,
+    "failures": [],
+    "region": "heartroot-hollow",
+    "nativeAssets": [
+      "actor-orun-crowned-beast"
+    ],
+    "phases": [
+      "windup",
+      "commit",
+      "active",
+      "recovery"
+    ],
+    "sampleCount": 193,
+    "attackSampleCount": 162,
+    "maxRootXZError": 0,
+    "maxNativeClockError": 0,
+    "wrongNativeActions": 0,
+    "maxEffectBirthClockError": 0,
+    "effectSamples": 40,
+    "fx": {
+      "capacity": 16,
+      "activeActors": 0,
+      "visibleTrails": 0,
+      "droppedCosmeticActors": 0,
+      "missingNativeAnchors": 0,
+      "sampledWorldTick": 192
+    },
+    "nativeIssues": [],
+    "webglLost": false,
+    "mesh": [
+      {
+        "name": "tripo_node_cdb276fc-a51f-42a5-bedb-ceb58a3ff3c7",
+        "bounds": {
+          "min": [
+            15.571370731931458,
+            -7.020474522334233,
+            -48.348427857554256
+          ],
+          "max": [
+            18.42851815076209,
+            -1.985347809212887,
+            -41.698598715972594
+          ]
+        },
+        "finiteBones": true
+      }
+    ]
+  }
+]
