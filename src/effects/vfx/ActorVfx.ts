@@ -18,7 +18,6 @@ import { VFX_COLORS, type VfxSystem } from './VfxSystem.js';
 
 /** Owner id for actor-driven particles: never matches a cue scope, cleared with the system. */
 export const ACTOR_VFX_OWNER = 0x7fff0000;
-const HEAVY_ACTION = /^aren-(charged-)?heavy$/;
 /** Every shared dodge clip (dive rolls, Perfect Dodge, quick steps, rolls, handspring, cartwheels, pivot rolls, slide); the hero's own dash clip is mapped onto these ids. */
 const DIVE_ACTION = /dive-roll|perfect-dodge|quick-step|shoulder-roll|back-handspring|cartwheel|pivot-roll|low-slide/;
 
@@ -113,8 +112,8 @@ export class ActorVfx {
     const state = this.player, action = actor.actionId, phase = actor.phase;
     this.rootPosition(actor, this.position);
     this.heading = Math.atan2(actor.facing.x, actor.facing.z);
-    const heavy = HEAVY_ACTION.test(action);
-    if (heavy && phase === 'active' && state.phase !== 'active') this.heavySlam(actor, action === 'aren-charged-heavy');
+    // Thunder Cleave contacts come from confirmed hit / delayed lightning cues, never the active pose alone.
+    if (action === 'aren-heavy' && phase === 'active' && state.phase !== 'active') this.heavySlam(actor);
     const diving = DIVE_ACTION.test(action);
     if (diving !== state.diving) this.diveDust(diving ? 1 : 0.8);
     if (diving) this.speedStreaks(actor, dt);
@@ -211,19 +210,18 @@ export class ActorVfx {
     else vfx.sparks(p.x, p.y + 0.1, p.z, 4, 2.5, 'arcane', owner, 0.3);
   }
 
-  private heavySlam(actor: ActorSnapshot, charged: boolean): void {
-    const vfx = this.vfx, radius = charged ? 1.9 : 1.3, owner = ACTOR_VFX_OWNER;
+  private heavySlam(actor: ActorSnapshot): void {
+    const vfx = this.vfx, radius = 1.3, owner = ACTOR_VFX_OWNER;
     const x = this.position.x + actor.facing.x * 1.25, z = this.position.z + actor.facing.z * 1.25, y = this.position.y;
     this.slam.set('disk', x, y, z, 0, radius, radius);
     vfx.ground.spawn('shock', this.slam, 'gold', owner, vfx.time, 0.42);
-    vfx.ground.spawn('decal', this.slam, 'earth', owner, vfx.time, charged ? 5 : 4, 1, 'gold');
-    vfx.dustRing(x, y, z, radius * 0.7, charged ? 26 : 16, owner);
-    vfx.chunks(x, y + 0.05, z, charged ? 9 : 5, 3.4, 0.2, owner, false, this.slam);
-    vfx.sparks(x, y + 0.15, z, charged ? 26 : 14, 4.5, 'gold', owner, 0.6);
-    this.groundCrackle(x, y, z, charged ? 8 : 5);
-    vfx.flash(x, y + 0.3, z, charged ? 2 : 1.4, 'gold', owner, 0.16);
-    if (charged) vfx.lights.pulse(x, y + 1, z, PALETTE.gold.hot, 6, 6, 0.4, vfx.time, owner);
-    this.impact?.shake(charged ? 0.16 : 0.08, 0.22, 24);
+    vfx.ground.spawn('decal', this.slam, 'earth', owner, vfx.time, 4, 1, 'gold');
+    vfx.dustRing(x, y, z, radius * 0.7, 16, owner);
+    vfx.chunks(x, y + 0.05, z, 5, 3.4, 0.2, owner, false, this.slam);
+    vfx.sparks(x, y + 0.15, z, 14, 4.5, 'gold', owner, 0.6);
+    this.groundCrackle(x, y, z, 5);
+    vfx.flash(x, y + 0.3, z, 1.4, 'gold', owner, 0.16);
+    this.impact?.shake(0.08, 0.22, 24);
   }
 
   /** Lightning racing outward over the ground from a slam: stretched violet-blue sparks on radial paths (earth + lightning). */

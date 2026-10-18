@@ -1,6 +1,6 @@
 # Proposal: Character VFX — Dark, Living, Forceful
 
-**Trạng thái:** đề xuất để duyệt, chưa triển khai và chưa có visual/performance acceptance.
+**Trạng thái:** đã triển khai một proof Aren Thunder Cleave ([issue #126](https://github.com/img2threejs/wild-crown/issues/126), [PR #127](https://github.com/img2threejs/wild-crown/pull/127)); chưa nghiệm thu proposal toàn bộ hero/companion và chưa duyệt nhân rộng art direction.
 
 ## 1. Mục tiêu và phạm vi
 
@@ -154,4 +154,31 @@ Mẫu chuẩn là cổng duyệt art direction, không phải phạm vi giao hà
 
 Chọn **Dark, Living, Forceful**: tối ở chất liệu và khoảng nghỉ; mạnh ở đường lực và contact; sinh động ở chuyển động riêng từng nguyên tố. Vesper đen/tím/crimson; Aren cyan bão/vàng cổ; Yara rễ/hổ phách; Sakda than/ember. Giữ sáu companion đọc rõ vai trò hỗ trợ, không cạnh tranh với hero bằng kích thước vụ nổ.
 
-Chưa có thay đổi runtime, thư viện hoặc asset nào được thực hiện theo proposal này. Cần duyệt art direction trước khi triển khai các mẫu chuẩn.
+Đã có thay đổi presentation giới hạn cho **một đòn Aren Thunder Cleave**, không thêm thư viện hoặc asset. Các mẫu Vesper/Koro và rollout toàn bộ roster vẫn cần duyệt riêng; không suy rộng acceptance từ proof này.
+
+## 10. Proof Aren Thunder Cleave — tham chiếu Kena
+
+### Tham chiếu và giới hạn
+
+- [PlayStation: Meet the Rot](https://www.playstation.com/en-us/games/kena-bridge-of-spirits/meet-the-rot-kena-bridge-of-spirits-cute-sidekick-creatures/) mô tả Rot tập trung trên staff khi tụ heavy, và Slam có nhịp lên chậm → bổ xuống.
+- [Kena: Bridge of Spirits trên Steam](https://store.steampowered.com/app/1954200/Kena_Bridge_of_Spirits/), **Kena Spirit Guide Trailer**, các frame đã xem tại **82.3s, 82.8s, 83.2s**: silhouette giơ cao/tụ năng lượng → follow-through thấp và flare cục bộ. Đây là quan sát visual từ trailer đã biên tập, không phải bằng chứng về hit frame, damage hoặc implementation của Kena.
+- Không có binary Kena để phân tích, không decompile, không đưa footage/asset Kena vào repository hoặc game. Footage chính thức chỉ được tải tạm để nghiên cứu rồi dọn bỏ. Không gọi provider generation trả phí. Chỉ dùng native Aren, glaive và boar hiện có; giữ nguyên hash và trạng thái candidate/blocked.
+
+### Timeline và quyền quyết định
+
+- Giữ hold threshold **54 ticks**, melee contact **54/114** của action release, damage **36**. Retiming chỉ đổi cách lấy mẫu clip: nâng sớm, giữ silhouette, tăng tốc sáu tick cuối trước contact, rồi follow-through và recovery. Contact pose và pose tại delayed lightning không đổi; charge dùng vòng lặp native hiện có.
+- **12 world ticks sau melee**, simulation phát lightning riêng, radius **3m**, damage **18**. Hit-stop chín tick khiến replay hit có khoảng cách **21 simulation ticks**, không phải 12 frame hiển thị.
+- Snapshot active pose/slash không còn tự tạo charged ground impact. Confirmed hit tạo flash/cut gọn tại capsule contact do simulation cung cấp. Lightning ground VFX chỉ xuất hiện từ cue lightning thật; nhánh mặt đất nằm trong footprint của cue. Melee hụt vẫn có lightning fallback đúng luật hiện có, nhưng không bịa target hit.
+- Không đổi damage, hitbox/range, mana **20**, cooldown **300 ticks**, reaction, invulnerability, save hay input. Simulation vẫn quyết định mọi kết quả; `CameraDirector` vẫn là camera writer duy nhất. Giảm shake/impulse qua API presentation hiện có, không ghi pose camera.
+- Cache crackle, bolt và body-arc dùng world clock; không thêm hạt/flicker khi clock đứng yên. Reduced Effects/Motion bỏ arcs/nhánh trang trí và giữ trunk gọn, contact cùng phản ứng thật.
+
+### Bằng chứng đã chạy
+
+- [Before](../../asset-source/playtests/evidence/aren-thunder-cleave/before.mp4) / [After](../../asset-source/playtests/evidence/aren-thunder-cleave/after.mp4), native Greenwake, cùng fixture, input, ánh sáng, gameplay framing và `CameraDirector`; khác biệt shake là chủ ý của presentation mới. Mỗi clip là **246 fixed steps ở 60Hz**, 1440×900; fixture dùng CombatEngine/GameRenderer/StoryPresentation thật, hai actor và tắt hành vi AI để so sánh lặp lại. Không phải campaign playthrough hay đo FPS thời gian thực.
+- [Recoil trước](../../asset-source/playtests/evidence/aren-thunder-cleave/before-138.png) / [Recoil sau](../../asset-source/playtests/evidence/aren-thunder-cleave/after-138.png): flare nhỏ hơn để lộ thân/vị trí boar; không đổi knockback. Toàn bộ 246 projection tick/world tick/action/phase/progress/HP/reaction/position/cue trùng nhau; weapon-tip tại melee contact lệch **0**.
+- HP native **160 → 124 → 106**. Melee tick/world **727/727**, lightning **748/739**. Native whiff: HP vẫn **160**, không ground burst ở melee, lightning thật tại world tick **739**. Cancel hold bằng Dive không phát hit/lightning.
+- Native Reduced Motion: vẫn **36 + 18**, knockback thật, **0 optional body arcs**. Pause qua UI thật: 60 render không đổi clock, bolt geometry/flicker hoặc **542** hạt; Resume cho bolt hết hạn. Restore/reset qua API engine/presentation xóa particles, ground, arcs và bolts về **0**, không replay hit. Save/Load UI bị vô hiệu theo policy Trials nên không tuyên bố đã chạy campaign Save/Load.
+- Regression trước sửa: **3 fail / 0 pass** (burst giả lúc whiff, charge sinh thêm hạt khi pause, ground filament vượt footprint). Sau sửa: focused **82 pass / 0 fail**, toàn bộ effect suite **320 pass / 0 fail**, native get-up **13 pass / 0 fail**; các bộ có overlap nên không cộng thành tổng test độc lập. TypeScript + Vite production build và **236 release-validator unit tests** pass, còn cảnh báo bundle-size. Unit tests của validator không chứng nhận release readiness cho assets hiện tại.
+- Hai lệnh mở rộng gộp thêm weapon/audio/story-animation timeout ở **180s / 90s**; effect suite chạy riêng và native get-up chạy riêng đều pass. Chưa kết luận nguyên nhân của timeout hoặc tuyên bố full-suite pass.
+- CPU presentation p95 quan sát trong paired capture: **9.80ms → 8.30ms**, sau warm-up 150 bước; 247 render samples gồm frame setup, không tính screenshot readback. Không cô lập tải nền trong capture nên **không coi đây là benchmark tải máy được kiểm soát**. Đây là thời gian CPU submit/render của fixture headless, không phải total frame time/GPU time; không chứng minh mục tiêu hiệu năng toàn proposal hoặc phần cứng tham chiếu.
+- [Trace, guard checks, hash và giới hạn](../../asset-source/playtests/evidence/aren-thunder-cleave/acceptance.json). Đã kiểm tra get-up immunity và zero-damage suppression bằng focused suite; targeted strike này không có block path để giả lập. Canopy, đông hiệu ứng, toàn roster và art/release verification của native assets **chưa được chứng nhận bởi proof này**.

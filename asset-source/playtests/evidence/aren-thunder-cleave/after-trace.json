@@ -1,0 +1,5458 @@
+{
+  "frames": 246,
+  "cues": [
+    {
+      "kind": "cancel",
+      "tick": 600,
+      "worldTick": 600
+    },
+    {
+      "kind": "slash",
+      "actionId": "aren-charged-heavy",
+      "element": "arcane",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "z": -1.1800000000000002
+      },
+      "footprint": {
+        "width": 2.8,
+        "length": 2.8,
+        "angleRadians": 3.141592653589793,
+        "sectorRadians": 2.8
+      },
+      "tick": 727,
+      "worldTick": 727
+    },
+    {
+      "kind": "hit",
+      "actionId": "aren-charged-heavy",
+      "element": "arcane",
+      "confirmedDamage": 36,
+      "position": {
+        "x": 6,
+        "y": 1.32,
+        "z": -1.95
+      },
+      "targetId": "corrupted-boar",
+      "tick": 727,
+      "worldTick": 727
+    },
+    {
+      "kind": "reaction-start",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "targetId": "corrupted-boar",
+      "tick": 727,
+      "worldTick": 727
+    },
+    {
+      "kind": "lightning",
+      "element": "lightning",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "footprint": {
+        "width": 6,
+        "length": 6
+      },
+      "tick": 748,
+      "worldTick": 739
+    },
+    {
+      "kind": "projectile-impact",
+      "element": "arcane",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "tick": 748,
+      "worldTick": 739
+    },
+    {
+      "kind": "hit",
+      "actionId": "aren-charged-heavy",
+      "element": "lightning",
+      "confirmedDamage": 18,
+      "position": {
+        "x": 6,
+        "y": 1.32,
+        "z": -3.3349651200000006
+      },
+      "targetId": "corrupted-boar",
+      "tick": 748,
+      "worldTick": 739
+    },
+    {
+      "kind": "reaction-start",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "targetId": "corrupted-boar",
+      "tick": 748,
+      "worldTick": 739
+    }
+  ],
+  "samples": [
+    {
+      "frame": 0,
+      "tick": 600,
+      "worldTick": 600,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.594818008234357,
+        0.12616635798581688,
+        -1.7199633368725094
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 1,
+      "tick": 601,
+      "worldTick": 601,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0,
+      "tip": [
+        5.6014493643261805,
+        0.24309550983197897,
+        -1.7693260712591992
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": [
+        {
+          "kind": "cancel",
+          "tick": 600,
+          "worldTick": 600
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "tick": 602,
+      "worldTick": 602,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0002777777777777778,
+      "tip": [
+        5.599493078998259,
+        0.3704970803509841,
+        -1.8061492348189976
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 3,
+      "tick": 603,
+      "worldTick": 603,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0005555555555555556,
+      "tip": [
+        5.591340371050905,
+        0.5052983227560103,
+        -1.828648486324676
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 4,
+      "tick": 604,
+      "worldTick": 604,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0008333333333333334,
+      "tip": [
+        5.579811828723179,
+        0.6444659791713152,
+        -1.835826854612991
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 5,
+      "tick": 605,
+      "worldTick": 605,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0011111111111111111,
+      "tip": [
+        5.567479747610737,
+        0.7853940787650494,
+        -1.8273613403668678
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 6,
+      "tick": 606,
+      "worldTick": 606,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.001388888888888889,
+      "tip": [
+        5.557110644076714,
+        0.9266664587729412,
+        -1.8036005363500793
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 7,
+      "tick": 607,
+      "worldTick": 607,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0016666666666666668,
+      "tip": [
+        5.55062184460738,
+        1.064435201322656,
+        -1.7655505585078324
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 8,
+      "tick": 608,
+      "worldTick": 608,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0019444444444444444,
+      "tip": [
+        5.549867355995005,
+        1.1962535590903247,
+        -1.71463731691613
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 9,
+      "tick": 609,
+      "worldTick": 609,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0022222222222222222,
+      "tip": [
+        5.556048095193383,
+        1.3199912093208805,
+        -1.6529478575189522
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 10,
+      "tick": 610,
+      "worldTick": 610,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0025,
+      "tip": [
+        5.569994379159838,
+        1.4335312160834888,
+        -1.5825364727927873
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 11,
+      "tick": 611,
+      "worldTick": 611,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.002777777777777778,
+      "tip": [
+        5.592093603746952,
+        1.535957484824638,
+        -1.5060080103404536
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 12,
+      "tick": 612,
+      "worldTick": 612,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0030555555555555557,
+      "tip": [
+        5.622290282699077,
+        1.6259307186100127,
+        -1.4255772948865766
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 13,
+      "tick": 613,
+      "worldTick": 613,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0033333333333333335,
+      "tip": [
+        5.660201915284393,
+        1.7034879317372353,
+        -1.3437957523800073
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 14,
+      "tick": 614,
+      "worldTick": 614,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.003611111111111111,
+      "tip": [
+        5.705170761196077,
+        1.768237029295228,
+        -1.2626420373714573
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 15,
+      "tick": 615,
+      "worldTick": 615,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0038888888888888888,
+      "tip": [
+        5.756272947821935,
+        1.8202146351738744,
+        -1.1842030074695638
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 16,
+      "tick": 616,
+      "worldTick": 616,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.004166666666666667,
+      "tip": [
+        5.756307417768076,
+        1.8178527028365608,
+        -1.179667571714502
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 17,
+      "tick": 617,
+      "worldTick": 617,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0044444444444444444,
+      "tip": [
+        5.524603145841563,
+        1.269175103189922,
+        -1.6588930619070879
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 18,
+      "tick": 618,
+      "worldTick": 618,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.004722222222222222,
+      "tip": [
+        5.561501651356445,
+        1.3341818122947982,
+        -1.6434955853114777
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 19,
+      "tick": 619,
+      "worldTick": 619,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.005,
+      "tip": [
+        5.599556638456466,
+        1.3954748092915417,
+        -1.6230066325697226
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 20,
+      "tick": 620,
+      "worldTick": 620,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.005277777777777778,
+      "tip": [
+        5.633207581829308,
+        1.4536636939090255,
+        -1.5958373136180954
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 21,
+      "tick": 621,
+      "worldTick": 621,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.005555555555555556,
+      "tip": [
+        5.666565065807126,
+        1.5082213637136284,
+        -1.5625878467924195
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 22,
+      "tick": 622,
+      "worldTick": 622,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.005833333333333334,
+      "tip": [
+        5.693255323040293,
+        1.5601190584880111,
+        -1.5185967843398855
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 23,
+      "tick": 623,
+      "worldTick": 623,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.006111111111111111,
+      "tip": [
+        5.719220124650237,
+        1.6077342001654897,
+        -1.4705457606607653
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 24,
+      "tick": 624,
+      "worldTick": 624,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.006388888888888889,
+      "tip": [
+        5.737915577564117,
+        1.6517094545414857,
+        -1.4178829465976783
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 25,
+      "tick": 625,
+      "worldTick": 625,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.006666666666666667,
+      "tip": [
+        5.7550054198519724,
+        1.691173627323157,
+        -1.3619982789011793
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 26,
+      "tick": 626,
+      "worldTick": 626,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.006944444444444444,
+      "tip": [
+        5.763950291225137,
+        1.7265468849765613,
+        -1.303137300762939
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 27,
+      "tick": 627,
+      "worldTick": 627,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.007222222222222222,
+      "tip": [
+        5.771259837382311,
+        1.7509022997247183,
+        -1.2554721117958403
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 28,
+      "tick": 628,
+      "worldTick": 628,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0075,
+      "tip": [
+        5.772158662876343,
+        1.7513217358562057,
+        -1.2555547191024874
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 29,
+      "tick": 629,
+      "worldTick": 629,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0077777777777777776,
+      "tip": [
+        5.773095617307717,
+        1.751883040090866,
+        -1.2554861078020543
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 30,
+      "tick": 630,
+      "worldTick": 630,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.008055555555555555,
+      "tip": [
+        5.774188371099095,
+        1.7529648285886026,
+        -1.2548921643183282
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 31,
+      "tick": 631,
+      "worldTick": 631,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.008333333333333333,
+      "tip": [
+        5.775211024789079,
+        1.7540284458996271,
+        -1.2540064191734803
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 32,
+      "tick": 632,
+      "worldTick": 632,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.008611111111111111,
+      "tip": [
+        5.775984501380919,
+        1.7550591014327468,
+        -1.252077349334972
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 33,
+      "tick": 633,
+      "worldTick": 633,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.008888888888888889,
+      "tip": [
+        5.776656586843902,
+        1.7560040002218695,
+        -1.249942643550891
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 34,
+      "tick": 634,
+      "worldTick": 634,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.009166666666666667,
+      "tip": [
+        5.776938299946653,
+        1.756682641371464,
+        -1.2470735035680751
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 35,
+      "tick": 635,
+      "worldTick": 635,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.009444444444444445,
+      "tip": [
+        5.776848172616602,
+        1.7574604260235642,
+        -1.2442884130762757
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 36,
+      "tick": 636,
+      "worldTick": 636,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.009722222222222222,
+      "tip": [
+        5.7754179283888165,
+        1.7586188821481497,
+        -1.2418008256698339
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 37,
+      "tick": 637,
+      "worldTick": 637,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01,
+      "tip": [
+        5.773928386294334,
+        1.7598310644864639,
+        -1.239384275988288
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 38,
+      "tick": 638,
+      "worldTick": 638,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.010277777777777778,
+      "tip": [
+        5.7721900895867595,
+        1.7612428574729557,
+        -1.2372401270656534
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 39,
+      "tick": 639,
+      "worldTick": 639,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.010555555555555556,
+      "tip": [
+        5.77045258387801,
+        1.7627882545019626,
+        -1.2352290765357874
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 40,
+      "tick": 640,
+      "worldTick": 640,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.010833333333333334,
+      "tip": [
+        5.768681113127128,
+        1.7648156715550134,
+        -1.2337169669982244
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 41,
+      "tick": 641,
+      "worldTick": 641,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.011111111111111112,
+      "tip": [
+        5.766895470872202,
+        1.7668850463438805,
+        -1.2323478977346134
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 42,
+      "tick": 642,
+      "worldTick": 642,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01138888888888889,
+      "tip": [
+        5.7650284746819045,
+        1.7690981206068948,
+        -1.2315236450037044
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 43,
+      "tick": 643,
+      "worldTick": 643,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.011666666666666667,
+      "tip": [
+        5.763162534839286,
+        1.7711773742601207,
+        -1.2307648386322028
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 44,
+      "tick": 644,
+      "worldTick": 644,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.011944444444444445,
+      "tip": [
+        5.761279097087221,
+        1.7727588994051344,
+        -1.2302897398645523
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 45,
+      "tick": 645,
+      "worldTick": 645,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.012222222222222223,
+      "tip": [
+        5.7594982714860254,
+        1.7748357943512545,
+        -1.229746232203396
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 46,
+      "tick": 646,
+      "worldTick": 646,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0125,
+      "tip": [
+        5.758068814266815,
+        1.7786405864223391,
+        -1.229019878913412
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 47,
+      "tick": 647,
+      "worldTick": 647,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.012777777777777779,
+      "tip": [
+        5.756772668102938,
+        1.7823252384082269,
+        -1.2281922257389613
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 48,
+      "tick": 648,
+      "worldTick": 648,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.013055555555555556,
+      "tip": [
+        5.7559711696647735,
+        1.7855558923376416,
+        -1.2270608936343208
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 49,
+      "tick": 649,
+      "worldTick": 649,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.013333333333333334,
+      "tip": [
+        5.755210698645829,
+        1.7886220839202935,
+        -1.2258311183523358
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 50,
+      "tick": 650,
+      "worldTick": 650,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01361111111111111,
+      "tip": [
+        5.754667632684249,
+        1.7910989752494588,
+        -1.2243173493514843
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 51,
+      "tick": 651,
+      "worldTick": 651,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.013888888888888888,
+      "tip": [
+        5.754215966229969,
+        1.793205197561098,
+        -1.2226746596563094
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 52,
+      "tick": 652,
+      "worldTick": 652,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.014166666666666666,
+      "tip": [
+        5.754157450503341,
+        1.7940024076564896,
+        -1.2206341487688726
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 53,
+      "tick": 653,
+      "worldTick": 653,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.014444444444444444,
+      "tip": [
+        5.754183886733462,
+        1.7956545231425651,
+        -1.2184675670218938
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 54,
+      "tick": 654,
+      "worldTick": 654,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.014722222222222222,
+      "tip": [
+        5.7545272315941896,
+        1.8003665560084614,
+        -1.215891779468506
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 55,
+      "tick": 655,
+      "worldTick": 655,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.015,
+      "tip": [
+        5.7548713916972805,
+        1.8049001810315874,
+        -1.2132170453474427
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 56,
+      "tick": 656,
+      "worldTick": 656,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.015277777777777777,
+      "tip": [
+        5.755209858973633,
+        1.808830296889089,
+        -1.210210105676871
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 57,
+      "tick": 657,
+      "worldTick": 657,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.015555555555555555,
+      "tip": [
+        5.755520430207314,
+        1.812440028542702,
+        -1.2071137783339714
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 58,
+      "tick": 658,
+      "worldTick": 658,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.015833333333333335,
+      "tip": [
+        5.75573538111534,
+        1.814938218452656,
+        -1.203705481842841
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 59,
+      "tick": 659,
+      "worldTick": 659,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01611111111111111,
+      "tip": [
+        5.755922320325435,
+        1.8171691957396328,
+        -1.2002132571298538
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 60,
+      "tick": 660,
+      "worldTick": 660,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01638888888888889,
+      "tip": [
+        5.7560315674501155,
+        1.8184615494207703,
+        -1.196425251032891
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 61,
+      "tick": 661,
+      "worldTick": 661,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.016666666666666666,
+      "tip": [
+        5.756126473174135,
+        1.8196099354910467,
+        -1.1925588136967846
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 62,
+      "tick": 662,
+      "worldTick": 662,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.016944444444444446,
+      "tip": [
+        5.756206193476841,
+        1.8202373212069451,
+        -1.188426871037352
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 63,
+      "tick": 663,
+      "worldTick": 663,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.017222222222222222,
+      "tip": [
+        5.756264354563115,
+        1.8202115173834814,
+        -1.1842037141283324
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 64,
+      "tick": 664,
+      "worldTick": 664,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.0175,
+      "tip": [
+        5.7563004453988995,
+        1.8178501731859604,
+        -1.179668143455652
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 65,
+      "tick": 665,
+      "worldTick": 665,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.017777777777777778,
+      "tip": [
+        5.524592759978733,
+        1.2691712918630693,
+        -1.6588893467988184
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 66,
+      "tick": 666,
+      "worldTick": 666,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.018055555555555554,
+      "tip": [
+        5.5614932699047115,
+        1.3341787345054663,
+        -1.6434930336617755
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 67,
+      "tick": 667,
+      "worldTick": 667,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.018333333333333333,
+      "tip": [
+        5.5995499155001625,
+        1.3954723352692504,
+        -1.6230049479412156
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 68,
+      "tick": 668,
+      "worldTick": 668,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01861111111111111,
+      "tip": [
+        5.633202224518941,
+        1.453661717612929,
+        -1.5958362391624572
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 69,
+      "tick": 669,
+      "worldTick": 669,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01888888888888889,
+      "tip": [
+        5.666565047336313,
+        1.5082213250424736,
+        -1.562587876845221
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 70,
+      "tick": 670,
+      "worldTick": 670,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.019166666666666665,
+      "tip": [
+        5.693255303346384,
+        1.56011902295816,
+        -1.5185968171801754
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 71,
+      "tick": 671,
+      "worldTick": 671,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.019444444444444445,
+      "tip": [
+        5.719220111589813,
+        1.6077341670923073,
+        -1.4705457971109417
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 72,
+      "tick": 672,
+      "worldTick": 672,
+      "timeScale": 1,
+      "action": "aren-charged-heavy-charge",
+      "phase": "anticipation",
+      "progress": 0.01972222222222222,
+      "tip": [
+        5.737915563891769,
+        1.651709424738154,
+        -1.4178829854430444
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 73,
+      "tick": 673,
+      "worldTick": 673,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0,
+      "tip": [
+        5.749846036331731,
+        1.7523530262863454,
+        -1.2907261042576914
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 74,
+      "tick": 674,
+      "worldTick": 674,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.008771929824561403,
+      "tip": [
+        5.759584796201894,
+        1.7536133557544202,
+        -1.217191938692146
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 75,
+      "tick": 675,
+      "worldTick": 675,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.017543859649122806,
+      "tip": [
+        5.841674002840233,
+        1.7075027719784355,
+        -1.2113568416250442
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 76,
+      "tick": 676,
+      "worldTick": 676,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.02631578947368421,
+      "tip": [
+        6.019466691719509,
+        1.685572220562395,
+        -1.1767882027513488
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 77,
+      "tick": 677,
+      "worldTick": 677,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.03508771929824561,
+      "tip": [
+        6.22656813073542,
+        1.6978125163392472,
+        -1.0814041790948734
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 78,
+      "tick": 678,
+      "worldTick": 678,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.043859649122807015,
+      "tip": [
+        6.2354553970195985,
+        1.7759897523108379,
+        -0.9606688368167398
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 79,
+      "tick": 679,
+      "worldTick": 679,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.05263157894736842,
+      "tip": [
+        6.1819782291664005,
+        1.857468821877247,
+        -0.8976333556986047
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 80,
+      "tick": 680,
+      "worldTick": 680,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.06140350877192982,
+      "tip": [
+        6.150402911433332,
+        1.904155140800571,
+        -0.8650662589841202
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 81,
+      "tick": 681,
+      "worldTick": 681,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.07017543859649122,
+      "tip": [
+        6.13959943999362,
+        1.9310662421368852,
+        -0.8502018742939543
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 82,
+      "tick": 682,
+      "worldTick": 682,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.07894736842105263,
+      "tip": [
+        6.166191988002558,
+        1.9290486432612666,
+        -0.8561278965748407
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 83,
+      "tick": 683,
+      "worldTick": 683,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.08771929824561403,
+      "tip": [
+        6.206547496999097,
+        1.913711150815999,
+        -0.8818275888209117
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 84,
+      "tick": 684,
+      "worldTick": 684,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.09649122807017543,
+      "tip": [
+        6.256838419727011,
+        1.8808173749906243,
+        -0.9340445948334526
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 85,
+      "tick": 685,
+      "worldTick": 685,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.10526315789473684,
+      "tip": [
+        6.286667237992031,
+        1.8666311306498367,
+        -0.9779918676883792
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 86,
+      "tick": 686,
+      "worldTick": 686,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.11403508771929824,
+      "tip": [
+        6.2893783711892,
+        1.86408021752097,
+        -1.0207287821852873
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 87,
+      "tick": 687,
+      "worldTick": 687,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.12280701754385964,
+      "tip": [
+        6.319224957447062,
+        1.8631080762600627,
+        -1.0588563128564066
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 88,
+      "tick": 688,
+      "worldTick": 688,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.13157894736842105,
+      "tip": [
+        6.3343388556303974,
+        1.8616844047487957,
+        -1.1064752251452736
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 89,
+      "tick": 689,
+      "worldTick": 689,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.14035087719298245,
+      "tip": [
+        6.366411918272928,
+        1.8728071297147886,
+        -1.147595306708256
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 90,
+      "tick": 690,
+      "worldTick": 690,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.14912280701754385,
+      "tip": [
+        6.407239327375272,
+        1.8909584728983582,
+        -1.1802765401555666
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 91,
+      "tick": 691,
+      "worldTick": 691,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.15789473684210525,
+      "tip": [
+        6.439356787958701,
+        1.882585558769641,
+        -1.224260637789961
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 92,
+      "tick": 692,
+      "worldTick": 692,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.16666666666666666,
+      "tip": [
+        6.454359390095241,
+        1.8312269691529282,
+        -1.292708753780679
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 93,
+      "tick": 693,
+      "worldTick": 693,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.17543859649122806,
+      "tip": [
+        6.461419644697526,
+        1.784023204203146,
+        -1.3587351289139367
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 94,
+      "tick": 694,
+      "worldTick": 694,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.18421052631578946,
+      "tip": [
+        6.4419196852490614,
+        1.7599927859307392,
+        -1.3928665890235135
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 95,
+      "tick": 695,
+      "worldTick": 695,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.19298245614035087,
+      "tip": [
+        6.435560550018686,
+        1.7469482115446575,
+        -1.4047438212513628
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 96,
+      "tick": 696,
+      "worldTick": 696,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.20175438596491227,
+      "tip": [
+        6.417726596817409,
+        1.8235964877833069,
+        -1.4292918595404562
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 97,
+      "tick": 697,
+      "worldTick": 697,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.21052631578947367,
+      "tip": [
+        6.400857905025617,
+        1.9330574608297522,
+        -1.4626857128902364
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 98,
+      "tick": 698,
+      "worldTick": 698,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.21929824561403508,
+      "tip": [
+        6.355100879071334,
+        2.063322701969093,
+        -1.5090920131655867
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 99,
+      "tick": 699,
+      "worldTick": 699,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.22807017543859648,
+      "tip": [
+        6.27511749396036,
+        2.2100794738870535,
+        -1.5630423591312634
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 100,
+      "tick": 700,
+      "worldTick": 700,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.23684210526315788,
+      "tip": [
+        6.231375567371061,
+        2.3473056631162135,
+        -1.5756844587868506
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 101,
+      "tick": 701,
+      "worldTick": 701,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.24561403508771928,
+      "tip": [
+        6.1308079301241785,
+        2.4091493270764244,
+        -1.569853640100448
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 102,
+      "tick": 702,
+      "worldTick": 702,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2543859649122807,
+      "tip": [
+        6.120039983865874,
+        2.4217223762830065,
+        -1.5496775181331865
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 103,
+      "tick": 703,
+      "worldTick": 703,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2631578947368421,
+      "tip": [
+        6.109745858240016,
+        2.434455614701972,
+        -1.5302806553181814
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 104,
+      "tick": 704,
+      "worldTick": 704,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2719298245614035,
+      "tip": [
+        6.099869628465202,
+        2.447150284241985,
+        -1.5135659106416426
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 105,
+      "tick": 705,
+      "worldTick": 705,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2807017543859649,
+      "tip": [
+        6.090353047236953,
+        2.459744819787364,
+        -1.50072789809352
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 106,
+      "tick": 706,
+      "worldTick": 706,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2894736842105263,
+      "tip": [
+        6.081136127015311,
+        2.4722694865931096,
+        -1.492280882646602
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 107,
+      "tick": 707,
+      "worldTick": 707,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.2982456140350877,
+      "tip": [
+        6.072157738115538,
+        2.4848085635133077,
+        -1.4881382690519236
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 108,
+      "tick": 708,
+      "worldTick": 708,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.30701754385964913,
+      "tip": [
+        6.063356218139824,
+        2.497475751985267,
+        -1.4877286423263272
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 109,
+      "tick": 709,
+      "worldTick": 709,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.3157894736842105,
+      "tip": [
+        6.054669988191136,
+        2.5104009763585395,
+        -1.4901323131439874
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 110,
+      "tick": 710,
+      "worldTick": 710,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.32456140350877194,
+      "tip": [
+        6.0460381712456135,
+        2.5237230896278335,
+        -1.4942232332062337
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 111,
+      "tick": 711,
+      "worldTick": 711,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.3333333333333333,
+      "tip": [
+        6.034617961555689,
+        2.528804707662705,
+        -1.5084521014538426
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 112,
+      "tick": 712,
+      "worldTick": 712,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.34210526315789475,
+      "tip": [
+        6.011843719689035,
+        2.4927950138740513,
+        -1.5641315977752532
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 113,
+      "tick": 713,
+      "worldTick": 713,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.3508771929824561,
+      "tip": [
+        5.992076995712033,
+        2.4575763086905953,
+        -1.6129751900493043
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 114,
+      "tick": 714,
+      "worldTick": 714,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.35964912280701755,
+      "tip": [
+        5.975273499499119,
+        2.4243826365772354,
+        -1.6547459566576435
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 115,
+      "tick": 715,
+      "worldTick": 715,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.3684210526315789,
+      "tip": [
+        5.96127120006031,
+        2.3943167100524025,
+        -1.6895128500348733
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 116,
+      "tick": 716,
+      "worldTick": 716,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.37719298245614036,
+      "tip": [
+        5.949802580855197,
+        2.3683062316484333,
+        -1.7175968761496212
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 117,
+      "tick": 717,
+      "worldTick": 717,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.38596491228070173,
+      "tip": [
+        5.940511057555588,
+        2.347080076114111,
+        -1.739500971833424
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 118,
+      "tick": 718,
+      "worldTick": 718,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.39473684210526316,
+      "tip": [
+        5.932970959037963,
+        2.3311625247470427,
+        -1.7558348010952978
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 119,
+      "tick": 719,
+      "worldTick": 719,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.40350877192982454,
+      "tip": [
+        5.926710345242634,
+        2.3208814828323936,
+        -1.767243147751588
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 120,
+      "tick": 720,
+      "worldTick": 720,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.41228070175438597,
+      "tip": [
+        5.921235831893485,
+        2.316385856660034,
+        -1.77434369307904
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 121,
+      "tick": 721,
+      "worldTick": 721,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.42105263157894735,
+      "tip": [
+        5.916058515413815,
+        2.317667655366675,
+        -1.7776773566655337
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 122,
+      "tick": 722,
+      "worldTick": 722,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.4298245614035088,
+      "tip": [
+        5.858475753447246,
+        2.464341699023593,
+        -1.726942297697354
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 123,
+      "tick": 723,
+      "worldTick": 723,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.43859649122807015,
+      "tip": [
+        5.93529814097695,
+        2.5576370140623945,
+        -1.8727558549821104
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 124,
+      "tick": 724,
+      "worldTick": 724,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.4473684210526316,
+      "tip": [
+        6.148963712200616,
+        2.407913868512937,
+        -2.2525705515153533
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 125,
+      "tick": 725,
+      "worldTick": 725,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.45614035087719296,
+      "tip": [
+        5.912617023864839,
+        1.927168427983268,
+        -2.6112300146938274
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 126,
+      "tick": 726,
+      "worldTick": 726,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "anticipation",
+      "progress": 0.4649122807017544,
+      "tip": [
+        5.636606363539615,
+        1.5435387142019728,
+        -2.6771306300932216
+      ],
+      "targetVitality": 160,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 127,
+      "tick": 727,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8379947969284226,
+        -2.7517166470609693
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": [
+        {
+          "kind": "slash",
+          "actionId": "aren-charged-heavy",
+          "element": "arcane",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -1.1800000000000002
+          },
+          "footprint": {
+            "width": 2.8,
+            "length": 2.8,
+            "angleRadians": 3.141592653589793,
+            "sectorRadians": 2.8
+          },
+          "tick": 727,
+          "worldTick": 727
+        },
+        {
+          "kind": "hit",
+          "actionId": "aren-charged-heavy",
+          "element": "arcane",
+          "confirmedDamage": 36,
+          "position": {
+            "x": 6,
+            "y": 1.32,
+            "z": -1.95
+          },
+          "targetId": "corrupted-boar",
+          "tick": 727,
+          "worldTick": 727
+        },
+        {
+          "kind": "reaction-start",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "targetId": "corrupted-boar",
+          "tick": 727,
+          "worldTick": 727
+        }
+      ]
+    },
+    {
+      "frame": 128,
+      "tick": 728,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8384051406266239,
+        -2.7514977946209584
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 129,
+      "tick": 729,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8383593694286515,
+        -2.751522213021146
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 130,
+      "tick": 730,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8379337595910729,
+        -2.751749188918275
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 131,
+      "tick": 731,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8372247349335149,
+        -2.7521269800951798
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 132,
+      "tick": 732,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8363371037875884,
+        -2.7525993600265375
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 133,
+      "tick": 733,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8353736104163282,
+        -2.753111384914518
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 134,
+      "tick": 734,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8344264473249724,
+        -2.7536139940698003
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 135,
+      "tick": 735,
+      "worldTick": 727,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8335711113840255,
+        -2.7540672477990524
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 136,
+      "tick": 736,
+      "worldTick": 727,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.47368421052631576,
+      "tip": [
+        5.786488547441018,
+        0.8328627317731009,
+        -2.7544421768839698
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3
+      },
+      "cues": []
+    },
+    {
+      "frame": 137,
+      "tick": 737,
+      "worldTick": 728,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.4824561403508772,
+      "tip": [
+        5.645365803183012,
+        0.7129332550692344,
+        -2.6579775391901133
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.1936435199999997
+      },
+      "cues": []
+    },
+    {
+      "frame": 138,
+      "tick": 738,
+      "worldTick": 729,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.49122807017543857,
+      "tip": [
+        5.564273539006315,
+        0.6206738438810092,
+        -2.5587209530281365
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.3718041599999995
+      },
+      "cues": []
+    },
+    {
+      "frame": 139,
+      "tick": 739,
+      "worldTick": 730,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.5,
+      "tip": [
+        5.539688158168649,
+        0.5361653079490573,
+        -2.468259612299892
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.5351270399999994
+      },
+      "cues": []
+    },
+    {
+      "frame": 140,
+      "tick": 740,
+      "worldTick": 731,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.5087719298245614,
+      "tip": [
+        5.517399653806399,
+        0.4674107158586822,
+        -2.427264363577474
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.68425728
+      },
+      "cues": []
+    },
+    {
+      "frame": 141,
+      "tick": 741,
+      "worldTick": 732,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "active",
+      "progress": 0.5175438596491229,
+      "tip": [
+        5.499112238027882,
+        0.4040691187117987,
+        -2.385733527408247
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.8198399999999997
+      },
+      "cues": []
+    },
+    {
+      "frame": 142,
+      "tick": 742,
+      "worldTick": 733,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5263157894736842,
+      "tip": [
+        5.484856497471629,
+        0.34551050312609777,
+        -2.3443339627045163
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -3.94252032
+      },
+      "cues": []
+    },
+    {
+      "frame": 143,
+      "tick": 743,
+      "worldTick": 734,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5350877192982456,
+      "tip": [
+        5.482475170639864,
+        0.27773883337167554,
+        -2.3180160510269294
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.05294336
+      },
+      "cues": []
+    },
+    {
+      "frame": 144,
+      "tick": 744,
+      "worldTick": 735,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.543859649122807,
+      "tip": [
+        5.480727221059684,
+        0.21208076901564105,
+        -2.28915669353915
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.151754240000001
+      },
+      "cues": []
+    },
+    {
+      "frame": 145,
+      "tick": 745,
+      "worldTick": 736,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5526315789473685,
+      "tip": [
+        5.4796492258513885,
+        0.14860176598120312,
+        -2.2579840845327883
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.23959808
+      },
+      "cues": []
+    },
+    {
+      "frame": 146,
+      "tick": 746,
+      "worldTick": 737,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5614035087719298,
+      "tip": [
+        5.481875511045581,
+        0.08555951123703642,
+        -2.2253864413649276
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.31712
+      },
+      "cues": []
+    },
+    {
+      "frame": 147,
+      "tick": 747,
+      "worldTick": 738,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5701754385964912,
+      "tip": [
+        5.484835795899221,
+        0.02456443261118213,
+        -2.1901629148026616
+      ],
+      "targetVitality": 124,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 148,
+      "tick": 748,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03423598740737044,
+        -2.152490347906547
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": [
+        {
+          "kind": "lightning",
+          "element": "lightning",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "footprint": {
+            "width": 6,
+            "length": 6
+          },
+          "tick": 748,
+          "worldTick": 739
+        },
+        {
+          "kind": "projectile-impact",
+          "element": "arcane",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "tick": 748,
+          "worldTick": 739
+        },
+        {
+          "kind": "hit",
+          "actionId": "aren-charged-heavy",
+          "element": "lightning",
+          "confirmedDamage": 18,
+          "position": {
+            "x": 6,
+            "y": 1.32,
+            "z": -3.3349651200000006
+          },
+          "targetId": "corrupted-boar",
+          "tick": 748,
+          "worldTick": 739
+        },
+        {
+          "kind": "reaction-start",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -4.38496512
+          },
+          "targetId": "corrupted-boar",
+          "tick": 748,
+          "worldTick": 739
+        }
+      ]
+    },
+    {
+      "frame": 149,
+      "tick": 749,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03417728910774387,
+        -2.1524924125742064
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 150,
+      "tick": 750,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03415884884531606,
+        -2.1524930604640415
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 151,
+      "tick": 751,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03417543457703398,
+        -2.1524924777480936
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 152,
+      "tick": 752,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.034219703486948694,
+        -2.1524909210365006
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 153,
+      "tick": 753,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.034283194936384764,
+        -2.152488684844256
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 154,
+      "tick": 754,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.034357247829543414,
+        -2.1524860714307095
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 155,
+      "tick": 755,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03443377705012074,
+        -2.15248336469228
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 156,
+      "tick": 756,
+      "worldTick": 739,
+      "timeScale": 0,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.03450586689929569,
+        -2.1524808094531656
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 157,
+      "tick": 757,
+      "worldTick": 739,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5789473684210527,
+      "tip": [
+        5.4884954479953745,
+        -0.034568162334208896,
+        -2.1524785970693605
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.38496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 158,
+      "tick": 758,
+      "worldTick": 740,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5877192982456141,
+      "tip": [
+        5.481419031620431,
+        -0.02657862815969647,
+        -2.1611975191048445
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.56955568712963
+      },
+      "cues": []
+    },
+    {
+      "frame": 159,
+      "tick": 759,
+      "worldTick": 741,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.5964912280701754,
+      "tip": [
+        5.474731370303344,
+        -0.018418020115955946,
+        -2.1699287414937936
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.7387729903703715
+      },
+      "cues": []
+    },
+    {
+      "frame": 160,
+      "tick": 760,
+      "worldTick": 742,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6052631578947368,
+      "tip": [
+        5.468427618379736,
+        -0.010088601303497424,
+        -2.178662692796403
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -4.893285432500001
+      },
+      "cues": []
+    },
+    {
+      "frame": 161,
+      "tick": 761,
+      "worldTick": 743,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6140350877192983,
+      "tip": [
+        5.462502466398268,
+        -0.0015936864032890519,
+        -2.1873896354303386
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.033761416296297
+      },
+      "cues": []
+    },
+    {
+      "frame": 162,
+      "tick": 762,
+      "worldTick": 744,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6228070175438597,
+      "tip": [
+        5.4569548374503585,
+        0.007075564772948573,
+        -2.1960911974695185
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.160869344537037
+      },
+      "cues": []
+    },
+    {
+      "frame": 163,
+      "tick": 763,
+      "worldTick": 745,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.631578947368421,
+      "tip": [
+        5.451838048757107,
+        0.016601421260102223,
+        -2.204172037900771
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.275277620000001
+      },
+      "cues": []
+    },
+    {
+      "frame": 164,
+      "tick": 764,
+      "worldTick": 746,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6403508771929824,
+      "tip": [
+        5.446696537908698,
+        0.026199018476088076,
+        -2.211990979609842
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.377654645462963
+      },
+      "cues": []
+    },
+    {
+      "frame": 165,
+      "tick": 765,
+      "worldTick": 747,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6491228070175439,
+      "tip": [
+        5.441532463626805,
+        0.03586026879010018,
+        -2.219547919285265
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.4686688237037036
+      },
+      "cues": []
+    },
+    {
+      "frame": 166,
+      "tick": 766,
+      "worldTick": 748,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6578947368421053,
+      "tip": [
+        5.436348036587266,
+        0.04557729433544444,
+        -2.2268430054069746
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.548988557500001
+      },
+      "cues": []
+    },
+    {
+      "frame": 167,
+      "tick": 767,
+      "worldTick": 749,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6666666666666666,
+      "tip": [
+        5.431196143424802,
+        0.05532322573580456,
+        -2.2338955736725934
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.61928224962963
+      },
+      "cues": []
+    },
+    {
+      "frame": 168,
+      "tick": 768,
+      "worldTick": 750,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6754385964912281,
+      "tip": [
+        5.427385575746705,
+        0.06459407041505416,
+        -2.2412215137769502
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.6802183028703706
+      },
+      "cues": []
+    },
+    {
+      "frame": 169,
+      "tick": 769,
+      "worldTick": 751,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6842105263157895,
+      "tip": [
+        5.423469146113335,
+        0.07394454997759731,
+        -2.2483018492801303
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.7324651200000005
+      },
+      "cues": []
+    },
+    {
+      "frame": 170,
+      "tick": 770,
+      "worldTick": 752,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.6929824561403509,
+      "tip": [
+        5.419449611941191,
+        0.0833695404018322,
+        -2.2551358011155136
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.7766911037962965
+      },
+      "cues": []
+    },
+    {
+      "frame": 171,
+      "tick": 771,
+      "worldTick": 753,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7017543859649122,
+      "tip": [
+        5.41532981449971,
+        0.09286456209678318,
+        -2.2617226750417982
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.813564657037038
+      },
+      "cues": []
+    },
+    {
+      "frame": 172,
+      "tick": 772,
+      "worldTick": 754,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7105263157894737,
+      "tip": [
+        5.411349835017514,
+        0.10235199520246357,
+        -2.268088513229883
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.843754182500001
+      },
+      "cues": []
+    },
+    {
+      "frame": 173,
+      "tick": 773,
+      "worldTick": 755,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7192982456140351,
+      "tip": [
+        5.4115525488585785,
+        0.11064530691345253,
+        -2.274789017098514
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.867928082962964
+      },
+      "cues": []
+    },
+    {
+      "frame": 174,
+      "tick": 774,
+      "worldTick": 756,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7280701754385965,
+      "tip": [
+        5.4116037389730165,
+        0.1191554305669999,
+        -2.2814245029450317
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.886754761203704
+      },
+      "cues": []
+    },
+    {
+      "frame": 175,
+      "tick": 775,
+      "worldTick": 757,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7368421052631579,
+      "tip": [
+        5.411505332366029,
+        0.12788153859003148,
+        -2.287989446497895
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.90090262
+      },
+      "cues": []
+    },
+    {
+      "frame": 176,
+      "tick": 776,
+      "worldTick": 758,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7456140350877193,
+      "tip": [
+        5.41125940396794,
+        0.13682274394121252,
+        -2.294478320406424
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.91104006212963
+      },
+      "cues": []
+    },
+    {
+      "frame": 177,
+      "tick": 777,
+      "worldTick": 759,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7543859649122807,
+      "tip": [
+        5.410931063481158,
+        0.14595989448021596,
+        -2.300887978336935
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.91783549037037
+      },
+      "cues": []
+    },
+    {
+      "frame": 178,
+      "tick": 778,
+      "worldTick": 760,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7631578947368421,
+      "tip": [
+        5.411311398403594,
+        0.15507516410870892,
+        -2.307261522012891
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.9219573075000005
+      },
+      "cues": []
+    },
+    {
+      "frame": 179,
+      "tick": 779,
+      "worldTick": 761,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7719298245614035,
+      "tip": [
+        5.411570444783479,
+        0.1644158896585572,
+        -2.313578385204755
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.9240739162962965
+      },
+      "cues": []
+    },
+    {
+      "frame": 180,
+      "tick": 780,
+      "worldTick": 762,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7807017543859649,
+      "tip": [
+        5.411717909860499,
+        0.17496138854940885,
+        -2.3204619135780247
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.924853719537038
+      },
+      "cues": []
+    },
+    {
+      "frame": 181,
+      "tick": 781,
+      "worldTick": 763,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7894736842105263,
+      "tip": [
+        5.4113453250824115,
+        0.19798081115699495,
+        -2.3341554813579117
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 182,
+      "tick": 782,
+      "worldTick": 764,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.7982456140350878,
+      "tip": [
+        5.4096177755508785,
+        0.22385793199562942,
+        -2.346596181719585
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 183,
+      "tick": 783,
+      "worldTick": 765,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8070175438596491,
+      "tip": [
+        5.407606941191204,
+        0.2504902424174559,
+        -2.3584720993315313
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 184,
+      "tick": 784,
+      "worldTick": 766,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8157894736842105,
+      "tip": [
+        5.403331961556492,
+        0.28147588237303034,
+        -2.3681462357571497
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 185,
+      "tick": 785,
+      "worldTick": 767,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8245614035087719,
+      "tip": [
+        5.39915673935304,
+        0.31285333452274233,
+        -2.377097519796971
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 186,
+      "tick": 786,
+      "worldTick": 768,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8333333333333334,
+      "tip": [
+        5.394135735162507,
+        0.3459492038875509,
+        -2.384471770996539
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 187,
+      "tick": 787,
+      "worldTick": 769,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8421052631578947,
+      "tip": [
+        5.389135118871217,
+        0.37963831694188466,
+        -2.390865842386761
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 188,
+      "tick": 788,
+      "worldTick": 770,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8508771929824561,
+      "tip": [
+        5.384063511937276,
+        0.4135324548457498,
+        -2.3960362828742348
+      ],
+      "targetVitality": 106,
+      "reaction": "knockback",
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 189,
+      "tick": 789,
+      "worldTick": 771,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8596491228070176,
+      "tip": [
+        5.379060635919684,
+        0.4476124842081222,
+        -2.4001199389281975
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 190,
+      "tick": 790,
+      "worldTick": 772,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.868421052631579,
+      "tip": [
+        5.3740506834822535,
+        0.48208822649360555,
+        -2.4027413480341746
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 191,
+      "tick": 791,
+      "worldTick": 773,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8771929824561403,
+      "tip": [
+        5.36892235423297,
+        0.5170111922768859,
+        -2.4035448996861684
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 192,
+      "tick": 792,
+      "worldTick": 774,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8859649122807017,
+      "tip": [
+        5.364075212669467,
+        0.5520834445774621,
+        -2.403268857475724
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 193,
+      "tick": 793,
+      "worldTick": 775,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.8947368421052632,
+      "tip": [
+        5.359128506359816,
+        0.5874791875609462,
+        -2.40114081391809
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 194,
+      "tick": 794,
+      "worldTick": 776,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9035087719298246,
+      "tip": [
+        5.354668713529488,
+        0.6228584124287139,
+        -2.398168449551203
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 195,
+      "tick": 795,
+      "worldTick": 777,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9122807017543859,
+      "tip": [
+        5.350183235295416,
+        0.6572049477606474,
+        -2.3939085040989614
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 196,
+      "tick": 796,
+      "worldTick": 778,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9210526315789473,
+      "tip": [
+        5.346177807194214,
+        0.6914759169225291,
+        -2.388807360903926
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 197,
+      "tick": 797,
+      "worldTick": 779,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9298245614035088,
+      "tip": [
+        5.34235501531552,
+        0.7249841768725409,
+        -2.3826223492347194
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 198,
+      "tick": 798,
+      "worldTick": 780,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9385964912280702,
+      "tip": [
+        5.338925439172104,
+        0.758191916722892,
+        -2.375541516487049
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 199,
+      "tick": 799,
+      "worldTick": 781,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9473684210526315,
+      "tip": [
+        5.335736793809598,
+        0.7908456662577261,
+        -2.367560833890551
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 200,
+      "tick": 800,
+      "worldTick": 782,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.956140350877193,
+      "tip": [
+        5.332856012077656,
+        0.8230442429949355,
+        -2.358709370517855
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 201,
+      "tick": 801,
+      "worldTick": 783,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9649122807017544,
+      "tip": [
+        5.33031072820912,
+        0.8547380987441541,
+        -2.349115309960717
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 202,
+      "tick": 802,
+      "worldTick": 784,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9736842105263158,
+      "tip": [
+        5.328020613039457,
+        0.8857550488393706,
+        -2.3388196428109715
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 203,
+      "tick": 803,
+      "worldTick": 785,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9824561403508771,
+      "tip": [
+        5.3261251152532365,
+        0.9163471655339115,
+        -2.3277589930076155
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 204,
+      "tick": 804,
+      "worldTick": 786,
+      "timeScale": 1,
+      "action": "aren-charged-heavy",
+      "phase": "recovery",
+      "progress": 0.9912280701754386,
+      "tip": [
+        5.324454201720624,
+        0.9460654719474881,
+        -2.316036921512578
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 205,
+      "tick": 805,
+      "worldTick": 787,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.364769946963668,
+        1.0794690033804768,
+        -2.298796932555993
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 206,
+      "tick": 806,
+      "worldTick": 788,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.398831926322885,
+        1.1843590662676124,
+        -2.270554380114281
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 207,
+      "tick": 807,
+      "worldTick": 789,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.429817015275221,
+        1.2608869687210091,
+        -2.240351833745321
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 208,
+      "tick": 808,
+      "worldTick": 790,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.461920492817878,
+        1.3118356808131781,
+        -2.2146344441065438
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 209,
+      "tick": 809,
+      "worldTick": 791,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.499375724015236,
+        1.3415740417193618,
+        -2.1966724473699273
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 210,
+      "tick": 810,
+      "worldTick": 792,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.545537237311412,
+        1.3550404565817153,
+        -2.1866449597360873
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 211,
+      "tick": 811,
+      "worldTick": 793,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.601909659726948,
+        1.356846038987277,
+        -2.1822710981741245
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 212,
+      "tick": 812,
+      "worldTick": 794,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.668033855406946,
+        1.3508701940176893,
+        -2.1799133959310333
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 213,
+      "tick": 813,
+      "worldTick": 795,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.741225286691755,
+        1.3399928637432243,
+        -2.175704326622707
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 214,
+      "tick": 814,
+      "worldTick": 796,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.81689578097422,
+        1.3262828299826972,
+        -2.1666020998797255
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 215,
+      "tick": 815,
+      "worldTick": 797,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.889660347544478,
+        1.311555592114325,
+        -2.151210624219162
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 216,
+      "tick": 816,
+      "worldTick": 798,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        5.953649532932442,
+        1.2977117451629163,
+        -2.1298421740996516
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 217,
+      "tick": 817,
+      "worldTick": 799,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.004035127151145,
+        1.2873821196911743,
+        -2.104423951082248
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 218,
+      "tick": 818,
+      "worldTick": 800,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.012154036493914,
+        1.283912219234574,
+        -2.09954771244121
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 219,
+      "tick": 819,
+      "worldTick": 801,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.012583384792113,
+        1.2814602744408468,
+        -2.1002184544888483
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 220,
+      "tick": 820,
+      "worldTick": 802,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.013023909263479,
+        1.279119494130529,
+        -2.1008668870431833
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 221,
+      "tick": 821,
+      "worldTick": 803,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.013271525168195,
+        1.2768446042936747,
+        -2.1014484988017013
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 222,
+      "tick": 822,
+      "worldTick": 804,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.013462874858885,
+        1.274661036620269,
+        -2.1019948422637076
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 223,
+      "tick": 823,
+      "worldTick": 805,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.01369119050965,
+        1.2725856277278949,
+        -2.1025238182636206
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 224,
+      "tick": 824,
+      "worldTick": 806,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.0140063962943096,
+        1.2706269500825549,
+        -2.103039426049383
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 225,
+      "tick": 825,
+      "worldTick": 807,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.014332461676275,
+        1.2687580332472215,
+        -2.1035391035995747
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 226,
+      "tick": 826,
+      "worldTick": 808,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.014762946127746,
+        1.2669214036274425,
+        -2.1040357027299033
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 227,
+      "tick": 827,
+      "worldTick": 809,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.015234575438584,
+        1.2651455240605833,
+        -2.104522439265315
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 228,
+      "tick": 828,
+      "worldTick": 810,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.015740606286316,
+        1.2633822252368505,
+        -2.1050054122380404
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 229,
+      "tick": 829,
+      "worldTick": 811,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.016331363831352,
+        1.2615066488340259,
+        -2.1055027782950653
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 230,
+      "tick": 830,
+      "worldTick": 812,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.016929747997159,
+        1.259691976442006,
+        -2.105988540295406
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 231,
+      "tick": 831,
+      "worldTick": 813,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.017306829594791,
+        1.2578790259122292,
+        -2.1064173858456137
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 232,
+      "tick": 832,
+      "worldTick": 814,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.017613919234095,
+        1.2560991363388985,
+        -2.1068210955204365
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 233,
+      "tick": 833,
+      "worldTick": 815,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.0179922096546825,
+        1.2544200768213498,
+        -2.1072165374756375
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 234,
+      "tick": 834,
+      "worldTick": 816,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.018572574313858,
+        1.2529461236340962,
+        -2.1076060610128513
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 235,
+      "tick": 835,
+      "worldTick": 817,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.0191569301818095,
+        1.2515116523622876,
+        -2.1079885075809925
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 236,
+      "tick": 836,
+      "worldTick": 818,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.019732450132635,
+        1.2502399210437276,
+        -2.108330236156552
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 237,
+      "tick": 837,
+      "worldTick": 819,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.02030653407404,
+        1.249043332339229,
+        -2.108654961020841
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 238,
+      "tick": 838,
+      "worldTick": 820,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.020854714500176,
+        1.2478738281185628,
+        -2.1089706257335417
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 239,
+      "tick": 839,
+      "worldTick": 821,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.0213200193361045,
+        1.246722649551001,
+        -2.1092697147966573
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 240,
+      "tick": 840,
+      "worldTick": 822,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.021786792373044,
+        1.2455964314171477,
+        -2.109564537572166
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 241,
+      "tick": 841,
+      "worldTick": 823,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.02243887841135,
+        1.244465471462875,
+        -2.1098798111324317
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 242,
+      "tick": 842,
+      "worldTick": 824,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.02315322798439,
+        1.2433464455724839,
+        -2.110199276729763
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 243,
+      "tick": 843,
+      "worldTick": 825,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.023884042208945,
+        1.242244086543762,
+        -2.110517035218124
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 244,
+      "tick": 844,
+      "worldTick": 826,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.024662782037956,
+        1.2411513867725403,
+        -2.1108373163017005
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 245,
+      "tick": 845,
+      "worldTick": 827,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.02544203059046,
+        1.24007509634411,
+        -2.1111541562983054
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    },
+    {
+      "frame": 246,
+      "tick": 846,
+      "worldTick": 828,
+      "timeScale": 1,
+      "action": "aren-idle",
+      "phase": "idle",
+      "progress": 0,
+      "tip": [
+        6.02629085135294,
+        1.2390935411322541,
+        -2.1114742617973246
+      ],
+      "targetVitality": 106,
+      "targetPosition": {
+        "x": 6,
+        "y": 0,
+        "z": -5.92496512
+      },
+      "cues": []
+    }
+  ],
+  "cpuPresentationP95Ms": 8.299999997019768
+}

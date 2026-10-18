@@ -1,6 +1,6 @@
 import { Matrix4, Mesh, Quaternion, Vector3, type Material } from 'three';
 import type { ActorSnapshot, CombatSnapshot, JudgementMarkSnapshot, PlayerProjectileSnapshot } from '../../game/contracts.js';
-import { THUNDER_CLEAVE } from '../../game/combat/PlayerSkills.js';
+import { TARGETED_STRIKES, THUNDER_CLEAVE } from '../../game/combat/PlayerSkills.js';
 import { CRESCENT_CHORD } from './CrescentFx.js';
 import { Footprint } from './footprint.js';
 import { PALETTE, type VfxElement } from './palette.js';
@@ -19,6 +19,11 @@ const SPIRAL_LENGTH = 2.4;
 const UP = new Vector3(0, 1, 0);
 /** Glaive lightning crackle: path subdivision (9 points) and the Aren swings that carry it (combo lights, heavy, Thunder Cleave). */
 const CRACKLE_LEVELS = 3;
+const CRACKLE_STRANDS = 3;
+const CLEAVE = TARGETED_STRIKES.charged_heavy;
+const CLEAVE_TOTAL = CLEAVE.ticks + CLEAVE.recoveryTicks;
+const CLEAVE_TRAIL_FROM = (CLEAVE.activeAt - 10) / CLEAVE_TOTAL;
+const CLEAVE_CONTACT = CLEAVE.activeAt / CLEAVE_TOTAL;
 const CRACKLE_ACTIONS = /^aren-(light-\d|heavy|charged-heavy)/;
 const MOTE = { r: 0.8, g: 0.72, b: 0.5 };
 const FLECK = { r: 0.3, g: 0.46, b: 0.16 };
@@ -54,7 +59,11 @@ export class WardenCombat {
   private readonly basis = new Matrix4();
   private readonly footprint = new Footprint();
   private readonly spiral = new Float32Array(SPIRAL_POINTS * 3);
-  private readonly crackle = new Float32Array(((1 << CRACKLE_LEVELS) + 1) * 3);
+  private readonly crackles = Array.from({ length: CRACKLE_STRANDS }, () => new Float32Array(((1 << CRACKLE_LEVELS) + 1) * 3));
+  private readonly crackleAlpha = new Float32Array(CRACKLE_STRANDS);
+  private lastCrackleTime = -Infinity;
+  private cleaveWindupTrail = false;
+  private readonly random = (): number => this.w.vfx.random();
 
   constructor(private readonly w: WardenFx) {}
 
@@ -63,6 +72,7 @@ export class WardenCombat {
     this.edgeMaterials.length = 0; this.edgeRoot = undefined;
     this.moteAcc = this.fleckAcc = this.streakAcc = 0;
     this.chargeStart = -1; this.chargeReady = false; this.chargeAcc = this.chargeArcAcc = 0;
+    this.lastCrackleTime = -Infinity; this.cleaveWindupTrail = false;
     this.w.player.valid = false;
   }
 
@@ -108,6 +118,7 @@ export class WardenCombat {
     const length = Math.hypot(aren.facing.x, aren.facing.z);
     if (length > 1e-6) player.facing.set(aren.facing.x / length, 0, aren.facing.z / length);
     player.actionId = aren.actionId; player.phase = aren.phase; player.valid = true;
+    player.normalizedTime = aren.normalizedTime;
   }
 
   /** The cleansed finish: burn the corruption shell away and flare embers; the animal itself is untouched. */
@@ -137,7 +148,7 @@ export class WardenCombat {
     if (this.chargeStart < 0) { this.chargeStart = simTick; this.chargeAcc = this.chargeArcAcc = 0; }
     const progress = Math.min(1, Math.max(0, (simTick - this.chargeStart) / THUNDER_CLEAVE.holdTicks));
     w.edgePeak = 1.3 + 2.3 * progress; w.edgeBoost = 1;
-    if (!this.bladePose()) return;
+    if (dt <= 0 || !this.bladePose()) return;
     const tip = this.tip;
     this.chargeAcc += dt * (14 + 46 * progress);
     for (; this.chargeAcc >= 1; this.chargeAcc--) vfx.gather(tip.x, tip.y, tip.z, 1, 0.55 + 0.5 * progress, element, WARDEN_OWNER);
@@ -182,22 +193,29 @@ export class WardenCombat {
   }
 
   private driveBlade(time: number, dt: number): void {
-    const w = this.w, vfx = w.vfx, open = (time >= w.trailFrom && time <= w.trailUntil) || w.hero.bladeLive();
+    const w = this.w, vfx = w.vfx;
+    const windup = w.player.actionId === 'aren-charged-heavy' && w.player.phase === 'anticipation'
+      && w.player.normalizedTime >= CLEAVE_TRAIL_FROM && w.player.normalizedTime < CLEAVE_CONTACT;
+    if (windup && !this.cleaveWindupTrail) { w.trailElement = 'gold'; w.trail.setStyle('gold', 1.15, 0.14, 0.65); }
+    this.cleaveWindupTrail = windup;
+    const open = windup || (time >= w.trailFrom && time <= w.trailUntil) || w.hero.bladeLive();
     if (w.player.valid && open && this.bladePose()) {
       w.trail.push(this.base.x, this.base.y, this.base.z, this.tip.x, this.tip.y, this.tip.z, time, 1);
       const element = w.trailElement, palette = PALETTE[element];
-      if (w.player.hero === 'yara') this.sapTrail(palette);
+      if (w.player.hero === 'yara') { if (dt > 0) this.sapTrail(palette); }
       else {
-        for (let i = vfx.count(2); i > 0; i--) {
-          const p = vfx.spec();
-          p.x = this.tip.x + vfx.range(-0.04, 0.04); p.y = this.tip.y + vfx.range(-0.04, 0.04); p.z = this.tip.z + vfx.range(-0.04, 0.04);
-          p.vx = vfx.range(-0.8, 0.8); p.vy = vfx.range(-0.2, 1); p.vz = vfx.range(-0.8, 0.8); p.gravity = 2.5; p.drag = 1.8; p.life = vfx.range(0.16, 0.3);
-          p.size0 = 0.035; p.size1 = 0.015; p.frame = VFX_FRAME.spark; p.stretch = 0.07;
-          p.r0 = palette.hot.r; p.g0 = palette.hot.g; p.b0 = palette.hot.b; p.r1 = palette.b.r; p.g1 = palette.b.g; p.b1 = palette.b.b; p.a0 = 0.8; p.fadeOut = 0.5;
-          vfx.emit(vfx.particles.additive, WARDEN_OWNER);
+        if (dt > 0) {
+          for (let i = vfx.count(2); i > 0; i--) {
+            const p = vfx.spec();
+            p.x = this.tip.x + vfx.range(-0.04, 0.04); p.y = this.tip.y + vfx.range(-0.04, 0.04); p.z = this.tip.z + vfx.range(-0.04, 0.04);
+            p.vx = vfx.range(-0.8, 0.8); p.vy = vfx.range(-0.2, 1); p.vz = vfx.range(-0.8, 0.8); p.gravity = 2.5; p.drag = 1.8; p.life = vfx.range(0.16, 0.3);
+            p.size0 = 0.035; p.size1 = 0.015; p.frame = VFX_FRAME.spark; p.stretch = 0.07;
+            p.r0 = palette.hot.r; p.g0 = palette.hot.g; p.b0 = palette.hot.b; p.r1 = palette.b.r; p.g1 = palette.b.g; p.b1 = palette.b.b; p.a0 = 0.8; p.fadeOut = 0.5;
+            vfx.emit(vfx.particles.additive, WARDEN_OWNER);
+          }
+          if (element === 'gold' && vfx.random() < 0.5) vfx.sparks(this.tip.x, this.tip.y, this.tip.z, 1, 5, 'lightning', WARDEN_OWNER, 0.1);
         }
-        if (element === 'gold' && vfx.random() < 0.5) vfx.sparks(this.tip.x, this.tip.y, this.tip.z, 1, 5, 'lightning', WARDEN_OWNER, 0.1);
-        this.glaiveCrackle();
+        this.glaiveCrackle(time);
       }
     }
     w.trail.update(time);
@@ -205,21 +223,26 @@ export class WardenCombat {
     if (w.player.valid && time < w.dashUntil) this.dashStreaks(dt);
   }
 
-  /** Lightning crackling along the glaive while a combo swing or heavy blow is live: a few short jagged filaments re-rolled every frame. */
-  private glaiveCrackle(): void {
+  /** Glaive filaments are re-rolled only as the world clock advances; frozen frames redraw the same paths. */
+  private glaiveCrackle(time: number): void {
     const w = this.w, vfx = w.vfx;
     if (!CRACKLE_ACTIONS.test(w.player.actionId)) return;
-    const palette = PALETTE.lightning;
-    for (let n = vfx.reducedEffects ? 1 : 3; n > 0; n--) {
-      const s0 = vfx.range(-0.05, 0.55), s1 = Math.min(1.12, s0 + vfx.range(0.35, 0.55)), lateral = vfx.range(0.02, 0.07);
-      this.a.subVectors(this.tip, this.base);
-      this.b.copy(this.base).addScaledVector(this.a, s0);
-      this.c.copy(this.base).addScaledVector(this.a, s1);
-      jaggedPath(this.crackle, this.b.x + lateral, this.b.y, this.b.z, this.c.x - lateral, this.c.y, this.c.z, CRACKLE_LEVELS, 0.3, () => vfx.random());
+    const palette = PALETTE.lightning, fresh = time !== this.lastCrackleTime;
+    this.lastCrackleTime = time;
+    for (let n = 0, count = vfx.reducedEffects ? 1 : CRACKLE_STRANDS; n < count; n++) {
+      const path = this.crackles[n]!;
+      if (fresh) {
+        const s0 = vfx.range(-0.05, 0.55), s1 = Math.min(1.12, s0 + vfx.range(0.35, 0.55)), lateral = vfx.range(0.02, 0.07);
+        this.a.subVectors(this.tip, this.base);
+        this.b.copy(this.base).addScaledVector(this.a, s0);
+        this.c.copy(this.base).addScaledVector(this.a, s1);
+        jaggedPath(path, this.b.x + lateral, this.b.y, this.b.z, this.c.x - lateral, this.c.y, this.c.z, CRACKLE_LEVELS, 0.3, this.random);
+        this.crackleAlpha[n] = 0.55 + 0.4 * vfx.random();
+      }
       const style = w.lines.style.reset();
       style.width = 0.038; style.taper = 0.6; style.cr = palette.hot.r; style.cg = palette.hot.g; style.cb = palette.hot.b; style.gr = palette.a.r * 2.4; style.gg = palette.a.g * 2.4; style.gb = palette.a.b * 2.4;
-      style.alpha0 = style.alpha1 = 0.55 + 0.4 * vfx.random();
-      w.lines.add(this.crackle, (1 << CRACKLE_LEVELS) + 1);
+      style.alpha0 = style.alpha1 = this.crackleAlpha[n]!;
+      w.lines.add(path, (1 << CRACKLE_LEVELS) + 1);
     }
   }
 
@@ -471,19 +494,22 @@ export class WardenCombat {
       const age = time - bolt.start;
       if (age >= THUNDER_SECONDS) { bolt.active = false; continue; }
       if (age < 0) continue;
-      if (w.frame >= bolt.nextRegen) { w.cues.regenerateBolt(bolt); bolt.nextRegen = w.frame + 2 + (vfx.random() < 0.5 ? 1 : 0); }
-      const envelope = age < 0.05 ? 1 : Math.pow(Math.max(0, 1 - (age - 0.05) / (THUNDER_SECONDS - 0.05)), 1.4), flicker = 0.7 + 0.3 * vfx.random();
+      if (!vfx.reducedEffects && time >= bolt.nextRegen) {
+        w.cues.regenerateBolt(bolt); bolt.nextRegen = time + (2 + (vfx.random() < 0.5 ? 1 : 0)) / 60;
+        bolt.flicker = 0.7 + 0.3 * vfx.random();
+      }
+      const envelope = age < 0.05 ? 1 : Math.pow(Math.max(0, 1 - (age - 0.05) / (THUNDER_SECONDS - 0.05)), 1.4);
       let style = w.lines.style.reset();
-      style.width = 0.38; style.taper = 0.45; style.cr = palette.hot.r; style.cg = palette.hot.g; style.cb = palette.hot.b; style.gr = palette.b.r; style.gg = palette.b.g; style.gb = palette.b.b;
-      style.alpha0 = style.alpha1 = envelope * flicker;
+      style.width = vfx.reducedEffects ? 0.16 : 0.38; style.taper = 0.45; style.cr = palette.hot.r; style.cg = palette.hot.g; style.cb = palette.hot.b; style.gr = palette.b.r; style.gg = palette.b.g; style.gb = palette.b.b;
+      style.alpha0 = style.alpha1 = envelope * (vfx.reducedEffects ? 0.65 : bolt.flicker);
       w.lines.add(bolt.trunk, (1 << BOLT_TRUNK_LEVELS) + 1);
-      for (const branch of bolt.branches) {
+      if (!vfx.reducedEffects) for (const branch of bolt.branches) {
         style = w.lines.style.reset();
         style.width = 0.17; style.taper = 0.85; style.cr = palette.hot.r * 0.8; style.cg = palette.hot.g * 0.8; style.cb = palette.hot.b * 0.8; style.gr = palette.b.r * 0.8; style.gg = palette.b.g * 0.8; style.gb = palette.b.b * 0.8;
-        style.alpha0 = envelope * flicker * 0.85; style.alpha1 = 0;
+        style.alpha0 = envelope * bolt.flicker * 0.85; style.alpha1 = 0;
         w.lines.add(branch, (1 << BOLT_BRANCH_LEVELS) + 1);
       }
-      if (age < 0.2) for (const radial of bolt.radial) {
+      if (!vfx.reducedEffects && age < 0.2) for (const radial of bolt.radial) {
         style = w.lines.style.reset();
         style.width = 0.13; style.taper = 0.7; style.cr = palette.hot.r * 0.8; style.cg = palette.hot.g * 0.8; style.cb = palette.hot.b * 0.8; style.gr = palette.b.r; style.gg = palette.b.g; style.gb = palette.b.b;
         style.alpha0 = envelope * 0.9; style.alpha1 = 0;
@@ -492,7 +518,7 @@ export class WardenCombat {
     }
   }
 
-  /** Starts `count` arcs crawling over `actorId` for `seconds`: anchors in the body capsule, jagged paths regenerated every 2–3 frames. */
+  /** Starts `count` arcs crawling over `actorId` for `seconds`: capsule anchors, jagged paths regenerated every 2–3 world ticks. */
   startArcs(actorId: string, owner: number, count: number, lightning: boolean, seconds: number): void {
     const w = this.w, vfx = w.vfx;
     if (vfx.reducedEffects) return;
@@ -513,14 +539,14 @@ export class WardenCombat {
     for (let i = 0; i < MAX_ARCS; i++) {
       const arc = w.arcs[i]!;
       if (!arc.active) continue;
-      if (time >= arc.until) { arc.active = false; continue; }
+      if (vfx.reducedEffects || time >= arc.until) { arc.active = false; continue; }
       const root = w.resolveSocket?.(arc.actorId, 'root');
       if (root) { root.updateWorldMatrix(true, false); root.getWorldPosition(this.a); } else {
         const cached = this.positions.get(arc.actorId);
         if (!cached) { arc.active = false; continue; }
         this.a.copy(cached);
       }
-      if (w.frame >= arc.nextRegen) { w.cues.regenerateArc(arc, this.a); arc.nextRegen = w.frame + 2 + (vfx.random() < 0.5 ? 1 : 0); arc.strength = 0.55 + 0.45 * vfx.random(); }
+      if (time >= arc.nextRegen) { w.cues.regenerateArc(arc, this.a); arc.nextRegen = time + (2 + (vfx.random() < 0.5 ? 1 : 0)) / 60; arc.strength = 0.55 + 0.45 * vfx.random(); }
       const life = (arc.until - time) / Math.max(1e-3, arc.until - arc.start), react = this.hitReact.get(arc.actorId) ?? 0;
       const palette = arc.lightning ? PALETTE.lightning : PALETTE.arcane, style = w.lines.style.reset();
       style.width = 0.09; style.taper = 0.3; style.cr = palette.hot.r; style.cg = palette.hot.g; style.cb = palette.hot.b; style.gr = palette.b.r; style.gg = palette.b.g; style.gb = palette.b.b;
