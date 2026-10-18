@@ -34,6 +34,7 @@ export class PlayerView {
   hero: HeroId = 'aren';
   actionId = '';
   phase = '';
+  normalizedTime = 0;
 }
 
 /** Electric arc crawling over a struck body: two capsule-local anchors, regenerated jagged path. */
@@ -45,19 +46,24 @@ export interface ArcState {
   until: number;
   strength: number;
   lightning: boolean;
+  /** Next regeneration deadline in world seconds; pause never advances it. */
   nextRegen: number;
   readonly a: Vector3;
   readonly b: Vector3;
   readonly path: Float32Array;
 }
 
-/** A Thunder Cleave strike: trunk, branches and radial ground arcs, regenerated every 2–3 frames for flicker. */
+/** A Thunder Cleave strike: trunk, branches and radial ground arcs, regenerated every 2–3 world ticks. */
 export interface BoltState {
   active: boolean;
   owner: number;
   start: number;
   end: number;
+  /** World-second deadline, not a render-frame counter. */
   nextRegen: number;
+  radiusX: number;
+  radiusZ: number;
+  flicker: number;
   readonly strike: Vector3;
   readonly trunk: Float32Array;
   readonly branches: Float32Array[];
@@ -157,7 +163,7 @@ export class WardenFx implements VfxModule {
     for (let i = 0; i < MAX_ARCS; i++) this.arcs.push({ active: false, actorId: '', owner: -1, start: 0, until: 0, strength: 1, lightning: false, nextRegen: 0, a: new Vector3(), b: new Vector3(), path: new Float32Array(((1 << ARC_LEVELS) + 1) * 3) });
     for (let i = 0; i < MAX_BOLTS; i++) {
       this.bolts.push({
-        active: false, owner: -1, start: 0, end: 0, nextRegen: 0, strike: new Vector3(), trunk: new Float32Array(((1 << BOLT_TRUNK_LEVELS) + 1) * 3),
+        active: false, owner: -1, start: 0, end: 0, nextRegen: 0, radiusX: 3, radiusZ: 3, flicker: 1, strike: new Vector3(), trunk: new Float32Array(((1 << BOLT_TRUNK_LEVELS) + 1) * 3),
         branches: Array.from({ length: BOLT_BRANCHES }, () => new Float32Array(((1 << BOLT_BRANCH_LEVELS) + 1) * 3)),
         radial: Array.from({ length: BOLT_RADIALS }, () => new Float32Array(((1 << BOLT_BRANCH_LEVELS) + 1) * 3)),
       });

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { CombatEngine, createEngineState, makeActor, type CombatInput } from '../../src/game/combat/CombatEngine.js';
 import { vec } from '../../src/game/combat/geometry.js';
 import { LIGHT_STEPS, THUNDER_CLEAVE } from '../../src/game/combat/PlayerSkills.js';
+import { arenClipProgress } from '../../src/rendering/ArenAnimation.js';
 
 interface ClipReport {
   readonly action: string;
@@ -69,7 +70,7 @@ describe('Aren combat clips meet the simulation hit tick', () => {
       const entry = clip(action);
       const { totalTicks, hitFraction } = run();
       // The engine resolves the impact on `activeAt`; allow the single tick between the resolve and the normalizedTime refresh.
-      expect(Math.abs(entry.contact!.outputNormalizedTime - hitFraction)).toBeLessThanOrEqual(1.5 / totalTicks);
+      expect(Math.abs(entry.contact!.outputNormalizedTime - arenClipProgress(action, hitFraction))).toBeLessThanOrEqual(1.5 / totalTicks);
     });
   }
 
@@ -82,5 +83,29 @@ describe('Warden Arsenal native contact alignment', () => {
       const nativeContact = entry.simulation!.activeTick! / entry.simulation!.totalTicks;
       expect(Math.abs(nativeContact - step.activeFrom / step.ticks)).toBeLessThanOrEqual(1 / step.ticks);
     });
+  });
+});
+
+describe('Thunder Cleave native sampling invariants', () => {
+  it('keeps simulation contact and delayed-lightning markers fixed while the surrounding poses are retimed', () => {
+    const { totalTicks, hitFraction } = measure(new CombatEngine(engineState()), heavyAfter(THUNDER_CLEAVE.holdTicks));
+    const action = 'aren-charged-heavy';
+    expect(arenClipProgress(action, hitFraction)).toBe(hitFraction);
+    const lightning = hitFraction + THUNDER_CLEAVE.delayTicks / totalTicks;
+    expect(arenClipProgress(action, lightning)).toBeCloseTo(lightning, 12);
+  });
+
+  it('never reverses the native action or overshoots its recovery, and leaves other strikes unchanged', () => {
+    let last = 0;
+    for (let frame = -1; frame <= 1001; frame++) {
+      const sampled = arenClipProgress('aren-charged-heavy', frame / 1000);
+      expect(sampled).toBeGreaterThanOrEqual(last);
+      expect(sampled).toBeLessThanOrEqual(1);
+      last = sampled;
+    }
+    expect(arenClipProgress('aren-charged-heavy', 0)).toBe(0);
+    expect(arenClipProgress('aren-charged-heavy', 1)).toBe(1);
+    expect(arenClipProgress('aren-heavy', 0.37)).toBe(0.37);
+    expect(arenClipProgress('aren-light-1', 0.68)).toBe(0.68);
   });
 });

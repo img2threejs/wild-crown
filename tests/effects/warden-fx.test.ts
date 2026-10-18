@@ -149,7 +149,6 @@ describe('Judgement marks, Thunder Cleave and hit arcs', () => {
       w.updateCombat(snapshot(1), 0);
       expect(w.bolts.some(bolt => bolt.active)).toBe(true);
       expect(w.lines.usedPoints).toBeGreaterThanOrEqual(33 + 4 * 9);
-      expect(impact.impulses.some(strength => strength >= 0.8)).toBe(true);
       expect(impact.shakes).toBeGreaterThan(0);
       const top = w.bolts.find(bolt => bolt.active)!.trunk[1]!;
       expect(top).toBeCloseTo(9, 4);

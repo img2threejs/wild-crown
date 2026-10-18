@@ -8,6 +8,7 @@ import {
 } from './MonsterAnimationProfiles';
 import type { NativeAssetInstance } from './NativeAssetLoader';
 import { vesperClipProgress } from './VesperAnimation';
+import { arenClipProgress } from './ArenAnimation';
 import { companionSkillByAction } from '../game/companions/CompanionSkills';
 
 const LOCOMOTION_RECOVERY_ACTIONS: Readonly<Record<string, true>> = {
@@ -19,7 +20,7 @@ const LOCOMOTION_RECOVERY_ACTIONS: Readonly<Record<string, true>> = {
 };
 /** Held poses the simulation reports as an action but the clip plays as a seamless loop on the actor clock (the controller loops the 'idle' phase). */
 const LOOPING_ACTIONS: Readonly<Record<string, true>> = {
-  'aren-sigil-charge': true, 'yara-seed-charge': true, 'yara-root-charge': true,
+  'aren-sigil-charge': true, 'aren-charged-heavy-charge': true, 'yara-seed-charge': true, 'yara-root-charge': true,
   'vesper-cuts-charge': true, 'vesper-shade-charge': true, 'sakda-knee-charge': true, 'sakda-elbow-charge': true,
   'vara:idle': true, 'vara:walk': true, 'vara:fly': true, 'vara:hover': true,
 };
@@ -240,7 +241,8 @@ export function driveActorAnimation(instance: NativeAssetInstance, actor: ActorS
   } else state.recoveryActionId = undefined;
   const recoveryActionId = recoveryWeight > 0 ? state.recoveryActionId : undefined;
   const loopPlaybackRate = nativeLocomotionPlaybackRate(instance, manifest, recoveryActionId ?? actor.actionId, actor.velocity, context);
-  const clipTime = instance.assetId === 'actor-vesper-hero' ? vesperClipProgress(clipActionId, normalizedTime) : normalizedTime;
+  const clipTime = instance.assetId === 'actor-vesper-hero' ? vesperClipProgress(clipActionId, normalizedTime)
+    : instance.assetId === 'actor-aren' ? arenClipProgress(clipActionId, normalizedTime) : normalizedTime;
   instance.animation.play(clipActionId, LOOPING_ACTIONS[String(actor.actionId)] ? 'idle' : actor.phase, clipTime, loopTimeSeconds, loopPlaybackRate, recoveryActionId, recoveryWeight);
   return 0;
 }

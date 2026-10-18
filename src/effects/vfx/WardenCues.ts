@@ -28,6 +28,7 @@ export class WardenCues {
   private readonly basis = new Matrix4();
   private readonly footprint = new Footprint();
   private readonly tangent = { x: 0, y: 0, z: 0 };
+  private readonly random = (): number => this.w.vfx.random();
 
   constructor(private readonly w: WardenFx) {}
 
@@ -113,12 +114,13 @@ export class WardenCues {
     w.trailFrom = (cue.worldTick - 2) / 60;
     w.trailUntil = (cue.worldTick + ticks + 2) / 60;
     w.trailElement = heavy ? 'gold' : step?.trail ?? 'arcane';
-    if (heavy) w.trail.setStyle('gold', 1.1 + 0.15 * intensity, 0.22);
+    if (action === 'aren-charged-heavy') w.trail.setStyle('gold', 1.15, 0.14, 0.65);
+    else if (heavy) w.trail.setStyle('gold', 1.1 + 0.15 * intensity, 0.22);
     else if (step) w.trail.setStyle(step.trail, step.intensity + 0.15 * (intensity - 1), step.life, step.width);
     else w.trail.setStyle('arcane', 0.95 + 0.25 * intensity, 0.16);
     w.edgePeak = Math.min(4, 2.2 + 0.9 * intensity); w.edgeBoost = 1;
     const spin = (cue.footprint?.sectorRadians ?? 0) > Math.PI * 1.9, position = cue.position ?? w.player.position, reach = Math.max(1, cue.footprint?.length ?? 2.4);
-    if (spin || action.includes('charged')) {
+    if (spin) {
       this.footprint.set('disk', position.x, position.y, position.z, 0, reach, reach);
       w.vfx.ground.spawn('shock', this.footprint, heavy ? 'gold' : 'arcane', slot.owner, w.vfx.time, 0.32, 0.8);
     }
@@ -216,6 +218,7 @@ export class WardenCues {
   private playerHit(slot: KitSlot): void {
     const w = this.w, vfx = w.vfx, cue = slot.cue, owner = slot.owner;
     const lightning = cue.element === 'lightning', action = cue.actionId ?? '', heavy = action.includes('heavy') || action.includes('charged');
+    const cleave = action === 'aren-charged-heavy';
     const element: VfxElement = lightning ? 'lightning' : heavy ? 'gold' : 'arcane';
     const pos = cue.position, intensity = Math.min(3, Math.max(0.3, cue.intensity ?? 1));
     if (!pos) return;
@@ -225,9 +228,9 @@ export class WardenCues {
     if (this.b.lengthSq() < 1e-8) this.b.set(w.player.facing.x, 0, w.player.facing.z);
     this.b.normalize();
     const palette = PALETTE[element], hot = palette.hot, body = palette.b;
-    const hx = this.b.x, hz = this.b.z, scale = 0.7 + 0.5 * intensity;
+    const hx = this.b.x, hz = this.b.z, scale = cleave ? 0.78 + 0.1 * intensity : 0.7 + 0.5 * intensity;
     // Oriented spark fan: a forward cone around the hit direction plus a short backspray.
-    for (let i = vfx.count(12 + 9 * intensity); i > 0; i--) {
+    for (let i = vfx.count(cleave ? 12 + 4 * intensity : 12 + 9 * intensity); i > 0; i--) {
       this.e.set(vfx.range(-1, 1), vfx.range(-0.6, 1), vfx.range(-1, 1)).normalize().multiplyScalar(0.62).add(this.b).normalize();
       this.spark(owner, this.a, this.e, vfx.range(4.5, 11), element, vfx.range(0.22, 0.5), vfx.range(0.04, 0.075));
     }
@@ -237,15 +240,15 @@ export class WardenCues {
     }
     // Star flash, soft flare and the razor cut line across the contact point (aligned to the swing plane).
     const p = vfx.spec();
-    p.x = this.a.x; p.y = this.a.y; p.z = this.a.z; p.frame = VFX_FRAME.star; p.life = 0.14; p.size0 = 0.55 * scale; p.size1 = 1.2 * scale; p.spin = vfx.random() * 6.28;
+    p.x = this.a.x; p.y = this.a.y; p.z = this.a.z; p.frame = VFX_FRAME.star; p.life = cleave ? 0.1 : 0.14; p.size0 = 0.55 * scale; p.size1 = 1.2 * scale; p.spin = vfx.random() * 6.28;
     p.r0 = p.r1 = hot.r; p.g0 = p.g1 = hot.g; p.b0 = p.b1 = hot.b; p.a0 = 0.95; p.fadeIn = 0.05; p.fadeOut = 0.45;
     vfx.emit(vfx.particles.additive, owner);
-    p.frame = VFX_FRAME.glow; p.life = 0.2; p.size0 = 0.8 * scale; p.size1 = 1.5 * scale; p.a0 = 0.45; p.r0 = p.r1 = body.r; p.g0 = p.g1 = body.g; p.b0 = p.b1 = body.b;
+    p.frame = VFX_FRAME.glow; p.life = cleave ? 0.12 : 0.2; p.size0 = 0.8 * scale; p.size1 = 1.5 * scale; p.a0 = cleave ? 0.25 : 0.45; p.r0 = p.r1 = body.r; p.g0 = p.g1 = body.g; p.b0 = p.b1 = body.b;
     vfx.emit(vfx.particles.additive, owner);
     this.swingTangent(action, hx, hz, this.c);
     const cut = vfx.spec();
     cut.x = this.a.x; cut.y = this.a.y; cut.z = this.a.z; cut.vx = this.c.x * 0.05; cut.vy = this.c.y * 0.05; cut.vz = this.c.z * 0.05; cut.stretch = 0.01;
-    cut.frame = VFX_FRAME.cut; cut.life = 0.17; cut.size0 = 1.5 * scale; cut.size1 = 2.1 * scale;
+    cut.frame = VFX_FRAME.cut; cut.life = cleave ? 0.12 : 0.17; cut.size0 = (cleave ? 0.75 : 1.5) * scale; cut.size1 = (cleave ? 1.2 : 2.1) * scale;
     cut.r0 = cut.r1 = hot.r; cut.g0 = cut.g1 = hot.g; cut.b0 = cut.b1 = hot.b; cut.a0 = 1; cut.fadeIn = 0.04; cut.fadeOut = 0.5;
     vfx.emit(vfx.particles.additive, owner);
     // Cyan energy droplets and a little debris; the monster's blood and material spray is the shared HitImpactFx layer.
@@ -257,15 +260,15 @@ export class WardenCues {
       vfx.emit(vfx.particles.additive, owner);
     }
     vfx.chunks(this.a.x, this.a.y - 0.45, this.a.z, 2, 2.4, 0.09, owner);
-    if (lightning) vfx.sparks(this.a.x, this.a.y, this.a.z, 14, 8, 'lightning', owner, 0.2);
-    if (intensity >= 1.15) vfx.lights.pulse(this.a.x, this.a.y, this.a.z, hot, 2.2 + 1.2 * intensity, 5, 0.18, vfx.time, owner);
+    if (lightning) vfx.sparks(this.a.x, this.a.y, this.a.z, cleave ? 6 : 14, 8, 'lightning', owner, 0.2);
+    if (intensity >= 1.15) vfx.lights.pulse(this.a.x, this.a.y, this.a.z, hot, cleave ? 2.8 : 2.2 + 1.2 * intensity, cleave ? 3 : 5, cleave ? 0.1 : 0.18, vfx.time, owner);
     const impact = w.impact;
     if (cue.targetId) {
-      impact?.flashActor(cue.targetId, hot, Math.min(2, 1.2 + 0.5 * intensity), 0.2, 'hit');
-      w.combat.startArcs(cue.targetId, owner, lightning ? 4 : 3, lightning, ARC_SECONDS);
+      impact?.flashActor(cue.targetId, hot, cleave ? 0.9 : Math.min(2, 1.2 + 0.5 * intensity), cleave ? 0.1 : 0.2, 'hit');
+      w.combat.startArcs(cue.targetId, owner, cleave ? lightning ? 2 : 1 : lightning ? 4 : 3, lightning, cleave ? 0.18 : ARC_SECONDS);
     }
-    impact?.shake(Math.min(0.18, 0.025 + 0.055 * intensity), 0.12 + 0.05 * intensity, 30);
-    if (intensity >= 1.15) impact?.impulse?.(Math.min(0.55, 0.12 + 0.5 * (intensity - 1)), 0.16);
+    impact?.shake(cleave ? 0.11 : Math.min(0.18, 0.025 + 0.055 * intensity), cleave ? 0.16 : 0.12 + 0.05 * intensity, 30);
+    if (intensity >= 1.15) impact?.impulse?.(cleave ? 0.2 : Math.min(0.55, 0.12 + 0.5 * (intensity - 1)), cleave ? 0.1 : 0.16);
     w.edgeBoost = Math.max(w.edgeBoost, 1);
   }
 
@@ -352,43 +355,48 @@ export class WardenCues {
     if (!at) return;
     let bolt: BoltState | undefined = w.bolts.find(candidate => !candidate.active);
     if (!bolt) { bolt = w.bolts[0]!; for (const candidate of w.bolts) if (candidate.start < bolt.start) bolt = candidate; }
-    bolt.active = true; bolt.owner = owner; bolt.start = vfx.time; bolt.end = vfx.time + THUNDER_SECONDS; bolt.nextRegen = 0;
+    bolt.active = true; bolt.owner = owner; bolt.start = vfx.time; bolt.end = vfx.time + THUNDER_SECONDS; bolt.nextRegen = vfx.time + 2 / 60; bolt.flicker = 0.85;
+    bolt.radiusX = (cue.footprint?.width ?? 6) / 2; bolt.radiusZ = (cue.footprint?.length ?? 6) / 2;
     bolt.strike.set(at.x, at.y, at.z);
     this.regenerateBolt(bolt);
     const y = at.y;
-    vfx.flash(at.x, y + 0.5, at.z, 4.2, 'lightning', owner, 0.28);
-    vfx.sparks(at.x, y + 0.2, at.z, 46, 9, 'lightning', owner, 0.35);
-    vfx.shards(at.x, y + 0.3, at.z, 18, 6, owner);
-    this.footprint.set('disk', at.x, y, at.z, 0, 3, 3);
+    vfx.flash(at.x, y + 0.5, at.z, 2.1, 'lightning', owner, 0.12);
+    vfx.sparks(at.x, y + 0.2, at.z, 24, 9, 'lightning', owner, 0.22);
+    vfx.shards(at.x, y + 0.3, at.z, 8, 6, owner);
+    this.footprint.set('disk', at.x, y, at.z, 0, bolt.radiusX, bolt.radiusZ);
     vfx.ground.spawn('shock', this.footprint, 'lightning', owner, vfx.time, 0.5, 1);
-    this.footprint.set('disk', at.x, y, at.z, 0, 1.6, 1.6);
+    this.footprint.set('disk', at.x, y, at.z, 0, Math.min(1.6, bolt.radiusX), Math.min(1.6, bolt.radiusZ));
     // Earth + lightning: a glowing-cracked earth scar, a heavy dust ring and a spray of clods under the bolt.
-    vfx.ground.spawn('decal', this.footprint, 'earth', owner, vfx.time, 5.5, 1, 'lightning');
-    vfx.dustRing(at.x, y, at.z, 2.2, 26, owner);
-    this.footprint.set('disk', at.x, y, at.z, 0, 3, 3);
-    vfx.chunks(at.x, y + 0.05, at.z, 12, 4.6, 0.2, owner, false, this.footprint);
+    vfx.ground.spawn('decal', this.footprint, 'earth', owner, vfx.time, 2.2, 0.65, 'lightning');
+    vfx.dustRing(at.x, y, at.z, Math.min(bolt.radiusX, bolt.radiusZ) * 0.7, 16, owner);
+    this.footprint.set('disk', at.x, y, at.z, 0, bolt.radiusX, bolt.radiusZ);
+    vfx.chunks(at.x, y + 0.05, at.z, 6, 4.6, 0.16, owner, false, this.footprint);
     const star = vfx.spec(), hot = PALETTE.lightning.hot;
-    star.x = at.x; star.y = y + 0.6; star.z = at.z; star.frame = VFX_FRAME.star; star.life = 0.22; star.size0 = 2.2; star.size1 = 3.4; star.r0 = star.r1 = hot.r; star.g0 = star.g1 = hot.g; star.b0 = star.b1 = hot.b; star.a0 = 0.9; star.fadeIn = 0.05; star.fadeOut = 0.5;
+    star.x = at.x; star.y = y + 0.6; star.z = at.z; star.frame = VFX_FRAME.star; star.life = 0.1; star.size0 = 1; star.size1 = 1.8; star.r0 = star.r1 = hot.r; star.g0 = star.g1 = hot.g; star.b0 = star.b1 = hot.b; star.a0 = 0.75; star.fadeIn = 0.05; star.fadeOut = 0.5;
     vfx.emit(vfx.particles.additive, owner);
-    vfx.lights.pulse(at.x, y + 2, at.z, PALETTE.lightning.hot, 8, 13, 0.4, vfx.time, owner);
-    w.impact?.shake(0.22, 0.4, 22);
-    w.impact?.impulse?.(0.85, 0.3);
+    vfx.lights.pulse(at.x, y + 2, at.z, PALETTE.lightning.hot, 4.5, 8, 0.18, vfx.time, owner);
+    w.impact?.shake(0.12, 0.18, 22);
+    w.impact?.impulse?.(0.35, 0.12);
   }
 
-  /** Re-rolls the trunk, branches and radial ground arcs (called every 2–3 frames for flicker). */
+  /** Re-rolls the trunk, branches and radial ground arcs (called every 2–3 world ticks for flicker). */
   regenerateBolt(bolt: BoltState): void {
-    const vfx = this.w.vfx, rnd = (): number => vfx.random(), s = bolt.strike;
+    const vfx = this.w.vfx, s = bolt.strike;
     const topX = s.x + vfx.range(-0.7, 0.7), topZ = s.z + vfx.range(-0.7, 0.7);
-    jaggedPath(bolt.trunk, topX, s.y + THUNDER_HEIGHT, topZ, s.x, s.y, s.z, BOLT_TRUNK_LEVELS, 0.2, rnd);
+    jaggedPath(bolt.trunk, topX, s.y + THUNDER_HEIGHT, topZ, s.x, s.y, s.z, BOLT_TRUNK_LEVELS, 0.2, this.random);
     const trunkPoints = (1 << BOLT_TRUNK_LEVELS) + 1;
     for (let i = 0; i < BOLT_BRANCHES; i++) {
       const at = Math.floor(vfx.range(5, trunkPoints - 6)) * 3, angle = vfx.random() * Math.PI * 2, length = vfx.range(1.4, 3);
-      jaggedPath(bolt.branches[i]!, bolt.trunk[at]!, bolt.trunk[at + 1]!, bolt.trunk[at + 2]!, bolt.trunk[at]! + Math.cos(angle) * length, bolt.trunk[at + 1]! - length * vfx.range(0.2, 0.8), bolt.trunk[at + 2]! + Math.sin(angle) * length, BOLT_BRANCH_LEVELS, 0.3, rnd);
+      jaggedPath(bolt.branches[i]!, bolt.trunk[at]!, bolt.trunk[at + 1]!, bolt.trunk[at + 2]!, bolt.trunk[at]! + Math.cos(angle) * length, bolt.trunk[at + 1]! - length * vfx.range(0.2, 0.8), bolt.trunk[at + 2]! + Math.sin(angle) * length, BOLT_BRANCH_LEVELS, 0.3, this.random);
     }
     for (let i = 0; i < BOLT_RADIALS; i++) {
-      const angle = ((i + vfx.random() * 0.8) / BOLT_RADIALS) * Math.PI * 2, length = vfx.range(2.2, 3.2), path = bolt.radial[i]!;
-      jaggedPath(path, s.x, s.y + 0.12, s.z, s.x + Math.cos(angle) * length, s.y + 0.12, s.z + Math.sin(angle) * length, BOLT_BRANCH_LEVELS, 0.22, rnd);
-      for (let p = 1; p < path.length / 3; p++) path[p * 3 + 1] = s.y + 0.1 + Math.abs(path[p * 3 + 1]! - (s.y + 0.12)) * 0.6 + vfx.random() * 0.06;
+      const angle = ((i + vfx.random() * 0.8) / BOLT_RADIALS) * Math.PI * 2, reach = vfx.range(0.72, 0.98), path = bolt.radial[i]!;
+      jaggedPath(path, s.x, s.y + 0.12, s.z, s.x + Math.cos(angle) * bolt.radiusX * reach, s.y + 0.12, s.z + Math.sin(angle) * bolt.radiusZ * reach, BOLT_BRANCH_LEVELS, 0.22, this.random);
+      for (let p = 1; p < path.length / 3; p++) {
+        const at = p * 3, dx = (path[at]! - s.x) / bolt.radiusX, dz = (path[at + 2]! - s.z) / bolt.radiusZ, distanceSq = dx * dx + dz * dz;
+        if (distanceSq > 1) { const scale = 1 / Math.sqrt(distanceSq); path[at] = s.x + dx * scale * bolt.radiusX; path[at + 2] = s.z + dz * scale * bolt.radiusZ; }
+        path[at + 1] = s.y + 0.1 + Math.abs(path[at + 1]! - (s.y + 0.12)) * 0.6 + vfx.random() * 0.06;
+      }
     }
   }
 
