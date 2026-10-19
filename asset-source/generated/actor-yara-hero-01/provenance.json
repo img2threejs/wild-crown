@@ -54,7 +54,7 @@
     ]
   },
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "8be9f6d3859a50c91625d25cdab413db545b37a2c3602e2e31e591b433dbabf7",
+  "outputHash": "436cb488a2b04c80625e4b1661275491dbfbffaaa5a9f26536d65c43c7a23ad5",
   "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
@@ -254,37 +254,32 @@
     {
       "clip": "aren-forward-left-dive-roll",
       "source": {
-        "donor": "b",
-        "animation": "dive"
+        "donor": "mixamo:asset-source/mixamo/yara/dodge-forward.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/dodge-forward.fbx"
       },
       "sim": {
         "totalTicks": 42
       },
       "window": [
-        0.15,
-        2.5
+        0,
+        1
       ],
       "airborne": true,
-      "limits": "JOINT_LIMITS",
+      "upright": 26,
+      "clearStaff": true,
+      "idleBlendTail": 0.25,
       "arm": {
-        "follow": 0.3,
+        "follow": 0.35,
         "keys": [
           {
             "t": 0,
-            "pose": "carry",
-            "w": 0.55
-          },
-          {
-            "t": 21,
-            "w": 0.2
-          },
-          {
-            "t": 42,
-            "w": 0.55
+            "pose": "carry"
           }
         ]
       },
-      "clearArms": true
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
     },
     {
       "clip": "aren-hit",
@@ -612,9 +607,9 @@
     {
       "clip": "yara-thornshot-1",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/sakda/jab-cross-medium.fbx:in-place",
+        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-01.fbx:in-place",
         "animation": "mixamo.com",
-        "file": "asset-source/mixamo/sakda/jab-cross-medium.fbx"
+        "file": "asset-source/mixamo/yara/1h-magic-attack-01.fbx"
       },
       "sim": {
         "totalTicks": 26,
@@ -622,573 +617,7 @@
       },
       "window": [
         0.35,
-        1
-      ],
-      "idleBlendTail": 0.35,
-      "contact": {
-        "joints": [
-          "LeftHand"
-        ],
-        "search": [
-          0.4,
-          0.75
-        ],
-        "settle": 0
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          },
-          {
-            "t": 9,
-            "pose": "carry",
-            "staff": [
-              0,
-              74
-            ]
-          },
-          {
-            "t": 26,
-            "pose": "carry"
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-thornshot-2",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/thrust-slash.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/thrust-slash.fbx"
-      },
-      "sim": {
-        "totalTicks": 28,
-        "activeTick": 10
-      },
-      "window": [
-        0.4,
-        1.3
-      ],
-      "idleBlendTail": 0.35,
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          0.5,
-          0.95
-        ],
-        "settle": 0
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          },
-          {
-            "t": 5,
-            "pose": "guard"
-          },
-          {
-            "t": 10,
-            "pose": "thrust"
-          },
-          {
-            "t": 17,
-            "pose": "thrust"
-          },
-          {
-            "t": 28,
-            "pose": "carry"
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-thornshot-3",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/melee-downward.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/melee-downward.fbx"
-      },
-      "sim": {
-        "totalTicks": 34
-      },
-      "window": [
-        0.35,
-        1.3
-      ],
-      "idleBlendTail": 0.35,
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry",
-            "gw": 0
-          },
-          {
-            "t": 5,
-            "pose": "overhead",
-            "gw": 1,
-            "grip": -0.26,
-            "hand": [
-              0.16,
-              0.17,
-              -0.02
-            ],
-            "staff": [
-              0,
-              52
-            ]
-          },
-          {
-            "t": 10,
-            "hand": [
-              0.2,
-              0.17,
-              -0.02
-            ],
-            "staff": [
-              0,
-              36
-            ]
-          },
-          {
-            "t": 18,
-            "hand": [
-              0.2,
-              0.15,
-              -0.02
-            ],
-            "staff": [
-              0,
-              40
-            ]
-          },
-          {
-            "t": 34,
-            "pose": "carry",
-            "gw": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-root-spike",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/melee-horizontal-rl.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/melee-horizontal-rl.fbx"
-      },
-      "sim": {
-        "totalTicks": 63,
-        "activeTick": 20
-      },
-      "window": [
-        0.45,
-        2
-      ],
-      "idleBlendTail": 0.3,
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          0.8,
-          1.1
-        ],
-        "settle": 0
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          },
-          {
-            "t": 12,
-            "hand": [
-              0.05,
-              -0.13,
-              0.15
-            ],
-            "staff": [
-              -55,
-              -12
-            ]
-          },
-          {
-            "t": 20,
-            "hand": [
-              0.22,
-              -0.2,
-              0.06
-            ],
-            "staff": [
-              8,
-              -26
-            ]
-          },
-          {
-            "t": 28,
-            "hand": [
-              0.22,
-              -0.2,
-              0.06
-            ],
-            "staff": [
-              8,
-              -32
-            ]
-          },
-          {
-            "t": 63,
-            "pose": "carry"
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-root-charge",
-      "source": {
-        "donor": "d",
-        "animation": "standing_relax"
-      },
-      "sim": {
-        "totalTicks": 90
-      },
-      "window": [
-        4,
-        7.5
-      ],
-      "loop": {
-        "overlapSeconds": 0.3
-      },
-      "sway": {
-        "joints": [
-          "Spine1",
-          "Spine2",
-          "Head"
-        ],
-        "amplitude": 0.02
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.15,
-              0.19,
-              -0.02
-            ],
-            "staff": [
-              0,
-              84
-            ],
-            "gw": 1,
-            "grip": -0.24
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-root-eruption",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/melee-downward.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/melee-downward.fbx"
-      },
-      "sim": {
-        "totalTicks": 76,
-        "activeTick": 36
-      },
-      "window": [
-        0.1,
-        1.9
-      ],
-      "idleBlendTail": 0.25,
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          0.6,
-          1
-        ],
-        "settle": 0
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry",
-            "gw": 0
-          },
-          {
-            "t": 14,
-            "hand": [
-              0.15,
-              0.19,
-              -0.02
-            ],
-            "staff": [
-              0,
-              82
-            ],
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 26,
-            "hand": [
-              0.15,
-              0.19,
-              -0.02
-            ],
-            "staff": [
-              0,
-              84
-            ]
-          },
-          {
-            "t": 36,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 48,
-            "pose": "plant"
-          },
-          {
-            "t": 70,
-            "pose": "carry",
-            "gw": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-seed-charge",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/melee-idle.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/melee-idle.fbx"
-      },
-      "sim": {
-        "totalTicks": 90
-      },
-      "window": [
-        0,
-        1.8
-      ],
-      "loop": {
-        "overlapSeconds": 0.3
-      },
-      "sway": {
-        "joints": [
-          "Spine1",
-          "Spine2",
-          "Head"
-        ],
-        "amplitude": 0.015
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.21,
-              -0.06,
-              0.05
-            ],
-            "staff": [
-              0,
-              14
-            ],
-            "gw": 1,
-            "grip": 0.36
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-sap-lance",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/thrust-slash.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/thrust-slash.fbx"
-      },
-      "sim": {
-        "totalTicks": 30,
-        "activeTick": 16
-      },
-      "window": [
-        0.35,
-        1.3
-      ],
-      "idleBlendTail": 0.3,
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          0.5,
-          0.95
-        ],
-        "settle": 0
-      },
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.21,
-              -0.06,
-              0.05
-            ],
-            "staff": [
-              0,
-              14
-            ],
-            "gw": 1,
-            "grip": 0.36
-          },
-          {
-            "t": 8,
-            "hand": [
-              0.12,
-              -0.07,
-              0.06
-            ],
-            "staff": [
-              0,
-              14
-            ]
-          },
-          {
-            "t": 16,
-            "hand": [
-              0.3,
-              -0.02,
-              0.04
-            ],
-            "staff": [
-              0,
-              6
-            ]
-          },
-          {
-            "t": 22,
-            "hand": [
-              0.3,
-              -0.02,
-              0.04
-            ]
-          },
-          {
-            "t": 30,
-            "pose": "carry",
-            "gw": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-seed-storm",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/melee-360-high.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/melee-360-high.fbx"
-      },
-      "sim": {
-        "totalTicks": 60
-      },
-      "window": [
-        0.2,
-        2
-      ],
-      "idleBlendTail": 0.3,
-      "arm": {
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          },
-          {
-            "t": 10,
-            "hand": [
-              0,
-              0.02,
-              0.27
-            ],
-            "staff": [
-              -90,
-              12
-            ]
-          },
-          {
-            "t": 46,
-            "hand": [
-              0,
-              0.02,
-              0.27
-            ],
-            "staff": [
-              -90,
-              12
-            ]
-          },
-          {
-            "t": 60,
-            "pose": "carry"
-          }
-        ]
-      },
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-binding-vines",
-      "source": {
-        "donor": "mixamo:asset-source/mixamo/vesper/sword-inward-slash.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/vesper/sword-inward-slash.fbx"
-      },
-      "sim": {
-        "totalTicks": 54,
-        "activeTick": 18
-      },
-      "window": [
-        0.9,
-        1.9
+        1.5
       ],
       "mirror": true,
       "idleBlendTail": 0.3,
@@ -1197,154 +626,560 @@
           "LeftHand"
         ],
         "search": [
-          1,
+          0.6,
+          1
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.35,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-thornshot-2",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-02.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/1h-magic-attack-02.fbx"
+      },
+      "sim": {
+        "totalTicks": 28,
+        "activeTick": 10
+      },
+      "window": [
+        0.2,
+        1.4
+      ],
+      "mirror": true,
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          0.35,
+          0.65
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.35,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-thornshot-3",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/1h-cast-spell-01.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/1h-cast-spell-01.fbx"
+      },
+      "sim": {
+        "totalTicks": 34,
+        "activeTick": 10
+      },
+      "window": [
+        0.3,
+        1.5
+      ],
+      "mirror": true,
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          0.45,
+          0.75
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.35,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-spike",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-02.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-attack-02.fbx"
+      },
+      "sim": {
+        "totalTicks": 63,
+        "activeTick": 20
+      },
+      "window": [
+        0.3,
+        2.4
+      ],
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "LeftHand",
+          "RightHand"
+        ],
+        "search": [
+          1.1,
           1.4
         ],
         "settle": 0
       },
       "arm": {
+        "follow": 0.2,
         "keys": [
           {
             "t": 0,
             "pose": "carry"
           },
           {
-            "t": 18,
-            "pose": "carry",
-            "staff": [
-              0,
-              72
+            "t": 6,
+            "pose": "ready"
+          },
+          {
+            "t": 12,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
             ]
           },
           {
-            "t": 54,
+            "t": 20,
+            "pose": "plant"
+          },
+          {
+            "t": 40,
+            "pose": "plant"
+          },
+          {
+            "t": 63,
             "pose": "carry"
           }
         ]
       },
       "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-charge",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-03.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-attack-03.fbx"
+      },
+      "sim": {
+        "totalTicks": 90
+      },
+      "window": [
+        1.6,
+        3.1
+      ],
+      "loop": {
+        "overlapSeconds": 0.3
+      },
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ]
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-root-eruption",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-area-02.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-area-02.fbx"
+      },
+      "sim": {
+        "totalTicks": 76,
+        "activeTick": 36
+      },
+      "window": [
+        0.3,
+        3
+      ],
+      "idleBlendTail": 0.25,
+      "contact": {
+        "joints": [
+          "LeftHand",
+          "RightHand"
+        ],
+        "search": [
+          1.6,
+          1.95
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 10,
+            "pose": "ready"
+          },
+          {
+            "t": 20,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ]
+          },
+          {
+            "t": 36,
+            "pose": "plant"
+          },
+          {
+            "t": 56,
+            "pose": "plant"
+          },
+          {
+            "t": 76,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-seed-charge",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-04.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-attack-04.fbx"
+      },
+      "sim": {
+        "totalTicks": 90
+      },
+      "window": [
+        1.4,
+        2.6
+      ],
+      "loop": {
+        "overlapSeconds": 0.3
+      },
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "ready"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-sap-lance",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-01.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-attack-01.fbx"
+      },
+      "sim": {
+        "totalTicks": 30,
+        "activeTick": 16
+      },
+      "window": [
+        0.6,
+        1.7
+      ],
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          1,
+          1.25
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "ready"
+          },
+          {
+            "t": 16,
+            "pose": "ready"
+          },
+          {
+            "t": 22,
+            "pose": "ready"
+          },
+          {
+            "t": 30,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-seed-storm",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/wide-arm-spell.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/wide-arm-spell.fbx"
+      },
+      "sim": {
+        "totalTicks": 60
+      },
+      "window": [
+        0.4,
+        2.6
+      ],
+      "idleBlendTail": 0.25,
+      "arm": {
+        "follow": 0.2,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          },
+          {
+            "t": 5,
+            "pose": "ready"
+          },
+          {
+            "t": 11,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ]
+          },
+          {
+            "t": 46,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ]
+          },
+          {
+            "t": 53,
+            "pose": "ready"
+          },
+          {
+            "t": 60,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
+      "clearArms": true,
+      "limits": "COMBAT_LIMITS"
+    },
+    {
+      "clip": "yara-binding-vines",
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-03.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/1h-magic-attack-03.fbx"
+      },
+      "sim": {
+        "totalTicks": 54,
+        "activeTick": 18
+      },
+      "window": [
+        0.3,
+        1.8
+      ],
+      "mirror": true,
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "LeftHand"
+        ],
+        "search": [
+          0.8,
+          1.1
+        ],
+        "settle": 0
+      },
+      "arm": {
+        "follow": 0.35,
+        "keys": [
+          {
+            "t": 0,
+            "pose": "carry"
+          }
+        ]
+      },
+      "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
       "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
       "clip": "yara-cleanse",
       "source": {
-        "donor": "d",
-        "animation": "standing_relax"
+        "donor": "mixamo:asset-source/mixamo/yara/magic-heal.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/magic-heal.fbx"
       },
       "sim": {
         "totalTicks": 108
       },
       "window": [
-        4,
-        7.5
+        0.3,
+        2.6
       ],
-      "sway": {
-        "joints": [
-          "Spine1",
-          "Spine2",
-          "Head"
-        ],
-        "amplitude": 0.02
-      },
+      "mirror": true,
+      "idleBlendTail": 0.2,
       "arm": {
+        "follow": 0.35,
         "keys": [
           {
             "t": 0,
-            "pose": "carry",
-            "gw": 0
-          },
-          {
-            "t": 22,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.28,
-            "staff": [
-              0,
-              86
-            ]
-          },
-          {
-            "t": 80,
-            "pose": "plant",
-            "staff": [
-              0,
-              86
-            ]
-          },
-          {
-            "t": 100,
-            "pose": "carry",
-            "gw": 0
+            "pose": "carry"
           }
         ]
       },
       "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
       "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
       "clip": "yara-heartroot-bloom",
       "source": {
-        "donor": "d",
-        "animation": "standing_relax"
+        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-05.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/yara/2h-magic-attack-05.fbx"
       },
       "sim": {
         "totalTicks": 156
       },
       "window": [
-        4,
-        7.5
+        1.4,
+        3.5
       ],
-      "sway": {
-        "joints": [
-          "Spine1",
-          "Spine2",
-          "Head"
-        ],
-        "amplitude": 0.02
-      },
+      "idleBlendTail": 0.15,
       "arm": {
+        "follow": 0.2,
         "keys": [
           {
             "t": 0,
             "pose": "carry"
           },
           {
-            "t": 16,
-            "pose": "high"
+            "t": 8,
+            "pose": "ready"
           },
           {
-            "t": 120,
-            "pose": "high"
-          },
-          {
-            "t": 130,
+            "t": 18,
             "pose": "high",
-            "staff": [
-              0,
-              100
-            ]
-          },
-          {
-            "t": 134,
             "hand": [
-              0.26,
-              0.04,
-              0.05
-            ],
-            "staff": [
-              0,
-              -18
+              0.17,
+              0.25,
+              0.08
             ]
           },
           {
-            "t": 148,
+            "t": 124,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ]
+          },
+          {
+            "t": 132,
+            "pose": "plant"
+          },
+          {
+            "t": 146,
+            "pose": "plant"
+          },
+          {
+            "t": 156,
             "pose": "carry"
           }
         ]
       },
       "facing": 28,
+      "upright": 26,
+      "clearStaff": true,
       "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },

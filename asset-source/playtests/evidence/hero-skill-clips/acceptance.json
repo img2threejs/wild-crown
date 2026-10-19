@@ -20,7 +20,35 @@
   ],
   "files": [
     "aren-skills.webp",
-    "yara-skills.webp",
-    "audit-after.json"
-  ]
+    "audit-after.json",
+    "audit-yara-mage.json",
+    "yara-skills.webp"
+  ],
+  "yaraMage": {
+    "request": "Yara's skills redone as a sorceress: casting gestures, a human body that never folds into itself or passes through itself.",
+    "source": "17 Mixamo Magic-pack takes downloaded in the user's signed-in Mixamo account (asset-source/mixamo/yara, ledger asset-source/mixamo/provenance.json; Y Bot, FBX, no skin, 30 fps, no keyframe reduction). No paid generation.",
+    "mapping": {
+      "yara-thornshot-1": "1h-magic-attack-01 (mirrored)",
+      "yara-thornshot-2": "1h-magic-attack-02 (mirrored)",
+      "yara-thornshot-3": "1h-cast-spell-01 (mirrored)",
+      "yara-root-spike": "2h-magic-attack-02",
+      "yara-root-charge": "2h-magic-attack-03",
+      "yara-root-eruption": "2h-magic-area-02",
+      "yara-seed-charge": "2h-magic-attack-04",
+      "yara-sap-lance": "2h-magic-attack-01",
+      "yara-seed-storm": "wide-arm-spell",
+      "yara-binding-vines": "1h-magic-attack-03 (mirrored)",
+      "yara-cleanse": "magic-heal (mirrored)",
+      "yara-heartroot-bloom": "2h-magic-attack-05",
+      "aren-forward-left-dive-roll (Petal Step / evasions)": "dodge-forward"
+    },
+    "bodyRules": "limitLean keeps the trunk within 26 deg of vertical; clearArms keeps the arms out of trunk, head and legs; staffClearance turns the hand so the shaft stays out of legs, trunk and floor (deepest after <= 1.1 cm, from up to 7.9 cm); raised staff routed through the front of the body.",
+    "meshAudit": "audit-yara-mage.json (runtime solver on): 13 Yara skill/evasion clips, mean buried vertices 714 -> 6 against the committed clips before #134; worst 9.5 cm at <= 10 vertices (hair against the upper arm). Without the runtime solver the same 6.",
+    "playback": "yara-skills.webp: every clip played through mountHeroPreview (the Skills tab path) at game speed (clipSlowdown 1.5); the real Skills tab and a Greenwake trial (J,J,J,K,L,Q,F) ran with no console errors.",
+    "limits": [
+      "Mixamo's casts are empty-handed: the staff is held by the arm layer, not by the captured take, so the staff hand's motion is authored, not captured.",
+      "Root Spike, Sap Lance and Seed Charge keep the donors' lunging stance (hips about 15 % lower than her idle, trunk at the 26 deg limit).",
+      "aren-air-step (double jump) was not re-authored."
+    ]
+  }
 }

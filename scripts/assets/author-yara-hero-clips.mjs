@@ -385,6 +385,37 @@ function armLayer(context, frames, count, layer, limits) {
  * Donor stances turn the body sideways to cast. The simulation aims along the actor's facing, so the chest heading is kept within `maxDegrees` of the facing:
  * the excess is a smooth (tanh) rotation of the hips about the vertical, which carries the whole body.
  */
+/**
+ * Keeps the trunk upright: wherever the Hips → Neck line leans more than `maxDegrees` from vertical (a donor hunching or bowing over its cast), the
+ * excess is rotated back out of the spine, shared over Spine, Spine1 and Spine2 (rotation about the horizontal axis across the lean, in world space),
+ * with a soft knee (tanh) so a lean just past the limit is barely touched. Legs, hips and arms keep their captured motion.
+ */
+const UPRIGHT_SHARES = [['Spine', 0.34], ['Spine1', 0.33], ['Spine2', 0.33]];
+function limitLean(target, frames, count, maxDegrees) {
+  const hips = target.index.get('mixamorig:Hips'), neck = target.index.get('mixamorig:Neck'), limit = maxDegrees * DEG;
+  const h = new Vector3(), n = new Vector3(), dir = new Vector3(), axis = new Vector3(), parentWorld = new Quaternion(), turn = new Quaternion(), local = new Quaternion();
+  for (let k = 0; k < count; k += 1) {
+    let world = target.poseFrame(frames, k);
+    h.setFromMatrixPosition(world[hips]); n.setFromMatrixPosition(world[neck]);
+    dir.subVectors(n, h).normalize();
+    const lean = Math.acos(Math.min(1, Math.max(-1, dir.dot(UP))));
+    if (lean <= limit * 0.5) continue;
+    const allowed = limit * 0.5 + limit * 0.5 * Math.tanh((lean - limit * 0.5) / (limit * 0.5)), correction = lean - allowed;
+    if (correction < 1e-4) continue;
+    axis.crossVectors(dir, UP);
+    if (axis.lengthSq() < 1e-10) continue;
+    axis.normalize();
+    for (const [name, share] of UPRIGHT_SHARES) {
+      const node = target.index.get(`mixamorig:${name}`);
+      world = target.poseFrame(frames, k);
+      quaternionOf(world[target.parent[node]], parentWorld);
+      turn.setFromAxisAngle(axis, correction * share);
+      local.fromArray(frames.rotations[node], k * 4);
+      local.premultiply(parentWorld.clone().invert().multiply(turn).multiply(parentWorld)).normalize().toArray(frames.rotations[node], k * 4);
+    }
+  }
+}
+
 function faceForward(target, frames, count, maxDegrees) {
   const hips = target.index.get('mixamorig:Hips'), chest = target.index.get('mixamorig:Spine2'), parent = target.parent[hips];
   const chestRestInverse = target.restWorldQuaternion[chest].clone().invert();
@@ -819,7 +850,9 @@ add('aren-idle', 'a', 'idle', 240, [2, 6], { loop: { overlapSeconds: 0.4 }, limi
 add('aren-walk', 'a', 'walk', 142, [0, 2.3666665554], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.5, pitchPerUnit: 90, keys: [{ t: 0, pose: 'carry' }] } });
 add('aren-run', 'a', 'run', 76, [0, 1.26666665], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.45, pitchPerUnit: 50, keys: [{ t: 0, pose: 'carry', hand: [0.19, -0.1, 0.03] }] } });
 add('aren-jump', 'b', 'jump', 42, [0, 2.23333335], { airborne: true, limits: LOCOMOTION, arm: { follow: 0.25, keys: [{ t: 0, pose: 'carry', w: 0.9 }] } });
-add('aren-forward-left-dive-roll', 'b', 'dive', 42, [0.15, 2.5], { airborne: true, limits: LOCOMOTION, arm: { follow: 0.3, keys: [{ t: 0, pose: 'carry', w: 0.55 }, { t: 21, w: 0.2 }, { t: 42, w: 0.55 }] } });
+// Petal Step (every evasion action plays it): a light forward bound with the staff carried upright (Mixamo Standing Dodge Forward, in place: the simulation moves her).
+specs.push({ clip: 'aren-forward-left-dive-roll', source: { donor: 'mixamo', file: 'asset-source/mixamo/yara/dodge-forward.fbx', inPlace: true }, sim: { totalTicks: 42 }, window: [0, 1.0], airborne: true,
+  upright: 26, clearStaff: true, idleBlendTail: 0.25, arm: { follow: 0.35, keys: [{ t: 0, pose: 'carry' }] } });
 add('aren-hit', 'b', 'hurt', 24, [0, 1.4]);
 add('aren-cheer', 'b', 'cheer', 300, [0, 5], { limits: LOCOMOTION });
 add('aren-defeat', 'b', 'defeat_02', 360, [0, 8.46666622], { limits: LOCOMOTION });
@@ -844,46 +877,43 @@ lieClip('aren-getup-forward', 66, [
 // Heartroot skills. Release ticks are the simulation's (HEARTROOT_* / LIGHT_STEPS / SIGIL in src/game/combat): thorn bolts on tick 9/10/10, Root Spike on 20 (of 63),
 // Eruption on 36 (of 76), Sap Lance launch on 16, Seed Storm launches on 12–42 every 6, Bloom meteors from 30 and its pulse on 132 (of 156).
 const FACE = 28;
-const BRACE = { hand: [0.21, -0.06, 0.05], staff: [0, 14] };
-const TWO_HAND = { gw: 1, grip: 0.36 };
-// Every skill is authored on captured Mixamo sword / martial takes (asset-source/mixamo/{vesper,sakda}); the arm layer below only keeps the staff in her hands.
-const MXY = (name, dir = 'vesper') => ({ donor: 'mixamo', file: `asset-source/mixamo/${dir}/${name}.fbx`, inPlace: true });
-const addMx = (clip, source, ticks, window, extra = {}) => specs.push({ clip, source, sim: { totalTicks: ticks }, window, ...extra });
-// Thornshot 1: the free left hand flicks an open-palm thorn while the staff stays at the ready.
-addMx('yara-thornshot-1', MXY('jab-cross-medium', 'sakda'), 26, [0.35, 1.0], { sim: { totalTicks: 26, activeTick: 9 }, idleBlendTail: 0.35, contact: { joints: ['LeftHand'], search: [0.4, 0.75], settle: 0 },
-  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 9, pose: 'carry', staff: [0, 74] }, { t: 26, pose: 'carry' }] } });
-// Thornshot 2: a staff-tip thrust, hand drawn back and driven forward on the release tick.
-addMx('yara-thornshot-2', MXY('thrust-slash'), 28, [0.4, 1.3], { sim: { totalTicks: 28, activeTick: 10 }, idleBlendTail: 0.35, contact: { joints: ['RightHand'], search: [0.5, 0.95], settle: 0 },
-  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 5, pose: 'guard' }, { t: 10, pose: 'thrust' }, { t: 17, pose: 'thrust' }, { t: 28, pose: 'carry' }] } });
-// Thornshot 3: both hands lob a seed over the shoulder.
-addMx('yara-thornshot-3', MXY('melee-downward'), 34, [0.35, 1.3], { sim: { totalTicks: 34 }, idleBlendTail: 0.35,
-  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 5, pose: 'overhead', ...TWO_HAND, grip: -0.26, hand: [0.16, 0.17, -0.02], staff: [0, 52] }, { t: 10, hand: [0.2, 0.17, -0.02], staff: [0, 36] }, { t: 18, hand: [0.2, 0.15, -0.02], staff: [0, 40] }, { t: 34, pose: 'carry', gw: 0 }] } });
-// Root Spike: a low backswing and sweep that drives the staff tip along the ground lane on tick 20.
-addMx('yara-root-spike', MXY('melee-horizontal-rl'), 63, [0.45, 2.0], { sim: { totalTicks: 63, activeTick: 20 }, idleBlendTail: 0.3, contact: { joints: ['RightHand'], search: [0.8, 1.1], settle: 0 },
-  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 12, hand: [0.05, -0.13, 0.15], staff: [-55, -12] }, { t: 20, hand: [0.22, -0.2, 0.06], staff: [8, -26] }, { t: 28, hand: [0.22, -0.2, 0.06], staff: [8, -32] }, { t: 63, pose: 'carry' }] } });
-// Root charge: both hands raise the staff overhead; the loop breathes.
-add('yara-root-charge', 'd', 'standing_relax', 90, [4, 7.5], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
-  arm: { keys: [{ t: 0, hand: [0.15, 0.19, -0.02], staff: [0, 84], ...TWO_HAND, grip: -0.24 }] } });
-// Root Eruption: staff raised, then plunged into the ground on tick 36 in a deep lunge, then rises.
-addMx('yara-root-eruption', MXY('melee-downward'), 76, [0.1, 1.9], { sim: { totalTicks: 76, activeTick: 36 }, idleBlendTail: 0.25, contact: { joints: ['RightHand'], search: [0.6, 1.0], settle: 0 },
-  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 14, hand: [0.15, 0.19, -0.02], staff: [0, 82], ...TWO_HAND, grip: -0.26 }, { t: 26, hand: [0.15, 0.19, -0.02], staff: [0, 84] }, { t: 36, pose: 'plant', ...TWO_HAND, grip: -0.26 }, { t: 48, pose: 'plant' }, { t: 70, pose: 'carry', gw: 0 }] } });
-// Seed charge: braced two-hand stance, staff levelled at the target; the loop breathes.
-addMx('yara-seed-charge', MXY('melee-idle'), 90, [0, 1.8], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.015 },
-  arm: { keys: [{ t: 0, ...BRACE, ...TWO_HAND }] } });
-// Sap Lance: pulled back, then driven forward on the launch tick 16; both hands on the shaft.
-addMx('yara-sap-lance', MXY('thrust-slash'), 30, [0.35, 1.3], { sim: { totalTicks: 30, activeTick: 16 }, idleBlendTail: 0.3, contact: { joints: ['RightHand'], search: [0.5, 0.95], settle: 0 },
-  arm: { keys: [{ t: 0, ...BRACE, ...TWO_HAND }, { t: 8, hand: [0.12, -0.07, 0.06], staff: [0, 14] }, { t: 16, hand: [0.3, -0.02, 0.04], staff: [0, 6] }, { t: 22, hand: [0.3, -0.02, 0.04] }, { t: 30, pose: 'carry', gw: 0 }] } });
-// Seed Storm: a spin with the staff swept out to her side while six seeds leave on ticks 12–42.
-addMx('yara-seed-storm', MXY('melee-360-high'), 60, [0.2, 2.0], { idleBlendTail: 0.3, arm: { keys: [{ t: 0, pose: 'carry' }, { t: 10, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 46, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 60, pose: 'carry' }] } });
-// Binding Vines: the free left hand whips the vine (mirrored inward cut) while the staff stays low at her side.
-addMx('yara-binding-vines', MXY('sword-inward-slash'), 54, [0.9, 1.9], { mirror: true, sim: { totalTicks: 54, activeTick: 18 }, idleBlendTail: 0.3, contact: { joints: ['LeftHand'], search: [1.0, 1.4], settle: 0 },
-  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 18, pose: 'carry', staff: [0, 72] }, { t: 54, pose: 'carry' }] } });
-// Cleanse: she plants the staff upright in front of her and channels with both hands, then lets go.
-add('yara-cleanse', 'd', 'standing_relax', 108, [4, 7.5], { sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
-  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 22, pose: 'plant', ...TWO_HAND, grip: -0.28, staff: [0, 86] }, { t: 80, pose: 'plant', staff: [0, 86] }, { t: 100, pose: 'carry', gw: 0 }] } });
-// Heartroot Bloom: rising invocation with the staff held high, arms open to the sky, and a final pulse on tick 132.
-add('yara-heartroot-bloom', 'd', 'standing_relax', 156, [4, 7.5], { sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
-  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 16, pose: 'high' }, { t: 120, pose: 'high' }, { t: 130, pose: 'high', staff: [0, 100] }, { t: 134, hand: [0.26, 0.04, 0.05], staff: [0, -18] }, { t: 148, pose: 'carry' }] } });
+// Every Heartroot skill is a captured Mixamo spell-casting take (asset-source/mixamo/yara: the Magic packs, Y Bot, 30 fps, no keyframe reduction). One-handed casts
+// are mirrored so her free left hand casts; the right hand keeps the staff (arm layer below, `follow` lets it ride the body's motion) and only raises,
+// levels or plants it. Finite casts land the casting hand's fastest motion on the simulation release tick and blend back into the idle at the end.
+const MAGIC = (name) => ({ donor: 'mixamo', file: `asset-source/mixamo/yara/${name}.fbx`, inPlace: true });
+const cast = (clip, name, ticks, window, extra = {}) => specs.push({ clip, source: MAGIC(name), sim: { totalTicks: ticks }, window, ...extra });
+const LEFT = ['LeftHand'], BOTH = ['LeftHand', 'RightHand'];
+const STAFF_AT_SIDE = { follow: 0.35, keys: [{ t: 0, pose: 'carry' }] };
+/** The staff raised high but held clear in front of the head (the plain `high` hand passes the temple while a cast turns the chest). */
+const RAISED = { pose: 'high', hand: [0.17, 0.25, 0.08] };
+// Thornshot 1: a one-handed forward cast flings the homing thorn.
+cast('yara-thornshot-1', '1h-magic-attack-01', 26, [0.35, 1.5], { mirror: true, sim: { totalTicks: 26, activeTick: 9 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.6, 1.0], settle: 0 }, arm: STAFF_AT_SIDE });
+// Thornshot 2: a sweeping right-to-left cast throws the twin thorns.
+cast('yara-thornshot-2', '1h-magic-attack-02', 28, [0.2, 1.4], { mirror: true, sim: { totalTicks: 28, activeTick: 10 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.35, 0.65], settle: 0 }, arm: STAFF_AT_SIDE });
+// Thornshot 3: an upward cast lobs the seed that bursts into a blossom.
+cast('yara-thornshot-3', '1h-cast-spell-01', 34, [0.3, 1.5], { mirror: true, sim: { totalTicks: 34, activeTick: 10 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.45, 0.75], settle: 0 }, arm: STAFF_AT_SIDE });
+// Root Spike: a two-handed forward cast sends the roots along the lane; the staff is raised and struck down on the release tick.
+cast('yara-root-spike', '2h-magic-attack-02', 63, [0.3, 2.4], { sim: { totalTicks: 63, activeTick: 20 }, idleBlendTail: 0.3, contact: { joints: BOTH, search: [1.1, 1.4], settle: 0 },
+  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 6, pose: 'ready' }, { t: 12, ...RAISED }, { t: 20, pose: 'plant' }, { t: 40, pose: 'plant' }, { t: 63, pose: 'carry' }] } });
+// Root charge (held): the sustained two-handed cast, staff raised.
+cast('yara-root-charge', '2h-magic-attack-03', 90, [1.6, 3.1], { loop: { overlapSeconds: 0.3 }, arm: { follow: 0.2, keys: [{ t: 0, ...RAISED }] } });
+// Heartroot Eruption: pull the power in, blast it out under the foe on tick 36 with the staff planted.
+cast('yara-root-eruption', '2h-magic-area-02', 76, [0.3, 3.0], { sim: { totalTicks: 76, activeTick: 36 }, idleBlendTail: 0.25, contact: { joints: BOTH, search: [1.6, 1.95], settle: 0 },
+  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 10, pose: 'ready' }, { t: 20, ...RAISED }, { t: 36, pose: 'plant' }, { t: 56, pose: 'plant' }, { t: 76, pose: 'carry' }] } });
+// Seed charge (held): the sustained forward cast, staff levelled at the target.
+cast('yara-seed-charge', '2h-magic-attack-04', 90, [1.4, 2.6], { loop: { overlapSeconds: 0.3 }, arm: { follow: 0.2, keys: [{ t: 0, pose: 'ready' }] } });
+// Sap Lance: a two-handed forward blast, staff levelled toward the target on the launch tick 16.
+cast('yara-sap-lance', '2h-magic-attack-01', 30, [0.6, 1.7], { sim: { totalTicks: 30, activeTick: 16 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [1.0, 1.25], settle: 0 },
+  arm: { follow: 0.2, keys: [{ t: 0, pose: 'ready' }, { t: 16, pose: 'ready' }, { t: 22, pose: 'ready' }, { t: 30, pose: 'carry' }] } });
+// Seed Storm: arms spread wide to call the volley down while six seeds leave on ticks 12–42; the staff is held high.
+cast('yara-seed-storm', 'wide-arm-spell', 60, [0.4, 2.6], { idleBlendTail: 0.25, arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 5, pose: 'ready' }, { t: 11, ...RAISED }, { t: 46, ...RAISED }, { t: 53, pose: 'ready' }, { t: 60, pose: 'carry' }] } });
+// Binding Vines: a one-handed upward sweep raises the vines on tick 18.
+cast('yara-binding-vines', '1h-magic-attack-03', 54, [0.3, 1.8], { mirror: true, sim: { totalTicks: 54, activeTick: 18 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.8, 1.1], settle: 0 }, arm: STAFF_AT_SIDE });
+// Cleanse: the one-handed healing cast, staff upright at her side.
+cast('yara-cleanse', 'magic-heal', 108, [0.3, 2.6], { mirror: true, idleBlendTail: 0.2, arm: STAFF_AT_SIDE });
+// Heartroot Bloom: rising out of the gather, she pulls the power up and brings the hands together; the staff stays high until the final pulse on tick 132 plants it.
+cast('yara-heartroot-bloom', '2h-magic-attack-05', 156, [1.4, 3.5], { idleBlendTail: 0.15,
+  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 8, pose: 'ready' }, { t: 18, ...RAISED }, { t: 124, ...RAISED }, { t: 132, pose: 'plant' }, { t: 146, pose: 'plant' }, { t: 156, pose: 'carry' }] } });
 // Second jump ("treading the wind"): two air steps, a somersault tuck, open-out and a soft landing, in place.
 compose('aren-air-step', 60, [
   { donor: 'd', animation: 'run_upstairs', window: [0, 0.8], ticks: [0, 60] },
@@ -891,8 +921,9 @@ compose('aren-air-step', 60, [
   { donor: 'b', animation: 'jump', window: [1.2, 2.2], ticks: [40, 60] },
 ], { airborne: true, idleBlendTail: 0.3, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, arm: { follow: 0.3, keys: [{ t: 0, pose: 'carry', w: 0.8 }, { t: 14, w: 0.8 }, { t: 24, w: 0.2 }, { t: 44, w: 0.2 }, { t: 54, w: 0.8 }, { t: 60, w: 0.8 }] } });
 
-// Every skill faces the target along the simulation's facing; only the Seed Storm spin turns the whole body.
-for (const spec of specs) if (spec.clip.startsWith('yara-') && spec.clip !== 'yara-seed-storm') spec.facing = FACE;
+// Every skill faces the target along the simulation's facing, and keeps the trunk within UPRIGHT_DEGREES of vertical (a caster stands tall).
+const UPRIGHT_DEGREES = 26;
+for (const spec of specs) if (spec.clip.startsWith('yara-')) { spec.facing = FACE; spec.upright = UPRIGHT_DEGREES; spec.clearStaff = true; }
 // Every clip built from donor motion keeps the arms out of the trunk, head and legs (arm-body-clearance.mjs); the captured knockdown and get-up takes are left as recorded.
 for (const spec of specs) if (!spec.lie && !spec.getup) spec.clearArms = true;
 
@@ -1116,11 +1147,14 @@ function makeClip(spec) {
   if (spec.idleBlendTail) blendTailToIdle(clip, produce(specOf('aren-idle')), spec.idleBlendTail);
   const limits = spec.limits ?? COMBAT_LIMITS;
   if (spec.pin) pinHips(target, clip.frames, clip.count, spec.pin.maxVertical);
+  if (spec.upright) limitLean(target, clip.frames, clip.count, spec.upright);
   if (spec.facing !== undefined) faceForward(target, clip.frames, clip.count, spec.facing);
   let staffTilt;
   if (spec.arm) staffTilt = armLayer(context, clip.frames, clip.count, spec.arm, limits);
   // Loops keep their seam bit-exact: the pass is a pure function of a frame, but the time smoothing is not periodic, so loops skip it.
   const armClearance = spec.clearArms ? clearArms(target, clip.frames, clip.count, { smooth: spec.loop ? 0 : 0.5 }) : undefined;
+  // Skills: the staff shaft is kept out of her legs, trunk and the floor by turning the hand (the same layer the falls use).
+  const staffReport = spec.clearStaff ? staffClearance(target, clip.frames, clip.count, spec.limits ?? COMBAT_LIMITS, { pinFirst: Boolean(spec.loop) }) : undefined;
   if (process.env.YARA_DEBUG) { const pre = jointExcursions(target, clip.frames, clip.count, limits); console.error(spec.clip, 'pre-limit', JSON.stringify(Object.fromEntries(Object.entries(pre).filter(([j]) => /Right(Arm|ForeArm|Hand|Shoulder)|Left(Arm|ForeArm|Hand)/.test(j)).map(([j, e]) => [j.replace('mixamorig:', ''), [Math.round(e.swing), Math.round(e.twist)]])))); }
   if (process.env.YARA_TRACE === spec.clip) {
     for (let k = 0; k < clip.count; k += 1) {
@@ -1140,6 +1174,7 @@ function makeClip(spec) {
     ...(staffTilt ? { staffTiltMax: Math.round(Math.max(...staffTilt) * 10) / 10, staffTiltMean: Math.round(staffTilt.reduce((s, v) => s + v, 0) / staffTilt.length * 10) / 10 } : {}),
     corrections,
     ...(armClearance ? { armClearance } : {}),
+    ...(staffReport ? { staffClearance: staffReport } : {}),
     ...(spec.pin ? { hipsTravel: (() => { const t = hipsTravel(target, clip.frames, clip.count); return { horizontalMetres: Math.round(t.horizontal * RIG_SCALE * 1e4) / 1e4, verticalMetres: Math.round(t.vertical * RIG_SCALE * 1e4) / 1e4 }; })() } : {}),
   };
   return clip;
@@ -1273,7 +1308,9 @@ for (const clip of clips) {
   deformation[clip.spec.clip] = { p99: measured.p99, p999: measured.p999, max: measured.max, worstBone: measured.worstBone };
 }
 const locomotion = ['aren-idle', 'aren-walk', 'aren-run', 'aren-jump', 'aren-forward-left-dive-roll'];
-const ceiling = Math.max(...locomotion.map((name) => deformation[name].p999));
+// The envelope is her native locomotion: the clips delivered now and, for the evasion clip that was re-authored from the native Tripo dive roll into the Mixamo
+// forward bound, the native dive's own measurement in the baseline (the native skin was approved at that stretch; the bound stays below it).
+const ceiling = Math.max(...locomotion.map((name) => Math.max(deformation[name].p999, baseline[name]?.deformation?.p999 ?? 0)));
 const anatomy = {
   schemaVersion: 1,
   grip: {
@@ -1281,7 +1318,7 @@ const anatomy = {
     palmHand: grip.palm.toArray().map((v) => Math.round(v * 1e6) / 1e6), shaftRadiusRig: Math.round(grip.shaftRadius * 1e6) / 1e6, metacarpalHand: grip.d.toArray().map((v) => Math.round(v * 1e6) / 1e6),
     thumbSideHand: grip.thumb.toArray().map((v) => Math.round(v * 1e6) / 1e6), palmNormalHand: grip.n.toArray().map((v) => Math.round(v * 1e6) / 1e6),
   },
-  deformationCeiling: { clips: locomotion, p999: ceiling },
+  deformationCeiling: { clips: locomotion, includesBaseline: true, p999: ceiling },
   clips: Object.fromEntries(clips.map((clip) => [clip.spec.clip, { ...report[clip.spec.clip], deformation: deformation[clip.spec.clip], before: baseline[clip.spec.clip] ?? null }])),
 };
 await writeFile(root + output + '/anatomy-report.json', JSON.stringify(anatomy, null, 2) + '\n');
