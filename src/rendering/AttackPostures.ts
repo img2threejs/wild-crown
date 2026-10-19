@@ -8,5 +8,5 @@ export const ATTACK_POSTURES: Readonly<Record<string, PostureProfile>> = {
   'aren-light-4': { coil: -0.1571, lean: 0.0960, peak: 0.33 },
   'aren-root-tether': { coil: 0.0000, lean: 0.0436, peak: 0.19 },
   'sakda-limb-1': { coil: 0.0000, lean: 0.0785, peak: 0.57 },
-  'yara-thornshot-3': { coil: -0.2793, lean: 0.0785, peak: 0.21 },
+  'yara-thornshot-3': { coil: -0.2793, lean: 0.0349, peak: 0.21 },
 };

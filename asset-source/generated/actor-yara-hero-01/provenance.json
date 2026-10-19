@@ -54,7 +54,7 @@
     ]
   },
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "f082fc8fbe6c9bf0c2cce528c472ad10e8e2d6aed47e44962c6d0730d86bdc31",
+  "outputHash": "1d4547f0658f8128a3ecdcf8dda07b4677202d70fbe4a5aef743ff45b87e1294",
   "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
@@ -158,7 +158,8 @@
             "pose": "carry"
           }
         ]
-      }
+      },
+      "clearArms": true
     },
     {
       "clip": "aren-walk",
@@ -186,7 +187,8 @@
             "pose": "carry"
           }
         ]
-      }
+      },
+      "clearArms": true
     },
     {
       "clip": "aren-run",
@@ -219,7 +221,8 @@
             ]
           }
         ]
-      }
+      },
+      "clearArms": true
     },
     {
       "clip": "aren-jump",
@@ -245,7 +248,8 @@
             "w": 0.9
           }
         ]
-      }
+      },
+      "clearArms": true
     },
     {
       "clip": "aren-forward-left-dive-roll",
@@ -279,7 +283,8 @@
             "w": 0.55
           }
         ]
-      }
+      },
+      "clearArms": true
     },
     {
       "clip": "aren-hit",
@@ -294,6 +299,7 @@
         0,
         1.4
       ],
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -309,7 +315,8 @@
         0,
         5
       ],
-      "limits": "JOINT_LIMITS"
+      "limits": "JOINT_LIMITS",
+      "clearArms": true
     },
     {
       "clip": "aren-defeat",
@@ -324,7 +331,8 @@
         0,
         8.46666622
       ],
-      "limits": "JOINT_LIMITS"
+      "limits": "JOINT_LIMITS",
+      "clearArms": true
     },
     {
       "clip": "aren-knockdown",
@@ -647,6 +655,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -698,6 +707,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -748,9 +758,9 @@
             "gw": 1,
             "grip": -0.26,
             "hand": [
-              0.1,
-              0.2,
-              0.06
+              0.16,
+              0.17,
+              -0.02
             ],
             "staff": [
               0,
@@ -760,9 +770,9 @@
           {
             "t": 10,
             "hand": [
-              0.22,
-              0.22,
-              0.05
+              0.2,
+              0.17,
+              -0.02
             ],
             "staff": [
               0,
@@ -772,9 +782,9 @@
           {
             "t": 18,
             "hand": [
-              0.22,
               0.2,
-              0.05
+              0.15,
+              -0.02
             ],
             "staff": [
               0,
@@ -789,6 +799,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -875,6 +886,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -906,9 +918,9 @@
           {
             "t": 0,
             "hand": [
-              0.08,
-              0.235,
-              0.05
+              0.15,
+              0.19,
+              -0.02
             ],
             "staff": [
               0,
@@ -920,6 +932,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -978,9 +991,9 @@
           {
             "t": 14,
             "hand": [
-              0.1,
-              0.2,
-              0.06
+              0.15,
+              0.19,
+              -0.02
             ],
             "staff": [
               0,
@@ -992,9 +1005,9 @@
           {
             "t": 26,
             "hand": [
-              0.1,
-              0.2,
-              0.06
+              0.15,
+              0.19,
+              -0.02
             ],
             "staff": [
               0,
@@ -1019,6 +1032,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1064,6 +1078,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1149,6 +1164,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1200,6 +1216,7 @@
           }
         ]
       },
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1248,6 +1265,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1329,6 +1347,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1404,6 +1423,7 @@
         ]
       },
       "facing": 28,
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
     {
@@ -1504,6 +1524,7 @@
           }
         ]
       },
+      "clearArms": true,
       "limits": "COMBAT_LIMITS"
     }
   ]

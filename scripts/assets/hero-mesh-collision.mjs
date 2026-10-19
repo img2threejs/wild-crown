@@ -32,7 +32,15 @@ const REGION_ORDER = Object.fromEntries(REGIONS.map((r, i) => [r, i]));
 
 /** The simplified runtime mesh of a hero GLB (`{ json, bin }`), compacted to the vertices its triangles use. */
 const CACHED = ['tris', 'pos', 'joint', 'weight', 'region', 'triRegion'];
-function cachePath(bin) { return `${tmpdir()}/wc-runtime-mesh-${createHash('sha1').update(`${CACHE_VERSION}`).update(bin).digest('hex').slice(0, 14)}.bin`; }
+/** Keyed by the mesh's own bytes (positions, skin, indices), so adding or re-authoring clips never invalidates the decimated mesh. */
+function cachePath(json, bin) {
+  const hash = createHash('sha1').update(`${CACHE_VERSION}`), primitive = json.meshes[0].primitives[0];
+  for (const id of [...Object.values(primitive.attributes), primitive.indices]) {
+    const accessor = json.accessors[id], view = json.bufferViews[accessor.bufferView], start = (view.byteOffset ?? 0) + (accessor.byteOffset ?? 0);
+    hash.update(bin.subarray(start, start + view.byteLength - (accessor.byteOffset ?? 0)));
+  }
+  return `${tmpdir()}/wc-runtime-mesh-${hash.digest('hex').slice(0, 14)}.bin`;
+}
 function loadCached(file, json, rig) {
   const buffer = readFileSync(file), headerLength = buffer.readUInt32LE(0), header = JSON.parse(buffer.subarray(4, 4 + headerLength).toString('utf8'));
   const mesh = { count: header.count };
@@ -48,7 +56,7 @@ function finishMesh(mesh, json, rig) {
 }
 export async function runtimeMesh(glb, rig) {
   const { json, bin } = glb, primitive = json.meshes[0].primitives[0];
-  const file = cachePath(bin);
+  const file = cachePath(json, bin);
   if (existsSync(file)) { const cached = loadCached(file, json, rig); cached.inverseBind = readAccessorAny(json, bin, json.skins[0].inverseBindMatrices); return cached; }
   const geometry = new BufferGeometry();
   const widths = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4 };

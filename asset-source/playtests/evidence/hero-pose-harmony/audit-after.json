@@ -5,29 +5,22 @@
   "vertices": 16042,
   "clips": {
    "aren-idle": {
-    "worstCm": 8,
+    "worstCm": 7.1,
     "peakVerts": 2,
-    "meanVerts": 1,
+    "meanVerts": 0,
     "top": [
      {
       "pair": "thighL>farmL",
-      "cm": 8,
+      "cm": 7.1,
       "verts": 1,
-      "frame": 109.5,
-      "t": 3.667
-     },
-     {
-      "pair": "farmL>thighL",
-      "cm": 8,
-      "verts": 1,
-      "frame": 52,
-      "t": 1.733
+      "frame": 31.5,
+      "t": 1.067
      }
     ]
    },
    "aren-walk": {
     "worstCm": 8,
-    "peakVerts": 5,
+    "peakVerts": 2,
     "meanVerts": 1,
     "top": [
      {
@@ -36,32 +29,18 @@
       "verts": 1,
       "frame": 6,
       "t": 0.2
-     },
-     {
-      "pair": "farmL>thighL",
-      "cm": 8,
-      "verts": 1,
-      "frame": 58.5,
-      "t": 1.967
-     },
-     {
-      "pair": "thighL>handL",
-      "cm": 7.1,
-      "verts": 5,
-      "frame": 24.5,
-      "t": 0.833
      }
     ]
    },
    "aren-run": {
     "worstCm": 8,
-    "peakVerts": 2,
+    "peakVerts": 3,
     "meanVerts": 0,
     "top": [
      {
       "pair": "thighL>handL",
       "cm": 8,
-      "verts": 2,
+      "verts": 3,
       "frame": 31.5,
       "t": 1.067
      },
@@ -71,13 +50,6 @@
       "verts": 1,
       "frame": 21.5,
       "t": 0.733
-     },
-     {
-      "pair": "torso>farmR",
-      "cm": 7.1,
-      "verts": 2,
-      "frame": 33,
-      "t": 1.1
      }
     ]
    },
@@ -104,8 +76,8 @@
    },
    "aren-forward-left-dive-roll": {
     "worstCm": 11.7,
-    "peakVerts": 19,
-    "meanVerts": 4,
+    "peakVerts": 22,
+    "meanVerts": 3,
     "top": [
      {
       "pair": "head>uarmR",
@@ -115,72 +87,79 @@
       "t": 0.3
      },
      {
+      "pair": "handL>thighL",
+      "cm": 8.8,
+      "verts": 7,
+      "frame": 20,
+      "t": 0.667
+     },
+     {
       "pair": "head>uarmL",
-      "cm": 9.5,
+      "cm": 8.8,
       "verts": 3,
       "frame": 9,
       "t": 0.3
      },
      {
       "pair": "thighR>farmR",
-      "cm": 8.8,
+      "cm": 8.6,
       "verts": 4,
-      "frame": 17.5,
-      "t": 0.6
-     },
-     {
-      "pair": "farmR>thighR",
-      "cm": 8.8,
-      "verts": 9,
-      "frame": 17.5,
-      "t": 0.6
+      "frame": 19,
+      "t": 0.633
      }
     ]
    },
    "aren-hit": {
-    "worstCm": 13.8,
-    "peakVerts": 117,
-    "meanVerts": 44,
+    "worstCm": 11.2,
+    "peakVerts": 112,
+    "meanVerts": 38,
     "top": [
      {
-      "pair": "farmR>thighR",
-      "cm": 13.8,
-      "verts": 23,
-      "frame": 12,
-      "t": 0.4
-     },
-     {
       "pair": "uarmR>thighR",
-      "cm": 12.9,
-      "verts": 20,
+      "cm": 11.2,
+      "verts": 15,
       "frame": 11,
       "t": 0.367
+     },
+     {
+      "pair": "thighR>uarmR",
+      "cm": 10.9,
+      "verts": 44,
+      "frame": 9,
+      "t": 0.3
      },
      {
       "pair": "farmR>thighL",
-      "cm": 12.4,
-      "verts": 6,
-      "frame": 11,
-      "t": 0.367
-     },
-     {
-      "pair": "uarmR>thighL",
-      "cm": 12.1,
-      "verts": 1,
+      "cm": 10.9,
+      "verts": 3,
       "frame": 12,
       "t": 0.4
+     },
+     {
+      "pair": "farmR>thighR",
+      "cm": 10.7,
+      "verts": 15,
+      "frame": 10,
+      "t": 0.333
      }
     ]
    },
    "aren-cheer": {
-    "worstCm": 12.4,
-    "peakVerts": 64,
+    "worstCm": 12.7,
+    "peakVerts": 58,
     "meanVerts": 20,
     "top": [
      {
       "pair": "head>uarmR",
-      "cm": 12.4,
+      "cm": 12.7,
       "verts": 26,
+      "frame": 26,
+      "t": 0.867
+     },
+     {
+      "pair": "uarmR>head",
+      "cm": 9.2,
+      "verts": 1,
       "frame": 26,
       "t": 0.867
      },
@@ -190,48 +169,41 @@
       "verts": 1,
       "frame": 6.5,
       "t": 0.233
-     },
-     {
-      "pair": "uarmR>head",
-      "cm": 8,
-      "verts": 1,
-      "frame": 32.5,
-      "t": 1.1
      }
     ]
    },
    "aren-defeat": {
-    "worstCm": 10.9,
-    "peakVerts": 44,
-    "meanVerts": 8,
+    "worstCm": 8,
+    "peakVerts": 9,
+    "meanVerts": 1,
     "top": [
-     {
-      "pair": "handL>thighL",
-      "cm": 10.9,
-      "verts": 40,
-      "frame": 55,
-      "t": 1.833
-     },
-     {
-      "pair": "head>uarmR",
-      "cm": 8.6,
-      "verts": 6,
-      "frame": 86,
-      "t": 2.867
-     },
      {
       "pair": "thighR>handR",
       "cm": 8,
       "verts": 9,
-      "frame": 15.5,
-      "t": 0.533
+      "frame": 31.5,
+      "t": 1.067
      },
      {
       "pair": "thighL>handL",
       "cm": 8,
+      "verts": 1,
+      "frame": 117.5,
+      "t": 3.933
+     },
+     {
+      "pair": "thighR>farmR",
+      "cm": 8,
       "verts": 3,
-      "frame": 55,
-      "t": 1.833
+      "frame": 94,
+      "t": 3.133
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 7.1,
+      "verts": 2,
+      "frame": 78.5,
+      "t": 2.633
      }
     ]
    },
@@ -283,13 +255,6 @@
       "t": 0.267
      },
      {
-      "pair": "thighL>farmL",
-      "cm": 8,
-      "verts": 1,
-      "frame": 15.5,
-      "t": 0.267
-     },
-     {
       "pair": "thighR>handR",
       "cm": 8,
       "verts": 8,
@@ -298,6 +263,13 @@
      },
      {
       "pair": "torso>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 15.5,
+      "t": 0.267
+     },
+     {
+      "pair": "thighL>farmL",
       "cm": 8,
       "verts": 1,
       "frame": 15.5,
@@ -382,14 +354,14 @@
     "top": []
    },
    "yara-thornshot-2": {
-    "worstCm": 9.2,
-    "peakVerts": 18,
-    "meanVerts": 2,
+    "worstCm": 8.8,
+    "peakVerts": 4,
+    "meanVerts": 0,
     "top": [
      {
       "pair": "handL>farmR",
-      "cm": 9.2,
-      "verts": 17,
+      "cm": 8.8,
+      "verts": 3,
       "frame": 4.5,
       "t": 0.167
      },
@@ -403,72 +375,65 @@
      {
       "pair": "torso>handL",
       "cm": 8,
-      "verts": 2,
-      "frame": 6.5,
-      "t": 0.233
-     },
-     {
-      "pair": "farmL>torso",
-      "cm": 7.1,
-      "verts": 2,
+      "verts": 1,
       "frame": 6.5,
       "t": 0.233
      }
     ]
    },
    "yara-thornshot-3": {
-    "worstCm": 15.7,
-    "peakVerts": 251,
-    "meanVerts": 37,
+    "worstCm": 14.6,
+    "peakVerts": 117,
+    "meanVerts": 15,
     "top": [
      {
-      "pair": "farmL>torso",
-      "cm": 15.7,
-      "verts": 38,
-      "frame": 2,
-      "t": 0.067
+      "pair": "handL>torso",
+      "cm": 14.6,
+      "verts": 51,
+      "frame": 8,
+      "t": 0.267
      },
      {
-      "pair": "uarmL>head",
-      "cm": 14.6,
-      "verts": 89,
+      "pair": "handL>uarmL",
+      "cm": 13.8,
+      "verts": 43,
+      "frame": 8,
+      "t": 0.267
+     },
+     {
+      "pair": "uarmL>handL",
+      "cm": 10.9,
+      "verts": 19,
+      "frame": 8,
+      "t": 0.267
+     },
+     {
+      "pair": "farmL>torso",
+      "cm": 10,
+      "verts": 1,
       "frame": 3.5,
       "t": 0.133
-     },
-     {
-      "pair": "farmL>thighL",
-      "cm": 12.7,
-      "verts": 11,
-      "frame": 2,
-      "t": 0.067
-     },
-     {
-      "pair": "handR>head",
-      "cm": 10.9,
-      "verts": 12,
-      "frame": 1.5,
-      "t": 0.067
      }
     ]
    },
    "yara-root-spike": {
     "worstCm": 8,
-    "peakVerts": 4,
+    "peakVerts": 3,
     "meanVerts": 1,
     "top": [
      {
       "pair": "thighL>handL",
       "cm": 8,
       "verts": 1,
-      "frame": 0,
-      "t": 0
+      "frame": 3,
+      "t": 0.1
      },
      {
       "pair": "torso>farmL",
       "cm": 8,
       "verts": 1,
-      "frame": 4,
-      "t": 0.133
+      "frame": 9.5,
+      "t": 0.333
      },
      {
       "pair": "thighL>farmL",
@@ -476,83 +441,55 @@
       "verts": 1,
       "frame": 11,
       "t": 0.367
-     },
-     {
-      "pair": "farmL>torso",
-      "cm": 6.6,
-      "verts": 2,
-      "frame": 28,
-      "t": 0.933
      }
     ]
    },
    "yara-root-charge": {
-    "worstCm": 16.1,
-    "peakVerts": 343,
-    "meanVerts": 64,
+    "worstCm": 8,
+    "peakVerts": 3,
+    "meanVerts": 1,
     "top": [
      {
-      "pair": "farmL>torso",
-      "cm": 16.1,
-      "verts": 78,
-      "frame": 29.5,
-      "t": 1
-     },
-     {
-      "pair": "handL>head",
-      "cm": 14.6,
-      "verts": 242,
-      "frame": 4,
-      "t": 0.133
-     },
-     {
-      "pair": "farmL>head",
-      "cm": 13,
-      "verts": 11,
-      "frame": 35,
-      "t": 1.167
-     },
-     {
-      "pair": "handL>torso",
-      "cm": 12.9,
-      "verts": 42,
-      "frame": 31.5,
-      "t": 1.067
+      "pair": "torso>farmL",
+      "cm": 8,
+      "verts": 2,
+      "frame": 8,
+      "t": 0.267
      }
     ]
    },
    "yara-root-eruption": {
-    "worstCm": 18.2,
-    "peakVerts": 119,
-    "meanVerts": 26,
+    "worstCm": 11.5,
+    "peakVerts": 69,
+    "meanVerts": 6,
     "top": [
      {
       "pair": "farmL>thighL",
-      "cm": 18.2,
-      "verts": 44,
-      "frame": 10,
-      "t": 0.333
-     },
-     {
-      "pair": "farmL>torso",
-      "cm": 17.7,
-      "verts": 57,
-      "frame": 5,
-      "t": 0.167
-     },
-     {
-      "pair": "farmR>thighR",
-      "cm": 13,
-      "verts": 44,
-      "frame": 16.5,
-      "t": 0.567
-     },
-     {
-      "pair": "handR>torso",
       "cm": 11.5,
-      "verts": 43,
-      "frame": 3.5,
-      "t": 0.133
+      "verts": 26,
+      "frame": 29.5,
+      "t": 1
+     },
+     {
+      "pair": "handL>thighL",
+      "cm": 11.5,
+      "verts": 26,
+      "frame": 29.5,
+      "t": 1
+     },
+     {
+      "pair": "thighR>farmL",
+      "cm": 9.5,
+      "verts": 1,
+      "frame": 20,
+      "t": 0.667
+     },
+     {
+      "pair": "farmL>thighR",
+      "cm": 9.5,
+      "verts": 10,
+      "frame": 28,
+      "t": 0.933
      }
     ]
    },
@@ -592,79 +529,93 @@
    },
    "yara-binding-vines": {
     "worstCm": 10,
-    "peakVerts": 48,
-    "meanVerts": 12,
+    "peakVerts": 49,
+    "meanVerts": 9,
     "top": [
+     {
+      "pair": "torso>farmR",
+      "cm": 10,
+      "verts": 8,
+      "frame": 14,
+      "t": 0.467
+     },
      {
       "pair": "thighR>farmL",
       "cm": 10,
-      "verts": 16,
-      "frame": 15.5,
-      "t": 0.533
-     },
-     {
-      "pair": "torso>farmR",
-      "cm": 9.5,
-      "verts": 3,
-      "frame": 15.5,
-      "t": 0.533
-     },
-     {
-      "pair": "farmR>torso",
-      "cm": 9.5,
-      "verts": 5,
-      "frame": 20,
-      "t": 0.667
-     },
-     {
-      "pair": "farmL>thighR",
-      "cm": 8.8,
-      "verts": 5,
-      "frame": 15.5,
-      "t": 0.533
-     }
-    ]
-   },
-   "yara-cleanse": {
-    "worstCm": 13,
-    "peakVerts": 73,
-    "meanVerts": 17,
-    "top": [
-     {
-      "pair": "farmR>thighR",
-      "cm": 13,
-      "verts": 37,
+      "verts": 14,
       "frame": 16.5,
       "t": 0.567
      },
      {
+      "pair": "farmL>thighR",
+      "cm": 8.8,
+      "verts": 6,
+      "frame": 15.5,
+      "t": 0.533
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 8.6,
+      "verts": 2,
+      "frame": 3.5,
+      "t": 0.133
+     }
+    ]
+   },
+   "yara-cleanse": {
+    "worstCm": 12.4,
+    "peakVerts": 70,
+    "meanVerts": 8,
+    "top": [
+     {
       "pair": "farmL>thighL",
-      "cm": 11.5,
-      "verts": 28,
+      "cm": 12.4,
+      "verts": 29,
       "frame": 44.5,
       "t": 1.5
      },
      {
       "pair": "handL>thighL",
-      "cm": 10.7,
-      "verts": 12,
+      "cm": 11.7,
+      "verts": 13,
       "frame": 44.5,
       "t": 1.5
      },
      {
       "pair": "thighL>farmL",
-      "cm": 10,
-      "verts": 17,
+      "cm": 10.7,
+      "verts": 19,
       "frame": 44.5,
       "t": 1.5
+     },
+     {
+      "pair": "thighL>uarmL",
+      "cm": 8.8,
+      "verts": 1,
+      "frame": 35,
+      "t": 1.167
      }
     ]
    },
    "yara-heartroot-bloom": {
-    "worstCm": 8.8,
-    "peakVerts": 15,
-    "meanVerts": 5,
+    "worstCm": 10.9,
+    "peakVerts": 44,
+    "meanVerts": 7,
     "top": [
+     {
+      "pair": "handR>torso",
+      "cm": 10.9,
+      "verts": 33,
+      "frame": 3.5,
+      "t": 0.133
+     },
+     {
+      "pair": "head>handR",
+      "cm": 9.5,
+      "verts": 8,
+      "frame": 3.5,
+      "t": 0.133
+     },
      {
       "pair": "head>uarmR",
       "cm": 8.8,
@@ -673,43 +624,36 @@
       "t": 0.8
      },
      {
-      "pair": "thighL>farmL",
+      "pair": "handR>head",
       "cm": 8,
       "verts": 1,
-      "frame": 0,
-      "t": 0
-     },
-     {
-      "pair": "thighL>handL",
-      "cm": 8,
-      "verts": 2,
-      "frame": 0,
-      "t": 0
-     },
-     {
-      "pair": "handL>thighL",
-      "cm": 8,
-      "verts": 1,
-      "frame": 7,
-      "t": 0.233
+      "frame": 3.5,
+      "t": 0.133
      }
     ]
    },
    "aren-air-step": {
-    "worstCm": 8,
-    "peakVerts": 2,
+    "worstCm": 9.5,
+    "peakVerts": 1,
     "meanVerts": 0,
     "top": [
      {
+      "pair": "torso>handL",
+      "cm": 9.5,
+      "verts": 1,
+      "frame": 0,
+      "t": 0
+     },
+     {
       "pair": "thighL>handL",
       "cm": 8,
-      "verts": 2,
+      "verts": 1,
       "frame": 6.5,
       "t": 0.233
      },
      {
       "pair": "torso>farmR",
-      "cm": 7.1,
+      "cm": 6.6,
       "verts": 1,
       "frame": 25,
       "t": 0.833
