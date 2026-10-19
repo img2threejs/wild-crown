@@ -1,0 +1,62 @@
+{
+ "source": "REA-observed live Three.js build (xikhar/Walden, GitHub Pages), RightHand strikes of its light chain A/B/C driven by real mouse input at 60 Hz; only derived measurements are retained, no code or asset is copied",
+ "strikes": {
+  "A": {
+   "frames": 18,
+   "peakFrame": 9,
+   "peakSpeed": 22.74,
+   "windupMeanSpeed": 8.15,
+   "peakToWindup": 2.8,
+   "riseFrames": 4,
+   "stopFrames": 5,
+   "shoulderHipYawSepAtWindupMin": -31.6,
+   "sepAtPeak": 0.3,
+   "sepTravel": 31.9,
+   "leanAtStart": 8.8,
+   "leanAtPeak": 19.9,
+   "hipsLungeForward": 0.125,
+   "hipsLateral": 0.067,
+   "elbowAtPeak": 152,
+   "stanceLengthAtPeak": 0.714,
+   "handReachFromChest": 0.526
+  },
+  "B": {
+   "frames": 18,
+   "peakFrame": 9,
+   "peakSpeed": 24.47,
+   "windupMeanSpeed": 8.42,
+   "peakToWindup": 2.9,
+   "riseFrames": 3,
+   "stopFrames": 5,
+   "shoulderHipYawSepAtWindupMin": -6.6,
+   "sepAtPeak": -6.6,
+   "sepTravel": 0,
+   "leanAtStart": 11.4,
+   "leanAtPeak": 52.9,
+   "hipsLungeForward": 0.02,
+   "hipsLateral": 0.031,
+   "elbowAtPeak": 143,
+   "stanceLengthAtPeak": 0.756,
+   "handReachFromChest": 0.496
+  },
+  "C": {
+   "frames": 80,
+   "peakFrame": 28,
+   "peakSpeed": 23.94,
+   "windupMeanSpeed": 8.67,
+   "peakToWindup": 2.8,
+   "riseFrames": 4,
+   "stopFrames": 8,
+   "shoulderHipYawSepAtWindupMin": -46.6,
+   "sepAtPeak": -17.1,
+   "sepTravel": 29.6,
+   "leanAtStart": 54.3,
+   "leanAtPeak": 35.5,
+   "hipsLungeForward": 0.12,
+   "hipsLateral": 0.132,
+   "elbowAtPeak": 155,
+   "stanceLengthAtPeak": 0.986,
+   "handReachFromChest": 0.576
+  }
+ }
+}

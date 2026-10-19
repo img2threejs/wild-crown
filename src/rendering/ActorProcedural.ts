@@ -1,5 +1,7 @@
 import { Quaternion, Vector3, type Object3D } from 'three';
 import type { GroundingSlot } from './AnimationController';
+import { applyPosture } from './AttackPosture';
+import { LimbClearance } from './LimbClearance';
 import { BIPED_LOOK_AT, CREATURE_LOOK_AT, LookAtIK } from './LookAtIK';
 import type { ReactionPose } from './ReactionPresenter';
 import { rotateBoneWorld, type RigBones } from './RigBones';
@@ -26,10 +28,15 @@ export interface ProceduralInputs {
   targetX: number;
   targetY: number;
   targetZ: number;
+  /** Chest coil and forward lean (radians) staging the current strike; 0 outside one. Bipeds only. */
+  postureCoil: number;
+  postureLean: number;
+  /** Keep the arms out of the body (bipeds): on for every visible, animated hero. */
+  limbClearance: boolean;
 }
 
 export function createProceduralInputs(): ProceduralInputs {
-  return { detail: 'full', reaction: undefined, lookEnabled: false, hasTarget: false, targetX: 0, targetY: 0, targetZ: 0 };
+  return { detail: 'full', reaction: undefined, lookEnabled: false, hasTarget: false, targetX: 0, targetY: 0, targetZ: 0, postureCoil: 0, postureLean: 0, limbClearance: false };
 }
 
 const tiltAxis = new Vector3(), forward = new Vector3(), upV = new Vector3(0, 1, 0);
@@ -46,11 +53,14 @@ export class ActorProcedural implements GroundingSlot {
   private readonly saved: Quaternion[] = [];
   private hasSaved = false;
   private readonly look: LookAtIK | undefined;
+  private readonly clearance: LimbClearance | undefined;
   private readonly springs: SpringChain[] = [];
   private springsLive = false;
 
   constructor(private readonly root: Object3D, private readonly rig: RigBones, private readonly inner: GroundingSlot | null) {
-    for (const bone of [...rig.spine, ...rig.head]) { this.bones.push(bone); this.saved.push(new Quaternion()); }
+    const arms = rig.biped ? [rig.biped.left.arm, rig.biped.left.foreArm, rig.biped.right.arm, rig.biped.right.foreArm] : [];
+    for (const bone of [...rig.spine, ...rig.head, ...arms]) { this.bones.push(bone); this.saved.push(new Quaternion()); }
+    if (rig.biped) this.clearance = new LimbClearance(rig.biped);
     if (rig.head.length > 0) this.look = new LookAtIK(rig.head.length >= 2 && rig.kind === 'biped' ? [...rig.spine, ...rig.head] : rig.head, rig.kind === 'biped' ? BIPED_LOOK_AT : CREATURE_LOOK_AT);
     for (const tail of rig.tails) this.springs.push(new SpringChain(tail, TAIL_SPRING));
   }
@@ -82,12 +92,18 @@ export class ActorProcedural implements GroundingSlot {
     forward.set(e[8]!, 0, e[10]!);
     if (forward.lengthSq() < 1e-8) forward.set(0, 0, 1); else forward.normalize();
     const reacting = pose !== undefined && (pose.kind !== undefined || pose.spine !== 0 || pose.head !== 0 || pose.sway !== 0);
-    if (reacting || (this.look && (inputs.lookEnabled || this.look.strength > 0))) {
+    const staging = this.clearance !== undefined && !reacting && (inputs.postureCoil !== 0 || inputs.postureLean !== 0);
+    const clearing = this.clearance !== undefined && inputs.limbClearance;
+    if (this.clearance && !clearing) this.clearance.reset();
+    if (reacting || staging || clearing || (this.look && (inputs.lookEnabled || this.look.strength > 0))) {
       for (let i = 0; i < this.bones.length; i += 1) this.saved[i]!.copy(this.bones[i]!.quaternion);
       this.hasSaved = true;
       if (reacting) this.bend(pose!);
       if (this.look && !reacting) this.look.apply(dt, inputs.lookEnabled, inputs.hasTarget, forward.x, forward.z, inputs.targetX, inputs.targetY, inputs.targetZ);
       else this.look?.reset();
+      if (staging) applyPosture(this.rig.spine, forward, inputs.postureCoil, inputs.postureLean);
+      // The bends above moved the trunk, so the arms are tested against the body as it will be drawn.
+      if (clearing) { this.root.updateMatrixWorld(true); this.clearance!.apply(dt); }
     }
     if (inputs.detail === 'full' && this.springs.length > 0) {
       for (const chain of this.springs) chain.apply(dt, e[12]!, e[13]!, e[14]!);
