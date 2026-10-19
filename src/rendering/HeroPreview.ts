@@ -306,7 +306,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
         animation.play(actionId, 'active', 0);
         const unscaled = actionId.endsWith('-charge') || actionId === 'cleanse' || actionId.endsWith('-cleanse')
           || actionId === 'vesper-mist-blink' || actionId === 'sakda-guard-dash';
-        const rate = unscaled ? 1 : HERO_COMBAT[hero.id].attackPlaybackRate;
+        const rate = unscaled ? 1 : HERO_COMBAT[hero.id].attackPlaybackRate / HERO_COMBAT[hero.id].clipSlowdown;
         stepDuration = Math.max(0.1, (hero.id === 'vesper' ? vesperActionSeconds(actionId) : undefined) ?? (animation.activeDuration ?? 0.1) / rate);
       }
       stepElapsed += dt;
