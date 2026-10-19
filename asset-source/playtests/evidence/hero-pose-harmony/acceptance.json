@@ -8,7 +8,10 @@
     "reported": "Heroes' body parts pass through each other when casting skills; poses read as implausible for a human body.",
     "method": "Skinned-mesh burial audit (scripts/assets/audit-hero-mesh-intersection.mjs): the exact runtime-simplified hero meshes are posed at 24 sample points per clip (engine 60 Hz joint slerp), voxelised, the exterior is flood-filled and every vertex nudged along its normal that lands in an unreachable voxel is buried. Bind-pose burial is the per-vertex baseline; articulated neighbours (knee, elbow, shoulder, hip, neck, wrist, ankle) and leg-versus-leg pairs (gap below voxel size) are excluded.",
     "finding": "Confirmed on all four heroes: forearms and hands lie inside the trunk, skirt and thighs in 90+ of 108 clips (Yara Root Spike: 194 mean buried vertices, Aren Light 1: 201, Sakda Cleanse: 235, Yara Aren-Hit: 354). Yara's Thornshot 3 / Root Charge / Root Eruption carry the left forearm across the chest centre line.",
-    "files": ["audit-before.json", "audit-after.json"]
+    "files": [
+      "audit-before.json",
+      "audit-after.json"
+    ]
   },
   "reference": {
     "tool": "REA (rea-cdp-browser) against a live Three.js action game with an animated rigged swordsman (xikhar/Walden on GitHub Pages)",
@@ -18,32 +21,82 @@
       "note": "REA's passive page evidence covers the page, scripts and execution coverage; the skeleton/katana pose stream was captured through the game's own __game/__step hooks driven with real mouse input, at 60 Hz, then reduced to metrics."
     },
     "measured": "reference-metrics.json (right-hand light chain A/B/C): shoulder-to-hip coil 30-47 degrees before contact, forward chest lean 20-35 degrees at contact, peak/wind-up hand speed 2.8x, 3-4 frames to rise, 5-8 to stop.",
-    "borrowed_ideas": ["stage a strike with torso coil and lean, not arm travel alone", "cloth/limb clearance against the body as a continuous correction, not a pose swap"],
+    "borrowed_ideas": [
+      "stage a strike with torso coil and lean, not arm travel alone",
+      "cloth/limb clearance against the body as a continuous correction, not a pose swap"
+    ],
     "not_borrowed": "No code, model or animation data was copied (the repository declares no licence). Commercial games (Kena, Zenless Zone Zero, Genshin) are not installed and no binary was supplied, so none is claimed as measured.",
     "limit": "One open-source game is a narrow reference; its numbers set targets for coil and lean only."
   },
   "change": {
     "LimbClearance": "src/rendering/LimbClearance.ts: capsule volumes + damped least-squares elbow/shoulder correction, bounded 1.2 / 0.9 rad from the clip pose, 3 cm tolerance, relaxed at 28/s and 0.3 rad per frame.",
     "AttackPosture": "src/rendering/AttackPosture.ts + generated AttackPostures.ts: chest coil and forward lean enveloped on the action's normalizedTime; 7 clips need staging (the other strike clips already meet the reference).",
-    "wiring": "RigBones.biped -> ActorProcedural (restore/apply slot) <- GameRenderer inputs (limbClearance, postureCoil, postureLean); simulation, hit windows, damage and CameraDirector untouched; Reduced Motion halves the posture."
+    "wiring": "RigBones.biped -> ActorProcedural (restore/apply slot) <- GameRenderer inputs (limbClearance, postureCoil, postureLean); simulation, hit windows, damage and CameraDirector untouched; Reduced Motion halves the posture.",
+    "YaraAuthoring": "scripts/assets/author-yara-hero-clips.mjs + arm-body-clearance.mjs + src/rendering/BodyVolumes.mjs: the staff-arm layer prices arm-in-body into the elbow swivel and an offline pass pushes remaining arm samples out of the same body capsules the runtime solver uses; captured knockdown/get-up takes are unchanged. yara-hero-animated.glb rebuilt (outputHash 1d4547f0...) and synced into every playtest manifest."
   },
   "result": {
-    "meshAudit": { "clips": 108, "meanBuriedVerticesBefore": 3236, "after": 827, "reductionPercent": 74 },
+    "meshAudit": {
+      "clips": 108,
+      "meanBuriedVerticesBefore": 3236,
+      "after": 695,
+      "reductionPercent": 79,
+      "authoredOnly": 1692,
+      "runtimeSolverOnly": 827
+    },
     "examples": [
-      { "clip": "yara-root-spike", "before": 194, "after": 1 },
-      { "clip": "aren-light-1", "before": 201, "after": 16 },
-      { "clip": "sakda-cleanse", "before": 235, "after": 10 },
-      { "clip": "yara aren-hit", "before": 354, "after": 44 },
-      { "clip": "yara aren-idle", "before": 166, "after": 1 }
+      {
+        "clip": "yara-root-spike",
+        "before": 194,
+        "after": 1
+      },
+      {
+        "clip": "yara-root-charge",
+        "before": 155,
+        "after": 1
+      },
+      {
+        "clip": "yara-root-eruption",
+        "before": 74,
+        "after": 6
+      },
+      {
+        "clip": "yara-thornshot-3",
+        "before": 94,
+        "after": 15
+      },
+      {
+        "clip": "aren-light-1",
+        "before": 201,
+        "after": 16
+      },
+      {
+        "clip": "sakda-cleanse",
+        "before": 235,
+        "after": 10
+      },
+      {
+        "clip": "yara aren-hit",
+        "before": 354,
+        "after": 38
+      },
+      {
+        "clip": "yara aren-idle",
+        "before": 166,
+        "after": 0
+      }
     ],
     "limits": [
-      "Yara Thornshot 3 (94 -> 37), Root Charge (155 -> 64), Root Eruption (74 -> 26) are only reduced; Root Charge's worst single pose rises 216 -> 343 vertices (hand pushed into hair). These retargeted clips need re-authoring.",
-      "Aren Stagger (hand clutching the knee) is unchanged.",
+      "Yara Thornshot 3 still overlaps by up to 14.6 cm in a few poses (15 mean buried vertices).",
+      "Aren Stagger (hand clutching the knee) is unchanged (159 -> 158); Yara aren-hit (38) and Vesper aren-defeat / vesper-mist-blink (26, 25) are the largest remaining.",
       "Voxel audit resolution is about 2 cm: hair and cloth that legitimately drape over an arm are counted; the numbers rank poses, they are not a collision-free proof.",
-      "Idle/walk/run: untouched for Vesper and Sakda; Yara's idle is corrected by 10.6 degrees on average (a hand held inside her thigh).",
       "Vesper's katana was not re-checked against the staged torso: Vesper has no posture profile, only arm clearance."
     ],
-    "files": ["pose-comparison.webp", "runtime-yara.mp4"]
+    "files": [
+      "pose-comparison.webp",
+      "yara-reauthored-poses.webp",
+      "runtime-yara.mp4"
+    ],
+    "note": "pose-comparison.webp and runtime-yara.mp4 were captured before Yara's clips were re-authored; yara-reauthored-poses.webp shows the delivered Thornshot 3, Root Charge, Root Eruption and Cleanse with the runtime solver and posture on."
   },
   "runtime": {
     "scenario": "Actual GameApplication (dev server, Greenwake, Yara selected through the UI) driven with real keyboard input J,J,J,K,O,L; 1280x720.",
@@ -51,8 +104,13 @@
     "note": "The in-game camera shows the hero small; pose-comparison.webp is the close inspection, rendered with the same solver and posture code."
   },
   "verification": {
-    "unit": "tests/rendering/LimbClearance.test.ts (7), tests/rendering/hero-limb-clearance.test.ts (6: locomotion untouched, no snaps p99.9 < 8 cm and max < 35 cm per 60 Hz sample, joint limits within 8 degrees, mesh-level Root Spike), tests/rendering/attack-posture.test.ts (2: table freshness, staged coil reaches the reference)",
-    "regression": "tests/rendering + effects + ui: 1,381 pass; 17 fail, none caused here: 15 are worktree-only missing untracked Tripo logs/assets, and the two animation failures (Aren byte-identical rebuild, ActorAnimationDriver monster clip) fail identically on main. Full-repo bun test exceeds 15 minutes and was not completed."
+    "unit": "tests/rendering/LimbClearance.test.ts (7), tests/rendering/hero-limb-clearance.test.ts (6: locomotion untouched, no snaps p99.9 < 8 cm and max < 35 cm per 60 Hz sample, joint limits within 8 degrees, mesh-level Root Spike on the authored clip and the solved pose), tests/rendering/attack-posture.test.ts (2: table freshness, staged coil reaches the reference)",
+    "regression": "tests/rendering + effects + ui: 1,381 pass; 17 fail, none caused here: 15 are worktree-only missing untracked Tripo logs/assets, and the two animation failures (Aren byte-identical rebuild, ActorAnimationDriver monster clip) fail identically on main. Full-repo bun test exceeds 15 minutes and was not completed.",
+    "attackPosture": "AttackPostures.ts re-derived: 7 profiles as before; the forward-reach eligibility threshold moved 0.15 -> 0.10 m because the re-authored Thornshot 3 now starts its hand 0.100 m forward."
   },
-  "usage": { "workers": 0, "mainTokens": null, "note": "No subagents were dispatched; harness token counters unavailable. No paid generation." }
+  "usage": {
+    "workers": 0,
+    "mainTokens": null,
+    "note": "No subagents were dispatched; harness token counters unavailable. No paid generation."
+  }
 }

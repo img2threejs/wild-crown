@@ -83,17 +83,17 @@ describe('limb clearance on the delivered hero clips', () => {
     }
   }, 120_000);
 
-  it('removes the hand-through-thigh and forearm-through-chest overlap of Yara’s Root Spike, measured on the rendered mesh', async () => {
+  it('keeps Yara’s Root Spike out of her own body: the authored clip and the solved pose bury at most a handful of mesh vertices (committed clip buried 194)', async () => {
     const context = await openHero('yara'), { rig } = context, skeleton = new ThreeSkeleton(rig);
     const { frames, count } = readClipFrames(rig, 'yara-root-spike'), scratch = interpolateFrame(frames, 0);
-    let before = 0, after = 0;
+    let authored = 0, solved = 0;
     for (let frame = 0; frame <= count - 1; frame += 2) {
       interpolateFrame(frames, frame, scratch);
-      before = Math.max(before, penetrations(context, rig.poseFrame(scratch, 0)).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
+      authored = Math.max(authored, penetrations(context, rig.poseFrame(scratch, 0)).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
       skeleton.setFrame(scratch, 0);
-      after = Math.max(after, penetrations(context, skeleton.solve()).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
+      solved = Math.max(solved, penetrations(context, skeleton.solve()).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
     }
-    expect(before).toBeGreaterThan(200);
-    expect(after).toBeLessThan(before * 0.15);
+    expect(authored).toBeLessThan(20);
+    expect(solved).toBeLessThan(20);
   }, 240_000);
 });

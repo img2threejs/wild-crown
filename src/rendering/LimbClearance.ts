@@ -1,19 +1,13 @@
 import { Quaternion, Vector3, type Object3D } from 'three';
+import { BODY_RADII, BODY_REFERENCE_CHAIN, BODY_TOLERANCE as TOLERANCE } from './BodyVolumes.mjs';
 import { rotateBoneWorld } from './RigBones';
+
+export { BODY_RADII, BODY_REFERENCE_CHAIN };
 
 /** One side of a Mixamo biped: the arm chain and the leg chain it must keep clear of. */
 export interface LimbSide { readonly arm: Object3D; readonly foreArm: Object3D; readonly hand: Object3D; readonly upLeg: Object3D; readonly leg: Object3D; readonly foot: Object3D }
 export interface BipedLimbs { readonly hips: Object3D; readonly spine1: Object3D; readonly neck: Object3D; readonly head: Object3D; readonly left: LimbSide; readonly right: LimbSide }
 
-/**
- * Body volumes in metres for a 0.5 m hips-to-neck chain (every hero rig is a Mixamo skeleton of similar proportions); the actual chain
- * length rescales them. The radii are the bind-pose-clear fits of the four playable heroes; `TOLERANCE` lets soft tissue and cloth overlap
- * the volumes a little, so the idle, walk and run clips are touched only where an arm really lies in the trunk or thigh.
- */
-export const BODY_REFERENCE_CHAIN = 0.5;
-export const BODY_RADII = Object.freeze({ pelvis: 0.125, chest: 0.15, head: 0.11, thigh: 0.125, shin: 0.075, upperArm: 0.07, foreArm: 0.058, hand: 0.055 });
-/** A sample may sink this far (metres) into a volume before the arm is moved. */
-const TOLERANCE = 0.03;
 /** Largest total rotation a solve may add to a bone relative to the clip pose (radians). */
 const MAX_SHOULDER = 0.9, MAX_ELBOW = 1.2;
 /** Damping of the least-squares step (m²): bounds the rotation of a nearly degenerate lever. */

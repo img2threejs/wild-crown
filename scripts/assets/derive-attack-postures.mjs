@@ -40,7 +40,7 @@ export function clipMetrics(rig, scale, name, { subdivisions = 2 } = {}) {
 export function profileFor(m) {
   // One whip per clip: multi-strike chains (Thousand Cuts, Hundred Elbows), charge holds and slams do not follow a single coil-and-release envelope.
   const peak = m.peakFrame / (m.samples - 1);
-  const strike = m.peakSpeed >= 8 && m.peakToWindup >= 1.4 && m.riseFrames <= 10 && peak >= 0.12 && peak <= 0.7 && m.duration <= 0.9 && m.handForward >= 0.15;
+  const strike = m.peakSpeed >= 8 && m.peakToWindup >= 1.4 && m.riseFrames <= 10 && peak >= 0.12 && peak <= 0.7 && m.duration <= 0.9 && m.handForward >= 0.1;
   if (!strike) return undefined;
   const coil = clamp(TARGET.sepTravel - m.sepTravel, 0, MAX_COIL_DEGREES), lean = clamp(TARGET.lean - m.leanAtPeak, 0, MAX_LEAN_DEGREES) * Math.min(1, m.handForward / 0.4);
   if (coil < 3 && lean < 2) return undefined;

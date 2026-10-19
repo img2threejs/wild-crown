@@ -18,8 +18,8 @@ const LEG = /^(thigh|shin|foot)[LR]$/;
 const adjacent = (a, b) => a === b || ADJACENT.has(`${a}|${b}`) || ADJACENT.has(`${b}|${a}`) || (LEG.test(a) && LEG.test(b));
 
 /** Loads a hero's runtime mesh and its rest-pose burial baseline (coat layers, shoulders and hips are buried in the bind pose). */
-export async function openHero(name) {
-  const hero = HEROES[name], source = parseGlb(readFileSync(root + hero.glb)), rig = new Rig(source);
+export async function openHero(name, glbPath) {
+  const hero = HEROES[name], source = parseGlb(readFileSync(glbPath ?? root + hero.glb)), rig = new Rig(source);
   const mesh = await runtimeMesh(source, rig), posed = new Float32Array(mesh.count * 3), normals = new Float32Array(mesh.count * 3), occupancy = new Occupancy();
   rig.resetPose(); skin(mesh, rig.evaluate(), posed); vertexNormals(mesh, posed, normals); occupancy.build(mesh, posed);
   const base = new Float32Array(mesh.count);
@@ -45,8 +45,8 @@ export function penetrations(ctx, world) {
   return [...pairs.values()].sort((a, b) => b.excess - a.excess);
 }
 
-export async function auditMesh(name, { only, frameBudget = 24, log = false, corrected = false } = {}) {
-  const ctx = await openHero(name), { rig, source, hero } = ctx, clips = {}, skeleton = corrected ? new ThreeSkeleton(rig) : undefined;
+export async function auditMesh(name, { only, frameBudget = 24, log = false, corrected = false, glb } = {}) {
+  const ctx = await openHero(name, glb), { rig, source, hero } = ctx, clips = {}, skeleton = corrected ? new ThreeSkeleton(rig) : undefined;
   for (const animation of source.json.animations) {
     if (only && !only.includes(animation.name)) continue;
     const { frames, count, times } = readClipFrames(rig, animation.name), scratch = interpolateFrame(frames, 0), total = count * 2 - 1, picks = new Set();
@@ -72,10 +72,10 @@ export async function auditMesh(name, { only, frameBudget = 24, log = false, cor
 }
 
 if (process.argv[1]?.endsWith('audit-hero-mesh-intersection.mjs')) {
-  const corrected = process.argv.includes('--corrected'), args = process.argv.slice(2).filter((a) => a !== '--corrected'), names = args.filter((a) => HEROES[a]), only = args.filter((a) => !HEROES[a]), out = [];
+  const glb = process.argv.find((a) => a.startsWith('--glb='))?.slice(6), corrected = process.argv.includes('--corrected'), args = process.argv.slice(2).filter((a) => a !== '--corrected' && !a.startsWith('--glb=')), names = args.filter((a) => HEROES[a]), only = args.filter((a) => !HEROES[a]), out = [];
   for (const n of names.length ? names : Object.keys(HEROES)) {
     const t0 = performance.now();
-    out.push(await auditMesh(n, { only: only.length ? only : undefined, log: true, corrected }));
+    out.push(await auditMesh(n, { only: only.length ? only : undefined, log: true, corrected, glb }));
     console.log(n, 'seconds', ((performance.now() - t0) / 1000).toFixed(1));
   }
   writeFileSync(`/tmp/hero-mesh-intersection-${names.join('-') || 'all'}${corrected ? '-corrected' : ''}.json`, JSON.stringify(out, null, 1));

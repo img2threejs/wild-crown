@@ -7,6 +7,7 @@ import { parseGlb, encodeGlb } from './import-aren-animation-set.mjs';
 import { readAccessorAny } from './creature-rig-kit.mjs';
 import { Rig, buildClip, appendClips, limitJoints, jointExcursions, skinDeformationReport, JOINT_LIMITS, COMBAT_LIMITS, FPS } from './retarget-aren-tripo-clips.mjs';
 import { loadMixamoDonor, resolveMixamoSources } from './mixamo-import.mjs';
+import { armDepth, capsules as bodyCapsules, clearArms } from './arm-body-clearance.mjs';
 
 /**
  * Authors Yara's Heartroot clip set on her native 23-joint Tripo skeleton.
@@ -158,7 +159,9 @@ const POSES = {
 };
 
 const BONE_Y = new Vector3(0, 1, 0);
-const SWIVELS = [0, -20, 20, -40, 40, -60, 60];
+const SWIVELS = [0, -20, 20, -40, 40, -60, 60, -80, 80, -100, 100];
+/** Cost per rig unit of arm-in-body depth: a centimetre of overlap outweighs the whole preference for a small swivel. */
+const BODY_PRICE = 14;
 /** Rest-relative swing and twist (radians) of a local rotation about the bone's +Y axis (the limitJoints convention of the retarget toolkit). */
 function swingTwist(local, restInverse, scratch) {
   const rel = scratch.copy(restInverse).multiply(local);
@@ -244,7 +247,7 @@ function armSolver(target, side) {
       out.arm = parent.clone().invert().multiply(qa).normalize();
       out.fore = qa.clone().invert().multiply(qf).normalize();
       out.hand = qf.clone().invert().multiply(qh).normalize();
-      out.reach = reach;
+      out.reach = reach; out.shoulder = S; out.elbow = elbow; out.wrist = S.clone().addScaledVector(u, reach);
       return out;
     },
   };
@@ -302,12 +305,14 @@ function armLayer(context, frames, count, layer, limits) {
   const trace = [];
   /** Tries elbow swivels about the shoulder-wrist axis (each with its best roll share) and keeps the one that stays furthest inside the joint limits. */
   const trial = { arm: new Quaternion(), fore: new Quaternion(), hand: new Quaternion() };
+  /** Body volumes of the frame being solved (set per frame): an elbow placement that sinks the arm into the trunk, head or legs is priced out. */
+  let body;
   const solveBest = (solver, side, memory, out, solveWith) => {
     let best = { cost: Infinity };
     for (const swivel of SWIVELS) {
       solveWith(swivel * DEG, trial);
       const rolls = { ta: memory.ta, tf: memory.tf };
-      const cost = balanceRoll(target, solver.ids, trial, limits, side, rolls) + 0.0008 * Math.abs(swivel) + 0.0004 * Math.abs(swivel - memory.swivel);
+      const cost = balanceRoll(target, solver.ids, trial, limits, side, rolls) + 0.0008 * Math.abs(swivel) + 0.0004 * Math.abs(swivel - memory.swivel) + BODY_PRICE * armDepth(body, trial.shoulder, trial.elbow, trial.wrist);
       if (cost < best.cost) best = { cost, swivel, rolls, arm: trial.arm.clone(), fore: trial.fore.clone(), hand: trial.hand.clone() };
     }
     out.arm = best.arm; out.fore = best.fore; out.hand = best.hand; out.reach = 0;
@@ -321,6 +326,7 @@ function armLayer(context, frames, count, layer, limits) {
     const tick = k * TICKS_PER_SECOND / FPS;
     const w = sampleKey(keys, tick, 'w'), gw = sampleKey(keys, tick, 'gw');
     const world = target.poseFrame(frames, k);
+    body = bodyCapsules(target, world);
     const delta = rightArm.chestDelta(world, q.chest);
     const forward = new Vector3(1, 0, 0).applyQuaternion(delta), yaw = Math.atan2(-forward.z, forward.x), heading = new Quaternion().setFromAxisAngle(UP, yaw);
     const shoulder = rightArm.position(world, rightArm.ids.arm, new Vector3());
@@ -345,6 +351,7 @@ function armLayer(context, frames, count, layer, limits) {
     }
     // Staff direction actually carried (after the solve) for reporting; also the left-hand seat.
     const after = target.poseFrame(frames, k);
+    body = bodyCapsules(target, after);
     const handQ = quaternionOf(after[rightArm.ids.hand]);
     const staffNow = grip.s.clone().applyQuaternion(handQ);
     trace.push(staffNow.angleTo(UP) / DEG);
@@ -847,19 +854,19 @@ add('yara-thornshot-2', 'a', 'cast_a_spell', 28, [2.0, 3.2], { sim: { totalTicks
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 5, pose: 'guard' }, { t: 10, pose: 'thrust' }, { t: 17, pose: 'thrust' }, { t: 28, pose: 'carry' }] } });
 // Thornshot 3: both hands lob a seed over the shoulder.
 add('yara-thornshot-3', 'c', 'basketball_shot', 34, [0, 1], { keys: [[0, 1.55], [6, 1.85], [10, 2.25], [16, 2.8], [34, 3.6]], sim: { totalTicks: 34 },
-  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 5, pose: 'overhead', ...TWO_HAND, grip: -0.26, hand: [0.1, 0.2, 0.06], staff: [0, 52] }, { t: 10, hand: [0.22, 0.22, 0.05], staff: [0, 36] }, { t: 18, hand: [0.22, 0.2, 0.05], staff: [0, 40] }, { t: 34, pose: 'carry', gw: 0 }] } });
+  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 5, pose: 'overhead', ...TWO_HAND, grip: -0.26, hand: [0.16, 0.17, -0.02], staff: [0, 52] }, { t: 10, hand: [0.2, 0.17, -0.02], staff: [0, 36] }, { t: 18, hand: [0.2, 0.15, -0.02], staff: [0, 40] }, { t: 34, pose: 'carry', gw: 0 }] } });
 // Root Spike: a low backswing and sweep that drives the staff tip along the ground lane on tick 20.
 add('yara-root-spike', 'c', 'golf', 63, [0, 1], { keys: [[0, 6.3], [14, 7.4], [22, 8.0], [40, 8.6], [63, 9.4]], sim: { totalTicks: 63 },
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 12, hand: [0.05, -0.13, 0.15], staff: [-55, -12] }, { t: 20, hand: [0.22, -0.2, 0.06], staff: [8, -26] }, { t: 28, hand: [0.22, -0.2, 0.06], staff: [8, -32] }, { t: 63, pose: 'carry' }] } });
 // Root charge: both hands raise the staff overhead; the loop breathes.
 add('yara-root-charge', 'd', 'standing_relax', 90, [4, 7.5], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
-  arm: { keys: [{ t: 0, hand: [0.08, 0.235, 0.05], staff: [0, 84], ...TWO_HAND, grip: -0.24 }] } });
+  arm: { keys: [{ t: 0, hand: [0.15, 0.19, -0.02], staff: [0, 84], ...TWO_HAND, grip: -0.24 }] } });
 // Root Eruption: staff raised, then plunged into the ground on tick 36 while she drops into a knee, then rises.
 compose('yara-root-eruption', 76, [
   { donor: 'd', animation: 'standing_relax', window: [4, 6] },
   { donor: 'c', animation: 'dig', window: [0.3, 1.5], ticks: [26, 76] },
   { donor: 'd', animation: 'standing_relax', window: [4, 6], ticks: [60, 76] },
-], { crossfadeTicks: 8, arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 14, hand: [0.1, 0.2, 0.06], staff: [0, 82], ...TWO_HAND, grip: -0.26 }, { t: 26, hand: [0.1, 0.2, 0.06], staff: [0, 84] }, { t: 36, pose: 'plant', ...TWO_HAND, grip: -0.26 }, { t: 48, pose: 'plant' }, { t: 70, pose: 'carry', gw: 0 }] } });
+], { crossfadeTicks: 8, arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 14, hand: [0.15, 0.19, -0.02], staff: [0, 82], ...TWO_HAND, grip: -0.26 }, { t: 26, hand: [0.15, 0.19, -0.02], staff: [0, 84] }, { t: 36, pose: 'plant', ...TWO_HAND, grip: -0.26 }, { t: 48, pose: 'plant' }, { t: 70, pose: 'carry', gw: 0 }] } });
 // Seed charge: braced two-hand stance, staff levelled at the target; the loop breathes.
 add('yara-seed-charge', 'c', 'fire', 90, [0.1, 1.5], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.015 },
   arm: { keys: [{ t: 0, ...BRACE, ...TWO_HAND }] } });
@@ -891,6 +898,8 @@ compose('aren-air-step', 60, [
 
 // Every skill faces the target along the simulation's facing; only the Seed Storm spin turns the whole body.
 for (const spec of specs) if (spec.clip.startsWith('yara-') && spec.clip !== 'yara-seed-storm') spec.facing = FACE;
+// Every clip built from donor motion keeps the arms out of the trunk, head and legs (arm-body-clearance.mjs); the captured knockdown and get-up takes are left as recorded.
+for (const spec of specs) if (!spec.lie && !spec.getup) spec.clearArms = true;
 
 /* ------------------------------------------------------------------ build */
 
@@ -1094,6 +1103,8 @@ function makeClip(spec) {
   if (spec.facing !== undefined) faceForward(target, clip.frames, clip.count, spec.facing);
   let staffTilt;
   if (spec.arm) staffTilt = armLayer(context, clip.frames, clip.count, spec.arm, limits);
+  // Loops keep their seam bit-exact: the pass is a pure function of a frame, but the time smoothing is not periodic, so loops skip it.
+  const armClearance = spec.clearArms ? clearArms(target, clip.frames, clip.count, { smooth: spec.loop ? 0 : 0.5 }) : undefined;
   if (process.env.YARA_DEBUG) { const pre = jointExcursions(target, clip.frames, clip.count, limits); console.error(spec.clip, 'pre-limit', JSON.stringify(Object.fromEntries(Object.entries(pre).filter(([j]) => /Right(Arm|ForeArm|Hand|Shoulder)|Left(Arm|ForeArm|Hand)/.test(j)).map(([j, e]) => [j.replace('mixamorig:', ''), [Math.round(e.swing), Math.round(e.twist)]])))); }
   if (process.env.YARA_TRACE === spec.clip) {
     for (let k = 0; k < clip.count; k += 1) {
@@ -1112,6 +1123,7 @@ function makeClip(spec) {
     peakSwing: Math.round(Math.max(...worst.map((e) => e.swing)) * 10) / 10, peakTwist: Math.round(Math.max(...worst.map((e) => e.twist)) * 10) / 10,
     ...(staffTilt ? { staffTiltMax: Math.round(Math.max(...staffTilt) * 10) / 10, staffTiltMean: Math.round(staffTilt.reduce((s, v) => s + v, 0) / staffTilt.length * 10) / 10 } : {}),
     corrections,
+    ...(armClearance ? { armClearance } : {}),
     ...(spec.pin ? { hipsTravel: (() => { const t = hipsTravel(target, clip.frames, clip.count); return { horizontalMetres: Math.round(t.horizontal * RIG_SCALE * 1e4) / 1e4, verticalMetres: Math.round(t.vertical * RIG_SCALE * 1e4) / 1e4 }; })() } : {}),
   };
   return clip;
