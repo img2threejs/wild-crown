@@ -6,6 +6,8 @@ import { MAX_SHOT_DISTANCE, planEstablishingShot, type EstablishingFraming } fro
 import { CameraDirector } from './CameraDirector';
 import { createActorMotionState, settleDrawnHeight, updateLean, type ActorMotionState } from './ActorMotionSmoothing';
 import { ActorProcedural, type ProceduralDetail } from './ActorProcedural';
+import { postureEnvelope, type PostureFactors } from './AttackPosture';
+import { ATTACK_POSTURES } from './AttackPostures';
 import { QuadrupedGrounding } from './QuadrupedGrounding';
 import { REACTION_CLIPS, ReactionPresenter, localReactionDirection, type ReactionContext } from './ReactionPresenter';
 import { findRigBones } from './RigBones';
@@ -1082,6 +1084,7 @@ export class GameRenderer {
    * Procedural rig of an instance, resolved once: foot IK for complete Mixamo bipeds and for creature limbs (never for flyers), and the bone
    * layer over them (reaction bends, look-at, spring tails) wherever the rig has the bones for it. Installed as the controller's grounding slot.
    */
+  private readonly postureFactors: PostureFactors = { coil: 0, lean: 0 };
   private rigFor(instance: NativeAssetInstance): ActorRig {
     let rig = this.footGrounding.get(instance);
     if (rig === undefined) {
@@ -1613,6 +1616,16 @@ export class GameRenderer {
       inputs.lookEnabled = gaze && detail === 'full';
       inputs.hasTarget = inputs.lookEnabled && this.selectLookTarget(actor, this.lookTarget);
       if (inputs.hasTarget) { inputs.targetX = this.lookTarget.x; inputs.targetY = this.lookTarget.y; inputs.targetZ = this.lookTarget.z; }
+      // Biped heroes keep their arms out of their own body, and stage hand strikes with a chest coil timed to the action's contact.
+      inputs.limbClearance = !monsterBody && inputs.detail !== 'off' && actor.visible;
+      const posture = monsterBody || reacting || actor.downed || inputs.detail === 'off' ? undefined : ATTACK_POSTURES[actor.actionId];
+      if (posture) {
+        let time = actor.normalizedTime;
+        if (interpolate && previous?.actionId === actor.actionId && previous.normalizedTime <= time) time = previous.normalizedTime + (time - previous.normalizedTime) * alpha;
+        postureEnvelope(posture.peak, time, this.postureFactors);
+        const scale = this.reducedMotion ? 0.5 : 1;
+        inputs.postureCoil = posture.coil * this.postureFactors.coil * scale; inputs.postureLean = posture.lean * this.postureFactors.lean * scale;
+      } else { inputs.postureCoil = 0; inputs.postureLean = 0; }
     }
     if (extras.lodSkip) return;
     const loopTimeSeconds = this.currentCombat

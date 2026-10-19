@@ -1,4 +1,5 @@
 import { PropertyBinding, Quaternion, Vector3, type Object3D } from 'three';
+import type { BipedLimbs } from './LimbClearance';
 
 /**
  * Bones a rig exposes to procedural motion (reaction bends, look-at, spring tails), found once per instance by name:
@@ -15,6 +16,8 @@ export interface RigBones {
   readonly tails: readonly (readonly Object3D[])[];
   /** Legs of a creature (one chain per limb, base first); empty for bipeds (FootGrounding owns their legs). */
   readonly limbs: readonly (readonly Object3D[])[];
+  /** Arms, legs and trunk of a complete Mixamo biped, for the limb-clearance solver; undefined for creatures and partial rigs. */
+  readonly biped: BipedLimbs | undefined;
 }
 
 const BIPED_SPINE = ['mixamorig:Spine', 'mixamorig:Spine1', 'mixamorig:Spine2'] as const;
@@ -37,12 +40,22 @@ function chainOf(bones: readonly Object3D[]): Object3D[] {
   return chain;
 }
 
+function findBipedLimbs(find: (name: string) => Object3D | undefined, spine: Object3D[], head: Object3D[]): BipedLimbs | undefined {
+  const side = (s: 'Left' | 'Right') => {
+    const arm = find(`mixamorig:${s}Arm`), foreArm = find(`mixamorig:${s}ForeArm`), hand = find(`mixamorig:${s}Hand`);
+    const upLeg = find(`mixamorig:${s}UpLeg`), leg = find(`mixamorig:${s}Leg`), foot = find(`mixamorig:${s}Foot`);
+    return arm && foreArm && hand && upLeg && leg && foot ? { arm, foreArm, hand, upLeg, leg, foot } : undefined;
+  };
+  const hips = find('mixamorig:Hips'), left = side('Left'), right = side('Right');
+  return hips && left && right ? { hips, spine1: spine[1]!, neck: head[0]!, head: head[1]!, left, right } : undefined;
+}
+
 /** Null when the rig has neither a complete biped spine/head nor any creature chain. */
 export function findRigBones(root: Object3D): RigBones | null {
   const find = (name: string): Object3D | undefined => root.getObjectByName(PropertyBinding.sanitizeNodeName(name)) ?? root.getObjectByName(name);
   const spine = BIPED_SPINE.map(find), head = BIPED_HEAD.map(find);
   if (spine.every(Boolean) && head.every(Boolean)) {
-    return { kind: 'biped', spine: spine as Object3D[], head: head as Object3D[], tails: [], limbs: [] };
+    return { kind: 'biped', spine: spine as Object3D[], head: head as Object3D[], tails: [], limbs: [], biped: findBipedLimbs(find, spine as Object3D[], head as Object3D[]) };
   }
   const parts: Record<string, { index: number; bone: Object3D }[]> = { Spine: [], Head: [], Tail: [] };
   const limbs = new Map<string, { index: number; bone: Object3D }[]>();
@@ -67,6 +80,7 @@ export function findRigBones(root: Object3D): RigBones | null {
     head: headChain,
     tails: tail.length >= 2 ? [tail] : [],
     limbs: [...limbs.values()].map(ordered).filter(chain => chain.length >= 3),
+    biped: undefined,
   };
 }
 
