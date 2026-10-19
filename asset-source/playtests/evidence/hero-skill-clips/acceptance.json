@@ -22,7 +22,8 @@
     "aren-skills.webp",
     "audit-after.json",
     "audit-yara-mage.json",
-    "yara-skills.webp"
+    "yara-skills.webp",
+    "yara-thornshot-ingame.webp"
   ],
   "yaraMage": {
     "request": "Yara's skills redone as a sorceress: casting gestures, a human body that never folds into itself or passes through itself.",
@@ -49,6 +50,7 @@
       "Mixamo's casts are empty-handed: the staff is held by the arm layer, not by the captured take, so the staff hand's motion is authored, not captured.",
       "Root Spike, Sap Lance and Seed Charge keep the donors' lunging stance (hips about 15 % lower than her idle, trunk at the 26 deg limit).",
       "aren-air-step (double jump) was not re-authored."
-    ]
+    ],
+    "vfx": "Hand casts (Thornshot 1-3, Binding Vines, Cleanse): launch flare, sap trail and drawn thorn/seed start at the left palm (ActorBounds.leftPalm), easing onto the simulated path within 0.15 s; Seed Storm seeds leave the raised staff head. Presentation only. yara-thornshot-ingame.webp: Greenwake close crop, 60 fps canvas frames 6-29 after J. tests/effects 322 pass."
   }
 }

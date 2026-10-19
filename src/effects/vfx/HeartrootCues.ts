@@ -1,5 +1,6 @@
 import { ConeGeometry, Vector3 } from 'three';
 import type { KitSlot } from './ElementKits.js';
+import { isYaraHandCast, leftPalm } from './ActorBounds.js';
 import { CrystalSpikesFx } from './InstancedFx.js';
 import { Footprint } from './footprint.js';
 import { HEARTROOT_IMPACT, HEARTROOT_TRAIL, type HeartrootKitId } from './HeroKits.js';
@@ -25,7 +26,7 @@ interface Burst { tick: number; kit: HeartrootKitId; owner: number; x: number; z
 
 /**
  * Heartroot (Yara) presentation: one kit per skill, each with its own contact (thorn, seed, root spike, eruption, sap lance, seed storm,
- * vines, cleanse, bloom, meteor), a staff-head sap trail, shake/rim/light scaled by `HEARTROOT_IMPACT`, and a Petal Step petal swirl.
+ * vines, cleanse, bloom, meteor), a sap trail on the staff head (or, for the hand casts, on her casting hand), shake/rim/light scaled by `HEARTROOT_IMPACT`, and a Petal Step petal swirl.
  * A recent-burst ledger keys a projectile hit (impact cue + hit cue) or an area burst (bloom cue + per-target hit cues) to the engine's
  * same-tick duplicate cue of the same skill, so one contact draws one burst.
  */
@@ -130,13 +131,27 @@ export class HeartrootCues {
 
   // ---- launch and projectile impacts ----
 
-  /** Thornshot / seed / storm-seed leaving the staff: a flare at the staff head and a short sap trail on the swing. */
+  /** Thornshot / seed / storm-seed launch: a flare where the spell leaves her (the palm for the hand casts, the raised staff head for Seed Storm) and a short sap trail. */
   private launch(slot: KitSlot, kit: HeartrootKitId, x: number, y: number, z: number): void {
     const vfx = this.vfx, owner = slot.owner;
+    // The flare sits on what casts the spell, not on the simulation's spawn point ahead of the chest.
+    if (this.castingPalm()) { x = this.a.x; y = this.a.y; z = this.a.z; }
+    else if (kit === 'heartroot-storm') {
+      const tip = this.warden?.resolveSocket?.('aren', 'weapon-tip');
+      if (tip) { tip.updateWorldMatrix(true, false); tip.getWorldPosition(this.a); x = this.a.x; y = this.a.y; z = this.a.z; }
+    }
     this.openTrail(kit, kit === 'heartroot-storm' ? 8 : 10);
     vfx.gather(x, y, z, kit === 'heartroot-seed' ? 12 : 8, .5, 'heartroot', owner);
     vfx.flash(x, y, z, kit === 'heartroot-seed' ? 1.2 : .8, 'heartroot', owner, .14);
     if (kit !== 'heartroot-storm') vfx.lights.pulse(x, y, z, PALETTE.heartroot.hot, 1.8, 4, .2, vfx.time, owner);
+  }
+
+  /** Writes the left palm into `this.a` (direction into `this.b`) while Yara plays a hand-cast skill; false otherwise. */
+  private castingPalm(): boolean {
+    const w = this.warden;
+    if (!w || w.player.hero !== 'yara' || !isYaraHandCast(w.player.actionId)) return false;
+    w.hand.resolve(w.resolveActorRoot?.('aren'));
+    return leftPalm(w.hand, this.a, this.b);
   }
 
   private projectileImpact(slot: KitSlot, kit: HeartrootKitId, x: number, y: number, z: number): void {
@@ -283,6 +298,11 @@ export class HeartrootCues {
     const cue = slot.cue, to = cue.to ?? cue.position;
     if (!to) return;
     this.openTrail('heartroot-vines', 14);
+    // The vines are flung from her raised hand: a sap flare and a short spray of leaves along the throw.
+    if (this.castingPalm()) {
+      this.vfx.flash(this.a.x, this.a.y, this.a.z, .7, 'heartroot', slot.owner, .12);
+      this.drops(slot.owner, this.a.x, this.a.y, this.a.z, 6, 1.6);
+    }
     this.contact(slot, 'heartroot-vines', to.x, to.y + .9, to.z, true);
   }
 
@@ -295,6 +315,8 @@ export class HeartrootCues {
     slot.tracked = false;
     slot.acc[0] = 0;
     vfx.flash(x, y + .5, z, 1, 'heartroot', owner, .2);
+    // The healing light gathers in her open palm before the ring rises.
+    if (this.castingPalm()) vfx.gather(this.a.x, this.a.y, this.a.z, 10, .45, 'heartroot', owner);
     this.pollen(owner, x, y + .1, z, 14, .9);
     this.sink('heartroot-cleanse', slot.cue.targetId, x, y + 1, z, owner);
   }

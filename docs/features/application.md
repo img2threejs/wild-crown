@@ -159,6 +159,7 @@ All captures are under `asset-source/playtests/evidence/combat-polish`. Skills w
 - Binding Vines staggered a winding-up boar.
 - Cleanse lowered corruption from 60 to 40.
 - Her boosted jump played her own `aren-air-step` with petal air steps.
+- Since the sorceress rework (#134) her hand casts (Thornshot 1–3, Binding Vines, Cleanse) are cast by her left hand, and the effects follow it (`isYaraHandCast` / `leftPalm` in `ActorBounds.ts`): the launch flare, the sap trail and the drawn thorn or seed start at her palm, and the thorn eases onto its simulated path within 0.15 s (presentation only; the simulation spawn point is unchanged). Seed Storm's seeds leave the raised staff head; Sap Lance, the charges, Root Spike, Eruption and Bloom keep their staff-head and ground effects.
 
 **Monsters on all five maps** (`monster-attacks-contact.png`, `monster-greenwake-attacks-contact.png`)
 - In the live AI, all 13 trial monsters went windup → commit → active on their planned clip slot, for example:
