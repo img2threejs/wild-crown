@@ -4,11 +4,12 @@ import { isAbsolute, resolve } from 'node:path';
 import { Quaternion, Texture, TextureLoader, Vector3 } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { Rig } from './retarget-aren-tripo-clips.mjs';
+import { parseGlb } from './import-aren-animation-set.mjs';
 
 /**
  * Mixamo FBX donors for the hero clip authors.
  *
- * `loadMixamoDonor(file)` parses an animation FBX (Mixamo "Without Skin" 30 fps, or a Tripo `--out-format fbx` retarget) with three's FBXLoader and
+ * `loadMixamoDonor(file)` parses an animation FBX (Mixamo "Without Skin" 30 fps, or a Tripo `--out-format fbx` retarget) or a Mixamo-rig GLB (Viggle `mixamo-glb`) with three's FBXLoader and
  * re-expresses its skeleton and take as an in-memory glTF source, so the result is a stock `Rig` with `decodeAnimation(name)` — exactly the shape the
  * Tripo donors have in `retarget-aren-tripo-clips.mjs` (`rigs[key]`, `{ source: { donor: key, animation } }`). `buildClip`, `retargetFrames` and the
  * world-space rest-pose retarget then treat it like any other donor; nothing else is special-cased.
@@ -38,6 +39,18 @@ function parseFbx(bytes) {
     TextureLoader.prototype.load = original;
     console.warn = warn;
   }
+}
+
+/**
+ * A Mixamo-rig motion delivered as binary glTF (Viggle/PINOC `mixamo-glb`: X Bot mesh, 65 `mixamorig:` joints under a Y-up root, metres). The glTF is the
+ * source as is; the rest pose is its skin's bind pose (the node defaults).
+ */
+function glbSource(bytes, label) {
+  const source = parseGlb(bytes);
+  if (!source.json.animations?.length) throw new Error(`${label}: GLB has no animation`);
+  const hipsNode = source.json.nodes.findIndex((node) => node.name === 'mixamorig:Hips');
+  if (hipsNode < 0) throw new Error(`${label}: GLB has no mixamorig:Hips`);
+  return { source, hipsNode, unitScale: 1, bindPose: true };
 }
 
 /** `mixamorigHips` / `mixamorig1:Hips` / `mixamorig:Hips` → `mixamorig:Hips`; every other name is left alone. */
@@ -211,7 +224,9 @@ const parsedFiles = new Map();
 function parseFile(path, label) {
   if (!parsedFiles.has(path)) {
     parsedFiles.set(path, (async () => {
-      const bytes = await readFile(path), scene = parseFbx(bytes);
+      const bytes = await readFile(path);
+      if (/\.glb$/i.test(path)) return { ...glbSource(bytes, label), sha256: sha256(bytes) };
+      const scene = parseFbx(bytes);
       if (!scene.animations.length) throw new Error(`${label}: FBX has no animation take`);
       return { ...buildSource(scene), sha256: sha256(bytes) };
     })());

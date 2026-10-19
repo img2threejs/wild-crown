@@ -44,35 +44,44 @@ const mirrorName = (name) => name.replace(/^(mixamorig:)(Left|Right)/, (_, prefi
  * are described at `buildClip`. `aim` ([tick, yaw°, pitch°, weight?], yaw 0 forward, + toward Aren's left) steers the glaive.
  */
 const RIGHT_HAND = ['RightHand'];
-const MX = (name) => ({ donor: 'mixamo', file: `asset-source/mixamo/vesper/${name}.fbx`, inPlace: true });
+/** A Viggle/PINOC text-to-motion take on the Mixamo rig (asset-source/viggle/<name>.glb, ledger asset-source/viggle/provenance.json), played in place. */
+const VG = (name) => ({ donor: 'mixamo', file: `asset-source/viggle/${name}.glb`, inPlace: true });
+/** The glaive continues the line of the striking forearm (see solveWrist): the captured swing carries the blade without hand-keyed aim curves. */
+const ALONG = { along: 'forearm', lift: 0.1 };
 const CARRY = [15, 30];
 export const CLIP_SPECS = [
-  // Warden Blade combo, authored on captured Mixamo sword takes (asset-source/mixamo/vesper). Light 1: horizontal right-to-left cut; Light 2: outward return cut; Light 3: the one-handed combo's forward diagonal; Light 4: its downward finisher.
-  { clip: 'aren-light-1', source: MX('melee-horizontal-rl'), sim: { totalTicks: 26, activeTick: 9 }, window: [0.7, 1.5], contact: { joints: RIGHT_HAND, search: [0.8, 1.1], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-light-2', source: MX('sword-outward-slash'), sim: { totalTicks: 28, activeTick: 10 }, window: [0.55, 1.5], contact: { joints: RIGHT_HAND, search: [0.7, 1.0], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-light-3', source: MX('one-hand-sword-combo'), sim: { totalTicks: 34, activeTick: 10 }, window: [1.75, 2.6], contact: { joints: RIGHT_HAND, search: [1.8, 2.2], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-light-4', source: MX('one-hand-sword-combo'), sim: { totalTicks: 40, activeTick: 15 }, window: [2.6, 3.6], contact: { joints: RIGHT_HAND, search: [2.8, 3.2], settle: 0 }, idleBlendTail: 0.3 },
-  // Sigil casts: the glaive thrust releases the sigil; Barrage chains three thrusts. The charge loops the ready stance.
-  { clip: 'aren-sigil-bolt', source: MX('thrust-slash'), sim: { totalTicks: 30, activeTick: 16 }, window: [0.35, 1.3], contact: { joints: RIGHT_HAND, search: [0.5, 0.95], settle: 0.1 }, idleBlendTail: 0.3,
-    aim: [[0, ...CARRY], [8, 10, 55], [16, 0, 12, 3], [22, 0, 10], [30, ...CARRY]] },
-  { clip: 'aren-sigil-barrage', sim: { totalTicks: 40 }, idleBlendTail: 0.25,
-    aim: [[0, ...CARRY], [8, 0, 12, 3], [12, 5, 30], [16, 0, 12, 3], [20, 5, 30], [24, 0, 12, 3], [40, ...CARRY]],
+  // Warden Blade combo: one continuous captured four-blow take (glaive-2) cut at the low-speed instants between blows, so every step ends exactly on the
+  // pose the next step starts from and a chained combo flows without a pose change. Each blow's fastest hand motion lands on its simulation hit tick.
+  // Light 1: horizontal cut right → left; Light 2: rising backhand; Light 3: horizontal cut (the simulation turns Aren through the spin); Light 4: the
+  // descending finisher, which alone settles back toward the idle. Around each hit the warp runs at one rate (±3 ticks), so the blow itself, not its
+  // compressed wind-up, is the fastest motion of the step. Steps 1–3 cover only the last few hundredths of a second of their take over the
+  // ticks from which the simulation accepts the next press (CHAIN_EARLY_TICKS), so a chain started anywhere in that window meets the next step's first pose.
+  { clip: 'aren-light-1', source: VG('glaive-2'), sim: { totalTicks: 26, activeTick: 9 }, keys: [[0, 0.66], [6, 0.805], [9, 0.885], [12, 0.965], [22, 1.1], [26, 1.15]], contact: { joints: RIGHT_HAND, search: [0.8, 1.0] }, aim: ALONG },
+  { clip: 'aren-light-2', source: VG('glaive-2'), sim: { totalTicks: 28, activeTick: 10 }, keys: [[0, 1.15], [7, 1.34], [10, 1.42], [13, 1.5], [24, 1.69], [28, 1.75]], contact: { joints: RIGHT_HAND, search: [1.35, 1.55] }, aim: ALONG },
+  { clip: 'aren-light-3', source: VG('glaive-2'), sim: { totalTicks: 34, activeTick: 10 }, keys: [[0, 1.75], [7, 1.95], [10, 2.05], [13, 2.15], [30, 2.74], [34, 2.8]], contact: { joints: RIGHT_HAND, search: [2.0, 2.2] }, aim: ALONG },
+  { clip: 'aren-light-4', source: VG('glaive-2'), sim: { totalTicks: 40, activeTick: 15 }, keys: [[0, 2.8], [12, 3.12], [15, 3.2], [18, 3.28], [40, 3.6]], contact: { joints: RIGHT_HAND, search: [3.1, 3.3] }, aim: ALONG, idleBlendTail: 0.3 },
+  // Sigil casts (the glaive aimed level at the target throughout): the channelling stance (glaive point-forward, left palm raised) and the bolt's
+  // lunging thrust are one take (aren-sigil-full-2): the
+  // charge loops its still opening and the bolt continues from there. Barrage is three thrusts of a three-thrust take, each part centred on its
+  // fullest reach so the launches fall on ticks 8, 16 and 24.
+  { clip: 'aren-sigil-charge', source: VG('aren-sigil-full-2'), durationSeconds: 1.2, loop: { overlapSeconds: 0.3 }, window: [0.1, 0.9], aim: [[0, 0, 12], [72, 0, 12]] },
+  { clip: 'aren-sigil-bolt', source: VG('aren-sigil-full-2'), sim: { totalTicks: 30, activeTick: 16 }, keys: [[0, 0.9], [13, 1.47], [16, 1.55], [19, 1.6], [30, 1.75]], contact: { joints: RIGHT_HAND, search: [1.3, 1.5] }, aim: [[0, 0, 12], [16, 0, 8, 3], [30, 0, 10]], seamFrom: { clip: 'aren-sigil-charge', ticks: 6 }, idleBlendTail: 0.3 },
+  { clip: 'aren-sigil-barrage', sim: { totalTicks: 40 }, aim: [[0, 0, 12], [8, 0, 8, 3], [16, 0, 8, 3], [24, 0, 8, 3], [40, 0, 10]], seamFrom: { clip: 'aren-sigil-charge', ticks: 4 }, idleBlendTail: 0.25,
     parts: [
-      { ticks: [0, 12], source: MX('thrust-slash'), keys: [[0, 0.35], [2, 0.45], [8, 0.85], [14, 1.15]] },
-      { ticks: [12, 20], source: MX('thrust-slash'), keys: [[10, 0.45], [16, 0.85], [22, 1.15]] },
-      { ticks: [20, 28], source: MX('thrust-slash'), keys: [[18, 0.45], [24, 0.85], [30, 1.15], [40, 1.3]] },
+      { ticks: [0, 12], source: VG('aren-sigil-barrage-b-2'), keys: [[0, 0.15], [8, 0.5], [14, 0.72]] },
+      { ticks: [12, 20], source: VG('aren-sigil-barrage-b-2'), keys: [[10, 0.88], [16, 1.07], [22, 1.42]] },
+      { ticks: [20, 28], source: VG('aren-sigil-barrage-b-2'), keys: [[18, 1.62], [24, 1.8], [28, 1.93], [40, 2.6]] },
     ] },
-  { clip: 'aren-sigil-charge', source: MX('melee-idle'), durationSeconds: 1.2, loop: { overlapSeconds: 0.4 }, window: [0, 1.5] },
-  // Warden's Judgement: the rising backhand sweep.
-  { clip: 'aren-judgement', source: MX('melee-backhand-up'), sim: { totalTicks: 52 }, window: [0.55, 2.2], idleBlendTail: 0.3 },
-  // Heavy: the overhead chop with a long wind-up; Thunder Cleave: the spinning 360 cut.
-  { clip: 'aren-heavy', source: MX('melee-downward'), sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, window: [0.1, 1.9], contact: { joints: RIGHT_HAND, search: [0.6, 1.0], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-charged-heavy', source: MX('melee-360-high'), sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, window: [0.2, 2.4], contact: { joints: RIGHT_HAND, search: [0.9, 1.3], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-charged-heavy-charge', source: MX('melee-idle'), durationSeconds: 0.8, loop: { overlapSeconds: 0.3 }, window: [0, 1.2] },
-  // Root Tether: the inward cut as a lash; Cleanse: the glaive planted, a still channel, the rise.
-  { clip: 'aren-root-tether', source: MX('sword-inward-slash'), sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, window: [0.9, 1.9], contact: { joints: RIGHT_HAND, search: [1.0, 1.4], settle: 0 }, idleBlendTail: 0.3 },
-  { clip: 'aren-cleanse', source: MX('melee-idle'), sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, window: [0, 1.8], sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 }, idleBlendTail: 0.2,
-    aim: [[0, ...CARRY], [20, 0, -10, 2], [35, 0, -75, 3], [90, 0, -70], [108, ...CARRY]] },
+  // Warden's Judgement: a gathering crouch, the low lunging dash, a spinning rising finisher and the recovery.
+  { clip: 'aren-judgement', source: VG('aren-judgement-2'), sim: { totalTicks: 52 }, window: [0.4, 2.7], aim: ALONG, idleBlendTail: 0.25 },
+  // Heavy: a deliberate overhead wind-up and slam. Thunder Cleave: the braced charge, then the leap and two-handed slam that starts from that stance.
+  // Both land the slam on the hit tick (keys: [tick, source seconds]) and pass quickly through the low crouch after it, so he is not left kneeling.
+  { clip: 'aren-heavy', source: VG('aren-heavy-1'), sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, keys: [[0, 0.4], [17, 1.25], [20, 1.33], [23, 1.41], [30, 1.75], [63, 2.75]], contact: { joints: RIGHT_HAND, search: [1.2, 1.45] }, aim: ALONG, idleBlendTail: 0.2 },
+  { clip: 'aren-charged-heavy-charge', source: VG('aren-cleave-charge-1'), durationSeconds: 0.8, loop: { overlapSeconds: 0.3 }, window: [0.5, 1.8], aim: ALONG },
+  { clip: 'aren-charged-heavy', source: VG('aren-cleave-release-2'), sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, keys: [[0, 0.4], [33, 1.01], [36, 1.13], [39, 1.25], [48, 1.75], [76, 2.6]], contact: { joints: RIGHT_HAND, search: [1.1, 1.3] }, airborne: true, aim: ALONG, seamFrom: { clip: 'aren-charged-heavy-charge', ticks: 18 }, idleBlendTail: 0.2 },
+  // Root Tether: the whipping overhand lash and the yank back. Cleanse: the glaive planted point-down, a long bowed channel, then free.
+  { clip: 'aren-root-tether', source: VG('aren-root-tether-3'), sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, window: [0.5, 2.5], contact: { joints: RIGHT_HAND, search: [0.85, 1.0], settle: 0 }, aim: ALONG, idleBlendTail: 0.25 },
+  { clip: 'aren-cleanse', source: VG('aren-cleanse-2'), sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, window: [0.3, 2.9], aim: ALONG, idleBlendTail: 0.2 },
   { clip: 'aren-hit', source: { donor: 'b', animation: 'hit_to_body_01' }, durationSeconds: 0.35, window: [0.12, 0.9], joints: UPPER_BODY },
   { clip: 'aren-stagger', source: { donor: 'b', animation: 'hit_to_stomach' }, durationSeconds: 0.7, window: [0.1, 1.2], aim: [[0, ...CARRY], [42, ...CARRY]] },
   // Tripo's flip is a forward somersault; Back Handspring travels backwards, so the segment plays in reverse.
@@ -691,6 +700,7 @@ const MAX_WRIST_SWING = 40 * DEGREES, MAX_WRIST_TWIST = 100 * DEGREES, SWING_PEN
 const AIM_CHAIN = [{ joint: 'RightHand', fraction: 0.6, cap: 70 }, { joint: 'RightForeArm', fraction: 0.5, cap: 100 }, { joint: 'RightArm', fraction: 0.35, cap: 60 }];
 const AIM_PASSES = 10;
 const BONE_AXIS = new Vector3(0, 1, 0);
+const UP_AXIS = new Vector3(0, 1, 0);
 const twistScratch = new Quaternion(), swingScratch = new Quaternion();
 
 /** Rotation about the bone axis (+Y) contained in `q` (radians, −π..π) and the angle of the remaining swing (`q = swing · twist`). */
@@ -712,9 +722,18 @@ function solveWrist(target, frames, count, aim, limits) {
   const hand = target.index.get('mixamorig:RightHand'), forearm = target.index.get('mixamorig:RightForeArm'), axis = bladeAxisLocal(target);
   const track = frames.rotations[hand], forearmTrack = frames.rotations[forearm];
   const quaternions = [], desired = [], weights = [], scratch = { direction: new Vector3(), weight: 1 };
+  const elbow = new Vector3(), wristPoint = new Vector3();
   for (let k = 0; k < count; k += 1) {
-    quaternions.push(worldQuaternion(target.poseFrame(frames, k)[hand], new Quaternion()));
-    aimAt(aim, k * TICKS_PER_SECOND / FPS, scratch);
+    const world = target.poseFrame(frames, k);
+    quaternions.push(worldQuaternion(world[hand], new Quaternion()));
+    if (Array.isArray(aim)) aimAt(aim, k * TICKS_PER_SECOND / FPS, scratch);
+    else {
+      // `{ along: 'forearm', lift }`: the blade continues the line of the striking forearm (elbow → wrist), tipped up by `lift` — the way a held
+      // polearm extends the arm through every captured swing, without hand-keyed aim curves.
+      elbow.setFromMatrixPosition(world[forearm]); wristPoint.setFromMatrixPosition(world[hand]);
+      scratch.direction.subVectors(wristPoint, elbow).normalize().addScaledVector(UP_AXIS, aim.lift ?? 0).normalize();
+      scratch.weight = 1;
+    }
     desired.push(scratch.direction.clone()); weights.push(scratch.weight);
   }
   const weightSum = weights.reduce((sum, w) => sum + w, 0), probe = new Vector3(), q = new Quaternion();
@@ -729,14 +748,16 @@ function solveWrist(target, frames, count, aim, limits) {
   };
   const best = axis.clone();
   let bestCost = cost(best);
-  const candidates = 6000, golden = Math.PI * (3 - Math.sqrt(5)), u = new Vector3();
+  // A forearm-aligned clip keeps the grip as fitted (no clip-wide wrist offset): stage 2 alone is a function of each frame, so two combo steps cut
+  // from one take produce the same pose at their shared boundary.
+  const candidates = Array.isArray(aim) ? 6000 : 0, golden = Math.PI * (3 - Math.sqrt(5)), u = new Vector3();
   for (let i = 0; i < candidates; i += 1) {
     const z = 1 - 2 * (i + 0.5) / candidates, r = Math.sqrt(1 - z * z);
     const c = cost(u.set(r * Math.cos(i * golden), r * Math.sin(i * golden), z));
     if (c < bestCost) { bestCost = c; best.copy(u); }
   }
   const e1 = new Vector3(), e2 = new Vector3(), next = new Vector3();
-  for (const step of [0.1, 0.05, 0.025, 0.0125, 0.006, 0.003]) {
+  for (const step of candidates ? [0.1, 0.05, 0.025, 0.0125, 0.006, 0.003] : []) {
     for (let improved = true; improved;) {
       improved = false;
       e1.set(1, 0, 0).cross(best).normalize(); e2.crossVectors(best, e1);
@@ -868,8 +889,18 @@ export function buildClip(spec, rigs) {
     // A loop's source window also covers the overlap frames (its tail continuation), so a held pose keeps playing instead of freezing on the window's end.
     const source = sourceFor(part, rigs), ticks = part.ticks ?? [0, (rawCount - 1) / FPS * TICKS_PER_SECOND];
     let contact, keys;
-    if (part.keys) keys = part.keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]);
-    else {
+    if (part.keys) {
+      keys = part.keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]);
+      // Keys that also name a contact: the warp is the keys' own (they place the blow and shape the recovery); the contact is reported from the
+      // measured peak and the key at the hit tick, so the timing checks see the same facts as a contact-warped clip.
+      if (part.contact) {
+        const scanCount = Math.floor(source.decoded.duration * FPS) + 1;
+        const peak = peakSpeedTime(target, resample(target, source, scanCount, (k) => k / FPS, part.mirror), scanCount, part.contact.joints, part.contact.search);
+        const hit = part.keys.find(([tick]) => tick === spec.sim.activeTick);
+        if (!hit) throw new Error(`${spec.clip}: keys need a key on the hit tick ${spec.sim.activeTick}`);
+        contact = { peakSource: peak.time, peakSpeed: peak.speed, source: hit[1], outputFraction: spec.sim.activeTick / totalTicks, window: [part.keys[0][1], part.keys.at(-1)[1]], settle: hit[1] - peak.time, keys };
+      }
+    } else {
       const [start, end] = part.window;
       if (part.contact) {
         const scanCount = Math.floor(source.decoded.duration * FPS) + 1;
@@ -982,11 +1013,11 @@ export function appendClips(baseBytes, clips) {
 
 function round(value, digits = 4) { return Number(value.toFixed(digits)); }
 
-/** Glaive direction in the clip (yaw° 0 forward / + toward Aren's left, pitch° above horizontal) at every aim key, plus hand-speed peaks (ticks). */
+/** Glaive direction in the clip (yaw° 0 forward / + toward Aren's left, pitch° above horizontal) at every aim key (none for a forearm-aligned clip), plus hand-speed peaks (ticks). */
 function bladeReport(clip, target) {
   const hand = target.index.get('mixamorig:RightHand'), axis = bladeAxisLocal(target), quaternion = new Quaternion(), direction = new Vector3();
   const directionAt = (k) => direction.copy(axis).applyQuaternion(worldQuaternion(target.poseFrame(clip.frames, k)[hand], quaternion));
-  const keys = clip.spec.aim.map(([tick, yaw, pitch]) => {
+  const keys = (Array.isArray(clip.spec.aim) ? clip.spec.aim : []).map(([tick, yaw, pitch]) => {
     const k = Math.min(clip.count - 1, Math.round(tick * FPS / TICKS_PER_SECOND)), d = directionAt(k);
     return { tick, aimYawDegrees: yaw, aimPitchDegrees: pitch, yawDegrees: round(Math.atan2(d.x, d.z) / DEGREES, 1), pitchDegrees: round(Math.asin(Math.max(-1, Math.min(1, d.y))) / DEGREES, 1) };
   });
@@ -1088,8 +1119,14 @@ export async function retargetAren() {
   const idle = (() => {
     try { return readClipFrames(target, 'idle.001').frames; } catch { return undefined; }
   })();
+  const byName = Object.fromEntries(clips.map((clip) => [clip.spec.clip, clip]));
   for (const clip of clips) {
     const spec = clip.spec;
+    // A release that follows a held charge (`seamFrom: { clip, ticks }`) starts on the charge loop's pose and blends into its own motion.
+    if (spec.seamFrom) {
+      const from = byName[spec.seamFrom.clip];
+      blendSeamFrames(from.frames, from.count - 1, clip.frames, Math.min(clip.count, Math.max(1, Math.round(spec.seamFrom.ticks * FPS / TICKS_PER_SECOND))));
+    }
     if (spec.seamFromHold && heldByName[spec.seamFromHold]) {
       const heldClip = heldByName[spec.seamFromHold];
       const blendTicks = spec.seamBlendTicks ?? 0;
@@ -1168,9 +1205,9 @@ export function syncManifest(text, report) {
 
 export const CLIP_NOTES = [
   'Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope and is only used to report.',
-  'Warden skills are captured Mixamo sword takes (asset-source/mixamo/vesper, in place): Light 1 melee-horizontal-rl, Light 2 sword-outward-slash, Light 3 and 4 the second and third cuts of one-hand-sword-combo, Heavy melee-downward, Thunder Cleave melee-360-high, Judgement melee-backhand-up, Root Tether sword-inward-slash. The warp lands each take\'s fastest hand motion on the simulation hit tick.',
-  'Sigil Bolt plays the thrust-slash take with its fullest reach on the release tick; Sigil Barrage chains three thrust-slash reaches on ticks 8, 16 and 24, cross-faded. Sigil Charge and Thunder Cleave charge loop melee-idle; Cleanse holds melee-idle with the glaive aimed into the ground.',
-  'Every finite strike is blended into the idle pose over its last 20-30 % (`idleBlendTail`), so a skill hands back to the stance instead of freezing in its follow-through.',
+  'Warden skills are Viggle/PINOC text-to-motion takes on the Mixamo rig (asset-source/viggle, ledger provenance.json, in place). Warden Blade 1-4 are one continuous four-blow take (glaive-2) cut at its quiet instants, each step ending on the pose the next starts from, so a chained combo flows without a pose change; Heavy aren-heavy-1; Thunder Cleave charge aren-cleave-charge-1 feeding release aren-cleave-release-2 (seamFrom); Judgement aren-judgement-2; Root Tether aren-root-tether-3; Cleanse aren-cleanse-2. Keyed warps land each blow\'s fastest hand motion on the simulation hit tick.',
+  'Sigil Charge and Sigil Bolt are one take (aren-sigil-full-2): the channelling stance loops and the bolt\'s lunging thrust continues from it, its fullest reach on the release tick; Sigil Barrage is the three thrusts of aren-sigil-barrage-b-2, reaching on ticks 8, 16 and 24. The glaive follows the striking forearm frame by frame; the sigil clips aim it level at the target.',
+  'Every finite strike except Warden Blade 1-3 is blended into the idle pose over its last 20-30 % (`idleBlendTail`), so a skill hands back to the stance instead of freezing in its follow-through; the first three combo steps end on the next step\'s opening pose instead, spread over the chain window.',
   'aren-back-handspring plays Tripo flip in reverse (forward somersault -> backward). aren-hit carries upper-body tracks only so the presentation overlay never disturbs legs or hips.',
   'aren-air-step is the in-place second-jump clip: run_upstairs air steps, flip somersault, open out and landing absorb; its Hips track is pinned horizontally and compressed vertically (IN_PLACE_VERTICAL_LIMIT).',
 ];

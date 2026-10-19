@@ -19,7 +19,7 @@ describe('attack posture profiles', () => {
     expect(readFileSync(`${root}src/rendering/AttackPostures.ts`, 'utf8')).toBe(render(derive().table));
   });
 
-  it('bring each staged strike’s shoulder coil up to the reference game’s (measured on the posed rig, hand peak speed kept within 12%)', () => {
+  it('stage every profiled strike: a coil reaches the reference game’s shoulder travel, and no profile costs more than 12% of the hand’s peak speed', () => {
     const forward = new Vector3(0, 0, 1), factors = { coil: 0, lean: 0 };
     let checked = 0;
     for (const [hero, { glb, scale }] of Object.entries(HEROES)) {
@@ -27,7 +27,7 @@ describe('attack posture profiles', () => {
       const spine = ['Spine', 'Spine1', 'Spine2'].map((name) => skeleton.byName(name));
       for (const animation of source.json.animations as { name: string }[]) {
         const profile = ATTACK_POSTURES[animation.name];
-        if (!profile || Math.abs(profile.coil) < 3 * Math.PI / 180) continue;
+        if (!profile) continue;
         const { frames, count, times } = readClipFrames(rig, animation.name), scratch = interpolateFrame(frames, 0), duration = times[count - 1] - times[0];
         const measure = (staged: boolean) => {
           const sequence = [];
@@ -42,11 +42,12 @@ describe('attack posture profiles', () => {
           return ['RightHand', 'LeftHand'].map((end) => ({ end, ...analyse(sequence, { end, fps }) })).sort((a: { peakSpeed: number }, b: { peakSpeed: number }) => b.peakSpeed - a.peakSpeed)[0]!;
         };
         const before = measure(false), after = measure(true);
-        expect(after.sepTravel, `${hero} ${animation.name}`).toBeGreaterThanOrEqual(Math.min(TARGET.sepTravel - 6, before.sepTravel + 0.45 * Math.abs(profile.coil) * 180 / Math.PI));
+        // A coil profile must actually turn the shoulders against the hips; a lean-only profile (captured strikes already coil) must not slow the blow.
+        if (Math.abs(profile.coil) >= 3 * Math.PI / 180) expect(after.sepTravel, `${hero} ${animation.name}`).toBeGreaterThanOrEqual(Math.min(TARGET.sepTravel - 6, before.sepTravel + 0.45 * Math.abs(profile.coil) * 180 / Math.PI));
         expect(after.peakSpeed / before.peakSpeed, `${hero} ${animation.name} peak speed`).toBeGreaterThan(0.88);
         checked += 1;
       }
     }
-    expect(checked).toBeGreaterThanOrEqual(2);
+    expect(checked).toBe(Object.keys(ATTACK_POSTURES).length);
   });
 });

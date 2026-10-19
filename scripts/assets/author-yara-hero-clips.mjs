@@ -850,8 +850,8 @@ add('aren-idle', 'a', 'idle', 240, [2, 6], { loop: { overlapSeconds: 0.4 }, limi
 add('aren-walk', 'a', 'walk', 142, [0, 2.3666665554], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.5, pitchPerUnit: 90, keys: [{ t: 0, pose: 'carry' }] } });
 add('aren-run', 'a', 'run', 76, [0, 1.26666665], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.45, pitchPerUnit: 50, keys: [{ t: 0, pose: 'carry', hand: [0.19, -0.1, 0.03] }] } });
 add('aren-jump', 'b', 'jump', 42, [0, 2.23333335], { airborne: true, limits: LOCOMOTION, arm: { follow: 0.25, keys: [{ t: 0, pose: 'carry', w: 0.9 }] } });
-// Petal Step (every evasion action plays it): a light forward bound with the staff carried upright (Mixamo Standing Dodge Forward, in place: the simulation moves her).
-specs.push({ clip: 'aren-forward-left-dive-roll', source: { donor: 'mixamo', file: 'asset-source/mixamo/yara/dodge-forward.fbx', inPlace: true }, sim: { totalTicks: 42 }, window: [0, 1.0], airborne: true,
+// Petal Step (every evasion action plays it): a light forward dash-step with the staff carried upright (a Viggle take, in place: the simulation moves her).
+specs.push({ clip: 'aren-forward-left-dive-roll', source: { donor: 'mixamo', file: 'asset-source/viggle/yara-petal-step-2.glb', inPlace: true }, sim: { totalTicks: 42 }, window: [0.2, 1.9], airborne: true,
   upright: 26, clearStaff: true, idleBlendTail: 0.25, arm: { follow: 0.35, keys: [{ t: 0, pose: 'carry' }] } });
 add('aren-hit', 'b', 'hurt', 24, [0, 1.4]);
 add('aren-cheer', 'b', 'cheer', 300, [0, 5], { limits: LOCOMOTION });
@@ -877,43 +877,52 @@ lieClip('aren-getup-forward', 66, [
 // Heartroot skills. Release ticks are the simulation's (HEARTROOT_* / LIGHT_STEPS / SIGIL in src/game/combat): thorn bolts on tick 9/10/10, Root Spike on 20 (of 63),
 // Eruption on 36 (of 76), Sap Lance launch on 16, Seed Storm launches on 12–42 every 6, Bloom meteors from 30 and its pulse on 132 (of 156).
 const FACE = 28;
-// Every Heartroot skill is a captured Mixamo spell-casting take (asset-source/mixamo/yara: the Magic packs, Y Bot, 30 fps, no keyframe reduction). One-handed casts
-// are mirrored so her free left hand casts; the right hand keeps the staff (arm layer below, `follow` lets it ride the body's motion) and only raises,
-// levels or plants it. Finite casts land the casting hand's fastest motion on the simulation release tick and blend back into the idle at the end.
-const MAGIC = (name) => ({ donor: 'mixamo', file: `asset-source/mixamo/yara/${name}.fbx`, inPlace: true });
-const cast = (clip, name, ticks, window, extra = {}) => specs.push({ clip, source: MAGIC(name), sim: { totalTicks: ticks }, window, ...extra });
+// Every Heartroot skill is a Viggle/PINOC text-to-motion take on the Mixamo rig (asset-source/viggle/<name>.glb, ledger asset-source/viggle/provenance.json),
+// played in place: a sorceress who casts with her free left hand and works the staff in her right (both hands on it for the slams, the aim and the
+// invocation). The arm layer below holds the staff in her right fist (follow 0: a function of each frame, so steps cut from one take meet exactly).
+// Keyed warps ([tick, source seconds]) land the casting hand's fastest motion on the simulation release tick; Thornshot 1–3 are one continuous take
+// cut at its quiet instants, and each step covers only a few hundredths of a second over the ticks from which the next press is accepted, so a
+// chained combo flows from cast to cast; the per-clip arm and staff clearance passes can still differ by a few degrees at the cut, so steps 2 and 3
+// also open on the previous step's last pose (`seamFrom`). Charges loop a held pose and their releases start from it the same way.
+const VG = (name) => ({ donor: 'mixamo', file: `asset-source/viggle/${name}.glb`, inPlace: true });
+const cast = (clip, name, ticks, extra) => specs.push({ clip, source: VG(name), sim: { totalTicks: ticks }, ...extra });
 const LEFT = ['LeftHand'], BOTH = ['LeftHand', 'RightHand'];
-const STAFF_AT_SIDE = { follow: 0.35, keys: [{ t: 0, pose: 'carry' }] };
+const STAFF_AT_SIDE = { follow: 0, keys: [{ t: 0, pose: 'carry' }] };
+const TWO_HAND = { gw: 1, grip: 0.36 };
 /** The staff raised high but held clear in front of the head (the plain `high` hand passes the temple while a cast turns the chest). */
 const RAISED = { pose: 'high', hand: [0.17, 0.25, 0.08] };
-// Thornshot 1: a one-handed forward cast flings the homing thorn.
-cast('yara-thornshot-1', '1h-magic-attack-01', 26, [0.35, 1.5], { mirror: true, sim: { totalTicks: 26, activeTick: 9 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.6, 1.0], settle: 0 }, arm: STAFF_AT_SIDE });
-// Thornshot 2: a sweeping right-to-left cast throws the twin thorns.
-cast('yara-thornshot-2', '1h-magic-attack-02', 28, [0.2, 1.4], { mirror: true, sim: { totalTicks: 28, activeTick: 10 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.35, 0.65], settle: 0 }, arm: STAFF_AT_SIDE });
-// Thornshot 3: an upward cast lobs the seed that bursts into a blossom.
-cast('yara-thornshot-3', '1h-cast-spell-01', 34, [0.3, 1.5], { mirror: true, sim: { totalTicks: 34, activeTick: 10 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.45, 0.75], settle: 0 }, arm: STAFF_AT_SIDE });
-// Root Spike: a two-handed forward cast sends the roots along the lane; the staff is raised and struck down on the release tick.
-cast('yara-root-spike', '2h-magic-attack-02', 63, [0.3, 2.4], { sim: { totalTicks: 63, activeTick: 20 }, idleBlendTail: 0.3, contact: { joints: BOTH, search: [1.1, 1.4], settle: 0 },
-  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 6, pose: 'ready' }, { t: 12, ...RAISED }, { t: 20, pose: 'plant' }, { t: 40, pose: 'plant' }, { t: 63, pose: 'carry' }] } });
-// Root charge (held): the sustained two-handed cast, staff raised.
-cast('yara-root-charge', '2h-magic-attack-03', 90, [1.6, 3.1], { loop: { overlapSeconds: 0.3 }, arm: { follow: 0.2, keys: [{ t: 0, ...RAISED }] } });
-// Heartroot Eruption: pull the power in, blast it out under the foe on tick 36 with the staff planted.
-cast('yara-root-eruption', '2h-magic-area-02', 76, [0.3, 3.0], { sim: { totalTicks: 76, activeTick: 36 }, idleBlendTail: 0.25, contact: { joints: BOTH, search: [1.6, 1.95], settle: 0 },
-  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 10, pose: 'ready' }, { t: 20, ...RAISED }, { t: 36, pose: 'plant' }, { t: 56, pose: 'plant' }, { t: 76, pose: 'carry' }] } });
-// Seed charge (held): the sustained forward cast, staff levelled at the target.
-cast('yara-seed-charge', '2h-magic-attack-04', 90, [1.4, 2.6], { loop: { overlapSeconds: 0.3 }, arm: { follow: 0.2, keys: [{ t: 0, pose: 'ready' }] } });
-// Sap Lance: a two-handed forward blast, staff levelled toward the target on the launch tick 16.
-cast('yara-sap-lance', '2h-magic-attack-01', 30, [0.6, 1.7], { sim: { totalTicks: 30, activeTick: 16 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [1.0, 1.25], settle: 0 },
-  arm: { follow: 0.2, keys: [{ t: 0, pose: 'ready' }, { t: 16, pose: 'ready' }, { t: 22, pose: 'ready' }, { t: 30, pose: 'carry' }] } });
-// Seed Storm: arms spread wide to call the volley down while six seeds leave on ticks 12–42; the staff is held high.
-cast('yara-seed-storm', 'wide-arm-spell', 60, [0.4, 2.6], { idleBlendTail: 0.25, arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 5, pose: 'ready' }, { t: 11, ...RAISED }, { t: 46, ...RAISED }, { t: 53, pose: 'ready' }, { t: 60, pose: 'carry' }] } });
-// Binding Vines: a one-handed upward sweep raises the vines on tick 18.
-cast('yara-binding-vines', '1h-magic-attack-03', 54, [0.3, 1.8], { mirror: true, sim: { totalTicks: 54, activeTick: 18 }, idleBlendTail: 0.3, contact: { joints: LEFT, search: [0.8, 1.1], settle: 0 }, arm: STAFF_AT_SIDE });
-// Cleanse: the one-handed healing cast, staff upright at her side.
-cast('yara-cleanse', 'magic-heal', 108, [0.3, 2.6], { mirror: true, idleBlendTail: 0.2, arm: STAFF_AT_SIDE });
-// Heartroot Bloom: rising out of the gather, she pulls the power up and brings the hands together; the staff stays high until the final pulse on tick 132 plants it.
-cast('yara-heartroot-bloom', '2h-magic-attack-05', 156, [1.4, 3.5], { idleBlendTail: 0.15,
-  arm: { follow: 0.2, keys: [{ t: 0, pose: 'carry' }, { t: 8, pose: 'ready' }, { t: 18, ...RAISED }, { t: 124, ...RAISED }, { t: 132, pose: 'plant' }, { t: 146, pose: 'plant' }, { t: 156, pose: 'carry' }] } });
+/** Both hands on the raised staff: the left fist below the right one, in front of the face (above it, the left upper arm would cross her head). */
+const RAISED_TWO = { pose: 'high', hand: [0.26, 0.21, 0.08], gw: 1, grip: -0.26 };
+/** On the way up both hands pass in front of the chest, clear of the face. */
+const LIFT_TWO = { pose: 'high', hand: [0.32, 0.12, 0.1], gw: 1, grip: -0.26 };
+/** Both hands on the planted staff, the left fist below the right one. */
+const PLANT_TWO = { pose: 'plant', gw: 1, grip: -0.26 };
+// Thornshot 1–3: forward palm thrust, a sweeping cast, then the overhead hurl of the seed (one take, sorc-1).
+cast('yara-thornshot-1', 'sorc-1', 26, { sim: { totalTicks: 26, activeTick: 9 }, keys: [[0, 0.5], [9, 0.9], [22, 1.49], [26, 1.55]], contact: { joints: LEFT, search: [0.8, 1.0] }, arm: STAFF_AT_SIDE });
+cast('yara-thornshot-2', 'sorc-1', 28, { sim: { totalTicks: 28, activeTick: 10 }, keys: [[0, 1.55], [10, 2.0], [24, 2.69], [28, 2.75]], contact: { joints: LEFT, search: [1.9, 2.1] }, seamFrom: { clip: 'yara-thornshot-1', ticks: 4 }, arm: STAFF_AT_SIDE });
+cast('yara-thornshot-3', 'sorc-1', 34, { sim: { totalTicks: 34, activeTick: 10 }, keys: [[0, 2.75], [10, 3.3], [34, 4.0]], contact: { joints: LEFT, search: [3.2, 3.4] }, seamFrom: { clip: 'yara-thornshot-2', ticks: 4 }, idleBlendTail: 0.3, arm: STAFF_AT_SIDE });
+// Root Spike: the staff lifted in both hands and driven down beside her front foot on tick 20, held, lifted away.
+cast('yara-root-spike', 'yara-root-full-4', 63, { sim: { totalTicks: 63, activeTick: 20 }, keys: [[0, 0.4], [17, 1.6], [20, 1.67], [23, 1.74], [35, 2.3], [63, 3.5]], contact: { joints: BOTH, search: [1.55, 1.75] }, idleBlendTail: 0.2,
+  arm: { follow: 0, keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 4, pose: 'ready', ...TWO_HAND }, { t: 8, ...LIFT_TWO }, { t: 12, ...RAISED_TWO }, { t: 17, ...RAISED_TWO }, { t: 20, ...PLANT_TWO }, { t: 44, ...PLANT_TWO }, { t: 63, pose: 'carry', gw: 0 }] } });
+// Root charge (held) and Heartroot Eruption are one take (yara-root-full-4): the charge loops its still raised-staff hold, the eruption continues from
+// there and drives the staff down on tick 36. Root Spike is the quick version of the same slam.
+cast('yara-root-charge', 'yara-root-full-4', 90, { window: [0.8, 1.4], loop: { overlapSeconds: 0.2 }, arm: { follow: 0, keys: [{ t: 0, ...RAISED_TWO }] } });
+cast('yara-root-eruption', 'yara-root-full-4', 76, { sim: { totalTicks: 76, activeTick: 36 }, keys: [[0, 0.9], [33, 1.62], [36, 1.67], [39, 1.72], [50, 2.3], [76, 3.5]], contact: { joints: BOTH, search: [1.55, 1.75] }, seamFrom: { clip: 'yara-root-charge', ticks: 8 }, idleBlendTail: 0.2,
+  arm: { follow: 0, keys: [{ t: 0, ...RAISED_TWO }, { t: 33, ...RAISED_TWO }, { t: 36, ...PLANT_TWO }, { t: 60, ...PLANT_TWO }, { t: 76, pose: 'carry', gw: 0 }] } });
+// Seed charge (held) and Sap Lance are one take (yara-seed-full-2): the charge loops the levelled aim, the lance's thrust continues from it. Seed Storm
+// starts from the same aim.
+cast('yara-seed-charge', 'yara-seed-full-2', 90, { window: [0.8, 1.9], loop: { overlapSeconds: 0.2 }, arm: { follow: 0, keys: [{ t: 0, pose: 'ready', ...TWO_HAND }] } });
+cast('yara-sap-lance', 'yara-seed-full-2', 30, { sim: { totalTicks: 30, activeTick: 16 }, keys: [[0, 1.9], [13, 2.08], [16, 2.13], [19, 2.18], [30, 2.7]], contact: { joints: LEFT, search: [2.0, 2.25] }, seamFrom: { clip: 'yara-seed-charge', ticks: 6 }, idleBlendTail: 0.3,
+  arm: { follow: 0, keys: [{ t: 0, pose: 'ready', ...TWO_HAND }, { t: 16, pose: 'ready', staff: [0, 20], ...TWO_HAND }, { t: 24, pose: 'ready', ...TWO_HAND }, { t: 30, pose: 'carry', gw: 0 }] } });
+cast('yara-seed-storm', 'yara-seed-storm-2', 60, { window: [0.1, 2.7], seamFrom: { clip: 'yara-seed-charge', ticks: 8 }, idleBlendTail: 0.25,
+  arm: { follow: 0, keys: [{ t: 0, pose: 'ready', ...TWO_HAND }, { t: 8, ...RAISED, gw: 0 }, { t: 48, ...RAISED }, { t: 60, pose: 'carry' }] } });
+// Binding Vines: the free hand flings the vines forward on tick 18 and draws them tight.
+cast('yara-binding-vines', 'yara-binding-vines-1', 54, { sim: { totalTicks: 54, activeTick: 18 }, keys: [[0, 0.3], [18, 1.0], [54, 2.3]], contact: { joints: LEFT, search: [0.9, 1.1] }, idleBlendTail: 0.3, arm: STAFF_AT_SIDE });
+// Cleanse: the open left palm channels the healing light, staff upright at her side.
+cast('yara-cleanse', 'yara-cleanse-2', 108, { window: [0.2, 2.8], idleBlendTail: 0.2, arm: STAFF_AT_SIDE });
+// Heartroot Bloom: the staff raised high in both hands, the long invocation, then struck down for the final pulse on tick 132.
+cast('yara-heartroot-bloom', 'yara-heartroot-bloom-b-2', 156, { keys: [[0, 0.2], [14, 0.7], [124, 4.0], [132, 4.2], [156, 4.9]], idleBlendTail: 0.15,
+  arm: { follow: 0, keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 6, pose: 'ready', ...TWO_HAND }, { t: 10, ...LIFT_TWO }, { t: 15, ...RAISED_TWO }, { t: 124, ...RAISED_TWO }, { t: 132, ...PLANT_TWO }, { t: 146, ...PLANT_TWO }, { t: 156, pose: 'carry', gw: 0 }] } });
 // Second jump ("treading the wind"): two air steps, a somersault tuck, open-out and a soft landing, in place.
 compose('aren-air-step', 60, [
   { donor: 'd', animation: 'run_upstairs', window: [0, 0.8], ticks: [0, 60] },
@@ -1164,6 +1173,11 @@ function makeClip(spec) {
     }
   }
   const corrections = limitJoints(target, clip.frames, clip.count, limits);
+  // A release that follows a held charge starts on the charge loop's pose and blends into its own motion over `seamFrom.ticks`.
+  if (spec.seamFrom) {
+    const from = produce(specOf(spec.seamFrom.clip)), n = Math.max(1, Math.round(spec.seamFrom.ticks * FPS / TICKS_PER_SECOND));
+    for (let k = 0; k < Math.min(n, clip.count); k += 1) blendInto(clip.frames, from.frames, k, from.count - 1, 1 - smooth(k / n));
+  }
   continuity(clip.frames, clip.count);
   if (process.env.YARA_STAFF === spec.clip) staffTrace(context, clip.frames, clip.count).forEach((e, k) => { if (k % 2 === 0) console.error('tick', k * 2, 'yaw', e.yaw.toFixed(0), 'pitch', e.pitch.toFixed(0), 'tilt', e.tilt.toFixed(0), 'pommelY', e.pommelY.toFixed(2), 'headY', e.headY.toFixed(2)); });
   const excursions = jointExcursions(target, clip.frames, clip.count, limits);

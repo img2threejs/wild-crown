@@ -152,6 +152,7 @@ All captures are under `asset-source/playtests/evidence/combat-polish`. Skills w
 - Q Cleanse on an exposed boar lowered corruption from 80 to 40.
 - Space ×2 played `aren-air-step` through rising, falling and landing. It fired two air steps, scaled the landing dust to 1.60 and blended to idle.
 - The hero-select Root Tether and Cleanse captures show no mesh tearing.
+- Since the combo rework (#134, `hero-skill-clips/aren-combo-ingame.webp`), J ×4 pressed inside the chain window played `aren-light-1` → 2 → 3 → 4 with each step continuing from the pose the previous one ended on.
 
 **Yara in Greenwake** (`yara-grip-contact.png`, `yara-combat-contact.png`)
 - Through idle, walk and run, the staff stays upright in her fixed fist.
@@ -160,6 +161,7 @@ All captures are under `asset-source/playtests/evidence/combat-polish`. Skills w
 - Cleanse lowered corruption from 60 to 40.
 - Her boosted jump played her own `aren-air-step` with petal air steps.
 - Since the sorceress rework (#134) her hand casts (Thornshot 1–3, Binding Vines, Cleanse) are cast by her left hand, and the effects follow it (`isYaraHandCast` / `leftPalm` in `ActorBounds.ts`): the launch flare, the sap trail and the drawn thorn or seed start at her palm, and the thorn eases onto its simulated path within 0.15 s (presentation only; the simulation spawn point is unchanged). Seed Storm's seeds leave the raised staff head; Sap Lance, the charges, Root Spike, Eruption and Bloom keep their staff-head and ground effects.
+- Since the combo rework (#134, `hero-skill-clips/yara-combo-ingame.webp`), J ×3 inside the chain window played Thornshot 1 → 2 → 3 as one continuous casting sequence; held K played `yara-root-charge` → `yara-root-eruption` and held L `yara-seed-charge` → `yara-seed-storm`, each release opening on its charge pose.
 
 **Monsters on all five maps** (`monster-attacks-contact.png`, `monster-greenwake-attacks-contact.png`)
 - In the live AI, all 13 trial monsters went windup → commit → active on their planned clip slot, for example:

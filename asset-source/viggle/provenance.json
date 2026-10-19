@@ -1,0 +1,400 @@
+{
+  "source": "Viggle PINOC text-to-motion (generate_motion), mixamo-glb export: X Bot mesh, 65 mixamorig joints, Y-up, metres; generated and downloaded by the main session from the user's PINOC account",
+  "createdAt": "2026-10-19",
+  "usage": "Read by scripts/assets/mixamo-import.mjs (loadMixamoDonor accepts .glb) and played in place by the Aren (retarget-aren-tripo-clips.mjs) and Yara (author-yara-hero-clips.mjs) clip authors. Each request returns 4 samples; only the samples the clips use are kept.",
+  "creditsSpent": 97,
+  "requests": [
+    {
+      "request": "aren-heavy",
+      "taskId": "5386fc44-d5b3-4cda-ab48-afcf67a4b445",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-cleave-charge",
+      "taskId": "dd5a329b-549d-4c32-8542-bd2e67caec2a",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-cleave-release",
+      "taskId": "70ca5b57-47ca-4e70-abad-5e49b51d232e",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-sigil-charge",
+      "taskId": "b0f749d1-9ac3-49cf-8278-435be2bf2637",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-sigil-bolt",
+      "taskId": "e982cd87-d0d7-486a-b8ab-46f45defda28",
+      "durationSeconds": 2,
+      "creditsCharged": 2,
+      "samples": 4
+    },
+    {
+      "request": "aren-sigil-barrage",
+      "taskId": "0ef39f12-b5fb-4099-a2d8-455914e512eb",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-root-tether",
+      "taskId": "8c90c41b-c1e8-4bee-8d2c-ae96f2659976",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-cleanse",
+      "taskId": "39bde3b4-2618-47b9-a0b6-57b3f28a309f",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "aren-judgement",
+      "taskId": "5efdb467-e503-4a70-afaa-6d6d7877f386",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-spike",
+      "taskId": "b30f7d08-8aa3-45c4-b904-038c95188e39",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-charge",
+      "taskId": "c9660275-475a-4e1c-8d9a-0d952d9b6250",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-eruption",
+      "taskId": "1d17c3eb-b52a-4a1e-965b-915cc2733097",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-seed-charge",
+      "taskId": "dd4e477b-4505-4167-9c49-7f4e600d53cd",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-sap-lance",
+      "taskId": "097de603-e8e2-49be-9744-add8b79605d2",
+      "durationSeconds": 2,
+      "creditsCharged": 2,
+      "samples": 4
+    },
+    {
+      "request": "yara-seed-storm",
+      "taskId": "e2e32614-78dc-419f-a03d-5e19866ef025",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-binding-vines",
+      "taskId": "98ac5763-4fdf-44e4-8f2c-d89a41b580da",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-cleanse",
+      "taskId": "1f2634ef-fccf-425f-a3b4-320a5ee7cbb8",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-heartroot-bloom",
+      "taskId": "9fded600-3133-460f-81b8-262e5215329c",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-petal-step",
+      "taskId": "cdfc44c6-de29-416f-a126-0b80ff5a69dc",
+      "durationSeconds": 2,
+      "creditsCharged": 2,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-spike-b",
+      "taskId": "e51beee8-b0a4-4300-84e1-4767e176ca19",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-eruption-b",
+      "taskId": "bbfe8846-5eb2-4404-9ac5-5972abc25992",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "yara-heartroot-bloom-b",
+      "taskId": "6ea6ba27-6f2b-453a-9366-9e8a6889f6cd",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "aren-sigil-barrage-b",
+      "taskId": "a7869451-d245-4aa0-bea4-4e6b76926362",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "sorc",
+      "taskId": "be74c17f-6c4f-4714-a891-f8d9fd3add33",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "glaive",
+      "taskId": "2421fc6a-c40f-406a-a638-d942de92ba0a",
+      "durationSeconds": 6,
+      "creditsCharged": 6,
+      "samples": 4
+    },
+    {
+      "request": "aren-cleave-full",
+      "taskId": "7635417c-5540-45ec-98b5-d5087aeeeea4",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "aren-sigil-full",
+      "taskId": "2930ea28-8144-4409-81ae-6d69b7201d7f",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    },
+    {
+      "request": "yara-root-full",
+      "taskId": "0d5130f7-941a-4a21-8486-f4b3c8651d1f",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "yara-seed-full",
+      "taskId": "f8ef3237-bd00-4ec9-b688-1fa9cfe1c7bd",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    }
+  ],
+  "files": [
+    {
+      "file": "asset-source/viggle/glaive-2.glb",
+      "request": "glaive",
+      "sample": 2,
+      "taskId": "2421fc6a-c40f-406a-a638-d942de92ba0a",
+      "assetPublicId": "35a716bf-5691-47ec-af3b-1809c8e6ca15",
+      "prompt": "A warrior performs a continuous four-hit melee combo in place with a long curved glaive held in his right hand, left hand free for balance. Hit 1: a fast horizontal slash from his right to his left, hips leading. Hit 2: flows straight into a rising diagonal backhand cut from low left to high right. Hit 3: a full-body spinning horizontal slash, one complete turn on the balls of the feet. Hit 4: a powerful overhead downward cleave with a step forward, the blade driven to the ground. Each blow has a short wind-up, a sharp strike and a follow-through that sets up the next. He ends in a balanced guard stance. Realistic weight transfer, grounded feet, readable poses.",
+      "durationSeconds": 6,
+      "sha256": "7ac8ea6315d8de455f3f53dc8b5e00744bd6d1145a0532d3606ad7b238d07076",
+      "bytes": 1993496
+    },
+    {
+      "file": "asset-source/viggle/aren-sigil-full-2.glb",
+      "request": "aren-sigil-full",
+      "sample": 2,
+      "taskId": "2930ea28-8144-4409-81ae-6d69b7201d7f",
+      "assetPublicId": "3f38f25e-17e0-4cac-8113-a3289a9bbb67",
+      "prompt": "A warrior stands channeling energy for two seconds: a glaive held point-forward at chest height in his right hand, the tip aimed straight ahead, his open left palm raised forward. Then he lunges forward in one sharp level thrust of the glaive straight at the target, holds the extension for a beat, and recovers to the channeling stance. Standing in place facing forward, realistic grounded weight shifts, readable poses.",
+      "durationSeconds": 4,
+      "sha256": "83251449309546b7d30c732f5b89897054ff699393b4350873a2311474d33a4e",
+      "bytes": 1942612
+    },
+    {
+      "file": "asset-source/viggle/aren-sigil-barrage-b-2.glb",
+      "request": "aren-sigil-barrage-b",
+      "sample": 2,
+      "taskId": "a7869451-d245-4aa0-bea4-4e6b76926362",
+      "assetPublicId": "f8ccc40c-a2db-4848-bde4-ae4bb908f0dd",
+      "prompt": "A warrior holding a glaive in his right hand performs exactly three separate sharp forward thrusts, one every half second, each a quick lunge forward and pull back, then settles in a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses.",
+      "durationSeconds": 3,
+      "sha256": "17be1ce6e90e4fcb014325159c6322f26f46587ba5b68872cb177db3d82b6486",
+      "bytes": 1917116
+    },
+    {
+      "file": "asset-source/viggle/aren-judgement-2.glb",
+      "request": "aren-judgement",
+      "sample": 2,
+      "taskId": "5efdb467-e503-4a70-afaa-6d6d7877f386",
+      "assetPublicId": "169a4bb7-85ee-495c-bf8d-5d2759cd2f35",
+      "prompt": "A warrior performs a finishing move with a long glaive: a short crouched gathering, an explosive low dash lunge forward with a thrust, then a rising upward finishing slash, then he recovers upright to guard.",
+      "durationSeconds": 3,
+      "sha256": "1259e2e64c5f109186e8c6d6a483a42c4dad7206bd05ada2cbe1c7bc9c68301c",
+      "bytes": 1917108
+    },
+    {
+      "file": "asset-source/viggle/aren-heavy-1.glb",
+      "request": "aren-heavy",
+      "sample": 1,
+      "taskId": "5386fc44-d5b3-4cda-ab48-afcf67a4b445",
+      "assetPublicId": "5c28d548-7864-45cf-ab77-99a65c29df0b",
+      "prompt": "A warrior holding a long glaive in his right hand performs one heavy overhead chop: a deliberate wind-up lifting the glaive high over his head with both hands, a step forward and a powerful downward slam, a brief follow-through low, then he recovers to a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "3e1497fe0ff7a066c3031cf8216ae59d173fcdf32f477ed2ff409792af0c9715",
+      "bytes": 1917116
+    },
+    {
+      "file": "asset-source/viggle/aren-cleave-charge-1.glb",
+      "request": "aren-cleave-charge",
+      "sample": 1,
+      "taskId": "dd5a329b-549d-4c32-8542-bd2e67caec2a",
+      "assetPublicId": "c2d40940-b65b-4ebe-bd60-c7f3773c8db5",
+      "prompt": "A warrior braces in a low wide stance holding a long glaive low behind him in his right hand, gathering power, chest breathing, small tension shakes, a steady loopable hold. Slightly lowered stance but upright torso.",
+      "durationSeconds": 3,
+      "sha256": "243badeacce0bb9e7ccb8961d42fccc722a2f0cd72a26e2d82201eac66c0e9e7",
+      "bytes": 1917124
+    },
+    {
+      "file": "asset-source/viggle/aren-cleave-release-2.glb",
+      "request": "aren-cleave-release",
+      "sample": 2,
+      "taskId": "70ca5b57-47ca-4e70-abad-5e49b51d232e",
+      "assetPublicId": "78bce91c-88e3-45d2-9cbd-baef6ca6e295",
+      "prompt": "From a low braced stance with the glaive held low behind him, a warrior springs upward and brings the glaive over his head in a huge arcing two-handed overhead slam into the ground in front of him, a heavy impact, then straightens back to guard. Realistic weight transfer.",
+      "durationSeconds": 3,
+      "sha256": "77cf5fa7250ff0a85a30a2a9ece637e3f3d0e4d7bca83c7dd883af47a43422a6",
+      "bytes": 1917120
+    },
+    {
+      "file": "asset-source/viggle/aren-root-tether-3.glb",
+      "request": "aren-root-tether",
+      "sample": 3,
+      "taskId": "8c90c41b-c1e8-4bee-8d2c-ae96f2659976",
+      "assetPublicId": "6724fbcf-da16-4589-8ff4-8e27fe30c7e1",
+      "prompt": "A warrior lashes a long glaive forward in a whipping overhand strike as if throwing a chain, then yanks it back toward himself with both hands, then returns to guard. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "12e30e85efebb689cf77081639724565ba8b94f7cb9ec7e8ec6ed2a75c4e40da",
+      "bytes": 1917116
+    },
+    {
+      "file": "asset-source/viggle/aren-cleanse-2.glb",
+      "request": "aren-cleanse",
+      "sample": 2,
+      "taskId": "39bde3b4-2618-47b9-a0b6-57b3f28a309f",
+      "assetPublicId": "c5e0bfd4-72c0-4c91-9bcd-f37458903efd",
+      "prompt": "A warrior plants the tip of a long glaive into the ground in front of him with both hands on the shaft, bows his head and channels for a long moment, then pulls the glaive free and returns to a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "0df80f93145b1ece0ec7d6a9b31205e9580d49af343c532f3e74bf3856f1d55b",
+      "bytes": 1917116
+    },
+    {
+      "file": "asset-source/viggle/sorc-1.glb",
+      "request": "sorc",
+      "sample": 1,
+      "taskId": "be74c17f-6c4f-4714-a891-f8d9fd3add33",
+      "assetPublicId": "92617b98-a799-4865-b72c-1a85439cb0f4",
+      "prompt": "A sorceress performs a continuous three-hit spell combo in place, holding a tall staff upright in her right hand at her side the whole time. Hit 1: steps in and thrusts her open left palm straight forward to fire a bolt. Hit 2: flows into a sweep of the left hand from right to left, throwing twin bolts. Hit 3: draws the left hand back and up, then hurls an orb forward overhead with a weight shift onto the front foot. She settles into a balanced ready stance. Upright torso, grounded weight shifts, crisp readable poses, no crouching.",
+      "durationSeconds": 5,
+      "sha256": "9f99263964d7e864905dd7497f6bb8a1f59536e6523165a4c352662e8ff8f190",
+      "bytes": 1968052
+    },
+    {
+      "file": "asset-source/viggle/yara-root-full-4.glb",
+      "request": "yara-root-full",
+      "sample": 4,
+      "taskId": "0d5130f7-941a-4a21-8486-f4b3c8651d1f",
+      "assetPublicId": "c4ea3173-d760-4e31-8509-dec269720346",
+      "prompt": "A sorceress holds a tall staff raised above her head with both hands, gathering power and holding almost still for two seconds, then drives the staff straight down to strike the ground beside her front foot with a strong two-handed thrust, a powerful burst, then straightens and returns the staff to her side. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
+      "durationSeconds": 5,
+      "sha256": "e200217cb1f8e8fad040d076eed6df3793ca7c691aa7b6303fe1b9d4bcadd1cf",
+      "bytes": 1968060
+    },
+    {
+      "file": "asset-source/viggle/yara-seed-full-2.glb",
+      "request": "yara-seed-full",
+      "sample": 2,
+      "taskId": "f8ef3237-bd00-4ec9-b688-1fa9cfe1c7bd",
+      "assetPublicId": "a9142f58-1b85-4422-8ed9-2634bcd6ec35",
+      "prompt": "A sorceress aims a tall staff levelled forward with both hands, channeling power and holding almost still for two seconds, then thrusts the staff forward to fire a beam, braces against the recoil, then returns the staff upright to her side. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
+      "durationSeconds": 4,
+      "sha256": "d64c4799fe97040f618b68b1f667409014873e81a14cd9366b8bd4b75d659d2a",
+      "bytes": 1942616
+    },
+    {
+      "file": "asset-source/viggle/yara-seed-storm-2.glb",
+      "request": "yara-seed-storm",
+      "sample": 2,
+      "taskId": "e2e32614-78dc-419f-a03d-5e19866ef025",
+      "assetPublicId": "685fd36d-3a3c-4d68-b3dd-5c715e393e68",
+      "prompt": "A sorceress holding a tall staff in her right hand lifts it skyward and spreads her left arm wide, calling down a rain of spells, sweeping the staff slowly across the sky, then lowers it. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "c41b152c3da1720dd5385f4b67b14e6d4edef82d4dc7dccb44e9251ce7520509",
+      "bytes": 1917116
+    },
+    {
+      "file": "asset-source/viggle/yara-binding-vines-1.glb",
+      "request": "yara-binding-vines",
+      "sample": 1,
+      "taskId": "98ac5763-4fdf-44e4-8f2c-d89a41b580da",
+      "assetPublicId": "eef7c8aa-700b-4d02-aea8-ec87d85be84d",
+      "prompt": "A sorceress holding a tall staff upright in her right hand flings her open left hand forward in a whip-like throwing motion, then pulls her hand back as if tightening a bind. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "9f11ad59593c01a6330a410460547a8e268bf1b06d0b102b3287ea54206ca305",
+      "bytes": 1917120
+    },
+    {
+      "file": "asset-source/viggle/yara-cleanse-2.glb",
+      "request": "yara-cleanse",
+      "sample": 2,
+      "taskId": "1f2634ef-fccf-425f-a3b4-320a5ee7cbb8",
+      "assetPublicId": "85b5077f-7be3-4721-9db8-e317337bbedf",
+      "prompt": "A sorceress holding a tall staff upright in her right hand raises her open left palm forward and channels calm healing light, gentle and steady, then lowers her hand. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "durationSeconds": 3,
+      "sha256": "844655a024232606323e79bcb23269375530caefaf100cc10bb81ec59c9cc22c",
+      "bytes": 1917124
+    },
+    {
+      "file": "asset-source/viggle/yara-heartroot-bloom-b-2.glb",
+      "request": "yara-heartroot-bloom-b",
+      "sample": 2,
+      "taskId": "6ea6ba27-6f2b-453a-9366-9e8a6889f6cd",
+      "assetPublicId": "69dd1a5e-ff80-47e9-846a-6e7d54adb4ed",
+      "prompt": "A sorceress lifts a tall staff high above her head with both hands and rises onto her toes, summoning a great spell; she holds the raised pose with energy for two seconds, then brings the staff down to strike the ground beside her for a final pulse and stands tall again. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
+      "durationSeconds": 5,
+      "sha256": "04208c588f93c8f8c5971ea9f5664ea64ef22ab1538ba01db1a70b59297b74bc",
+      "bytes": 1968044
+    },
+    {
+      "file": "asset-source/viggle/yara-petal-step-2.glb",
+      "request": "yara-petal-step",
+      "sample": 2,
+      "taskId": "cdfc44c6-de29-416f-a126-0b80ff5a69dc",
+      "assetPublicId": "46405d0e-9def-4965-8504-bcf65fe73c9f",
+      "prompt": "A sorceress holding a tall staff upright in her right hand makes a quick light forward leaping dash and lands softly on the balls of her feet, staff steady. Realistic and graceful.",
+      "durationSeconds": 2,
+      "sha256": "63ed2ca6912d880ac4c65f327c3b78afac7191f05a81d39d61c7962b42f8cdc0",
+      "bytes": 1891624
+    }
+  ]
+}

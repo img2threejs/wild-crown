@@ -1458,7 +1458,8 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
       // Independent measurement on the shipped GLB: the fastest limb motion precedes the hit tick by at most `settle` and never trails it by more than a frame.
       const lead = (spec.sim.activeTick - peakTick(spec)) / 60;
       assert.ok(lead > -1.5 / 60 && lead < 0.2, `${spec.clip}: peak limb speed ${lead.toFixed(3)}s before the hit tick`);
-      assert.ok(entry.playbackSpeedBeforeAfterContact.every((speed) => speed >= 0.8 && speed <= 4.5), `${spec.clip}: source speed-up stays natural (${entry.playbackSpeedBeforeAfterContact})`);
+      // Between 0.5× (a combo step easing into the pose the next step starts from) and 4.5× (a compressed wind-up) of the captured speed.
+      assert.ok(entry.playbackSpeedBeforeAfterContact.every((speed) => speed >= 0.5 && speed <= 4.5), `${spec.clip}: source speed-up stays natural (${entry.playbackSpeedBeforeAfterContact})`);
     }
   });
 
@@ -1496,11 +1497,39 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
     }
   });
 
-  it('hands every finite strike back to the idle stance: the last frame sits within a hand-width of the idle pose', () => {
+  it('chains the Warden Blade combo: each step ends on the pose the next one starts from, and holds it while the next press can land', async () => {
+    const { LIGHT_STEPS, CHAIN_EARLY_TICKS } = await vite.ssrLoadModule('/src/game/combat/PlayerSkills.ts');
+    /** Right hand position and glaive direction of `action` at normalized time `u` (0..1 of the clip). */
+    const poseAt = (action, u) => {
+      const clip = clipOf(action), hips = new THREE.Vector3(), quaternion = new THREE.Quaternion();
+      mixer.stopAllAction();
+      for (const [bone, state] of rest) { bone.position.copy(state.position); bone.quaternion.copy(state.quaternion); bone.scale.copy(state.scale); }
+      const running = mixer.clipAction(clip).play();
+      running.paused = true; running.time = Math.min(clip.duration, u * clip.duration);
+      mixer.update(0); gltf.scene.updateMatrixWorld(true);
+      const pose = { hand: point('RightHand').sub(point('Hips', hips)), blade: gripAxis.clone().applyQuaternion(named('RightHand').getWorldQuaternion(quaternion)) };
+      mixer.stopAllAction();
+      return pose;
+    };
+    for (let step = 1; step < 4; step += 1) {
+      const from = `aren-light-${step}`, to = `aren-light-${step + 1}`, next = poseAt(to, 0), end = poseAt(from, 1);
+      assert.ok(end.hand.distanceTo(next.hand) < 0.01 && end.blade.angleTo(next.blade) < 0.02, `${from} ends where ${to} starts`);
+      // The simulation accepts the next press CHAIN_EARLY_TICKS before the step ends; from there on the pose barely moves.
+      const spec = LIGHT_STEPS[step - 1], early = poseAt(from, (spec.ticks - CHAIN_EARLY_TICKS) / spec.ticks);
+      assert.ok(early.hand.distanceTo(next.hand) < 0.12, `${from} → ${to}: an early chain starts ${early.hand.distanceTo(next.hand).toFixed(3)} from the next pose`);
+    }
+    // Single blows and the finisher settle back toward the idle stance.
     const idle = trace('aren-idle')[0];
-    for (const action of ['aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-judgement', 'aren-heavy', 'aren-charged-heavy', 'aren-root-tether', 'aren-cleanse']) {
+    for (const action of ['aren-light-4', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-judgement', 'aren-heavy', 'aren-charged-heavy', 'aren-root-tether', 'aren-cleanse']) {
       const last = trace(action).at(-1);
       assert.ok(last.hand.distanceTo(idle.hand) < 0.1, `${action}: ends ${last.hand.distanceTo(idle.hand).toFixed(2)} from the idle hand position`);
+    }
+  });
+
+  it('starts every charged release on its charge hold: Thunder Cleave, Sigil Bolt and Barrage open on the loop pose', () => {
+    for (const [hold, release] of [['aren-charged-heavy-charge', 'aren-charged-heavy'], ['aren-sigil-charge', 'aren-sigil-bolt'], ['aren-sigil-charge', 'aren-sigil-barrage']]) {
+      const end = trace(hold).at(-1), start = trace(release)[0];
+      assert.ok(end.hand.distanceTo(start.hand) < 0.01, `${release} opens on the ${hold} pose (${end.hand.distanceTo(start.hand).toFixed(3)})`);
     }
   });
 
@@ -1516,7 +1545,7 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
       }
     }
     const frames = trace('aren-sigil-charge');
-    assert.ok(frames.every((frame) => frame.pitch > 20 && frame.pitch < 80), 'the blade is held raised through the hold');
+    assert.ok(frames.every((frame) => frame.pitch > -25 && frame.pitch < 40 && Math.abs(frame.yaw) < 60), 'the blade is held levelled toward the target through the channel');
   });
 
   it('keeps the glaive aimed where the report says, with bounded wrist work', () => {

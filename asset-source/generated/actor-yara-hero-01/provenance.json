@@ -54,7 +54,7 @@
     ]
   },
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "436cb488a2b04c80625e4b1661275491dbfbffaaa5a9f26536d65c43c7a23ad5",
+  "outputHash": "acc9a3d2b8629fce060523ddff043b76867991a436cd9947ab3f991357064439",
   "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
@@ -254,16 +254,16 @@
     {
       "clip": "aren-forward-left-dive-roll",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/dodge-forward.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/dodge-forward.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-petal-step-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-petal-step-2.glb"
       },
       "sim": {
         "totalTicks": 42
       },
       "window": [
-        0,
-        1
+        0.2,
+        1.9
       ],
       "airborne": true,
       "upright": 26,
@@ -607,32 +607,43 @@
     {
       "clip": "yara-thornshot-1",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-01.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/1h-magic-attack-01.fbx"
+        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/sorc-1.glb"
       },
       "sim": {
         "totalTicks": 26,
         "activeTick": 9
       },
-      "window": [
-        0.35,
-        1.5
+      "keys": [
+        [
+          0,
+          0.5
+        ],
+        [
+          9,
+          0.9
+        ],
+        [
+          22,
+          1.49
+        ],
+        [
+          26,
+          1.55
+        ]
       ],
-      "mirror": true,
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          0.6,
+          0.8,
           1
-        ],
-        "settle": 0
+        ]
       },
       "arm": {
-        "follow": 0.35,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
@@ -649,32 +660,47 @@
     {
       "clip": "yara-thornshot-2",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-02.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/1h-magic-attack-02.fbx"
+        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/sorc-1.glb"
       },
       "sim": {
         "totalTicks": 28,
         "activeTick": 10
       },
-      "window": [
-        0.2,
-        1.4
+      "keys": [
+        [
+          0,
+          1.55
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          24,
+          2.69
+        ],
+        [
+          28,
+          2.75
+        ]
       ],
-      "mirror": true,
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          0.35,
-          0.65
-        ],
-        "settle": 0
+          1.9,
+          2.1
+        ]
+      },
+      "seamFrom": {
+        "clip": "yara-thornshot-1",
+        "ticks": 4
       },
       "arm": {
-        "follow": 0.35,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
@@ -691,32 +717,44 @@
     {
       "clip": "yara-thornshot-3",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/1h-cast-spell-01.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/1h-cast-spell-01.fbx"
+        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/sorc-1.glb"
       },
       "sim": {
         "totalTicks": 34,
         "activeTick": 10
       },
-      "window": [
-        0.3,
-        1.5
+      "keys": [
+        [
+          0,
+          2.75
+        ],
+        [
+          10,
+          3.3
+        ],
+        [
+          34,
+          4
+        ]
       ],
-      "mirror": true,
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          0.45,
-          0.75
-        ],
-        "settle": 0
+          3.2,
+          3.4
+        ]
       },
+      "seamFrom": {
+        "clip": "yara-thornshot-2",
+        "ticks": 4
+      },
+      "idleBlendTail": 0.3,
       "arm": {
-        "follow": 0.35,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
@@ -733,61 +771,114 @@
     {
       "clip": "yara-root-spike",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-02.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-attack-02.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-root-full-4.glb"
       },
       "sim": {
         "totalTicks": 63,
         "activeTick": 20
       },
-      "window": [
-        0.3,
-        2.4
+      "keys": [
+        [
+          0,
+          0.4
+        ],
+        [
+          17,
+          1.6
+        ],
+        [
+          20,
+          1.67
+        ],
+        [
+          23,
+          1.74
+        ],
+        [
+          35,
+          2.3
+        ],
+        [
+          63,
+          3.5
+        ]
       ],
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand",
           "RightHand"
         ],
         "search": [
-          1.1,
-          1.4
-        ],
-        "settle": 0
+          1.55,
+          1.75
+        ]
       },
+      "idleBlendTail": 0.2,
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           },
           {
-            "t": 6,
-            "pose": "ready"
+            "t": 4,
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
+          },
+          {
+            "t": 8,
+            "pose": "high",
+            "hand": [
+              0.32,
+              0.12,
+              0.1
+            ],
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 12,
             "pose": "high",
             "hand": [
-              0.17,
-              0.25,
+              0.26,
+              0.21,
               0.08
-            ]
+            ],
+            "gw": 1,
+            "grip": -0.26
+          },
+          {
+            "t": 17,
+            "pose": "high",
+            "hand": [
+              0.26,
+              0.21,
+              0.08
+            ],
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 20,
-            "pose": "plant"
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
-            "t": 40,
-            "pose": "plant"
+            "t": 44,
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 63,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           }
         ]
       },
@@ -800,31 +891,33 @@
     {
       "clip": "yara-root-charge",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-03.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-attack-03.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-root-full-4.glb"
       },
       "sim": {
         "totalTicks": 90
       },
       "window": [
-        1.6,
-        3.1
+        0.8,
+        1.4
       ],
       "loop": {
-        "overlapSeconds": 0.3
+        "overlapSeconds": 0.2
       },
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
             "pose": "high",
             "hand": [
-              0.17,
-              0.25,
+              0.26,
+              0.21,
               0.08
-            ]
+            ],
+            "gw": 1,
+            "grip": -0.26
           }
         ]
       },
@@ -837,61 +930,96 @@
     {
       "clip": "yara-root-eruption",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-area-02.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-area-02.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-root-full-4.glb"
       },
       "sim": {
         "totalTicks": 76,
         "activeTick": 36
       },
-      "window": [
-        0.3,
-        3
+      "keys": [
+        [
+          0,
+          0.9
+        ],
+        [
+          33,
+          1.62
+        ],
+        [
+          36,
+          1.67
+        ],
+        [
+          39,
+          1.72
+        ],
+        [
+          50,
+          2.3
+        ],
+        [
+          76,
+          3.5
+        ]
       ],
-      "idleBlendTail": 0.25,
       "contact": {
         "joints": [
           "LeftHand",
           "RightHand"
         ],
         "search": [
-          1.6,
-          1.95
-        ],
-        "settle": 0
+          1.55,
+          1.75
+        ]
       },
+      "seamFrom": {
+        "clip": "yara-root-charge",
+        "ticks": 8
+      },
+      "idleBlendTail": 0.2,
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "carry"
-          },
-          {
-            "t": 10,
-            "pose": "ready"
-          },
-          {
-            "t": 20,
             "pose": "high",
             "hand": [
-              0.17,
-              0.25,
+              0.26,
+              0.21,
               0.08
-            ]
+            ],
+            "gw": 1,
+            "grip": -0.26
+          },
+          {
+            "t": 33,
+            "pose": "high",
+            "hand": [
+              0.26,
+              0.21,
+              0.08
+            ],
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 36,
-            "pose": "plant"
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
-            "t": 56,
-            "pose": "plant"
+            "t": 60,
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 76,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           }
         ]
       },
@@ -904,26 +1032,28 @@
     {
       "clip": "yara-seed-charge",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-04.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-attack-04.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-seed-full-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-seed-full-2.glb"
       },
       "sim": {
         "totalTicks": 90
       },
       "window": [
-        1.4,
-        2.6
+        0.8,
+        1.9
       ],
       "loop": {
-        "overlapSeconds": 0.3
+        "overlapSeconds": 0.2
       },
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "ready"
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
           }
         ]
       },
@@ -936,47 +1066,79 @@
     {
       "clip": "yara-sap-lance",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-01.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-attack-01.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-seed-full-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-seed-full-2.glb"
       },
       "sim": {
         "totalTicks": 30,
         "activeTick": 16
       },
-      "window": [
-        0.6,
-        1.7
+      "keys": [
+        [
+          0,
+          1.9
+        ],
+        [
+          13,
+          2.08
+        ],
+        [
+          16,
+          2.13
+        ],
+        [
+          19,
+          2.18
+        ],
+        [
+          30,
+          2.7
+        ]
       ],
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          1,
-          1.25
-        ],
-        "settle": 0
+          2,
+          2.25
+        ]
       },
+      "seamFrom": {
+        "clip": "yara-seed-charge",
+        "ticks": 6
+      },
+      "idleBlendTail": 0.3,
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "ready"
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
           },
           {
             "t": 16,
-            "pose": "ready"
+            "pose": "ready",
+            "staff": [
+              0,
+              20
+            ],
+            "gw": 1,
+            "grip": 0.36
           },
           {
-            "t": 22,
-            "pose": "ready"
+            "t": 24,
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
           },
           {
             "t": 30,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           }
         ]
       },
@@ -989,50 +1151,49 @@
     {
       "clip": "yara-seed-storm",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/wide-arm-spell.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/wide-arm-spell.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-seed-storm-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-seed-storm-2.glb"
       },
       "sim": {
         "totalTicks": 60
       },
       "window": [
-        0.4,
-        2.6
+        0.1,
+        2.7
       ],
+      "seamFrom": {
+        "clip": "yara-seed-charge",
+        "ticks": 8
+      },
       "idleBlendTail": 0.25,
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "carry"
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
           },
           {
-            "t": 5,
-            "pose": "ready"
+            "t": 8,
+            "pose": "high",
+            "hand": [
+              0.17,
+              0.25,
+              0.08
+            ],
+            "gw": 0
           },
           {
-            "t": 11,
+            "t": 48,
             "pose": "high",
             "hand": [
               0.17,
               0.25,
               0.08
             ]
-          },
-          {
-            "t": 46,
-            "pose": "high",
-            "hand": [
-              0.17,
-              0.25,
-              0.08
-            ]
-          },
-          {
-            "t": 53,
-            "pose": "ready"
           },
           {
             "t": 60,
@@ -1049,32 +1210,40 @@
     {
       "clip": "yara-binding-vines",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/1h-magic-attack-03.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/1h-magic-attack-03.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-binding-vines-1.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-binding-vines-1.glb"
       },
       "sim": {
         "totalTicks": 54,
         "activeTick": 18
       },
-      "window": [
-        0.3,
-        1.8
+      "keys": [
+        [
+          0,
+          0.3
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          54,
+          2.3
+        ]
       ],
-      "mirror": true,
-      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          0.8,
+          0.9,
           1.1
-        ],
-        "settle": 0
+        ]
       },
+      "idleBlendTail": 0.3,
       "arm": {
-        "follow": 0.35,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
@@ -1091,21 +1260,20 @@
     {
       "clip": "yara-cleanse",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/magic-heal.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/magic-heal.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-cleanse-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-cleanse-2.glb"
       },
       "sim": {
         "totalTicks": 108
       },
       "window": [
-        0.3,
-        2.6
+        0.2,
+        2.8
       ],
-      "mirror": true,
       "idleBlendTail": 0.2,
       "arm": {
-        "follow": 0.35,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
@@ -1122,58 +1290,99 @@
     {
       "clip": "yara-heartroot-bloom",
       "source": {
-        "donor": "mixamo:asset-source/mixamo/yara/2h-magic-attack-05.fbx:in-place",
-        "animation": "mixamo.com",
-        "file": "asset-source/mixamo/yara/2h-magic-attack-05.fbx"
+        "donor": "mixamo:asset-source/viggle/yara-heartroot-bloom-b-2.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/yara-heartroot-bloom-b-2.glb"
       },
       "sim": {
         "totalTicks": 156
       },
-      "window": [
-        1.4,
-        3.5
+      "keys": [
+        [
+          0,
+          0.2
+        ],
+        [
+          14,
+          0.7
+        ],
+        [
+          124,
+          4
+        ],
+        [
+          132,
+          4.2
+        ],
+        [
+          156,
+          4.9
+        ]
       ],
       "idleBlendTail": 0.15,
       "arm": {
-        "follow": 0.2,
+        "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           },
           {
-            "t": 8,
-            "pose": "ready"
+            "t": 6,
+            "pose": "ready",
+            "gw": 1,
+            "grip": 0.36
           },
           {
-            "t": 18,
+            "t": 10,
             "pose": "high",
             "hand": [
-              0.17,
-              0.25,
+              0.32,
+              0.12,
+              0.1
+            ],
+            "gw": 1,
+            "grip": -0.26
+          },
+          {
+            "t": 15,
+            "pose": "high",
+            "hand": [
+              0.26,
+              0.21,
               0.08
-            ]
+            ],
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 124,
             "pose": "high",
             "hand": [
-              0.17,
-              0.25,
+              0.26,
+              0.21,
               0.08
-            ]
+            ],
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 132,
-            "pose": "plant"
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 146,
-            "pose": "plant"
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26
           },
           {
             "t": 156,
-            "pose": "carry"
+            "pose": "carry",
+            "gw": 0
           }
         ]
       },
