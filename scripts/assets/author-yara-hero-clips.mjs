@@ -846,55 +846,50 @@ lieClip('aren-getup-forward', 66, [
 const FACE = 28;
 const BRACE = { hand: [0.21, -0.06, 0.05], staff: [0, 14] };
 const TWO_HAND = { gw: 1, grip: 0.36 };
+// Every skill is authored on captured Mixamo sword / martial takes (asset-source/mixamo/{vesper,sakda}); the arm layer below only keeps the staff in her hands.
+const MXY = (name, dir = 'vesper') => ({ donor: 'mixamo', file: `asset-source/mixamo/${dir}/${name}.fbx`, inPlace: true });
+const addMx = (clip, source, ticks, window, extra = {}) => specs.push({ clip, source, sim: { totalTicks: ticks }, window, ...extra });
 // Thornshot 1: the free left hand flicks an open-palm thorn while the staff stays at the ready.
-add('yara-thornshot-1', 'a', 'cast_a_spell', 26, [2.0, 3.0], { mirror: true, sim: { totalTicks: 26, activeTick: 9 }, contact: { joints: ['LeftHand'], search: [2.2, 2.8], settle: 0 },
+addMx('yara-thornshot-1', MXY('jab-cross-medium', 'sakda'), 26, [0.35, 1.0], { sim: { totalTicks: 26, activeTick: 9 }, idleBlendTail: 0.35, contact: { joints: ['LeftHand'], search: [0.4, 0.75], settle: 0 },
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 9, pose: 'carry', staff: [0, 74] }, { t: 26, pose: 'carry' }] } });
 // Thornshot 2: a staff-tip thrust, hand drawn back and driven forward on the release tick.
-add('yara-thornshot-2', 'a', 'cast_a_spell', 28, [2.0, 3.2], { sim: { totalTicks: 28, activeTick: 10 }, contact: { joints: ['RightHand'], search: [2.2, 2.8], settle: 0 },
+addMx('yara-thornshot-2', MXY('thrust-slash'), 28, [0.4, 1.3], { sim: { totalTicks: 28, activeTick: 10 }, idleBlendTail: 0.35, contact: { joints: ['RightHand'], search: [0.5, 0.95], settle: 0 },
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 5, pose: 'guard' }, { t: 10, pose: 'thrust' }, { t: 17, pose: 'thrust' }, { t: 28, pose: 'carry' }] } });
 // Thornshot 3: both hands lob a seed over the shoulder.
-add('yara-thornshot-3', 'c', 'basketball_shot', 34, [0, 1], { keys: [[0, 1.55], [6, 1.85], [10, 2.25], [16, 2.8], [34, 3.6]], sim: { totalTicks: 34 },
+addMx('yara-thornshot-3', MXY('melee-downward'), 34, [0.35, 1.3], { sim: { totalTicks: 34 }, idleBlendTail: 0.35,
   arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 5, pose: 'overhead', ...TWO_HAND, grip: -0.26, hand: [0.16, 0.17, -0.02], staff: [0, 52] }, { t: 10, hand: [0.2, 0.17, -0.02], staff: [0, 36] }, { t: 18, hand: [0.2, 0.15, -0.02], staff: [0, 40] }, { t: 34, pose: 'carry', gw: 0 }] } });
 // Root Spike: a low backswing and sweep that drives the staff tip along the ground lane on tick 20.
-add('yara-root-spike', 'c', 'golf', 63, [0, 1], { keys: [[0, 6.3], [14, 7.4], [22, 8.0], [40, 8.6], [63, 9.4]], sim: { totalTicks: 63 },
+addMx('yara-root-spike', MXY('melee-horizontal-rl'), 63, [0.45, 2.0], { sim: { totalTicks: 63, activeTick: 20 }, idleBlendTail: 0.3, contact: { joints: ['RightHand'], search: [0.8, 1.1], settle: 0 },
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 12, hand: [0.05, -0.13, 0.15], staff: [-55, -12] }, { t: 20, hand: [0.22, -0.2, 0.06], staff: [8, -26] }, { t: 28, hand: [0.22, -0.2, 0.06], staff: [8, -32] }, { t: 63, pose: 'carry' }] } });
 // Root charge: both hands raise the staff overhead; the loop breathes.
 add('yara-root-charge', 'd', 'standing_relax', 90, [4, 7.5], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
   arm: { keys: [{ t: 0, hand: [0.15, 0.19, -0.02], staff: [0, 84], ...TWO_HAND, grip: -0.24 }] } });
-// Root Eruption: staff raised, then plunged into the ground on tick 36 while she drops into a knee, then rises.
-compose('yara-root-eruption', 76, [
-  { donor: 'd', animation: 'standing_relax', window: [4, 6] },
-  { donor: 'c', animation: 'dig', window: [0.3, 1.5], ticks: [26, 76] },
-  { donor: 'd', animation: 'standing_relax', window: [4, 6], ticks: [60, 76] },
-], { crossfadeTicks: 8, arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 14, hand: [0.15, 0.19, -0.02], staff: [0, 82], ...TWO_HAND, grip: -0.26 }, { t: 26, hand: [0.15, 0.19, -0.02], staff: [0, 84] }, { t: 36, pose: 'plant', ...TWO_HAND, grip: -0.26 }, { t: 48, pose: 'plant' }, { t: 70, pose: 'carry', gw: 0 }] } });
+// Root Eruption: staff raised, then plunged into the ground on tick 36 in a deep lunge, then rises.
+addMx('yara-root-eruption', MXY('melee-downward'), 76, [0.1, 1.9], { sim: { totalTicks: 76, activeTick: 36 }, idleBlendTail: 0.25, contact: { joints: ['RightHand'], search: [0.6, 1.0], settle: 0 },
+  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 14, hand: [0.15, 0.19, -0.02], staff: [0, 82], ...TWO_HAND, grip: -0.26 }, { t: 26, hand: [0.15, 0.19, -0.02], staff: [0, 84] }, { t: 36, pose: 'plant', ...TWO_HAND, grip: -0.26 }, { t: 48, pose: 'plant' }, { t: 70, pose: 'carry', gw: 0 }] } });
 // Seed charge: braced two-hand stance, staff levelled at the target; the loop breathes.
-add('yara-seed-charge', 'c', 'fire', 90, [0.1, 1.5], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.015 },
+addMx('yara-seed-charge', MXY('melee-idle'), 90, [0, 1.8], { loop: { overlapSeconds: 0.3 }, sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.015 },
   arm: { keys: [{ t: 0, ...BRACE, ...TWO_HAND }] } });
 // Sap Lance: pulled back, then driven forward on the launch tick 16; both hands on the shaft.
-add('yara-sap-lance', 'a', 'cast_a_spell', 30, [0, 1], { keys: [[0, 2.2], [16, 2.45], [30, 3.3]], sim: { totalTicks: 30 },
+addMx('yara-sap-lance', MXY('thrust-slash'), 30, [0.35, 1.3], { sim: { totalTicks: 30, activeTick: 16 }, idleBlendTail: 0.3, contact: { joints: ['RightHand'], search: [0.5, 0.95], settle: 0 },
   arm: { keys: [{ t: 0, ...BRACE, ...TWO_HAND }, { t: 8, hand: [0.12, -0.07, 0.06], staff: [0, 14] }, { t: 16, hand: [0.3, -0.02, 0.04], staff: [0, 6] }, { t: 22, hand: [0.3, -0.02, 0.04] }, { t: 30, pose: 'carry', gw: 0 }] } });
 // Seed Storm: a spin with the staff swept out to her side while six seeds leave on ticks 12–42.
-add('yara-seed-storm', 'e', 'dance_04', 60, [4.3, 5.8], { arm: { keys: [{ t: 0, pose: 'carry' }, { t: 10, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 46, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 60, pose: 'carry' }] } });
-// Binding Vines: the free left hand whips the vine overhand (mirrored baseball pitch) while the staff stays low at her side.
-add('yara-binding-vines', 'c', 'pitch_baseball', 54, [0.9, 2.5], { mirror: true, sim: { totalTicks: 54, activeTick: 18 }, contact: { joints: ['LeftHand'], search: [1.6, 2.1], settle: 0 },
+addMx('yara-seed-storm', MXY('melee-360-high'), 60, [0.2, 2.0], { idleBlendTail: 0.3, arm: { keys: [{ t: 0, pose: 'carry' }, { t: 10, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 46, hand: [0.0, 0.02, 0.27], staff: [-90, 12] }, { t: 60, pose: 'carry' }] } });
+// Binding Vines: the free left hand whips the vine (mirrored inward cut) while the staff stays low at her side.
+addMx('yara-binding-vines', MXY('sword-inward-slash'), 54, [0.9, 1.9], { mirror: true, sim: { totalTicks: 54, activeTick: 18 }, idleBlendTail: 0.3, contact: { joints: ['LeftHand'], search: [1.0, 1.4], settle: 0 },
   arm: { keys: [{ t: 0, pose: 'carry' }, { t: 18, pose: 'carry', staff: [0, 72] }, { t: 54, pose: 'carry' }] } });
-// Cleanse: kneel, plant the staff upright in front of her and channel with both hands, then rise.
-compose('yara-cleanse', 108, [
-  { donor: 'd', animation: 'standing_relax', window: [4, 6] },
-  { donor: 'c', animation: 'dig', window: [0.3, 1.5], ticks: [24, 108] },
-  { donor: 'd', animation: 'standing_relax', window: [4, 6], ticks: [92, 108] },
-], { crossfadeTicks: 12, arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 22, pose: 'plant', ...TWO_HAND, grip: -0.28, staff: [0, 86] }, { t: 80, pose: 'plant', staff: [0, 86] }, { t: 100, pose: 'carry', gw: 0 }] } });
+// Cleanse: she plants the staff upright in front of her and channels with both hands, then lets go.
+add('yara-cleanse', 'd', 'standing_relax', 108, [4, 7.5], { sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
+  arm: { keys: [{ t: 0, pose: 'carry', gw: 0 }, { t: 22, pose: 'plant', ...TWO_HAND, grip: -0.28, staff: [0, 86] }, { t: 80, pose: 'plant', staff: [0, 86] }, { t: 100, pose: 'carry', gw: 0 }] } });
 // Heartroot Bloom: rising invocation with the staff held high, arms open to the sky, and a final pulse on tick 132.
-compose('yara-heartroot-bloom', 156, [
-  { donor: 'd', animation: 'standing_relax', window: [4, 6] },
-  { donor: 'e', animation: 'victory_celebration', window: [0.6, 3.4], ticks: [14, 156] },
-], { crossfadeTicks: 8, arm: { keys: [{ t: 0, pose: 'carry' }, { t: 16, pose: 'high' }, { t: 120, pose: 'high' }, { t: 130, pose: 'high', staff: [0, 100] }, { t: 134, hand: [0.26, 0.04, 0.05], staff: [0, -18] }, { t: 148, pose: 'carry' }] } });
+add('yara-heartroot-bloom', 'd', 'standing_relax', 156, [4, 7.5], { sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
+  arm: { keys: [{ t: 0, pose: 'carry' }, { t: 16, pose: 'high' }, { t: 120, pose: 'high' }, { t: 130, pose: 'high', staff: [0, 100] }, { t: 134, hand: [0.26, 0.04, 0.05], staff: [0, -18] }, { t: 148, pose: 'carry' }] } });
 // Second jump ("treading the wind"): two air steps, a somersault tuck, open-out and a soft landing, in place.
 compose('aren-air-step', 60, [
   { donor: 'd', animation: 'run_upstairs', window: [0, 0.8], ticks: [0, 60] },
   { donor: 'd', animation: 'flip', keys: [[0, 0.9], [26, 1.2], [38, 2.2], [60, 3.4]], ticks: [14, 60] },
   { donor: 'b', animation: 'jump', window: [1.2, 2.2], ticks: [40, 60] },
-], { airborne: true, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, arm: { follow: 0.3, keys: [{ t: 0, pose: 'carry', w: 0.8 }, { t: 14, w: 0.8 }, { t: 24, w: 0.2 }, { t: 44, w: 0.2 }, { t: 54, w: 0.8 }, { t: 60, w: 0.8 }] } });
+], { airborne: true, idleBlendTail: 0.3, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, arm: { follow: 0.3, keys: [{ t: 0, pose: 'carry', w: 0.8 }, { t: 14, w: 0.8 }, { t: 24, w: 0.2 }, { t: 44, w: 0.2 }, { t: 54, w: 0.8 }, { t: 60, w: 0.8 }] } });
 
 // Every skill faces the target along the simulation's facing; only the Seed Storm spin turns the whole body.
 for (const spec of specs) if (spec.clip.startsWith('yara-') && spec.clip !== 'yara-seed-storm') spec.facing = FACE;
@@ -912,6 +907,7 @@ const baseGlb = parseGlb(base);
 const rigs = { target: new Rig(baseGlb) };
 for (const [key, path] of Object.entries(sources)) rigs[key] = new Rig(parseGlb(await readFile(root + path)));
 const target = rigs.target;
+await resolveMixamoSources(specs, rigs, root);
 const grip = handAnatomy(baseGlb, 'Right'), leftGrip = handAnatomy(baseGlb, 'Left');
 const context = { target, grip, leftGrip };
 /** The Mixamo reaction donors (asset-source/mixamo/reactions/<name>.fbx; ledger in asset-source/mixamo/provenance.json): the fall, lie and get-up takes. Only the takes a clip plays are loaded. */
@@ -1096,8 +1092,28 @@ function produce(spec) {
   return produced.get(spec.clip);
 }
 
+/** Slerps the last `tail` share of a clip's frames into the idle's first frame (smoothstep), so a strike hands back to the idle stance instead of freezing in its follow-through. */
+function blendTailToIdle(clip, idle, tail) {
+  const from = Math.floor(clip.count * (1 - tail)), a = new Quaternion(), b = new Quaternion();
+  for (let k = from; k < clip.count; k += 1) {
+    const x = Math.min(1, Math.max(0, (k - from) / Math.max(1, clip.count - 1 - from))), w = x * x * (3 - 2 * x);
+    clip.frames.rotations.forEach((track, node) => {
+      const rest = idle.frames.rotations[node];
+      if (!track || !rest) return;
+      a.fromArray(track, k * 4); b.fromArray(rest, 0);
+      a.slerp(b, w).toArray(track, k * 4);
+    });
+    clip.frames.positions.forEach((track, node) => {
+      const rest = idle.frames.positions[node];
+      if (!track || !rest) return;
+      for (let c = 0; c < 3; c += 1) track[k * 3 + c] += (rest[c] - track[k * 3 + c]) * w;
+    });
+  }
+}
+
 function makeClip(spec) {
   const clip = buildClip(spec, rigs);
+  if (spec.idleBlendTail) blendTailToIdle(clip, produce(specOf('aren-idle')), spec.idleBlendTail);
   const limits = spec.limits ?? COMBAT_LIMITS;
   if (spec.pin) pinHips(target, clip.frames, clip.count, spec.pin.maxVertical);
   if (spec.facing !== undefined) faceForward(target, clip.frames, clip.count, spec.facing);

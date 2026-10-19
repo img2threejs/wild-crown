@@ -58,7 +58,7 @@
     "rigFamily": "biped",
     "sourceHash": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
     "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
-    "outputHash": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1",
+    "outputHash": "f7e3ff6d5b27e37ad6d602b65ff5217b6cae824126dad6774bc2142ee7af8dfc",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -457,618 +457,175 @@
         "evidenceStatus": "verified"
       },
       "aren-light-1": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.51244,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.2,
-            "position": {
-              "x": 0.001322,
-              "y": 0.52532,
-              "z": -0.0099
-            }
-          },
-          {
-            "time": 0.433333,
-            "position": {
-              "x": 0.000892,
-              "y": 0.528494,
-              "z": -0.009996
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.471471, "z": -0.009761 } },
+          { "time": 0.2, "position": { "x": 0.001952, "y": 0.439157, "z": -0.009761 } },
+          { "time": 0.433333, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-light-2": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.504317,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.233333,
-            "position": {
-              "x": 0.047959,
-              "y": 0.541409,
-              "z": -0.011859
-            }
-          },
-          {
-            "time": 0.466667,
-            "position": {
-              "x": 0.061625,
-              "y": 0.518523,
-              "z": -0.006039
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.428845, "z": -0.009761 } },
+          { "time": 0.233333, "position": { "x": 0.001952, "y": 0.47314, "z": -0.009761 } },
+          { "time": 0.466667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-light-3": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.414128,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.266667,
-            "position": {
-              "x": 0.002651,
-              "y": 0.454702,
-              "z": -0.009916
-            }
-          },
-          {
-            "time": 0.566667,
-            "position": {
-              "x": 0.002637,
-              "y": 0.442329,
-              "z": -0.009913
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.537067, "z": -0.009761 } },
+          { "time": 0.266667, "position": { "x": 0.001952, "y": 0.511436, "z": -0.009761 } },
+          { "time": 0.566667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-heavy": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.515411,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.533333,
-            "position": {
-              "x": 0.059597,
-              "y": 0.498775,
-              "z": -0.012644
-            }
-          },
-          {
-            "time": 1.066667,
-            "position": {
-              "x": 0.062246,
-              "y": 0.505053,
-              "z": -0.011606
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.474015, "z": -0.009761 } },
+          { "time": 0.533333, "position": { "x": 0.001952, "y": 0.471248, "z": -0.009761 } },
+          { "time": 1.066667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-charged-heavy": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.469883,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.633333,
-            "position": {
-              "x": -1.115659,
-              "y": 0.447643,
-              "z": 0.566891
-            }
-          },
-          {
-            "time": 1.266667,
-            "position": {
-              "x": -1.21886,
-              "y": 0.437764,
-              "z": 1.046211
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.46371, "z": -0.009761 } },
+          { "time": 0.633333, "position": { "x": 0.001952, "y": 0.438793, "z": -0.009761 } },
+          { "time": 1.266667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-charged-heavy-charge": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.048576,
-              "y": 0.52713,
-              "z": -0.00625
-            }
-          },
-          {
-            "time": 0.4,
-            "position": {
-              "x": 0.009046,
-              "y": 0.5192,
-              "z": -0.009342
-            }
-          },
-          {
-            "time": 0.8,
-            "position": {
-              "x": 0.048576,
-              "y": 0.52713,
-              "z": -0.00625
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.491803, "z": -0.009761 } },
+          { "time": 0.4, "position": { "x": 0.001952, "y": 0.487844, "z": -0.009761 } },
+          { "time": 0.8, "position": { "x": 0.001952, "y": 0.491803, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-root-tether": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.576398,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.433333,
-            "position": {
-              "x": -0.644083,
-              "y": 0.431474,
-              "z": 0.302154
-            }
-          },
-          {
-            "time": 0.9,
-            "position": {
-              "x": 0.106919,
-              "y": 0.514341,
-              "z": -0.005092
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.425606, "z": -0.009761 } },
+          { "time": 0.433333, "position": { "x": 0.001952, "y": 0.485297, "z": -0.009761 } },
+          { "time": 0.9, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-cleanse": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.249942,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.9,
-            "position": {
-              "x": 0.001907,
-              "y": 0.209825,
-              "z": -0.00977
-            }
-          },
-          {
-            "time": 1.8,
-            "position": {
-              "x": 0.112755,
-              "y": 0.518263,
-              "z": -0.004905
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.470445, "z": -0.009761 } },
+          { "time": 0.9, "position": { "x": 0.001952, "y": 0.491458, "z": -0.009761 } },
+          { "time": 1.8, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
-      "aren-hit": {
-        "mode": "in-place",
-        "evidenceStatus": "verified"
-      },
+      "aren-hit": { "mode": "in-place", "evidenceStatus": "verified" },
       "aren-stagger": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.459892,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.333333,
-            "position": {
-              "x": 0.001358,
-              "y": 0.478145,
-              "z": -0.009893
-            }
-          },
-          {
-            "time": 0.7,
-            "position": {
-              "x": 0.001347,
-              "y": 0.478183,
-              "z": -0.009895
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.459892, "z": -0.009761 } },
+          { "time": 0.333333, "position": { "x": 0.001358, "y": 0.478145, "z": -0.009893 } },
+          { "time": 0.7, "position": { "x": 0.001347, "y": 0.478183, "z": -0.009895 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-back-handspring": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.518509,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.4,
-            "position": {
-              "x": 0.001092,
-              "y": 0.541486,
-              "z": -0.009952
-            }
-          },
-          {
-            "time": 0.8,
-            "position": {
-              "x": 0.000923,
-              "y": 0.546003,
-              "z": -0.009989
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.518509, "z": -0.009761 } },
+          { "time": 0.4, "position": { "x": 0.001092, "y": 0.541486, "z": -0.009952 } },
+          { "time": 0.8, "position": { "x": 0.000923, "y": 0.546003, "z": -0.009989 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-light-4": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.52114,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.333333,
-            "position": {
-              "x": -1.560017,
-              "y": 0.433133,
-              "z": 0.418542
-            }
-          },
-          {
-            "time": 0.666667,
-            "position": {
-              "x": -1.647183,
-              "y": 0.428728,
-              "z": 0.777246
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.507647, "z": -0.009761 } },
+          { "time": 0.333333, "position": { "x": 0.001952, "y": 0.488981, "z": -0.009761 } },
+          { "time": 0.666667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-sigil-bolt": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.437825,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.233333,
-            "position": {
-              "x": 0.001346,
-              "y": 0.440674,
-              "z": -0.009627
-            }
-          },
-          {
-            "time": 0.5,
-            "position": {
-              "x": 0.000554,
-              "y": 0.421005,
-              "z": -0.009451
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.48094, "z": -0.009761 } },
+          { "time": 0.233333, "position": { "x": 0.001952, "y": 0.469811, "z": -0.009761 } },
+          { "time": 0.5, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-sigil-barrage": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.424266,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.333333,
-            "position": {
-              "x": 0.001963,
-              "y": 0.419875,
-              "z": -0.009763
-            }
-          },
-          {
-            "time": 0.666667,
-            "position": {
-              "x": 0.002785,
-              "y": 0.463071,
-              "z": -0.009945
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.48094, "z": -0.009761 } },
+          { "time": 0.333333, "position": { "x": 0.001952, "y": 0.478892, "z": -0.009761 } },
+          { "time": 0.666667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-sigil-charge": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.527853,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.6,
-            "position": {
-              "x": 0.00193,
-              "y": 0.529136,
-              "z": -0.009766
-            }
-          },
-          {
-            "time": 1.2,
-            "position": {
-              "x": 0.001952,
-              "y": 0.527853,
-              "z": -0.009761
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.483559, "z": -0.009761 } },
+          { "time": 0.6, "position": { "x": 0.001952, "y": 0.489849, "z": -0.009761 } },
+          { "time": 1.2, "position": { "x": 0.001952, "y": 0.483559, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-judgement": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.025296,
-              "y": 0.479302,
-              "z": -0.015362
-            }
-          },
-          {
-            "time": 0.433333,
-            "position": {
-              "x": -0.002988,
-              "y": 0.409858,
-              "z": -0.006032
-            }
-          },
-          {
-            "time": 0.866667,
-            "position": {
-              "x": 0.06204,
-              "y": 0.55771,
-              "z": -0.061476
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.489911, "z": -0.009761 } },
+          { "time": 0.433333, "position": { "x": 0.001952, "y": 0.490473, "z": -0.009761 } },
+          { "time": 0.866667, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
-      "aren-air-step": {
-        "mode": "in-place",
-        "evidenceStatus": "verified"
-      },
+      "aren-air-step": { "mode": "in-place", "evidenceStatus": "verified" },
       "aren-knockdown": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.489657,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.733333,
-            "position": {
-              "x": 0.001952,
-              "y": 0.067299,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 1.5,
-            "position": {
-              "x": 0.001952,
-              "y": 0.067147,
-              "z": -0.009761
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.489657, "z": -0.009761 } },
+          { "time": 0.733333, "position": { "x": 0.001952, "y": 0.067299, "z": -0.009761 } },
+          { "time": 1.5, "position": { "x": 0.001952, "y": 0.067147, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-knockdown-forward": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.492497,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.733333,
-            "position": {
-              "x": 0.001952,
-              "y": 0.093443,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 1.5,
-            "position": {
-              "x": 0.001952,
-              "y": 0.113863,
-              "z": -0.009761
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.492497, "z": -0.009761 } },
+          { "time": 0.733333, "position": { "x": 0.001952, "y": 0.093443, "z": -0.009761 } },
+          { "time": 1.5, "position": { "x": 0.001952, "y": 0.113863, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-getup": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.067147,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.533333,
-            "position": {
-              "x": 0.001952,
-              "y": 0.096265,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 1.1,
-            "position": {
-              "x": 0.001952,
-              "y": 0.550391,
-              "z": -0.009761
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.067147, "z": -0.009761 } },
+          { "time": 0.533333, "position": { "x": 0.001952, "y": 0.096265, "z": -0.009761 } },
+          { "time": 1.1, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       },
       "aren-getup-forward": {
-        "mode": "native-root-motion",
-        "rootNodeName": "mixamorigHips",
-        "preserveVerticalMotion": true,
+        "mode": "native-root-motion", "rootNodeName": "mixamorigHips", "preserveVerticalMotion": true,
         "curveSamples": [
-          {
-            "time": 0,
-            "position": {
-              "x": 0.001952,
-              "y": 0.113863,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 0.533333,
-            "position": {
-              "x": 0.001952,
-              "y": 0.130848,
-              "z": -0.009761
-            }
-          },
-          {
-            "time": 1.1,
-            "position": {
-              "x": 0.001952,
-              "y": 0.550391,
-              "z": -0.009761
-            }
-          }
+          { "time": 0, "position": { "x": 0.001952, "y": 0.113863, "z": -0.009761 } },
+          { "time": 0.533333, "position": { "x": 0.001952, "y": 0.130848, "z": -0.009761 } },
+          { "time": 1.1, "position": { "x": 0.001952, "y": 0.550391, "z": -0.009761 } }
         ],
         "evidenceStatus": "verified"
       }
@@ -1838,7 +1395,7 @@
     "rigFamily": "biped",
     "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
     "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-    "outputHash": "1d4547f0658f8128a3ecdcf8dda07b4677202d70fbe4a5aef743ff45b87e1294",
+    "outputHash": "8be9f6d3859a50c91625d25cdab413db545b37a2c3602e2e31e591b433dbabf7",
     "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
@@ -2291,24 +1848,24 @@
             "time": 0,
             "position": {
               "x": 1.1849464742752502e-9,
-              "y": -0.09796744585037231,
-              "z": 0.5613521933555603
+              "y": -0.023314593359827995,
+              "z": 0.39287397265434265
             }
           },
           {
             "time": 0.20000000298023224,
             "position": {
-              "x": 0.000331217102939263,
-              "y": -0.1032819077372551,
-              "z": 0.5074383020401001
+              "x": 1.1849464742752502e-9,
+              "y": -0.021789968013763428,
+              "z": 0.3969925343990326
             }
           },
           {
             "time": 0.4333333373069763,
             "position": {
-              "x": 0.000506809214130044,
-              "y": -0.10062075406312943,
-              "z": 0.47885581851005554
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2323,24 +1880,24 @@
             "time": 0,
             "position": {
               "x": 1.1849464742752502e-9,
-              "y": -0.08361588418483734,
-              "z": 0.5613521933555603
+              "y": -0.008050849661231041,
+              "z": 0.43843376636505127
             }
           },
           {
             "time": 0.23333333432674408,
             "position": {
-              "x": -0.0006239826907403767,
-              "y": -0.08849125355482101,
-              "z": 0.48653101921081543
+              "x": 1.1849464742752502e-9,
+              "y": -0.011676833964884281,
+              "z": 0.4043846130371094
             }
           },
           {
             "time": 0.46666666865348816,
             "position": {
-              "x": -0.0006539213936775923,
-              "y": -0.08779843151569366,
-              "z": 0.48293787240982056
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2354,25 +1911,25 @@
           {
             "time": 0,
             "position": {
-              "x": 3.909240930966007e-8,
-              "y": -0.02051372639834881,
-              "z": 0.44898319244384766
+              "x": 1.1849464742752502e-9,
+              "y": -0.003913300111889839,
+              "z": 0.4396362602710724
             }
           },
           {
             "time": 0.2666666805744171,
             "position": {
-              "x": -0.004447067156434059,
-              "y": -0.07444466650485992,
-              "z": 0.5423376560211182
+              "x": 1.1849464742752502e-9,
+              "y": -0.012650154531002045,
+              "z": 0.4364509582519531
             }
           },
           {
             "time": 0.5666666626930237,
             "position": {
-              "x": 0.005962226074188948,
-              "y": -0.03533719852566719,
-              "z": 0.5298789739608765
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2387,24 +1944,24 @@
             "time": 0,
             "position": {
               "x": 1.1849464742752502e-9,
-              "y": -0.02494216337800026,
-              "z": 0.4994905889034271
+              "y": -0.0022033865097910166,
+              "z": 0.432407408952713
             }
           },
           {
             "time": 0.5333333611488342,
             "position": {
-              "x": 0.000007582193120470038,
-              "y": -0.017177551984786987,
-              "z": 0.5003997087478638
+              "x": 1.1849464742752502e-9,
+              "y": -0.024993054568767548,
+              "z": 0.3834572434425354
             }
           },
           {
             "time": 1.0666667222976685,
             "position": {
-              "x": 0.00003858402851619758,
-              "y": -0.02969842404127121,
-              "z": 0.5041155219078064
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2450,25 +2007,25 @@
           {
             "time": 0,
             "position": {
-              "x": 2.7597193863471148e-8,
-              "y": -3.1912733788885816e-8,
-              "z": 0.4896388053894043
+              "x": 1.1849464742752502e-9,
+              "y": -0.006300369277596474,
+              "z": 0.42900046706199646
             }
           },
           {
             "time": 0.6333333253860474,
             "position": {
-              "x": -0.00022671477927360684,
-              "y": -0.02029220573604107,
-              "z": 0.24031834304332733
+              "x": 1.1849464742752502e-9,
+              "y": -0.01324913464486599,
+              "z": 0.4338958263397217
             }
           },
           {
             "time": 1.2666666507720947,
             "position": {
-              "x": 0.0000861917797010392,
-              "y": 0.0010071342112496495,
-              "z": 0.49710550904273987
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2482,25 +2039,25 @@
           {
             "time": 0,
             "position": {
-              "x": -2.8938765694874746e-7,
-              "y": -0.012217303737998009,
-              "z": 0.49994343519210815
+              "x": 1.1849464742752502e-9,
+              "y": -0.0055017718113958836,
+              "z": 0.42927470803260803
             }
           },
           {
             "time": 0.7333333492279053,
             "position": {
-              "x": 0.0000029892823931731982,
-              "y": -0.011022056452929974,
-              "z": 0.5003365278244019
+              "x": 1.1849464742752502e-9,
+              "y": -0.0031280526891350746,
+              "z": 0.4451155960559845
             }
           },
           {
             "time": 1.5,
             "position": {
-              "x": -2.8938765694874746e-7,
-              "y": -0.012217303737998009,
-              "z": 0.49994343519210815
+              "x": 1.1849464742752502e-9,
+              "y": -0.0055017718113958836,
+              "z": 0.42927470803260803
             }
           }
         ],
@@ -2515,24 +2072,24 @@
             "time": 0,
             "position": {
               "x": 1.1849464742752502e-9,
-              "y": -0.0853157788515091,
-              "z": 0.551487386226654
+              "y": -0.009272932074964046,
+              "z": 0.4352681040763855
             }
           },
           {
             "time": 0.23333333432674408,
             "position": {
-              "x": -0.0001377003500238061,
-              "y": -0.08920425921678543,
-              "z": 0.5349740386009216
+              "x": 1.1849464742752502e-9,
+              "y": -0.00826338678598404,
+              "z": 0.4434410631656647
             }
           },
           {
             "time": 0.5,
             "position": {
-              "x": -0.0005703408387489617,
-              "y": -0.08779386430978775,
-              "z": 0.4831017255783081
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2546,25 +2103,25 @@
           {
             "time": 0,
             "position": {
-              "x": -2.0923609511669383e-8,
-              "y": -3.1038201342425964e-8,
-              "z": 0.45550400018692017
+              "x": 1.1849464742752502e-9,
+              "y": -0.010305264964699745,
+              "z": 0.41967448592185974
             }
           },
           {
             "time": 0.5,
             "position": {
-              "x": 0.03230109065771103,
-              "y": 0.06460392475128174,
-              "z": 0.4740181267261505
+              "x": 1.1849464742752502e-9,
+              "y": -0.0161226075142622,
+              "z": 0.3968695402145386
             }
           },
           {
             "time": 1,
             "position": {
-              "x": 0.018657851964235306,
-              "y": 0.04919020086526871,
-              "z": 0.48378393054008484
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2578,25 +2135,25 @@
           {
             "time": 0,
             "position": {
-              "x": 7.816970537533052e-8,
-              "y": -1.9468760115159967e-7,
-              "z": 0.5109941959381104
+              "x": 1.1849464742752502e-9,
+              "y": -0.014739413745701313,
+              "z": 0.3851889669895172
             }
           },
           {
             "time": 0.4333333373069763,
             "position": {
-              "x": -0.011876503936946392,
-              "y": 0.5749015808105469,
-              "z": 0.41647228598594666
+              "x": 1.1849464742752502e-9,
+              "y": -0.0109403096139431,
+              "z": 0.4518522322177887
             }
           },
           {
             "time": 0.8999999761581421,
             "position": {
-              "x": 0.006427145563066006,
-              "y": 0.5700517892837524,
-              "z": 0.41865020990371704
+              "x": 0.0001968211872735992,
+              "y": -0.00913058128207922,
+              "z": 0.4980331063270569
             }
           }
         ],
@@ -2618,17 +2175,17 @@
           {
             "time": 0.8999999761581421,
             "position": {
-              "x": -0.0016054903389886022,
-              "y": -0.016533292829990387,
-              "z": 0.23891612887382507
+              "x": 0.00009174052684102207,
+              "y": 0.0008843998657539487,
+              "z": 0.49784597754478455
             }
           },
           {
             "time": 1.7999999523162842,
             "position": {
-              "x": 0.0000861917797010392,
-              "y": 0.0010071342112496495,
-              "z": 0.49710550904273987
+              "x": 0.000060303045756882057,
+              "y": 0.0005256608710624278,
+              "z": 0.4939521253108978
             }
           }
         ],
@@ -2650,17 +2207,17 @@
           {
             "time": 1.2999999523162842,
             "position": {
-              "x": 0.0005148881464265287,
-              "y": -0.02270418219268322,
-              "z": 0.5010393261909485
+              "x": 0.00009174052684102207,
+              "y": 0.0008843998657539487,
+              "z": 0.49784597754478455
             }
           },
           {
             "time": 2.5999999046325684,
             "position": {
-              "x": 0.0004931104485876858,
-              "y": -0.023979632183909416,
-              "z": 0.4984279274940491
+              "x": 0.000060303045756882057,
+              "y": 0.0005256608710624278,
+              "z": 0.4939521253108978
             }
           }
         ],

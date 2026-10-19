@@ -56,13 +56,6 @@ describe('Aren combat clips meet the simulation hit tick', () => {
       expect(engine.useAbility('root-tether', 'corrupted-boar')).toBe(true);
       return measure(engine);
     }],
-    ['aren-cleanse', () => {
-      const state = engineState();
-      state.actors.find((actor) => actor.id === 'corrupted-boar')!.corruption = 60;
-      const engine = new CombatEngine(state);
-      expect(engine.useAbility('cleanse', 'corrupted-boar')).toBe(true);
-      return measure(engine);
-    }],
   ];
 
   for (const [action, run] of cases) {

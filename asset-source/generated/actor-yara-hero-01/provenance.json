@@ -54,7 +54,7 @@
     ]
   },
   "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "1d4547f0658f8128a3ecdcf8dda07b4677202d70fbe4a5aef743ff45b87e1294",
+  "outputHash": "8be9f6d3859a50c91625d25cdab413db545b37a2c3602e2e31e591b433dbabf7",
   "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
@@ -612,25 +612,26 @@
     {
       "clip": "yara-thornshot-1",
       "source": {
-        "donor": "a",
-        "animation": "cast_a_spell"
+        "donor": "mixamo:asset-source/mixamo/sakda/jab-cross-medium.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/sakda/jab-cross-medium.fbx"
       },
       "sim": {
         "totalTicks": 26,
         "activeTick": 9
       },
       "window": [
-        2,
-        3
+        0.35,
+        1
       ],
-      "mirror": true,
+      "idleBlendTail": 0.35,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          2.2,
-          2.8
+          0.4,
+          0.75
         ],
         "settle": 0
       },
@@ -661,24 +662,26 @@
     {
       "clip": "yara-thornshot-2",
       "source": {
-        "donor": "a",
-        "animation": "cast_a_spell"
+        "donor": "mixamo:asset-source/mixamo/vesper/thrust-slash.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/thrust-slash.fbx"
       },
       "sim": {
         "totalTicks": 28,
         "activeTick": 10
       },
       "window": [
-        2,
-        3.2
+        0.4,
+        1.3
       ],
+      "idleBlendTail": 0.35,
       "contact": {
         "joints": [
           "RightHand"
         ],
         "search": [
-          2.2,
-          2.8
+          0.5,
+          0.95
         ],
         "settle": 0
       },
@@ -713,38 +716,18 @@
     {
       "clip": "yara-thornshot-3",
       "source": {
-        "donor": "c",
-        "animation": "basketball_shot"
+        "donor": "mixamo:asset-source/mixamo/vesper/melee-downward.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/melee-downward.fbx"
       },
       "sim": {
         "totalTicks": 34
       },
       "window": [
-        0,
-        1
+        0.35,
+        1.3
       ],
-      "keys": [
-        [
-          0,
-          1.55
-        ],
-        [
-          6,
-          1.85
-        ],
-        [
-          10,
-          2.25
-        ],
-        [
-          16,
-          2.8
-        ],
-        [
-          34,
-          3.6
-        ]
-      ],
+      "idleBlendTail": 0.35,
       "arm": {
         "keys": [
           {
@@ -805,38 +788,29 @@
     {
       "clip": "yara-root-spike",
       "source": {
-        "donor": "c",
-        "animation": "golf"
+        "donor": "mixamo:asset-source/mixamo/vesper/melee-horizontal-rl.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/melee-horizontal-rl.fbx"
       },
       "sim": {
-        "totalTicks": 63
+        "totalTicks": 63,
+        "activeTick": 20
       },
       "window": [
-        0,
-        1
+        0.45,
+        2
       ],
-      "keys": [
-        [
-          0,
-          6.3
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "RightHand"
         ],
-        [
-          14,
-          7.4
+        "search": [
+          0.8,
+          1.1
         ],
-        [
-          22,
-          8
-        ],
-        [
-          40,
-          8.6
-        ],
-        [
-          63,
-          9.4
-        ]
-      ],
+        "settle": 0
+      },
       "arm": {
         "keys": [
           {
@@ -937,50 +911,30 @@
     },
     {
       "clip": "yara-root-eruption",
-      "sim": {
-        "totalTicks": 76
+      "source": {
+        "donor": "mixamo:asset-source/mixamo/vesper/melee-downward.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/melee-downward.fbx"
       },
-      "parts": [
-        {
-          "source": {
-            "donor": "d",
-            "animation": "standing_relax"
-          },
-          "window": [
-            4,
-            6
-          ]
-        },
-        {
-          "source": {
-            "donor": "c",
-            "animation": "dig"
-          },
-          "window": [
-            0.3,
-            1.5
-          ],
-          "ticks": [
-            26,
-            76
-          ]
-        },
-        {
-          "source": {
-            "donor": "d",
-            "animation": "standing_relax"
-          },
-          "window": [
-            4,
-            6
-          ],
-          "ticks": [
-            60,
-            76
-          ]
-        }
+      "sim": {
+        "totalTicks": 76,
+        "activeTick": 36
+      },
+      "window": [
+        0.1,
+        1.9
       ],
-      "crossfadeTicks": 8,
+      "idleBlendTail": 0.25,
+      "contact": {
+        "joints": [
+          "RightHand"
+        ],
+        "search": [
+          0.6,
+          1
+        ],
+        "settle": 0
+      },
       "arm": {
         "keys": [
           {
@@ -1038,15 +992,16 @@
     {
       "clip": "yara-seed-charge",
       "source": {
-        "donor": "c",
-        "animation": "fire"
+        "donor": "mixamo:asset-source/mixamo/vesper/melee-idle.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/melee-idle.fbx"
       },
       "sim": {
         "totalTicks": 90
       },
       "window": [
-        0.1,
-        1.5
+        0,
+        1.8
       ],
       "loop": {
         "overlapSeconds": 0.3
@@ -1084,30 +1039,29 @@
     {
       "clip": "yara-sap-lance",
       "source": {
-        "donor": "a",
-        "animation": "cast_a_spell"
+        "donor": "mixamo:asset-source/mixamo/vesper/thrust-slash.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/thrust-slash.fbx"
       },
       "sim": {
-        "totalTicks": 30
+        "totalTicks": 30,
+        "activeTick": 16
       },
       "window": [
-        0,
-        1
+        0.35,
+        1.3
       ],
-      "keys": [
-        [
-          0,
-          2.2
+      "idleBlendTail": 0.3,
+      "contact": {
+        "joints": [
+          "RightHand"
         ],
-        [
-          16,
-          2.45
+        "search": [
+          0.5,
+          0.95
         ],
-        [
-          30,
-          3.3
-        ]
-      ],
+        "settle": 0
+      },
       "arm": {
         "keys": [
           {
@@ -1170,16 +1124,18 @@
     {
       "clip": "yara-seed-storm",
       "source": {
-        "donor": "e",
-        "animation": "dance_04"
+        "donor": "mixamo:asset-source/mixamo/vesper/melee-360-high.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/melee-360-high.fbx"
       },
       "sim": {
         "totalTicks": 60
       },
       "window": [
-        4.3,
-        5.8
+        0.2,
+        2
       ],
+      "idleBlendTail": 0.3,
       "arm": {
         "keys": [
           {
@@ -1222,8 +1178,9 @@
     {
       "clip": "yara-binding-vines",
       "source": {
-        "donor": "c",
-        "animation": "pitch_baseball"
+        "donor": "mixamo:asset-source/mixamo/vesper/sword-inward-slash.fbx:in-place",
+        "animation": "mixamo.com",
+        "file": "asset-source/mixamo/vesper/sword-inward-slash.fbx"
       },
       "sim": {
         "totalTicks": 54,
@@ -1231,16 +1188,17 @@
       },
       "window": [
         0.9,
-        2.5
+        1.9
       ],
       "mirror": true,
+      "idleBlendTail": 0.3,
       "contact": {
         "joints": [
           "LeftHand"
         ],
         "search": [
-          1.6,
-          2.1
+          1,
+          1.4
         ],
         "settle": 0
       },
@@ -1270,50 +1228,25 @@
     },
     {
       "clip": "yara-cleanse",
+      "source": {
+        "donor": "d",
+        "animation": "standing_relax"
+      },
       "sim": {
         "totalTicks": 108
       },
-      "parts": [
-        {
-          "source": {
-            "donor": "d",
-            "animation": "standing_relax"
-          },
-          "window": [
-            4,
-            6
-          ]
-        },
-        {
-          "source": {
-            "donor": "c",
-            "animation": "dig"
-          },
-          "window": [
-            0.3,
-            1.5
-          ],
-          "ticks": [
-            24,
-            108
-          ]
-        },
-        {
-          "source": {
-            "donor": "d",
-            "animation": "standing_relax"
-          },
-          "window": [
-            4,
-            6
-          ],
-          "ticks": [
-            92,
-            108
-          ]
-        }
+      "window": [
+        4,
+        7.5
       ],
-      "crossfadeTicks": 12,
+      "sway": {
+        "joints": [
+          "Spine1",
+          "Spine2",
+          "Head"
+        ],
+        "amplitude": 0.02
+      },
       "arm": {
         "keys": [
           {
@@ -1352,36 +1285,25 @@
     },
     {
       "clip": "yara-heartroot-bloom",
+      "source": {
+        "donor": "d",
+        "animation": "standing_relax"
+      },
       "sim": {
         "totalTicks": 156
       },
-      "parts": [
-        {
-          "source": {
-            "donor": "d",
-            "animation": "standing_relax"
-          },
-          "window": [
-            4,
-            6
-          ]
-        },
-        {
-          "source": {
-            "donor": "e",
-            "animation": "victory_celebration"
-          },
-          "window": [
-            0.6,
-            3.4
-          ],
-          "ticks": [
-            14,
-            156
-          ]
-        }
+      "window": [
+        4,
+        7.5
       ],
-      "crossfadeTicks": 8,
+      "sway": {
+        "joints": [
+          "Spine1",
+          "Spine2",
+          "Head"
+        ],
+        "amplitude": 0.02
+      },
       "arm": {
         "keys": [
           {
@@ -1490,6 +1412,7 @@
         }
       ],
       "airborne": true,
+      "idleBlendTail": 0.3,
       "crossfadeTicks": 4,
       "pin": {
         "maxVertical": 0.08

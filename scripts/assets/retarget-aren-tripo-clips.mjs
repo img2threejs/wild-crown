@@ -44,60 +44,34 @@ const mirrorName = (name) => name.replace(/^(mixamorig:)(Left|Right)/, (_, prefi
  * are described at `buildClip`. `aim` ([tick, yaw°, pitch°, weight?], yaw 0 forward, + toward Aren's left) steers the glaive.
  */
 const RIGHT_HAND = ['RightHand'];
+const MX = (name) => ({ donor: 'mixamo', file: `asset-source/mixamo/vesper/${name}.fbx`, inPlace: true });
 const CARRY = [15, 30];
 export const CLIP_SPECS = [
-  // Warden Blade combo. Light 1: golf hip-led sweep (right → left); Light 2: Tripo slash mirrored and played backwards = rising diagonal return cut; Light 3: the box_03 hook held for the spin; Light 4: volleyball hop + spike = leaping overhead cleave.
-  { clip: 'aren-light-1', source: { donor: 'd', animation: 'golf' }, sim: { totalTicks: 26, activeTick: 9 }, window: [7.35, 9.0], contact: { joints: HANDS, search: [7.0, 8.6], settle: 0.12 },
-    torso: [[0, 0], [3, -25], [7, -12], [12, 35], [26, 0]],
-    aim: [[0, ...CARRY], [2, -70, 15], [5, -60, 10], [8, -5, 5, 3], [11, 50, 4, 3], [15, 85, 12], [26, ...CARRY]] },
-  { clip: 'aren-light-2', source: { donor: 'a', animation: 'slash' }, mirror: true, sim: { totalTicks: 28, activeTick: 10 }, window: [2.7, 1.45], contact: { joints: HANDS, search: [1.6, 2.4], settle: 0 },
-    torso: [[0, 0], [5, 30], [10, 5], [17, -30], [28, 0]],
-    aim: [[0, ...CARRY], [5, 60, -25], [10, 25, 0, 3], [13, -35, 50, 3], [17, -55, 65], [28, ...CARRY]] },
-  { clip: 'aren-light-3', source: { donor: 'c', animation: 'box_03' }, mirror: true, sim: { totalTicks: 34, activeTick: 10 },
-    keys: [[0, 0.4], [8, 0.55], [10, 0.66], [12, 0.74], [20, 0.82], [34, 1.3]],
-    torso: [[0, 0], [6, -35], [10, -10], [12, 30], [20, 30], [34, 0]],
-    aim: [[0, ...CARRY], [6, -80, 15], [10, -20, 5, 3], [12, 60, 3, 3], [20, 70, 3, 3], [34, ...CARRY]] },
-  { clip: 'aren-light-4', source: { donor: 'd', animation: 'volleyball' }, sim: { totalTicks: 40, activeTick: 15 }, window: [1.25, 2.8], contact: { joints: HANDS, search: [1.6, 2.3], settle: 0.05 }, airborne: true,
-    aim: [[0, ...CARRY], [7, -10, 75], [11, 5, 88], [15, 12, 25, 3], [18, 15, -45, 3], [26, 15, -35], [40, ...CARRY]] },
-  // Sigil casts: box_01 (mirrored) supplies the one-hand thrust of Bolt and Barrage; the charge loops Tripo's `fire` aiming pose.
-  { clip: 'aren-sigil-bolt', source: { donor: 'c', animation: 'box_01' }, mirror: true, sim: { totalTicks: 30, activeTick: 16 }, window: [0.3, 0.9], contact: { joints: RIGHT_HAND, search: [0.4, 0.65], settle: 0.1 },
+  // Warden Blade combo, authored on captured Mixamo sword takes (asset-source/mixamo/vesper). Light 1: horizontal right-to-left cut; Light 2: outward return cut; Light 3: the one-handed combo's forward diagonal; Light 4: its downward finisher.
+  { clip: 'aren-light-1', source: MX('melee-horizontal-rl'), sim: { totalTicks: 26, activeTick: 9 }, window: [0.7, 1.5], contact: { joints: RIGHT_HAND, search: [0.8, 1.1], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-light-2', source: MX('sword-outward-slash'), sim: { totalTicks: 28, activeTick: 10 }, window: [0.55, 1.5], contact: { joints: RIGHT_HAND, search: [0.7, 1.0], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-light-3', source: MX('one-hand-sword-combo'), sim: { totalTicks: 34, activeTick: 10 }, window: [1.75, 2.6], contact: { joints: RIGHT_HAND, search: [1.8, 2.2], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-light-4', source: MX('one-hand-sword-combo'), sim: { totalTicks: 40, activeTick: 15 }, window: [2.6, 3.6], contact: { joints: RIGHT_HAND, search: [2.8, 3.2], settle: 0 }, idleBlendTail: 0.3 },
+  // Sigil casts: the glaive thrust releases the sigil; Barrage chains three thrusts. The charge loops the ready stance.
+  { clip: 'aren-sigil-bolt', source: MX('thrust-slash'), sim: { totalTicks: 30, activeTick: 16 }, window: [0.35, 1.3], contact: { joints: RIGHT_HAND, search: [0.5, 0.95], settle: 0.1 }, idleBlendTail: 0.3,
     aim: [[0, ...CARRY], [8, 10, 55], [16, 0, 12, 3], [22, 0, 10], [30, ...CARRY]] },
-  { clip: 'aren-sigil-barrage', source: { donor: 'c', animation: 'box_01' }, mirror: true, sim: { totalTicks: 40 },
-    keys: [[0, 0.4], [8, 0.62], [12, 0.42], [16, 0.62], [20, 0.42], [24, 0.62], [40, 1.2]],
-    aim: [[0, ...CARRY], [8, 0, 12, 3], [12, 5, 30], [16, 0, 12, 3], [20, 5, 30], [24, 0, 12, 3], [40, ...CARRY]] },
-  { clip: 'aren-sigil-charge', source: { donor: 'b', animation: 'fire' }, durationSeconds: 1.2, loop: { overlapSeconds: 0.4 }, window: [0, 1.5],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.03 }, aim: [[0, 0, 50], [36, 0, 50]] },
-  // Warden's Judgement: anticipation crouch 0–9, flee_02 low dash lunge 10–21, kneeling recovery 22–51 (deep crouch, then rising).
-  { clip: 'aren-judgement', sim: { totalTicks: 52 }, airborne: false,
+  { clip: 'aren-sigil-barrage', sim: { totalTicks: 40 }, idleBlendTail: 0.25,
+    aim: [[0, ...CARRY], [8, 0, 12, 3], [12, 5, 30], [16, 0, 12, 3], [20, 5, 30], [24, 0, 12, 3], [40, ...CARRY]],
     parts: [
-      { ticks: [0, 10], source: { donor: 'native', animation: 'warm_up.001' }, window: [2.0, 2.6] },
-      { ticks: [10, 22], source: { donor: 'e', animation: 'flee_02' }, window: [0.45, 1.25] },
-      { ticks: [22, 40], source: { donor: 'native', animation: 'warm_up.001' }, window: [4.0, 5.4] },
-      { ticks: [40, 52], source: { donor: 'native', animation: 'warm_up.001' }, window: [5.5, 6.4] },
-    ],
-    aim: [[0, ...CARRY], [9, 10, 20], [10, 0, -5], [21, 0, -15], [24, 0, -35], [40, 0, -35], [52, ...CARRY]] },
-  // Heavy: Tripo's overhead chop, longer wind-up; Thunder Cleave: the volleyball leap, spike slam and heavy landing.
-  { clip: 'aren-heavy', source: { donor: 'a', animation: 'chop' }, sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, window: [1.35, 2.95], contact: { joints: HANDS, search: [1.9, 2.4], settle: 0.05 },
-    aim: [[0, ...CARRY], [12, -10, 70], [18, 0, 85], [20, 10, 40, 3], [24, 15, -35, 3], [34, 15, -30], [63, ...CARRY]] },
-  { clip: 'aren-charged-heavy', source: { donor: 'd', animation: 'volleyball' }, sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, window: [0.7, 3.0], contact: { joints: HANDS, search: [1.6, 2.3], settle: 0.1 }, airborne: true,
-    aim: [[0, ...CARRY], [20, -10, 60], [36, 10, 10, 3], [44, 10, -30], [76, ...CARRY]] },
-  { clip: 'aren-charged-heavy-charge', source: { donor: 'd', animation: 'lift_heavy' }, durationSeconds: 0.8, loop: { overlapSeconds: 0.3 }, window: [5.2, 6.4],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.025 }, aim: [[0, ...CARRY], [10, -10, 70], [48, -10, 75]] },
-  // Root Tether: pitch_baseball overhand lash; Cleanse: dig plants the glaive, a near-still channel, lift_heavy's rise.
-  { clip: 'aren-root-tether', sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, airborne: false,
-    parts: [
-      { ticks: [0, 34], source: { donor: 'd', animation: 'pitch_baseball' }, window: [1.15, 2.3], contact: { joints: RIGHT_HAND, search: [1.2, 1.9], settle: 0.05 } },
-      { ticks: [34, 54], source: { donor: 'd', animation: 'lift_heavy' }, window: [4.55, 5.25] },
-    ],
-    torso: [[0, 0], [6, -30], [12, 20], [30, 10], [54, 0]],
-    aim: [[0, ...CARRY], [6, -25, 70], [12, 10, 20, 3], [20, 12, 5], [36, 0, 30], [54, ...CARRY]] },
-  { clip: 'aren-cleanse', sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, airborne: false,
-    parts: [
-      { ticks: [0, 45], source: { donor: 'd', animation: 'dig' }, window: [0.7, 1.55], contact: { joints: HANDS, search: [0.8, 1.8], settle: 0.1 } },
-      { ticks: [45, 92], source: { donor: 'd', animation: 'dig' }, window: [2.2, 2.7] },
-      { ticks: [92, 108], source: { donor: 'd', animation: 'lift_heavy' }, window: [4.5, 5.3] },
-    ],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
+      { ticks: [0, 12], source: MX('thrust-slash'), keys: [[0, 0.35], [2, 0.45], [8, 0.85], [14, 1.15]] },
+      { ticks: [12, 20], source: MX('thrust-slash'), keys: [[10, 0.45], [16, 0.85], [22, 1.15]] },
+      { ticks: [20, 28], source: MX('thrust-slash'), keys: [[18, 0.45], [24, 0.85], [30, 1.15], [40, 1.3]] },
+    ] },
+  { clip: 'aren-sigil-charge', source: MX('melee-idle'), durationSeconds: 1.2, loop: { overlapSeconds: 0.4 }, window: [0, 1.5] },
+  // Warden's Judgement: the rising backhand sweep.
+  { clip: 'aren-judgement', source: MX('melee-backhand-up'), sim: { totalTicks: 52 }, window: [0.55, 2.2], idleBlendTail: 0.3 },
+  // Heavy: the overhead chop with a long wind-up; Thunder Cleave: the spinning 360 cut.
+  { clip: 'aren-heavy', source: MX('melee-downward'), sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, window: [0.1, 1.9], contact: { joints: RIGHT_HAND, search: [0.6, 1.0], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-charged-heavy', source: MX('melee-360-high'), sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, window: [0.2, 2.4], contact: { joints: RIGHT_HAND, search: [0.9, 1.3], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-charged-heavy-charge', source: MX('melee-idle'), durationSeconds: 0.8, loop: { overlapSeconds: 0.3 }, window: [0, 1.2] },
+  // Root Tether: the inward cut as a lash; Cleanse: the glaive planted, a still channel, the rise.
+  { clip: 'aren-root-tether', source: MX('sword-inward-slash'), sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, window: [0.9, 1.9], contact: { joints: RIGHT_HAND, search: [1.0, 1.4], settle: 0 }, idleBlendTail: 0.3 },
+  { clip: 'aren-cleanse', source: MX('melee-idle'), sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, window: [0, 1.8], sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 }, idleBlendTail: 0.2,
     aim: [[0, ...CARRY], [20, 0, -10, 2], [35, 0, -75, 3], [90, 0, -70], [108, ...CARRY]] },
   { clip: 'aren-hit', source: { donor: 'b', animation: 'hit_to_body_01' }, durationSeconds: 0.35, window: [0.12, 0.9], joints: UPPER_BODY },
   { clip: 'aren-stagger', source: { donor: 'b', animation: 'hit_to_stomach' }, durationSeconds: 0.7, window: [0.1, 1.2], aim: [[0, ...CARRY], [42, ...CARRY]] },
@@ -1193,13 +1167,10 @@ export function syncManifest(text, report) {
 }
 
 export const CLIP_NOTES = [
-  'Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope (see anatomy.nativeLimitRaises).',
-  'Tripo returned bit-identical data for the slash and chop presets earlier; Light 2 plays slash mirrored and backwards, Heavy plays chop, so they differ in side, direction and windows.',
-  'Light 1 plays Tripo golf (hip-led sweep); Light 4 and Thunder Cleave play the volleyball hop and spike with different windows and contact warps.',
-  'Light 3 and Sigil Bolt/Barrage mirror a left-hand Tripo punch (box_03 / box_01) onto the right hand that carries the glaive.',
-  'aren-sigil-charge and aren-charged-heavy-charge loop seamlessly (head fades from the tail continuation; chest sway keeps the held pose alive): fire aiming pose and lift_heavy brace.',
-  'aren-root-tether plays pitch_baseball (overhand throw); aren-cleanse chains dig (plant), a near-still dig channel and lift_heavy rise.',
-  'aren-judgement chains warm_up crouch, flee_02 low dash lunge and warm_up kneeling recovery, cross-faded over 3 ticks.',
+  'Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope and is only used to report.',
+  'Warden skills are captured Mixamo sword takes (asset-source/mixamo/vesper, in place): Light 1 melee-horizontal-rl, Light 2 sword-outward-slash, Light 3 and 4 the second and third cuts of one-hand-sword-combo, Heavy melee-downward, Thunder Cleave melee-360-high, Judgement melee-backhand-up, Root Tether sword-inward-slash. The warp lands each take\'s fastest hand motion on the simulation hit tick.',
+  'Sigil Bolt plays the thrust-slash take with its fullest reach on the release tick; Sigil Barrage chains three thrust-slash reaches on ticks 8, 16 and 24, cross-faded. Sigil Charge and Thunder Cleave charge loop melee-idle; Cleanse holds melee-idle with the glaive aimed into the ground.',
+  'Every finite strike is blended into the idle pose over its last 20-30 % (`idleBlendTail`), so a skill hands back to the stance instead of freezing in its follow-through.',
   'aren-back-handspring plays Tripo flip in reverse (forward somersault -> backward). aren-hit carries upper-body tracks only so the presentation overlay never disturbs legs or hips.',
   'aren-air-step is the in-place second-jump clip: run_upstairs air steps, flip somersault, open out and landing absorb; its Hips track is pinned horizontally and compressed vertically (IN_PLACE_VERTICAL_LIMIT).',
 ];

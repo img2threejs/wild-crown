@@ -47,6 +47,6 @@ describe('attack posture profiles', () => {
         checked += 1;
       }
     }
-    expect(checked).toBeGreaterThanOrEqual(3);
+    expect(checked).toBeGreaterThanOrEqual(2);
   });
 });

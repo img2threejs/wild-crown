@@ -1,0 +1,26 @@
+{
+  "issue": 134,
+  "title": "Aren and Yara skill animations rebuilt on captured motion",
+  "observedAt": "2026-10-19",
+  "coordinator": "main session; no independent external reviewer; no subagents; no paid generation",
+  "problem": "The Skills tab of hero select (HeroPreview, raw clips) and gameplay showed Aren's and Yara's skills built from unrelated Tripo sports/utility presets (golf, volleyball, dig, baseball pitch, flee, warm_up, dance): hunched or kneeling bodies, weapon and staff in the wrong place, strikes that froze in their follow-through. The earlier PR only measured arm/body overlap on stills and did not play the clips.",
+  "method": "Every skill clip is re-authored on captured Mixamo sword/martial takes already in the repository (asset-source/mixamo/vesper and sakda, in place). The warp lands each take's fastest hand motion on the simulation hit tick (Sigil Bolt on its fullest reach; Barrage on ticks 8/16/24). Finite strikes blend into the idle pose over their last 20-35 %. Yara keeps her staff arm layer and the arm-body clearance pass; her Root Charge, Cleanse and Bloom keep the upright Tripo standing_relax so she does not crouch. Nothing hand-keyed besides the existing staff layer and the glaive aim keys.",
+  "verification": {
+    "playedThroughHeroPreview": "Every skill clip was rendered frame by frame through mountHeroPreview (the Skills tab path) at 1/30 s steps; see aren-skills.webp and yara-skills.webp (rows = clips, columns = time).",
+    "meshAudit": "scripts/assets/audit-hero-mesh-intersection.mjs --corrected (runtime solver on): mean buried vertices over the 23 Aren/Yara skill clips 1033 -> 37 (83 without the solver); audit-after.json.",
+    "game": "Greenwake trial in the real game with Aren (J, J, L, K) and Yara (J, J, K, L, Q): skills fire with their VFX, no console errors.",
+    "tests": "aren-native-animation 56 pass + 2 failures that also fail on main (byte-identical rebuild under bun, ActorAnimationDriver monster clip); attack-posture, limb clearance, yara-anatomy and yara-knockdown pass."
+  },
+  "limits": [
+    "Mixamo has no staff or spell-casting take in the repository: Yara's casts reuse sword and martial takes with the staff layer; a dedicated casting set would read better (needs the user's Mixamo account).",
+    "Aren's Cleanse and the charge loops hold a stance (melee-idle with the glaive aimed); they are readable, not expressive.",
+    "Yara's Thornshot 3 still overlaps up to 13 cm in a few poses (10 mean buried vertices with the solver).",
+    "Aren's dive roll, back handspring and second jump (aren-air-step) and Yara's dive roll and air step were not re-authored; they play Tripo/native takes.",
+    "The in-game camera shows the hero small; the contact sheets (HeroPreview path) are the close inspection."
+  ],
+  "files": [
+    "aren-skills.webp",
+    "yara-skills.webp",
+    "audit-after.json"
+  ]
+}

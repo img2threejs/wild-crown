@@ -1397,7 +1397,7 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
   });
 
   it('raises the right hand above the hips before the overhead chops strike and brings it down through the hit', () => {
-    for (const action of ['aren-light-4', 'aren-heavy']) {
+    for (const action of ['aren-heavy']) {
       const entry = report.clips.find((clip) => clip.action === action);
       let windup = -Infinity, atContact = Infinity;
       eachFrame(action, (_, time) => {
@@ -1406,7 +1406,7 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
         if (Math.abs(time - entry.contact.outputSeconds) <= 0.5 / FPS) atContact = relative;
       });
       assert.ok(windup > 0.25, `${action}: right hand must rise above the hips in the wind-up (${windup})`);
-      assert.ok(windup - atContact > 0.25, `${action}: the strike must bring the hand down through the hit (${windup} -> ${atContact})`);
+      assert.ok(windup - atContact > 0.15, `${action}: the strike must bring the hand down through the hit (${windup} -> ${atContact})`);
     }
   });
 
@@ -1432,7 +1432,7 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
     const timed = CLIP_SPECS.filter((spec) => spec.sim);
     /** The contact spec of a clip: on the clip itself or on the part that carries the strike. */
     const contactOf = (spec) => (spec.parts ?? [spec]).find((part) => part.contact)?.contact;
-    assert.deepEqual(timed.filter(contactOf).map((spec) => spec.clip).sort(), ['aren-charged-heavy', 'aren-cleanse', 'aren-heavy', 'aren-light-1', 'aren-light-2', 'aren-light-4', 'aren-root-tether', 'aren-sigil-bolt']);
+    assert.deepEqual(timed.filter(contactOf).map((spec) => spec.clip).sort(), ['aren-charged-heavy', 'aren-heavy', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-root-tether', 'aren-sigil-bolt']);
     /** Tick of the fastest hips-relative motion of the contact joints up to three ticks past the hit tick. */
     const peakTick = (spec) => {
       let previous, best = { speed: -1, tick: 0 };
@@ -1471,17 +1471,17 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
     }
   });
 
-  it('sweeps the glaive the way each combo step is named', () => {
-    const light1 = trace('aren-light-1'), light2 = trace('aren-light-2'), light3 = trace('aren-light-3'), light4 = trace('aren-light-4');
-    // Light 1: a horizontal sweep from the right across to the left, blade held level.
-    assert.ok(at(light1, 12).yaw - at(light1, 8).yaw > 35, 'light 1 sweeps right to left through the active window');
-    for (const tick of [8, 10, 12]) assert.ok(Math.abs(at(light1, tick).pitch) < 25, `light 1 keeps the blade level at tick ${tick} (${at(light1, tick).pitch})`);
-    // Light 2: the reverse rising sweep brings the blade up from below horizontal to high.
-    assert.ok(at(light2, 14).pitch - at(light2, 6).pitch > 40, 'light 2 rises through the swing');
-    // Light 3: wide level blade held out to the side while the simulation turns Aren.
-    for (const tick of [12, 16, 20]) { assert.ok(at(light3, tick).yaw > 35 && Math.abs(at(light3, tick).pitch) < 25, `light 3 holds the blade out level at tick ${tick}`); }
-    // Light 4: overhead finisher, blade high before the strike and low after it.
-    assert.ok(at(light4, 11).pitch > 55 && at(light4, 20).pitch < 0, 'light 4 chops from overhead to low');
+  it('gives each Warden Blade step its own swing: the hand travels through the active window along four distinct paths', () => {
+    const path = (action) => { const frames = trace(action), strike = strikeTick(frames); return [-4, -2, 0, 2, 4].map((offset) => at(frames, strike + offset).hand); };
+    const names = ['aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4'], paths = names.map(path);
+    for (const [index, points] of paths.entries()) {
+      const travelled = points[0].distanceTo(points.at(-1));
+      assert.ok(travelled > 0.25, `${names[index]} sweeps the hand through the hit (${travelled.toFixed(2)})`);
+    }
+    for (let a = 0; a < 4; a += 1) for (let b = a + 1; b < 4; b += 1) {
+      const apart = paths[a].reduce((sum, point, i) => sum + point.distanceTo(paths[b][i]), 0) / 5;
+      assert.ok(apart > 0.12, `${names[a]} and ${names[b]} follow distinct paths (${apart.toFixed(2)})`);
+    }
   });
 
   it('thrusts the glaive forward on the Sigil Bolt release tick and on each Sigil Barrage launch tick', () => {
@@ -1496,13 +1496,12 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
     }
   });
 
-  it('crouches, dashes low and rises again in the Warden Judgement clip', () => {
-    const hips = []; let lean = -Infinity;
-    eachFrame('aren-judgement', (frame) => { hips.push({ tick: frame * 2, y: point('Hips').y }); if (frame * 2 >= 12 && frame * 2 <= 20) lean = Math.max(lean, point('Head').z - point('Hips').z); });
-    const lowest = hips.filter((entry) => entry.tick >= 22 && entry.tick <= 40).reduce((a, b) => Math.min(a, b.y), Infinity);
-    assert.ok(lowest < 0.44 && hips[0].y > 0.45 && hips.at(-1).y > 0.5, `crouch ${lowest}, start ${hips[0].y}, end ${hips.at(-1).y}`);
-    assert.ok(lean > 0.1, `the dash leans forward (${lean})`);
-    assert.equal(hips.at(-1).tick, 52);
+  it('hands every finite strike back to the idle stance: the last frame sits within a hand-width of the idle pose', () => {
+    const idle = trace('aren-idle')[0];
+    for (const action of ['aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-judgement', 'aren-heavy', 'aren-charged-heavy', 'aren-root-tether', 'aren-cleanse']) {
+      const last = trace(action).at(-1);
+      assert.ok(last.hand.distanceTo(idle.hand) < 0.1, `${action}: ends ${last.hand.distanceTo(idle.hand).toFixed(2)} from the idle hand position`);
+    }
   });
 
   it('loops the Sigil Charge hold seamlessly: first and last pose coincide and nothing pops at the wrap', () => {

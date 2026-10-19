@@ -37,7 +37,10 @@ export function clipMetrics(rig, scale, name, { subdivisions = 2 } = {}) {
 }
 
 /** The staging a clip needs, or undefined when it is not a hand strike or already coils enough. */
-export function profileFor(m) {
+/** Clips the chest cannot stage: Yara's thornshot-2 is a straight staff thrust placed by the arm layer; the measured coil does not move the shoulders on the posed rig. */
+const UNSTAGED = new Set(['yara-thornshot-2']);
+export function profileFor(m, name) {
+  if (UNSTAGED.has(name)) return undefined;
   // One whip per clip: multi-strike chains (Thousand Cuts, Hundred Elbows), charge holds and slams do not follow a single coil-and-release envelope.
   const peak = m.peakFrame / (m.samples - 1);
   const strike = m.peakSpeed >= 8 && m.peakToWindup >= 1.4 && m.riseFrames <= 10 && peak >= 0.12 && peak <= 0.7 && m.duration <= 0.9 && m.handForward >= 0.1;
@@ -55,7 +58,7 @@ export function derive() {
     const source = parseGlb(readFileSync(root + glb)), rig = new Rig(source);
     for (const animation of source.json.animations) {
       if (!SKILL.test(animation.name)) continue;
-      const m = clipMetrics(rig, scale, animation.name), profile = profileFor(m);
+      const m = clipMetrics(rig, scale, animation.name), profile = profileFor(m, animation.name);
       report[`${hero}/${animation.name}`] = { end: m.end, peakSpeed: m.peakSpeed, sepTravel: m.sepTravel, leanAtPeak: m.leanAtPeak, profile: profile ?? null };
       if (profile) table[animation.name] = profile;
     }

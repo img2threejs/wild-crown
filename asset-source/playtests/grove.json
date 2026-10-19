@@ -34,7 +34,7 @@
     "rigFamily": "biped",
     "sourceHash": "d015ca2003ea76c140ca5fe59f8f15a0ef3f5910f5b2998be07232199c7149a3",
     "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
-    "outputHash": "3974728dd8fe17476c89d7313b6d72d228e55146d271781e74eed3e2f1adeab1",
+    "outputHash": "f7e3ff6d5b27e37ad6d602b65ff5217b6cae824126dad6774bc2142ee7af8dfc",
     "lodIds": [],
     "coordinateTransform": {
       "forward": {
@@ -1981,7 +1981,7 @@
     "rigFamily": "biped",
     "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
     "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-    "outputHash": "1d4547f0658f8128a3ecdcf8dda07b4677202d70fbe4a5aef743ff45b87e1294",
+    "outputHash": "8be9f6d3859a50c91625d25cdab413db545b37a2c3602e2e31e591b433dbabf7",
     "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
