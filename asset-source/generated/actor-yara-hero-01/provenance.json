@@ -53,43 +53,43 @@
       "sing_04"
     ]
   },
-  "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-  "outputHash": "acc9a3d2b8629fce060523ddff043b76867991a436cd9947ab3f991357064439",
+  "sourceHash": "63d647440996e049a01c111359b7cfb536fcd816c964fd6129951804a5e5452d",
+  "outputHash": "29c0d8c1d5735044c829667430ae4e724e2beea3fa349f7ed776b2ec7faa65a3",
   "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
-    "staffToMiddleFingerDegrees": 75.76603924438858,
-    "staffToPrincipalAxisDegrees": 90,
+    "staffToMiddleFingerDegrees": 80.2818820325746,
+    "staffToPrincipalAxisDegrees": 91.31039873873125,
     "middleFingerHand": [
-      -0.132633,
-      0.974967,
-      -0.17846
+      0.271883,
+      0.954956,
+      -0.118905
     ],
     "staffAxisHand": [
-      0.758689,
-      0.24491,
-      -0.603664
+      0.992274,
+      -0.095953,
+      0.078643
     ],
     "palmHand": [
-      0.014573,
-      0.047026,
-      0.009131
+      0.005367,
+      0.021478,
+      0.011337
     ],
-    "shaftRadiusRig": 0.01195,
+    "shaftRadiusRig": 0.005341,
     "metacarpalHand": [
-      -0.29332,
-      0.955823,
-      0.019135
+      0.090144,
+      0.963293,
+      -0.252865
     ],
     "thumbSideHand": [
-      0.758689,
-      0.24491,
-      -0.603664
+      -0.955418,
+      0.011966,
+      -0.295015
     ],
     "palmNormalHand": [
-      0.581682,
-      0.162549,
-      0.79701
+      0.281161,
+      -0.268186,
+      -0.921426
     ]
   },
   "credits": {
@@ -106,28 +106,28 @@
       "sha256": "248ab54bdab4fdfab8a1a1703c38618ffacafbaf90f9d7baeec0abcbef49b7d8",
       "durationSeconds": 2.6,
       "frames": 79,
-      "facingDegrees": 84.11
+      "facingDegrees": 90
     },
     "react-forward": {
       "file": "asset-source/mixamo/reactions/react-forward.fbx",
       "sha256": "2fc20a6ebc26cd0dac6b66649e10527d060dd78067bdaff0ce56fc6acc75530f",
       "durationSeconds": 3.6667,
       "frames": 111,
-      "facingDegrees": 84.11
+      "facingDegrees": 90
     },
     "getting-up-stomach": {
       "file": "asset-source/mixamo/reactions/getting-up-stomach.fbx",
       "sha256": "ead02bf768fb1d97870f820aa7b199bd199f702b59af36ea1cd6108f32250675",
       "durationSeconds": 8.6,
       "frames": 259,
-      "facingDegrees": 84.11
+      "facingDegrees": 90
     },
     "getting-up-knocked": {
       "file": "asset-source/mixamo/reactions/getting-up-knocked.fbx",
       "sha256": "d3247fb0b39bd891e613dd53fad0a15298a5d30feebfffeadd7cb98680143451",
       "durationSeconds": 2.7,
       "frames": 82,
-      "facingDegrees": 84.11
+      "facingDegrees": 90
     }
   },
   "creditTotal": 275,
@@ -136,29 +136,22 @@
     {
       "clip": "aren-idle",
       "source": {
-        "donor": "a",
-        "animation": "idle"
+        "donor": "mixamo:asset-source/viggle/y3-idle-1.glb:in-place",
+        "animation": "Armature.001|Scene",
+        "file": "asset-source/viggle/y3-idle-1.glb"
       },
       "sim": {
         "totalTicks": 240
       },
       "window": [
-        2,
-        6
+        0.3,
+        3.7
       ],
       "loop": {
         "overlapSeconds": 0.4
       },
       "limits": "JOINT_LIMITS",
-      "arm": {
-        "follow": 0.2,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
-        ]
-      },
+      "upright": 26,
       "clearArms": true
     },
     {
@@ -254,30 +247,21 @@
     {
       "clip": "aren-forward-left-dive-roll",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-petal-step-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-petal-step-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-petal-step-2.glb"
+        "file": "asset-source/viggle/y3-petal-step-2.glb"
       },
       "sim": {
         "totalTicks": 42
       },
       "window": [
-        0.2,
+        0.05,
         1.9
       ],
       "airborne": true,
       "upright": 26,
       "clearStaff": true,
       "idleBlendTail": 0.25,
-      "arm": {
-        "follow": 0.35,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
-        ]
-      },
       "clearArms": true,
       "limits": "COMBAT_LIMITS"
     },
@@ -382,18 +366,18 @@
       "travel": {
         "maxMetres": 0.62
       },
-      "travelScale": 0.7346,
+      "travelScale": 0.66,
       "floor": {
-        "liftMinMetres": -0.002,
-        "liftMaxMetres": 0.1594
+        "liftMinMetres": -0.0159,
+        "liftMaxMetres": 0.1402
       },
       "staff": {
-        "lowestBeforeMetres": -0.034,
-        "lowestAfterMetres": 0.031,
-        "deepestIntoLimbBeforeMetres": 0.073,
-        "deepestIntoLimbAfterMetres": 0.014,
+        "lowestBeforeMetres": 0.133,
+        "lowestAfterMetres": 0.078,
+        "deepestIntoLimbBeforeMetres": 0.075,
+        "deepestIntoLimbAfterMetres": 0.01,
         "framesTurned": 27,
-        "largestTurnDegrees": 24
+        "largestTurnDegrees": 32
       }
     },
     {
@@ -449,18 +433,18 @@
       "travel": {
         "maxMetres": 0.62
       },
-      "travelScale": 0.7427,
+      "travelScale": 0.6673,
       "floor": {
-        "liftMinMetres": 0.0221,
-        "liftMaxMetres": 0.1605
+        "liftMinMetres": -0.0326,
+        "liftMaxMetres": 0.1072
       },
       "staff": {
-        "lowestBeforeMetres": -0.675,
-        "lowestAfterMetres": 0.004,
-        "deepestIntoLimbBeforeMetres": 0.083,
-        "deepestIntoLimbAfterMetres": 0.021,
-        "framesTurned": 31,
-        "largestTurnDegrees": 56
+        "lowestBeforeMetres": -0.857,
+        "lowestAfterMetres": 0.015,
+        "deepestIntoLimbBeforeMetres": 0.062,
+        "deepestIntoLimbAfterMetres": 0.016,
+        "framesTurned": 35,
+        "largestTurnDegrees": 72
       }
     },
     {
@@ -486,7 +470,7 @@
             ]
           ],
           "retarget": {
-            "yaw": 13.1
+            "yaw": 12.9
           },
           "ticks": [
             0
@@ -505,21 +489,25 @@
       },
       "floor": {
         "take": {
-          "liftMinMetres": -0.0146,
-          "liftMaxMetres": 0.1137
+          "liftMinMetres": -0.0134,
+          "liftMaxMetres": 0.1736
         },
         "final": {
-          "liftMinMetres": -0.0411,
-          "liftMaxMetres": 0.0401
+          "liftMinMetres": 0,
+          "liftMaxMetres": 0.0413
+        },
+        "afterStaff": {
+          "liftMinMetres": -0.0037,
+          "liftMaxMetres": 0
         }
       },
       "staff": {
-        "lowestBeforeMetres": -0.275,
-        "lowestAfterMetres": 0.013,
-        "deepestIntoLimbBeforeMetres": 0.101,
-        "deepestIntoLimbAfterMetres": 0.023,
-        "framesTurned": 43,
-        "largestTurnDegrees": 44
+        "lowestBeforeMetres": -0.256,
+        "lowestAfterMetres": 0.039,
+        "deepestIntoLimbBeforeMetres": 0.082,
+        "deepestIntoLimbAfterMetres": 0.025,
+        "framesTurned": 40,
+        "largestTurnDegrees": 40
       }
     },
     {
@@ -545,7 +533,7 @@
             ]
           ],
           "retarget": {
-            "yaw": 6.5
+            "yaw": 6.3
           },
           "ticks": [
             0
@@ -568,7 +556,7 @@
             ]
           ],
           "retarget": {
-            "yaw": 6.5
+            "yaw": 6.3
           },
           "ticks": [
             36
@@ -587,29 +575,33 @@
       },
       "floor": {
         "take": {
-          "liftMinMetres": -0.0227,
-          "liftMaxMetres": 0.1242
+          "liftMinMetres": -0.0302,
+          "liftMaxMetres": 0.0313
         },
         "final": {
-          "liftMinMetres": 0,
-          "liftMaxMetres": 0.0399
+          "liftMinMetres": -0.0126,
+          "liftMaxMetres": 0.0342
+        },
+        "afterStaff": {
+          "liftMinMetres": -0.0007,
+          "liftMaxMetres": 0.0241
         }
       },
       "staff": {
-        "lowestBeforeMetres": -0.515,
-        "lowestAfterMetres": 0.031,
-        "deepestIntoLimbBeforeMetres": 0.022,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 34,
-        "largestTurnDegrees": 32
+        "lowestBeforeMetres": -0.891,
+        "lowestAfterMetres": 0.03,
+        "deepestIntoLimbBeforeMetres": 0.082,
+        "deepestIntoLimbAfterMetres": 0.007,
+        "framesTurned": 31,
+        "largestTurnDegrees": 64
       }
     },
     {
       "clip": "yara-thornshot-1",
       "source": {
-        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/sorc-1.glb"
+        "file": "asset-source/viggle/y3-thornshot-1.glb"
       },
       "sim": {
         "totalTicks": 26,
@@ -618,19 +610,19 @@
       "keys": [
         [
           0,
-          0.5
+          0.42
         ],
         [
           9,
-          0.9
+          0.77
         ],
         [
           22,
-          1.49
+          0.9
         ],
         [
           26,
-          1.55
+          0.93
         ]
       ],
       "contact": {
@@ -638,17 +630,8 @@
           "LeftHand"
         ],
         "search": [
-          0.8,
-          1
-        ]
-      },
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
+          0.65,
+          0.9
         ]
       },
       "facing": 28,
@@ -660,9 +643,9 @@
     {
       "clip": "yara-thornshot-2",
       "source": {
-        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/sorc-1.glb"
+        "file": "asset-source/viggle/y3-thornshot-1.glb"
       },
       "sim": {
         "totalTicks": 28,
@@ -671,42 +654,33 @@
       "keys": [
         [
           0,
-          1.55
+          0.93
         ],
         [
           10,
-          2
+          1.25
         ],
         [
           24,
-          2.69
+          1.75
         ],
         [
           28,
-          2.75
+          1.8
         ]
       ],
       "contact": {
         "joints": [
-          "LeftHand"
+          "RightHand"
         ],
         "search": [
-          1.9,
-          2.1
+          1.1,
+          1.35
         ]
       },
       "seamFrom": {
         "clip": "yara-thornshot-1",
         "ticks": 4
-      },
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
-        ]
       },
       "facing": 28,
       "upright": 26,
@@ -717,9 +691,9 @@
     {
       "clip": "yara-thornshot-3",
       "source": {
-        "donor": "mixamo:asset-source/viggle/sorc-1.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/sorc-1.glb"
+        "file": "asset-source/viggle/y3-thornshot-1.glb"
       },
       "sim": {
         "totalTicks": 34,
@@ -728,24 +702,24 @@
       "keys": [
         [
           0,
-          2.75
+          1.8
         ],
         [
           10,
-          3.3
+          2.23
         ],
         [
           34,
-          4
+          3.2
         ]
       ],
       "contact": {
         "joints": [
-          "LeftHand"
+          "RightHand"
         ],
         "search": [
-          3.2,
-          3.4
+          2.1,
+          2.35
         ]
       },
       "seamFrom": {
@@ -753,15 +727,6 @@
         "ticks": 4
       },
       "idleBlendTail": 0.3,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
-        ]
-      },
       "facing": 28,
       "upright": 26,
       "clearStaff": true,
@@ -771,9 +736,9 @@
     {
       "clip": "yara-root-spike",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-root-spike-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-root-full-4.glb"
+        "file": "asset-source/viggle/y3-root-spike-2.glb"
       },
       "sim": {
         "totalTicks": 63,
@@ -782,27 +747,27 @@
       "keys": [
         [
           0,
-          0.4
+          0.9
         ],
         [
           17,
-          1.6
+          1.66
         ],
         [
           20,
-          1.67
+          1.78
         ],
         [
           23,
-          1.74
+          1.88
         ],
         [
-          35,
-          2.3
+          40,
+          2.5
         ],
         [
           63,
-          3.5
+          3
         ]
       ],
       "contact": {
@@ -811,38 +776,46 @@
           "RightHand"
         ],
         "search": [
-          1.55,
-          1.75
+          1.65,
+          1.9
         ]
       },
-      "idleBlendTail": 0.2,
+      "idleBlendTail": 0.25,
       "arm": {
         "follow": 0,
         "keys": [
           {
             "t": 0,
-            "pose": "carry",
-            "gw": 0
-          },
-          {
-            "t": 4,
-            "pose": "ready",
-            "gw": 1,
-            "grip": 0.36
-          },
-          {
-            "t": 8,
-            "pose": "high",
             "hand": [
-              0.32,
-              0.12,
-              0.1
+              0.22,
+              0.02,
+              0.06
+            ],
+            "staff": [
+              0,
+              88
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 0
           },
           {
-            "t": 12,
+            "t": 9,
+            "hand": [
+              0.22,
+              0.02,
+              0.06
+            ],
+            "staff": [
+              0,
+              88
+            ],
+            "gw": 1,
+            "grip": -0.26,
+            "w": 1
+          },
+          {
+            "t": 14,
             "pose": "high",
             "hand": [
               0.26,
@@ -850,7 +823,8 @@
               0.08
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 17,
@@ -861,24 +835,29 @@
               0.08
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 20,
             "pose": "plant",
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
-            "t": 44,
+            "t": 40,
             "pose": "plant",
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 63,
-            "pose": "carry",
-            "gw": 0
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26,
+            "w": 0
           }
         ]
       },
@@ -891,15 +870,15 @@
     {
       "clip": "yara-root-charge",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-root-full-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-root-full-4.glb"
+        "file": "asset-source/viggle/y3-root-full-2.glb"
       },
       "sim": {
         "totalTicks": 90
       },
       "window": [
-        0.8,
+        0.6,
         1.4
       ],
       "loop": {
@@ -910,14 +889,18 @@
         "keys": [
           {
             "t": 0,
-            "pose": "high",
             "hand": [
-              0.26,
-              0.21,
-              0.08
+              0.22,
+              0.02,
+              0.06
+            ],
+            "staff": [
+              0,
+              88
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           }
         ]
       },
@@ -930,9 +913,9 @@
     {
       "clip": "yara-root-eruption",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-root-full-4.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-root-spike-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-root-full-4.glb"
+        "file": "asset-source/viggle/y3-root-spike-2.glb"
       },
       "sim": {
         "totalTicks": 76,
@@ -941,27 +924,27 @@
       "keys": [
         [
           0,
-          0.9
+          1.2
         ],
         [
           33,
-          1.62
+          1.66
         ],
         [
           36,
-          1.67
+          1.78
         ],
         [
           39,
-          1.72
+          1.88
         ],
         [
-          50,
-          2.3
+          55,
+          2.5
         ],
         [
           76,
-          3.5
+          3
         ]
       ],
       "contact": {
@@ -970,20 +953,50 @@
           "RightHand"
         ],
         "search": [
-          1.55,
-          1.75
+          1.65,
+          1.9
         ]
       },
       "seamFrom": {
         "clip": "yara-root-charge",
-        "ticks": 8
+        "ticks": 18
       },
-      "idleBlendTail": 0.2,
+      "idleBlendTail": 0.25,
       "arm": {
         "follow": 0,
         "keys": [
           {
             "t": 0,
+            "hand": [
+              0.22,
+              0.02,
+              0.06
+            ],
+            "staff": [
+              0,
+              88
+            ],
+            "gw": 1,
+            "grip": -0.26,
+            "w": 1
+          },
+          {
+            "t": 24,
+            "hand": [
+              0.22,
+              0.02,
+              0.06
+            ],
+            "staff": [
+              0,
+              88
+            ],
+            "gw": 1,
+            "grip": -0.26,
+            "w": 1
+          },
+          {
+            "t": 31,
             "pose": "high",
             "hand": [
               0.26,
@@ -991,7 +1004,8 @@
               0.08
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 33,
@@ -1002,24 +1016,29 @@
               0.08
             ],
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 36,
             "pose": "plant",
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
-            "t": 60,
+            "t": 58,
             "pose": "plant",
             "gw": 1,
-            "grip": -0.26
+            "grip": -0.26,
+            "w": 1
           },
           {
             "t": 76,
-            "pose": "carry",
-            "gw": 0
+            "pose": "plant",
+            "gw": 1,
+            "grip": -0.26,
+            "w": 0
           }
         ]
       },
@@ -1032,16 +1051,16 @@
     {
       "clip": "yara-seed-charge",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-seed-full-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-seed-full-3.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-seed-full-2.glb"
+        "file": "asset-source/viggle/y3-seed-full-3.glb"
       },
       "sim": {
         "totalTicks": 90
       },
       "window": [
-        0.8,
-        1.9
+        0.9,
+        1.7
       ],
       "loop": {
         "overlapSeconds": 0.2
@@ -1051,9 +1070,18 @@
         "keys": [
           {
             "t": 0,
-            "pose": "ready",
+            "hand": [
+              0.2,
+              -0.04,
+              0.06
+            ],
+            "staff": [
+              0,
+              6
+            ],
             "gw": 1,
-            "grip": 0.36
+            "grip": 0.36,
+            "w": 1
           }
         ]
       },
@@ -1066,9 +1094,9 @@
     {
       "clip": "yara-sap-lance",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-seed-full-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-seed-full-3.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-seed-full-2.glb"
+        "file": "asset-source/viggle/y3-seed-full-3.glb"
       },
       "sim": {
         "totalTicks": 30,
@@ -1077,32 +1105,33 @@
       "keys": [
         [
           0,
-          1.9
+          1.75
         ],
         [
           13,
-          2.08
+          2.3
         ],
         [
           16,
-          2.13
+          2.43
         ],
         [
           19,
-          2.18
+          2.52
         ],
         [
           30,
-          2.7
+          3
         ]
       ],
       "contact": {
         "joints": [
-          "LeftHand"
+          "LeftHand",
+          "RightHand"
         ],
         "search": [
-          2,
-          2.25
+          2.25,
+          2.55
         ]
       },
       "seamFrom": {
@@ -1115,30 +1144,78 @@
         "keys": [
           {
             "t": 0,
-            "pose": "ready",
+            "hand": [
+              0.2,
+              -0.04,
+              0.06
+            ],
+            "staff": [
+              0,
+              6
+            ],
             "gw": 1,
-            "grip": 0.36
+            "grip": 0.36,
+            "w": 1
+          },
+          {
+            "t": 12,
+            "hand": [
+              0.14,
+              -0.04,
+              0.06
+            ],
+            "staff": [
+              0,
+              6
+            ],
+            "gw": 1,
+            "grip": 0.36,
+            "w": 1
           },
           {
             "t": 16,
-            "pose": "ready",
+            "hand": [
+              0.33,
+              0,
+              0.04
+            ],
             "staff": [
               0,
-              20
+              4
             ],
             "gw": 1,
-            "grip": 0.36
+            "grip": 0.36,
+            "w": 1
           },
           {
-            "t": 24,
-            "pose": "ready",
+            "t": 22,
+            "hand": [
+              0.33,
+              0,
+              0.04
+            ],
+            "staff": [
+              0,
+              4
+            ],
             "gw": 1,
-            "grip": 0.36
+            "grip": 0.36,
+            "w": 1
           },
           {
             "t": 30,
-            "pose": "carry",
-            "gw": 0
+            "hand": [
+              0.2,
+              -0.04,
+              0.06
+            ],
+            "staff": [
+              0,
+              6
+            ],
+            "gw": 1,
+            "grip": 0.36,
+            "w": 1
           }
         ]
       },
@@ -1151,56 +1228,36 @@
     {
       "clip": "yara-seed-storm",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-seed-storm-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-seed-storm-3.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-seed-storm-2.glb"
+        "file": "asset-source/viggle/y3-seed-storm-3.glb"
       },
       "sim": {
         "totalTicks": 60
       },
-      "window": [
-        0.1,
-        2.7
+      "keys": [
+        [
+          0,
+          0.4
+        ],
+        [
+          12,
+          0.95
+        ],
+        [
+          42,
+          2.9
+        ],
+        [
+          60,
+          3.4
+        ]
       ],
       "seamFrom": {
         "clip": "yara-seed-charge",
         "ticks": 8
       },
       "idleBlendTail": 0.25,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "ready",
-            "gw": 1,
-            "grip": 0.36
-          },
-          {
-            "t": 8,
-            "pose": "high",
-            "hand": [
-              0.17,
-              0.25,
-              0.08
-            ],
-            "gw": 0
-          },
-          {
-            "t": 48,
-            "pose": "high",
-            "hand": [
-              0.17,
-              0.25,
-              0.08
-            ]
-          },
-          {
-            "t": 60,
-            "pose": "carry"
-          }
-        ]
-      },
       "facing": 28,
       "upright": 26,
       "clearStaff": true,
@@ -1210,9 +1267,9 @@
     {
       "clip": "yara-binding-vines",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-binding-vines-1.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-binding-vines-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-binding-vines-1.glb"
+        "file": "asset-source/viggle/y3-binding-vines-2.glb"
       },
       "sim": {
         "totalTicks": 54,
@@ -1221,15 +1278,19 @@
       "keys": [
         [
           0,
-          0.3
+          0.05
         ],
         [
           18,
-          1
+          0.37
+        ],
+        [
+          40,
+          2.6
         ],
         [
           54,
-          2.3
+          3
         ]
       ],
       "contact": {
@@ -1237,17 +1298,33 @@
           "LeftHand"
         ],
         "search": [
-          0.9,
-          1.1
+          0.25,
+          0.5
         ]
       },
       "idleBlendTail": 0.3,
       "arm": {
-        "follow": 0,
+        "follow": 0.25,
         "keys": [
           {
             "t": 0,
-            "pose": "carry"
+            "pose": "carry",
+            "w": 0
+          },
+          {
+            "t": 8,
+            "pose": "carry",
+            "w": 1
+          },
+          {
+            "t": 44,
+            "pose": "carry",
+            "w": 1
+          },
+          {
+            "t": 54,
+            "pose": "carry",
+            "w": 0
           }
         ]
       },
@@ -1260,27 +1337,18 @@
     {
       "clip": "yara-cleanse",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-cleanse-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-cleanse-2.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-cleanse-2.glb"
+        "file": "asset-source/viggle/y3-cleanse-2.glb"
       },
       "sim": {
         "totalTicks": 108
       },
       "window": [
-        0.2,
-        2.8
+        0.05,
+        4
       ],
       "idleBlendTail": 0.2,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry"
-          }
-        ]
-      },
       "facing": 28,
       "upright": 26,
       "clearStaff": true,
@@ -1290,9 +1358,9 @@
     {
       "clip": "yara-heartroot-bloom",
       "source": {
-        "donor": "mixamo:asset-source/viggle/yara-heartroot-bloom-b-2.glb:in-place",
+        "donor": "mixamo:asset-source/viggle/y3-bloom-1.glb:in-place",
         "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/yara-heartroot-bloom-b-2.glb"
+        "file": "asset-source/viggle/y3-bloom-1.glb"
       },
       "sim": {
         "totalTicks": 156
@@ -1300,19 +1368,19 @@
       "keys": [
         [
           0,
-          0.2
+          0.1
         ],
         [
-          14,
-          0.7
+          30,
+          1.2
         ],
         [
           124,
-          4
+          3.25
         ],
         [
           132,
-          4.2
+          3.46
         ],
         [
           156,
@@ -1320,72 +1388,6 @@
         ]
       ],
       "idleBlendTail": 0.15,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry",
-            "gw": 0
-          },
-          {
-            "t": 6,
-            "pose": "ready",
-            "gw": 1,
-            "grip": 0.36
-          },
-          {
-            "t": 10,
-            "pose": "high",
-            "hand": [
-              0.32,
-              0.12,
-              0.1
-            ],
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 15,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 124,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 132,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 146,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26
-          },
-          {
-            "t": 156,
-            "pose": "carry",
-            "gw": 0
-          }
-        ]
-      },
       "facing": 28,
       "upright": 26,
       "clearStaff": true,

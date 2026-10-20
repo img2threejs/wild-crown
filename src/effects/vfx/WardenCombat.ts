@@ -354,14 +354,15 @@ export class WardenCombat {
       emitAcc: 0, scarDistance: 0, prev: new Vector3(), cur: new Vector3(), display: new Vector3(), direction: new Vector3(snapshot.direction.x, snapshot.direction.y, snapshot.direction.z),
       scarFrom: new Vector3(snapshot.position.x, snapshot.position.y, snapshot.position.z), launch: new Vector3(), launchAt: -Infinity,
     };
-    // Yara's projectiles are drawn leaving what casts them (the palm for her hand casts, the raised staff head for Seed Storm) and join their
-    // simulated path within PALM_LAUNCH_SECONDS; the simulation's spawn point ahead of her chest stays authoritative.
+    // Yara's projectiles are drawn leaving what casts them (the palm for her hand casts; the staff head for the staff strikes, Thornshot 2–3, and Seed
+    // Storm) and join their simulated path within PALM_LAUNCH_SECONDS; the simulation's spawn point ahead of her chest stays authoritative.
     if (w.player.hero === 'yara') {
       let from = false;
-      if ((snapshot.kind === 'thorn-bolt' || snapshot.kind === 'bloom-seed') && isYaraHandCast(w.player.actionId)) {
+      const thorn = snapshot.kind === 'thorn-bolt' || snapshot.kind === 'bloom-seed';
+      if (thorn && isYaraHandCast(w.player.actionId)) {
         w.hand.resolve(w.resolveActorRoot?.('aren'));
         from = leftPalm(w.hand, visual.launch, this.b);
-      } else if (snapshot.kind === 'storm-seed') {
+      } else if (thorn || snapshot.kind === 'storm-seed') {
         const tip = w.resolveSocket?.('aren', 'weapon-tip');
         if (tip) { tip.updateWorldMatrix(true, false); tip.getWorldPosition(visual.launch); from = true; }
       }

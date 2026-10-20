@@ -1749,7 +1749,7 @@
     "rigFamily": "biped",
     "tripoSourceTask": "5e75ddbe-dbd3-4f5a-93d0-fac15ea06ba5",
     "sourceHash": "97794dbfe1074ef0d32e40d1a45cd69fa5df5a967a23a1e80f926fdde274815d",
-    "outputHash": "acc9a3d2b8629fce060523ddff043b76867991a436cd9947ab3f991357064439",
+    "outputHash": "29c0d8c1d5735044c829667430ae4e724e2beea3fa349f7ed776b2ec7faa65a3",
     "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
     "coordinateTransform": {
       "forward": {
@@ -3230,14 +3230,14 @@
     "id": "prop-heartroot-focus-staff",
     "sourceType": "native-glb",
     "kind": "prop",
-    "tripoSourceTask": "db7ced9a-59c7-413b-a8f0-e5fe80cbef60",
-    "runtimeUrl": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
-    "outputHash": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b",
+    "tripoSourceTask": "4e0784e2-8bdb-416a-ba10-3847593d7fab",
+    "runtimeUrl": "/asset-source/generated/prop-yara-c-staff-01/model.glb",
+    "outputHash": "b0b8c9e289aff75a18ee9544dd45744d58ba966917c612265780984e47063864",
     "lodIds": [],
     "requiredActionIds": [],
     "actionToClipMapping": {},
     "sockets": [],
-    "provenance": "asset-source/generated/prop-heartroot-focus-staff-01/provenance.json",
+    "provenance": "asset-source/generated/prop-yara-c-staff-01/provenance.json",
     "evidenceStatus": "blocked"
   },
   {

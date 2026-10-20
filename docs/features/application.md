@@ -155,12 +155,12 @@ All captures are under `asset-source/playtests/evidence/combat-polish`. Skills w
 - Since the combo rework (#134, `hero-skill-clips/aren-combo-ingame.webp`), J ×4 pressed inside the chain window played `aren-light-1` → 2 → 3 → 4 with each step continuing from the pose the previous one ended on.
 
 **Yara in Greenwake** (`yara-grip-contact.png`, `yara-combat-contact.png`)
-- Through idle, walk and run, the staff stays upright in her fixed fist.
+- Through walk and run, the staff stays upright in her fist; since the concept C remake (#134) her fingers wrap the shaft every frame and her idle holds it at the ready.
 - Thornshot 1–3, Root Spike, Heartroot Eruption, Sap Lance, Seed Storm, Heartroot Bloom, Binding Vines, Cleanse and Petal Step each played her own clip, with amber/petal effects distinct from Aren's cyan.
 - Binding Vines staggered a winding-up boar.
 - Cleanse lowered corruption from 60 to 40.
 - Her boosted jump played her own `aren-air-step` with petal air steps.
-- Since the sorceress rework (#134) her hand casts (Thornshot 1–3, Binding Vines, Cleanse) are cast by her left hand, and the effects follow it (`isYaraHandCast` / `leftPalm` in `ActorBounds.ts`): the launch flare, the sap trail and the drawn thorn or seed start at her palm, and the thorn eases onto its simulated path within 0.15 s (presentation only; the simulation spawn point is unchanged). Seed Storm's seeds leave the raised staff head; Sap Lance, the charges, Root Spike, Eruption and Bloom keep their staff-head and ground effects.
+- Since the concept C remake (#134) her open-palm casts (Thornshot 1, Binding Vines, Cleanse) leave her left hand and her staff strikes (Thornshot 2–3, Seed Storm) the staff head, and the effects follow them (`isYaraHandCast` / `leftPalm` in `ActorBounds.ts`): the launch flare, the sap trail and the drawn thorn or seed start at her palm, and the thorn eases onto its simulated path within 0.15 s (presentation only; the simulation spawn point is unchanged). Seed Storm's seeds leave the raised staff head; Sap Lance, the charges, Root Spike, Eruption and Bloom keep their staff-head and ground effects.
 - Since the combo rework (#134, `hero-skill-clips/yara-combo-ingame.webp`), J ×3 inside the chain window played Thornshot 1 → 2 → 3 as one continuous casting sequence; held K played `yara-root-charge` → `yara-root-eruption` and held L `yara-seed-charge` → `yara-seed-storm`, each release opening on its charge pose.
 
 **Monsters on all five maps** (`monster-attacks-contact.png`, `monster-greenwake-attacks-contact.png`)

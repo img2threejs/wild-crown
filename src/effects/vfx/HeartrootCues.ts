@@ -131,13 +131,13 @@ export class HeartrootCues {
 
   // ---- launch and projectile impacts ----
 
-  /** Thornshot / seed / storm-seed launch: a flare where the spell leaves her (the palm for the hand casts, the raised staff head for Seed Storm) and a short sap trail. */
+  /** Thornshot / seed / storm-seed launch: a flare where the spell leaves her (the palm for the hand casts, the staff head for her staff strikes and Seed Storm) and a short sap trail. */
   private launch(slot: KitSlot, kit: HeartrootKitId, x: number, y: number, z: number): void {
     const vfx = this.vfx, owner = slot.owner;
     // The flare sits on what casts the spell, not on the simulation's spawn point ahead of the chest.
     if (this.castingPalm()) { x = this.a.x; y = this.a.y; z = this.a.z; }
-    else if (kit === 'heartroot-storm') {
-      const tip = this.warden?.resolveSocket?.('aren', 'weapon-tip');
+    else if (this.warden?.player.hero === 'yara') {
+      const tip = this.warden.resolveSocket?.('aren', 'weapon-tip');
       if (tip) { tip.updateWorldMatrix(true, false); tip.getWorldPosition(this.a); x = this.a.x; y = this.a.y; z = this.a.z; }
     }
     this.openTrail(kit, kit === 'heartroot-storm' ? 8 : 10);

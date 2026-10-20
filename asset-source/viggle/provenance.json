@@ -2,7 +2,7 @@
   "source": "Viggle PINOC text-to-motion (generate_motion), mixamo-glb export: X Bot mesh, 65 mixamorig joints, Y-up, metres; generated and downloaded by the main session from the user's PINOC account",
   "createdAt": "2026-10-19",
   "usage": "Read by scripts/assets/mixamo-import.mjs (loadMixamoDonor accepts .glb) and played in place by the Aren (retarget-aren-tripo-clips.mjs) and Yara (author-yara-hero-clips.mjs) clip authors. Each request returns 4 samples; only the samples the clips use are kept.",
-  "creditsSpent": 97,
+  "creditsSpent": 177,
   "requests": [
     {
       "request": "aren-heavy",
@@ -206,6 +206,156 @@
       "durationSeconds": 4,
       "creditsCharged": 4,
       "samples": 4
+    },
+    {
+      "request": "y3-idle",
+      "taskId": "9dc002ba-574c-417c-afcc-54ee047699cc",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    },
+    {
+      "request": "y3-thornshot",
+      "taskId": "a2cf021e-1025-4fbf-bf8e-9f21f7b42573",
+      "durationSeconds": 6,
+      "creditsCharged": 6,
+      "samples": 4
+    },
+    {
+      "request": "y3-root-spike",
+      "taskId": "b4a729b9-4892-47a4-8ac1-c2d004b531eb",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "y3-root-full",
+      "taskId": "84ca3ee3-a15a-4174-9a52-04d230ca032e",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "y3-seed-full",
+      "taskId": "4f9c91a9-3944-4160-9186-8820172a6033",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    },
+    {
+      "request": "y3-seed-storm",
+      "taskId": "4cb7a989-6c3e-4e22-81d9-ab600cd656af",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    },
+    {
+      "request": "y3-binding-vines",
+      "taskId": "f161c328-ff61-43a5-8874-c07bca1599ca",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4
+    },
+    {
+      "request": "y3-cleanse",
+      "taskId": "8b133a8d-e951-4e28-81cb-15a63f0bde2d",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4
+    },
+    {
+      "request": "y3-petal-step",
+      "taskId": "de677c14-b2e9-4a5d-aa36-18e135b228dc",
+      "durationSeconds": 2,
+      "creditsCharged": 2,
+      "samples": 4
+    },
+    {
+      "request": "y3-bloom",
+      "taskId": "e7a6cb6b-fc36-4294-9720-77b51f1f0579",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4
+    },
+    {
+      "request": "yara2-idle",
+      "taskId": "ef7993b5-5e31-409e-90d0-be6423d9ccf0",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-thornshot",
+      "taskId": "6ea31277-bcf0-4be3-b484-74a835bc4300",
+      "durationSeconds": 6,
+      "creditsCharged": 6,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-root-full",
+      "taskId": "fa20755e-cc34-48b9-9062-ccb97dd59034",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-root-spike",
+      "taskId": "8a325c0e-f6d3-4db8-9258-0127f8c0c076",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-seed-full",
+      "taskId": "6e9ba965-a39a-407c-ab7d-d2b9f2da6665",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-seed-storm",
+      "taskId": "490b078e-3472-4a21-9234-6d6cacc06059",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-binding-vines",
+      "taskId": "315cb6c2-8738-46ba-849f-8115ca439c7a",
+      "durationSeconds": 3,
+      "creditsCharged": 3,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-cleanse",
+      "taskId": "843213a4-4a43-4cf0-b597-d1f693d27485",
+      "durationSeconds": 4,
+      "creditsCharged": 4,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-petal-step",
+      "taskId": "b9126beb-a5c2-4fd2-a53d-80f8ff958bae",
+      "durationSeconds": 2,
+      "creditsCharged": 2,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
+    },
+    {
+      "request": "yara2-bloom",
+      "taskId": "64b76bde-645e-4243-8300-f92f83f031c1",
+      "durationSeconds": 5,
+      "creditsCharged": 5,
+      "samples": 4,
+      "note": "evaluated, not used (dance-like takes without the staff)"
     }
   ],
   "files": [
@@ -309,92 +459,114 @@
       "bytes": 1917116
     },
     {
-      "file": "asset-source/viggle/sorc-1.glb",
-      "request": "sorc",
+      "file": "asset-source/viggle/y3-idle-1.glb",
+      "request": "y3-idle",
       "sample": 1,
-      "taskId": "be74c17f-6c4f-4714-a891-f8d9fd3add33",
-      "assetPublicId": "92617b98-a799-4865-b72c-1a85439cb0f4",
-      "prompt": "A sorceress performs a continuous three-hit spell combo in place, holding a tall staff upright in her right hand at her side the whole time. Hit 1: steps in and thrusts her open left palm straight forward to fire a bolt. Hit 2: flows into a sweep of the left hand from right to left, throwing twin bolts. Hit 3: draws the left hand back and up, then hurls an orb forward overhead with a weight shift onto the front foot. She settles into a balanced ready stance. Upright torso, grounded weight shifts, crisp readable poses, no crouching.",
-      "durationSeconds": 5,
-      "sha256": "9f99263964d7e864905dd7497f6bb8a1f59536e6523165a4c352662e8ff8f190",
-      "bytes": 1968052
+      "taskId": "9dc002ba-574c-417c-afcc-54ee047699cc",
+      "assetPublicId": "52318cfa-61da-4b3a-9f99-212fac6463d6",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A combat-ready idle loop: she stands with weight on her back leg, the staff held diagonally across her front in her right hand with the staff head raised forward at shoulder height, left hand open and ready near her hip, slow breathing, alert. Ends in the same pose it starts.",
+      "durationSeconds": 4,
+      "sha256": "de51135e929e9bf120aa01f2b1f3ad49fc98e047bc8a0aa009f81f952e678d92",
+      "bytes": 1942620
     },
     {
-      "file": "asset-source/viggle/yara-root-full-4.glb",
-      "request": "yara-root-full",
-      "sample": 4,
-      "taskId": "0d5130f7-941a-4a21-8486-f4b3c8651d1f",
-      "assetPublicId": "c4ea3173-d760-4e31-8509-dec269720346",
-      "prompt": "A sorceress holds a tall staff raised above her head with both hands, gathering power and holding almost still for two seconds, then drives the staff straight down to strike the ground beside her front foot with a strong two-handed thrust, a powerful burst, then straightens and returns the staff to her side. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
+      "file": "asset-source/viggle/y3-thornshot-1.glb",
+      "request": "y3-thornshot",
+      "sample": 1,
+      "taskId": "a2cf021e-1025-4fbf-bf8e-9f21f7b42573",
+      "assetPublicId": "7a59c5e8-73d7-4832-8826-2773f6d1be18",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A fast three-hit attack combo, each hit flowing straight into the next. Hit 1: she steps forward and thrusts her open left palm straight at the enemy at shoulder height, arm fully extended, the staff held upright in her right hand. Hit 2: she pivots her hips and swings the staff head in a fast horizontal arc from right to left at chest height, both hands on the staff, ending with the staff head pointed at the enemy. Hit 3: she lifts the staff above her head with both hands and whips the staff head down forward, stopping it pointed at the enemy at chest height, front knee bent. Then she recovers to the ready stance.",
+      "durationSeconds": 6,
+      "sha256": "5ec2df6f60d3ff494b61770cf53699a34a6c5ea7b5f645a01610b12bab0901c9",
+      "bytes": 1993488
+    },
+    {
+      "file": "asset-source/viggle/y3-root-spike-2.glb",
+      "request": "y3-root-spike",
+      "sample": 2,
+      "taskId": "b4a729b9-4892-47a4-8ac1-c2d004b531eb",
+      "assetPublicId": "cc3b27f8-baf5-49b9-9518-ad4a24e2dfd7",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. One heavy strike: she lifts the staff vertically with both hands above her right shoulder, steps forward and stabs the bottom end of the staff down into the ground just in front of her front foot, leaning over it with both hands pressing down, holds for a beat, then pulls it out and returns to ready.",
+      "durationSeconds": 3,
+      "sha256": "e72dbe2df290297e9d477b98c856606d6b5be8a8c017d5fcd1088d1fb8eea430",
+      "bytes": 1917128
+    },
+    {
+      "file": "asset-source/viggle/y3-root-full-2.glb",
+      "request": "y3-root-full",
+      "sample": 2,
+      "taskId": "84ca3ee3-a15a-4174-9a52-04d230ca032e",
+      "assetPublicId": "e755a049-4548-48b3-a54f-9de16ed60c34",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She holds the staff vertically in front of her body with both hands, gathering power, almost still for two seconds with her head lowered; then she jumps slightly, raises the staff high with both hands and slams the bottom end down into the ground in front of her with full force, landing with knees bent, holds the impact pose, then rises to ready.",
       "durationSeconds": 5,
-      "sha256": "e200217cb1f8e8fad040d076eed6df3793ca7c691aa7b6303fe1b9d4bcadd1cf",
+      "sha256": "2fcf3d0222e8a3f60fe097e2c22f7c636945d70e2eb58a61fc754edc5ae8f5c4",
       "bytes": 1968060
     },
     {
-      "file": "asset-source/viggle/yara-seed-full-2.glb",
-      "request": "yara-seed-full",
-      "sample": 2,
-      "taskId": "f8ef3237-bd00-4ec9-b688-1fa9cfe1c7bd",
-      "assetPublicId": "a9142f58-1b85-4422-8ed9-2634bcd6ec35",
-      "prompt": "A sorceress aims a tall staff levelled forward with both hands, channeling power and holding almost still for two seconds, then thrusts the staff forward to fire a beam, braces against the recoil, then returns the staff upright to her side. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
+      "file": "asset-source/viggle/y3-seed-full-3.glb",
+      "request": "y3-seed-full",
+      "sample": 3,
+      "taskId": "4f9c91a9-3944-4160-9186-8820172a6033",
+      "assetPublicId": "f7d63a8a-da57-4581-ac5c-4b63cd2cef69",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She aims the staff horizontally at the enemy like a lance at chest height, left hand forward on the shaft and right hand back, sighting along it, holding almost still for two seconds; then she lunges forward and thrusts the staff straight ahead to fire a beam, arms extended, then pulls back to the ready stance.",
       "durationSeconds": 4,
-      "sha256": "d64c4799fe97040f618b68b1f667409014873e81a14cd9366b8bd4b75d659d2a",
+      "sha256": "d69c00bfad7a6a64ef7f97b9ad67a8c4836f037809c7592c7baec69c1af4af8e",
       "bytes": 1942616
     },
     {
-      "file": "asset-source/viggle/yara-seed-storm-2.glb",
-      "request": "yara-seed-storm",
-      "sample": 2,
-      "taskId": "e2e32614-78dc-419f-a03d-5e19866ef025",
-      "assetPublicId": "685fd36d-3a3c-4d68-b3dd-5c715e393e68",
-      "prompt": "A sorceress holding a tall staff in her right hand lifts it skyward and spreads her left arm wide, calling down a rain of spells, sweeping the staff slowly across the sky, then lowers it. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
-      "durationSeconds": 3,
-      "sha256": "c41b152c3da1720dd5385f4b67b14e6d4edef82d4dc7dccb44e9251ce7520509",
-      "bytes": 1917116
+      "file": "asset-source/viggle/y3-seed-storm-3.glb",
+      "request": "y3-seed-storm",
+      "sample": 3,
+      "taskId": "4cb7a989-6c3e-4e22-81d9-ab600cd656af",
+      "assetPublicId": "21a66a14-5682-4136-ac12-f40ee62731e6",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She swings the staff in a big circle above her head with her right hand, then points the staff head forward and up at the enemy and sweeps it from left to right three times, each sweep a sharp flick releasing a volley, left arm extended for balance, then returns to ready.",
+      "durationSeconds": 4,
+      "sha256": "e1038d19356bb0e5ac2c2f3ef1f9b0c1a2d5a04fd40292333fdf2eff2257c07c",
+      "bytes": 1942612
     },
     {
-      "file": "asset-source/viggle/yara-binding-vines-1.glb",
-      "request": "yara-binding-vines",
-      "sample": 1,
-      "taskId": "98ac5763-4fdf-44e4-8f2c-d89a41b580da",
-      "assetPublicId": "eef7c8aa-700b-4d02-aea8-ec87d85be84d",
-      "prompt": "A sorceress holding a tall staff upright in her right hand flings her open left hand forward in a whip-like throwing motion, then pulls her hand back as if tightening a bind. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
+      "file": "asset-source/viggle/y3-binding-vines-2.glb",
+      "request": "y3-binding-vines",
+      "sample": 2,
+      "taskId": "f161c328-ff61-43a5-8874-c07bca1599ca",
+      "assetPublicId": "f7c779b5-4277-4c0a-bb47-3bafd109b306",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She shoots her open left hand forward at the enemy with fingers spread, then clenches the fist and yanks it hard back to her hip as if pulling a rope, leaning back slightly, the staff held upright in her right hand, then returns to ready.",
       "durationSeconds": 3,
-      "sha256": "9f11ad59593c01a6330a410460547a8e268bf1b06d0b102b3287ea54206ca305",
+      "sha256": "79ac3476762bdfc29c20416bff0851e26a81668bb76c918217409b846d4849fa",
       "bytes": 1917120
     },
     {
-      "file": "asset-source/viggle/yara-cleanse-2.glb",
-      "request": "yara-cleanse",
+      "file": "asset-source/viggle/y3-cleanse-2.glb",
+      "request": "y3-cleanse",
       "sample": 2,
-      "taskId": "1f2634ef-fccf-425f-a3b4-320a5ee7cbb8",
-      "assetPublicId": "85b5077f-7be3-4721-9db8-e317337bbedf",
-      "prompt": "A sorceress holding a tall staff upright in her right hand raises her open left palm forward and channels calm healing light, gentle and steady, then lowers her hand. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
-      "durationSeconds": 3,
-      "sha256": "844655a024232606323e79bcb23269375530caefaf100cc10bb81ec59c9cc22c",
-      "bytes": 1917124
+      "taskId": "8b133a8d-e951-4e28-81cb-15a63f0bde2d",
+      "assetPublicId": "21bac8e3-927c-4871-a46e-4747f81aba71",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She plants the staff upright beside her right foot and holds it, then raises her open left palm forward at chest height and channels steadily, standing tall, then lowers her palm and lifts the staff back to ready.",
+      "durationSeconds": 4,
+      "sha256": "cd899e6b5929c08c6f7cb83da991fb2f7c5dae06ea3d3d019dda245de1a337ec",
+      "bytes": 1942604
     },
     {
-      "file": "asset-source/viggle/yara-heartroot-bloom-b-2.glb",
-      "request": "yara-heartroot-bloom-b",
+      "file": "asset-source/viggle/y3-petal-step-2.glb",
+      "request": "y3-petal-step",
       "sample": 2,
-      "taskId": "6ea6ba27-6f2b-453a-9366-9e8a6889f6cd",
-      "assetPublicId": "69dd1a5e-ff80-47e9-846a-6e7d54adb4ed",
-      "prompt": "A sorceress lifts a tall staff high above her head with both hands and rises onto her toes, summoning a great spell; she holds the raised pose with energy for two seconds, then brings the staff down to strike the ground beside her for a final pulse and stands tall again. She keeps her back straight and chest up the whole time, bending only her knees a little; she never bows or hunches. Standing in place facing forward, grounded weight shifts, clear readable poses.",
-      "durationSeconds": 5,
-      "sha256": "04208c588f93c8f8c5971ea9f5664ea64ef22ab1538ba01db1a70b59297b74bc",
-      "bytes": 1968044
-    },
-    {
-      "file": "asset-source/viggle/yara-petal-step-2.glb",
-      "request": "yara-petal-step",
-      "sample": 2,
-      "taskId": "cdfc44c6-de29-416f-a126-0b80ff5a69dc",
-      "assetPublicId": "46405d0e-9def-4965-8504-bcf65fe73c9f",
-      "prompt": "A sorceress holding a tall staff upright in her right hand makes a quick light forward leaping dash and lands softly on the balls of her feet, staff steady. Realistic and graceful.",
+      "taskId": "de677c14-b2e9-4a5d-aa36-18e135b228dc",
+      "assetPublicId": "95dc6a2c-983e-453a-a230-c7f45657aa84",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A quick evasive dash forward: she takes two fast light steps forward with the staff held across her body in both hands, then lands balanced in the ready stance.",
       "durationSeconds": 2,
-      "sha256": "63ed2ca6912d880ac4c65f327c3b78afac7191f05a81d39d61c7962b42f8cdc0",
-      "bytes": 1891624
+      "sha256": "8b34c1820c01840a8859ea1287eab3e249ce3a5d9e3feca293da30f5da269d51",
+      "bytes": 1891632
+    },
+    {
+      "file": "asset-source/viggle/y3-bloom-1.glb",
+      "request": "y3-bloom",
+      "sample": 1,
+      "taskId": "e7a6cb6b-fc36-4294-9720-77b51f1f0579",
+      "assetPublicId": "56a78a46-d8bd-4811-994e-5b0709c7579f",
+      "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. Her ultimate spell: she raises the staff high above her head with both hands and rises onto her toes, holding the raised staff with power for two seconds, then swings the staff down in a big overhead arc and slams the staff head into the ground in front of her with both hands, holding the final pose.",
+      "durationSeconds": 5,
+      "sha256": "d12f0872303fb65843167e3c1163217f17c6cd46813cb4b3000df744af0d4a81",
+      "bytes": 1968052
     }
   ]
 }

@@ -99,7 +99,7 @@ Hashes below are 12-character display prefixes; the linked JSON contains the ful
 | [prop-greenwake-root-gate](../../asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `c6574067dd00` |
 | [prop-greenwake-rope-bridge](../../asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb) | greenwake, bamboo | `1a2b2d973050` |
 | [prop-grove-platform](../../asset-source/generated/prop-grove-platform-runtime-01/prop-grove-platform.glb) | grove | `b969c577f56c` |
-| [prop-heartroot-focus-staff](../../asset-source/generated/prop-heartroot-focus-staff-01/model.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `16db5e10621b` |
+| [prop-heartroot-focus-staff](../../asset-source/generated/prop-yara-c-staff-01/model.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `b0b8c9e289af` |
 | [prop-heartroot-fragment-stone](../../asset-source/generated/prop-heartroot-fragment-stone-runtime-01/prop-heartroot-fragment-stone.glb) | later | `1d8ff4a75c58` |
 | [prop-heartroot-root-column](../../asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb) | later | `99de3cbd5798` |
 | [prop-heartroot-trunk](../../asset-source/generated/prop-heartroot-trunk-runtime-01/prop-heartroot-trunk.glb) | grove | `6c9361728819` |

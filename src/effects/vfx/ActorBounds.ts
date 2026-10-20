@@ -55,9 +55,9 @@ export class HandRig {
   clear(): void { this.root = undefined; this.hand = undefined; this.forearm = undefined; this.leftHand = undefined; this.leftForearm = undefined; }
 }
 
-/** Yara's skills cast by her free left hand (the captured spell takes); the others work through the staff (raised, levelled or planted). */
+/** Yara's skills cast by her open left palm (Thornshot 1's thrust, Binding Vines, Cleanse); the others work through the staff (swung, levelled, stabbed or raised). */
 const YARA_HAND_CASTS: Readonly<Record<string, true>> = {
-  'yara-thornshot-1': true, 'yara-thornshot-2': true, 'yara-thornshot-3': true, 'yara-binding-vines': true, 'yara-cleanse': true,
+  'yara-thornshot-1': true, 'yara-binding-vines': true, 'yara-cleanse': true,
 };
 export function isYaraHandCast(actionId: string): boolean { return YARA_HAND_CASTS[actionId] === true; }
 

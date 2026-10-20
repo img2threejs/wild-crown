@@ -28,15 +28,18 @@ import { parseGlb } from './import-aren-animation-set.mjs';
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
-/** FBXLoader tries to decode embedded textures through the DOM; an animation donor has no use for them. */
-function parseFbx(bytes) {
-  const original = TextureLoader.prototype.load, warn = console.warn;
+/** FBXLoader tries to decode embedded textures through the DOM; neither an animation donor nor a rig rebuild uses them. */
+export function parseFbx(bytes) {
+  const original = TextureLoader.prototype.load, warn = console.warn, hadWindow = 'window' in globalThis;
   TextureLoader.prototype.load = () => new Texture();
+  // A rigged-character FBX embeds its texture; FBXLoader turns it into a blob URL through `window.URL`, which Node lacks.
+  if (!hadWindow) globalThis.window = { URL: { createObjectURL: () => '' } };
   console.warn = (...values) => { if (!String(values[0]).startsWith('FBXLoader: Image type')) warn(...values); };
   try {
     return new FBXLoader().parse(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
   } finally {
     TextureLoader.prototype.load = original;
+    if (!hadWindow) delete globalThis.window;
     console.warn = warn;
   }
 }

@@ -48,9 +48,9 @@ test('no clip deforms the skin more than her locomotion clips do (p99.9 of the t
   }
 });
 
-test('the staff stays within 15° of vertical through the idle loop and the walk and run cycles', () => {
+test('the staff stays within 15° of vertical through the walk and run cycles (the idle holds it at the ready)', () => {
   const shaft = new Vector3(...report.grip.staffAxisHand), up = new Vector3(0, 1, 0), q = new Quaternion();
-  for (const name of ['aren-idle', 'aren-walk', 'aren-run']) {
+  for (const name of ['aren-walk', 'aren-run']) {
     const { frames, count } = readClipFrames(rig, name);
     let peak = 0;
     for (let k = 0; k < count; k += 1) {

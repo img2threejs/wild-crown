@@ -16,9 +16,9 @@ export const WARDEN_EDGE_IDLE_INTENSITY = 0.6;
 /** Native blade aim shared with the Aren retargeter; palm placement and shaft thickness come from real hand anatomy. */
 export const WARDEN_GRIP = Object.freeze({ tiltRadians: 0.5 });
 /**
- * Heartroot staff fist: the shaft lies along the knuckle line (thumb end up). Yara's fingers point about 14° off the perpendicular of that line, so the staff
- * already crosses the palm crease on a slight diagonal: ≈76° from the middle-finger axis (90° from the principal hand axis). `diagonalRadians` tips the shaft
- * further from the knuckle line toward the fingertips.
+ * Heartroot staff fist: Yara's Mixamo rig has finger chains, so the staff is gripped like the glaive: the shaft lies along the knuckle line (index base −
+ * pinky base, thumb end toward the staff head) and the four fingers wrap it every frame. `diagonalRadians` tips the shaft from the knuckle line toward the
+ * wrist.
  */
 export const HEARTROOT_GRIP = Object.freeze({ diagonalRadians: 0 });
 /** Vesper uses the authoritative captured-motion rigid-fist fit in KatanaGrip.mjs.
@@ -48,7 +48,7 @@ interface WeaponProfile {
 }
 const WEAPON_PROFILES: Readonly<Record<WardenWeaponKind, WeaponProfile>> = Object.freeze({
   warden: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: false, tilt: WARDEN_GRIP.tiltRadians, edgeColor: WARDEN_EDGE_COLOR, name: 'wc:warden-weapon', orientation: 'crescent' },
-  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .55, shaftOuter: .68, rigidFist: true, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent' },
+  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .12, shaftOuter: .26, rigidFist: false, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent' },
   katana: { length: KATANA_GRIP.length, gripFraction: KATANA_GRIP.gripFromPommel / KATANA_GRIP.length, shaftFraction: KATANA_GRIP.handleFromPommel / KATANA_GRIP.length, bladeFraction: KATANA_GRIP.bladeLength / KATANA_GRIP.length, shaftCore: .15, shaftOuter: .2, rigidFist: true, tilt: KATANA_GRIP.diagonalRadians, edgeColor: KATANA_EDGE_COLOR, name: 'wc:vesper-katana', orientation: 'guard', fuchi: { backFromPommel: KATANA_GRIP.tsubaBackFromPommel, length: KATANA_GRIP.fuchi.length, scale: KATANA_GRIP.fuchi.scale } },
 });
 
