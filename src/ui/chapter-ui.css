@@ -2,12 +2,18 @@
  * Same survey world as game-ui.css: frame tags over the scene, paper sheets for pages. Nothing animates while playing. */
 
 /* Objective HUD: quest and step, the objective, its action and a bearing to it. */
-.wc-objective--chapter { width: min(26vw, 300px); }
-.wc-objective__quest { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 10px; margin: 0; }
-.wc-objective__quest strong { font: 600 16px/1.15 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
+@media (min-width: 761px) {
+  .wc-objective--chapter { width: min(26vw, 300px); }
+}
+.wc-objective__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.wc-objective__head .wc-hud__toggle { flex: none; }
+.wc-objective__quest { display: flex; flex: 1; min-width: 0; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 10px; margin: 0; }
+.wc-objective__quest strong { overflow-wrap: anywhere; font: 600 16px/1.15 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
 .wc-objective__quest span { color: var(--wc-route-bright); font: 600 11px var(--wc-sans); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .wc-objective--chapter .wc-objective__title { margin: 6px 0 0; color: var(--wc-fg); font-size: 14px; font-weight: 600; line-height: 1.35; }
 .wc-objective__counter { margin-left: 4px; color: var(--wc-route-bright); font-variant-numeric: tabular-nums; }
+.wc-objective__guidance { margin: 8px 0; color: var(--wc-fg-soft); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.wc-objective--chapter[data-guidance-status="ready"] .wc-objective__hint { color: var(--wc-route-bright); }
 .wc-objective__hint { color: var(--wc-fg-soft); }
 .wc-objective__hint kbd { margin-right: 4px; }
 .wc-objective__dest { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--wc-rule); }
@@ -67,7 +73,6 @@
   .wc-wheel__ring { width: 300px; height: 300px; }
   .wc-wheel__sector { width: 94px; height: 48px; margin: -24px 0 0 -47px; font-size: 11px; transform: rotate(calc(var(--i) * 45deg)) translateY(-108px) rotate(calc(var(--i) * -45deg)); }
   .wc-wheel__hub { width: 142px; min-height: 142px; margin: -71px 0 0 -71px; }
-  .wc-objective--chapter { top: 46px; }
 }
 @media (max-width: 760px) {
   .wc-wheel-open { bottom: 210px; }
@@ -75,6 +80,33 @@
 @media (prefers-contrast: more) {
   .wc-wheel__sector { border-width: 2px; border-color: var(--wc-frame-text); }
 }
+
+/* Training Grounds: the pause entry, the map selector and the practice banner in the world HUD. */
+.wc-pause__training { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--wc-rule); }
+.wc-pause__training .wc-action { margin-bottom: 6px; }
+.wc-training__card { max-width: 720px; }
+.wc-training__maps { display: grid; gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; }
+.wc-training__map { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 14px; align-items: start; padding: 10px; border: 1px solid var(--wc-rule-strong); border-radius: 2px; }
+.wc-training__map[data-unlocked="false"] { border-style: dashed; }
+.wc-training__thumb { margin: 0; width: 100%; aspect-ratio: 16 / 9; background-size: cover; background-position: 50% 45%; background-color: var(--wc-paper-deep); box-shadow: inset 0 0 0 1px var(--wc-rule-strong); border-radius: 2px; }
+.wc-training__thumb--placeholder { background-image: url('/ui/world-map-game.webp'); background-size: cover; background-position: 50% 50%; }
+.wc-training__body { display: grid; gap: 6px; justify-items: start; min-width: 0; }
+.wc-training__name { margin: 0; color: var(--wc-fg); font: 600 19px/1.1 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
+.wc-training__reason { margin: 0; color: var(--wc-fg-faint); font-size: 12px; line-height: 1.4; }
+.wc-training-hud { position: absolute; left: 50%; top: 3.5%; transform: translateX(-50%); display: grid; justify-items: center; gap: 1px; padding: 6px 16px; color: var(--wc-frame-text); background: var(--wc-frame-glass); border: 1px solid var(--wc-ochre-bright); border-radius: 2px; text-align: center; }
+.wc-training-hud strong { font: 600 15px/1.1 var(--wc-display); letter-spacing: .14em; text-transform: uppercase; }
+.wc-training-hud small { color: var(--wc-frame-soft); font-size: 10px; }
+
+/* Region details on the world map: the authoritative reason a region or entrance is open or closed. */
+.wc-region { display: grid; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--wc-rule); }
+.wc-region__name { margin: 0; color: var(--wc-fg); font: 600 17px/1.1 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
+.wc-region__state { margin: 0; color: var(--wc-fg-soft); font-size: 12px; line-height: 1.4; }
+.wc-region__state[data-open="false"] { color: var(--wc-fg-faint); }
+.wc-region__entrances { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.wc-region__entrances li { display: grid; gap: 1px; }
+.wc-region__entrances strong { color: var(--wc-fg); font: 600 13px/1.2 var(--wc-sans); }
+.wc-region__entrances small { color: var(--wc-fg-faint); font-size: 11px; line-height: 1.35; }
+.wc-map-footer__practice { margin: 10px 0 0; color: var(--wc-fg-faint); font-size: 12px; }
 
 /* Grove/Refuge hub: growth stage, quick access, dodge practice, milestone upgrades and unlocked memories on one sheet. */
 .wc-hub-screen__body { display: block; overflow-y: auto; }

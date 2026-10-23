@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "operation": "build-yara-mixamo-rig.mjs: Mixamo auto-rig of the Tripo v3.1 Ultra Yara (concept C) with the leaf skirt rebound to the hips, the knee web dropped, the T-pose baked as the rest pose and every joint bound",
+  "sources": {
+    "fbx": {
+      "path": "asset-source/mixamo/yara-rig/yara-c-tpose.fbx",
+      "sha256": "708f71d19db4d3b328f953c41f9a1af4910372f655ec2506ec70a5d045ab4097"
+    },
+    "model": {
+      "path": "asset-source/generated/actor-yara-c-model-01/model.glb",
+      "sha256": "677d7b54b76a23f84ae3a04dff66f208ded14ff7d4238bb3509dabe77b3b4c8d"
+    }
+  },
+  "tripo": {
+    "model": "f1dd47dd-ee34-43b8-bc79-3562573e3be8 (multiview_to_model, v3.1-20260211, geometry_quality detailed, texture_quality extreme, pbr)",
+    "multiview": "efaa5fde-b405-4c2f-b33c-90983b5dc3a3",
+    "apose": "da7f4153-eeb3-4b5e-bdcc-1c0de018e3ab",
+    "concept": "954e5416-a654-42f9-9c7a-cd123941dbc1"
+  },
+  "mixamo": "Auto-rigger, Standard Skeleton (65), markers chin/wrists/elbows/knees/groin, uploaded as a 199,994-triangle OBJ (meshoptimizer simplify of the Tripo mesh), downloaded FBX Binary T-pose",
+  "skirt": {
+    "thighShare": 0.8,
+    "falloff": 4,
+    "thighRadius": [
+      10,
+      7.5
+    ],
+    "shinRadius": 8.5,
+    "hemBelowKnee": 25,
+    "skirt": 48745,
+    "grown": 2794
+  },
+  "bridges": {
+    "dropped": 68
+  },
+  "joints": 65,
+  "triangles": 199926,
+  "vertices": 130723,
+  "height": 1,
+  "output": {
+    "file": "asset-source/generated/actor-yara-c-rig-01/yara-c-rig.glb",
+    "sha256": "63d647440996e049a01c111359b7cfb536fcd816c964fd6129951804a5e5452d",
+    "bytes": 23815108
+  }
+}

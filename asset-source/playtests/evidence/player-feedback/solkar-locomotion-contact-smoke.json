@@ -1,0 +1,41 @@
+{
+  "scope": "All skinned vertices, real final playable GLB, 30 Hz full-cycle sampling; rest-skin floor comparison in source units, not a live terrain qualification",
+  "runtimeHash": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb",
+  "restFloor": 1.4102489442890942e-7,
+  "bodyHeight": 0.6573,
+  "vertices": 30077,
+  "results": [
+    {
+      "clip": "monster-idle",
+      "frames": 91,
+      "minSkinY": -0.003966846036166094,
+      "maxOfMinSkinY": 0.0011349774631716492,
+      "belowRestFloor": 0.003966987061060523,
+      "bodyHeightFraction": 0.0060352762225171505
+    },
+    {
+      "clip": "monster-walk",
+      "frames": 25,
+      "minSkinY": -0.021594944082863166,
+      "maxOfMinSkinY": -0.0070270177736642125,
+      "belowRestFloor": 0.021595085107757594,
+      "bodyHeightFraction": 0.032854229587338496
+    },
+    {
+      "clip": "monster-run",
+      "frames": 18,
+      "minSkinY": -0.022908315529473866,
+      "maxOfMinSkinY": -0.0005416665509275775,
+      "belowRestFloor": 0.022908456554368295,
+      "bodyHeightFraction": 0.03485236049652867
+    },
+    {
+      "clip": "monster-turn",
+      "frames": 31,
+      "minSkinY": -0.0009135883063293715,
+      "maxOfMinSkinY": 0.0012821425995152569,
+      "belowRestFloor": 0.0009137293312238004,
+      "bodyHeightFraction": 0.0013901252566922264
+    }
+  ]
+}

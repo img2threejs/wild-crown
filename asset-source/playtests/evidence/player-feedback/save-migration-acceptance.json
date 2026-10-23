@@ -1,0 +1,1788 @@
+{
+  "scope": "Fresh-process focused save/migration acceptance smoke over the repository own isolated in-memory IndexedDB backend, the real SaveRepository, the real CampaignDirector and the real CombatEngine. No repository method is overridden, stubbed or mocked.",
+  "notCovered": [
+    "A real browser IndexedDB: the backend is the repository own deterministic in-memory IDBFactory, not Chromium.",
+    "The renderer, the UI layer and physical input devices: no browser was opened and no interaction was driven.",
+    "A full test suite: this is one focused smoke, not a suite run."
+  ],
+  "observedFindings": [
+    {
+      "id": "exile-gate-is-crown-only",
+      "observation": "The live access rule in src/game/campaign/access.ts applies the permanent exile only inside its \"id === 'solkar'\" branch. A Canopy/Fang/Shadow leader whose faction leaderStatus is \"exiled\" (representative present:false) still reads as available; those three leaders are bound by the \"absent\" status instead. Vara (Sky) and Sable (Pack) are envoys and are bound by neither.",
+      "why": "Reported as observed, not asserted as desired. The authored story only exiles Solkar, so no production path writes an exiled status for another faction. This smoke observed the rule by writing that status directly into a checkpoint; it is a statement about the current rule, not a defect claim and not a proposed change.",
+      "where": "checks named \"[<id>] a non-Crown leader is bound by absence, not by exile\" and \"[<id>] the envoy is not removed by its faction's leader status\"."
+    },
+    {
+      "id": "legacy-roster-conservative",
+      "observation": "The schema-1 migration recruited only the companions whose legacy Heartroot fragment the save held: Vara (Sky) and Koro (Canopy). Asha, Sable, Nyra and Solkar stayed unrecruited, and the schema-1 role-slot party { scout: vara, utility: koro } was reduced to the single travelling companion id koro, which the migration had earned.",
+      "why": "Confirms the conservative derivation: the migration never grants a companion the legacy save did not evidence.",
+      "where": "checks named \"the legacy Sky fragment recruited Vara\" through \"the legacy save did not recruit Solkar\" and \"the legacy role-slot party reduced to the Combat-primary Koro, which the migrated roster earned\"."
+    },
+    {
+      "id": "reads-never-rewrite-stored-records",
+      "observation": "Reading the seeded schema-1 slot migrated the envelope in memory only: the stored row bytes were unchanged and the raw recovery export still returned schemaVersion 1.",
+      "why": "Confirms the read-boundary migration contract on the real repository over the isolated backend.",
+      "where": "checks named \"the stored legacy rows were not rewritten by the read\" and \"the raw recovery export still returns the original schema-1 envelope\"."
+    }
+  ],
+  "fixtures": {
+    "legacy": "A schema-1 envelope built from the repository own documented legacy shape (a schema-1 world without a companion roster, a role-slot party, a Koro Dominion ledger entry and no session metadata), seeded into the slots/runs stores of the production database.",
+    "roster": "The migration derives the roster with the production schema-1 rules (fragments plus covenant tier); no rule was re-implemented in this file.",
+    "combat": "A real serialized CombatEngine state per companion id, with a travelling instance, a narrative instance of the same species, a stale mark, a stale support slow, a stale job and a stale object request.",
+    "region": "The real authored Greenwake region plus the real ChapterParty projection, loaded through the real CombatEngine.loadRegion."
+  },
+  "cleanupApi": {
+    "listSlots": "SaveRepository.listSlots(): Promise<SaveSlotSummary[]> — every slot of this repository scope, newest updatedAt first.",
+    "removeSlot": "SaveRepository.removeSlot(slotId: string): Promise<void> — deletes exactly one slot row from the scope database; no other row is touched.",
+    "scopeToDatabase": {
+      "production": "wild-crown-saves",
+      "candidate-chapters": "wild-crown-candidate-chapter-saves"
+    },
+    "storeScope": "The scope selects the whole IndexedDB database name. The \"slots\" and \"runs\" object stores live inside that one database; a production repository never reads or writes the candidate database and vice versa.",
+    "summaryShape": [
+      "slotId",
+      "label",
+      "runId",
+      "kind",
+      "updatedAt",
+      "chapter",
+      "regionId",
+      "scope",
+      "heroId",
+      "segmentId",
+      "checkpointId",
+      "autosave"
+    ],
+    "slotRowShape": "The stored slot row is the summary fields plus \"envelope\": [format, schemaVersion, scope, kind, runId, checkpoint, campaign, progress, eventKeys, savedAt].",
+    "autosaveSlotId": "autosave:<runId> — one stable autosave slot per run; a manual slot is slot-<id>.",
+    "runLedger": "The \"runs\" store holds one ledger row per runId (runId, kind, dominionHistory, eventKeys, updatedAt). removeSlot does not delete a ledger row.",
+    "safeCleanupRule": "List first, select by explicit runId, remove only those slotIds, and never delete an unknown row wholesale."
+  },
+  "checks": [
+    {
+      "name": "legacy slot is listed from the real repository",
+      "ok": true,
+      "detail": {
+        "slotId": "legacy-slot",
+        "label": "Legacy",
+        "runId": "acceptance-legacy-schema1",
+        "kind": "campaign",
+        "updatedAt": 5,
+        "chapter": 1,
+        "regionId": "whispering-canopy",
+        "scope": "production",
+        "heroId": "aren",
+        "segmentId": "canopy",
+        "checkpointId": null,
+        "autosave": false
+      }
+    },
+    {
+      "name": "legacy slot summary derives the production scope and Aren",
+      "ok": true,
+      "detail": {
+        "slotId": "legacy-slot",
+        "label": "Legacy",
+        "runId": "acceptance-legacy-schema1",
+        "kind": "campaign",
+        "updatedAt": 5,
+        "chapter": 1,
+        "regionId": "whispering-canopy",
+        "scope": "production",
+        "heroId": "aren",
+        "segmentId": "canopy",
+        "checkpointId": null,
+        "autosave": false
+      }
+    },
+    {
+      "name": "legacy slot summary derives the canopy segment",
+      "ok": true,
+      "detail": {
+        "slotId": "legacy-slot",
+        "label": "Legacy",
+        "runId": "acceptance-legacy-schema1",
+        "kind": "campaign",
+        "updatedAt": 5,
+        "chapter": 1,
+        "regionId": "whispering-canopy",
+        "scope": "production",
+        "heroId": "aren",
+        "segmentId": "canopy",
+        "checkpointId": null,
+        "autosave": false
+      }
+    },
+    {
+      "name": "the read migrated the legacy envelope to schema 3",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "name": "the migrated envelope is production scoped",
+      "ok": true,
+      "detail": "production"
+    },
+    {
+      "name": "the migrated session stamps Aren",
+      "ok": true,
+      "detail": {
+        "saveScope": "production",
+        "assetPolicy": "verified",
+        "heroId": "aren",
+        "resume": {
+          "segmentId": "canopy",
+          "layoutRevision": 1,
+          "checkpointId": "canopy-arrival",
+          "activeEncounterId": null,
+          "requiredBeatQueue": [],
+          "dialogue": null,
+          "completedBeatIds": [],
+          "pendingChoiceId": null
+        }
+      }
+    },
+    {
+      "name": "the migrated session layout revision was migrated from 0 to the installed revision",
+      "ok": true,
+      "detail": {
+        "segmentId": "canopy",
+        "layoutRevision": 1,
+        "checkpointId": "canopy-arrival",
+        "activeEncounterId": null,
+        "requiredBeatQueue": [],
+        "dialogue": null,
+        "completedBeatIds": [],
+        "pendingChoiceId": null
+      }
+    },
+    {
+      "name": "the stored legacy rows were not rewritten by the read",
+      "ok": true,
+      "detail": "stored row bytes changed on read"
+    },
+    {
+      "name": "the raw recovery export still returns the original schema-1 envelope",
+      "ok": true,
+      "detail": "raw export changed"
+    },
+    {
+      "name": "the Director adopted the legacy run id",
+      "ok": true,
+      "detail": "acceptance-legacy-schema1"
+    },
+    {
+      "name": "the legacy quest history survived",
+      "ok": true,
+      "detail": [
+        "fallen-scout"
+      ]
+    },
+    {
+      "name": "the legacy completed quest survived",
+      "ok": true,
+      "detail": [
+        "prologue"
+      ]
+    },
+    {
+      "name": "the legacy completed objective survived",
+      "ok": true,
+      "detail": [
+        "prologue:receive-sky"
+      ]
+    },
+    {
+      "name": "the legacy tracked objective survived",
+      "ok": true,
+      "detail": "fallen-scout:follow-the-scouts"
+    },
+    {
+      "name": "the legacy choice survived",
+      "ok": true,
+      "detail": {
+        "koro-pact": "bond"
+      }
+    },
+    {
+      "name": "the legacy world fact survived",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "the legacy Dominion ledger survived the migration",
+      "ok": true,
+      "detail": [
+        {
+          "sequence": 1,
+          "leaderId": "koro"
+        }
+      ]
+    },
+    {
+      "name": "the migrated Dominion floor is reapplied to the earned Koro",
+      "ok": true,
+      "detail": {
+        "id": "koro",
+        "recruited": true,
+        "bondLevel": 50,
+        "dominionLevel": 25,
+        "unlockedAbilityIds": [
+          "distract",
+          "move-object",
+          "dominion-special"
+        ],
+        "storyFlags": {
+          "legacy-migrated": true,
+          "possession-risk": true
+        }
+      }
+    },
+    {
+      "name": "the legacy role-slot party was reduced to one traveling companion id",
+      "ok": true,
+      "detail": {
+        "companionId": "koro"
+      }
+    },
+    {
+      "name": "the legacy role-slot party reduced to the Combat-primary Koro, which the migrated roster earned",
+      "ok": true,
+      "detail": {
+        "party": {
+          "companionId": "koro"
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": true,
+          "bondLevel": 50,
+          "dominionLevel": 25,
+          "unlockedAbilityIds": [
+            "distract",
+            "move-object",
+            "dominion-special"
+          ],
+          "storyFlags": {
+            "legacy-migrated": true,
+            "possession-risk": true
+          }
+        }
+      }
+    },
+    {
+      "name": "the migration kept the derived session resume segment",
+      "ok": true,
+      "detail": {
+        "segmentId": "canopy",
+        "layoutRevision": 1,
+        "checkpointId": "canopy-arrival",
+        "activeEncounterId": null,
+        "requiredBeatQueue": [],
+        "dialogue": null,
+        "completedBeatIds": [],
+        "pendingChoiceId": null
+      }
+    },
+    {
+      "name": "the legacy Sky fragment recruited Vara",
+      "ok": true,
+      "detail": {
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "storyFlags": {
+          "legacy-migrated": true
+        }
+      }
+    },
+    {
+      "name": "the legacy Canopy fragment recruited Koro",
+      "ok": true,
+      "detail": {
+        "recruited": true,
+        "bondLevel": 50,
+        "dominionLevel": 25,
+        "storyFlags": {
+          "legacy-migrated": true,
+          "possession-risk": true
+        }
+      }
+    },
+    {
+      "name": "the tier-2 Canopy covenant seeded Koro personal Bond 50",
+      "ok": true,
+      "detail": {
+        "recruited": true,
+        "bondLevel": 50,
+        "dominionLevel": 25,
+        "storyFlags": {
+          "legacy-migrated": true,
+          "possession-risk": true
+        }
+      }
+    },
+    {
+      "name": "the legacy save did not recruit Asha",
+      "ok": true,
+      "detail": {
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the legacy save did not recruit Sable",
+      "ok": true,
+      "detail": {
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the legacy save did not recruit Nyra",
+      "ok": true,
+      "detail": {
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the legacy save did not recruit Solkar",
+      "ok": true,
+      "detail": {
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the migrated roster is complete for all six companion ids",
+      "ok": true,
+      "detail": [
+        "vara",
+        "koro",
+        "asha",
+        "sable",
+        "nyra",
+        "solkar"
+      ]
+    },
+    {
+      "name": "Vara is available after the migration",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "Koro is available after the migration",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "Asha is refused as not recruited",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion has not joined your journey yet."
+      }
+    },
+    {
+      "name": "Sable is refused as not recruited",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion has not joined your journey yet."
+      }
+    },
+    {
+      "name": "Nyra is refused as not recruited",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion has not joined your journey yet."
+      }
+    },
+    {
+      "name": "Solkar is refused as not recruited",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion has not joined your journey yet."
+      }
+    },
+    {
+      "name": "every unearned companion was refused by selectParty",
+      "ok": true,
+      "detail": {
+        "partyRefusals": 4,
+        "unearnedByMigration": [
+          "asha",
+          "sable",
+          "nyra",
+          "solkar"
+        ]
+      }
+    },
+    {
+      "name": "the earned vara could be equipped after the migration",
+      "ok": true,
+      "detail": {
+        "companionId": "vara"
+      }
+    },
+    {
+      "name": "the earned koro could be equipped after the migration",
+      "ok": true,
+      "detail": {
+        "companionId": "koro"
+      }
+    },
+    {
+      "name": "the remembered hero companion preference is stored as a setting",
+      "ok": true,
+      "detail": {
+        "aren": "koro",
+        "yara": "vara",
+        "vesper": "nyra",
+        "sakda": "asha"
+      }
+    },
+    {
+      "name": "a fresh journey starts with no traveling companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "the remembered preference grants no vara in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "vara",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the remembered preference grants no koro in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "koro",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the remembered preference grants no asha in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "asha",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the remembered preference grants no sable in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "sable",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the remembered preference grants no nyra in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "nyra",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the remembered preference grants no solkar in a fresh journey",
+      "ok": true,
+      "detail": {
+        "id": "solkar",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "a free companion selection is refused",
+      "ok": true,
+      "detail": "A new journey starts without a traveling companion; companions are earned in the story."
+    },
+    {
+      "name": "[vara] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[vara] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[vara] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[vara] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[vara] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[vara] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[vara] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "vara": 9999
+        },
+        "after": {
+          "vara": 9999
+        }
+      }
+    },
+    {
+      "name": "[vara] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[vara] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[vara] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "vara",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[koro] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[koro] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[koro] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[koro] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[koro] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[koro] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[koro] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "koro": 9999
+        },
+        "after": {
+          "koro": 9999
+        }
+      }
+    },
+    {
+      "name": "[koro] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[koro] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[koro] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "koro",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[asha] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[asha] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[asha] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[asha] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[asha] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[asha] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[asha] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "asha": 9999
+        },
+        "after": {
+          "asha": 9999
+        }
+      }
+    },
+    {
+      "name": "[asha] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[asha] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[asha] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "asha",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[sable] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[sable] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[sable] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[sable] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[sable] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[sable] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[sable] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "sable": 9999
+        },
+        "after": {
+          "sable": 9999
+        }
+      }
+    },
+    {
+      "name": "[sable] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[sable] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[sable] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "sable",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[nyra] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[nyra] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[nyra] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[nyra] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[nyra] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[nyra] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[nyra] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "nyra": 9999
+        },
+        "after": {
+          "nyra": 9999
+        }
+      }
+    },
+    {
+      "name": "[nyra] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[nyra] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[nyra] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "nyra",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[solkar] the unearned travelling companion is unequipped",
+      "ok": true
+    },
+    {
+      "name": "[solkar] the unearned travelling actor is hidden",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "[solkar] the narrative counterpart stays visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[solkar] the stale mark is removed",
+      "ok": true
+    },
+    {
+      "name": "[solkar] the stale support slow is removed",
+      "ok": true
+    },
+    {
+      "name": "[solkar] the command tokens are not refunded by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        },
+        "after": {
+          "available": 1,
+          "maximum": 2,
+          "nextAt": 0
+        }
+      }
+    },
+    {
+      "name": "[solkar] the support cooldown deadline is preserved by the revocation",
+      "ok": true,
+      "detail": {
+        "before": {
+          "solkar": 9999
+        },
+        "after": {
+          "solkar": 9999
+        }
+      }
+    },
+    {
+      "name": "[solkar] the stale job is dropped with the unequipped companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[solkar] the stale object request is dropped with the unequipped companion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "[solkar] the roster progress is kept even though the companion is not earned",
+      "ok": true,
+      "detail": {
+        "id": "solkar",
+        "recruited": false,
+        "bondLevel": 0,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[vara] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "vara"
+    },
+    {
+      "name": "[vara] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[vara] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "vara": 9999
+      }
+    },
+    {
+      "name": "[vara] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "[koro] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "koro"
+    },
+    {
+      "name": "[koro] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[koro] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "koro": 9999
+      }
+    },
+    {
+      "name": "[koro] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "[asha] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "asha"
+    },
+    {
+      "name": "[asha] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[asha] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "asha": 9999
+      }
+    },
+    {
+      "name": "[asha] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "[sable] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "sable"
+    },
+    {
+      "name": "[sable] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[sable] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "sable": 9999
+      }
+    },
+    {
+      "name": "[sable] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "[nyra] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "nyra"
+    },
+    {
+      "name": "[nyra] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[nyra] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "nyra": 9999
+      }
+    },
+    {
+      "name": "[nyra] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "[solkar] an earned companion keeps his travelling slot",
+      "ok": true,
+      "detail": "solkar"
+    },
+    {
+      "name": "[solkar] an earned companion keeps his travelling actor visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[solkar] an earned companion keeps his support cooldown deadline",
+      "ok": true,
+      "detail": {
+        "solkar": 9999
+      }
+    },
+    {
+      "name": "[solkar] an earned companion keeps his command tokens",
+      "ok": true,
+      "detail": {
+        "available": 1,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "the authored Greenwake narrative Vara placement exists",
+      "ok": true,
+      "detail": "vara"
+    },
+    {
+      "name": "the authored narrative Vara placement is not a travelling instance",
+      "ok": true,
+      "detail": "vara"
+    },
+    {
+      "name": "the real party projection produced one travelling Vara instance",
+      "ok": true,
+      "detail": [
+        {
+          "id": "vara__party_companion",
+          "actorId": "vara",
+          "assetId": "actor-vara",
+          "placement": "ground",
+          "position": {
+            "x": -15.2,
+            "y": 0,
+            "z": -9
+          },
+          "kind": "actor"
+        }
+      ]
+    },
+    {
+      "name": "the real region load equipped the projected travelling Vara",
+      "ok": true,
+      "detail": "vara"
+    },
+    {
+      "name": "the authored narrative Vara is present and visible in the loaded region",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "the unearned travelling Vara is unequipped in the real region",
+      "ok": true
+    },
+    {
+      "name": "the unearned travelling Vara actor is hidden in the real region",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "name": "the authored narrative Vara stays visible in the real region",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "the authored narrative Solkar placement exists in Sunmane",
+      "ok": true,
+      "detail": "solkar"
+    },
+    {
+      "name": "the authored narrative Solkar placement is not a travelling instance",
+      "ok": true,
+      "detail": "solkar"
+    },
+    {
+      "name": "[vara] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[vara] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "vara",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[vara] the envoy is not removed by its faction's leader status",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[koro] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[koro] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "koro",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[koro] the absent leader is refused with the absence reason",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion is absent from the journey."
+      }
+    },
+    {
+      "name": "[koro] an absent leader cannot be equipped",
+      "ok": true,
+      "detail": "This companion is absent from the journey."
+    },
+    {
+      "name": "[asha] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[asha] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "asha",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[asha] the absent leader is refused with the absence reason",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion is absent from the journey."
+      }
+    },
+    {
+      "name": "[asha] an absent leader cannot be equipped",
+      "ok": true,
+      "detail": "This companion is absent from the journey."
+    },
+    {
+      "name": "[sable] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[sable] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "sable",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[sable] the envoy is not removed by its faction's leader status",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[nyra] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[nyra] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "nyra",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[nyra] the absent leader is refused with the absence reason",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion is absent from the journey."
+      }
+    },
+    {
+      "name": "[nyra] an absent leader cannot be equipped",
+      "ok": true,
+      "detail": "This companion is absent from the journey."
+    },
+    {
+      "name": "[solkar] the absent-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[solkar] the earned recruitment survives the absence",
+      "ok": true,
+      "detail": {
+        "id": "solkar",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[solkar] the absent leader is refused with the absence reason",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "This companion is absent from the journey."
+      }
+    },
+    {
+      "name": "[solkar] an absent leader cannot be equipped",
+      "ok": true,
+      "detail": "This companion is absent from the journey."
+    },
+    {
+      "name": "the exiled checkpoint restored",
+      "ok": true
+    },
+    {
+      "name": "the earned Solkar recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "solkar",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "the exiled Solkar access is refused",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "Solkar left after your exile decision."
+      }
+    },
+    {
+      "name": "the exiled Solkar cannot be equipped",
+      "ok": true,
+      "detail": "Solkar left after your exile decision."
+    },
+    {
+      "name": "the exile leaves no traveling companion",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "[vara] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[vara] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "vara",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[vara] the envoy is not removed by its faction's leader status",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[koro] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[koro] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "koro",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[koro] a non-Crown leader is bound by absence, not by exile",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[asha] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[asha] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "asha",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[asha] a non-Crown leader is bound by absence, not by exile",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[sable] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[sable] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "sable",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[sable] the envoy is not removed by its faction's leader status",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[nyra] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[nyra] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "nyra",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[nyra] a non-Crown leader is bound by absence, not by exile",
+      "ok": true,
+      "detail": {
+        "available": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "[solkar] the exiled-leader checkpoint restored",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "name": "[solkar] the earned recruitment survives the exile",
+      "ok": true,
+      "detail": {
+        "id": "solkar",
+        "recruited": true,
+        "bondLevel": 10,
+        "dominionLevel": 0,
+        "unlockedAbilityIds": [],
+        "storyFlags": {}
+      }
+    },
+    {
+      "name": "[solkar] the exiled leader is refused with the exile reason",
+      "ok": true,
+      "detail": {
+        "available": false,
+        "reason": "Solkar left after your exile decision."
+      }
+    },
+    {
+      "name": "[solkar] an exiled leader cannot be equipped",
+      "ok": true,
+      "detail": "Solkar left after your exile decision."
+    },
+    {
+      "name": "an earned Vara keeps her travelling slot",
+      "ok": true,
+      "detail": "vara"
+    },
+    {
+      "name": "the mark command was accepted",
+      "ok": true
+    },
+    {
+      "name": "an earned Vara marks the threat",
+      "ok": true,
+      "detail": {
+        "sourceId": "vara__party_companion",
+        "untilWorldTick": 324,
+        "extended": false
+      }
+    },
+    {
+      "name": "the mark exposes a live snapshot",
+      "ok": true,
+      "detail": {
+        "sourceId": "vara__party_companion",
+        "remainingTicks": 284,
+        "landing": {
+          "x": 4,
+          "y": 0,
+          "z": 2
+        }
+      }
+    },
+    {
+      "name": "the expired mark is cleaned up",
+      "ok": true
+    },
+    {
+      "name": "the world clock moved past the mark deadline",
+      "ok": true,
+      "detail": {
+        "worldTick": 440,
+        "markDeadline": 324
+      }
+    },
+    {
+      "name": "the command tokens regenerated on the authored resource tick",
+      "ok": true,
+      "detail": {
+        "available": 2,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "the token clock is consistent with the maximum",
+      "ok": true,
+      "detail": {
+        "available": 2,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "an earned Sable keeps her travelling slot",
+      "ok": true,
+      "detail": "sable"
+    },
+    {
+      "name": "the support command was accepted",
+      "ok": true
+    },
+    {
+      "name": "an earned Sable applies the authored support slow",
+      "ok": true,
+      "detail": {
+        "factor": 0.65,
+        "untilWorldTick": 283,
+        "sourceId": "sable__party_companion"
+      }
+    },
+    {
+      "name": "the expired support slow is cleaned up",
+      "ok": true
+    },
+    {
+      "name": "the support slow expired on its own deadline",
+      "ok": true,
+      "detail": {
+        "worldTick": 420,
+        "slowDeadline": 283
+      }
+    },
+    {
+      "name": "the command tokens still regenerate after the slow expired",
+      "ok": true,
+      "detail": {
+        "available": 2,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "the accepted command recorded a bounded job deadline",
+      "ok": true,
+      "detail": {
+        "command": "focus",
+        "phase": "act",
+        "startedAt": 0,
+        "endsAt": 49
+      }
+    },
+    {
+      "name": "the job ended at or before its authored deadline",
+      "ok": true
+    },
+    {
+      "name": "the world clock moved past the job deadline",
+      "ok": true,
+      "detail": {
+        "worldTick": 700,
+        "jobDeadline": 49
+      }
+    },
+    {
+      "name": "the command tokens still regenerate after the job ended",
+      "ok": true,
+      "detail": {
+        "available": 2,
+        "maximum": 2,
+        "nextAt": 0
+      }
+    },
+    {
+      "name": "the production scope wrote exactly one slot",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "the candidate scope wrote exactly one slot",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "the production slot belongs to the shared run id",
+      "ok": true,
+      "detail": "acceptance-scope-shared-run"
+    },
+    {
+      "name": "the candidate slot belongs to the shared run id",
+      "ok": true,
+      "detail": "acceptance-scope-shared-run"
+    },
+    {
+      "name": "the production slot is production scoped",
+      "ok": true,
+      "detail": "production"
+    },
+    {
+      "name": "the candidate slot is candidate scoped",
+      "ok": true,
+      "detail": "candidate-chapters"
+    },
+    {
+      "name": "the two scopes use distinct database names",
+      "ok": true,
+      "detail": [
+        "wild-crown-saves",
+        "wild-crown-candidate-chapter-saves"
+      ]
+    },
+    {
+      "name": "the production row kept its own Sky fragment",
+      "ok": true,
+      "detail": [
+        "heartroot-sky"
+      ]
+    },
+    {
+      "name": "the candidate row did not inherit the production fragment",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "the candidate row kept its own Koro Dominion",
+      "ok": true,
+      "detail": [
+        "koro"
+      ]
+    },
+    {
+      "name": "the production row did not inherit the candidate Dominion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "a production payload is refused by the candidate scope",
+      "ok": true,
+      "detail": "scope-mismatch"
+    },
+    {
+      "name": "the rejected cross-scope import changed no candidate row",
+      "ok": true,
+      "detail": "candidate rows changed after a rejected import"
+    },
+    {
+      "name": "a candidate payload is refused by the production scope",
+      "ok": true,
+      "detail": "scope-mismatch"
+    },
+    {
+      "name": "the rejected reverse-scope import changed no production row",
+      "ok": true,
+      "detail": "production rows changed after a rejected import"
+    },
+    {
+      "name": "removeSlot deleted exactly the named slot",
+      "ok": true,
+      "detail": {
+        "beforeCleanup": [
+          "autosave:acceptance-scope-shared-run"
+        ],
+        "afterCleanup": []
+      }
+    },
+    {
+      "name": "the candidate scope is untouched by the production cleanup",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "the run ledger row is not removed by removeSlot",
+      "ok": true,
+      "detail": 1
+    }
+  ],
+  "passed": 223,
+  "failed": 0
+}

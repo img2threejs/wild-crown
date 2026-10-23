@@ -28,6 +28,8 @@ export interface ImpactSink {
   flashActor(actorId: string, color: Color, intensity: number, durationSeconds: number, mode: 'hit' | 'charge'): void;
   /** Brief full-screen radial blur / chromatic punch (0..1 strength); optional so older sinks keep working. */
   impulse?(strength: number, durationSeconds: number): void;
+  /** Sap Lance: the actor's held Heartroot staff leaves the fist toward `to` (world) and returns by itself; optional so sinks without a staff keep working. */
+  throwStaff?(actorId: string, to: { readonly x: number; readonly y: number; readonly z: number }): void;
 }
 export type SocketResolver = (actorId: string, socketName: string) => Object3D | undefined;
 

@@ -156,7 +156,7 @@ describe('Asha charge block guards Aren against an active hostile charge', () =>
     expect(state.companionState.slots.asha?.guard).toBe(guardBefore);
   });
 
-  it('allows an available Asha without granting a narrative alliance', () => {
+  it('refuses an unearned Asha and lets an earned one guard without granting a narrative alliance', () => {
     const state = makeEngine('asha');
     const asha = state.actors.find(candidate => candidate.id === 'asha')!;
     asha.position = { x: 0.5, y: 0, z: 0.4 };
@@ -164,10 +164,17 @@ describe('Asha charge block guards Aren against an active hostile charge', () =>
     const hazard = seedChargeHazard(state, { x: 0, y: 0, z: 4 }, { x: 0, y: 0, z: 0 }, 'aren');
     const request = { companionId: 'asha', command: 'special', target: { kind: 'hazard', hazardId: hazard.id, protecteeId: 'aren' } } as const;
     expect(commandAvailability(state, request).available).toBe(true);
+    // An unearned companion is refused: the roster is authoritative, so no charge is blocked and no token is spent.
     state.companionState.progress = { asha: { id: 'asha', recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} } };
+    expect(commandAvailability(state, request).available).toBe(false);
+    expect(commandCompanion(state, request)).toBe(false);
+    expect(state.companionState.tokens.available).toBe(tokensBefore);
+    expect(state.companionState.slots.asha?.guard?.hazardId).toBeUndefined();
+    // The earned companion guards the charge, and the guard grants no narrative alliance of its own.
+    state.companionState.progress = { asha: { id: 'asha', recruited: true, bondLevel: 10, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} } };
     expect(commandCompanion(state, request)).toBe(true);
     expect(state.companionState.tokens.available).toBe(tokensBefore - 1);
-    expect(state.companionState.progress.asha?.recruited).toBe(false);
+    expect(state.companionState.progress.asha?.recruited).toBe(true);
     expect(state.companionState.slots.asha?.guard?.hazardId).toBe(hazard.id);
   });
 });
@@ -217,14 +224,21 @@ describe('Vara aerial scout mark persists on the marked target', () => {
     expect(state.events.some(event => event.actorId === 'vara' && event.message === 'Mark Counter')).toBe(true);
   });
 
-  it('allows an available Vara without changing her story recruitment', () => {
+  it('refuses an unearned Vara and lets an earned one mark without changing her story recruitment', () => {
     const state = makeEngine('vara');
     const tokensBefore = state.companionState.tokens.available;
+    // An unearned companion cannot mark: the roster is authoritative.
     state.companionState.progress = { vara: { id: 'vara', recruited: false, bondLevel: 0, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} } };
+    expect(commandCompanion(state, { companionId: 'vara', command: 'focus', target: { kind: 'actor', instanceId: 'hostile' as ActorId } })).toBe(false);
+    advance(state, 24);
+    expect(state.companionState.tokens.available).toBe(tokensBefore);
+    expect(state.actors.find(candidate => candidate.id === 'hostile')?.markState).toBeUndefined();
+    // The earned companion marks the threat, and the mark grants no narrative recruitment of its own.
+    state.companionState.progress = { vara: { id: 'vara', recruited: true, bondLevel: 10, dominionLevel: 0, unlockedAbilityIds: [], storyFlags: {} } };
     expect(commandCompanion(state, { companionId: 'vara', command: 'focus', target: { kind: 'actor', instanceId: 'hostile' as ActorId } })).toBe(true);
     advance(state, 24);
     expect(state.companionState.tokens.available).toBe(tokensBefore);
-    expect(state.companionState.progress.vara?.recruited).toBe(false);
+    expect(state.companionState.progress.vara?.recruited).toBe(true);
     expect(state.actors.find(candidate => candidate.id === 'hostile')?.markState).toBeDefined();
   });
 });

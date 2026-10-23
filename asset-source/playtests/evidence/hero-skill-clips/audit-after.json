@@ -1,0 +1,1302 @@
+[
+ {
+  "hero": "yara",
+  "triangles": 21530,
+  "vertices": 16042,
+  "clips": {
+   "aren-idle": {
+    "worstCm": 7.1,
+    "peakVerts": 2,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "thighL>farmL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 31.5,
+      "t": 1.067
+     }
+    ]
+   },
+   "aren-walk": {
+    "worstCm": 8,
+    "peakVerts": 2,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "thighL>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 6,
+      "t": 0.2
+     }
+    ]
+   },
+   "aren-run": {
+    "worstCm": 8,
+    "peakVerts": 3,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "thighL>handL",
+      "cm": 8,
+      "verts": 3,
+      "frame": 31.5,
+      "t": 1.067
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 21.5,
+      "t": 0.733
+     }
+    ]
+   },
+   "aren-jump": {
+    "worstCm": 8,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "thighL>handL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 10,
+      "t": 0.333
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 11,
+      "t": 0.367
+     }
+    ]
+   },
+   "aren-forward-left-dive-roll": {
+    "worstCm": 8.8,
+    "peakVerts": 3,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "torso>farmR",
+      "cm": 8.8,
+      "verts": 2,
+      "frame": 13,
+      "t": 0.433
+     },
+     {
+      "pair": "thighL>handL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 13,
+      "t": 0.433
+     }
+    ]
+   },
+   "aren-hit": {
+    "worstCm": 11.2,
+    "peakVerts": 112,
+    "meanVerts": 38,
+    "top": [
+     {
+      "pair": "uarmR>thighR",
+      "cm": 11.2,
+      "verts": 15,
+      "frame": 11,
+      "t": 0.367
+     },
+     {
+      "pair": "thighR>uarmR",
+      "cm": 10.9,
+      "verts": 44,
+      "frame": 9,
+      "t": 0.3
+     },
+     {
+      "pair": "farmR>thighL",
+      "cm": 10.9,
+      "verts": 3,
+      "frame": 12,
+      "t": 0.4
+     },
+     {
+      "pair": "farmR>thighR",
+      "cm": 10.7,
+      "verts": 15,
+      "frame": 10,
+      "t": 0.333
+     }
+    ]
+   },
+   "aren-cheer": {
+    "worstCm": 12.7,
+    "peakVerts": 58,
+    "meanVerts": 20,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 12.7,
+      "verts": 26,
+      "frame": 26,
+      "t": 0.867
+     },
+     {
+      "pair": "uarmR>head",
+      "cm": 9.2,
+      "verts": 1,
+      "frame": 26,
+      "t": 0.867
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 8.6,
+      "verts": 1,
+      "frame": 6.5,
+      "t": 0.233
+     }
+    ]
+   },
+   "aren-defeat": {
+    "worstCm": 8,
+    "peakVerts": 9,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "thighR>handR",
+      "cm": 8,
+      "verts": 9,
+      "frame": 31.5,
+      "t": 1.067
+     },
+     {
+      "pair": "thighL>handL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 117.5,
+      "t": 3.933
+     },
+     {
+      "pair": "thighR>farmR",
+      "cm": 8,
+      "verts": 3,
+      "frame": 94,
+      "t": 3.133
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 7.1,
+      "verts": 2,
+      "frame": 78.5,
+      "t": 2.633
+     }
+    ]
+   },
+   "aren-knockdown": {
+    "worstCm": 9.2,
+    "peakVerts": 13,
+    "meanVerts": 4,
+    "top": [
+     {
+      "pair": "torso>farmR",
+      "cm": 9.2,
+      "verts": 8,
+      "frame": 27.5,
+      "t": 0.467
+     },
+     {
+      "pair": "head>handL",
+      "cm": 8.6,
+      "verts": 5,
+      "frame": 11.5,
+      "t": 0.2
+     },
+     {
+      "pair": "thighR>farmR",
+      "cm": 8,
+      "verts": 5,
+      "frame": 23.5,
+      "t": 0.4
+     },
+     {
+      "pair": "farmR>torso",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 27.5,
+      "t": 0.467
+     }
+    ]
+   },
+   "aren-knockdown-forward": {
+    "worstCm": 9.5,
+    "peakVerts": 24,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "handR>thighR",
+      "cm": 9.5,
+      "verts": 13,
+      "frame": 15.5,
+      "t": 0.267
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 8,
+      "verts": 8,
+      "frame": 15.5,
+      "t": 0.267
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 15.5,
+      "t": 0.267
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 15.5,
+      "t": 0.267
+     }
+    ]
+   },
+   "aren-getup": {
+    "worstCm": 11.5,
+    "peakVerts": 60,
+    "meanVerts": 5,
+    "top": [
+     {
+      "pair": "handR>thighR",
+      "cm": 11.5,
+      "verts": 46,
+      "frame": 17,
+      "t": 0.283
+     },
+     {
+      "pair": "handR>shinR",
+      "cm": 11.5,
+      "verts": 8,
+      "frame": 17,
+      "t": 0.283
+     },
+     {
+      "pair": "handR>thighL",
+      "cm": 10.9,
+      "verts": 23,
+      "frame": 20,
+      "t": 0.333
+     },
+     {
+      "pair": "handR>shinL",
+      "cm": 9.5,
+      "verts": 2,
+      "frame": 20,
+      "t": 0.333
+     }
+    ]
+   },
+   "aren-getup-forward": {
+    "worstCm": 10.1,
+    "peakVerts": 58,
+    "meanVerts": 5,
+    "top": [
+     {
+      "pair": "uarmR>thighR",
+      "cm": 10.1,
+      "verts": 11,
+      "frame": 40,
+      "t": 0.667
+     },
+     {
+      "pair": "thighR>uarmR",
+      "cm": 10,
+      "verts": 33,
+      "frame": 40,
+      "t": 0.667
+     },
+     {
+      "pair": "thighR>farmR",
+      "cm": 8.8,
+      "verts": 14,
+      "frame": 40,
+      "t": 0.667
+     },
+     {
+      "pair": "thighL>uarmL",
+      "cm": 8.8,
+      "verts": 1,
+      "frame": 51.5,
+      "t": 0.867
+     }
+    ]
+   },
+   "yara-thornshot-1": {
+    "worstCm": 7.1,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "torso>farmR",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 0.5,
+      "t": 0.033
+     }
+    ]
+   },
+   "yara-thornshot-2": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "yara-thornshot-3": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "yara-root-spike": {
+    "worstCm": 8.8,
+    "peakVerts": 10,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 8.8,
+      "verts": 5,
+      "frame": 3,
+      "t": 0.1
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 1.5,
+      "t": 0.067
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8,
+      "verts": 2,
+      "frame": 3,
+      "t": 0.1
+     },
+     {
+      "pair": "head>farmR",
+      "cm": 8,
+      "verts": 1,
+      "frame": 5.5,
+      "t": 0.2
+     }
+    ]
+   },
+   "yara-root-charge": {
+    "worstCm": 8.8,
+    "peakVerts": 12,
+    "meanVerts": 8,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 8.8,
+      "verts": 2,
+      "frame": 6,
+      "t": 0.2
+     },
+     {
+      "pair": "head>farmR",
+      "cm": 8.8,
+      "verts": 3,
+      "frame": 27.5,
+      "t": 0.933
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8.6,
+      "verts": 3,
+      "frame": 0,
+      "t": 0
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 8.6,
+      "verts": 2,
+      "frame": 6,
+      "t": 0.2
+     }
+    ]
+   },
+   "yara-root-eruption": {
+    "worstCm": 10.7,
+    "peakVerts": 26,
+    "meanVerts": 4,
+    "top": [
+     {
+      "pair": "uarmL>head",
+      "cm": 10.7,
+      "verts": 1,
+      "frame": 25,
+      "t": 0.833
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8.8,
+      "verts": 2,
+      "frame": 1.5,
+      "t": 0.067
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 8.8,
+      "verts": 22,
+      "frame": 10,
+      "t": 0.333
+     },
+     {
+      "pair": "head>farmR",
+      "cm": 8.8,
+      "verts": 5,
+      "frame": 11.5,
+      "t": 0.4
+     }
+    ]
+   },
+   "yara-seed-charge": {
+    "worstCm": 8.8,
+    "peakVerts": 2,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "head>uarmL",
+      "cm": 8.8,
+      "verts": 2,
+      "frame": 41,
+      "t": 1.367
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 19.5,
+      "t": 0.667
+     }
+    ]
+   },
+   "yara-sap-lance": {
+    "worstCm": 8.6,
+    "peakVerts": 2,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "head>uarmL",
+      "cm": 8.6,
+      "verts": 1,
+      "frame": 4.5,
+      "t": 0.167
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8,
+      "verts": 2,
+      "frame": 11,
+      "t": 0.367
+     }
+    ]
+   },
+   "yara-seed-storm": {
+    "worstCm": 9.5,
+    "peakVerts": 10,
+    "meanVerts": 4,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 9.5,
+      "verts": 9,
+      "frame": 9,
+      "t": 0.3
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 8.6,
+      "verts": 4,
+      "frame": 21,
+      "t": 0.7
+     },
+     {
+      "pair": "head>farmR",
+      "cm": 8,
+      "verts": 2,
+      "frame": 22,
+      "t": 0.733
+     }
+    ]
+   },
+   "yara-binding-vines": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "yara-cleanse": {
+    "worstCm": 7.1,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "thighL>handL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 0,
+      "t": 0
+     }
+    ]
+   },
+   "yara-heartroot-bloom": {
+    "worstCm": 8.6,
+    "peakVerts": 3,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "head>uarmL",
+      "cm": 8.6,
+      "verts": 2,
+      "frame": 34,
+      "t": 1.133
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 8,
+      "verts": 1,
+      "frame": 30.5,
+      "t": 1.033
+     }
+    ]
+   },
+   "aren-air-step": {
+    "worstCm": 9.5,
+    "peakVerts": 2,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "torso>handL",
+      "cm": 9.5,
+      "verts": 1,
+      "frame": 0,
+      "t": 0
+     },
+     {
+      "pair": "thighL>handL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 6.5,
+      "t": 0.233
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 30,
+      "t": 1
+     }
+    ]
+   }
+  }
+ },
+ {
+  "hero": "aren",
+  "triangles": 8622,
+  "vertices": 13552,
+  "clips": {
+   "One long jump.001": {
+    "worstCm": 7.1,
+    "peakVerts": 3,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "head>handR",
+      "cm": 7.1,
+      "verts": 3,
+      "frame": 24.5,
+      "t": 1.083
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 52.5,
+      "t": 2.25
+     },
+     {
+      "pair": "thighR>farmR",
+      "cm": 6.6,
+      "verts": 1,
+      "frame": 3,
+      "t": 0.167
+     },
+     {
+      "pair": "torso>farmR",
+      "cm": 5.9,
+      "verts": 1,
+      "frame": 43,
+      "t": 1.833
+     }
+    ]
+   },
+   "warm_up.001": {
+    "worstCm": 9.5,
+    "peakVerts": 47,
+    "meanVerts": 10,
+    "top": [
+     {
+      "pair": "handR>thighL",
+      "cm": 9.5,
+      "verts": 9,
+      "frame": 229,
+      "t": 9.583
+     },
+     {
+      "pair": "torso>handR",
+      "cm": 9.2,
+      "verts": 9,
+      "frame": 76.5,
+      "t": 3.25
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 8.8,
+      "verts": 5,
+      "frame": 114.5,
+      "t": 4.833
+     },
+     {
+      "pair": "torso>farmR",
+      "cm": 8.8,
+      "verts": 4,
+      "frame": 95.5,
+      "t": 4.042
+     }
+    ]
+   },
+   "1 High and long jump with a cross-kick..001": {
+    "worstCm": 8.6,
+    "peakVerts": 16,
+    "meanVerts": 7,
+    "top": [
+     {
+      "pair": "head>handR",
+      "cm": 8.6,
+      "verts": 9,
+      "frame": 0,
+      "t": 0.042
+     },
+     {
+      "pair": "torso>handR",
+      "cm": 8.6,
+      "verts": 4,
+      "frame": 12.5,
+      "t": 0.583
+     },
+     {
+      "pair": "handR>head",
+      "cm": 8,
+      "verts": 2,
+      "frame": 6,
+      "t": 0.292
+     },
+     {
+      "pair": "torso>farmR",
+      "cm": 7.1,
+      "verts": 2,
+      "frame": 0,
+      "t": 0.042
+     }
+    ]
+   },
+   "dive.001": {
+    "worstCm": 10,
+    "peakVerts": 17,
+    "meanVerts": 2,
+    "top": [
+     {
+      "pair": "uarmR>head",
+      "cm": 10,
+      "verts": 3,
+      "frame": 28.5,
+      "t": 1.25
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 8.6,
+      "verts": 2,
+      "frame": 25.5,
+      "t": 1.125
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 7.1,
+      "verts": 4,
+      "frame": 28.5,
+      "t": 1.25
+     },
+     {
+      "pair": "head>handL",
+      "cm": 7.1,
+      "verts": 5,
+      "frame": 39.5,
+      "t": 1.708
+     }
+    ]
+   },
+   "run.001": {
+    "worstCm": 9.2,
+    "peakVerts": 3,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "torso>farmL",
+      "cm": 9.2,
+      "verts": 2,
+      "frame": 10.5,
+      "t": 0.5
+     }
+    ]
+   },
+   "walk.001": {
+    "worstCm": 6.6,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "thighR>farmR",
+      "cm": 6.6,
+      "verts": 1,
+      "frame": 24.5,
+      "t": 1.083
+     }
+    ]
+   },
+   "idle.001": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "cheer.001": {
+    "worstCm": 8.6,
+    "peakVerts": 9,
+    "meanVerts": 4,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 8.6,
+      "verts": 4,
+      "frame": 25,
+      "t": 1.083
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 8,
+      "verts": 6,
+      "frame": 50.5,
+      "t": 2.167
+     }
+    ]
+   },
+   "defeat_03.001": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "aren-light-1": {
+    "worstCm": 7.1,
+    "peakVerts": 2,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "torso>handL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 13,
+      "t": 0.433
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 6.6,
+      "verts": 1,
+      "frame": 13,
+      "t": 0.433
+     }
+    ]
+   },
+   "aren-light-2": {
+    "worstCm": 8.8,
+    "peakVerts": 7,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 8.8,
+      "verts": 4,
+      "frame": 3.5,
+      "t": 0.133
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 8,
+      "verts": 2,
+      "frame": 2,
+      "t": 0.067
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 6.6,
+      "verts": 1,
+      "frame": 0,
+      "t": 0
+     }
+    ]
+   },
+   "aren-light-3": {
+    "worstCm": 8,
+    "peakVerts": 5,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 8,
+      "verts": 5,
+      "frame": 11,
+      "t": 0.367
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 9,
+      "t": 0.3
+     }
+    ]
+   },
+   "aren-light-4": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "aren-sigil-charge": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "aren-sigil-bolt": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "aren-sigil-barrage": {
+    "worstCm": 6.6,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "head>uarmR",
+      "cm": 6.6,
+      "verts": 1,
+      "frame": 8,
+      "t": 0.267
+     }
+    ]
+   },
+   "aren-judgement": {
+    "worstCm": 8.8,
+    "peakVerts": 3,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "uarmR>head",
+      "cm": 8.8,
+      "verts": 1,
+      "frame": 16,
+      "t": 0.533
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 22.5,
+      "t": 0.767
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 2.5,
+      "t": 0.1
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 7.1,
+      "verts": 2,
+      "frame": 14.5,
+      "t": 0.5
+     }
+    ]
+   },
+   "aren-heavy": {
+    "worstCm": 10,
+    "peakVerts": 23,
+    "meanVerts": 6,
+    "top": [
+     {
+      "pair": "uarmL>head",
+      "cm": 10,
+      "verts": 1,
+      "frame": 14,
+      "t": 0.467
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 9.2,
+      "verts": 12,
+      "frame": 21,
+      "t": 0.7
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 8.6,
+      "verts": 7,
+      "frame": 0,
+      "t": 0
+     },
+     {
+      "pair": "handL>farmR",
+      "cm": 8.6,
+      "verts": 12,
+      "frame": 18,
+      "t": 0.6
+     }
+    ]
+   },
+   "aren-charged-heavy-charge": {
+    "worstCm": 0,
+    "peakVerts": 0,
+    "meanVerts": 0,
+    "top": []
+   },
+   "aren-charged-heavy": {
+    "worstCm": 10.1,
+    "peakVerts": 51,
+    "meanVerts": 3,
+    "top": [
+     {
+      "pair": "handR>thighR",
+      "cm": 10.1,
+      "verts": 51,
+      "frame": 29.5,
+      "t": 1
+     },
+     {
+      "pair": "head>uarmR",
+      "cm": 8,
+      "verts": 7,
+      "frame": 10,
+      "t": 0.333
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 6.6,
+      "verts": 2,
+      "frame": 16.5,
+      "t": 0.567
+     }
+    ]
+   },
+   "aren-root-tether": {
+    "worstCm": 8,
+    "peakVerts": 5,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "head>uarmL",
+      "cm": 8,
+      "verts": 3,
+      "frame": 9.5,
+      "t": 0.333
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 21,
+      "t": 0.7
+     }
+    ]
+   },
+   "aren-cleanse": {
+    "worstCm": 11.2,
+    "peakVerts": 13,
+    "meanVerts": 2,
+    "top": [
+     {
+      "pair": "torso>farmL",
+      "cm": 11.2,
+      "verts": 11,
+      "frame": 30.5,
+      "t": 1.033
+     },
+     {
+      "pair": "head>uarmL",
+      "cm": 8,
+      "verts": 3,
+      "frame": 23.5,
+      "t": 0.8
+     },
+     {
+      "pair": "head>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 26,
+      "t": 0.867
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 7.1,
+      "verts": 2,
+      "frame": 30.5,
+      "t": 1.033
+     }
+    ]
+   },
+   "aren-hit": {
+    "worstCm": 10.9,
+    "peakVerts": 48,
+    "meanVerts": 18,
+    "top": [
+     {
+      "pair": "farmL>torso",
+      "cm": 10.9,
+      "verts": 2,
+      "frame": 7.5,
+      "t": 0.267
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 10,
+      "verts": 43,
+      "frame": 6,
+      "t": 0.2
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 9.5,
+      "verts": 4,
+      "frame": 4.5,
+      "t": 0.167
+     },
+     {
+      "pair": "thighL>farmL",
+      "cm": 8,
+      "verts": 1,
+      "frame": 5,
+      "t": 0.167
+     }
+    ]
+   },
+   "aren-stagger": {
+    "worstCm": 15.8,
+    "peakVerts": 210,
+    "meanVerts": 158,
+    "top": [
+     {
+      "pair": "handR>torso",
+      "cm": 15.8,
+      "verts": 99,
+      "frame": 15.5,
+      "t": 0.533
+     },
+     {
+      "pair": "handR>thighR",
+      "cm": 15.8,
+      "verts": 79,
+      "frame": 13,
+      "t": 0.433
+     },
+     {
+      "pair": "handR>thighL",
+      "cm": 13.3,
+      "verts": 15,
+      "frame": 8,
+      "t": 0.267
+     },
+     {
+      "pair": "torso>handR",
+      "cm": 11.2,
+      "verts": 16,
+      "frame": 0,
+      "t": 0
+     }
+    ]
+   },
+   "aren-back-handspring": {
+    "worstCm": 7.1,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "head>handR",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 11.5,
+      "t": 0.4
+     }
+    ]
+   },
+   "aren-air-step": {
+    "worstCm": 9.5,
+    "peakVerts": 43,
+    "meanVerts": 6,
+    "top": [
+     {
+      "pair": "handR>thighR",
+      "cm": 9.5,
+      "verts": 32,
+      "frame": 0,
+      "t": 0
+     },
+     {
+      "pair": "torso>farmL",
+      "cm": 9.2,
+      "verts": 2,
+      "frame": 4,
+      "t": 0.133
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 9.2,
+      "verts": 5,
+      "frame": 8,
+      "t": 0.267
+     },
+     {
+      "pair": "handR>head",
+      "cm": 8.8,
+      "verts": 12,
+      "frame": 23.5,
+      "t": 0.8
+     }
+    ]
+   },
+   "aren-knockdown": {
+    "worstCm": 8.6,
+    "peakVerts": 14,
+    "meanVerts": 7,
+    "top": [
+     {
+      "pair": "torso>farmL",
+      "cm": 8.6,
+      "verts": 13,
+      "frame": 25.5,
+      "t": 0.867
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 25.5,
+      "t": 0.867
+     }
+    ]
+   },
+   "aren-knockdown-forward": {
+    "worstCm": 9.2,
+    "peakVerts": 15,
+    "meanVerts": 1,
+    "top": [
+     {
+      "pair": "torso>farmL",
+      "cm": 9.2,
+      "verts": 6,
+      "frame": 11.5,
+      "t": 0.4
+     },
+     {
+      "pair": "torso>handL",
+      "cm": 8.6,
+      "verts": 1,
+      "frame": 11.5,
+      "t": 0.4
+     },
+     {
+      "pair": "handR>thighR",
+      "cm": 8,
+      "verts": 7,
+      "frame": 11.5,
+      "t": 0.4
+     },
+     {
+      "pair": "thighR>handR",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 11.5,
+      "t": 0.4
+     }
+    ]
+   },
+   "aren-getup": {
+    "worstCm": 12.7,
+    "peakVerts": 148,
+    "meanVerts": 14,
+    "top": [
+     {
+      "pair": "handR>head",
+      "cm": 12.7,
+      "verts": 84,
+      "frame": 24.5,
+      "t": 0.833
+     },
+     {
+      "pair": "handL>head",
+      "cm": 10.9,
+      "verts": 20,
+      "frame": 21.5,
+      "t": 0.733
+     },
+     {
+      "pair": "handR>handL",
+      "cm": 10.7,
+      "verts": 13,
+      "frame": 24.5,
+      "t": 0.833
+     },
+     {
+      "pair": "handL>handR",
+      "cm": 9.5,
+      "verts": 3,
+      "frame": 24.5,
+      "t": 0.833
+     }
+    ]
+   },
+   "aren-getup-forward": {
+    "worstCm": 7.1,
+    "peakVerts": 1,
+    "meanVerts": 0,
+    "top": [
+     {
+      "pair": "torso>farmL",
+      "cm": 7.1,
+      "verts": 1,
+      "frame": 20,
+      "t": 0.667
+     }
+    ]
+   }
+  }
+ }
+]

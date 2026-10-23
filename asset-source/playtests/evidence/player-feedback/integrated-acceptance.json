@@ -1,0 +1,527 @@
+{
+  "generatedAt": "2026-10-22T19:09:32.605Z",
+  "status": "Player-feedback implementation and bounded coordinator acceptance passed; R1 release qualification remains incomplete.",
+  "previousRound": {
+    "generatedAt": "2026-10-22T14:56:26.734Z",
+    "status": "Implementation and bounded native smoke recorded; integrated gates are NOT all green; no release approval",
+    "latestUserFix": {
+      "generatedAt": "2026-10-22T14:48:08.337Z",
+      "problem": "Grove ambient fireflies/pollen/petals rise and fall with the player jump",
+      "hypotheses": [
+        {
+          "mechanism": "Full actor-root position copied into uFocus; vertex shader adds uFocus.y to ambient particle height",
+          "result": "confirmed",
+          "evidence": "Native before measurement: root and focus both rise from 0 to 1.2494614512471847m; regression fails at y=0.6 before fix"
+        },
+        {
+          "mechanism": "Only camera movement creates apparent particle displacement while world height remains fixed",
+          "result": "rejected as sole cause",
+          "evidence": "Actual renderer uFocus.y changes 1:1 with jumping root before fix, independent of projection"
+        }
+      ],
+      "decision": "Anchor Grove particle focus at existing flat world ground y=0; preserve X/Z streaming and world-clock animation. No other biome, light, camera or gameplay changes.",
+      "verification": {
+        "bundle": "http://127.0.0.1:5214/assets/main-CCkPTWuT.js",
+        "before": {
+          "frames": 53,
+          "rootMax": 1.2494614512471847,
+          "focusMin": 0,
+          "focusMax": 1.2494614512471847
+        },
+        "after": {
+          "frames": 118,
+          "rootMax": 1.248962585034013,
+          "focusMin": 0,
+          "focusMax": 0,
+          "landed": true
+        },
+        "scope": "actual compiled Grove journey; trusted Space; explicit browser focus fixture only; no actor, particle, clock, camera or resource mutation"
+      },
+      "tests": {
+        "red": "0 pass / 1 fail: focused new invariant before fix",
+        "green": "16 pass / 0 fail: tests/world/grove-world.test.ts",
+        "build": "tsc -b && vite build passed; 1068 modules; main-CCkPTWuT.js; existing large-chunk warning",
+        "artifact": "artifact://22570",
+        "wallSeconds": 53.57,
+        "finalFocusedIntegration": {
+          "passed": 157,
+          "failed": 1,
+          "total": 158,
+          "files": 12,
+          "wallSeconds": 12.75,
+          "failure": "terrain mesh, mask textures, clutter and draw calls stay within Greenwake budgets timed out at 5017.99ms against its unchanged 5000ms deadline; no failed assertion reported; no pass claimed"
+        }
+      },
+      "recall": "No prior memory store available at /Users/hoainho/.config/opencode/memory",
+      "limits": "Firefly Y values derived from unchanged live shader plus measured uniforms; screenshots visually inspected. Browser focus emulation is an explicit fixture, not physical device/performance qualification."
+    },
+    "modelRouting": {
+      "workerCount": 10,
+      "actualModel": "minimax-code/MiniMax-M3.1-Flash",
+      "ompLevel": "high",
+      "nativeEffortDepthClaim": false,
+      "evidence": "flash-worker-routing.json",
+      "interrupt": "Eight original sessions interrupted by ENOTFOUND api.minimax.io and resumed without fallback",
+      "integrationOwner": "main session; Grove fix and shared integration performed directly",
+      "requestTokenCounters": {
+        "mainOnly": null,
+        "workerInclusive": null,
+        "note": "Actual request/fresh-input/cached-input/output counters were not available; no quota or quality inference"
+      }
+    },
+    "gates": {
+      "finalGrove": {
+        "pass": 16,
+        "fail": 0,
+        "buildPass": true,
+        "modules": 1068,
+        "bundle": "main-CCkPTWuT.js",
+        "wallSeconds": 53.57,
+        "output": "artifact://22570"
+      },
+      "finalFocused": {
+        "pass": 157,
+        "fail": 1,
+        "total": 158,
+        "files": 12,
+        "wallSeconds": 12.75,
+        "failure": "terrain mesh, mask textures, clutter and draw calls stay within Greenwake budgets timed out at 5017.99ms against its unchanged 5000ms deadline; no failed assertion reported; no pass claimed"
+      },
+      "priorUiAppAccess": {
+        "pass": 142,
+        "fail": 0,
+        "files": 11,
+        "output": "artifact://22542"
+      },
+      "fullNode24": {
+        "tests": 873,
+        "pass": 872,
+        "fail": 1,
+        "wallSeconds": 338.16,
+        "output": "artifact://22457",
+        "failure": "actor-koro/koro-search sink 0.169m exceeds unchanged 0.15m; separate R1 native asset blocker"
+      },
+      "normalFullBun": {
+        "files": 185,
+        "pass": 2378,
+        "fail": 2,
+        "wallSeconds": 587.48,
+        "failure": "Two unchanged 5s deadlines exceeded; no failed assertion reported"
+      },
+      "isolatedFullBun": {
+        "files": 185,
+        "status": "incomplete",
+        "commandDeadlineSeconds": 1200,
+        "aggregateCount": null,
+        "note": "Further sealed-route, Vesper, monster and hero geometry timeouts; no deadline raised or file dropped"
+      }
+    },
+    "native": {
+      "bundleProvenance": {
+        "freshHeroAndMotion": "main-_RbZxzXD.js",
+        "selectorCancelAndInitialPractice": "main-CYGBvALd.js",
+        "groveJumpAndEntryFailureCancellation": "main-CCkPTWuT.js"
+      },
+      "freshHeroes": "All four actual New Game entries: no free companion or future-map grants",
+      "motion": "Natural spawn, trusted sprint/jump/direction/air-turn/landing; all four heroes reached ~1.25m",
+      "earnedMaps": "All five canonical authored-event exports imported through actual UI file input; not a physical full-campaign playthrough",
+      "previews": "Real unrecruited refusal and actual earned Vara native skill preview",
+      "practice": {
+        "clearedCombatStages": 2,
+        "fullMapPracticeComplete": false,
+        "return": "Normal/defeat/failed return with actual Retry; original source mana 88 restored after practice-local Koro selection",
+        "entry": "Injected native preparation failure plus held-preparation cancellation through real dispatch; obsolete preparation cannot replace restored journey",
+        "invariants": [
+          "same campaign run",
+          "full campaign snapshot",
+          "raw slot rows",
+          "raw run ledger rows",
+          "actual original restore ticket",
+          "resources",
+          "position",
+          "world tick"
+        ],
+        "settings": "Raw settings unchanged across practice checks",
+        "evidence": [
+          "after-built-training-native.json",
+          "after-built-training-completion.json",
+          "after-built-training-final-completion.json",
+          "after-built-training-failed-entry.json",
+          "after-built-training-cancelled-entry.json",
+          "after-training-cancel-fix.json"
+        ]
+      },
+      "console": {
+        "url": "http://127.0.0.1:5214/",
+        "rows": [],
+        "note": "Retained CDP console/log records plus final 600ms observation at Title after owned native scenarios; not a whole-session network/performance capture."
+      }
+    },
+    "cleanup": {
+      "temporaryFeedbackFilesRemoved": 21,
+      "ownedViteConfigRemoved": true,
+      "builtOwnedSlotsRemoved": 9,
+      "builtRemainingSlots": 0,
+      "builtSettingsUnchanged": true,
+      "sourceCleanupEvidence": "source-owned-save-cleanup.json",
+      "sourceUnownedRunPreserved": "f7d98f10-485f-42f0-9682-6fad31b14629",
+      "databaseWipe": false,
+      "runLedgerDeletion": false,
+      "ownedServersStopped": true,
+      "managedBrowserTabReleased": true
+    },
+    "releaseBoundary": {
+      "ready": false,
+      "blockers": [
+        "Full Bun gate not green/incomplete and final focused terrain timeout",
+        "Koro native search sink exceeds existing gate",
+        "Reference M4 Pro / Chrome 150 benchmarks and physical-gamepad evidence unavailable",
+        "Native rights/consent and explicit hash-bound user asset approval remain missing"
+      ],
+      "assetPromotion": false,
+      "committed": false,
+      "pushed": false,
+      "merged": false,
+      "paidGeneration": false
+    }
+  },
+  "modelRouting": {
+    "initialParallelWorkers": {
+      "count": 10,
+      "actual": "minimax-code/MiniMax-M3.1-Flash",
+      "level": "high",
+      "evidence": "flash-worker-routing.json",
+      "networkInterruptedSessions": 8,
+      "resumedSameSessions": true
+    },
+    "repairHandoffs": [
+      {
+        "slice": "Koro Search fingertip/wrist contact",
+        "actual": "minimax-code/MiniMax-M3.1-Flash",
+        "level": "high",
+        "toolRoundedElapsed": "35m40s",
+        "evidence": "koro-ground-repair.json"
+      },
+      {
+        "slice": "Grove/sealed-route/monster/Vesper/Moonpine harness clone costs",
+        "actual": "minimax-code/MiniMax-M3.1-Flash",
+        "level": "high",
+        "toolRoundedElapsed": "1h4m",
+        "evidence": "gate-timeout-repair.json"
+      }
+    ],
+    "coordinatorFollowup": "Measured and repaired redundant native traversal fixture decoding after the exhaustive fresh-process gate exposed its timeout; reused the existing Canopy grouping pattern.",
+    "misroutes": "Sonnet debugger startups stopped before retained edits; direct Flash R2 authentication failed without a run. Neither is attributed as Flash implementation.",
+    "globalModelConfigurationChanged": false,
+    "processDeviation": "Some workers ran tests despite the no-mid-flight prohibition. Their results are not main integrated acceptance or evidence of process compliance.",
+    "counters": {
+      "availability": "No actual request/token counters exposed; not estimated from text length or model labels.",
+      "mainOnly": {
+        "requests": null,
+        "freshInputTokens": null,
+        "cachedInputTokens": null,
+        "outputTokens": null
+      },
+      "workerInclusive": {
+        "requests": null,
+        "freshInputTokens": null,
+        "cachedInputTokens": null,
+        "outputTokens": null
+      }
+    },
+    "coordinatorProductionRepairs": [
+      {
+        "cause": "Cross-region E was treated as local physics traversal.",
+        "fix": "Queue the current authored exit through the existing durable Director advanceChapter path; gates retain authority.",
+        "before": "Two positive real-Director app regressions failed; native E did not leave Greenwake.",
+        "after": "Three app exit scenarios pass; genuine E transitions into Canopy and Bamboo; Continue persists both."
+      },
+      {
+        "cause": "Two required Canopy targets and one optional target were inside the unchanged native tree collider.",
+        "fix": "Move only those authored targets onto the existing eastern seed-alcove route.",
+        "before": "Actual player blocked at trunk; new traversal regression distance 7.5279m, artifact://23054.",
+        "after": "Native E commits both required interactions; regression reaches all three with the same native geometry."
+      },
+      {
+        "cause": "A pending spatial pact auto-opened remotely after its cinematic, then the real spatial guard rejected Bond.",
+        "fix": "Present only when its same eligible contextual site is current; leave remote play walkable.",
+        "before": "Permanent app regression expected game but got choice; actual native wrong-site Bond produced an application error.",
+        "after": "69 focused tests pass; native remote prompt absent, pending retained, real site Bond accepted and durable consequences observed."
+      },
+      {
+        "cause": "Objective HUD hard-coded the interact binding although restoration requires the authored ability input.",
+        "fix": "Project existing inputHint into the objective view model, its invalidation key and real control-binding resolver.",
+        "before": "Native objective displayed E while actual restoration required Q.",
+        "after": "Final native capture displays Q at the genuine distant restoration objective; TypeScript/build and complete gates pass."
+      }
+    ]
+  },
+  "gates": {
+    "exhaustiveFreshProcessDiagnostic": {
+      "receipt": "final-bun-gate-r3.json",
+      "complete": true,
+      "files": 185,
+      "pass": 2389,
+      "fail": 1,
+      "skip": 0,
+      "wallSeconds": 353.145499125,
+      "failure": "Traversal native geometry fixture exceeded unchanged 5s deadline; repaired afterward, so this diagnostic remains a failed run."
+    },
+    "traversalCausalRepair": {
+      "observedAt": "2026-10-22T17:01:55.049Z",
+      "owner": "main coordinator",
+      "source": "tests/combat/traversal.test.ts",
+      "redEvidence": "final-bun-gate-r3.json",
+      "red": {
+        "test": "completes every authored type against the renderer-measured native props, not only their authored proxies",
+        "elapsedMs": 6661.79,
+        "unchangedDeadlineMs": 5000
+      },
+      "cause": "Repeatedly decoded the same native GLBs and rebuilt identical model-space geometry once per prop placement; the existing Canopy sealed-route fixture already groups same-asset/same-kind placements into one measured batch.",
+      "change": "Reuse that established grouped-batch pattern locally in the traversal fixture and dispose every batch. No production changes; all nine authored arcs, all 355 solid placements, all 581 measured colliders, 53 supports and every assertion remain.",
+      "profiles": {
+        "before": "traversal-native-fixture-before-r3.json",
+        "after": "traversal-native-fixture-after-r3.json",
+        "beforeMs": 2480.188583,
+        "afterMs": 381.03766600000006,
+        "beforeNativeDecodes": 355,
+        "afterNativeDecodes": 22
+      },
+      "focusedAfter": {
+        "command": "bun test tests/combat/traversal.test.ts",
+        "pass": 13,
+        "fail": 0,
+        "expectCalls": 350,
+        "wallSeconds": 1.49
+      },
+      "canonicalFullGate": "final-canonical-gates-r3.json"
+    },
+    "canonicalFull": {
+      "receipt": "final-canonical-gates-r6.json",
+      "outputArtifact": "artifact://23115",
+      "complete": true,
+      "startedAt": "2026-10-22T18:57:51.730Z",
+      "finishedAt": "2026-10-22T19:01:51.371Z",
+      "bun": {
+        "tests": 2394,
+        "files": 185,
+        "pass": 2394,
+        "fail": 0,
+        "assertions": 731031,
+        "wallSeconds": 192.807355666
+      },
+      "node": {
+        "tests": 873,
+        "suites": 102,
+        "pass": 873,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "wallSeconds": 46.83069183300002
+      },
+      "outerWallSeconds": 239.78,
+      "normalDeadlines": true,
+      "sequential": true,
+      "scenarioGridReduced": false
+    },
+    "build": {
+      "command": "env PATH=\"/Users/hoainho/.nvm/versions/node/v24.22.0/bin:$PATH\" npm run build",
+      "result": "passed",
+      "modules": 1068,
+      "bundle": "main-NZ-ie19v.js",
+      "viteSeconds": 6.65,
+      "wallSeconds": 16.02,
+      "outputArtifact": "artifact://23104",
+      "warning": "Existing Vite chunk-size warning retained."
+    }
+  },
+  "native": {
+    "finalBuilt": {
+      "receipt": "final-built-runtime-r3.json",
+      "bundle": "main-CIt3U7ZE.js",
+      "fourFreshHeroes": true,
+      "peakHeightApproximatelyMetres": 1.25,
+      "solkar": "Actual idle/walk/run/moving-turn plus visible settled idle; the occluded short tail is excluded from qualified visual evidence.",
+      "koro": "Actual native loader cache used regenerated ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256; actual fetched bytes matched that hash; no fabricated ResourceTiming row.",
+      "ui": "Six specific recruitment requirements, disabled unearned Koro previews, three independent HUD toggles and menu persistence, pointer/Tab/application-frame navigator input, chapter-map hover without geometry drift.",
+      "errors": "Receipt retains the failed throwaway observer callback and aborted audio requests across scene/title changes. No application JS/WebGL error observed; the complete log is not described as empty.",
+      "controllerQualification": "Logical standard-gamepad fixture through the real RAF, not a physical gamepad."
+    },
+    "campaign": {
+      "receipt": "earned-campaign-native-r3.json",
+      "realFreshRecruitment": "Actual native Vara recruitment, fragment/staff collection and equipment; early travel/equip/command refused.",
+      "saveSafety": "Real Continue, native-earned reload, valid schema-2 adoption without invented history, exiled/absent Solkar refusals and active Koro encounter practice-entry refusal.",
+      "scope": "Later-region checkpoints are disclosed authoritative authored-event fixtures, not an uninterrupted physical campaign clear. Native boar failures are retained."
+    },
+    "fullPractice": {
+      "receipt": "grove-practice-complete-native-r3.json",
+      "actualStagesCleared": 3,
+      "bossCleared": true,
+      "actualPracticeCompleteCard": true,
+      "actualReturnToJourney": true,
+      "campaignIsolationChecksPassed": 9,
+      "scope": "Trusted native input completed the full Grove practice map and restored the exact source campaign/resources/position/world tick/save rows/restore ticket; no campaign rewards or recruitment."
+    },
+    "genuineEarned": {
+      "receipt": "native-campaign-gate-gameplay-r4.json",
+      "scope": {
+        "genuinePhysicalRoute": "Earned prologue Vara and Sky fragment → all Greenwake boar phases and exit → Canopy chase, repaired native seed alcove, waterwheel, both Koro phases, thorn inspection, tether and cleanse → real Bond pact, fragment, equipped Koro and field Search → real Q restoration and E exit → Chapter 2 Bamboo arrival → full reload/Continue → fresh same-Aren New Game with remembered Koro and no free roster.",
+        "laterChapters": "The remaining chapter maps and authority refusals retain explicitly authored-event/import fixture evidence from R3; no claim of physically completing every later chapter.",
+        "writes": "Trusted keyboard and real visible controls only; no actor, resource, phase, clock, campaign, history, event or checkpoint writes. A debugger exposed the existing instance read-only and was disabled before gameplay. The headless focus fixture stayed enabled through loading/actions and was disabled after each operation."
+      },
+      "bambooContinueChecks": {
+        "sameRun": true,
+        "sameHero": true,
+        "chapterTwo": true,
+        "loadedBamboo": true,
+        "sameParty": true,
+        "sameCompanions": true,
+        "sameDomainHistory": true,
+        "sameWorldFacts": true,
+        "sameResume": true,
+        "earnedKoroActor": true,
+        "ashaStillUnearned": true,
+        "noError": true
+      },
+      "freshSameHeroChecks": {
+        "differentRun": true,
+        "sameArenHero": true,
+        "rememberedKoroRetained": true,
+        "noFreeKoro": true,
+        "noEarnedRosterCopied": true,
+        "noEquippedCompanion": true,
+        "noRuntimeCompanionActor": true,
+        "noNativeActiveCompanion": true,
+        "noError": true
+      },
+      "practiceStageAndReturnChecks": {
+        "sameRun": true,
+        "fullCampaign": true,
+        "ticketSnapshot": true,
+        "sourceDirector": true,
+        "exactRestoreTicket": true,
+        "rawStoresDuring": true,
+        "rawStoresAfter": true,
+        "resources": true,
+        "position": true,
+        "actualStageCleared": true
+      },
+      "cancelledPracticeChecks": {
+        "realSelector": true,
+        "sameRun": true,
+        "sameCampaign": true,
+        "samePolicy": true,
+        "sameResources": true,
+        "samePosition": true,
+        "noTicketCreated": true,
+        "allRawRowsUnchanged": true,
+        "noError": true,
+        "exactEngineUnchanged": true
+      },
+      "failedPracticeChecks": {
+        "realNetworkFailure": true,
+        "ticketExactlyCaptured": true,
+        "sourceSnapshotPreserved": true,
+        "sourceDirectorPreserved": true,
+        "automaticallyReturned": true,
+        "sameRun": true,
+        "sameCampaign": true,
+        "sameResources": true,
+        "samePosition": true,
+        "allRawRowsUnchanged": true,
+        "noAppError": true
+      },
+      "finalBundle": "main-NZ-ie19v.js",
+      "finalBundleScope": "Exact genuine pre-pact export imported without modification; trusted site-valid Bond/fragment replay; actual Q objective cue; real safe-checkpoint selector Cancel and one-network-request failed-entry rollback.",
+      "earlierBuildScope": "The complete earned Greenwake → Canopy → Bamboo route spans the explicitly recorded successive repair bundles. Retained four-hero/Solkar/broader UI observations identify their baseline main-CIt3U7ZE.js; no claim that every scenario was repeated on every later bundle.",
+      "returnVideoFinalized": false,
+      "debuggerDisabledBeforeGameplay": true,
+      "headlessFocusFixtureExplicit": true,
+      "outOfBandActorResourceClockCampaignWrites": false
+    }
+  },
+  "assetInventory": {
+    "receipt": "../../../generated/asset-acceptance-inventory.json",
+    "bindings": 100,
+    "nativeBindings": 91,
+    "nativeFiles": 89,
+    "nativeHashMatches": 91,
+    "composedRecipes": 9,
+    "allStatuses": "blocked",
+    "userApproval": null
+  },
+  "cleanup": {
+    "receipt": "final-cleanup-r6.json",
+    "scaffoldFilesDeleted": 25,
+    "ownedStagingDirectoryDeleted": true,
+    "ownedSlotsRemoved": 4,
+    "checks": {
+      "onlyFourExactOwnedSlotsRemoved": true,
+      "noDatabaseWipe": true,
+      "allNonSlotStoresUnchanged": true,
+      "unplannedSlotsRetained": true,
+      "productionSlotsUnchanged": true
+    },
+    "ownedPagePhysicallyClosed": true,
+    "ownedAliasReleased": true,
+    "ownedPreviewStopped": true,
+    "remainingOwnedScaffoldMatches": 0
+  },
+  "releaseBoundary": {
+    "ready": false,
+    "blockers": [
+      "M4 Pro / Chrome 150 reference-hardware benchmark unavailable here",
+      "Physical gamepad evidence unavailable here",
+      "Native acceptance gates including G11 derivative-freeze runtime parity, canonical production export and reference evidence remain unqualified",
+      "Explicit user visual approval bound to each exact asset hash is absent"
+    ],
+    "assetPromotion": false,
+    "canonicalManifestPromotion": false,
+    "commit": false,
+    "stage": false,
+    "push": false,
+    "merge": false,
+    "deploy": false,
+    "paidGeneration": false,
+    "nativeProducerComplete": false,
+    "runtimeParity": null,
+    "nativeTechnicalBlockers": [
+      "Actual G11 geometry/UV/material/frozen-live-scene measurements and detecting mismatch controls are incomplete.",
+      "Canonical production export and reference native evidence are unqualified."
+    ],
+    "technicalScope": "These native technical blockers are separate from hardware and human approval; implementation-gate success does not close them."
+  },
+  "previousRoundIsHistorical": true,
+  "mainReview": {
+    "owner": "main coordinator",
+    "localImplementationAccepted": true,
+    "releaseAccepted": false,
+    "authority": "Committed recruitment/transition requirements remain the sole access authority; no map-based roster ledger, free preference grant or history fabrication.",
+    "lifetime": "Real selector cancellation and a deliberately failed GLB entry preserve the source; exact paused engine retained in the ticket; native geometry is rebound on normal return.",
+    "saveSafety": "Existing-save adoption evidence retained; genuine same-run Continue and fresh-run reset verified; exact owned-slot cleanup preserves all non-slot stores.",
+    "assetPolicy": "Candidate banners and strict native acceptance remain intact; no evidenceStatus or canonical manifest promotion.",
+    "closureSourceFiles": [
+      "src/app/GameApplication.ts",
+      "src/content/levels/canopy-region.ts",
+      "src/app/ChapterFlow.ts",
+      "src/game/contracts.ts",
+      "src/ui/GameUI.ts",
+      "tests/app/GameApplication.test.ts",
+      "tests/combat/traversal.test.ts"
+    ],
+    "documentation": [
+      "docs/features/application.md",
+      ".opencode/plans/2026-10-14-full-remediation.md"
+    ],
+    "diagnosticScope": "Historical failed combat, wrong-site pact, observer/focus errors and invalid single-rule/shape comparisons remain explicitly recorded. Final console has 12 transition audio aborts and the deliberately failed practice GLB; no final captured console error or shader/WebGL failure. Node disconnected-binding warnings are retained negative-control output."
+  },
+  "elapsed": {
+    "canonicalOuterWallSeconds": 239.78,
+    "buildOuterWallSeconds": 16.02,
+    "nativeClosingStartedAt": "2026-10-22T17:28:01.142Z",
+    "nativeClosingFinishedAt": "2026-10-22T19:07:31.951Z",
+    "nativeClosingWallSeconds": 5970.809,
+    "nativeClosingScope": "Observed gameplay/gates/cleanup wall span, including harness corrections and waits; not worker-inclusive effort or a comparative benchmark.",
+    "workerRepairRoundedValuesRetained": true
+  }
+}

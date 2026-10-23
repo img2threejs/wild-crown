@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-23T07:53:58.004Z",
+  "build": {
+    "bundle": "main-1bL2ASaL.js",
+    "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+    "nativeViperSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
+  },
+  "acceptance": [
+    {
+      "command": "bun test tests/*/*.test.ts",
+      "passed": 2361,
+      "failed": 0,
+      "files": 184,
+      "expectCalls": 731085,
+      "durationSeconds": 227.36,
+      "timeoutOverride": false
+    },
+    {
+      "command": "bun test packages/campaign/test/*.test.ts",
+      "passed": 51,
+      "failed": 0,
+      "files": 2,
+      "durationSeconds": 0.237,
+      "timeoutOverride": false
+    },
+    {
+      "command": "/Users/hoainho/.nvm/versions/node/v24.22.0/bin/node --test tests/rendering/*.test.mjs tests/release/*.test.mjs tests/asset-lab/*.test.mjs",
+      "passed": 873,
+      "failed": 0,
+      "suites": 102,
+      "durationSeconds": 154.288821583,
+      "rawOutput": "artifact://23287"
+    },
+    {
+      "command": "env PATH=\"/Users/hoainho/.nvm/versions/node/v24.22.0/bin:$PATH\" npm run build -- --outDir dist-feedback-scout-viper-r9-final",
+      "result": "passed",
+      "modules": 1069,
+      "warning": "Existing >500 kB chunk-size warning retained."
+    }
+  ],
+  "totals": {
+    "bunPassed": 2412,
+    "nodePassed": 873,
+    "failed": 0
+  },
+  "native": {
+    "scout": "scout-block-native-r9.json",
+    "viper": "viper-head-native-r9.json",
+    "sameFinalEmittedBundle": true,
+    "controls": "Trusted keyboard/pointer in a coordinator-owned isolated Brave profile; simulation/progress were observed, not overridden."
+  },
+  "discardedRuns": [
+    {
+      "command": "bun test (all extensions), concurrent with the separate native Node suite",
+      "result": "Timed out after 180 seconds with runtime-test timeout failures; not accepted as a gate."
+    },
+    {
+      "command": "bun test --timeout 60000 (all extensions)",
+      "passed": 3283,
+      "failed": 2,
+      "rawOutput": "artifact://23320",
+      "failures": [
+        "Node-only Aren retarget byte-identity test differs under Bun.",
+        "A Node-only FBX loader test lacks window.URL.createObjectURL under the mixed Bun process."
+      ],
+      "resolution": "Kept the tests unchanged. Used explicit TypeScript Bun commands and the native Node .mjs command above; all pass. This record does not claim the mixed-run failures were fixed."
+    }
+  ],
+  "publication": {
+    "startedAt": "2026-10-23T07:51:50.504Z",
+    "completedAt": "2026-10-23T07:52:36.148Z",
+    "url": "http://127.0.0.1:5214/",
+    "build": {
+      "bundle": "main-1bL2ASaL.js",
+      "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+      "nativeViperSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
+    },
+    "httpMainSha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+    "httpViperSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+    "atomicEntryPointReplacement": true,
+    "olderHashedAssetsRetainedForOpenTabs": true,
+    "userTabReloaded": false,
+    "userSaveAccessed": false,
+    "sourceEvidenceFiles": [
+      "scout-equip-hint-after-r9.png",
+      "scout-command-hint-after-r9.png",
+      "scout-wheel-mark-available-after-r9.png",
+      "scout-mark-completed-after-r9.png",
+      "scout-warning-actual-target-after-r9.png",
+      "scout-lesson-unblocked-after-r9.png",
+      "scout-wheel-blocked-before-r9.png",
+      "scout-block-native-r9.json",
+      "viper-native-head-before-r9.png",
+      "viper-native-head-no-overlay-diagnostic-r9.png",
+      "viper-native-head-after-r9.png",
+      "viper-head-native-r9.json"
+    ]
+  },
+  "cleanup": {
+    "ownedAcceptancePreviewStopped": "ScoutViperFinalPreview:5218",
+    "userPreviewKeptRunning": "FeedbackReviewPreview:5214",
+    "ownedBuildDirectoriesRemoved": [
+      "dist-feedback-scout-viper-r9",
+      "dist-feedback-scout-viper-r9-final"
+    ],
+    "ownedBrowserProfileRemoved": "/tmp/wild-crown-scout-viper-native-r9-owned",
+    "browserTabsAndBrowserService": "Owned tabs released and owned replacement Brave service stopped after native acceptance.",
+    "throwawayRepositoryScripts": "Previously removed .tmp-viper-runtime-probe.ts, .tmp-scout-arrival-owned.json and .tmp-viper-native-owned.json."
+  }
+}

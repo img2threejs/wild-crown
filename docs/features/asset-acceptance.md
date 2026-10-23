@@ -6,7 +6,7 @@ This review covers the seven chapter candidate manifests (Greenwake, Canopy, Bam
 
 ## Identity check
 
-The coordinator measured **86 distinct native files / 90 native bindings**. All 90 output-hash comparisons matched. Another nine bindings are composed environment recipes, not standalone GLBs. All **99 unique bindings remain blocked**. Matching bytes establishes identity only; it does not establish animation, skinning, visibility, runtime parity, performance or visual acceptance.
+The coordinator remeasured **89 distinct native files / 91 native bindings** against the current seven manifests. All 91 output-hash comparisons matched. Another nine bindings are composed environment recipes, not standalone GLBs. All **100 unique bindings remain blocked**. Matching bytes establishes identity only; it does not establish animation, skinning, visibility, runtime parity, performance or visual acceptance.
 
 ## Review groups
 
@@ -39,45 +39,45 @@ Hashes below are 12-character display prefixes; the linked JSON contains the ful
 
 | Asset | Candidate manifests | Observed SHA-256 prefix |
 |---|---|---|
-| [actor-aren](../../asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `8a0eece28ad4` |
-| [actor-asha](../../asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb) | bamboo | `e182b5f1b28e` |
-| [actor-bog-lurker](../../asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb) | mistveil | `9544b5bc7611` |
-| [actor-camp-hunter-melee](../../asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb) | bamboo | `2cc2f3c1409d` |
-| [actor-camp-hunter-ranged](../../asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb) | bamboo | `4041ef84aa83` |
-| [actor-council-envoy](../../asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb) | later | `97fb5f8a5a1a` |
-| [actor-ember-boar](../../asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb) | greenwake | `a1334e49db47` |
-| [actor-frost-sap-stalker](../../asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb) | greenwake | `850fa81dd894` |
+| [actor-aren](../../asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `5e0c3b5f843e` |
+| [actor-asha](../../asset-source/generated/actor-asha-runtime-01/actor-asha-companion.glb) | bamboo | `6d6abe449158` |
+| [actor-bog-lurker](../../asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb) | mistveil | `23d50ccb7040` |
+| [actor-camp-hunter-melee](../../asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb) | bamboo | `0280b9fac471` |
+| [actor-camp-hunter-ranged](../../asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb) | bamboo | `652fb2bd389c` |
+| [actor-council-envoy](../../asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb) | later | `21b797cf6b26` |
+| [actor-ember-boar](../../asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb) | greenwake | `44694ec9e198` |
+| [actor-frost-sap-stalker](../../asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb) | greenwake | `a8754840ce9d` |
 | [actor-frostfang-tracker](../../asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb) | moonpine | `807af505c747` |
-| [actor-ghor-mire-maw](../../asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb) | mistveil | `5be953fff1fe` |
-| [actor-grove-blighted-rootling](../../asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb) | grove | `5fe5ab10d67d` |
-| [actor-grove-hollowheart](../../asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb) | grove | `2341f605d6f9` |
-| [actor-grove-rootling](../../asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb) | grove | `ce46b6f7b440` |
-| [actor-howl-scout](../../asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb) | moonpine | `c0707113cef4` |
-| [actor-koro](../../asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb) | bamboo, grove | `00be46c1121e` |
-| [actor-koro-branchbreaker](../../asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb) | bamboo | `9a87004392a1` |
-| [actor-lantern-heron](../../asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb) | mistveil | `2e29c6649a15` |
-| [actor-luma](../../asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb) | later | `376552b99f7f` |
-| [actor-marek](../../asset-source/generated/actor-marek-runtime-01/actor-marek-animated.glb) | bamboo | `df001308c0ce` |
-| [actor-mire-viper](../../asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb) | canopy | `d72669df7967` |
-| [actor-nursery-cub](../../asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb) | bamboo | `35c71d85bc7b` |
-| [actor-nyra](../../asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb) | later | `6ec519525a22` |
-| [actor-orun](../../asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb) | later | `427c7feff760` |
-| [actor-orun-crowned-beast](../../asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb) | later | `2b148adb2ee1` |
-| [actor-ridge-elder-scout](../../asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb) | later | `7550df808fd9` |
-| [actor-ridge-young-scout](../../asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb) | later | `376552b99f7f` |
+| [actor-ghor-mire-maw](../../asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb) | mistveil | `d950191ec41f` |
+| [actor-grove-blighted-rootling](../../asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb) | grove | `952cab27ed53` |
+| [actor-grove-hollowheart](../../asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb) | grove | `33c647f92f0c` |
+| [actor-grove-rootling](../../asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb) | grove | `1b31d6fb84bd` |
+| [actor-howl-scout](../../asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb) | moonpine | `ca155e520e95` |
+| [actor-koro](../../asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb) | bamboo, grove | `ecabfa4dee27` |
+| [actor-koro-branchbreaker](../../asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb) | bamboo | `551ed622df5a` |
+| [actor-lantern-heron](../../asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb) | mistveil | `2834895a954d` |
+| [actor-luma](../../asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb) | later | `c07563e5a027` |
+| [actor-marek](../../asset-source/generated/actor-marek-runtime-01/actor-marek-animated.glb) | bamboo | `0f0dbd0f500f` |
+| [actor-mire-viper](../../asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb) | canopy | `33c412ced3c9` |
+| [actor-nursery-cub](../../asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb) | bamboo | `ebab423d6f23` |
+| [actor-nyra](../../asset-source/generated/actor-nyra-runtime-01/actor-nyra-companion.glb) | later | `b8bd183a145e` |
+| [actor-orun](../../asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb) | later | `57692ab870be` |
+| [actor-orun-crowned-beast](../../asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb) | later | `e0c491bc32f2` |
+| [actor-ridge-elder-scout](../../asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb) | later | `b5e9cdc82a99` |
+| [actor-ridge-young-scout](../../asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb) | later | `c07563e5a027` |
 | [actor-roost-hornbill](../../asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb) | later | `82abb2b3c61f` |
-| [actor-root-rammer](../../asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb) | greenwake | `e1fefc653dee` |
-| [actor-ruun-chained-howl](../../asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb) | moonpine | `9d12d9e6a188` |
-| [actor-sable](../../asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb) | later | `7550df808fd9` |
-| [actor-sakda-hero](../../asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `8c58c6da39c3` |
-| [actor-solkar](../../asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb) | later | `4988bfd69cfb` |
-| [actor-storm-hornbill](../../asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb) | canopy | `adbc57e73169` |
-| [actor-tali](../../asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb) | bamboo | `35c71d85bc7b` |
-| [actor-thornback-howler](../../asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb) | canopy | `2564325385a4` |
-| [actor-vara](../../asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb) | greenwake, canopy, bamboo, grove, moonpine | `d028b5fe798d` |
+| [actor-root-rammer](../../asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb) | greenwake | `610ea44f952d` |
+| [actor-ruun-chained-howl](../../asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb) | moonpine | `c3638ece7b1e` |
+| [actor-sable](../../asset-source/generated/actor-sable-runtime-01/actor-sable-companion.glb) | later | `cae7c51ecd62` |
+| [actor-sakda-hero](../../asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `b9f57e6fa6d6` |
+| [actor-solkar](../../asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb) | later | `eec7b5cd8f37` |
+| [actor-storm-hornbill](../../asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb) | canopy | `f855207319ab` |
+| [actor-tali](../../asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb) | bamboo | `ebab423d6f23` |
+| [actor-thornback-howler](../../asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb) | canopy | `903522689dd4` |
+| [actor-vara](../../asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb) | greenwake, canopy, bamboo, grove, moonpine | `036b3c562277` |
 | [actor-vesper-hero](../../asset-source/generated/actor-vesper-hero-01/vesper-hero-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `60f43cba4932` |
-| [actor-yara](../../asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/model.glb) | greenwake | `ba99afb35bb4` |
-| [actor-yara-hero](../../asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `b5980b99ca5f` |
+| [actor-yara](../../asset-source/generated/actor-yara-runtime-01/actor-yara.glb) | greenwake | `bd8c0ae132f3` |
+| [actor-yara-hero](../../asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `69f57ecda919` |
 | `blood-bamboo-valley-environment` | bamboo | Composed recipe |
 | `greenwake-environment` | greenwake | Composed recipe |
 | `heartroot-hollow-environment` | later | Composed recipe |
@@ -92,19 +92,19 @@ Hashes below are 12-character display prefixes; the linked JSON contains the ful
 | [prop-buried-wolf-temple](../../asset-source/generated/prop-buried-wolf-temple-runtime-01/prop-buried-wolf-temple.glb) | moonpine | `da4eee96e452` |
 | [prop-canopy-cliff-rock](../../asset-source/generated/prop-canopy-cliff-rock-runtime-01/prop-canopy-cliff-rock.glb) | canopy, bamboo, grove | `947c088b727c` |
 | [prop-canopy-fern-cluster](../../asset-source/generated/prop-canopy-fern-cluster-runtime-01/prop-canopy-fern-cluster.glb) | canopy, bamboo, grove | `e3296cb5527a` |
-| [prop-erya-edge-tree](../../asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb) | greenwake, bamboo, grove | `a6e810a3d10b` |
+| [prop-erya-edge-tree](../../asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb) | greenwake, bamboo, grove | `b853dbbd3ddb` |
 | [prop-greenwake-boulder-cluster](../../asset-source/generated/prop-greenwake-boulder-cluster-runtime-01/prop-greenwake-boulder-cluster.glb) | greenwake, bamboo, grove | `ba9a07310cd7` |
 | [prop-greenwake-bramble-wall](../../asset-source/generated/prop-greenwake-bramble-wall-runtime-01/prop-greenwake-bramble-wall.glb) | greenwake, bamboo | `078858fc2aee` |
-| [prop-greenwake-houses](../../asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb) | greenwake | `8acd81831f98` |
+| [prop-greenwake-houses](../../asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb) | greenwake | `8fa4ef9ac707` |
 | [prop-greenwake-root-gate](../../asset-source/generated/prop-greenwake-root-gate-runtime-01/prop-greenwake-root-gate.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `c6574067dd00` |
 | [prop-greenwake-rope-bridge](../../asset-source/generated/prop-greenwake-rope-bridge-decimate-01/tripo-out/prop-greenwake-rope-bridge-decim-600bf410/model.glb) | greenwake, bamboo | `1a2b2d973050` |
 | [prop-grove-platform](../../asset-source/generated/prop-grove-platform-runtime-01/prop-grove-platform.glb) | grove | `b969c577f56c` |
-| [prop-heartroot-focus-staff](../../asset-source/generated/prop-heartroot-focus-staff-01/model.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `16db5e10621b` |
+| [prop-heartroot-focus-staff](../../asset-source/generated/prop-yara-c-staff-01/model.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `b0b8c9e289af` |
 | [prop-heartroot-fragment-stone](../../asset-source/generated/prop-heartroot-fragment-stone-runtime-01/prop-heartroot-fragment-stone.glb) | later | `1d8ff4a75c58` |
 | [prop-heartroot-root-column](../../asset-source/generated/prop-heartroot-root-column-runtime-01/prop-heartroot-root-column.glb) | later | `99de3cbd5798` |
 | [prop-heartroot-trunk](../../asset-source/generated/prop-heartroot-trunk-runtime-01/prop-heartroot-trunk.glb) | grove | `6c9361728819` |
 | [prop-hollow-cavern-rock](../../asset-source/generated/prop-hollow-cavern-rock-runtime-01/prop-hollow-cavern-rock.glb) | later | `a75f5a0d3fe7` |
-| [prop-hunter-cage](../../asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb) | greenwake, bamboo | `9d0dbab9656d` |
+| [prop-hunter-cage](../../asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb) | greenwake, bamboo | `9ce908d106e1` |
 | [prop-hunter-camp](../../asset-source/generated/prop-hunter-camp-runtime-01/prop-hunter-camp.glb) | bamboo | `43592898cc2a` |
 | [prop-hunter-extraction-rig](../../asset-source/generated/prop-hunter-extraction-rig-runtime-01/prop-hunter-extraction-rig.glb) | bamboo, mistveil | `3e7edc383ad9` |
 | [prop-map-table](../../asset-source/generated/prop-map-table-runtime-01/prop-map-table.glb) | later | `924e1281730d` |
@@ -117,7 +117,7 @@ Hashes below are 12-character display prefixes; the linked JSON contains the ful
 | [prop-plains-stone-arch](../../asset-source/generated/prop-plains-stone-arch-runtime-01/prop-plains-stone-arch.glb) | later | `a36819ac2d46` |
 | [prop-rainforest-canopy-tree](../../asset-source/generated/prop-rainforest-canopy-tree-runtime-01/prop-rainforest-canopy-tree.glb) | canopy, bamboo | `db9347f79497` |
 | [prop-refuge-shelter](../../asset-source/generated/prop-refuge-shelter-runtime-01/prop-refuge-shelter.glb) | grove | `2758244c4cbe` |
-| [prop-root-arch](../../asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/model.glb) | greenwake, bamboo | `44217e698b86` |
+| [prop-root-arch](../../asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb) | greenwake, bamboo | `e12209f48c7d` |
 | [prop-root-cavern-mouth](../../asset-source/generated/prop-root-cavern-mouth-runtime-01/prop-root-cavern-mouth.glb) | bamboo, grove, mistveil | `57fd3a6f8ded` |
 | [prop-root-crown-altar](../../asset-source/generated/prop-root-crown-altar-runtime-01/prop-root-crown-altar.glb) | later | `bbabd257d859` |
 | [prop-root-tether-anchor](../../asset-source/generated/prop-root-tether-anchor-runtime-01/prop-root-tether-anchor.glb) | later | `74aee811ab2e` |
@@ -134,6 +134,7 @@ Hashes below are 12-character display prefixes; the linked JSON contains the ful
 | [prop-warden-waystone](../../asset-source/generated/prop-warden-waystone-runtime-01/prop-warden-waystone.glb) | greenwake, canopy, bamboo, grove, moonpine, mistveil | `831be2fcdf64` |
 | [prop-water-allotment-gate](../../asset-source/generated/prop-water-allotment-gate-runtime-01/prop-water-allotment-gate.glb) | later | `95438d07e9f1` |
 | [prop-water-basin](../../asset-source/generated/prop-water-basin-runtime-01/prop-water-basin.glb) | grove | `b8fa40523474` |
+| [prop-wooden-crate-stack](../../asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb) | greenwake | `adff6b71619d` |
 | `refuge-environment` | later | Composed recipe |
 | `sunmane-expanse-environment` | later | Composed recipe |
 | `the-grove-environment` | grove | Composed recipe |

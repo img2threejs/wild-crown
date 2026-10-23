@@ -1,0 +1,332 @@
+{
+  "bundle": "http://127.0.0.1:5214/assets/main-_RbZxzXD.js",
+  "observed": {
+    "pointerAndEnterRemainOnSelector": {
+      "screen": "training-select",
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "feedback-allmaps-greenwake-mvjjtb64",
+      "heroId": "sakda",
+      "worldReady": true,
+      "loading": {
+        "active": false,
+        "label": "",
+        "progress": null
+      },
+      "error": null,
+      "tutorial": false,
+      "entryShot": false,
+      "trainingReturn": false,
+      "training": {
+        "active": false,
+        "available": true,
+        "reason": null,
+        "maps": [
+          {
+            "id": "greenwake",
+            "name": "Greenwake",
+            "regionId": "greenwake",
+            "unlocked": true,
+            "reason": null,
+            "thumbnailUrl": "/asset-source/ui/maps/greenwake.jpg"
+          },
+          {
+            "id": "canopy",
+            "name": "Whispering Canopy",
+            "regionId": "whispering-canopy",
+            "unlocked": false,
+            "reason": "Finish the Whispering Canopy story to unlock Whispering Canopy practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/whispering-canopy.jpg"
+          },
+          {
+            "id": "grove",
+            "name": "The Grove",
+            "regionId": "the-grove",
+            "unlocked": false,
+            "reason": "Finish the The Grove story to unlock The Grove practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/the-grove.jpg"
+          },
+          {
+            "id": "moonpine",
+            "name": "Moonpine Ridge",
+            "regionId": "moonpine-ridge",
+            "unlocked": false,
+            "reason": "Finish the Moonpine Ridge story to unlock Moonpine Ridge practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/moonpine-ridge.jpg"
+          },
+          {
+            "id": "mistveil",
+            "name": "Mistveil Basin",
+            "regionId": "mistveil-basin",
+            "unlocked": false,
+            "reason": "Finish the Mistveil Basin story to unlock Mistveil Basin practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/mistveil-basin.jpg"
+          }
+        ]
+      },
+      "party": {},
+      "companions": {
+        "vara": {
+          "id": "vara",
+          "recruited": true,
+          "bondLevel": 20,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [
+            "mark"
+          ],
+          "storyFlags": {}
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "asha": {
+          "id": "asha",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "sable": {
+          "id": "sable",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "nyra": {
+          "id": "nyra",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "solkar": {
+          "id": "solkar",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        }
+      },
+      "resources": {
+        "heroId": "sakda",
+        "vitality": 115,
+        "maxVitality": 115,
+        "instinct": 0,
+        "mana": 92,
+        "maxMana": 100
+      },
+      "position": {
+        "x": 63,
+        "y": 0,
+        "z": 46
+      },
+      "outcome": null,
+      "stageCompleted": false,
+      "actions": [
+        {
+          "action": "start-training",
+          "map": "greenwake",
+          "disabled": false,
+          "label": "Start practice"
+        },
+        {
+          "action": "close-screen",
+          "disabled": false,
+          "label": "Cancel"
+        }
+      ]
+    },
+    "controllerCloseReturnedToPause": {
+      "screen": "pause",
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "feedback-allmaps-greenwake-mvjjtb64",
+      "heroId": "sakda",
+      "worldReady": true,
+      "loading": {
+        "active": false,
+        "label": "",
+        "progress": null
+      },
+      "error": null,
+      "tutorial": false,
+      "entryShot": false,
+      "trainingReturn": false,
+      "training": {
+        "active": false,
+        "available": true,
+        "reason": null,
+        "maps": [
+          {
+            "id": "greenwake",
+            "name": "Greenwake",
+            "regionId": "greenwake",
+            "unlocked": true,
+            "reason": null,
+            "thumbnailUrl": "/asset-source/ui/maps/greenwake.jpg"
+          },
+          {
+            "id": "canopy",
+            "name": "Whispering Canopy",
+            "regionId": "whispering-canopy",
+            "unlocked": false,
+            "reason": "Finish the Whispering Canopy story to unlock Whispering Canopy practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/whispering-canopy.jpg"
+          },
+          {
+            "id": "grove",
+            "name": "The Grove",
+            "regionId": "the-grove",
+            "unlocked": false,
+            "reason": "Finish the The Grove story to unlock The Grove practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/the-grove.jpg"
+          },
+          {
+            "id": "moonpine",
+            "name": "Moonpine Ridge",
+            "regionId": "moonpine-ridge",
+            "unlocked": false,
+            "reason": "Finish the Moonpine Ridge story to unlock Moonpine Ridge practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/moonpine-ridge.jpg"
+          },
+          {
+            "id": "mistveil",
+            "name": "Mistveil Basin",
+            "regionId": "mistveil-basin",
+            "unlocked": false,
+            "reason": "Finish the Mistveil Basin story to unlock Mistveil Basin practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/mistveil-basin.jpg"
+          }
+        ]
+      },
+      "party": {},
+      "companions": {
+        "vara": {
+          "id": "vara",
+          "recruited": true,
+          "bondLevel": 20,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [
+            "mark"
+          ],
+          "storyFlags": {}
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "asha": {
+          "id": "asha",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "sable": {
+          "id": "sable",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "nyra": {
+          "id": "nyra",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "solkar": {
+          "id": "solkar",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        }
+      },
+      "resources": {
+        "heroId": "sakda",
+        "vitality": 115,
+        "maxVitality": 115,
+        "instinct": 0,
+        "mana": 92,
+        "maxMana": 100
+      },
+      "position": {
+        "x": 63,
+        "y": 0,
+        "z": 46
+      },
+      "outcome": null,
+      "stageCompleted": false,
+      "actions": [
+        {
+          "action": "resume",
+          "disabled": false,
+          "label": "Resume"
+        },
+        {
+          "action": "save-screen",
+          "disabled": false,
+          "label": "Save Game"
+        },
+        {
+          "action": "load-screen",
+          "disabled": false,
+          "label": "Load Game"
+        },
+        {
+          "action": "title-screen",
+          "disabled": false,
+          "label": "Return to Title"
+        },
+        {
+          "action": "open-training",
+          "disabled": false,
+          "label": "Training Grounds"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Hero detailsExpanded"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Objective detailsExpanded"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Skill detailsCollapsed"
+        }
+      ]
+    }
+  },
+  "cause": "Training selector emits data-ui-action=close-screen, while GameUI.actionFor supports the existing close action. Real pointer/Enter did nothing; the real controller close-screen action popped history correctly.",
+  "fix": "Use existing close button convention, without a second alias or controller change."
+}

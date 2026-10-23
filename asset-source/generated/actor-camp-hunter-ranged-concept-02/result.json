@@ -1,0 +1,14 @@
+{
+  "task_id": "2f124ff3-04e2-4d7c-80d8-959ec63f0264",
+  "type": "text_to_image",
+  "status": "success",
+  "credits_consumed": 15,
+  "output_dir": "asset-source/generated/actor-camp-hunter-ranged-concept-02/tripo-out/actor-camp-hunter-ranged-concept-2-2f124ff3",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ],
+  "preview": "asset-source/generated/actor-camp-hunter-ranged-concept-02/tripo-out/actor-camp-hunter-ranged-concept-2-2f124ff3/preview.png",
+  "started": "2026-10-14T08:47:16.996Z",
+  "finished": "2026-10-14T08:48:55.341Z"
+}

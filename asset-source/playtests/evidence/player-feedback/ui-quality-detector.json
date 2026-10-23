@@ -1,0 +1,14 @@
+{
+  "command": "impeccable detect src/ui/GameUI.ts src/ui/game-ui.css src/ui/map-select.css src/ui/chapterPanels.ts src/ui/hubPanels.ts src/ui/chapter-ui.css src/ui/ui-motion.css",
+  "exitCode": 2,
+  "findings": [
+    {
+      "rule": "border-accent-on-rounded",
+      "path": "src/ui/game-ui.css",
+      "line": 276,
+      "observed": ".wc-legend i: width22px;height0;border-top3px;border-radius2px",
+      "decision": "False positive: a zero-height route legend line swatch, not a rounded card. Preserve approved map semantics; no suppression or source change."
+    }
+  ],
+  "otherFindings": 0
+}

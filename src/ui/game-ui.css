@@ -52,6 +52,9 @@
   --wc-control-hover: rgba(239, 232, 214, .12);
   --wc-ok: var(--wc-wood-bright);
   --wc-warn: var(--wc-danger-bright);
+  /* Contextual focus: keyboard/gamepad focus is a warm gold rim, never the magenta route colour. */
+  --wc-focus: #e6c069;
+  --wc-focus-ink: #171b14;
   color-scheme: dark;
 }
 .wc-sheet, .wc-map-choice {
@@ -66,6 +69,9 @@
   --wc-control-hover: rgba(168, 23, 79, .08);
   --wc-ok: var(--wc-wood);
   --wc-warn: var(--wc-danger);
+  /* On paper the focus rim is forest ink with a light halo, so it stays legible on unbleached sheets. */
+  --wc-focus: #2c3a24;
+  --wc-focus-ink: #f4ead4;
   color-scheme: light;
   color: var(--wc-fg);
   background: var(--wc-paper);
@@ -90,7 +96,11 @@
 .wc-ui ::-webkit-scrollbar { width: 8px; height: 8px; }
 .wc-ui ::-webkit-scrollbar-thumb { background: var(--wc-rule-strong); border-radius: 4px; border: 2px solid transparent; background-clip: content-box; }
 .wc-ui ::-webkit-scrollbar-track { background: transparent; }
-.wc-ui :focus-visible { outline: 2px solid var(--wc-accent); outline-offset: 2px; }
+/* Keyboard/gamepad focus: a warm gold (dark surfaces) or forest ink (paper) rim. Never the route magenta, and never a
+   replacement of the control's own selected/pressed/error/disabled drawing — the rim only frames the control. */
+.wc-ui :focus-visible { outline: 2px solid var(--wc-focus); outline-offset: 2px; }
+.wc-ui[data-input-modality="gamepad"] :focus { outline: 2px solid var(--wc-focus); outline-offset: 2px; }
+.wc-ui[data-input-modality="pointer"] :focus-visible { outline: none; }
 .wc-screen { position: absolute; inset: 0; pointer-events: auto; }
 .wc-screen--game { pointer-events: none; }
 /* Two persistent layers host the screens: the front layer shows the current screen, the other plays the outgoing screen's exit. */
@@ -137,7 +147,10 @@
   font: 600 14px/1.25 var(--wc-sans); letter-spacing: .02em;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
-.wc-action:hover:not(:disabled), .wc-action[aria-current="true"] { background: var(--wc-control-hover); border-color: var(--wc-accent); }
+/* Pointer hover is a neutral lift: the magenta route colour is reserved for "this is live / selected", never for
+   "the pointer happens to be here". Selected and current states keep the accent. */
+.wc-action:hover:not(:disabled) { background: var(--wc-control-hover); border-color: var(--wc-rule-strong); }
+.wc-action[aria-current="true"] { background: var(--wc-control-hover); border-color: var(--wc-accent); }
 .wc-action[aria-pressed="true"] { color: var(--wc-accent); border-color: currentColor; background: var(--wc-control-hover); }
 .wc-action:active:not(:disabled) { transform: translateY(1px); }
 .wc-action--primary { color: var(--wc-paper); background: var(--wc-route); border-color: var(--wc-route); }
@@ -168,7 +181,7 @@
   font: 600 14px var(--wc-display); letter-spacing: .14em; text-transform: uppercase;
 }
 .wc-tabs .wc-action::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 3px; background: var(--wc-route-bright); transform: scaleX(0); transition: transform 200ms var(--wc-ease-out, ease); }
-.wc-tabs .wc-action:hover:not(:disabled) { color: var(--wc-frame-text); background: none; text-decoration: none; }
+.wc-tabs .wc-action:hover:not(:disabled) { color: var(--wc-frame-text); background: none; text-decoration: none; border-color: var(--wc-frame-line); }
 .wc-tabs .wc-action[aria-current="page"] { color: var(--wc-frame-text); }
 .wc-tabs .wc-action[aria-current="page"]::after { transform: none; }
 .wc-tabs .wc-action:focus-visible { outline-offset: -4px; }
@@ -272,8 +285,11 @@
   color: var(--wc-frame-text); background: var(--wc-frame-glass); border: 1px solid var(--wc-frame-line); border-radius: 50%; box-shadow: var(--wc-lift);
 }
 .wc-region-chip .wc-icon { width: 17px; height: 17px; }
-.wc-region-chip:not(:disabled):hover { border-color: var(--wc-route-bright); }
+.wc-region-chip:not(:disabled):hover { border-color: var(--wc-frame-text); }
 .wc-region-chip:disabled { color: var(--wc-frame-faint); cursor: default; }
+/* A locked region stays focusable so it can be inspected and explains itself; it never dispatches travel. */
+.wc-region-chip[aria-disabled="true"] { color: var(--wc-frame-faint); cursor: help; }
+.wc-region-chip[aria-disabled="true"]:hover { border-color: var(--wc-frame-text); }
 .wc-region-chip[data-here="true"] { color: var(--wc-paper); background: var(--wc-route); border-color: var(--wc-route); }
 /* Positions apply to the map's region chips only: `data-region` is also the scene id on loading scenes, intros and the establishing-shot overlay. */
 .wc-region-chip[data-region=whispering-canopy] { left: 6%; top: 40%; }
@@ -419,7 +435,20 @@
 .wc-hud { position: absolute; inset: 0; }
 .wc-ui--feedback { z-index: 11; }
 .wc-hud .wc-panel { padding: 10px 12px; }
+/* Three independently collapsible HUD groups. Each toggle is a real button with its own label and pointer events,
+   so it never clicks through into an attack. */
+.wc-hud__toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 2px 8px; pointer-events: auto;
+  color: var(--wc-frame-soft); background: transparent; border: 1px solid var(--wc-frame-line); border-radius: 2px;
+  font: 600 10px/1.2 var(--wc-sans); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+}
+.wc-hud__toggle:hover { color: var(--wc-frame-text); border-color: var(--wc-frame-text); }
+.wc-hud__toggle-mark { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translate(-1px, -1px); }
+.wc-hud__group[data-expanded="false"] .wc-hud__toggle-mark { transform: rotate(-45deg) translate(-1px, 1px); }
+.wc-hud__body[hidden] { display: none; }
 .wc-vitals { position: absolute; top: 2.1%; left: 1.15%; width: min(24vw, 230px); }
+.wc-vitals__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.wc-vitals__vitality { margin-top: 6px; }
 .wc-vitals__identity { display: flex; align-items: center; gap: 9px; }
 .wc-vitals__name { font: 600 19px/1 var(--wc-display); letter-spacing: .14em; text-transform: uppercase; }
 .wc-vitals__title { margin-top: 3px; color: var(--wc-fg-faint); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
@@ -437,7 +466,12 @@
 .wc-sheet .wc-meter__track { background: rgba(30, 35, 27, .1); box-shadow: inset 0 0 0 1px var(--wc-rule-strong); }
 .wc-mana-value { margin: 3px 0 0 60px; color: var(--wc-water-bright); font-size: 10px; font-variant-numeric: tabular-nums; }
 .wc-mana-value span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.wc-skill-bar { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; gap: 4px; width: min(680px, 70vw); }
+.wc-skill-bar { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; gap: 4px; width: min(680px, 70vw); align-items: stretch; }
+.wc-skill-bar__summary { display: flex; align-items: center; padding: 0 10px; color: var(--wc-frame-soft); background: var(--wc-frame-glass); border: 1px solid var(--wc-frame-line); border-radius: 2px; font: 600 11px/1.2 var(--wc-sans); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.wc-skill-bar__summary[hidden] { display: none; }
+.wc-skill-bar__body { display: flex; gap: 4px; flex: 1; min-width: 0; }
+.wc-skill-bar__body[hidden] { display: none; }
+.wc-skill-bar > .wc-hud__toggle { align-self: stretch; }
 .wc-skill { position: relative; flex: 1; min-width: 0; padding: 6px 7px; color: var(--wc-frame-faint); background: var(--wc-frame-glass); border: 1px solid var(--wc-frame-line); border-radius: 2px; backdrop-filter: blur(6px); }
 .wc-skill > div { display: flex; align-items: center; justify-content: space-between; gap: 3px; font-size: 9px; letter-spacing: .04em; }
 .wc-skill kbd { font-size: 9px; }
@@ -636,7 +670,8 @@
 .wc-hero-stats tr + tr { border-top: 1px solid var(--wc-rule); }
 .wc-hero-skill-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .wc-hero-skill { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; padding: 11px 12px; color: var(--wc-ink-soft); text-align: left; cursor: pointer; background: rgba(30, 35, 27, .03); border: 1px solid var(--wc-rule); border-radius: 2px; transition: border-color 160ms ease, background-color 160ms ease; }
-.wc-hero-skill:hover, .wc-hero-skill[aria-pressed="true"] { background: rgba(168, 23, 79, .06); border-color: var(--wc-route); }
+.wc-hero-skill:hover { background: rgba(30, 35, 27, .05); border-color: var(--wc-rule-strong); }
+.wc-hero-skill[aria-pressed="true"] { background: rgba(168, 23, 79, .06); border-color: var(--wc-route); }
 .wc-hero-skill kbd { grid-row: span 3; align-self: start; min-width: 46px; color: var(--wc-route); }
 .wc-hero-skill__name { color: var(--wc-ink); font: 600 17px/1.1 var(--wc-display); letter-spacing: .06em; text-transform: uppercase; }
 .wc-hero-skill__cost { color: var(--wc-ink-faint); font-size: 11px; letter-spacing: .06em; white-space: nowrap; }
@@ -664,7 +699,7 @@
 }
 @media (max-width: 1100px) {
   .wc-asset-playtest-banner { top: 6px; max-width: calc(100% - 16px); padding: 5px 8px; font-size: 9px; line-height: 1.25; }
-  .wc-vitals, .wc-encounter { top: 46px; }
+  .wc-app:has(> .wc-asset-playtest-banner) :is(.wc-vitals, .wc-objective, .wc-encounter) { top: 46px; }
   .wc-survey, .wc-journal { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; overflow-y: auto; }
   .wc-menu__body > .wc-survey__map { min-height: 62vh; }
   .wc-menu__body > .wc-sheet { overflow: visible; }
@@ -685,10 +720,16 @@
   .wc-map-footer { padding: 10px 12px; font-size: 11px; }
   .wc-map-footer span:nth-child(2) { display: none; }
   .wc-menu__body > .wc-survey__map { min-height: 54vh; }
-  .wc-vitals { width: min(44vw, 300px); top: 44px; left: 2%; }
+  .wc-vitals { width: min(44vw, 300px); left: 2%; }
   .wc-boss { left: auto; right: 2%; transform: none; width: min(48vw, 330px); top: 16%; }
-  .wc-objective { top: 44px; right: 2%; width: min(43vw, 280px); }
-  .wc-encounter { top: 44px; width: 45vw; padding: 8px; }
+  .wc-objective { right: 2%; width: min(43vw, 280px); }
+  .wc-encounter { width: 45vw; padding: 8px; }
+  .wc-app:has(> .wc-asset-playtest-banner) :is(.wc-vitals, .wc-objective, .wc-encounter) { top: 44px; }
+  .wc-vitals__head { gap: 4px; }
+  .wc-vitals__identity { gap: 4px; min-width: 0; }
+  .wc-vitals__name { font-size: 15px; }
+  .wc-vitals .wc-hero-crest { width: 24px; height: 24px; }
+  .wc-vitals .wc-hud__toggle-label, .wc-objective .wc-hud__toggle-label { display: none; }
   .wc-encounter h2 { font-size: 16px; }
   .wc-party-hud { right: 2%; bottom: 140px; gap: 4px; }
   .wc-party-hud .wc-portrait { width: 32px; height: 32px; }

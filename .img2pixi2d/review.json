@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "pass": "user-authorized-pointerup-teardown-repair",
+  "reviewer": "Main coordinator: source/runtime and native image/video inspection",
+  "decision": "stop",
+  "accepted": true,
+  "reason": "Eight-region hover zoom and closed borders complete; no further corrections.",
+  "referenceHash": "3c3382ec63d0a133e7b64fa8fdfa5e25b69f1af0ebb573d3e03f89492091a085",
+  "specHash": "8ad2c1b1f8d0e7ab25ace1b36cef2da504d1ffd2e27946e490d3cf14e71becd9",
+  "sourceHash": "37e17bdead6312fe0fd55e6cc6a435dd2564f6581897d0661dd1eaa917e61dc7",
+  "assetHash": "50ffb914526386464969b7c60fdeda26be32a257f050a905a9030586a9170b7c",
+  "profileHash": "63d7144ff26e5d36d9f498f8078ce1662adf4e0090c5f5d568e5c7c931d8f2ac",
+  "bindings": {
+    "canonicalJSON": "Sorted object keys, compact UTF-8 JSON, finite numbers only. Spec excludes review bookkeeping.",
+    "source": {
+      "src/ui/eryaWorldMap.ts": "220632e4c6edd85fccde4982a097d72dc593811fc88a043523c4fe81df970922",
+      "src/ui/worldMapSelect.ts": "ff85310e96d156252b4310d081a586232cf58392cd6a48a4e3fba8a6d7987c07",
+      "src/ui/map-select.css": "dfce748b9ecbad6848af8da7730747dfeb1eefc9a8ece379503e6b8c2d67f8bb",
+      "src/ui/GameUI.ts": "fe10af7021e876c806d4057f7a553595331a156822dd513b707d1c9bb29d63ae",
+      "src/content/worldMapRegions.ts": "88e37aa32f08167de4cb328ade01f2b0eef017fd17510d1bb5e6b38cafb57dc9",
+      "package.json": "0d93049a490f55ac19a6a9743f5367ecc9b17552085d32dd970a4fb8e6383e4a",
+      "package-lock.json": "258d8366de6fc2de5478cbf7c2d08ea511b9958e7ab35ba21f86c4742f70e096"
+    },
+    "assets": {
+      "public/ui/world-map-game.webp": "ae6842605dc1c8c72cb6ce0a3befd1b98d98da9cf890106a371f71cab598c72e",
+      "asset-source/ui/maps/greenwake.jpg": "1002f441e8267beed69708b0a90a78687c0cfba5df072aa8bbe64586ddd9c7c8",
+      "asset-source/ui/maps/whispering-canopy.jpg": "c8aea8bc37aff2d5ef1f2bd4c9897e987f7d60f35bef3fd7655616013b155005",
+      "asset-source/ui/maps/the-grove.jpg": "76536ca142539e1fa11817cd33c20b0d9a7652ff07c8fb6e42df28d3d7d31816",
+      "asset-source/ui/maps/moonpine-ridge.jpg": "9c8edc83aaf610bd82f10fe5880c0fd9268bd31d7a05a053d7b072b8b6b62ded",
+      "asset-source/ui/maps/mistveil-basin.jpg": "c519e51b691a2172d5e1a34ded655303d5cc8dc207388d16c02eba4d11a95add",
+      "node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2": "b0a8ad37ac45f5fb22ced461576db72e44e295107aad7a9c8a7a4bad728fd03b",
+      "node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff2": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+      "node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2": "4b52ddd4836b592df0e4832b8286956883cdc651b015126bdd18f184b7f90cc3",
+      "node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff2": "2d797dd8b35dcb3413e1af9d7052b3f4f8c341a147cdcb01f4f06af80db53289",
+      "node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2": "215a93c696f442034a46fbb382958f753fda60e30490683aeea6b235fcbb2b66",
+      "node_modules/@fontsource/alegreya/files/alegreya-latin-400-italic.woff2": "9be8976a11463895bb4d590973a684c1c96616b7e40a03333151efa8c7210241"
+    },
+    "profile": {
+      "desktop": {
+        "width": 1440,
+        "height": 1000,
+        "dpr": 1,
+        "visibility": "visible",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "systemReduced": false,
+        "applicationStatic": false,
+        "loadedFonts": 6,
+        "fontErrors": 0
+      },
+      "portrait": {
+        "width": 375,
+        "height": 812,
+        "visibility": "visible"
+      },
+      "native": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "devicePixelRatio": 1,
+        "rendererType": 1,
+        "resolution": 1,
+        "fonts": [
+          {
+            "family": "Barlow",
+            "weight": "400",
+            "style": "normal"
+          },
+          {
+            "family": "Barlow",
+            "weight": "500",
+            "style": "normal"
+          },
+          {
+            "family": "Barlow",
+            "weight": "600",
+            "style": "normal"
+          },
+          {
+            "family": "Barlow",
+            "weight": "700",
+            "style": "normal"
+          },
+          {
+            "family": "Barlow Condensed",
+            "weight": "600",
+            "style": "normal"
+          },
+          {
+            "family": "Alegreya",
+            "weight": "400",
+            "style": "italic"
+          }
+        ]
+      },
+      "artboard": {
+        "width": 1536,
+        "height": 960
+      },
+      "motion": {
+        "focalMoment": "Hover or focus a geographic region: a closed warm survey border identifies its full footprint while the intact map eases toward that region.",
+        "zoom": 1.1,
+        "durationMs": 300,
+        "easing": "quartic ease-out",
+        "pivot": "Authoritative region centre, constrained to keep its outline inside the viewport and prevent uncovered canvas.",
+        "reset": "Pointer leave with no focused region returns the common camera to scale1. The last inspected info panel remains readable. Switching regions starts from the current transform; zoom never compounds.",
+        "reducedMotion": "User setting or system preference suppresses camera movement and tweening while retaining the border and inspection feedback.",
+        "idle": "No continuous effect loop. Stop the host ticker when the bounded transition settles or the document is hidden."
+      },
+      "input": "CDP native mouse/touch; actual application keyboard and navigator.getGamepads virtual input; no physical-device certification"
+    },
+    "evidence": {
+      "../../companion-rebuilt-review/map-hover/desktop-samples.json": "5cf4eaf89eb8d10e13d8c2bdc9369bd5de0d64b5c37fbd831b132bfce39d9fc4",
+      "../../companion-rebuilt-review/map-hover/native-ownership.json": "c2798c48fa9f3b6f40becc242d5a80afa4d5d1a0f9dabef310fa1b18a08ffde3",
+      "../../companion-rebuilt-review/map-hover/normal-interactions.json": "82c8255fd50bb3d31e464ea7f34b4e6cf24ae6ee75dd1158db34770ad7df13d2",
+      "../../companion-rebuilt-review/map-hover/touch-interactions.json": "6b1b7e783cfe86ec448f1130819555c820b7fc14c4b4dc42e8badc18433ccb3d",
+      "../../companion-rebuilt-review/map-hover/teardown-before.json": "49734fe0cb462753eaab7a5fdc04384f48dc8b9185cbf90b9406e5d994f44a85",
+      "../../companion-rebuilt-review/map-hover/teardown-after.json": "a4e8318e83b8413ce12a47987dcc1e0de9cbf874a6c5195a5cac4cd17cd8791a",
+      "../../companion-rebuilt-review/map-hover/resource-lifecycle.json": "82551c5ce95c607f954d014138c30ef7f2c29c2fad139332730ece3a680cecfc",
+      "../../companion-rebuilt-review/map-hover/final-verification.json": "557d05b6ed3128d95f93324b6c272e10291fc1f558fd7e57602f71977a1063ad",
+      "../../companion-rebuilt-review/map-hover/native-artboard.png": "402a59a03d7c714b0a92a29f89aec387c4c86a2d11d6c7485d1e1e31f509ca55",
+      "../../companion-rebuilt-review/map-hover/ownership-greenwake-moved.png": "ceb235a1bc22b7b17634bafd65b1b2c239aeaace037645b64f9fcec2da737be0",
+      "../../companion-rebuilt-review/map-hover/missing-resource.png": "fce332d23800e48315b90edc31be7173dca1072bc5818007009e9b0199c547ee",
+      "../../companion-rebuilt-review/map-hover/mobile-sunmane-touch.png": "f3e7f4b874eaa21f844af7ec094986ab4abed94f1f5e7c2ef160e4bebaf684b6",
+      "../../companion-rebuilt-review/map-hover/mobile-scrolled-controls.png": "5940a8d2e012f177aca134e1116a8251fca0ae7def733e7e808bcf9f3dd46cd4",
+      "../../companion-rebuilt-review/map-hover/mobile-reduced-motion.png": "38aad7bbd7b7ff6b5f92f71827046c33cf6b5b0c39e272d77f029dd534576c9c",
+      "../../companion-rebuilt-review/map-hover/mobile-application-reduced-motion.png": "77db6b13157072d4729bbc56f291d671e4bcb9dbf87ecbf344d32f43553a1482",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-01.png": "83d2b73cc4169df7fd860ce6bc01836d2e52a8cd98cb2a1fb7d7e5655b3523e5",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-02.png": "125f5ab44afe19e3c9270e2740e05707cb9fd0fa24e470f1056a4a4c8eb58d51",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-03.png": "6749c489b6194c6d844e56f98711c4e384e70a975a16a444559bf01ca18014e7",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-04.png": "2f39ad704768bc5f61927191286d36a6fab11bac2d5fb388cf47c03b225fd82d",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-05.png": "578245f16f735054d8c9a2d05600617524a29f72a99c05955f6ff1dd9a1656c9",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-06.png": "d421af4407a179f6376f557fc3fa9d66f539bb85b82c690b0e573952f437d1cd",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-07.png": "199afbfa2c0a5762cd3c242a6b1daadf774dfeaa28847535e0efe13633fcf3c0",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-08.png": "e2df1d936570f6828a90cceef988acc072396d8d11e1e75b2a42210afe99718b",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-09.png": "ad02c16d5989b4125457401c5285847f61d2f76c6d445bc7aacd818dee088fad",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-10.png": "d21ac052cdea685d81b4e827a3531a1649b5da607e22ec4462f6eea6a9551f2c",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-11.png": "51b7bb3508819a199f73856fb4c074f00f180ef9f5609df9856668b51adac6bd",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-12.png": "d2f5f905dffe1aaf98294605e4dd31d176251191a487c4112cf9ee727e3af4cd",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-13.png": "96eb1729230d749b323ea194fe671e9c404b6f2afbeef52af4b14915fd7992a2",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-14.png": "c36ebf4b31dd8c23cfaa431de3a5253a65267f7a86ae4f82ebccb927340a27dc",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-15.png": "073b34b7cdbb793686e76bc94b94bcdc2dfb2e280113900deffd5984356f94db",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-16.png": "387f78b6ed9763ac1ab45dedd572a5b8a72fe743ee60e362940d3b69d2e8a9f5",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-17.png": "fca0aac7cc0f085389a9c997ddf49057a20588a8285e0d911fa9f52edbdcbf2f",
+      "../../companion-rebuilt-review/map-hover/video-review/sheet-18.png": "6380cc5d84fe9f8e625287829fe08195165260396eeaefc0f6d9cdc05722f097",
+      "../../companion-rebuilt-review/map-hover/native-comparison/metrics.ea28245aaa3dba80a76418d63364418a8fbe69eca302d242cbdbcc96de841181.json": "d1981067b3d54cf4f73ddbe617bc1a1d1acc3723c0cd3635c461245c73d66a17",
+      "../../companion-rebuilt-review/map-hover/native-comparison/northern-lettering/metrics.2ac7cd0b9fbe07b558ebeea9d867f7d97cbc88c519c572663799b18cc52a1d1c.json": "e379ce5856c3bb9d3139ff5939d7de78b4c5ff10c2997795840f8efd5de45714",
+      "../../companion-rebuilt-review/map-hover/native-comparison/central-heartroot/metrics.ae06bbfe5b2a579b6247159fd1530ef4c4ea5feb5e83ad9f73b10fdc756b199f.json": "6fa71ede1ff84da661fb29e3fa7f6bdd1aede9cc1e4add2493d127360165bacc",
+      "../../companion-rebuilt-review/map-hover/native-comparison/underground/metrics.66b90ec19f280ed3ca14611a33bb9cfb3f0241dccdb4738530ac264adf092505.json": "7d46f3d5516286447a704c72c9ebd3fd34ec0ac24f73355e7fc1034c8e08bc73",
+      "../../companion-rebuilt-review/14-ban-do-hover.mp4": "502a30f13d7015d99f101153078a0c6b24b9a6b4f8d0260f5190b4ba2b4f00bc"
+    },
+    "evidenceBase": "Repository root"
+  },
+  "history": {
+    "originalCorrectionLimit": 6,
+    "additionalRepair": {
+      "authorization": "User selected “Sửa tiếp lỗi teardown”.",
+      "count": 1,
+      "scope": "Defer scene/Application destruction until native Pixi pointerup returns."
+    },
+    "preservedEvidence": [
+      "../../companion-rebuilt-review/map-hover/pass-1/",
+      "../../companion-rebuilt-review/map-hover/pass-2/",
+      "../../companion-rebuilt-review/map-hover/pass-3/",
+      "../../companion-rebuilt-review/map-hover/pre-teardown-repair/",
+      "../../companion-rebuilt-review/map-hover/teardown-before.json"
+    ],
+    "withdrawn": "Pre-repair native selection evidence is not final acceptance. Four native entries, movie, ownership, gestures, motion preferences, lifecycle and resource-fault observations were refreshed."
+  },
+  "assessments": {
+    "artwork": "Native 1536×960 backdrop; all eight independently moved/hidden overlay owners reset exactly without changing the painting. Final backdrop byte hash matches the compared render. Northern lettering, central tree/village/water and underground crops inspected.",
+    "borders": "Eight closed Graphics borders and matching geographic Polygon hit areas; full inspected contour remains in frame, layout is stable and zoom does not compound.",
+    "motion": "All 274 decoded video frames across 18 contact sheets reviewed, including intermediate motion, eight extremes and leave/reset. 24 interrupted switches and actual hidden-page suspension/recovery exercised.",
+    "input": "Eight phone keyboard extrema; application virtual-gamepad polling; native touch hold, scroll without selection and pointercancel recovery. Four native touch/mouse phone/desktop entries each dispatch one selection and dispose cleanly.",
+    "resources": "Actual worker-held late load cannot attach a canvas after unmount. Missing image shows unobscured status at actual 375×812, preserves both chapter gates and recovers. Original fetch restored; final zero live map apps/canvases.",
+    "typography": "Six actual packaged font faces loaded with zero font errors. Original map lettering remains in the atomic painting.",
+    "verification": {
+      "command": "env PATH=\"/Users/hoainho/.nvm/versions/node/v24.22.0/bin:$PATH\" npm run build && bun test tests/ui/worldMapSelect.test.ts tests/app/AssetPlaytests.test.ts tests/app/PlaytestProgress.test.ts",
+      "exitCode": 0,
+      "productionBuild": true,
+      "typecheck": true,
+      "tests": {
+        "passed": 28,
+        "failed": 0,
+        "files": 3,
+        "expectCalls": 1193
+      },
+      "wallSeconds": 12.61,
+      "rawOutput": "artifact://20221",
+      "warning": "Vite reports chunks larger than 500 kB; no bundle-size claim.",
+      "runtime": "resource-lifecycle.json; normal-interactions.json; touch-interactions.json; teardown-after.json"
+    }
+  },
+  "defects": [],
+  "acceptedApproximations": [
+    "Interior borders on the continuous painting are inferred gameplay partitions, not artist-authored mattes.",
+    "Only overlay nodes move independently; the painting zooms as one intact common scene.",
+    "Virtual input and emulated viewports do not certify physical phone/controller hardware or other browsers."
+  ],
+  "observations": [
+    "Normal navigation recorded an aborted title.ogg request; no uncaught page errors after repair.",
+    "Deliberate missing-image injection records expected request failures and the handled renderer error.",
+    "Vite bundle-size warning remains; no full-game readiness or performance claim."
+  ],
+  "usage": {
+    "mainTokens": null,
+    "workerTokens": null,
+    "note": "Counters unavailable; no new workers dispatched for closure."
+  }
+}

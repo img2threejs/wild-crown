@@ -1,0 +1,2708 @@
+{
+  "scenario": "wild-crown-hud-native",
+  "ranAt": "2026-10-22T12:09:11.615Z",
+  "simulatedGamepad": true,
+  "physicalGamepadQualified": false,
+  "heroObserved": "aren",
+  "steps": [
+    {
+      "name": "preflight",
+      "at": "2026-10-22T12:09:11.678Z",
+      "ok": true,
+      "reason": null,
+      "appScreen": "game",
+      "frontScreen": "game",
+      "scopeSelector": ".wc-ui[data-feedback-primary=\"true\"]",
+      "campaign": {
+        "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84",
+        "segmentId": "prologue",
+        "chapter": 0,
+        "heroId": "aren",
+        "saveScope": "candidate-chapters",
+        "assetPolicy": "candidate",
+        "resumeCheckpointId": "prologue-run-entry"
+      },
+      "enginePlayer": {
+        "heroId": "aren",
+        "vitality": 120,
+        "maxVitality": 120,
+        "mana": 100,
+        "maxMana": 100,
+        "instinct": 0
+      },
+      "engineSkills": [
+        {
+          "id": "dive",
+          "label": "Dive",
+          "binding": "dodge",
+          "manaCost": 25,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "jump",
+          "label": "Jump",
+          "binding": "jump",
+          "manaCost": 8,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "light",
+          "label": "Warden Blade",
+          "binding": "light",
+          "manaCost": 0,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "heavy",
+          "label": "Heavy",
+          "binding": "heavy",
+          "manaCost": 12,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "sigil_bolt",
+          "label": "Sigil Bolt",
+          "binding": "ranged",
+          "manaCost": 15,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "root_tether",
+          "label": "Root Tether",
+          "binding": "ability",
+          "manaCost": 20,
+          "available": false,
+          "reason": "No target"
+        },
+        {
+          "id": "judgement",
+          "label": "Judgement",
+          "binding": "ultimate",
+          "manaCost": 0,
+          "available": false,
+          "reason": "Need full Instinct"
+        }
+      ],
+      "realGamepads": [],
+      "documentHasFocus": true,
+      "inputEnabled": true,
+      "inputFocused": true
+    },
+    {
+      "name": "baseline-groups",
+      "at": "2026-10-22T12:09:11.678Z",
+      "initialGroups": {
+        "hero": true,
+        "objective": true,
+        "skills": true
+      },
+      "note": "read from the live DOM; no fixed hero and no fixed HUD state is assumed",
+      "observedHero": "aren",
+      "documentHasFocus": true,
+      "inputEnabled": true,
+      "inputFocused": true
+    },
+    {
+      "name": "live-collapsed-values-matrix",
+      "at": "2026-10-22T12:09:13.002Z",
+      "hero": {
+        "forcedCollapsed": {
+          "ok": true,
+          "group": "hero",
+          "before": true,
+          "expanded": false
+        },
+        "collapsed": {
+          "expanded": "false",
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "ariaExpanded": "false",
+          "heroVitals": {
+            "heroName": "AREN",
+            "heroTitle": "Warden of the Wild",
+            "vitality": {
+              "ariaLabel": "Vitality 100%",
+              "fillWidth": "100%",
+              "visible": true,
+              "rect": {
+                "x": 29.55,
+                "y": 86.9,
+                "width": 204,
+                "height": 15.95,
+                "top": 86.9,
+                "left": 29.55,
+                "right": 233.55,
+                "bottom": 102.84
+              }
+            },
+            "engineVitality": 120,
+            "engineMaxVitality": 120,
+            "manaValue": {
+              "text": "100 / 100 Move to Restore Mana",
+              "visible": false,
+              "insideCollapsedBody": true,
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0,
+                "top": 0,
+                "left": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "manaMeter": {
+              "ariaLabel": "Mana 100%",
+              "visible": false
+            },
+            "instinct": {
+              "ariaLabel": "Instinct 0%",
+              "visible": false
+            },
+            "engineMana": 100,
+            "engineInstinct": 0
+          },
+          "objective": null,
+          "skills": null
+        },
+        "forcedExpanded": {
+          "ok": true,
+          "group": "hero",
+          "before": false,
+          "expanded": true
+        },
+        "expanded": {
+          "expanded": "true",
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "ariaExpanded": "true",
+          "heroVitals": {
+            "vitality": {
+              "ariaLabel": "Vitality 100%",
+              "fillWidth": "100%",
+              "visible": true,
+              "rect": {
+                "x": 29.55,
+                "y": 86.9,
+                "width": 204,
+                "height": 15.95,
+                "top": 86.9,
+                "left": 29.55,
+                "right": 233.55,
+                "bottom": 102.84
+              }
+            },
+            "manaValue": {
+              "text": "100 / 100 Move to Restore Mana",
+              "visible": true,
+              "insideCollapsedBody": true,
+              "rect": {
+                "x": 89.55,
+                "y": 127.79,
+                "width": 144,
+                "height": 14.5,
+                "top": 127.79,
+                "left": 89.55,
+                "right": 233.55,
+                "bottom": 142.29
+              }
+            },
+            "manaMeter": {
+              "ariaLabel": "Mana 100%",
+              "visible": true
+            },
+            "instinct": {
+              "ariaLabel": "Instinct 0%",
+              "visible": true
+            },
+            "engineMana": 100
+          },
+          "objective": null,
+          "skills": null
+        }
+      },
+      "objective": {
+        "forcedCollapsed": {
+          "ok": true,
+          "group": "objective",
+          "before": true,
+          "expanded": false
+        },
+        "collapsed": {
+          "expanded": "false",
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "ariaExpanded": "false",
+          "heroVitals": null,
+          "objective": {
+            "questTitle": "The Night of a Thousand Roars",
+            "questVisible": true,
+            "title": "Hear the night of a thousand roars",
+            "titleVisible": true,
+            "hint": "E Listen for the roars",
+            "hintVisible": false,
+            "chapterLabel": "Prologue"
+          },
+          "skills": null
+        },
+        "forcedExpanded": {
+          "ok": true,
+          "group": "objective",
+          "before": false,
+          "expanded": true
+        },
+        "expanded": {
+          "expanded": "true",
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "ariaExpanded": "true",
+          "heroVitals": null,
+          "objective": {
+            "questTitle": "The Night of a Thousand Roars",
+            "title": "Hear the night of a thousand roars",
+            "hint": "E Listen for the roars",
+            "chapterLabel": "Prologue",
+            "hintVisible": true
+          },
+          "skills": null
+        }
+      },
+      "skills": {
+        "forcedCollapsed": {
+          "ok": true,
+          "group": "skills",
+          "before": true,
+          "expanded": false
+        },
+        "collapsed": {
+          "expanded": "false",
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "ariaExpanded": "false",
+          "heroVitals": null,
+          "objective": null,
+          "skills": {
+            "summary": {
+              "text": "5 of 7 ready",
+              "visible": true,
+              "rect": {
+                "x": 454.27,
+                "y": 828,
+                "width": 96.8,
+                "height": 44,
+                "top": 828,
+                "left": 454.27,
+                "right": 551.07,
+                "bottom": 872
+              }
+            },
+            "engineReadySkills": 5,
+            "engineSkillCount": 7,
+            "cards": [
+              {
+                "id": "dive",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Dive",
+                "reason": "Ready",
+                "cost": "25 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "jump",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Jump",
+                "reason": "Ready",
+                "cost": "8 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "light",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Warden Blade",
+                "reason": "Ready",
+                "cost": "FREE",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "heavy",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Heavy",
+                "reason": "Ready",
+                "cost": "12 / 20 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "sigil_bolt",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Sigil Bolt",
+                "reason": "Ready",
+                "cost": "15 / 35 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "root_tether",
+                "ready": "false",
+                "ariaDisabled": "true",
+                "label": "Root Tether",
+                "reason": "No target",
+                "cost": "20 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              },
+              {
+                "id": "judgement",
+                "ready": "false",
+                "ariaDisabled": "true",
+                "label": "Judgement",
+                "reason": "Need full Instinct",
+                "cost": "INSTINCT",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": false,
+                "rect": {
+                  "x": 0,
+                  "y": 0,
+                  "width": 0,
+                  "height": 0,
+                  "top": 0,
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0
+                }
+              }
+            ],
+            "allCardsInsideSkillsBody": true,
+            "allCardsInsideSkillsGroup": true,
+            "signatureCard": {
+              "id": "judgement",
+              "ready": "false",
+              "ariaDisabled": "true",
+              "label": "Judgement",
+              "reason": "Need full Instinct",
+              "cost": "INSTINCT",
+              "insideSkillsBody": true,
+              "insideSkillsGroup": true,
+              "visible": false,
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0,
+                "top": 0,
+                "left": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "engineSignature": {
+              "id": "judgement",
+              "label": "Judgement",
+              "binding": "ultimate",
+              "manaCost": 0,
+              "available": false,
+              "reason": "Need full Instinct"
+            },
+            "signatureLabelMatchesEngine": true
+          }
+        },
+        "forcedExpanded": {
+          "ok": true,
+          "group": "skills",
+          "before": false,
+          "expanded": true
+        },
+        "expanded": {
+          "expanded": "true",
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "ariaExpanded": "true",
+          "heroVitals": null,
+          "objective": null,
+          "skills": {
+            "summary": {
+              "text": "5 of 7 ready",
+              "visible": false,
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0,
+                "top": 0,
+                "left": 0,
+                "right": 0,
+                "bottom": 0
+              }
+            },
+            "summaryVisible": false,
+            "cards": [
+              {
+                "id": "dive",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Dive",
+                "reason": "Ready",
+                "cost": "25 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 454.27,
+                  "y": 795.56,
+                  "width": 83.1,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 454.27,
+                  "right": 537.37,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "jump",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Jump",
+                "reason": "Ready",
+                "cost": "8 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 541.37,
+                  "y": 795.56,
+                  "width": 83.11,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 541.37,
+                  "right": 624.48,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "light",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Warden Blade",
+                "reason": "Ready",
+                "cost": "FREE",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 628.48,
+                  "y": 795.56,
+                  "width": 83.1,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 628.48,
+                  "right": 711.58,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "heavy",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Heavy",
+                "reason": "Ready",
+                "cost": "12 / 20 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 715.58,
+                  "y": 795.56,
+                  "width": 83.11,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 715.58,
+                  "right": 798.69,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "sigil_bolt",
+                "ready": "true",
+                "ariaDisabled": "false",
+                "label": "Sigil Bolt",
+                "reason": "Ready",
+                "cost": "15 / 35 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 802.69,
+                  "y": 795.56,
+                  "width": 83.1,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 802.69,
+                  "right": 885.79,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "root_tether",
+                "ready": "false",
+                "ariaDisabled": "true",
+                "label": "Root Tether",
+                "reason": "No target",
+                "cost": "20 MP",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 889.79,
+                  "y": 795.56,
+                  "width": 83.11,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 889.79,
+                  "right": 972.9,
+                  "bottom": 872
+                }
+              },
+              {
+                "id": "judgement",
+                "ready": "false",
+                "ariaDisabled": "true",
+                "label": "Judgement",
+                "reason": "Need full Instinct",
+                "cost": "INSTINCT",
+                "insideSkillsBody": true,
+                "insideSkillsGroup": true,
+                "visible": true,
+                "rect": {
+                  "x": 976.9,
+                  "y": 795.56,
+                  "width": 83.1,
+                  "height": 76.44,
+                  "top": 795.56,
+                  "left": 976.9,
+                  "right": 1060,
+                  "bottom": 872
+                }
+              }
+            ],
+            "engineReadySkills": 5
+          }
+        }
+      }
+    },
+    {
+      "0": {
+        "action": "focus the hero HUD toggle",
+        "result": {
+          "ok": true,
+          "group": "hero",
+          "focusKey": "hud-toggle-hero",
+          "modality": "pointer",
+          "note": "focus set programmatically as a precondition; the activation itself is a real browser key event"
+        }
+      },
+      "1": {
+        "action": "Space keydown held on the focused hero toggle",
+        "transport": {
+          "transport": "cdp",
+          "error": null
+        },
+        "heroExpandedBefore": "true",
+        "heroExpandedDuring": "false",
+        "heroExpandedAfter": "false",
+        "toggleTransitions": [
+          {
+            "atMs": 110,
+            "from": "true",
+            "to": "false"
+          }
+        ],
+        "toggleTransitionCount": 1,
+        "bodyHiddenDuring": true,
+        "ariaExpandedDuring": "false",
+        "gameplayInputKeysDuring": [],
+        "playerYBefore": 0,
+        "playerYDuring": 0,
+        "jumpPhaseDuring": null,
+        "activeElementDuring": {
+          "tag": "BUTTON",
+          "className": "wc-hud__toggle",
+          "focusKey": "hud-toggle-hero",
+          "hudGroup": "hero",
+          "uiAction": "hud-toggle",
+          "text": "Hero",
+          "outlineWidth": "2px",
+          "outlineStyle": "solid"
+        },
+        "uiModalityDuring": "keyboard"
+      },
+      "2": {
+        "action": "an auto-repeat Space keydown held on the same focused toggle",
+        "transport": {
+          "transport": "cdp",
+          "error": null
+        },
+        "heroExpandedBefore": "false",
+        "heroExpandedDuring": "false",
+        "toggleTransitions": [],
+        "toggleTransitionCount": 0,
+        "gameplayInputKeysDuring": [],
+        "playerYDuring": 0,
+        "jumpPhaseDuring": null,
+        "activeElementDuring": {
+          "tag": "BUTTON",
+          "className": "wc-hud__toggle",
+          "focusKey": "hud-toggle-hero",
+          "hudGroup": "hero",
+          "uiAction": "hud-toggle",
+          "text": "Hero",
+          "outlineWidth": "2px",
+          "outlineStyle": "solid"
+        }
+      },
+      "3": {
+        "action": "Enter keydown held on the focused hero toggle",
+        "focus": {
+          "ok": true,
+          "group": "hero",
+          "focusKey": "hud-toggle-hero",
+          "modality": "keyboard",
+          "note": "focus set programmatically as a precondition; the activation itself is a real browser key event"
+        },
+        "transport": {
+          "transport": "cdp",
+          "error": null
+        },
+        "heroExpandedBefore": "false",
+        "heroExpandedDuring": "true",
+        "toggleTransitions": [
+          {
+            "atMs": 15,
+            "from": "false",
+            "to": "true"
+          }
+        ],
+        "toggleTransitionCount": 1,
+        "bodyHiddenDuring": false,
+        "gameplayInputKeysDuring": [],
+        "activeElementDuring": {
+          "tag": "BUTTON",
+          "className": "wc-hud__toggle",
+          "focusKey": "hud-toggle-hero",
+          "hudGroup": "hero",
+          "uiAction": "hud-toggle",
+          "text": "Hero",
+          "outlineWidth": "2px",
+          "outlineStyle": "solid"
+        },
+        "uiModalityDuring": "keyboard"
+      },
+      "name": "keyboard-ownership",
+      "at": "2026-10-22T12:09:15.267Z"
+    },
+    {
+      "name": "jump-control-case",
+      "at": "2026-10-22T12:09:16.955Z",
+      "note": "control case: the identical Space key with the gameplay input host focused, proving the harness can observe a real jump",
+      "focus": {
+        "ok": true,
+        "activeClass": "wc-input-host"
+      },
+      "transport": {
+        "transport": "cdp",
+        "error": null
+      },
+      "engineManaBefore": 100,
+      "engineManaAfter": 92,
+      "gameplayInputKeysDuring": [
+        " "
+      ],
+      "playerYBefore": 0,
+      "playerYDuring": 0.9070294784580497,
+      "jumpPhaseDuring": "rising",
+      "playerYAfter": 0,
+      "jumpPhaseAfter": null,
+      "engineVitalityBefore": 120,
+      "engineVitalityAfter": 120
+    },
+    {
+      "name": "real-engine-action",
+      "at": "2026-10-22T12:09:22.372Z",
+      "note": "real engine actions the engine itself consumes: the light attack, the Dive / Guard Dash and the Heavy; the collapsed skills summary and the skill cards are sampled live",
+      "skillsGroupCollapsedForThisStep": "false",
+      "summaryVisibleForThisStep": true,
+      "transport": {
+        "light": {
+          "transport": "cdp",
+          "error": null
+        },
+        "dive": {
+          "transport": "cdp",
+          "error": null
+        },
+        "heavy": {
+          "transport": "cdp",
+          "error": null
+        }
+      },
+      "engineManaBefore": 92,
+      "engineManaAfter": 55,
+      "summaryBefore": "5 of 7 ready",
+      "summaryAfter": "4 of 7 ready",
+      "engineReadyBefore": 5,
+      "engineReadyAfter": 4,
+      "skillStatesBefore": [
+        {
+          "id": "dive",
+          "label": "Dive",
+          "binding": "dodge",
+          "manaCost": 25,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "jump",
+          "label": "Jump",
+          "binding": "jump",
+          "manaCost": 8,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "light",
+          "label": "Warden Blade",
+          "binding": "light",
+          "manaCost": 0,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "heavy",
+          "label": "Heavy",
+          "binding": "heavy",
+          "manaCost": 12,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "sigil_bolt",
+          "label": "Sigil Bolt",
+          "binding": "ranged",
+          "manaCost": 15,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "root_tether",
+          "label": "Root Tether",
+          "binding": "ability",
+          "manaCost": 20,
+          "available": false,
+          "reason": "No target"
+        },
+        {
+          "id": "judgement",
+          "label": "Judgement",
+          "binding": "ultimate",
+          "manaCost": 0,
+          "available": false,
+          "reason": "Need full Instinct"
+        }
+      ],
+      "skillStatesAfter": [
+        {
+          "id": "dive",
+          "label": "Dive",
+          "binding": "dodge",
+          "manaCost": 25,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "jump",
+          "label": "Jump",
+          "binding": "jump",
+          "manaCost": 8,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "light",
+          "label": "Warden Blade",
+          "binding": "light",
+          "manaCost": 0,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "heavy",
+          "label": "Heavy",
+          "binding": "heavy",
+          "manaCost": 12,
+          "available": false,
+          "reason": "Cooldown 1s"
+        },
+        {
+          "id": "sigil_bolt",
+          "label": "Sigil Bolt",
+          "binding": "ranged",
+          "manaCost": 15,
+          "available": true,
+          "reason": "Ready"
+        },
+        {
+          "id": "root_tether",
+          "label": "Root Tether",
+          "binding": "ability",
+          "manaCost": 20,
+          "available": false,
+          "reason": "No target"
+        },
+        {
+          "id": "judgement",
+          "label": "Judgement",
+          "binding": "ultimate",
+          "manaCost": 0,
+          "available": false,
+          "reason": "Need full Instinct"
+        }
+      ],
+      "sampleCount": 128,
+      "timeline": [
+        {
+          "signature": "5 of 7 ready|true|5|92|dive=true,jump=true,light=true,heavy=true,sigil_bolt=true,root_tether=false,judgement=false||aren-idle",
+          "t": 134186,
+          "summary": "5 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 5,
+          "engineMana": 92,
+          "engineSkills": [
+            "dive=ready",
+            "jump=ready",
+            "light=ready",
+            "heavy=ready",
+            "sigil_bolt=ready",
+            "root_tether=No target",
+            "judgement=Need full Instinct"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=true",
+            "light=true",
+            "heavy=true",
+            "sigil_bolt=true",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "92 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-idle"
+        },
+        {
+          "signature": "0 of 7 ready|true|0|92|dive=false,jump=false,light=false,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-light-1",
+          "t": 134267,
+          "summary": "0 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 0,
+          "engineMana": 92,
+          "engineSkills": [
+            "dive=Recovering",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=Recovering",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=false",
+            "jump=false",
+            "light=false",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "92 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-light-1"
+        },
+        {
+          "signature": "1 of 7 ready|true|1|92|dive=true,jump=false,light=false,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-light-1",
+          "t": 134747,
+          "summary": "1 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 1,
+          "engineMana": 92,
+          "engineSkills": [
+            "dive=ready",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=Recovering",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=false",
+            "light=false",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "92 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-light-1"
+        },
+        {
+          "signature": "2 of 7 ready|true|2|92|dive=true,jump=false,light=true,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-light-1",
+          "t": 134794,
+          "summary": "2 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 2,
+          "engineMana": 92,
+          "engineSkills": [
+            "dive=ready",
+            "jump=Recovering",
+            "light=ready",
+            "heavy=Recovering",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=false",
+            "light=true",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "92 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-light-1"
+        },
+        {
+          "signature": "5 of 7 ready|true|5|92|dive=true,jump=true,light=true,heavy=true,sigil_bolt=true,root_tether=false,judgement=false||aren-idle",
+          "t": 134868,
+          "summary": "5 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 5,
+          "engineMana": 92,
+          "engineSkills": [
+            "dive=ready",
+            "jump=ready",
+            "light=ready",
+            "heavy=ready",
+            "sigil_bolt=ready",
+            "root_tether=No target",
+            "judgement=Need full Instinct"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=true",
+            "light=true",
+            "heavy=true",
+            "sigil_bolt=true",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "92 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-idle"
+        },
+        {
+          "signature": "0 of 7 ready|true|0|67|dive=false,jump=false,light=false,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-forward-right-dive-roll",
+          "t": 135307,
+          "summary": "0 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 0,
+          "engineMana": 67,
+          "engineSkills": [
+            "dive=Cooldown 2s",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=Recovering",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=false",
+            "jump=false",
+            "light=false",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "67 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-forward-right-dive-roll"
+        },
+        {
+          "signature": "4 of 7 ready|true|4|67|dive=false,jump=true,light=true,heavy=true,sigil_bolt=true,root_tether=false,judgement=false||aren-idle",
+          "t": 136268,
+          "summary": "4 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 4,
+          "engineMana": 67,
+          "engineSkills": [
+            "dive=Cooldown 1s",
+            "jump=ready",
+            "light=ready",
+            "heavy=ready",
+            "sigil_bolt=ready",
+            "root_tether=No target",
+            "judgement=Need full Instinct"
+          ],
+          "cards": [
+            "dive=false",
+            "jump=true",
+            "light=true",
+            "heavy=true",
+            "sigil_bolt=true",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "67 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-idle"
+        },
+        {
+          "signature": "5 of 7 ready|true|5|67|dive=true,jump=true,light=true,heavy=true,sigil_bolt=true,root_tether=false,judgement=false||aren-idle",
+          "t": 136828,
+          "summary": "5 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 5,
+          "engineMana": 67,
+          "engineSkills": [
+            "dive=ready",
+            "jump=ready",
+            "light=ready",
+            "heavy=ready",
+            "sigil_bolt=ready",
+            "root_tether=No target",
+            "judgement=Need full Instinct"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=true",
+            "light=true",
+            "heavy=true",
+            "sigil_bolt=true",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "67 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-idle"
+        },
+        {
+          "signature": "2 of 7 ready|true|2|67|dive=true,jump=false,light=false,heavy=true,sigil_bolt=false,root_tether=false,judgement=false||aren-charged-heavy-charge",
+          "t": 136913,
+          "summary": "2 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 2,
+          "engineMana": 67,
+          "engineSkills": [
+            "dive=ready",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=ready",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=false",
+            "light=false",
+            "heavy=true",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "67 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-charged-heavy-charge"
+        },
+        {
+          "signature": "0 of 7 ready|true|0|55|dive=false,jump=false,light=false,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-heavy",
+          "t": 137067,
+          "summary": "0 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 0,
+          "engineMana": 55,
+          "engineSkills": [
+            "dive=Recovering",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=Cooldown 3s",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=false",
+            "jump=false",
+            "light=false",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "55 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-heavy"
+        },
+        {
+          "signature": "1 of 7 ready|true|1|55|dive=true,jump=false,light=false,heavy=false,sigil_bolt=false,root_tether=false,judgement=false||aren-heavy",
+          "t": 138229,
+          "summary": "1 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 1,
+          "engineMana": 55,
+          "engineSkills": [
+            "dive=ready",
+            "jump=Recovering",
+            "light=Recovering",
+            "heavy=Cooldown 2s",
+            "sigil_bolt=Recovering",
+            "root_tether=Recovering",
+            "judgement=Recovering"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=false",
+            "light=false",
+            "heavy=false",
+            "sigil_bolt=false",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "55 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-heavy"
+        },
+        {
+          "signature": "4 of 7 ready|true|4|55|dive=true,jump=true,light=true,heavy=false,sigil_bolt=true,root_tether=false,judgement=false||aren-idle",
+          "t": 138669,
+          "summary": "4 of 7 ready",
+          "summaryVisible": true,
+          "engineReady": 4,
+          "engineMana": 55,
+          "engineSkills": [
+            "dive=ready",
+            "jump=ready",
+            "light=ready",
+            "heavy=Cooldown 2s",
+            "sigil_bolt=ready",
+            "root_tether=No target",
+            "judgement=Need full Instinct"
+          ],
+          "cards": [
+            "dive=true",
+            "jump=true",
+            "light=true",
+            "heavy=false",
+            "sigil_bolt=true",
+            "root_tether=false",
+            "judgement=false"
+          ],
+          "manaText": "55 / 100 Move to Restore Mana",
+          "jumpPhase": null,
+          "actionId": "aren-idle"
+        }
+      ]
+    },
+    {
+      "name": "pause-opened",
+      "at": "2026-10-22T12:09:23.391Z",
+      "appScreen": "pause",
+      "frontScreen": "pause",
+      "worldTickBefore": 643,
+      "worldTickInPause": 645,
+      "timePolicyInPause": "paused",
+      "pauseHudControls": [
+        {
+          "group": "hero",
+          "focusKey": "hud-toggle-hero",
+          "ariaPressed": "true",
+          "text": "Hero detailsExpanded",
+          "visible": true,
+          "rect": {
+            "x": 436,
+            "y": 573.45,
+            "width": 161.55,
+            "height": 44,
+            "top": 573.45,
+            "left": 436,
+            "right": 597.55,
+            "bottom": 617.45
+          }
+        },
+        {
+          "group": "objective",
+          "focusKey": "hud-toggle-objective",
+          "ariaPressed": "true",
+          "text": "Objective detailsExpanded",
+          "visible": true,
+          "rect": {
+            "x": 607.55,
+            "y": 573.45,
+            "width": 193.42,
+            "height": 44,
+            "top": 573.45,
+            "left": 607.55,
+            "right": 800.97,
+            "bottom": 617.45
+          }
+        },
+        {
+          "group": "skills",
+          "focusKey": "hud-toggle-skills",
+          "ariaPressed": "false",
+          "text": "Skill detailsCollapsed",
+          "visible": true,
+          "rect": {
+            "x": 810.97,
+            "y": 573.45,
+            "width": 170.96,
+            "height": 44,
+            "top": 573.45,
+            "left": 810.97,
+            "right": 981.93,
+            "bottom": 617.45
+          }
+        }
+      ],
+      "pauseControlOrder": [
+        {
+          "focusKey": "resume-Resume",
+          "uiAction": "resume",
+          "text": "Resume"
+        },
+        {
+          "focusKey": "save-screen-Save Game",
+          "uiAction": "save-screen",
+          "text": "Save Game"
+        },
+        {
+          "focusKey": "load-screen-Load Game",
+          "uiAction": "load-screen",
+          "text": "Load Game"
+        },
+        {
+          "focusKey": "title-screen-Return to Title",
+          "uiAction": "title-screen",
+          "text": "Return to Title"
+        },
+        {
+          "focusKey": "hud-toggle-hero",
+          "uiAction": "hud-toggle",
+          "text": "Hero detailsExpanded"
+        },
+        {
+          "focusKey": "hud-toggle-objective",
+          "uiAction": "hud-toggle",
+          "text": "Objective detailsExpanded"
+        },
+        {
+          "focusKey": "hud-toggle-skills",
+          "uiAction": "hud-toggle",
+          "text": "Skill detailsCollapsed"
+        }
+      ],
+      "groupsInGameBefore": {
+        "hero": {
+          "sectionPresent": true,
+          "sectionExpanded": "true",
+          "togglePresent": true,
+          "toggleAriaExpanded": "true",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-hero-body",
+          "toggleRect": {
+            "x": 177.77,
+            "y": 29.9,
+            "width": 55.79,
+            "height": 44,
+            "top": 29.9,
+            "left": 177.77,
+            "right": 233.55,
+            "bottom": 73.9
+          },
+          "bodyPresent": true,
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "bodyRect": {
+            "x": 29.55,
+            "y": 108.84,
+            "width": 204,
+            "height": 55.39,
+            "top": 108.84,
+            "left": 29.55,
+            "right": 233.55,
+            "bottom": 164.23
+          }
+        },
+        "objective": {
+          "sectionPresent": true,
+          "sectionExpanded": "true",
+          "togglePresent": true,
+          "toggleAriaExpanded": "true",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-objective-body",
+          "toggleRect": {
+            "x": 1318.14,
+            "y": 29.9,
+            "width": 92.3,
+            "height": 44,
+            "top": 29.9,
+            "left": 1318.14,
+            "right": 1410.45,
+            "bottom": 73.9
+          },
+          "bodyPresent": true,
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "bodyRect": {
+            "x": 1136.45,
+            "y": 116.59,
+            "width": 274,
+            "height": 78.34,
+            "top": 116.59,
+            "left": 1136.45,
+            "right": 1410.45,
+            "bottom": 194.94
+          }
+        },
+        "skills": {
+          "sectionPresent": true,
+          "sectionExpanded": "false",
+          "togglePresent": true,
+          "toggleAriaExpanded": "false",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-skills-body",
+          "toggleRect": {
+            "x": 380,
+            "y": 828,
+            "width": 70.27,
+            "height": 44,
+            "top": 828,
+            "left": 380,
+            "right": 450.27,
+            "bottom": 872
+          },
+          "bodyPresent": true,
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "bodyRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "left": 0,
+            "right": 0,
+            "bottom": 0
+          }
+        }
+      },
+      "note": "the world clock must not advance while paused"
+    },
+    {
+      "name": "simulated-pad-idle-in-pause",
+      "at": "2026-10-22T12:09:23.411Z",
+      "note": "a connected but idle simulated pad must not change the modality and must not activate anything",
+      "result": {
+        "simulated": true,
+        "physical": false,
+        "steps": [
+          {
+            "note": "connected idle pad (no button pressed)",
+            "pressed": [],
+            "modality": "keyboard",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "hud-toggle-skills",
+              "hudGroup": "skills",
+              "uiAction": "hud-toggle",
+              "ariaPressed": "false",
+              "text": "Skill detailsCollapsed",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          }
+        ],
+        "error": null,
+        "start": {
+          "modality": "keyboard",
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-skills",
+            "hudGroup": "skills",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "false",
+            "text": "Skill detailsCollapsed",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          }
+        },
+        "afterIdlePad": {
+          "modality": "keyboard",
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-skills",
+            "hudGroup": "skills",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "false",
+            "text": "Skill detailsCollapsed",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          }
+        }
+      }
+    },
+    {
+      "name": "simulated-pad-pause-hud-control",
+      "at": "2026-10-22T12:09:23.427Z",
+      "note": "real virtual pad: D-pad navigation plus the A button on the Pause screen HUD control (GameUI.ts tag 2CD8)",
+      "result": {
+        "simulated": true,
+        "physical": false,
+        "steps": [
+          {
+            "note": "D-pad Right (next control)",
+            "pressed": [
+              15
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "resume-Resume",
+              "hudGroup": null,
+              "uiAction": "resume",
+              "ariaPressed": null,
+              "text": "Resume",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "resume-Resume",
+              "hudGroup": null,
+              "uiAction": "resume",
+              "ariaPressed": null,
+              "text": "Resume",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "D-pad Right (next control)",
+            "pressed": [
+              15
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "save-screen-Save Game",
+              "hudGroup": null,
+              "uiAction": "save-screen",
+              "ariaPressed": null,
+              "text": "Save Game",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "save-screen-Save Game",
+              "hudGroup": null,
+              "uiAction": "save-screen",
+              "ariaPressed": null,
+              "text": "Save Game",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "D-pad Right (next control)",
+            "pressed": [
+              15
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "load-screen-Load Game",
+              "hudGroup": null,
+              "uiAction": "load-screen",
+              "ariaPressed": null,
+              "text": "Load Game",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "load-screen-Load Game",
+              "hudGroup": null,
+              "uiAction": "load-screen",
+              "ariaPressed": null,
+              "text": "Load Game",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "D-pad Right (next control)",
+            "pressed": [
+              15
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "title-screen-Return to Title",
+              "hudGroup": null,
+              "uiAction": "title-screen",
+              "ariaPressed": null,
+              "text": "Return to Title",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "title-screen-Return to Title",
+              "hudGroup": null,
+              "uiAction": "title-screen",
+              "ariaPressed": null,
+              "text": "Return to Title",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "D-pad Right (next control)",
+            "pressed": [
+              15
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "hud-toggle-hero",
+              "hudGroup": "hero",
+              "uiAction": "hud-toggle",
+              "ariaPressed": "true",
+              "text": "Hero detailsExpanded",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "hud-toggle-hero",
+              "hudGroup": "hero",
+              "uiAction": "hud-toggle",
+              "ariaPressed": "true",
+              "text": "Hero detailsExpanded",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "A / confirm button",
+            "pressed": [
+              0
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "hud-toggle-hero",
+              "hudGroup": "hero",
+              "uiAction": "hud-toggle",
+              "ariaPressed": "false",
+              "text": "Hero detailsCollapsed",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "BUTTON",
+              "focusKey": "hud-toggle-hero",
+              "hudGroup": "hero",
+              "uiAction": "hud-toggle",
+              "ariaPressed": "false",
+              "text": "Hero detailsCollapsed",
+              "outlineWidth": "2px",
+              "outlineStyle": "solid"
+            }
+          }
+        ],
+        "error": null,
+        "start": {
+          "modality": "keyboard",
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-skills",
+            "hudGroup": "skills",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "false",
+            "text": "Skill detailsCollapsed",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          }
+        },
+        "navigated": {
+          "focusKey": "hud-toggle-hero",
+          "presses": 5,
+          "visited": [
+            "hud-toggle-skills",
+            "resume-Resume",
+            "save-screen-Save Game",
+            "load-screen-Load Game",
+            "title-screen-Return to Title",
+            "hud-toggle-hero"
+          ]
+        },
+        "beforeActivate": {
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-hero",
+            "hudGroup": "hero",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "true",
+            "text": "Hero detailsExpanded",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          },
+          "hudToggles": [
+            {
+              "group": "hero",
+              "ariaPressed": "true",
+              "text": "Hero detailsExpanded",
+              "focusKey": "hud-toggle-hero"
+            },
+            {
+              "group": "objective",
+              "ariaPressed": "true",
+              "text": "Objective detailsExpanded",
+              "focusKey": "hud-toggle-objective"
+            },
+            {
+              "group": "skills",
+              "ariaPressed": "false",
+              "text": "Skill detailsCollapsed",
+              "focusKey": "hud-toggle-skills"
+            }
+          ],
+          "modality": "gamepad"
+        },
+        "afterActivate": {
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-hero",
+            "hudGroup": "hero",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "false",
+            "text": "Hero detailsCollapsed",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          },
+          "hudToggles": [
+            {
+              "group": "hero",
+              "ariaPressed": "false",
+              "text": "Hero detailsCollapsed",
+              "focusKey": "hud-toggle-hero"
+            },
+            {
+              "group": "objective",
+              "ariaPressed": "true",
+              "text": "Objective detailsExpanded",
+              "focusKey": "hud-toggle-objective"
+            },
+            {
+              "group": "skills",
+              "ariaPressed": "false",
+              "text": "Skill detailsCollapsed",
+              "focusKey": "hud-toggle-skills"
+            }
+          ],
+          "modality": "gamepad"
+        }
+      }
+    },
+    {
+      "name": "simulated-pad-resume",
+      "at": "2026-10-22T12:09:24.530Z",
+      "note": "the B button resumes from the Pause screen",
+      "result": {
+        "simulated": true,
+        "physical": false,
+        "steps": [
+          {
+            "note": "B / cancel button",
+            "pressed": [
+              1
+            ],
+            "modality": "gamepad",
+            "active": {
+              "tag": "DIV",
+              "focusKey": null,
+              "hudGroup": null,
+              "uiAction": null,
+              "ariaPressed": null,
+              "text": "",
+              "outlineWidth": "1px",
+              "outlineStyle": "auto"
+            }
+          },
+          {
+            "note": "release",
+            "pressed": [],
+            "modality": "gamepad",
+            "active": {
+              "tag": "DIV",
+              "focusKey": null,
+              "hudGroup": null,
+              "uiAction": null,
+              "ariaPressed": null,
+              "text": "",
+              "outlineWidth": "1px",
+              "outlineStyle": "auto"
+            }
+          }
+        ],
+        "error": null,
+        "start": {
+          "modality": "gamepad",
+          "active": {
+            "tag": "BUTTON",
+            "focusKey": "hud-toggle-hero",
+            "hudGroup": "hero",
+            "uiAction": "hud-toggle",
+            "ariaPressed": "false",
+            "text": "Hero detailsCollapsed",
+            "outlineWidth": "2px",
+            "outlineStyle": "solid"
+          }
+        },
+        "afterSecondary": {
+          "active": {
+            "tag": "DIV",
+            "focusKey": null,
+            "hudGroup": null,
+            "uiAction": null,
+            "ariaPressed": null,
+            "text": "",
+            "outlineWidth": "1px",
+            "outlineStyle": "auto"
+          },
+          "hudToggles": [
+            {
+              "group": "hero",
+              "ariaPressed": null,
+              "text": "Hero",
+              "focusKey": "hud-toggle-hero"
+            },
+            {
+              "group": "objective",
+              "ariaPressed": null,
+              "text": "Objective",
+              "focusKey": "hud-toggle-objective"
+            },
+            {
+              "group": "skills",
+              "ariaPressed": null,
+              "text": "Skills",
+              "focusKey": "hud-toggle-skills"
+            }
+          ],
+          "modality": "gamepad"
+        }
+      },
+      "appScreen": "game",
+      "frontScreen": "game",
+      "groupsAfterResume": {
+        "hero": {
+          "sectionPresent": true,
+          "sectionExpanded": "false",
+          "togglePresent": true,
+          "toggleAriaExpanded": "false",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-hero-body",
+          "toggleRect": {
+            "x": 177.77,
+            "y": 29.9,
+            "width": 55.79,
+            "height": 44,
+            "top": 29.9,
+            "left": 177.77,
+            "right": 233.55,
+            "bottom": 73.9
+          },
+          "bodyPresent": true,
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "bodyRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "left": 0,
+            "right": 0,
+            "bottom": 0
+          }
+        },
+        "objective": {
+          "sectionPresent": true,
+          "sectionExpanded": "true",
+          "togglePresent": true,
+          "toggleAriaExpanded": "true",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-objective-body",
+          "toggleRect": {
+            "x": 1318.14,
+            "y": 29.9,
+            "width": 92.3,
+            "height": 44,
+            "top": 29.9,
+            "left": 1318.14,
+            "right": 1410.45,
+            "bottom": 73.9
+          },
+          "bodyPresent": true,
+          "bodyHidden": false,
+          "bodyVisible": true,
+          "bodyRect": {
+            "x": 1136.45,
+            "y": 116.59,
+            "width": 274,
+            "height": 78.34,
+            "top": 116.59,
+            "left": 1136.45,
+            "right": 1410.45,
+            "bottom": 194.94
+          }
+        },
+        "skills": {
+          "sectionPresent": true,
+          "sectionExpanded": "false",
+          "togglePresent": true,
+          "toggleAriaExpanded": "false",
+          "toggleAriaPressed": null,
+          "toggleAriaControls": "wc-hud-skills-body",
+          "toggleRect": {
+            "x": 380,
+            "y": 828,
+            "width": 70.27,
+            "height": 44,
+            "top": 828,
+            "left": 380,
+            "right": 450.27,
+            "bottom": 872
+          },
+          "bodyPresent": true,
+          "bodyHidden": true,
+          "bodyVisible": false,
+          "bodyRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "left": 0,
+            "right": 0,
+            "bottom": 0
+          }
+        }
+      },
+      "worldTickAfterResume": 711,
+      "activeAfterResume": {
+        "tag": "DIV",
+        "className": "wc-input-host",
+        "focusKey": null,
+        "hudGroup": null,
+        "uiAction": null,
+        "text": "",
+        "outlineWidth": "1px",
+        "outlineStyle": "auto"
+      }
+    },
+    {
+      "name": "pointer-modality-transition",
+      "at": "2026-10-22T12:09:25.422Z",
+      "note": "real pointer: mousedown focuses the toggle (pointer modality, no focus ring), mouseup activates it and the focus returns to the gameplay input host",
+      "mousedown": {
+        "ok": true,
+        "phase": "down",
+        "box": {
+          "x": 1364.29296875,
+          "y": 51.8984375,
+          "width": 92.3046875,
+          "height": 44
+        }
+      },
+      "mouseup": {
+        "ok": true,
+        "phase": "up",
+        "box": {
+          "x": 1364.29296875,
+          "y": 51.8984375,
+          "width": 92.3046875,
+          "height": 44
+        }
+      },
+      "modalityOnMouseDown": "pointer",
+      "activeOnMouseDown": {
+        "tag": "BUTTON",
+        "className": "wc-hud__toggle",
+        "focusKey": "hud-toggle-objective",
+        "hudGroup": "objective",
+        "uiAction": "hud-toggle",
+        "text": "Objective",
+        "outlineWidth": "3px",
+        "outlineStyle": "none"
+      },
+      "outlineOnMouseDown": "3px",
+      "modalityAfterClick": "pointer",
+      "activeAfterClick": {
+        "tag": "DIV",
+        "className": "wc-input-host",
+        "focusKey": null,
+        "hudGroup": null,
+        "uiAction": null,
+        "text": "",
+        "outlineWidth": "3px",
+        "outlineStyle": "none"
+      },
+      "objectiveExpandedBefore": "true",
+      "objectiveExpandedAfter": "false",
+      "gameplayInputHostFocused": true,
+      "playerActionBefore": "aren-idle",
+      "playerActionAfter": "aren-idle",
+      "gameplayInputKeysAfter": []
+    },
+    {
+      "name": "idle-pad-does-not-steal-pointer-modality",
+      "at": "2026-10-22T12:09:25.428Z",
+      "modalityBefore": "pointer",
+      "modalityAfterIdlePad": "pointer",
+      "unchanged": true
+    },
+    {
+      "name": "simulated-pad-in-game-screen",
+      "at": "2026-10-22T12:09:25.444Z",
+      "note": "observation of the live game screen: GameUI.updateGamepad dispatches only pause/map/journal/companions there, so the in-game HUD toggles are not controller-activatable (Main repaired controller access through the Pause screen controls)",
+      "result": {
+        "simulated": true,
+        "physical": false,
+        "steps": [
+          {
+            "note": "connected idle pad (no button pressed)",
+            "pressed": [],
+            "modality": "pointer",
+            "active": {
+              "tag": "DIV",
+              "focusKey": null,
+              "hudGroup": null,
+              "uiAction": null,
+              "ariaPressed": null,
+              "text": "",
+              "outlineWidth": "3px",
+              "outlineStyle": "none"
+            }
+          }
+        ],
+        "error": null,
+        "start": {
+          "modality": "pointer",
+          "active": {
+            "tag": "DIV",
+            "focusKey": null,
+            "hudGroup": null,
+            "uiAction": null,
+            "ariaPressed": null,
+            "text": "",
+            "outlineWidth": "3px",
+            "outlineStyle": "none"
+          }
+        },
+        "afterIdlePad": {
+          "modality": "pointer",
+          "active": {
+            "tag": "DIV",
+            "focusKey": null,
+            "hudGroup": null,
+            "uiAction": null,
+            "ariaPressed": null,
+            "text": "",
+            "outlineWidth": "3px",
+            "outlineStyle": "none"
+          }
+        }
+      }
+    },
+    {
+      "name": "viewport-before",
+      "at": "2026-10-22T12:09:25.453Z",
+      "pageViewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1
+      },
+      "viewportError": null,
+      "inner": {
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "devicePixelRatio": 1
+      }
+    },
+    {
+      "name": "layout-bounds",
+      "at": "2026-10-22T12:09:28.959Z",
+      "widths": [
+        375,
+        768,
+        1440
+      ],
+      "measurements": [
+        {
+          "innerWidth": 375,
+          "innerHeight": 900,
+          "devicePixelRatio": 1,
+          "documentScrollWidth": 375,
+          "documentClientWidth": 375,
+          "bodyScrollWidth": 375,
+          "horizontalOverflow": false,
+          "canvasRect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 900,
+            "top": 0,
+            "left": 0,
+            "right": 375,
+            "bottom": 900
+          },
+          "banner": {
+            "text": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+            "rect": {
+              "x": 11,
+              "y": 6,
+              "width": 353,
+              "height": 21,
+              "top": 6,
+              "left": 11,
+              "right": 364,
+              "bottom": 27
+            },
+            "visible": true
+          },
+          "groups": {
+            "hero": {
+              "sectionRect": {
+                "x": 8,
+                "y": 44,
+                "width": 165,
+                "height": 90,
+                "top": 44,
+                "left": 8,
+                "right": 173,
+                "bottom": 134
+              },
+              "toggleRect": {
+                "x": 116,
+                "y": 55,
+                "width": 44,
+                "height": 44,
+                "top": 55,
+                "left": 116,
+                "right": 160,
+                "bottom": 99
+              },
+              "toggleWidth": 44,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "objective": {
+              "sectionRect": {
+                "x": 270,
+                "y": 44,
+                "width": 98,
+                "height": 197,
+                "top": 44,
+                "left": 270,
+                "right": 368,
+                "bottom": 241
+              },
+              "toggleRect": {
+                "x": 359,
+                "y": 55,
+                "width": 44,
+                "height": 44,
+                "top": 55,
+                "left": 359,
+                "right": 403,
+                "bottom": 99
+              },
+              "toggleWidth": 44,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "skills": {
+              "sectionRect": {
+                "x": 12,
+                "y": 824,
+                "width": 351,
+                "height": 44,
+                "top": 824,
+                "left": 12,
+                "right": 363,
+                "bottom": 868
+              },
+              "toggleRect": {
+                "x": 12,
+                "y": 824,
+                "width": 70,
+                "height": 44,
+                "top": 824,
+                "left": 12,
+                "right": 82,
+                "bottom": 868
+              },
+              "toggleWidth": 70,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            }
+          },
+          "overlaps": [
+            {
+              "pair": "hero/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "hero/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "objective/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/hero",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/skills",
+              "overlapArea": 0
+            }
+          ]
+        },
+        {
+          "innerWidth": 768,
+          "innerHeight": 900,
+          "devicePixelRatio": 1,
+          "documentScrollWidth": 768,
+          "documentClientWidth": 768,
+          "bodyScrollWidth": 768,
+          "horizontalOverflow": false,
+          "canvasRect": {
+            "x": 0,
+            "y": 0,
+            "width": 768,
+            "height": 900,
+            "top": 0,
+            "left": 0,
+            "right": 768,
+            "bottom": 900
+          },
+          "banner": {
+            "text": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+            "rect": {
+              "x": 208,
+              "y": 6,
+              "width": 353,
+              "height": 21,
+              "top": 6,
+              "left": 208,
+              "right": 560,
+              "bottom": 27
+            },
+            "visible": true
+          },
+          "groups": {
+            "hero": {
+              "sectionRect": {
+                "x": 9,
+                "y": 46,
+                "width": 184,
+                "height": 95,
+                "top": 46,
+                "left": 9,
+                "right": 193,
+                "bottom": 141
+              },
+              "toggleRect": {
+                "x": 134,
+                "y": 57,
+                "width": 46,
+                "height": 44,
+                "top": 57,
+                "left": 134,
+                "right": 180,
+                "bottom": 101
+              },
+              "toggleWidth": 46,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "objective": {
+              "sectionRect": {
+                "x": 559,
+                "y": 46,
+                "width": 200,
+                "height": 159,
+                "top": 46,
+                "left": 559,
+                "right": 759,
+                "bottom": 205
+              },
+              "toggleRect": {
+                "x": 654,
+                "y": 57,
+                "width": 92,
+                "height": 44,
+                "top": 57,
+                "left": 654,
+                "right": 746,
+                "bottom": 101
+              },
+              "toggleWidth": 92,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "skills": {
+              "sectionRect": {
+                "x": 44,
+                "y": 828,
+                "width": 680,
+                "height": 44,
+                "top": 828,
+                "left": 44,
+                "right": 724,
+                "bottom": 872
+              },
+              "toggleRect": {
+                "x": 44,
+                "y": 828,
+                "width": 70,
+                "height": 44,
+                "top": 828,
+                "left": 44,
+                "right": 114,
+                "bottom": 872
+              },
+              "toggleWidth": 70,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            }
+          },
+          "overlaps": [
+            {
+              "pair": "hero/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "hero/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "objective/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/hero",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/skills",
+              "overlapArea": 0
+            }
+          ]
+        },
+        {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "devicePixelRatio": 1,
+          "documentScrollWidth": 1440,
+          "documentClientWidth": 1440,
+          "bodyScrollWidth": 1440,
+          "horizontalOverflow": false,
+          "canvasRect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 900,
+            "top": 0,
+            "left": 0,
+            "right": 1440,
+            "bottom": 900
+          },
+          "banner": {
+            "text": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+            "rect": {
+              "x": 502,
+              "y": 10,
+              "width": 436,
+              "height": 26,
+              "top": 10,
+              "left": 502,
+              "right": 938,
+              "bottom": 36
+            },
+            "visible": true
+          },
+          "groups": {
+            "hero": {
+              "sectionRect": {
+                "x": 17,
+                "y": 19,
+                "width": 230,
+                "height": 95,
+                "top": 19,
+                "left": 17,
+                "right": 247,
+                "bottom": 114
+              },
+              "toggleRect": {
+                "x": 178,
+                "y": 30,
+                "width": 56,
+                "height": 44,
+                "top": 30,
+                "left": 178,
+                "right": 234,
+                "bottom": 74
+              },
+              "toggleWidth": 56,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "objective": {
+              "sectionRect": {
+                "x": 1123,
+                "y": 19,
+                "width": 300,
+                "height": 104,
+                "top": 19,
+                "left": 1123,
+                "right": 1423,
+                "bottom": 123
+              },
+              "toggleRect": {
+                "x": 1318,
+                "y": 30,
+                "width": 92,
+                "height": 44,
+                "top": 30,
+                "left": 1318,
+                "right": 1410,
+                "bottom": 74
+              },
+              "toggleWidth": 92,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            },
+            "skills": {
+              "sectionRect": {
+                "x": 380,
+                "y": 828,
+                "width": 680,
+                "height": 44,
+                "top": 828,
+                "left": 380,
+                "right": 1060,
+                "bottom": 872
+              },
+              "toggleRect": {
+                "x": 380,
+                "y": 828,
+                "width": 70,
+                "height": 44,
+                "top": 828,
+                "left": 380,
+                "right": 450,
+                "bottom": 872
+              },
+              "toggleWidth": 70,
+              "toggleHeight": 44,
+              "toggleVisible": true,
+              "meets44px": true
+            }
+          },
+          "overlaps": [
+            {
+              "pair": "hero/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "hero/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "objective/skills",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/hero",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/objective",
+              "overlapArea": 0
+            },
+            {
+              "pair": "banner/skills",
+              "overlapArea": 0
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "name": "hud-375",
+          "path": "/var/folders/8r/433bd68x6g75xymhlbcwp2bh0000gn/T/omp-sshots-15b02e5c77ab0f06.webp"
+        },
+        {
+          "name": "hud-768",
+          "path": "/var/folders/8r/433bd68x6g75xymhlbcwp2bh0000gn/T/omp-sshots-15b02e5d62ab0f07.webp"
+        },
+        {
+          "name": "hud-1440",
+          "path": "/var/folders/8r/433bd68x6g75xymhlbcwp2bh0000gn/T/omp-sshots-15b02e5eadab0f08.webp"
+        }
+      ],
+      "viewportRestoredTo": {
+        "pageViewport": {
+          "width": 1440,
+          "height": 900,
+          "deviceScaleFactor": 1
+        },
+        "viewportError": null,
+        "inner": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "devicePixelRatio": 1
+        }
+      },
+      "note": "the canvas size is recorded at each width so a renderer/stage resize would be visible"
+    },
+    {
+      "name": "cleanup",
+      "at": "2026-10-22T12:09:28.992Z",
+      "viewportRestored": {
+        "pageViewport": {
+          "width": 1440,
+          "height": 900,
+          "deviceScaleFactor": 1
+        },
+        "viewportError": null,
+        "inner": {
+          "innerWidth": 1440,
+          "innerHeight": 900,
+          "devicePixelRatio": 1
+        }
+      },
+      "hudStateRestored": {
+        "before": {
+          "hero": false,
+          "objective": false,
+          "skills": false
+        },
+        "after": {
+          "hero": true,
+          "objective": true,
+          "skills": true
+        }
+      },
+      "focusRestored": {
+        "ok": true,
+        "modality": "pointer"
+      },
+      "pageHooksRemoved": {
+        "removed": [],
+        "remaining": []
+      }
+    }
+  ],
+  "errors": [],
+  "cleanup": {
+    "viewportRestored": {
+      "pageViewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1
+      },
+      "viewportError": null,
+      "inner": {
+        "innerWidth": 1440,
+        "innerHeight": 900,
+        "devicePixelRatio": 1
+      }
+    },
+    "hudStateRestored": {
+      "before": {
+        "hero": false,
+        "objective": false,
+        "skills": false
+      },
+      "after": {
+        "hero": true,
+        "objective": true,
+        "skills": true
+      }
+    },
+    "focusRestored": {
+      "ok": true,
+      "modality": "pointer"
+    },
+    "pageHooksRemoved": {
+      "removed": [],
+      "remaining": []
+    }
+  },
+  "finishedAt": "2026-10-22T12:09:28.993Z",
+  "notClaimed": [
+    "physical gamepad qualification (every pad interaction in this run used a synthetic in-page standard pad driven into GameUI.updateGamepad)",
+    "reference-hardware performance qualification",
+    "release asset qualification"
+  ]
+}

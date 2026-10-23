@@ -1,0 +1,72 @@
+{
+  "scope": "Native real application after existing-authority preview projection; no recruitment or permission rule changed",
+  "after": {
+    "screen": "companions",
+    "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84",
+    "heroId": "aren",
+    "party": {},
+    "encounterBlocksEquipment": false,
+    "selectedPreview": "vara",
+    "placeholder": "VaraThis companion has not joined your journey yet.",
+    "previews": [
+      {
+        "ability": "storm-talon",
+        "disabled": true
+      },
+      {
+        "ability": "sky-mark",
+        "disabled": true
+      },
+      {
+        "ability": "vara-search",
+        "disabled": true
+      }
+    ],
+    "permissions": [
+      {
+        "id": "storm-talon",
+        "previewAvailable": false,
+        "previewReason": "This companion has not joined your journey yet.",
+        "commandAvailable": false
+      },
+      {
+        "id": "sky-mark",
+        "previewAvailable": false,
+        "previewReason": "This companion has not joined your journey yet.",
+        "commandAvailable": false
+      },
+      {
+        "id": "vara-search",
+        "previewAvailable": false,
+        "previewReason": "This companion has not joined your journey yet.",
+        "commandAvailable": false
+      }
+    ],
+    "nativePreviewHandles": 0,
+    "relationship": "1 command token · This companion has not joined your journey yet.",
+    "availableNowText": false
+  },
+  "source": {
+    "gameUI": "E629",
+    "gameApplication": "A2B2",
+    "contracts": "E2D6",
+    "chapterPanels": "698D"
+  },
+  "beforeEvidence": "after-hud-focus-frame-controller.json",
+  "freshTrainingRefusal": {
+    "scope": "Actual fresh normal campaign before any earned map/companion unlock",
+    "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84",
+    "hero": "aren",
+    "party": {},
+    "completed": [],
+    "trainingText": "Training Grounds\n\nClear a region story to earn Training Grounds practice.",
+    "controls": [
+      {
+        "action": "open-training",
+        "disabled": true,
+        "text": "Training Grounds",
+        "title": ""
+      }
+    ]
+  }
+}

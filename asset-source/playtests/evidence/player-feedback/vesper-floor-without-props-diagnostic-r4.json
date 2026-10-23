@@ -1,0 +1,15 @@
+{
+  "mode": "without-props-diagnostic",
+  "elapsedMs": 61.772042,
+  "simulationTicks": 167,
+  "worldTicks": 143,
+  "initialProps": 154,
+  "finalProps": 0,
+  "impactedProps": 0,
+  "brokenProps": 0,
+  "refreshCalls": 0,
+  "refreshMs": 0,
+  "playerVitality": 9950,
+  "monsterVitality": 99849,
+  "arenaColliders": 29
+}

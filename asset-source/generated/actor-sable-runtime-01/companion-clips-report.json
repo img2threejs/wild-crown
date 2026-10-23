@@ -1,0 +1,62 @@
+{
+  "assetId": "actor-sable",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-companion-rig.glb",
+    "sha256": "000d9729b6fba6718ffc87e45d704d7787f789f60b83c3c26486a49c9afede20"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-companion.glb",
+    "sha256": "cae7c51ecd6263f8cff216d8da6563bc983b40a91fc6f2aae70bf0da4d04cbe8"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "jawRepair": {
+    "source": "asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+    "sourceSha256": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+    "joint": "repair::Jaw",
+    "parent": "tripo::Head_2",
+    "pivot": [
+      -0.002,
+      0.505,
+      -0.325
+    ],
+    "affectedVertices": 1126,
+    "fullyAssignedVertices": 536,
+    "maximumDiscardedInfluence": 0.14004068639388856,
+    "maximumBindPositionError": 1.1972678658565847e-7,
+    "preserved": "Positions, normals, UVs, indices, textures, materials, existing joints and clips. Only lower-muzzle skin weights and the added jaw joint/inverse bind matrix differ."
+  },
+  "clips": [
+    {
+      "name": "sable-flank",
+      "seconds": 1.2,
+      "frames": 39,
+      "markers": {
+        "release": 0.32,
+        "contact": 0.58
+      },
+      "channels": 35
+    },
+    {
+      "name": "sable-search",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "release": 0.2,
+        "contact": 0.9
+      },
+      "channels": 35
+    },
+    {
+      "name": "sable-distract",
+      "seconds": 1.1,
+      "frames": 36,
+      "markers": {
+        "release": 0.32,
+        "contact": 0.5
+      },
+      "channels": 35
+    }
+  ]
+}

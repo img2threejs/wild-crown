@@ -1,0 +1,222 @@
+{
+  "requested": "minimax-code/MiniMax-M3.1-Flash:high",
+  "actual": [
+    {
+      "name": "FlashFastTraining",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "d71715f3",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.203Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "03e4a573",
+          "parentId": "d71715f3",
+          "timestamp": "2026-10-22T10:02:49.204Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastHud",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "ed3975c0",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.411Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "10fc06ee",
+          "parentId": "ed3975c0",
+          "timestamp": "2026-10-22T10:02:49.412Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastBambooReceipts",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "67b6329b",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.335Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "42ecbeed",
+          "parentId": "67b6329b",
+          "timestamp": "2026-10-22T10:02:49.335Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastStoryTests",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "95952d1b",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.376Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "e0a6a7cd",
+          "parentId": "95952d1b",
+          "timestamp": "2026-10-22T10:02:49.377Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastGroveReceipts",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "44a43341",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.274Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "0cb57909",
+          "parentId": "44a43341",
+          "timestamp": "2026-10-22T10:02:49.276Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastSave",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "c8acd0ed",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.483Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "943955ff",
+          "parentId": "c8acd0ed",
+          "timestamp": "2026-10-22T10:02:49.486Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastFixtures",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "f17d0e0e",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.549Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "77fc211f",
+          "parentId": "f17d0e0e",
+          "timestamp": "2026-10-22T10:02:49.550Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastDocs",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "84909c3a",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.644Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "26caa6ec",
+          "parentId": "84909c3a",
+          "timestamp": "2026-10-22T10:02:49.644Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastBuild",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "8b8f4e4c",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.585Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "dd2b914e",
+          "parentId": "8b8f4e4c",
+          "timestamp": "2026-10-22T10:02:49.585Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    },
+    {
+      "name": "FlashFastBambooTests",
+      "metadata": [
+        {
+          "type": "model_change",
+          "id": "7d332278",
+          "parentId": null,
+          "timestamp": "2026-10-22T10:02:49.449Z",
+          "model": "minimax-code/MiniMax-M3.1-Flash",
+          "resolvedModelIsFallback": false
+        },
+        {
+          "type": "thinking_level_change",
+          "id": "153e5412",
+          "parentId": "7d332278",
+          "timestamp": "2026-10-22T10:02:49.449Z",
+          "thinkingLevel": "high",
+          "configured": null
+        }
+      ]
+    }
+  ],
+  "route": "jev-utility",
+  "fallback": false,
+  "priorAttempt": {
+    "status": "cancelled",
+    "reason": "Role routing ignored exact per-task selector; sampled FlashNativeTrainingScenario resolved anthropic/claude-sonnet-5-5 medium. Retained produced artifacts; no claim all other cancelled models inspected."
+  },
+  "qualification": "Role high is harness configuration, not a claimed native API reasoning-depth ladder. Main retains integration/review."
+}

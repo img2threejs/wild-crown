@@ -19,6 +19,16 @@ function liveState(engine: CombatEngine): EngineState {
   return (engine as unknown as { state: EngineState }).state;
 }
 
+/**
+ * Whether the hero is untargetable right now, read through the engine's own predicate.
+ *
+ * `snapshot().player.untargetable` rebuilds a whole snapshot (every actor, hazard, telegraph, prop and event) on
+ * each call; these loops call it once per tick. The engine keeps the predicate private, so the tests read it
+ * through the same test seam the other combat tests use.
+ */
+interface UntargetableReader { isUntargetable(): boolean }
+const isUntargetable = (engine: CombatEngine): boolean => (engine as unknown as UntargetableReader).isUntargetable();
+
 interface BenchOptions {
   /** Metres between the player and the monster along z (the player faces -z, toward it). */
   distance?: number;
@@ -115,6 +125,9 @@ const damageEvents = (b: Bench, actionId: string) => b.engine.consumeEvents().fi
 
 /** An unblockable hazard covering the whole arena, live from `activeFrom` for 300 world ticks (the seam tests use the same shape). */
 function floorHazard(b: Bench, damage: number, activeFrom: number): LiveHazard {
+  // This artificial region-wide field probes character immunity, not rubble physics.
+  // Preserve real terrain/gates; environment-props.test.ts covers offensive world effects.
+  b.state.environment.props = [];
   const attack = ATTACKS['koro-fruit-burst']!;
   return {
     ...structuredClone(attack.hazard), id: 'floor-burst', attackId: attack.id,
@@ -210,7 +223,7 @@ describe('Moonlit Iai', () => {
     b.runLive(VESPER.iai.riftDashTo, age => {
       expect(standing(b)).toBe(true);
       expect(insideBounds(b)).toBe(true);
-      if (age >= VESPER.iai.riftDashFrom) expect(b.engine.snapshot().player.untargetable).toBe(true);
+      if (age >= VESPER.iai.riftDashFrom) expect(isUntargetable(b.engine)).toBe(true);
     });
     expect(b.state.player.vitality).toBe(vitalityBefore);
     // 4.5 m through the target: it ends on the far side.
@@ -462,7 +475,7 @@ describe('Shadow Step', () => {
         const b = bench({ distance: 7 });
         reachRift(b);
         b.runLive(age);
-        expect(b.engine.snapshot().player.untargetable).toBe(true);
+        expect(isUntargetable(b.engine)).toBe(true);
         const rifted = damageEvents(b, 'light_4').length;
         b.engine.consumeEvents();
         b.step(into === 'heavy' ? { heavyPressed: true } : { dodgePressed: true });
@@ -470,7 +483,7 @@ describe('Shadow Step', () => {
           expect(b.player.actionId).toBe(VESPER_CLIPS.heavy!);
           // The dash is over: no leftover velocity and no untouchable window.
           expect(Math.hypot(b.player.velocity.x, b.player.velocity.z)).toBe(0);
-          expect(b.engine.snapshot().player.untargetable).not.toBe(true);
+          expect(isUntargetable(b.engine)).not.toBe(true);
         } else expect(b.cues.some(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.dodge)).toBe(true);
         b.runLive(VESPER.iai.steps[3]!.ticks);
         expect(rifted).toBe(0);
@@ -546,7 +559,7 @@ describe('Thousand Cuts', () => {
     const dealt: { age: number; damage: number }[] = [];
     let health = b.health();
     b.runLive(VESPER.thousandCuts.ticks - 1, age => {
-      expect(b.engine.snapshot().player.untargetable).toBe(true);
+      expect(isUntargetable(b.engine)).toBe(true);
       expect(standing(b)).toBe(true);
       if (b.health() < health) { dealt.push({ age, damage: health - b.health() }); health = b.health(); }
     });
@@ -558,7 +571,7 @@ describe('Thousand Cuts', () => {
     // Cuts 5 and 6 build a second mark, which the finisher executes.
     expect(dealt[6]!.damage).toBe(VESPER.thousandCuts.finisherDamage + VESPER.deathMark.executionDamage);
     b.runLive(3);
-    expect(b.engine.snapshot().player.untargetable).toBeUndefined();
+    expect(isUntargetable(b.engine)).toBe(false);
     expect(b.cues.filter(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.charged_heavy).length).toBe(7);
   });
 
@@ -660,10 +673,10 @@ describe('Shade Swap', () => {
     expect(standing(b)).toBe(true);
     expect(insideBounds(b)).toBe(true);
     expect(b.cues.some(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.sigil_barrage)).toBe(true);
-    b.runLive(VESPER.shadeSwap.untouchableTicks - 1, () => { expect(b.engine.snapshot().player.untargetable).toBe(true); });
+    b.runLive(VESPER.shadeSwap.untouchableTicks - 1, () => { expect(isUntargetable(b.engine)).toBe(true); });
     expect(b.state.player.vitality).toBe(before);
     b.runLive(1);
-    expect(b.engine.snapshot().player.untargetable).toBeUndefined();
+    expect(isUntargetable(b.engine)).toBe(false);
     b.runLive(6);
     expect(b.state.player.vitality).toBeLessThan(before);
   });
@@ -739,11 +752,11 @@ describe('Mist Blink', () => {
     b.step({ dodgePressed: true });
     expect(b.player.actionEndsTick - b.player.actionStartedTick).toBe(VESPER.mistBlink.durationTicks + VESPER.mistBlink.recoveryTicks);
     expect(b.state.player.mana).toBe(100_000 - PLAYER_SKILLS.dive.manaCost);
-    let untargetable = b.engine.snapshot().player.untargetable === true ? 1 : 0, blinkEnd = start;
+    let untargetable = isUntargetable(b.engine) ? 1 : 0, blinkEnd = start;
     for (let tick = 1; tick < VESPER.mistBlink.iframes + 6; tick++) {
       b.step();
       if (tick === VESPER.mistBlink.durationTicks) blinkEnd = { ...b.player.position };
-      if (b.engine.snapshot().player.untargetable === true) untargetable++;
+      if (isUntargetable(b.engine)) untargetable++;
       expect(groundHeightAt(b.state.arena, b.player.position.x, b.player.position.z, b.player.position.y)).not.toBeNull();
       expect(insideBounds(b)).toBe(true);
       // Untouchable through the whole iframe window.
@@ -780,7 +793,7 @@ describe('Crimson Requiem', () => {
     const hits: { age: number; damage: number }[] = [];
     b.runLive(VESPER.requiem.ticks - 1, age => {
       for (const event of b.engine.consumeEvents()) if (event.kind === 'damage' && event.actionId === 'requiem_slash') slashes++;
-      expect(b.engine.snapshot().player.untargetable).toBe(true);
+      expect(isUntargetable(b.engine)).toBe(true);
       if (marked() && markedAt === undefined) markedAt = age;
       if (b.health() < health) { hits.push({ age, damage: health - b.health() }); health = b.health(); }
       expect(standing(b)).toBe(true);
@@ -801,7 +814,7 @@ describe('Crimson Requiem', () => {
     expect(b.cues.filter(cue => cue.kind === 'judgement-mark' && cue.phase === 'hit').length).toBe(1);
     expect(b.cues.filter(cue => cue.kind === 'blink' && cue.actionId === VESPER_CLIPS.judgement).length).toBe(VESPER.requiem.slashCount);
     b.runLive(2);
-    expect(b.engine.snapshot().player.untargetable).toBeUndefined();
+    expect(isUntargetable(b.engine)).toBe(false);
   });
 
   it('marks nothing outside 12 m and still ends cleanly', () => {
@@ -810,7 +823,7 @@ describe('Crimson Requiem', () => {
     b.runLive(VESPER.requiem.ticks);
     expect(b.health()).toBe(100_000);
     expect(b.engine.snapshot().actors.find(actor => actor.id === b.monster.id)!.heroMarks).toBeUndefined();
-    expect(b.engine.snapshot().player.untargetable).toBeUndefined();
+    expect(isUntargetable(b.engine)).toBe(false);
   });
 
   it('needs full Instinct', () => {

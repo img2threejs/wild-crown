@@ -1,0 +1,15 @@
+{
+  "mode": "original",
+  "elapsedMs": 2240.269542,
+  "simulationTicks": 167,
+  "worldTicks": 143,
+  "initialProps": 154,
+  "finalProps": 154,
+  "impactedProps": 58,
+  "brokenProps": 1,
+  "refreshCalls": 0,
+  "refreshMs": 0,
+  "playerVitality": 9950,
+  "monsterVitality": 99849,
+  "arenaColliders": 29
+}

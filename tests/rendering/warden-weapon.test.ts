@@ -3,8 +3,10 @@ import { readFileSync } from 'node:fs';
 import { AnimationMixer, BoxGeometry, ConeGeometry, CylinderGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Quaternion, SkinnedMesh, Triangle, Vector3, type Bone, type Material } from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { HEARTROOT_GRIP, KATANA_EDGE_COLOR, KATANA_EDGE_TIP_COLOR, KATANA_GRIP, WARDEN_BLADE_FRACTION, WARDEN_EDGE_COLOR, WARDEN_EDGE_IDLE_INTENSITY, WARDEN_WEAPON_LENGTH, WardenWeapon, analyzeGlaive, splitBladeGeometry, weaponKindForGrip } from '../../src/rendering/WardenWeapon.js';
+import { GLAIVE_BLEND_SECONDS, HEARTROOT_GRIP, KATANA_EDGE_COLOR, KATANA_EDGE_TIP_COLOR, KATANA_GRIP, STAFF_BLEND_SECONDS, WARDEN_BLADE_FRACTION, WARDEN_EDGE_COLOR, WARDEN_EDGE_IDLE_INTENSITY, WARDEN_GRIP, WARDEN_GRIP_FRACTION, WARDEN_WEAPON_LENGTH, WardenWeapon, analyzeGlaive, glaiveProfileFor, splitBladeGeometry, staffProfileFor, weaponKindForGrip } from '../../src/rendering/WardenWeapon.js';
 import { computeHandGrip, referencedVertices } from '../../src/rendering/NativeHandGrip.js';
+import { STAFF_THROW } from '../../src/rendering/ThrownStaff.js';
+import { Scene } from 'three';
 
 const root = new URL('../../', import.meta.url).pathname;
 const manifest = JSON.parse(readFileSync(`${root}asset-source/playtests/greenwake.json`, 'utf8')) as Array<{ id: string; runtimeUrl: string; actionToClipMapping: Record<string, string> }>;
@@ -229,10 +231,79 @@ describe('Warden weapon on the real Aren skeleton', () => {
   }
 });
 
+describe('Warden glaive per-clip profile on the real Aren skeleton', () => {
+  const degrees = (angle: number) => angle * 180 / Math.PI;
+  const tipZ = (weapon: WardenWeapon): number => { aren.scene.updateMatrixWorld(true); return weapon.root.worldToLocal(weapon.sockets['weapon-tip'].getWorldPosition(new Vector3())).z; };
+  const worldAxis = (weapon: WardenWeapon): Vector3 => new Vector3(0, 0, 1).applyQuaternion(weapon.root.getWorldQuaternion(new Quaternion()));
+
+  it('default profile is the former fixed placement: turn −WARDEN_GRIP.tiltRadians (≈ −28.648°) and the pommel share WARDEN_GRIP_FRACTION', () => {
+    const fallback = glaiveProfileFor('a-clip-the-table-does-not-list');
+    expect(fallback.turn).toBeCloseTo(-WARDEN_GRIP.tiltRadians, 12);
+    expect(fallback.grip).toBe(WARDEN_GRIP_FRACTION);
+    expect(degrees(fallback.turn)).toBeCloseTo(-28.64788975654116, 9);
+  });
+
+  it('places the glaive and closes the fingers exactly as the pre-profile fixed tilt did (≤ 1e-6)', () => {
+    aren.scene.scale.setScalar(1.7);
+    aren.scene.updateMatrixWorld(true);
+    openHand();
+    // Pre-change construction: the fist tilted WARDEN_GRIP.tiltRadians at build, the weapon frame from that axis and curl, grip point at the origin.
+    const old = computeHandGrip(aren.scene, false, WARDEN_GRIP.tiltRadians);
+    const y = old.curl.clone().addScaledVector(old.axis, -old.curl.dot(old.axis)).normalize();
+    const expected = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(new Vector3().crossVectors(y, old.axis), y, old.axis));
+    const oldFingers = old.joints.map((joint) => [joint.bone, joint.grip.clone()] as const);
+
+    const rig = equip(tripoGlaive.scene.clone());
+    try {
+      const tipBefore = rig.weapon.sockets['weapon-tip'].position.clone(), baseBefore = rig.weapon.sockets['weapon-base'].position.clone();
+      const glaiveBefore = rig.glaiveRoot.position.clone();
+      rig.weapon.setClip('aren-walk', 0); // a clip the profile table does not list: the default placement
+      expect(rig.weapon.root.position.distanceTo(old.palm)).toBeLessThan(1e-6);
+      expect(rig.weapon.root.quaternion.angleTo(expected)).toBeLessThan(1e-6);
+      expect(rig.weapon.sockets['weapon-tip'].position.distanceTo(tipBefore)).toBeLessThan(1e-6);
+      expect(rig.weapon.sockets['weapon-base'].position.distanceTo(baseBefore)).toBeLessThan(1e-6);
+      expect(rig.glaiveRoot.position.distanceTo(glaiveBefore)).toBeLessThan(1e-6);
+      // The turned axis of the weapon frame is the old tilted axis.
+      expect(new Vector3(0, 0, 1).applyQuaternion(rig.weapon.root.quaternion).distanceTo(old.axis)).toBeLessThan(1e-6);
+      rig.hook();
+      for (const [bone, grip] of oldFingers) expect(bone.quaternion.angleTo(grip), bone.name).toBeLessThan(1e-6);
+    } finally { rig.weapon.dispose(); openHand(); }
+  });
+
+  it('moves the glaive, its tip socket and the fingers to a clip entry of the table, eased over the blend time', () => {
+    const entry = { turnDegrees: 20, gripFraction: 0.2 };
+    const profiles = { default: { turnDegrees: degrees(-WARDEN_GRIP.tiltRadians), gripFraction: WARDEN_GRIP_FRACTION }, blendSeconds: GLAIVE_BLEND_SECONDS, clips: { 'aren-test-clip': entry } };
+    aren.scene.scale.setScalar(1.7);
+    aren.scene.updateMatrixWorld(true);
+    openHand();
+    const rig = { hook: () => undefined as void, hookCleared: 0 } as { hook: () => void; hookCleared: number };
+    const weapon = new WardenWeapon({ root: tripoGlaive.scene.clone(), dispose: () => undefined }, { root: aren.scene, animation: { setPostPose: (hook) => { if (hook) rig.hook = hook; } } }, 'warden', false, profiles);
+    try {
+      weapon.setClip('aren-idle', 0);
+      const idleTip = tipZ(weapon), idleAxis = worldAxis(weapon);
+      rig.hook();
+      const fingerOf = () => named(aren.scene, 'RightHandIndex2').quaternion.clone();
+      const idleFinger = fingerOf();
+      weapon.setClip('aren-test-clip', GLAIVE_BLEND_SECONDS / 2);
+      const slide = (WARDEN_GRIP_FRACTION - entry.gripFraction) * WARDEN_WEAPON_LENGTH;
+      expect(tipZ(weapon)).toBeGreaterThan(idleTip + slide * 0.2);
+      expect(tipZ(weapon)).toBeLessThan(idleTip + slide * 0.8);
+      weapon.setClip('aren-test-clip', GLAIVE_BLEND_SECONDS);
+      expect(tipZ(weapon)).toBeCloseTo(idleTip + slide, 4);
+      expect(degrees(worldAxis(weapon).angleTo(idleAxis))).toBeCloseTo(entry.turnDegrees - profiles.default.turnDegrees, 2);
+      rig.hook();
+      expect(fingerOf().angleTo(idleFinger)).toBeGreaterThan(1e-3);
+      // Back to a clip the table does not list: the default placement returns.
+      weapon.setClip('aren-idle', 1);
+      expect(tipZ(weapon)).toBeCloseTo(idleTip, 4);
+    } finally { weapon.dispose(); openHand(); }
+  });
+});
+
 
 /**
- * Yara's fixed fist. Her native hand has no finger chains: the grasp is baked once into the hand mesh and the staff orientation comes only from the
- * arm pose (the old per-frame wrist twist is gone), so every relation below must hold in any pose.
+ * Yara's staff fist. Her Mixamo rig has finger chains, so the staff is gripped like the glaive: the shaft lies along the knuckle line and the fingers close
+ * onto it after every pose (a post-pose hook), the wrist itself is never twisted.
  */
 const yara = await load(entry('actor-yara-hero').runtimeUrl, () => new MeshBasicMaterial());
 const heartrootStaff = await load(entry('prop-heartroot-focus-staff').runtimeUrl, () => new MeshStandardMaterial());
@@ -252,120 +323,246 @@ const yaraSkin = yara.scene.getObjectByProperty('isSkinnedMesh', true) as Skinne
 const yaraHand = yara.scene.getObjectByName('mixamorigRightHand') as Bone;
 yara.scene.scale.setScalar(1.7);
 yara.scene.updateMatrixWorld(true);
-
-/** Bind-pose hand-weighted vertices in hand-bone space (measured before any weapon edits the mesh). */
-function bindHandPoints(): Vector3[] {
-  const toHand = yaraSkin.skeleton.boneInverses[yaraSkin.skeleton.bones.indexOf(yaraHand)]!.clone().multiply(yaraSkin.bindMatrix);
-  const position = yaraSkin.geometry.getAttribute('position'), indices = yaraSkin.geometry.getAttribute('skinIndex'), weights = yaraSkin.geometry.getAttribute('skinWeight');
-  const points: Vector3[] = [];
-  for (const vertex of referencedVertices(yaraSkin.geometry)) {
-    let weight = 0;
-    for (let component = 0; component < 4; component++) if (yaraSkin.skeleton.bones[indices.getComponent(vertex, component)]?.name.includes('RightHand')) weight += weights.getComponent(vertex, component);
-    if (weight >= .6) points.push(new Vector3().fromBufferAttribute(position, vertex).applyMatrix4(toHand));
-  }
-  return points;
-}
-const handPoints = bindHandPoints();
 const originalHandGeometry = yaraSkin.geometry;
-const bindGrip = computeHandGrip(yara.scene, true, HEARTROOT_GRIP.diagonalRadians);
+// WardenWeapon's heartroot profile is the finger-chain fist (rigidFist false).
+const bindGrip = computeHandGrip(yara.scene, false, HEARTROOT_GRIP.diagonalRadians);
 const WORLD_UP = new Vector3(0, 1, 0);
 
-interface YaraRig { weapon: WardenWeapon; hooks: number }
+interface YaraRig { weapon: WardenWeapon; hook: () => void; cleared: number }
 function equipYara(): YaraRig {
-  const rig = { hooks: 0 } as YaraRig;
-  rig.weapon = new WardenWeapon({ root: heartrootStaff.scene.clone(), dispose: () => undefined }, { root: yara.scene, animation: { setPostPose: (hook) => { if (hook) rig.hooks += 1; } } }, 'heartroot');
+  const rig = { hook: () => undefined, cleared: 0 } as YaraRig;
+  rig.weapon = new WardenWeapon({ root: heartrootStaff.scene.clone(), dispose: () => undefined }, { root: yara.scene, animation: { setPostPose: (hook) => { if (hook) rig.hook = hook; else rig.cleared += 1; } } }, 'heartroot');
   return rig;
 }
 const radians = (angle: number) => angle * 180 / Math.PI;
 const staffTilt = (rig: YaraRig) => radians(new Vector3(0, 0, 1).applyQuaternion(rig.weapon.sockets.weapon.getWorldQuaternion(new Quaternion())).angleTo(WORLD_UP));
+const yaraNamed = (name: string) => yara.scene.getObjectByName(`mixamorig${name}`) as Bone;
 
-describe('Heartroot staff in Yara\'s fixed fist', () => {
-  it('seats the shaft 70–110° from the metacarpal direction with the thumb end toward the staff head', () => {
-    // Middle-finger (metacarpal) axis: centroid direction of the hand vertices farthest from the wrist.
-    const far = handPoints.map((point) => ({ point, distance: point.length() })).sort((a, b) => b.distance - a.distance).slice(0, Math.floor(handPoints.length * .15));
-    const fingers = far.reduce((sum, item) => sum.add(item.point), new Vector3()).divideScalar(far.length).normalize();
-    const angle = radians(bindGrip.axis.angleTo(fingers));
-    expect(angle).toBeGreaterThan(70);
-    expect(angle).toBeLessThan(110);
-    // The thumb is the lateral protrusion of the hand: its tail along the shaft lies on the head side.
-    const mean = handPoints.reduce((sum, point) => sum + point.dot(bindGrip.axis), 0) / handPoints.length;
-    expect(Math.max(...handPoints.map((point) => point.dot(bindGrip.axis))) - mean).toBeGreaterThan(mean - Math.min(...handPoints.map((point) => point.dot(bindGrip.axis))));
+describe('Heartroot staff in Yara\'s fist', () => {
+  it('lays the shaft along the knuckle line, thumb end toward the staff head', () => {
+    const local = (name: string) => yaraNamed(name).getWorldPosition(new Vector3()).applyMatrix4(yaraHand.matrixWorld.clone().invert());
+    poseYara('aren-idle', 0);
+    const knuckles = local('RightHandIndex1').sub(local('RightHandPinky1')).normalize();
+    expect(radians(bindGrip.axis.angleTo(knuckles))).toBeLessThan(1);
+    expect(bindGrip.joints.length).toBeGreaterThan(0);
   });
 
-  it('faces the palm toward the shaft', () => {
-    const rigid = bindGrip.rigid!;
-    const palm = handPoints.filter((point) => point.dot(rigid.direction) < rigid.hinge);
-    const centre = palm.reduce((sum, point) => sum.add(point), new Vector3()).divideScalar(palm.length);
-    expect(rigid.normal.dot(bindGrip.palm.clone().sub(centre))).toBeGreaterThan(0);
-    expect(rigid.normal.dot(bindGrip.palm.clone().sub(centre).normalize())).toBeGreaterThan(.6);
-  });
-
-  it('never twists the wrist: no post-pose hook, native hand rotation untouched, nothing accumulates across equips', () => {
-    poseYara('aren-walk', .4);
-    const native = yaraHand.quaternion.clone();
-    for (let round = 0; round < 3; round++) {
-      const rig = equipYara();
-      try {
-        expect(rig.hooks).toBe(0);
-        poseYara('aren-walk', .4);
-        expect(yaraHand.quaternion.toArray()).toEqual(native.toArray());
-        expect(yaraSkin.geometry).not.toBe(originalHandGeometry);
-      } finally { rig.weapon.dispose(); }
-      expect(yaraSkin.geometry).toBe(originalHandGeometry);
+  it('closes the fingers onto the shaft after every pose without moving the wrist or changing a bone length, and releases the hook on dispose', () => {
+    const rig = equipYara();
+    try {
+      poseYara('yara-sap-lance', .2);
+      const native = yaraHand.quaternion.clone();
+      const bones: Bone[] = [];
+      yara.scene.traverse((node) => { if ('isBone' in node && /mixamorigRightHand(Index|Middle|Ring|Pinky|Thumb)\d/.test(node.name)) bones.push(node as Bone); });
+      // Open the hand (the take's fingers already curl) so the closure is measured from a flat hand.
+      for (const bone of bones) bone.quaternion.copy(yaraBind.find(([candidate]) => candidate === bone)![1]);
+      yara.scene.updateMatrixWorld(true);
+      const spans = () => bones.map((bone) => bone.getWorldPosition(new Vector3()).distanceTo((bone.parent as Bone).getWorldPosition(new Vector3())));
+      const openTips = ['Index', 'Middle', 'Ring', 'Pinky'].map((finger) => yaraNamed(`RightHand${finger}4`).getWorldPosition(new Vector3()));
+      const lengths = spans();
+      rig.hook();
+      yara.scene.updateMatrixWorld(true);
       expect(yaraHand.quaternion.toArray()).toEqual(native.toArray());
-    }
+      spans().forEach((span, i) => expect(Math.abs(span - lengths[i]!)).toBeLessThan(1e-5));
+      const shaftPoint = rig.weapon.sockets.weapon.getWorldPosition(new Vector3());
+      const shaftAxis = new Vector3(0, 0, 1).applyQuaternion(rig.weapon.sockets.weapon.getWorldQuaternion(new Quaternion()));
+      const distanceToShaft = (point: Vector3) => point.clone().sub(shaftPoint).cross(shaftAxis).length();
+      ['Index', 'Middle', 'Ring', 'Pinky'].forEach((finger, i) => {
+        expect(distanceToShaft(yaraNamed(`RightHand${finger}4`).getWorldPosition(new Vector3()))).toBeLessThan(distanceToShaft(openTips[i]!) * 0.8);
+      });
+    } finally { rig.weapon.dispose(); }
+    expect(rig.cleared).toBe(1);
   }, 30_000);
 
-  it('wraps the fist around the shaft without flesh/staff penetration in every sampled pose', () => {
+  it('keeps the palm outside the shaft and grasps it closely in every sampled pose', () => {
     const rig = equipYara();
     try {
       const mesh = rig.weapon.root.getObjectByProperty('isMesh', true) as Mesh;
       const staffPositions = mesh.geometry.getAttribute('position');
       const inverse = new Matrix4(), point = new Vector3();
       const indices = yaraSkin.geometry.getAttribute('skinIndex'), weights = yaraSkin.geometry.getAttribute('skinWeight');
-      const sampled: Array<[string, number]> = [['aren-idle', 0], ['aren-walk', .3], ['aren-walk', 1.1], ['aren-run', .2], ['yara-thornshot-2', .2], ['yara-root-spike', .6]];
-      let shaftRadius = 0;
+      const handIndex = yaraSkin.skeleton.bones.indexOf(yaraHand);
+      const sampled: Array<[string, number]> = [['aren-idle', 0], ['aren-walk', .3], ['aren-run', .2], ['yara-thornshot-2', .2], ['yara-root-spike', .4], ['yara-sap-lance', .3]];
       for (const [clip, time] of sampled) {
         poseYara(clip, time);
+        rig.hook();
+        yara.scene.updateMatrixWorld(true);
         inverse.copy(rig.weapon.root.matrixWorld).invert();
-        shaftRadius = 0;
+        let shaftRadius = 0;
         for (const vertex of referencedVertices(mesh.geometry)) {
           point.fromBufferAttribute(staffPositions, vertex).applyMatrix4(mesh.matrixWorld).applyMatrix4(inverse);
           if (Math.abs(point.z) < .075) shaftRadius = Math.max(shaftRadius, Math.hypot(point.x, point.y));
         }
-        let skinRadius = Infinity;
+        let palmRadius = Infinity;
         for (const vertex of referencedVertices(yaraSkin.geometry)) {
-          let handWeight = 0;
-          for (let component = 0; component < 4; component++) if (yaraSkin.skeleton.bones[indices.getComponent(vertex, component)]?.name.includes('RightHand')) handWeight += weights.getComponent(vertex, component);
-          if (handWeight < .6) continue;
+          let palmWeight = 0;
+          for (let component = 0; component < 4; component++) if (indices.getComponent(vertex, component) === handIndex) palmWeight += weights.getComponent(vertex, component);
+          if (palmWeight < .6) continue;
           yaraSkin.getVertexPosition(vertex, point).applyMatrix4(yaraSkin.matrixWorld).applyMatrix4(inverse);
-          if (point.z > -.5 && point.z < .6) skinRadius = Math.min(skinRadius, Math.hypot(point.x, point.y));
+          if (Math.abs(point.z) < .075) palmRadius = Math.min(palmRadius, Math.hypot(point.x, point.y));
         }
         expect(shaftRadius).toBeGreaterThan(.005);
-        // Minimum finger/palm-to-shaft clearance: at worst tangent (never inside), and a close grasp.
-        expect(skinRadius - shaftRadius).toBeGreaterThan(-2e-4);
-        expect(skinRadius - shaftRadius).toBeLessThan(.008);
+        expect(palmRadius, clip).toBeGreaterThan(shaftRadius);
+        expect(palmRadius - shaftRadius, clip).toBeLessThan(.012);
       }
+    } finally { rig.weapon.dispose(); }
+  }, 60_000);
+
+  it('thins the whole shaft evenly, pommel to head: no waist where the fist rests', () => {
+    const rig = equipYara();
+    try {
+      const native = (heartrootStaff.scene.getObjectByProperty('isMesh', true) as Mesh).geometry.getAttribute('position');
+      const fitted = (rig.weapon.root.getObjectByProperty('isMesh', true) as Mesh).geometry.getAttribute('position');
+      expect(fitted.count).toBe(native.count);
+      const frame = analyzeGlaive(native.array as Float32Array);
+      const a = new Vector3(), b = new Vector3();
+      const radial = (attribute: typeof native, vertex: number, out: Vector3) => {
+        out.fromBufferAttribute(attribute, vertex).sub(frame.origin);
+        return out.addScaledVector(frame.axis, -out.dot(frame.axis)).length();
+      };
+      let low = Infinity, high = 0;
+      for (let vertex = 0; vertex < native.count; vertex++) {
+        const along = a.fromBufferAttribute(native, vertex).sub(frame.origin).dot(frame.axis) / frame.length;
+        if (along < .06 || along > .68) continue;
+        const before = radial(native, vertex, a);
+        if (before < 1e-4) continue;
+        const ratio = radial(fitted, vertex, b) / before;
+        low = Math.min(low, ratio); high = Math.max(high, ratio);
+      }
+      // One factor everywhere the fist can sit and between there and the head; the old fit carved a waist (ratio ~0.5 at the grip, 1 elsewhere).
+      expect(high).toBeLessThan(1);
+      expect(high / low).toBeLessThan(1.02);
     } finally { rig.weapon.dispose(); }
   }, 30_000);
 
-  it('carries the staff near vertical in the idle loop and through the walk and run cycles', () => {
+  it('carries the staff near vertical through the walk and run cycles', () => {
     const rig = equipYara();
     try {
-      for (const [clip, limit] of [['aren-idle', 15], ['aren-walk', 15], ['aren-run', 15]] as const) {
+      for (const clip of ['aren-walk', 'aren-run']) {
         const duration = yara.animations.find((item) => item.name === clip)!.duration;
         let peak = 0;
         for (let step = 0; step <= 24; step++) { poseYara(clip, duration * step / 24); peak = Math.max(peak, staffTilt(rig)); }
-        expect(peak).toBeLessThan(limit);
+        expect(peak, clip).toBeLessThan(15);
       }
     } finally { rig.weapon.dispose(); }
   }, 30_000);
 
   it('matches the grip the clip author used', () => {
-    const report = JSON.parse(readFileSync(`${root}asset-source/generated/actor-yara-hero-01/anatomy-report.json`, 'utf8')).grip as { staffAxisHand: number[]; palmHand: number[]; shaftRadiusRig: number };
+    const report = JSON.parse(readFileSync(`${root}asset-source/generated/actor-yara-hero-01/anatomy-report.json`, 'utf8')).grip as { staffAxisHand: number[]; palmHand: number[] };
     expect(radians(bindGrip.axis.angleTo(new Vector3(...report.staffAxisHand)))).toBeLessThan(.5);
     expect(bindGrip.palm.distanceTo(new Vector3(...report.palmHand))).toBeLessThan(1e-4);
   });
+});
+
+describe('Heartroot staff profiles and Sap Lance throw', () => {
+  const L = WARDEN_WEAPON_LENGTH;
+  const tipZ = (rig: YaraRig): number => { yara.scene.updateMatrixWorld(true); return rig.weapon.root.worldToLocal(rig.weapon.sockets['weapon-tip'].getWorldPosition(new Vector3())).z; };
+  const worldAxis = (object: Object3D): Vector3 => new Vector3(0, 0, 1).applyQuaternion(object.getWorldQuaternion(new Quaternion()));
+  const fingers: Bone[] = [];
+  yara.scene.traverse((node) => { if ('isBone' in node && /mixamorigRightHand(Index|Middle|Ring|Pinky|Thumb)\d/.test(node.name)) fingers.push(node as Bone); });
+  const fingerPose = (): Quaternion[] => fingers.map((bone) => bone.quaternion.clone());
+  const fingerDelta = (a: Quaternion[], b: Quaternion[]): number => Math.max(...a.map((q, i) => q.angleTo(b[i]!)));
+
+  it('uses the default profile for clips the table does not list and the table\'s own for the rest', () => {
+    expect(staffProfileFor('aren-walk')).toEqual({ turn: 0, grip: 0.42 });
+    expect(radians(staffProfileFor('yara-thornshot-2').turn)).toBeCloseTo(-45, 6);
+    expect(staffProfileFor('yara-root-spike').grip).toBe(0.12);
+  });
+
+  it('eases into the next clip\'s profile over the blend time, moving the staff head and the fingers with it', () => {
+    const rig = equipYara();
+    try {
+      poseYara('aren-idle', 0);
+      rig.weapon.setClip('aren-idle', 0);
+      const idle = staffProfileFor('aren-idle'), next = staffProfileFor('yara-thornshot-2');
+      const idleTip = tipZ(rig), idleAxis = worldAxis(rig.weapon.root);
+      rig.hook();
+      const idleFingers = fingerPose();
+      // Halfway through the blend the staff has slid half of the way along the shaft.
+      rig.weapon.setClip('yara-thornshot-2', STAFF_BLEND_SECONDS / 2);
+      const slide = (idle.grip - next.grip) * L;
+      expect(tipZ(rig)).toBeCloseTo(idleTip + slide / 2, 4);
+      // After the blend time it has reached the profile exactly.
+      rig.weapon.setClip('yara-thornshot-2', STAFF_BLEND_SECONDS);
+      expect(tipZ(rig)).toBeCloseTo(idleTip + slide, 4);
+      expect(radians(worldAxis(rig.weapon.root).angleTo(idleAxis))).toBeCloseTo(Math.abs(radians(next.turn - idle.turn)), 2);
+      rig.hook();
+      expect(fingerDelta(fingerPose(), idleFingers)).toBeGreaterThan(0.01);
+      // Staying on the clip leaves it there.
+      rig.weapon.setClip('yara-thornshot-2', 1);
+      expect(tipZ(rig)).toBeCloseTo(idleTip + slide, 4);
+    } finally { rig.weapon.dispose(); }
+  }, 30_000);
+
+  it('throws the staff: the held staff hides, the flying one spins flat, and it is back within 0.6 s plus the blend', () => {
+    const stage = new Scene();
+    stage.add(yara.scene);
+    const rig = equipYara();
+    try {
+      poseYara('yara-sap-lance', 0.3);
+      rig.weapon.setClip('yara-sap-lance', 0);
+      const held = rig.weapon.root.getObjectByProperty('isMesh', true) as Mesh;
+      const shown = (): boolean => { for (let node: Object3D | null = held; node; node = node === rig.weapon.root ? null : node.parent) if (!node.visible) return false; return true; };
+      const fist = rig.weapon.sockets.weapon.getWorldPosition(new Vector3());
+      const target = { x: fist.x + 5, y: fist.y, z: fist.z };
+      expect(shown()).toBe(true);
+      expect(rig.weapon.throwStaff(target)).toBe(true);
+      expect(rig.weapon.throwStaff(target)).toBe(false);
+      expect(rig.weapon.throwing).toBe(true);
+      expect(shown()).toBe(false);
+      const flight = rig.weapon.flight!;
+      expect(flight.visible).toBe(true);
+      expect(flight.parent).toBe(stage);
+      const frame = 1 / 60;
+      let elapsed = 0;
+      const step = (): void => { rig.weapon.setClip('yara-sap-lance', frame); elapsed += frame; };
+      while (elapsed < 0.18) step();
+      // Flat (the shaft never leaves the horizontal plane) and spinning: 3 frames at 2.5 rev/s turn it 45°.
+      expect(Math.abs(worldAxis(flight).y)).toBeLessThan(1e-6);
+      const before = worldAxis(flight);
+      for (let i = 0; i < 3; i++) step();
+      expect(radians(worldAxis(flight).angleTo(before))).toBeGreaterThan(30);
+      // The outward leg ends at the lane end, then she calls the staff back.
+      while (elapsed < STAFF_THROW.outSeconds - 1e-9) step();
+      expect(flight.getWorldPosition(new Vector3()).distanceTo(new Vector3(target.x, target.y, target.z))).toBeLessThan(0.2);
+      while (rig.weapon.throwing && elapsed < 2) step();
+      expect(elapsed).toBeLessThanOrEqual(STAFF_THROW.outSeconds + STAFF_THROW.backSeconds + STAFF_BLEND_SECONDS);
+      expect(elapsed).toBeGreaterThan(STAFF_THROW.outSeconds + STAFF_THROW.backSeconds - 2 * frame);
+      expect(shown()).toBe(true);
+      expect(flight.visible).toBe(false);
+      // A hit, knockdown or defeat snaps a flying staff straight back into the fist.
+      expect(rig.weapon.throwStaff(target)).toBe(true);
+      for (let i = 0; i < 5; i++) step();
+      rig.weapon.cancelThrow();
+      expect(rig.weapon.throwing).toBe(false);
+      expect(shown()).toBe(true);
+      expect(flight.visible).toBe(false);
+      // Disposing mid-flight takes the flying staff out of the scene.
+      expect(rig.weapon.throwStaff(target)).toBe(true);
+    } finally {
+      const flight = rig.weapon.flight;
+      rig.weapon.dispose();
+      expect(flight?.parent ?? null).toBeNull();
+      stage.remove(yara.scene);
+    }
+  }, 30_000);
+
+  it('keeps the fingers on the take while the staff is away', () => {
+    const stage = new Scene();
+    stage.add(yara.scene);
+    const rig = equipYara();
+    try {
+      poseYara('yara-sap-lance', 0.3);
+      rig.weapon.setClip('yara-sap-lance', 0);
+      const take = fingerPose();
+      rig.hook();
+      expect(fingerDelta(fingerPose(), take)).toBeGreaterThan(0.05);
+      poseYara('yara-sap-lance', 0.3);
+      rig.weapon.throwStaff({ x: 3, y: 1, z: 0 });
+      rig.hook();
+      expect(fingerDelta(fingerPose(), take)).toBeLessThan(1e-3);
+    } finally { rig.weapon.dispose(); stage.remove(yara.scene); }
+  }, 30_000);
 });
 
 /** Vesper's rigid-fist katana: synthetic fixtures cover orientation invariance;

@@ -767,7 +767,7 @@ function viperContext(rig) {
   ctx.hipsJoint = ctx.spine[1]; // mid body: the neck base swings forward in the strikes and the collapse, the coil behind it stays put
   ctx.rootJoint = ctx.root;
   ctx.strikeJoints = [ctx.head[0]];
-  // The raised neck and head are a short chain on a heavy body: every authored rear / head angle is scaled up so the strikes, spit and roar
+  // The raised neck and head are carried by Root: scale the authored rear angles so the strikes, spit and roar
   // read from a gameplay camera (the first review sheet showed head swings of only a few degrees on the S-coil).
   ctx.gain = 1.45;
   return ctx;
@@ -777,7 +777,7 @@ function viperContext(rig) {
 const VIPER_LEVELS = [0.15, 0.07, 0.128, 0.119, 0.07, 0.07, 0.051, 0.047, 0.039, 0.028];
 
 /**
- * Viper pose. ctl: { rear: [pitch, yaw, roll] of the neck/head about the neck base, head: [..] per head joint share,
+ * Viper pose. ctl: { rear: [pitch, yaw, roll] of the rigid skull about the neck base,
  * wave: { amp, k, phase, from } travelling lateral wave down the spine chain, lash: tail-weighted extra yaw }.
  */
 export function viperPose(ctx, ctl) {
@@ -807,11 +807,8 @@ export function viperPose(ctx, ctl) {
     pb.rotate(ctx.neckBase, qRear.clone().invert());
   }
   if (ctl.up || ctx.lift) pb.translate(ctx.root, V(0, (ctl.up ?? 0) + ctx.lift, 0));
-  const spread = (joints, angles, weights) => {
-    const total = weights.reduce(sum, 0);
-    joints.forEach((joint, i) => pb.rotate(joint, body.euler(angles.map(v => v * weights[i] / total))));
-  };
-  if (ctl.head) spread(ctx.head, ctl.head.map(v => v * ctx.gain), [0.34, 0.26, 0.2, 0.1, 0.05, 0.05]);
+  // Head_0..5 run through the snout, cheek and crown, not a flexible neck. Rotating them separately caves in
+  // the skull shared with Root. Keep their bind locals; Root above carries the whole head without folding it.
   const wave = ctl.wave;
   if (wave) ctx.spine.forEach((joint, i) => {
     const amp = wave.amp * (wave.taper ? 0.4 + 0.6 * (i / 9) ** wave.taper : 1);
@@ -832,7 +829,6 @@ function viperLunge(ctx, { swing, yaw = 0, nose = 0, coil = 0, follow = 0.85 }) 
   const angle = (follow * swing + nose) / ctx.gain, turn = 0.3 * yaw / ctx.gain;
   return viperPose(ctx, {
     rear: [angle, turn, 0],
-    head: [angle, turn, 0],
     fall: { pitch: swing, yaw, flat: 0, slack: i => coil * Math.sin(0.7 * i + 0.6) * (0.4 + 0.6 * (i / 9)) },
   });
 }
@@ -861,7 +857,6 @@ const VIPER = {
         const neck = 124 * sag, headAngle = neck * follow;
         return viperPose(ctx, {
           rear: [24 * hit + headAngle / ctx.gain, 14 * hit * sin(t, 2, 0.2), 0],
-          head: [16 * hit + headAngle / ctx.gain, 10 * sag, 0],
           fall: { pitch: neck, yaw: 12 * sag, flat, slack: i => 14 * sag * Math.sin(0.8 * i + 2.2) * (0.3 + 0.7 * (i / 9)) + 18 * thrash * sin(t, 3, -i * 0.1) },
         });
       },
@@ -882,7 +877,6 @@ const VIPER = {
         const neck = 116 * sag, headAngle = neck * follow;
         return viperPose(ctx, {
           rear: [22 * hit + headAngle / ctx.gain, 12 * hit * sin(t, 2, 0.2), 0],
-          head: [14 * hit + headAngle / ctx.gain, 8 * sag, 0],
           fall: { pitch: neck, yaw: 10 * sag, flat, slack: i => 12 * sag * Math.sin(0.8 * i + 2.2) * (0.3 + 0.7 * (i / 9)) + 16 * thrash * sin(t, 3, -i * 0.1) },
         });
       },
@@ -900,11 +894,11 @@ const VIPER = {
         const stageCtl = [
           null, // stage 0 is the knockdown's last frame; resolved in the closure
           // Half-coil: the spine re-coils up; the neck starts to rear with the head held off the ground.
-          { rear: [-8, 4 * sin(t, 1, 0.2), 0], head: [-2, 6 * sin(t, 1, -0.1), 0], wave: { t, cycles: 1, amp: 4, k: 0.08, taper: 1.2 } },
+          { rear: [-8, 4 * sin(t, 1, 0.2), 0], wave: { t, cycles: 1, amp: 4, k: 0.08, taper: 1.2 } },
           // Alert: the neck rears high, head scans (yaw sweep), shoulders spread, body coils.
-          { rear: [22 + 2 * sin(t, 1, 0.2), 14 * sin(t, 1, 0.4) + 6 * sin(t, 2, 0.3), 2 * sin(t, 1, 0.3)], head: [10 + 2 * sin(t, 2, 0.3), 22 * sin(t, 1, 0.5) + 4 * sin(t, 2, 0.3), 2 * sin(t, 1, 0.4)], wave: { t, cycles: 1, amp: 6, k: 0.08, taper: 1.4 } },
+          { rear: [22 + 2 * sin(t, 1, 0.2), 14 * sin(t, 1, 0.4) + 6 * sin(t, 2, 0.3), 2 * sin(t, 1, 0.3)], wave: { t, cycles: 1, amp: 6, k: 0.08, taper: 1.4 } },
           // Stand: body settles to the idle S-coil with a short shake-off (decaying).
-          { rear: [4 * sin(t, 1, 0.2) + 1.6 * sin(t, 2), 11 * sin(t, 1) + 2 * sin(t, 2, 0.3), 2.5 * sin(t, 1, 0.3)], head: [4 * sin(t, 2, 0.3), 10 * sin(t, 1, -0.12), 3 * sin(t, 1, 0.1)], wave: { t, cycles: 1, amp: 6, k: 0.08, taper: 1.5 } },
+          { rear: [4 * sin(t, 1, 0.2) + 1.6 * sin(t, 2), 11 * sin(t, 1) + 2 * sin(t, 2, 0.3), 2.5 * sin(t, 1, 0.3)], wave: { t, cycles: 1, amp: 6, k: 0.08, taper: 1.5 } },
         ];
         const rig = ctx.rig, edges = [0, 0.32, 0.6, 0.78];
         return { pb: { solve: () => {
@@ -930,7 +924,6 @@ const VIPER = {
         const shake = window01(t, 0.56, 0.62, 0.8, 0.92);
         return viperPose(ctx, {
           rear: [-30 * low + 26 * alert, 22 * look + 6 * shake * sin(t, 7, 0.3), 3 * shake * sin(t, 7)],
-          head: [-26 * low + 12 * alert, 26 * look + 8 * shake * sin(t, 7, 0.5), 0],
           wave: { t, cycles: 3, amp: 8 * low + 7 * shake, k: 0.1, taper: 1.2 },
         });
       },
@@ -939,7 +932,6 @@ const VIPER = {
       pose(t, ctx) {
         return viperPose(ctx, {
           rear: [4 * sin(t, 1, 0.2) + 1.6 * sin(t, 2), 11 * sin(t, 1), 2.5 * sin(t, 1, 0.3)],
-          head: [4 * sin(t, 2, 0.3), 10 * sin(t, 1, -0.12), 3 * sin(t, 1, 0.1)],
           wave: { t, cycles: 1, amp: 6, k: 0.08, taper: 1.5 },
         });
       },
@@ -948,7 +940,6 @@ const VIPER = {
       pose(t, ctx) {
         return viperPose(ctx, {
           rear: [-2 + 2 * sin(t, 2, 0.3), 10 * sin(t, 2, 0.1), 4 * sin(t, 2, 0.4)],
-          head: [-3 + 2 * sin(t, 2, 0.5), 14 * sin(t, 2, -0.1), 0],
           wave: { t, cycles: 3, amp: 12, k: 0.08, taper: 0.8 },
         });
       },
@@ -975,7 +966,6 @@ const VIPER = {
         const tremor = window01(t, 0.5, 0.54, 0.62, 0.68);
         return viperPose(ctx, {
           rear: [c([[0, 0], [0.12, -3, 'out'], [0.4, 48, 'io'], [0.47, 50, 'lin'], [0.52, -24, 'in'], [0.6, -10, 'out'], [0.67, -11, 'lin'], [1, 0]]), 3 * tremor * sin(t, 13, 0.2), 0],
-          head: [c([[0, 0], [0.4, 28, 'io'], [0.47, 32, 'lin'], [0.53, -28, 'in'], [0.6, -10, 'out'], [0.67, -10, 'lin'], [1, 0]]), 4 * tremor * sin(t, 13, 0.5), 0],
           wave: { t, cycles: 2, amp: c([[0, 0], [0.4, 3], [0.52, 8], [1, 0]]), k: 0.1, taper: 1.2 },
         });
       },
@@ -986,7 +976,6 @@ const VIPER = {
         const c = keys => curve(keys, t);
         return viperPose(ctx, {
           rear: [c([[0, 0], [0.26, -8, 'io'], [0.31, 44, 'in'], [0.5, 58, 'out2'], [0.7, 14, 'in'], [0.78, -16, 'out'], [0.95, 2], [1, 0]]), c([[0, 0], [0.26, 6], [0.5, -4], [1, 0]]), 0],
-          head: [c([[0, 0], [0.26, -10], [0.34, 16], [0.5, 22], [0.7, -4], [0.8, -14, 'out'], [1, 0]]), 0, 0],
           wave: { t, cycles: 1, amp: c([[0, 0], [0.26, 5], [0.5, 2], [0.78, 7], [1, 0]]), k: 0.12, taper: 1.2 },
         });
       },
@@ -1008,7 +997,6 @@ const VIPER = {
       pose(t, ctx) {
         return viperPose(ctx, {
           rear: [2, 12 * sin(t, 1, 0.1), 3 * sin(t, 1, 0.4)],
-          head: [0, 8 * sin(t, 1, 0.2), 0],
           wave: { t, cycles: 2, amp: 18, k: 0.1, taper: 1.8 },
           chain: 5 * sin(t, 1, 0.3),
         });
@@ -1035,7 +1023,6 @@ const VIPER = {
         const shake = window01(t, 0.22, 0.3, 0.76, 0.86);
         return viperPose(ctx, {
           rear: [50 * raise + 3 * shake * sin(t, 9, 0.2), 8 * shake * sin(t, 4.5), 4 * shake * sin(t, 4.5, 0.3)],
-          head: [32 * raise + 5 * shake * sin(t, 9, 0.5), 10 * shake * sin(t, 4.5, 0.1), 0],
           wave: { t, cycles: 3, amp: 3 * raise + 2 * shake, k: 0.1, taper: 1.2 },
         });
       },
@@ -1051,7 +1038,6 @@ const VIPER = {
         const keys = [[0, 0], [0.34, 9], [0.42, 10, 'lin'], [0.5, -15, 'in'], [0.57, -20, 'out'], [0.68, -10], [0.78, -1], [0.88, 3], [1, 0]];
         return viperPose(ctx, {
           rear: [c([[0, 0], [0.34, 6], [0.5, -3, 'in'], [1, 0]]), c([[0, 0], [0.34, -8], [0.5, 10, 'in'], [0.62, 6, 'out'], [0.85, 0], [1, 0]]), 0],
-          head: [0, c([[0, 0], [0.34, -6], [0.5, 8, 'in'], [1, 0]]), 0],
           lash: i => curve(keys, t - 0.026 * i) * (0.35 + 0.65 * (i / 9) ** 1.3),
         });
       },

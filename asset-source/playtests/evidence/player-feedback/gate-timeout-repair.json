@@ -1,0 +1,248 @@
+{
+  "title": "Gate timeout repair: measured, performance-preserving harness repairs for the 185-file Bun gate",
+  "scope": "tests/world/grove-world.test.ts, tests/combat/sealed-route-harness.ts, tests/combat/greenwake-monster-behaviour.test.ts, tests/combat/vesper-kit.test.ts, tests/combat/moonpine-sealed-route.test.ts",
+  "ownership": "Task 134 hero-pose-collision worktree; no production files, no other tests, no docs changed.",
+  "principles": [
+    "No deadline was changed, raised or removed.",
+    "No assertion, expected value, grid size, sampling rate or case count was weakened, re-pinned or removed.",
+    "No test was skipped, disabled or marked as expected-failure.",
+    "Every repair removes measured redundant work; none is a speculative optimisation.",
+    "The pre-existing seam convention in tests/combat/act-one-bench.ts, tests/combat/hero-kit-seam.test.ts and tests/combat/vesper-kit.test.ts (reading the engine's live state through a typed cast) was reused rather than a second convention invented."
+  ],
+  "environment": {
+    "host": "darwin 23.5.0 arm64, 8 cores, 16 GB",
+    "load_average_during_measurement": "20-23 (heavy external load: browsers, python render tools, other agents)",
+    "free_pages_observed": "~70 MB (4132 free + 4486 purgeable of 16 GB)",
+    "bun": "1.4.3",
+    "caveat": "Per-test durations measured under this load are noisy. Only the greenwake-monster-behaviour before/after (10.09 s -> 1.16 s, 8.7x) is far outside the noise band; the sealed-route and vesper-kit deltas are directional, not exact."
+  },
+  "causal_measurements": [
+    {
+      "symptom": "tests/world/grove-world.test.ts:262-293 'terrain mesh, mask textures, clutter and draw calls stay within Greenwake budgets' took 5017.99 ms against a 5000 ms deadline.",
+      "cause": "bakeGroundMask() is the dominant cost (grove 977-2279 ms, greenwake 943-2222 ms per bake), and the file baked the identical grove mask three times: at the budget case (line 269), the trail-painting case (line 296) and the sap-mud case (line 379).",
+      "evidence": [
+        "bench-grove-file-costs.ts: buildTerrainMeshData grove 56 ms / greenwake 47 ms; bakeGroundMask grove 977 ms / greenwake 943 ms; new GroundClutter grove 120 ms / greenwake 117 ms; new TerrainField grove 298 ms / greenwake 327 ms.",
+        "bench-grove-file-costs.ts: the two later re-bakes of the grove mask cost 632 ms and 696 ms.",
+        "bench-mask-determinism.ts: two bakes of (region, field, biome) are byte-identical for data, shade, terrain, edge, interior, detail and segments, and terrainRect matches; field.heights, field.fineHeights and the region JSON are unchanged by a bake."
+      ],
+      "repair": "One module-scope `groveMask` baked once, reused by all three cases. The bake is a pure function of (region, field, biome), proven by the determinism check above.",
+      "saved": "Two full-resolution bakes removed (each rasterises a 448x808 weight grid plus a 896x1616 detail grid), measured at 632 ms + 696 ms in the same process."
+    },
+    {
+      "symptom": "tests/combat/canopy-sealed-route.test.ts, greenwake-sealed-route.test.ts, mistveil-sealed-route.test.ts and moonpine-sealed-route.test.ts each carry a 120000 ms deadline on the breach case 'never lets Run, Dive chains or Jump chains reach the far side'.",
+      "cause": "The harness built a whole CombatSnapshot on every simulation tick (3264 runs x ~122 ticks = 399,840 ticks per region). snapshot() copies every actor, hazard, telegraph, prop and event; the loop only reads two things from it (the dive skill's availability and the player's position).",
+      "evidence": [
+        "bench-harness-internals.ts: snapshot() 0.1167 ms per call; the engine's own playerSkills() 0.0088 ms; a live-state actor read 0.00066 ms; fixedStep 0.0457 ms.",
+        "bench-harness-regions.ts (baseline, before the repair): engine loop Canopy 53.1 s, Greenwake 106.6 s, Mistveil 128.9 s, Moonpine 65.1 s, plus flood fills of 1.2-4.8 s per region.",
+        "bench-harness-internals.ts: the seam reads are equivalent to the snapshot reads - dive available (true/true) and the player position are identical.",
+        "bun test tests/combat/canopy-sealed-route.test.ts --reporter=junit: the breach case was 30.23 s of the file's 31.55 s; every other case was <= 0.2 s."
+      ],
+      "repair": "The per-tick `engine.snapshot()` in `furthest()` now reads the live engine state and the engine's own `playerSkills()` through the same typed-cast seam the other combat tests already use.",
+      "saved": "The snapshot cost per tick drops from 0.1167 ms to 0.0095 ms (about 12x less per tick) across 399,840 ticks per region."
+    },
+    {
+      "symptom": "The Greenwake monster cases in tests/combat/greenwake-monster-behaviour.test.ts timed out at 5 s.",
+      "cause": "Four hot loops each called `snapshotState()` up to four times per tick. snapshotState() deep-copies the whole engine state, including the 36-56 KB environment and the 44-64 KB checkpoint.",
+      "evidence": [
+        "bench-clone-cost.ts: snapshotState() 8.011 ms; snapshot() 0.361 ms; consumeEvents() and drainPresentationCues() below 0.001 ms.",
+        "bench-monster-behaviour.ts: snapshotState() 2.236 ms, snapshot() 0.221 ms, fixedStep 0.124 ms; the tier loop costs 2.0 s for 850 ticks and 6.1 s for 2600 ticks.",
+        "bench-clone-cost.ts: the four-clones-per-tick pattern costs 18.6 ms per tick, i.e. 11.2 s for a 600-tick loop and 16.7 s for a 900-tick loop."
+      ],
+      "repair": "The 3600-tick locomotion loop, laneSetup (600 ticks), the root-rammer loop (900 ticks), the roar loop and the tier loop (850/2600 ticks, four cases) now read the live engine state; the monster actor is read directly with liveMonster().",
+      "saved": "Measured end to end on the file: 10.09 s -> 1.16 s (8.7x), with the same 23 tests and the same 53612 expect() calls passing before and after."
+    },
+    {
+      "symptom": "The Vesper kit cases in tests/combat/vesper-kit.test.ts timed out at 5 s.",
+      "cause": "Twelve per-tick `snapshot().player.untargetable` reads rebuilt a whole snapshot on each tick to read one boolean.",
+      "evidence": [
+        "bench-harness-internals.ts: snapshot() 0.1167 ms per call against 0.00066 ms for a live read.",
+        "bun test tests/combat/vesper-kit.test.ts --reporter=junit: the slowest case ('is untargetable for its 120 ticks, marks every foe within 12 m, slashes seven times and detonates') was 2.01 s of a 6.04 s file."
+      ],
+      "repair": "Those reads now call the engine's own `isUntargetable()` predicate through the same private-method seam convention the repo already uses for `beginAttack` in tests/combat/act-one-bench.ts. `snapshot().player.untargetable` is `true` or absent, so the three `toBeUndefined()` assertions became `toBe(false)`, which is the same condition expressed as a boolean.",
+      "saved": "Directional only under this host load: the file's total moved from 5.85 s to 9.61 s across two runs whose slowest case was 2.01 s and then 3.38 s. The load moved with it, so this delta is not a claim of improvement."
+    },
+    {
+      "symptom": "The Moonpine route case timed out at 6181 ms.",
+      "cause": "walkRoute() called `walker.snapshot()` once per tick, up to 900 ticks per navigation node and five nodes.",
+      "evidence": [
+        "bench-harness-internals.ts: snapshot() 0.1167 ms per call against 0.00066 ms for a live read.",
+        "bun test tests/combat/moonpine-sealed-route.test.ts --reporter=junit: the breach case was 18.19 s of the file's 19.23 s; the route case 'stops at the first closed gate, then the second, then the third' was 0.20 s."
+      ],
+      "repair": "walkRoute() reads the player's live position through the same live-state seam.",
+      "saved": "Directional; the route case is a small share of the file."
+    }
+  ],
+  "deliberately_not_changed": [
+    {
+      "candidate": "Drop the outer `structuredClone(seedTemplate)` in sealed-route-harness.ts's spawnAt(), so the engine's own hydrateEngineState() clone is the only copy.",
+      "reason": "Measured and rejected. hydrateEngineState() aliases the seed's arrays instead of copying them: `state.hazards = seed.hazards ?? []` and `state.events = seed.events ?? []`. bench-seed-alias.ts confirms that without the outer clone a spawned engine's consumeEvents() truncates the shared template's events array (1 -> 0), so every later spawn would start from a corrupted template. A shallow-copy variant saved only 0.41 ms per spawn (about 1.3 s over 3264 runs) against that risk."
+    },
+    {
+      "candidate": "Split the sealed-route breach case per gate.",
+      "reason": "Not needed and would change the case count. bench-starts.ts shows every gate already contributes 17 start points and 1088 runs, and the file asserts `runs > 1000` over the whole region (3264 runs), so the existing single case already keeps each gate above 1000 runs on its own. Splitting was therefore not a repair but a restructuring."
+    },
+    {
+      "candidate": "Touch tests/combat/hero-kit-seam.test.ts's ten 'a long <direction> kit dodge' cases (0.38-0.43 s each) or tests/combat/greenwake-sealed-route.test.ts, canopy-sealed-route.test.ts, mistveil-sealed-route.test.ts.",
+      "reason": "hero-kit-seam was already repaired by Main (per-tick full-state clones removed, the long-dodge grid split); its ten remaining cases are all under the 5 s deadline. The three region files were left untouched: they own no measured redundant work of their own, and their cost is entirely in the shared harness, which was repaired instead."
+    },
+    {
+      "candidate": "Cache the Greenwake trial region across vesper-kit's 41 bench() calls.",
+      "reason": "createCombatTrialRegion() costs 7.55 ms against a 14.71 ms full bench() setup, and vesper-kit's cases run 9.6 s in total with no single case near its deadline. The change would alter what each bench() builds (a fresh region per call) for no measured deadline benefit."
+    }
+  ],
+  "retained_case_and_assertion_counts": {
+    "tests/world/grove-world.test.ts": "16 cases; the ambient jump invariant ('Grove ambient particles stay world-grounded through a jump and landing while their horizontal volume streams') preserved unchanged.",
+    "tests/combat/sealed-route-harness.ts": "6 assertions per region plus the 2 engine-loop cases; the breach case still asserts `runs > 1000` per region (measured 3264 runs, 1088 per gate) and still throws on any breach.",
+    "tests/combat/greenwake-monster-behaviour.test.ts": "23 tests, 53612 expect() calls - identical before and after the repair (measured).",
+    "tests/combat/vesper-kit.test.ts": "36 tests, 1022 expect() calls - identical before and after the repair (measured).",
+    "tests/combat/moonpine-sealed-route.test.ts": "16 tests, 27296 expect() calls - identical before and after the repair (measured).",
+    "tests/combat/hero-kit-seam.test.ts": "46 tests, 12542 expect() calls - unchanged by this slice."
+  },
+  "validation_commands": [
+    "bunx tsc --noEmit -p .  -> exit 0, no diagnostics in tests/world or tests/combat",
+    "bun test tests/combat/greenwake-monster-behaviour.test.ts  -> 23 pass / 0 fail / 53612 expect() calls, 1.16 s (baseline 10.09 s)",
+    "bun test tests/combat/vesper-kit.test.ts  -> 36 pass / 0 fail / 1022 expect() calls",
+    "bun test tests/combat/moonpine-sealed-route.test.ts tests/combat/hero-kit-seam.test.ts  -> 62 pass / 0 fail / 39838 expect() calls",
+    "bun test tests/combat/canopy-sealed-route.test.ts  -> 14 pass / 0 fail / 28771 expect() calls"
+  ],
+  "remaining_blockers": [
+    "Host pressure: load average 20-23 on 8 cores with ~70 MB of free pages throughout. This does not establish per-test causation for the reported suite-level failures, and it made several before/after comparisons directional rather than exact.",
+    "The complete 185-file gate and the fresh-sequential-per-file run were NOT executed in this slice: the brief forbids suite runs mid-flight and Main owns the integrated gate."
+  ],
+  "production_regressions_found": "None. Every measured cost was in test-side work (per-tick full-state deep copies, repeated identical mask bakes). No production file was modified and no measured behaviour change was found in src/.",
+  "coordinatorReview": {
+    "temporalObservation": "Main retained immutable historical observations while accepting the live-state hot-loop repair: previous movement uses X/Z scalars, saved per-tick positions copy only their Vec3, and the first observed hazard is cloned once. A later in-place engine update therefore cannot rewrite an earlier test observation.",
+    "untargetableEquivalence": "Main read CombatEngine.isUntargetable, playerSnapshotExtras and snapshot: the predicate is exactly the one projecting true-or-absent player.untargetable. The boolean assertions retain the same gameplay criterion.",
+    "finalGate": "final-bun-gate-r3.json is the authoritative exhaustive integrated result, not the worker's focused commands."
+  },
+  "diagnostics": {
+    "location": ".tmp-feedback-gate-harness/ (throwaway, removed after the measurements)",
+    "scripts": [
+      "bench-grove-budget.ts",
+      "bench-grove-file-costs.ts",
+      "bench-repeat.ts",
+      "bench-mask-determinism.ts",
+      "bench-harness-internals.ts",
+      "bench-harness-regions.ts",
+      "bench-harness-loop.ts",
+      "bench-spawn-variants.ts",
+      "bench-spawn-breakdown.ts",
+      "bench-seed-alias.ts",
+      "bench-alias-diagnosis.ts",
+      "bench-clone-cost.ts",
+      "bench-monster-behaviour.ts",
+      "bench-hero-vesper.ts",
+      "bench-named-slow.ts",
+      "bench-vesper-bench.ts",
+      "bench-vesper-hot.ts",
+      "bench-starts.ts",
+      "bench-engine-ctor.ts",
+      "bench-sealed-route.ts"
+    ]
+  },
+  "coordinatorFinalGateRepair": {
+    "observedAt": "2026-10-22T17:01:55.049Z",
+    "owner": "main coordinator",
+    "source": "tests/combat/traversal.test.ts",
+    "redEvidence": "final-bun-gate-r3.json",
+    "red": {
+      "test": "completes every authored type against the renderer-measured native props, not only their authored proxies",
+      "elapsedMs": 6661.79,
+      "unchangedDeadlineMs": 5000
+    },
+    "cause": "Repeatedly decoded the same native GLBs and rebuilt identical model-space geometry once per prop placement; the existing Canopy sealed-route fixture already groups same-asset/same-kind placements into one measured batch.",
+    "change": "Reuse that established grouped-batch pattern locally in the traversal fixture and dispose every batch. No production changes; all nine authored arcs, all 355 solid placements, all 581 measured colliders, 53 supports and every assertion remain.",
+    "profiles": {
+      "before": "traversal-native-fixture-before-r3.json",
+      "after": "traversal-native-fixture-after-r3.json",
+      "beforeMs": 2480.188583,
+      "afterMs": 381.03766600000006,
+      "beforeNativeDecodes": 355,
+      "afterNativeDecodes": 22
+    },
+    "focusedAfter": {
+      "command": "bun test tests/combat/traversal.test.ts",
+      "pass": 13,
+      "fail": 0,
+      "expectCalls": 350,
+      "wallSeconds": 1.49
+    },
+    "canonicalFullGate": "final-canonical-gates-r3.json"
+  },
+  "coordinatorCanonicalFollowup": {
+    "observedAt": "2026-10-22T17:22:12.494Z",
+    "red": {
+      "receipt": "final-canonical-gates-r3.json",
+      "complete": true,
+      "files": 185,
+      "pass": 2386,
+      "fail": 4,
+      "wallSeconds": 677.598689208,
+      "failures": [
+        {
+          "file": "tests/combat/vesper-kit.test.ts",
+          "test": "Thousand Cuts blocks a floor hazard for the whole skill",
+          "elapsedMs": 7523.73
+        },
+        {
+          "file": "tests/combat/vesper-kit.test.ts",
+          "test": "Crimson Requiem is untargetable for its 120 ticks",
+          "elapsedMs": 7042.27
+        },
+        {
+          "file": "tests/combat/orun-duel.test.ts",
+          "test": "ordinary damage never subdues the Last Warden",
+          "elapsedMs": 8756.5
+        },
+        {
+          "file": "tests/world/mistveil-world.test.ts",
+          "test": "terrain mesh, mask textures, clutter and draw calls stay within Greenwake budgets",
+          "elapsedMs": 6029.95
+        }
+      ],
+      "unchangedDeadlineMs": 5000
+    },
+    "repairs": {
+      "vesper": {
+        "evidence": [
+          "vesper-floor-original-r4.json",
+          "vesper-floor-without-props-diagnostic-r4.json"
+        ],
+        "measuredOriginalMs": 2240.269542,
+        "isolatedControlMs": 61.772042,
+        "simulationTicks": 167,
+        "worldTicks": 143,
+        "actualArenaCollidersInBoth": 29,
+        "identicalPlayerVitality": 9950,
+        "identicalMonsterVitality": 99849,
+        "cause": "Artificial 400m-wide floor hazard unnecessarily impacted 58 of 154 unrelated destructible props and advanced their rubble physics during a character-immunity probe.",
+        "change": "Only the floorHazard fixture isolates destructible bodies. It retains the exact real terrain, gates, collider count, hazard shape, all active ticks, damage and post-immunity hit assertions. Dedicated environment-props tests, including Vesper offensive world effects, are unchanged and included in the focused gate.",
+        "cpuProfilerLimit": "Bun test accepted the CPU flags but emitted no profile file; no sampled-CPU claim is made. Standalone actual-engine timing and the controlled intervention are retained."
+      },
+      "orun": {
+        "change": "Read engine-owned simulation state through a named, documented observation seam instead of serializing the entire arena every frame. Public player inputs, commands, public Orun projections, all 11 scenarios, tick limits and assertions remain. Preserve historical vine target and Fang aspect explicitly."
+      },
+      "mistveil": {
+        "change": "Reuse one pure Mistveil mask fixture across its two consumers, matching the existing Grove pattern. Greenwake reference bake and all geometry/draw/mask/clutter assertions stay in the budget test."
+      }
+    },
+    "focused": {
+      "command": "bun test tests/combat/vesper-kit.test.ts tests/combat/orun-duel.test.ts tests/combat/environment-props.test.ts tests/world/mistveil-world.test.ts",
+      "pass": 80,
+      "fail": 0,
+      "expectCalls": 1182,
+      "wallSeconds": 10.49
+    },
+    "finalCanonicalReceipt": "final-canonical-bun-r4.json",
+    "fullNode24": {
+      "receipt": "final-canonical-gates-r3.json",
+      "tests": 873,
+      "pass": 873,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "wallSeconds": 77.28976124999998,
+      "noProductionOrBinaryChangesAfterward": true
+    }
+  }
+}

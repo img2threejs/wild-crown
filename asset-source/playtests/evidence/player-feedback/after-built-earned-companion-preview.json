@@ -1,0 +1,77 @@
+{
+  "runId": "feedback-allmaps-greenwake-mvjjtb64",
+  "hero": "sakda",
+  "party": {},
+  "previewHosts": 1,
+  "canvas": true,
+  "selected": "vara",
+  "previewPermissions": [
+    {
+      "id": "storm-talon",
+      "available": true,
+      "reason": null
+    },
+    {
+      "id": "sky-mark",
+      "available": true,
+      "reason": null
+    },
+    {
+      "id": "vara-search",
+      "available": true,
+      "reason": null
+    }
+  ],
+  "buttons": [
+    {
+      "id": "storm-talon",
+      "disabled": false
+    },
+    {
+      "id": "sky-mark",
+      "disabled": false
+    },
+    {
+      "id": "vara-search",
+      "disabled": false
+    }
+  ],
+  "equipment": [
+    {
+      "companionId": "vara",
+      "name": "Vara",
+      "available": true,
+      "reason": null
+    },
+    {
+      "companionId": "koro",
+      "name": "Koro",
+      "available": false,
+      "reason": "This companion has not joined your journey yet."
+    },
+    {
+      "companionId": "asha",
+      "name": "Asha",
+      "available": false,
+      "reason": "This companion has not joined your journey yet."
+    },
+    {
+      "companionId": "sable",
+      "name": "Sable",
+      "available": false,
+      "reason": "This companion has not joined your journey yet."
+    },
+    {
+      "companionId": "nyra",
+      "name": "Nyra",
+      "available": false,
+      "reason": "This companion has not joined your journey yet."
+    },
+    {
+      "companionId": "solkar",
+      "name": "Solkar",
+      "available": false,
+      "reason": "This companion has not joined your journey yet."
+    }
+  ]
+}

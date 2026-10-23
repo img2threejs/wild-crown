@@ -9,7 +9,7 @@
   },
   "output": {
     "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
-    "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+    "sha256": "d0fd54830fa02330c7ab7782dc4467a3f5a0475a5c7158a1f8653453583bb262",
     "bytes": 7750216
   },
   "headAxis": "+X",
@@ -110,6 +110,7 @@
     "swing": 1.6,
     "howl": 1.6,
     "yawCap": 0.75,
+    "bodyRelativeFloor": true,
     "authoredWalk": true,
     "seconds": {
       "monster-walk": 0.8,
@@ -263,10 +264,10 @@
       "loop": true,
       "semanticKeyTimes": {},
       "measured": {
-        "measuredStrikeTime": 0.647,
-        "peakHeadSpeedUnitsPerSecond": 0.451,
-        "peakHeadDisplacementTime": 0.824,
-        "peakHeadDisplacementBodyHeights": 0.045,
+        "measuredStrikeTime": 0.706,
+        "peakHeadSpeedUnitsPerSecond": 0.454,
+        "peakHeadDisplacementTime": 0.588,
+        "peakHeadDisplacementBodyHeights": 0.063,
         "rootPeakBodyHeights": -0.0502,
         "rootPeakTime": 0.235,
         "rootMinBodyHeights": -0.07,
@@ -291,8 +292,8 @@
         "rootMeanRiseBodyHeights": -0.06,
         "planting": {
           "plantedSpeedUnitsPerSecond": 1.3454,
-          "strideUnits": 0.3251,
-          "stanceFraction": 0.426,
+          "strideUnits": 0.3476,
+          "stanceFraction": 0.456,
           "maxSlidePercent": 0.6,
           "meanSlidePercent": 0.3
         }
@@ -750,10 +751,10 @@
       "loop": true,
       "semanticKeyTimes": {},
       "measured": {
-        "measuredStrikeTime": 0.042,
-        "peakHeadSpeedUnitsPerSecond": 0.389,
-        "peakHeadDisplacementTime": 0.625,
-        "peakHeadDisplacementBodyHeights": 0.059,
+        "measuredStrikeTime": 0.417,
+        "peakHeadSpeedUnitsPerSecond": 0.299,
+        "peakHeadDisplacementTime": 0.583,
+        "peakHeadDisplacementBodyHeights": 0.044,
         "rootPeakBodyHeights": -0.04,
         "rootPeakTime": 0.333,
         "rootMinBodyHeights": -0.05,

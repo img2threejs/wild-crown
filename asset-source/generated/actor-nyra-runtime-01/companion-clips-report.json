@@ -1,0 +1,46 @@
+{
+  "assetId": "actor-nyra",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+    "sha256": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-companion.glb",
+    "sha256": "b8bd183a145ef59d52cf7958ec1412153ee4b053834901e54b9c42879b1b50c1"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "clips": [
+    {
+      "name": "nyra-ambush",
+      "seconds": 1,
+      "frames": 33,
+      "markers": {
+        "release": 0.26,
+        "contact": 0.52
+      },
+      "channels": 40
+    },
+    {
+      "name": "nyra-search",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "release": 0.2,
+        "contact": 0.9
+      },
+      "channels": 40
+    },
+    {
+      "name": "nyra-distract",
+      "seconds": 1.1,
+      "frames": 36,
+      "markers": {
+        "release": 0.32,
+        "contact": 0.5
+      },
+      "channels": 40
+    }
+  ]
+}

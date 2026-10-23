@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "recordedAt": "2026-10-14T21:02:30.297Z",
+  "recordedAt": "2026-10-22T16:24:34.523Z",
   "status": "blocked-not-approved",
   "scope": "Seven chapter candidate manifests, including reused native dependencies and hero bindings; not a production release certification.",
   "manifestPaths": [
@@ -13,19 +13,19 @@
     "asset-source/playtests/later.json"
   ],
   "manifestSha256": {
-    "asset-source/playtests/greenwake.json": "f206b54afa73532b9f18709a73b52da899fe5804bf007893c983360d5bed92b3",
-    "asset-source/playtests/canopy.json": "4a8c804b4044c7d26428bebcb2a6e19d1b92b8f8a49755af1130f15cd9acd9f0",
-    "asset-source/playtests/bamboo.json": "dd9a461c3e4172ccaeac40c228a5dd8061d3732f7d6532304ba001ac3e1e38eb",
-    "asset-source/playtests/grove.json": "bcfa886f492b601d1642b42196348eace012a0358089a4c1bd39815a8df33c18",
-    "asset-source/playtests/moonpine.json": "e187d63219f05a196d37872abbe6edd0c128deddc9cdb461870e456d9d495b19",
-    "asset-source/playtests/mistveil.json": "3614e19a1ed73d025e3d99866830bffa4dfe1778f60dd51dfc21ac84734c4ed2",
-    "asset-source/playtests/later.json": "ed66ad5eed52e599d65d010c4244d047e47e3363ad53b0d5ebfdcef6b111a9f3"
+    "asset-source/playtests/greenwake.json": "752b520b8317e154339730b9407bd4bd79ea69792931681f3d9c5bd0d0b58e86",
+    "asset-source/playtests/canopy.json": "611c67efa7401c903036302687414dca984f1fb272a8afe8f264cb28a01f02fd",
+    "asset-source/playtests/bamboo.json": "6d1b5965f5e2ca4e568964bc294c042860979af61c2b7e178b75b5211926eb04",
+    "asset-source/playtests/grove.json": "cf1766f917473b9d378bb8a7109a6f62648ceea291578272311527de455892a5",
+    "asset-source/playtests/moonpine.json": "be5eb9295161afaf760b86227c765c91ee99227434a067a7db99aa7d130eac08",
+    "asset-source/playtests/mistveil.json": "b8ee214b6c4b4d209adb758f38b018493524e791620c42d8cc708280f6616858",
+    "asset-source/playtests/later.json": "abddd68969555ff28c8f1ebe9b11d0ed5eaa64856f83478b6323c1616a5121f8"
   },
   "measurement": {
-    "uniqueBindings": 99,
-    "nativeBindings": 90,
-    "uniqueNativeFiles": 86,
-    "matchingNativeHashes": 90,
+    "uniqueBindings": 100,
+    "nativeBindings": 91,
+    "uniqueNativeFiles": 89,
+    "matchingNativeHashes": 91,
     "recipeBindings": 9,
     "method": "SHA-256 of each actual local native file compared with every candidate outputHash; hash identity alone is not a G1/G3/G6/G10/G11/G12 pass."
   },
@@ -36,7 +36,7 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-aren-user-supplied-01/aren-playtest-animated.glb",
-      "declaredSha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f",
+      "declaredSha256": "5e0c3b5f843e52395d2bfa8915de3d153c31c98558ff0b8f9119d4e6d8a080cc",
       "provenance": "asset-source/generated/actor-aren-user-supplied-01/retarget-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
@@ -48,8 +48,8 @@
         "mistveil"
       ],
       "observed": {
-        "bytes": 18238764,
-        "sha256": "8a0eece28ad42ef5e8aaebeb01a462239bd005ca550a6490144c2e51dce5e18f"
+        "bytes": 18648152,
+        "sha256": "5e0c3b5f843e52395d2bfa8915de3d153c31c98558ff0b8f9119d4e6d8a080cc"
       },
       "hashMatches": true
     },
@@ -57,16 +57,16 @@
       "id": "actor-asha",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-animated.glb",
-      "declaredSha256": "e182b5f1b28e44aa9bc6ca27ca1ad56d6d6586deef7bf949628767c07016203b",
-      "provenance": "asset-source/generated/actor-asha-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-asha-runtime-01/actor-asha-companion.glb",
+      "declaredSha256": "6d6abe449158754774f8989b02a509687c32fe41bf02b5da182a13a0cdce8718",
+      "provenance": "asset-source/generated/actor-asha-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 7548024,
-        "sha256": "e182b5f1b28e44aa9bc6ca27ca1ad56d6d6586deef7bf949628767c07016203b"
+        "bytes": 8598848,
+        "sha256": "6d6abe449158754774f8989b02a509687c32fe41bf02b5da182a13a0cdce8718"
       },
       "hashMatches": true
     },
@@ -74,16 +74,16 @@
       "id": "actor-bog-lurker",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-animated.glb",
-      "declaredSha256": "9544b5bc7611bcc401a9bb77f6fbaa5f44cf5e347c6ad5ab96e5e7082f43de37",
-      "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-bog-lurker-runtime-01/actor-bog-lurker-combat.glb",
+      "declaredSha256": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01",
+      "provenance": "asset-source/generated/actor-bog-lurker-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "mistveil"
       ],
       "observed": {
-        "bytes": 6283800,
-        "sha256": "9544b5bc7611bcc401a9bb77f6fbaa5f44cf5e347c6ad5ab96e5e7082f43de37"
+        "bytes": 6717204,
+        "sha256": "23d50ccb7040c8536e4bbfb1a9ef912d127e2024e389523f24d6d6fc1fc47c01"
       },
       "hashMatches": true
     },
@@ -91,16 +91,16 @@
       "id": "actor-camp-hunter-melee",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-animated.glb",
-      "declaredSha256": "2cc2f3c1409d401a66e443a42f49083d107ac91bfcced3b7e3efe2d80e934079",
-      "provenance": "asset-source/generated/actor-camp-hunter-melee-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-melee-runtime-01/actor-camp-hunter-melee-combat.glb",
+      "declaredSha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5",
+      "provenance": "asset-source/generated/actor-camp-hunter-melee-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 7908324,
-        "sha256": "2cc2f3c1409d401a66e443a42f49083d107ac91bfcced3b7e3efe2d80e934079"
+        "bytes": 8063020,
+        "sha256": "0280b9fac4710ca797666af5d3f8db88812755e561eb43cb131fabf908baabc5"
       },
       "hashMatches": true
     },
@@ -108,16 +108,16 @@
       "id": "actor-camp-hunter-ranged",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-animated.glb",
-      "declaredSha256": "4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a",
-      "provenance": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-camp-hunter-ranged-runtime-01/actor-camp-hunter-ranged-combat.glb",
+      "declaredSha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05",
+      "provenance": "asset-source/generated/actor-camp-hunter-ranged-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 7339584,
-        "sha256": "4041ef84aa834e3d06d0e84e6cef8ec55bfd37a0bebe5791f08c25cd8291901a"
+        "bytes": 7440172,
+        "sha256": "652fb2bd389c5c8942eaf1fae0f92e9d1ed74b4895401ce90df31ae5a3290a05"
       },
       "hashMatches": true
     },
@@ -126,15 +126,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-council-envoy-runtime-01/actor-council-envoy-animated.glb",
-      "declaredSha256": "97fb5f8a5a1a7f53903ac639321fce33b3096d9c23b90bd8657ad9898c639800",
+      "declaredSha256": "21b797cf6b2626296386eca9457d7aeb5049af25e9e88a9240bc6c580ef23a51",
       "provenance": "asset-source/generated/actor-council-envoy-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6124464,
-        "sha256": "97fb5f8a5a1a7f53903ac639321fce33b3096d9c23b90bd8657ad9898c639800"
+        "bytes": 6187776,
+        "sha256": "21b797cf6b2626296386eca9457d7aeb5049af25e9e88a9240bc6c580ef23a51"
       },
       "hashMatches": true
     },
@@ -142,16 +142,16 @@
       "id": "actor-ember-boar",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-animated.glb",
-      "declaredSha256": "a1334e49db4725a0de738842dfbf60034165d006b5768023e9496a5ae2b56bc5",
-      "provenance": "asset-source/generated/actor-ember-boar-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-ember-boar-runtime-01/actor-ember-boar-combat.glb",
+      "declaredSha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2",
+      "provenance": "asset-source/generated/actor-ember-boar-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake"
       ],
       "observed": {
-        "bytes": 7094568,
-        "sha256": "a1334e49db4725a0de738842dfbf60034165d006b5768023e9496a5ae2b56bc5"
+        "bytes": 7511816,
+        "sha256": "44694ec9e19874480ad5c4d1e8c817e71299731241a97de8cd395d1ebd2301f2"
       },
       "hashMatches": true
     },
@@ -159,16 +159,16 @@
       "id": "actor-frost-sap-stalker",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-animated.glb",
-      "declaredSha256": "850fa81dd89406c5e98579f4aafdcbe01ada14595833be598181a8859e14167d",
-      "provenance": "asset-source/generated/actor-frost-sap-stalker-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-frost-sap-stalker-runtime-01/actor-frost-sap-stalker-combat.glb",
+      "declaredSha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7",
+      "provenance": "asset-source/generated/actor-frost-sap-stalker-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake"
       ],
       "observed": {
-        "bytes": 8096216,
-        "sha256": "850fa81dd89406c5e98579f4aafdcbe01ada14595833be598181a8859e14167d"
+        "bytes": 8600236,
+        "sha256": "a8754840ce9d8ea36a3f437399c51caea4a7738ad65c4cf5ca9285081d6ed8e7"
       },
       "hashMatches": true
     },
@@ -176,16 +176,16 @@
       "id": "actor-frostfang-tracker",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-animated.glb",
-      "declaredSha256": "807af505c747c5bec4de5bc66d90959e3c60c110b23cfe0bcb0269ca35a6fd8b",
-      "provenance": "asset-source/generated/actor-frostfang-tracker-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-frostfang-tracker-runtime-01/actor-frostfang-tracker-combat.glb",
+      "declaredSha256": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1",
+      "provenance": "asset-source/generated/actor-frostfang-tracker-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "moonpine"
       ],
       "observed": {
-        "bytes": 7898896,
-        "sha256": "807af505c747c5bec4de5bc66d90959e3c60c110b23cfe0bcb0269ca35a6fd8b"
+        "bytes": 8205168,
+        "sha256": "2b1f545cf41af42791d84b027cca7c5d3efe83057672baa366dbb3c4936f94a1"
       },
       "hashMatches": true
     },
@@ -193,16 +193,16 @@
       "id": "actor-ghor-mire-maw",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-animated.glb",
-      "declaredSha256": "5be953fff1fe4f3717ac9efb23e20521b990aa60ef91a742929a33d23536226c",
-      "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-ghor-mire-maw-runtime-01/actor-ghor-mire-maw-combat.glb",
+      "declaredSha256": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f",
+      "provenance": "asset-source/generated/actor-ghor-mire-maw-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "mistveil"
       ],
       "observed": {
-        "bytes": 7498140,
-        "sha256": "5be953fff1fe4f3717ac9efb23e20521b990aa60ef91a742929a33d23536226c"
+        "bytes": 8135916,
+        "sha256": "d950191ec41f7c6f5be7c9d2f94cce88a438855c99183a4130e8acecf337275f"
       },
       "hashMatches": true
     },
@@ -210,16 +210,16 @@
       "id": "actor-grove-blighted-rootling",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-animated.glb",
-      "declaredSha256": "5fe5ab10d67d370c9186f1b72c9c5489eb7eb3568176520095cde9e69b495dde",
-      "provenance": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-grove-blighted-rootling-runtime-01/actor-grove-blighted-rootling-combat.glb",
+      "declaredSha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a",
+      "provenance": "asset-source/generated/actor-grove-blighted-rootling-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "grove"
       ],
       "observed": {
-        "bytes": 7193808,
-        "sha256": "5fe5ab10d67d370c9186f1b72c9c5489eb7eb3568176520095cde9e69b495dde"
+        "bytes": 7553348,
+        "sha256": "952cab27ed5309923ea789de9fa011489a02242368d4a8026f3dd74f4bed0f0a"
       },
       "hashMatches": true
     },
@@ -227,16 +227,16 @@
       "id": "actor-grove-hollowheart",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-animated.glb",
-      "declaredSha256": "2341f605d6f909302829fcd2575e7ad023ebaa47f6f766d6dbcfaf165bf37a84",
-      "provenance": "asset-source/generated/actor-grove-hollowheart-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-grove-hollowheart-runtime-01/actor-grove-hollowheart-combat.glb",
+      "declaredSha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911",
+      "provenance": "asset-source/generated/actor-grove-hollowheart-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "grove"
       ],
       "observed": {
-        "bytes": 9055076,
-        "sha256": "2341f605d6f909302829fcd2575e7ad023ebaa47f6f766d6dbcfaf165bf37a84"
+        "bytes": 9507880,
+        "sha256": "33c647f92f0c9b515ae1cafccdec23f07ab341289fc58eb096e8a80d14f6c911"
       },
       "hashMatches": true
     },
@@ -244,16 +244,16 @@
       "id": "actor-grove-rootling",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-animated.glb",
-      "declaredSha256": "ce46b6f7b44066b6d0b7432c8cb77ee45b0dd9fb4fdb7c40ae366632c9ec37f6",
-      "provenance": "asset-source/generated/actor-grove-rootling-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-grove-rootling-runtime-01/actor-grove-rootling-combat.glb",
+      "declaredSha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b",
+      "provenance": "asset-source/generated/actor-grove-rootling-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "grove"
       ],
       "observed": {
-        "bytes": 7193760,
-        "sha256": "ce46b6f7b44066b6d0b7432c8cb77ee45b0dd9fb4fdb7c40ae366632c9ec37f6"
+        "bytes": 7553292,
+        "sha256": "1b31d6fb84bd4a86e41fd50b4ffdbb8e4240fe12b86e1dc41173758d714b020b"
       },
       "hashMatches": true
     },
@@ -261,16 +261,16 @@
       "id": "actor-howl-scout",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-animated.glb",
-      "declaredSha256": "c0707113cef4cb6b022f7c4b7f7e88b216fdcfad08129e0705ef033ce7e699f7",
-      "provenance": "asset-source/generated/actor-howl-scout-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-howl-scout-runtime-01/actor-howl-scout-combat.glb",
+      "declaredSha256": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa",
+      "provenance": "asset-source/generated/actor-howl-scout-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "moonpine"
       ],
       "observed": {
-        "bytes": 7045760,
-        "sha256": "c0707113cef4cb6b022f7c4b7f7e88b216fdcfad08129e0705ef033ce7e699f7"
+        "bytes": 7365496,
+        "sha256": "ca155e520e950407909679743cbfbb548300c0e0f6d16813fa3921aa04cf75fa"
       },
       "hashMatches": true
     },
@@ -278,17 +278,17 @@
       "id": "actor-koro",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-animated.glb",
-      "declaredSha256": "00be46c1121e77f8a9380a6778674f4348512c4490a4ee550cf0120b3fa75e71",
-      "provenance": "asset-source/generated/actor-koro-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb",
+      "declaredSha256": "ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256",
+      "provenance": "asset-source/generated/actor-koro-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo",
         "grove"
       ],
       "observed": {
-        "bytes": 6694360,
-        "sha256": "00be46c1121e77f8a9380a6778674f4348512c4490a4ee550cf0120b3fa75e71"
+        "bytes": 7229600,
+        "sha256": "ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256"
       },
       "hashMatches": true
     },
@@ -296,16 +296,16 @@
       "id": "actor-koro-branchbreaker",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-animated.glb",
-      "declaredSha256": "9a87004392a1a3bbd45dc0ebfde02456220e35d732fb7c0347282cb66fd32872",
-      "provenance": "asset-source/generated/actor-koro-branchbreaker-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-koro-branchbreaker-runtime-01/actor-koro-branchbreaker-combat.glb",
+      "declaredSha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27",
+      "provenance": "asset-source/generated/actor-koro-branchbreaker-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 7682408,
-        "sha256": "9a87004392a1a3bbd45dc0ebfde02456220e35d732fb7c0347282cb66fd32872"
+        "bytes": 8321680,
+        "sha256": "551ed622df5ada8f1c58a0c9e6fa55a78c5a413fa16ba0ddd7a629933e206b27"
       },
       "hashMatches": true
     },
@@ -313,16 +313,16 @@
       "id": "actor-lantern-heron",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-animated.glb",
-      "declaredSha256": "2e29c6649a151bdb1ed038a8ddd74a7d3c35c0534cdd7af230e2efb661e3cd9b",
-      "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-lantern-heron-runtime-01/actor-lantern-heron-combat.glb",
+      "declaredSha256": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18",
+      "provenance": "asset-source/generated/actor-lantern-heron-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "mistveil"
       ],
       "observed": {
-        "bytes": 7643752,
-        "sha256": "2e29c6649a151bdb1ed038a8ddd74a7d3c35c0534cdd7af230e2efb661e3cd9b"
+        "bytes": 8097208,
+        "sha256": "2834895a954d42bd2893ab9343473f68dc0fe98e969c83fe34afcb904c7cbb18"
       },
       "hashMatches": true
     },
@@ -331,15 +331,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
-      "declaredSha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d",
+      "declaredSha256": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e",
       "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6094300,
-        "sha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d"
+        "bytes": 6157612,
+        "sha256": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e"
       },
       "hashMatches": true
     },
@@ -348,15 +348,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-marek-runtime-01/actor-marek-animated.glb",
-      "declaredSha256": "df001308c0ce1356d7c1b997ba07061043f7f437df8acd077411423917177248",
+      "declaredSha256": "0f0dbd0f500f76c92317483672038e4cb4c18e9f6afad9d3dfe43b43707dfee0",
       "provenance": "asset-source/generated/actor-marek-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 7692988,
-        "sha256": "df001308c0ce1356d7c1b997ba07061043f7f437df8acd077411423917177248"
+        "bytes": 7739308,
+        "sha256": "0f0dbd0f500f76c92317483672038e4cb4c18e9f6afad9d3dfe43b43707dfee0"
       },
       "hashMatches": true
     },
@@ -364,16 +364,16 @@
       "id": "actor-mire-viper",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
-      "declaredSha256": "d72669df7967d315c5aad7f525fbf8a99580ae01adc6d4544b6ed3209efdad1c",
-      "provenance": "asset-source/generated/actor-mire-viper-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+      "declaredSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe",
+      "provenance": "asset-source/generated/actor-mire-viper-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "canopy"
       ],
       "observed": {
-        "bytes": 7739212,
-        "sha256": "d72669df7967d315c5aad7f525fbf8a99580ae01adc6d4544b6ed3209efdad1c"
+        "bytes": 7899524,
+        "sha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
       },
       "hashMatches": true
     },
@@ -382,15 +382,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
-      "declaredSha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9",
+      "declaredSha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5",
       "provenance": "asset-source/generated/actor-tali-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 5956648,
-        "sha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9"
+        "bytes": 6027360,
+        "sha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5"
       },
       "hashMatches": true
     },
@@ -398,16 +398,16 @@
       "id": "actor-nyra",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-animated.glb",
-      "declaredSha256": "6ec519525a22aa151b30ad015c1ac570cb9f464f6b39c734840d3082e2c4ab3a",
-      "provenance": "asset-source/generated/actor-nyra-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-companion.glb",
+      "declaredSha256": "b8bd183a145ef59d52cf7958ec1412153ee4b053834901e54b9c42879b1b50c1",
+      "provenance": "asset-source/generated/actor-nyra-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 5361640,
-        "sha256": "6ec519525a22aa151b30ad015c1ac570cb9f464f6b39c734840d3082e2c4ab3a"
+        "bytes": 5618208,
+        "sha256": "b8bd183a145ef59d52cf7958ec1412153ee4b053834901e54b9c42879b1b50c1"
       },
       "hashMatches": true
     },
@@ -415,16 +415,16 @@
       "id": "actor-orun",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-animated.glb",
-      "declaredSha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0",
-      "provenance": "asset-source/generated/actor-orun-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-orun-runtime-01/actor-orun-combat.glb",
+      "declaredSha256": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21",
+      "provenance": "asset-source/generated/actor-orun-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6745644,
-        "sha256": "427c7feff7604cfb7df839e42f11238904ac83074d268116b6c025a0e05bcfe0"
+        "bytes": 7178600,
+        "sha256": "57692ab870bef7edb85f19210676a271a0d989ad621cba1e9d8d30bf5409ae21"
       },
       "hashMatches": true
     },
@@ -432,16 +432,16 @@
       "id": "actor-orun-crowned-beast",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-animated.glb",
-      "declaredSha256": "2b148adb2ee1dec205c6bab047c4dc7124798438d97b4f509840814cba6d5256",
-      "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-orun-crowned-beast-runtime-01/actor-orun-crowned-beast-combat.glb",
+      "declaredSha256": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f",
+      "provenance": "asset-source/generated/actor-orun-crowned-beast-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 7976108,
-        "sha256": "2b148adb2ee1dec205c6bab047c4dc7124798438d97b4f509840814cba6d5256"
+        "bytes": 8858348,
+        "sha256": "e0c491bc32f255c80be7456280b4162334e61969d4c01017868d4de8eff0060f"
       },
       "hashMatches": true
     },
@@ -450,15 +450,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
-      "declaredSha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01",
+      "declaredSha256": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131",
       "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6357640,
-        "sha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01"
+        "bytes": 6420952,
+        "sha256": "b5e9cdc82a99cea7be9bf46e2a134aba6dc5ea35bcc4ba2d971472936225e131"
       },
       "hashMatches": true
     },
@@ -467,15 +467,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-luma-runtime-01/actor-luma-animated.glb",
-      "declaredSha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d",
+      "declaredSha256": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e",
       "provenance": "asset-source/generated/actor-luma-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6094300,
-        "sha256": "376552b99f7f0208e0f2e84706e2f1c992b1d2612ed0acfc21c63222e7f8e78d"
+        "bytes": 6157612,
+        "sha256": "c07563e5a02752e99a9a68a5861e29a9935d051016c70add5035622dab01e78e"
       },
       "hashMatches": true
     },
@@ -500,16 +500,16 @@
       "id": "actor-root-rammer",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-animated.glb",
-      "declaredSha256": "e1fefc653deec1801ade9ee60909f4022e2a15c416e75df752319b21aed51fc9",
-      "provenance": "asset-source/generated/actor-root-rammer-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-root-rammer-runtime-01/actor-root-rammer-combat.glb",
+      "declaredSha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365",
+      "provenance": "asset-source/generated/actor-root-rammer-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake"
       ],
       "observed": {
-        "bytes": 7367796,
-        "sha256": "e1fefc653deec1801ade9ee60909f4022e2a15c416e75df752319b21aed51fc9"
+        "bytes": 7734676,
+        "sha256": "610ea44f952d5fdcad54bdf863bf5a49c907fb72dd4543a31ef01ee7480c0365"
       },
       "hashMatches": true
     },
@@ -517,16 +517,16 @@
       "id": "actor-ruun-chained-howl",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-animated.glb",
-      "declaredSha256": "9d12d9e6a1884790f64fcb2ed2ad5497e96772af08a812bd6c6963e00df8e268",
-      "provenance": "asset-source/generated/actor-ruun-chained-howl-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-ruun-chained-howl-runtime-01/actor-ruun-chained-howl-combat.glb",
+      "declaredSha256": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c",
+      "provenance": "asset-source/generated/actor-ruun-chained-howl-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "moonpine"
       ],
       "observed": {
-        "bytes": 8107772,
-        "sha256": "9d12d9e6a1884790f64fcb2ed2ad5497e96772af08a812bd6c6963e00df8e268"
+        "bytes": 8712816,
+        "sha256": "c3638ece7b1e356b144414fd31d146a85c803a9c00e780057a68068367b2a73c"
       },
       "hashMatches": true
     },
@@ -534,16 +534,16 @@
       "id": "actor-sable",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-animated.glb",
-      "declaredSha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01",
-      "provenance": "asset-source/generated/actor-sable-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-companion.glb",
+      "declaredSha256": "cae7c51ecd6263f8cff216d8da6563bc983b40a91fc6f2aae70bf0da4d04cbe8",
+      "provenance": "asset-source/generated/actor-sable-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 6357640,
-        "sha256": "7550df808fd93d08f56fb91140f37169a1ead97e7cae43db5ba1ee85d9cdff01"
+        "bytes": 7302012,
+        "sha256": "cae7c51ecd6263f8cff216d8da6563bc983b40a91fc6f2aae70bf0da4d04cbe8"
       },
       "hashMatches": true
     },
@@ -552,7 +552,7 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-sakda-hero-01/sakda-hero-animated.glb",
-      "declaredSha256": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659",
+      "declaredSha256": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5",
       "provenance": "asset-source/generated/actor-sakda-hero-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
@@ -564,8 +564,8 @@
         "mistveil"
       ],
       "observed": {
-        "bytes": 93505180,
-        "sha256": "8c58c6da39c336d0f4a4c63d9a57e5a0ef46dea85b5914a443ba5b8af2adc659"
+        "bytes": 93648764,
+        "sha256": "b9f57e6fa6d6d0e900b2939a8668e62537c52616bc924f2b5e3c1f97459983d5"
       },
       "hashMatches": true
     },
@@ -573,16 +573,16 @@
       "id": "actor-solkar",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
-      "declaredSha256": "4988bfd69cfb48f4425aabccb3930827dd7a5d0272fc6303d23da0f7d457f6b8",
-      "provenance": "asset-source/generated/actor-solkar-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb",
+      "declaredSha256": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb",
+      "provenance": "asset-source/generated/actor-solkar-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "later"
       ],
       "observed": {
-        "bytes": 7677656,
-        "sha256": "4988bfd69cfb48f4425aabccb3930827dd7a5d0272fc6303d23da0f7d457f6b8"
+        "bytes": 8843544,
+        "sha256": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb"
       },
       "hashMatches": true
     },
@@ -590,16 +590,16 @@
       "id": "actor-storm-hornbill",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-animated.glb",
-      "declaredSha256": "adbc57e73169516a9f514418f6fad911cb24ace44ee107b35f045ae479f6d663",
-      "provenance": "asset-source/generated/actor-storm-hornbill-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-storm-hornbill-runtime-01/actor-storm-hornbill-combat.glb",
+      "declaredSha256": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78",
+      "provenance": "asset-source/generated/actor-storm-hornbill-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "canopy"
       ],
       "observed": {
-        "bytes": 7203948,
-        "sha256": "adbc57e73169516a9f514418f6fad911cb24ace44ee107b35f045ae479f6d663"
+        "bytes": 7437440,
+        "sha256": "f855207319ab10bdb835a592cb0065bc9531b46246163a6192e7b3d7c1834e78"
       },
       "hashMatches": true
     },
@@ -608,15 +608,15 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-tali-runtime-01/actor-tali-animated.glb",
-      "declaredSha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9",
+      "declaredSha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5",
       "provenance": "asset-source/generated/actor-tali-runtime-01/clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "bamboo"
       ],
       "observed": {
-        "bytes": 5956648,
-        "sha256": "35c71d85bc7bea0149ea124173b141bbeb13ac232c346a6d9054ff5670cc71c9"
+        "bytes": 6027360,
+        "sha256": "ebab423d6f23ab1880ac982642bdd7bb19ef843273d7d44b04a6bbbb339905a5"
       },
       "hashMatches": true
     },
@@ -624,16 +624,16 @@
       "id": "actor-thornback-howler",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-animated.glb",
-      "declaredSha256": "2564325385a4d8b834d6aa95277dbd62257a10341c0152a1b055438047a85e6c",
-      "provenance": "asset-source/generated/actor-thornback-howler-runtime-01/clips-report.json",
+      "runtimeUrl": "/asset-source/generated/actor-thornback-howler-runtime-01/actor-thornback-howler-combat.glb",
+      "declaredSha256": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852",
+      "provenance": "asset-source/generated/actor-thornback-howler-runtime-01/combat-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "canopy"
       ],
       "observed": {
-        "bytes": 7599352,
-        "sha256": "2564325385a4d8b834d6aa95277dbd62257a10341c0152a1b055438047a85e6c"
+        "bytes": 7958884,
+        "sha256": "903522689dd4683426e06dbde2dc6cd2c030a43f0cb38460200bed49e5ce4852"
       },
       "hashMatches": true
     },
@@ -641,9 +641,9 @@
       "id": "actor-vara",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/model.glb",
-      "declaredSha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4",
-      "provenance": "asset-source/generated/actor-vara-rig-01/tripo-out/actor-vara-rig-01-a60d75d8/provenance.json",
+      "runtimeUrl": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb",
+      "declaredSha256": "036b3c562277a7fdebb4d411e4b8f0a214b85e671515eeb978a79a633a17576e",
+      "provenance": "asset-source/generated/actor-vara-harpy-runtime-01/companion-clips-report.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake",
@@ -653,8 +653,8 @@
         "moonpine"
       ],
       "observed": {
-        "bytes": 83079120,
-        "sha256": "82abb2b3c61f33b12e1db7760807e538881be9fd575836b147db3e3e7ca278f4"
+        "bytes": 7525864,
+        "sha256": "036b3c562277a7fdebb4d411e4b8f0a214b85e671515eeb978a79a633a17576e"
       },
       "hashMatches": true
     },
@@ -684,16 +684,16 @@
       "id": "actor-yara",
       "kind": "character",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/model.glb",
-      "declaredSha256": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b",
-      "provenance": "asset-source/generated/actor-yara-rig-01/tripo-out/actor-yara-rig-01-d77e80ae/provenance.json",
+      "runtimeUrl": "/asset-source/generated/actor-yara-runtime-01/actor-yara.glb",
+      "declaredSha256": "bd8c0ae132f3794890d404050c55f49d4540c34a1d40a2e5202427642194c350",
+      "provenance": "asset-source/generated/actor-yara-runtime-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake"
       ],
       "observed": {
-        "bytes": 83886648,
-        "sha256": "ba99afb35bb44c7ab4f74ab35ab8071bbb5edeb52766a8a17fd8375dd123ab3b"
+        "bytes": 6110592,
+        "sha256": "bd8c0ae132f3794890d404050c55f49d4540c34a1d40a2e5202427642194c350"
       },
       "hashMatches": true
     },
@@ -702,7 +702,7 @@
       "kind": "character",
       "sourceType": "native-glb",
       "runtimeUrl": "/asset-source/generated/actor-yara-hero-01/yara-hero-animated.glb",
-      "declaredSha256": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726",
+      "declaredSha256": "69f57ecda9190b84c2247ac5502105a404722f01d6ae5c288fa7c2a8aac3d146",
       "provenance": "asset-source/generated/actor-yara-hero-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
@@ -714,8 +714,8 @@
         "mistveil"
       ],
       "observed": {
-        "bytes": 84412704,
-        "sha256": "b5980b99ca5f344f1f62888cb238c65b73940d481e28187505fdc2db8c079726"
+        "bytes": 25871416,
+        "sha256": "69f57ecda9190b84c2247ac5502105a404722f01d6ae5c288fa7c2a8aac3d146"
       },
       "hashMatches": true
     },
@@ -942,9 +942,9 @@
       "id": "prop-erya-edge-tree",
       "kind": "prop",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/model.glb",
-      "declaredSha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15",
-      "provenance": "asset-source/generated/prop-erya-edge-tree-model-01/tripo-out/prop-erya-edge-tree-model-01-35924b8e/provenance.json",
+      "runtimeUrl": "/asset-source/generated/prop-erya-edge-tree-runtime-01/prop-erya-edge-tree.glb",
+      "declaredSha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5",
+      "provenance": "asset-source/generated/prop-erya-edge-tree-runtime-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake",
@@ -952,8 +952,8 @@
         "grove"
       ],
       "observed": {
-        "bytes": 64095300,
-        "sha256": "a6e810a3d10b4836130adb5d4643a74c41f12c792248f481f168de5074ee9c15"
+        "bytes": 2622024,
+        "sha256": "b853dbbd3ddb8abc56896e0040f279894d115703b7052906019bea14ec96b0a5"
       },
       "hashMatches": true
     },
@@ -998,16 +998,16 @@
       "id": "prop-greenwake-houses",
       "kind": "prop",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/model.glb",
-      "declaredSha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48",
-      "provenance": "asset-source/generated/prop-greenwake-houses-tripo-01/tripo-out/prop-greenwake-houses-tripo-01-3597ec6b/provenance.json",
+      "runtimeUrl": "/asset-source/generated/prop-greenwake-houses-runtime-01/prop-greenwake-houses.glb",
+      "declaredSha256": "8fa4ef9ac7079f8611b993d9676a593703383b1292f8cd0fda8841f6a3911b90",
+      "provenance": "asset-source/generated/prop-greenwake-houses-runtime-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake"
       ],
       "observed": {
-        "bytes": 68558524,
-        "sha256": "8acd81831f98e20e68bb427c2ef7785351cf0dc0b3a34e02a286c58f4eba0f48"
+        "bytes": 3410452,
+        "sha256": "8fa4ef9ac7079f8611b993d9676a593703383b1292f8cd0fda8841f6a3911b90"
       },
       "hashMatches": true
     },
@@ -1072,9 +1072,9 @@
       "id": "prop-heartroot-focus-staff",
       "kind": "prop",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/prop-heartroot-focus-staff-01/model.glb",
-      "declaredSha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b",
-      "provenance": "asset-source/generated/prop-heartroot-focus-staff-01/provenance.json",
+      "runtimeUrl": "/asset-source/generated/prop-yara-c-staff-01/model.glb",
+      "declaredSha256": "b0b8c9e289aff75a18ee9544dd45744d58ba966917c612265780984e47063864",
+      "provenance": "asset-source/generated/prop-yara-c-staff-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake",
@@ -1085,8 +1085,8 @@
         "mistveil"
       ],
       "observed": {
-        "bytes": 49681812,
-        "sha256": "16db5e10621b1ad2b082b66b5c5f5ad72464cfdb2f18bdf35c49944009d1684b"
+        "bytes": 57326992,
+        "sha256": "b0b8c9e289aff75a18ee9544dd45744d58ba966917c612265780984e47063864"
       },
       "hashMatches": true
     },
@@ -1162,17 +1162,17 @@
       "id": "prop-hunter-cage",
       "kind": "prop",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/model.glb",
-      "declaredSha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963",
-      "provenance": "asset-source/generated/prop-hunter-cage-model-01/tripo-out/prop-hunter-cage-model-01-71bcf405/provenance.json",
+      "runtimeUrl": "/asset-source/generated/prop-hunter-cage-runtime-01/prop-hunter-cage.glb",
+      "declaredSha256": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e",
+      "provenance": "asset-source/generated/prop-hunter-cage-runtime-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake",
         "bamboo"
       ],
       "observed": {
-        "bytes": 65300800,
-        "sha256": "9d0dbab9656d48e590156e7cba44d6874b6a3c5a43fd25b14fda9aca833c8963"
+        "bytes": 3060232,
+        "sha256": "9ce908d106e1aefcd2fa128a9dfc7ec2ab1da447b5c9566d96d6a26f011a926e"
       },
       "hashMatches": true
     },
@@ -1391,17 +1391,17 @@
       "id": "prop-root-arch",
       "kind": "prop",
       "sourceType": "native-glb",
-      "runtimeUrl": "/asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/model.glb",
-      "declaredSha256": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d",
-      "provenance": "asset-source/generated/prop-root-arch-model-01/tripo-out/prop-root-arch-model-01-a05b0f03/provenance.json",
+      "runtimeUrl": "/asset-source/generated/prop-root-arch-runtime-01/prop-root-arch.glb",
+      "declaredSha256": "e12209f48c7d01dcbac251dbcb909b2b3eaf74635539cb0948490723c862854b",
+      "provenance": "asset-source/generated/prop-root-arch-runtime-01/provenance.json",
       "evidenceStatus": "blocked",
       "manifests": [
         "greenwake",
         "bamboo"
       ],
       "observed": {
-        "bytes": 67641796,
-        "sha256": "44217e698b86bf64a407169440e642cb8b4a7c356ff0c0a4a80181e84ecbbb7d"
+        "bytes": 2278204,
+        "sha256": "e12209f48c7d01dcbac251dbcb909b2b3eaf74635539cb0948490723c862854b"
       },
       "hashMatches": true
     },
@@ -1691,6 +1691,23 @@
       "observed": {
         "bytes": 2150440,
         "sha256": "b8fa405234741e7c7f1396a9186ecaf893a686ef42bfa167196dbb1e5b88e911"
+      },
+      "hashMatches": true
+    },
+    {
+      "id": "prop-wooden-crate-stack",
+      "kind": "prop",
+      "sourceType": "native-glb",
+      "runtimeUrl": "/asset-source/generated/prop-wooden-crate-stack-runtime-01/prop-wooden-crate-stack.glb",
+      "declaredSha256": "adff6b71619d4ca4698c3e855861553efd6c60430b31bb47043e40d988de8840",
+      "provenance": "asset-source/generated/prop-wooden-crate-stack-runtime-01/provenance.json",
+      "evidenceStatus": "blocked",
+      "manifests": [
+        "greenwake"
+      ],
+      "observed": {
+        "bytes": 1531908,
+        "sha256": "adff6b71619d4ca4698c3e855861553efd6c60430b31bb47043e40d988de8840"
       },
       "hashMatches": true
     },

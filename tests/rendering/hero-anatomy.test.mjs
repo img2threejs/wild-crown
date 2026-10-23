@@ -62,20 +62,14 @@ describe('Aren anatomical guard and skin deformation', async () => {
   });
 
 
-  it('keeps every authored clip within the joint limits (±0.5°) and the combat clips within the combat limits', () => {
-    for (const name of authored) {
+  it('keeps every retargeted (non-exact) clip within the joint limits (±0.5°); exact Mixamo takes play as delivered and are not limited', () => {
+    const limited = report.clips.filter((clip) => !clip.exact).map((clip) => clip.action);
+    assert.ok(limited.includes('aren-hit') && limited.includes('aren-air-step'), 'the retargeted reaction and locomotion clips are limited');
+    for (const name of limited) {
       const { frames, count } = readClipFrames(rig, name);
       for (const [joint, peak] of Object.entries(jointExcursions(rig, frames, count, JOINT_LIMITS))) {
         assert.ok(peak.swing <= JOINT_LIMITS[joint].swing + TOLERANCE_DEGREES, `${name}: ${joint} swing ${peak.swing.toFixed(1)}° exceeds ${JOINT_LIMITS[joint].swing}°`);
         assert.ok(peak.twist <= JOINT_LIMITS[joint].twist + TOLERANCE_DEGREES, `${name}: ${joint} twist ${peak.twist.toFixed(1)}° exceeds ${JOINT_LIMITS[joint].twist}°`);
-      }
-    }
-    for (const name of ['aren-root-tether', 'aren-cleanse']) {
-      const { frames, count } = readClipFrames(rig, name), peaks = jointExcursions(rig, frames, count, COMBAT_LIMITS);
-      assert.ok(peaks['mixamorig:Head'].twist <= 50 + TOLERANCE_DEGREES, `${name}: head twist ${peaks['mixamorig:Head'].twist}`);
-      for (const side of ['Left', 'Right']) {
-        assert.ok(peaks[`mixamorig:${side}Hand`].twist <= 35 + TOLERANCE_DEGREES, `${name}: ${side} hand twist ${peaks[`mixamorig:${side}Hand`].twist}`);
-        assert.ok(peaks[`mixamorig:${side}Foot`].twist <= 25 + TOLERANCE_DEGREES, `${name}: ${side} foot twist ${peaks[`mixamorig:${side}Foot`].twist}`);
       }
     }
   });

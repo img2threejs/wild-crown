@@ -1,0 +1,207 @@
+{
+  "scope": "Headless real-engine regression discovered during coordinator review; not native game acceptance.",
+  "before": {
+    "startX": 0.5716666666666667,
+    "dashDistance": 1.2291176470588239,
+    "rows": [
+      {
+        "tick": 16,
+        "x": 0.6533333333333334,
+        "speed": 4.900000000000007,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 17,
+        "x": 0.7576470588235297,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 18,
+        "x": 0.8619607843137256,
+        "speed": 6.258823529411755,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 19,
+        "x": 0.9662745098039218,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 20,
+        "x": 1.070588235294118,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 21,
+        "x": 1.1749019607843136,
+        "speed": 6.2588235294117345,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 22,
+        "x": 1.2792156862745099,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 23,
+        "x": 1.3835294117647061,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 24,
+        "x": 1.4878431372549024,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 25,
+        "x": 1.592156862745098,
+        "speed": 6.2588235294117345,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 26,
+        "x": 1.6964705882352942,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      },
+      {
+        "tick": 27,
+        "x": 1.8007843137254904,
+        "speed": 6.2588235294117744,
+        "authoredDashSpeed": 32.5,
+        "steering": 6.258823529411765,
+        "dashActive": true
+      }
+    ]
+  },
+  "after": {
+    "startX": 0.5716666666666667,
+    "dashDistance": 3.332058823529412,
+    "rows": [
+      {
+        "tick": 16,
+        "x": 0.6533333333333334,
+        "speed": 4.900000000000007,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 17,
+        "x": 0.9488235294117644,
+        "speed": 17.72941176470586,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 18,
+        "x": 1.2443137254901955,
+        "speed": 17.729411764705866,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 19,
+        "x": 1.539803921568628,
+        "speed": 17.729411764705958,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 20,
+        "x": 1.835294117647059,
+        "speed": 17.72941176470585,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 21,
+        "x": 2.1307843137254907,
+        "speed": 17.729411764705905,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 22,
+        "x": 2.426274509803923,
+        "speed": 17.72941176470593,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 23,
+        "x": 2.721764705882352,
+        "speed": 17.729411764705745,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 24,
+        "x": 3.0172549019607846,
+        "speed": 17.729411764705958,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 25,
+        "x": 3.3127450980392172,
+        "speed": 17.729411764705958,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 26,
+        "x": 3.6082352941176463,
+        "speed": 17.729411764705745,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      },
+      {
+        "tick": 27,
+        "x": 3.903725490196079,
+        "speed": 17.729411764705958,
+        "authoredDashSpeed": 32.5,
+        "steering": 32.5,
+        "dashActive": true
+      }
+    ]
+  }
+}

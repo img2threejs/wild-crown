@@ -190,17 +190,13 @@
       "sourceWorkId": "vara",
       "state": "blocked-on-consent",
       "notes": "Vara's native harpy-eagle rig supersedes the Storm Hornbill pre-vis. Eleven in-place avian clips at 30 fps include the dedicated downward head-sweep Sky Survey; source geometry, skin, provider task and production evidence gates remain unchanged.",
-      "runtimeUrl": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+      "runtimeUrl": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb",
       "nativeGlb": "/asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy.glb",
       "sourceHash": "9a389f59842619e8557ca58d68de69d43562bb40938d6eae02d3d67cab2e75e7",
-      "outputHash": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60",
+      "outputHash": "036b3c562277a7fdebb4d411e4b8f0a214b85e671515eeb978a79a633a17576e",
       "sourceReference": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy.glb",
       "providerTaskId": "3b12e5de-aba6-4c9f-aba0-863c6ebf0fa1",
-      "provenance": {
-        "status": "complete",
-        "reference": "asset-source/generated/actor-vara-harpy-runtime-01/clips-report.json",
-        "providerTaskId": "3b12e5de-aba6-4c9f-aba0-863c6ebf0fa1"
-      },
+      "provenance": "asset-source/generated/actor-vara-harpy-runtime-01/companion-clips-report.json",
       "rigFamily": "avian",
       "rigStatus": "complete",
       "animationStatus": "complete",
@@ -217,7 +213,14 @@
         "vara-sky-mark": "vara-sky-mark",
         "vara:hurt": "vara:hurt"
       },
-      "coordinateTransform": { "forward": { "x": -1, "y": 0, "z": 0 }, "scale": 2.494 },
+      "coordinateTransform": {
+        "forward": {
+          "x": -1,
+          "y": 0,
+          "z": 0
+        },
+        "scale": 2.494
+      },
       "sockets": [],
       "requiredSockets": null,
       "collisionProxyId": null,
@@ -239,10 +242,57 @@
       "actionCoverageStatus": "complete",
       "kind": "character",
       "requiredActionIds": [
-        "vara:idle", "vara:walk", "vara:takeoff", "vara:fly", "vara:hover",
-        "vara:land", "vara:dive", "vara:strike", "vara-sky-mark", "vara:hurt", "vara-sky-survey"
+        "vara:idle",
+        "vara:walk",
+        "vara:takeoff",
+        "vara:fly",
+        "vara:hover",
+        "vara:land",
+        "vara:dive",
+        "vara:strike",
+        "vara-sky-mark",
+        "vara:hurt",
+        "vara-sky-survey"
       ],
-      "sourceInputHash": "9a389f59842619e8557ca58d68de69d43562bb40938d6eae02d3d67cab2e75e7"
+      "sourceInputHash": "9a389f59842619e8557ca58d68de69d43562bb40938d6eae02d3d67cab2e75e7",
+      "rootMotion": {
+        "vara:idle": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:takeoff": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:fly": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:hover": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:land": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:dive": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara:strike": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara-sky-mark": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        },
+        "vara-sky-survey": {
+          "mode": "in-place",
+          "evidenceStatus": "verified"
+        }
+      }
     },
     {
       "id": "actor-koro",

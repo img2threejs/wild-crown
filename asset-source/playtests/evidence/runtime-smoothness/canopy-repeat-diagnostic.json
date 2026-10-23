@@ -1,0 +1,286 @@
+{
+  "measurement": {
+    "label": "diagnostic-dev-canopy-warm-combat-cpu-profile",
+    "durationMs": 20003.80000001192,
+    "frames": 1433,
+    "frame": {
+      "p50": 13.399999999965075,
+      "p95": 15.400000000023283,
+      "p99": 26.79999999998836,
+      "max": 40.399999999965075,
+      "over25": 48,
+      "over50": 0
+    },
+    "longTasks": [
+      {
+        "start": 286720.39999997616,
+        "duration": 51
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1211,
+      "worldTick": 1180,
+      "worldTimeSeconds": 19.666666666666668,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 68,
+      "mana": 51,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -46.63239319687517,
+      "y": 0,
+      "z": -28.38398057219637
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 5229.151,
+      "taskMs": 6412.311,
+      "layoutMs": 37.643,
+      "recalcStyleMs": 470.72799999999995,
+      "heapUsedBytes": 93069608,
+      "domNodes": 5857
+    }
+  },
+  "cpu": {
+    "top": [
+      {
+        "name": "(idle)",
+        "url": "",
+        "line": 0,
+        "selfMs": 13617.25
+      },
+      {
+        "name": "(program)",
+        "url": "",
+        "line": 0,
+        "selfMs": 1294.465
+      },
+      {
+        "name": "frame",
+        "url": "http://127.0.0.1:5210/src/app/GameApplication.ts?t=1792634942042",
+        "line": 2369,
+        "selfMs": 349.398
+      },
+      {
+        "name": "updateOcclusion",
+        "url": "http://127.0.0.1:5210/src/rendering/InstanceVisibility.ts",
+        "line": 73,
+        "selfMs": 184.811
+      },
+      {
+        "name": "gameUiSignature",
+        "url": "http://127.0.0.1:5210/src/ui/GameUI.ts?t=1792630040376",
+        "line": 266,
+        "selfMs": 136.873
+      },
+      {
+        "name": "WebGLRenderer.renderBufferDirect",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17427,
+        "selfMs": 113.531
+      },
+      {
+        "name": "getProgram",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17874,
+        "selfMs": 112.052
+      },
+      {
+        "name": "updateMatrixWorld",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 4735,
+        "selfMs": 95.676
+      },
+      {
+        "name": "updateMatrixWorld",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 4735,
+        "selfMs": 90.623
+      },
+      {
+        "name": "WebGLRenderer.renderBufferDirect",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17427,
+        "selfMs": 65.588
+      },
+      {
+        "name": "multiplyMatrices",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 3737,
+        "selfMs": 63.809
+      },
+      {
+        "name": "setProgram",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17963,
+        "selfMs": 63.624
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:5210/src/game/combat/CombatEngine.ts",
+        "line": 1147,
+        "selfMs": 58.976
+      },
+      {
+        "name": "get companions",
+        "url": "http://127.0.0.1:5210/src/game/combat/CombatEngine.ts",
+        "line": 1762,
+        "selfMs": 57.616
+      },
+      {
+        "name": "updateMatrixWorld",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 4735,
+        "selfMs": 55.834
+      },
+      {
+        "name": "multiplyMatrices",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 3737,
+        "selfMs": 54.332
+      },
+      {
+        "name": "update",
+        "url": "http://127.0.0.1:5210/src/rendering/ScreenSpaceLOD.ts",
+        "line": 22,
+        "selfMs": 50.754
+      },
+      {
+        "name": "WebGLRenderer.renderBufferDirect",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17427,
+        "selfMs": 46.932
+      },
+      {
+        "name": "setProgram",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17963,
+        "selfMs": 44.515
+      },
+      {
+        "name": "setValueM4",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 11121,
+        "selfMs": 43.581
+      },
+      {
+        "name": "setFromRotationMatrix",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 4277,
+        "selfMs": 43.015
+      },
+      {
+        "name": "syncStoryState",
+        "url": "http://127.0.0.1:5210/src/app/GameApplication.ts?t=1792634942042",
+        "line": 1741,
+        "selfMs": 43.007
+      },
+      {
+        "name": "getProgramInfoLog",
+        "url": "",
+        "line": 0,
+        "selfMs": 42.287
+      },
+      {
+        "name": "renderObject",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 13625,
+        "selfMs": 42.091
+      },
+      {
+        "name": "multiplyMatrices",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 3737,
+        "selfMs": 41.092
+      },
+      {
+        "name": "structuredClone",
+        "url": "",
+        "line": 0,
+        "selfMs": 39.994
+      },
+      {
+        "name": "projectObject",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17706,
+        "selfMs": 39.605
+      },
+      {
+        "name": "nearestInteraction",
+        "url": "http://127.0.0.1:5210/src/app/GameApplication.ts?t=1792634942042",
+        "line": 2663,
+        "selfMs": 38.841
+      },
+      {
+        "name": "update",
+        "url": "http://127.0.0.1:5210/src/ui/MonsterLabels.ts",
+        "line": 31,
+        "selfMs": 38.025
+      },
+      {
+        "name": "applyActorSnapshot",
+        "url": "http://127.0.0.1:5210/src/rendering/GameRenderer.ts?t=1792634942042",
+        "line": 1640,
+        "selfMs": 37.087
+      },
+      {
+        "name": "updateMatrixWorld",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 4735,
+        "selfMs": 36.852
+      },
+      {
+        "name": "sync",
+        "url": "http://127.0.0.1:5210/src/rendering/GameRenderer.ts?t=1792634942042",
+        "line": 832,
+        "selfMs": 36.077
+      },
+      {
+        "name": "projectObject",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17706,
+        "selfMs": 36.004
+      },
+      {
+        "name": "projectObject",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 17706,
+        "selfMs": 35.172
+      },
+      {
+        "name": "slerpFlat",
+        "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+        "line": 1988,
+        "selfMs": 34.431
+      }
+    ]
+  },
+  "limitation": "CPU-profiler-instrumented repeat, not clean before/after frame-performance acceptance."
+}

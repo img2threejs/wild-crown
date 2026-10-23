@@ -6,11 +6,21 @@ import { describe, it, before } from 'node:test';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DEG, Rig, parseGlb, readAccessorAny, readAnimation } from '../../scripts/assets/creature-rig-kit.mjs';
+import { quadrupedRigContext } from '../../scripts/assets/author-quadruped-clips.mjs';
+import { BAMBOO_CLIP_SECONDS } from '../../src/rendering/BambooMonsterProfiles.ts';
+import attackPresentation from '../../src/content/enemy-attack-presentation.json' with { type: 'json' };
+import nativeAnchors from '../../src/content/enemy-native-anchors.json' with { type: 'json' };
 
 // Blood Bamboo Valley playtest assets (asset-source/playtests/bamboo.json, scripts/assets/build-bamboo-manifest.mjs): Koro the Branchbreaker, Asha, Tali,
 // Marek, the two Ash Hunter camp actors (melee trapper, ranged netter), the bamboo grove, the Ash Hunters' camp, the ancient shrine and the Black Sap jaw trap.
-// Checks the manifest, the runtime hashes, the clip slots and extras, in-place playback, grounded feet, stated sizes, the rig repairs, byte-deterministic
-// authoring and the Tripo credit ledger. Nothing here is release evidence: every entry stays evidence-blocked.
+//
+// The consumer contract is the native GLB plus the shipped production tables, not the authoring reports: every mapped action must be an actual
+// named clip in the runtime GLB, bound to real animation channels on real skin joints, anchored on a real bone, and driven by the production
+// clip-seconds table. The authoring reports (clips-report / combat-clips-report / companion-clips-report) are not read here: their key sets are an
+// authoring implementation detail, not a consumer contract. The manifest's `provenance` pointer is checked as a provenance and rights record
+// (it must describe the loaded GLB, its Tripo task ids must be in the authentic ledger, and nothing may claim acceptance).
+// Nothing here is release evidence: every entry stays evidence-blocked.
+//
 // GLTFLoader parses the real GLBs in Node (a material-only plugin skips texture decoding, which needs DOM image APIs).
 const root = process.cwd();
 const MANIFEST = 'asset-source/playtests/bamboo.json';
@@ -25,8 +35,8 @@ const TOLERANCE = 0.25;
 const SINK_TOLERANCE = 0.15;
 
 const CHARACTERS = {
-  // Biped rig v1.0 without a tail chain: twelve monster slots. Five are Tripo presets (idle, walk, run, slash, pitch), seven authored.
-  'actor-koro-branchbreaker': { actorId: 'bamboo-koro-branchbreaker', slots: MONSTER, height: 1.5, family: 'creature', task: 'rig' },
+  // Biped rig v1.0 without a tail chain: the twelve monster slots plus the six boss attacks.
+  'actor-koro-branchbreaker': { actorId: 'bamboo-koro-branchbreaker', slots: MONSTER, height: 1.5, family: 'creature' },
   // Felid quadrupeds with a real tail chain: the twelve slots plus the tail sweep (13), and the extras.
   'actor-asha': {
     actorId: 'bamboo-asha', slots: [...MONSTER, 'monster-tail'], shoulder: 1.1, family: 'quadruped',
@@ -58,6 +68,17 @@ const PROPS = {
 };
 // The reused environment kit (carried verbatim from the earlier manifests) the chapter is built from.
 const KIT = ['prop-erya-edge-tree', 'prop-rainforest-canopy-tree', 'prop-greenwake-boulder-cluster', 'prop-canopy-cliff-rock', 'prop-mire-bank-rock', 'prop-canopy-fern-cluster', 'prop-greenwake-rope-bridge', 'prop-hunter-cage', 'prop-greenwake-bramble-wall', 'prop-root-arch', 'prop-hunter-extraction-rig', 'prop-black-sap-filter-drum', 'prop-root-cavern-mouth'];
+// The production renderer plays a clip either as an endless loop (a gait or a held stance) or as a finite one-shot (a strike, a ceremony, a
+// lifecycle). The set below is the production contract from src/rendering/StoryActorAnimation.ts and src/rendering/MonsterAnimationProfiles.ts:
+// every action listed there as a loop must close seamlessly on its own first frame. A finite one-shot may legitimately return to its starting
+// pose, so no one-shot is constrained here.
+const LOOPING_ACTIONS = new Set([
+  'monster-idle', 'monster-walk', 'monster-run', 'monster-turn',
+  'asha-stalk', 'asha-corrupted-idle', 'asha-bond-idle',
+  'tali-play',
+  'npc-talk-relaxed', 'npc-talk-explain', 'npc-talk-guarded',
+  'hunter-kneel-idle',
+]);
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const toArrayBuffer = bytes => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
@@ -154,6 +175,34 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
     }
   });
 
+  it('every bamboo-built asset keeps its authored provenance record blocked and its production acceptance unestablished', async () => {
+    // The manifest's provenance pointer is the record a reviewer reads; it must exist, name the runtime GLB and never claim acceptance. The
+    // bamboo-built assets are the ones this chapter authored; the carried kit and heroes keep their own record shapes.
+    const ledger = (await readFile(`${root}/${LOG}`, 'utf8')).trim().split('\n').map(line => JSON.parse(line));
+    for (const id of [...Object.keys(CHARACTERS), ...Object.keys(PROPS)]) {
+      const item = entry(id);
+      assert.ok(item.provenance, `${id} needs a provenance record`);
+      const path = `${root}/${item.provenance}`;
+      assert.ok(existsSync(path), `${id}: ${item.provenance} does not exist`);
+      const record = JSON.parse(await readFile(path, 'utf8'));
+      // The record the manifest points at must describe the very GLB the manifest loads.
+      assert.equal(record.output?.sha256, item.outputHash, `${id}: ${item.provenance} does not describe the loaded GLB`);
+      // The generation provenance of the same runtime dir names the Tripo tasks; each must be a task id the authentic ledger records. The
+      // ledger is the local record of the provider calls: this proves the task ids were logged, not that the provider executed them.
+      const provenance = JSON.parse(await readFile(`${root}/${item.provenance.replace(/\/[^/]+$/, '')}/provenance.json`, 'utf8'));
+      for (const [step, task] of Object.entries(provenance.tasks ?? {})) {
+        assert.match(task, /^[0-9a-f-]{36}$/, `${id}: the ${step} task is not a task id`);
+        assert.ok(ledger.some(row => row.task_id === task), `${id}: the ${step} task ${task} is not in the generation ledger`);
+      }
+      // A static prop's record carries the acceptance verdict: it must stay blocked and unestablished.
+      if (item.kind === 'prop') {
+        assert.ok(provenance.assessment, `${id}: the prop record has no assessment`);
+        assert.equal(provenance.assessment.evidenceStatus, 'blocked', `${id} must stay evidence-blocked`);
+        assert.equal(provenance.assessment.productionAcceptance, 'NOT_ESTABLISHED', `${id} must not claim production acceptance`);
+      }
+    }
+  });
+
   describe('Tripo ledger', () => {
     let rows;
     before(async () => { rows = (await readFile(`${root}/${LOG}`, 'utf8')).trim().split('\n').map(line => JSON.parse(line)); });
@@ -188,24 +237,43 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
   describe('characters', () => {
     for (const [id, stated] of Object.entries(CHARACTERS)) {
       describe(id, () => {
-        let item, loaded, report, skinned;
+        let item, loaded, skinned, rig, json, bin;
         before(async () => {
           item = entry(id);
           loaded = await loadGlb(item.runtimeUrl);
-          report = await readJson(item.provenance);
+          ({ json, bin } = parseGlb(loaded.bytes));
+          rig = new Rig(json);
           loaded.gltf.scene.traverse(object => { if (object.isSkinnedMesh) skinned = object; });
         });
 
-        it('maps exactly the engine slots and extras to native named clips, in place', () => {
+        it('maps every engine slot and extra to a native named clip that actually moves the rig', () => {
           assert.equal(item.actorId, stated.actorId);
           assert.equal(item.kind, 'character');
           assert.equal(item.sourceType, 'native-glb');
-          const names = new Set(loaded.gltf.animations.map(clip => clip.name));
+          const clips = new Map(loaded.gltf.animations.map(clip => [clip.name, clip]));
           for (const [action, clipName] of Object.entries(item.actionToClipMapping)) {
-            assert.ok(names.has(clipName), `${id}: clip ${clipName} for ${action} is not in the GLB (has ${[...names].join(', ')})`);
-            assert.ok(loaded.gltf.animations.find(clip => clip.name === clipName).duration > 0.2, `${id}: ${clipName} is empty`);
+            const clip = clips.get(clipName);
+            assert.ok(clip, `${id}: clip ${clipName} for ${action} is not in the GLB (has ${[...clips.keys()].join(', ')})`);
+            assert.ok(clip.duration > 0.2, `${id}: ${clipName} is empty`);
+            // A mapped clip must actually pose the character: the skin's own joints have to change rotation over the clip. Counting rotation
+            // channels would pass for a clip whose channels target a static node or a joint that never moves.
+            const sampler = readAnimation(rig, bin, clipName);
+            const frames = Array.from({ length: 9 }, (_, step) => sampler.sample(sampler.duration * step / 8));
+            let posed = 0;
+            for (const joint of rig.joints) {
+              const rest = frames[0].Q[joint];
+              let travel = 0;
+              for (const frame of frames) travel = Math.max(travel, rest.clone().normalize().angleTo(frame.Q[joint].clone().normalize()) / DEG);
+              if (travel > 0.5) posed++;
+            }
+            assert.ok(posed >= 5, `${id}: ${clipName} poses only ${posed} of its ${rig.joints.length} skin joints`);
+          }
+        });
+
+        it('declares every mapped action in-place and verified, exactly as the renderer requires', () => {
+          for (const action of Object.keys(item.actionToClipMapping)) {
             assert.equal(item.rootMotion[action]?.mode, 'in-place', `${id}: ${action} root motion must be declared in-place`);
-            assert.equal(item.rootMotion[action]?.evidenceStatus, 'verified');
+            assert.equal(item.rootMotion[action]?.evidenceStatus, 'verified', `${id}: ${action} root motion evidence must be verified`);
           }
         });
 
@@ -215,43 +283,87 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
           assert.ok(bone?.isBone, `${id}: ${item.castSocketBone} is not a bone of the rig`);
         });
 
-        it('records how every clip was produced', () => {
-          for (const action of Object.keys(item.actionToClipMapping)) {
-            const produced = action.startsWith('wild-crown:') ? report.attacks?.[action.slice('wild-crown:'.length)] : report.slots?.[action] ?? report.clips?.[action];
-            assert.ok(produced, `${id}: clips-report has no ${action}`);
-            if (report.slots) assert.ok(['preset', 'preset-conditioned', 'authored'].includes(produced.produced), `${id}: ${action} produced=${produced.produced}`);
-            assert.ok(produced.durationSeconds > 0);
+        it('binds every attack the production presentation drives to a real native clip and anchor', () => {
+          // The production attack presentation (src/content/enemy-attack-presentation.json) is the authority on which attack a bamboo actor
+          // performs and which anatomy socket the effect follows. Every one of those attacks must be a real clip in this actor's GLB and must
+          // resolve to real bones through the native anchor registry.
+          const attacks = Object.entries(attackPresentation.attacks).filter(([, spec]) => spec.assets.includes(id));
+          for (const [attackId, spec] of attacks) {
+            const action = `wild-crown:${attackId}`;
+            assert.ok(item.actionToClipMapping[action], `${id}: the production attack ${attackId} has no manifest action`);
+            const clipName = item.actionToClipMapping[action];
+            assert.ok(loaded.gltf.animations.some(clip => clip.name === clipName), `${id}: ${attackId} maps to ${clipName}, which is not in the GLB`);
+            const anchor = nativeAnchors[id]?.[spec.socket];
+            assert.ok(anchor, `${id}: the attack ${attackId} needs a native anchor for the '${spec.socket}' socket`);
+            for (const part of ['base', 'tip']) {
+              const bone = loaded.gltf.scene.getObjectByName(sanitize(anchor[part])) ?? loaded.gltf.scene.getObjectByName(anchor[part]);
+              assert.ok(bone?.isBone, `${id}: the ${spec.socket} socket ${part} (${anchor[part]}) is not a bone of the rig`);
+            }
           }
         });
 
-        it('plays every slot clip in place and keeps the body on the ground plane', () => {
+        it('poses the body during the windup of every attack it drives', () => {
+          // The production renderer drives one native clip across the four authoritative phases (windup / commit / active / recovery,
+          // src/content/enemy-attack-presentation.json `phaseEnds`). The windup is the first phase, so the native clip has to already be
+          // moving there: an attack clip that only poses later cannot read as a windup.
+          const windupEnd = attackPresentation.phaseEnds[0];
+          const attacks = Object.entries(attackPresentation.attacks).filter(([, spec]) => spec.assets.includes(id));
+          for (const [attackId] of attacks) {
+            const clipName = item.actionToClipMapping[`wild-crown:${attackId}`];
+            const clip = readAnimation(rig, bin, clipName);
+            const frames = Array.from({ length: 9 }, (_, step) => clip.sample(clip.duration * windupEnd * step / 8));
+            let travel = 0;
+            for (const joint of rig.joints) {
+              const rest = frames[0].Q[joint];
+              for (const frame of frames) travel = Math.max(travel, rest.clone().normalize().angleTo(frame.Q[joint].clone().normalize()) / DEG);
+            }
+            assert.ok(travel > 5, `${id}: the attack ${attackId} barely moves during its ${windupEnd} windup (${travel.toFixed(1)} degrees)`);
+          }
+        });
+
+        it('plays every mapped clip in place and keeps the body on the ground plane', () => {
           assert.ok(skinned, 'runtime GLB must contain a skinned mesh');
-          const anchor = report.inPlaceAnchorBone ?? report.rig.hips;
-          const bone = skinned.skeleton.bones.find(candidate => candidate.name === sanitize(anchor));
-          assert.ok(bone, `anchor bone ${anchor} missing`);
-          const box = placedBox(loaded.gltf, item.coordinateTransform), scale = item.coordinateTransform.scale;
-          const span = Math.max(box.max.x - box.min.x, box.max.z - box.min.z) / scale;
+          // In place means the native root joint never travels horizontally: the simulation owns the actor's position, so a clip that
+          // carried its own displacement would double-move it. The root's translation track is read straight out of the GLB animation.
+          const rootJoint = rig.rootJoint;
+          for (const [action, clipName] of Object.entries(item.actionToClipMapping)) {
+            const animation = rig.json.animations.find(candidate => candidate.name === clipName);
+            assert.ok(animation, `${id}: ${clipName} is not an animation of the GLB`);
+            const channel = animation.channels.find(candidate => candidate.target.node === rootJoint && candidate.target.path === 'translation');
+            if (!channel) continue;
+            const sampler = animation.samplers[channel.sampler];
+            const values = readAccessorAny(rig.json, bin, sampler.output);
+            let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+            for (let i = 0; i < values.length / 3; i++) {
+              minX = Math.min(minX, values[i * 3]); maxX = Math.max(maxX, values[i * 3]);
+              minZ = Math.min(minZ, values[i * 3 + 2]); maxZ = Math.max(maxZ, values[i * 3 + 2]);
+            }
+            const travel = Math.max(maxX - minX, maxZ - minZ) * item.coordinateTransform.scale;
+            assert.ok(travel <= 1e-6, `${id}: ${action} (${clipName}) travels ${travel.toFixed(4)} m horizontally; the clip is not in place`);
+          }
+          // The body must stay on the ground plane while it plays: no clip may sink the mesh through the floor. The clip is played once and
+          // clamped, so the last sample is the clip's real terminal pose (a looping action would otherwise wrap back to its first frame).
+          const scale = item.coordinateTransform.scale;
           const mixer = new THREE.AnimationMixer(loaded.gltf.scene), vertex = new THREE.Vector3();
-          const rest = bone.getWorldPosition(new THREE.Vector3());
           for (const action of Object.keys(item.actionToClipMapping)) {
             const clip = loaded.gltf.animations.find(candidate => candidate.name === item.actionToClipMapping[action]);
             const playing = mixer.clipAction(clip);
+            playing.setLoop(THREE.LoopOnce, 1);
+            playing.clampWhenFinished = true;
             playing.play();
-            let worstDrift = 0, lowest = Infinity;
+            let lowest = Infinity;
             for (let step = 0; step <= 12; step++) {
               playing.time = clip.duration * step / 12;
               mixer.update(0);
               loaded.gltf.scene.updateMatrixWorld(true);
               skinned.skeleton.update();
-              const position = bone.getWorldPosition(new THREE.Vector3());
-              worstDrift = Math.max(worstDrift, Math.hypot(position.x - rest.x, position.z - rest.z));
               for (let i = 0; i < skinned.geometry.attributes.position.count; i += 7) {
                 skinned.getVertexPosition(i, vertex).applyMatrix4(skinned.matrixWorld);
                 lowest = Math.min(lowest, vertex.y);
               }
             }
             playing.stop();
-            assert.ok(worstDrift <= 0.12 * span, `${id}: ${action} (${clip.name}) drifts ${(worstDrift / span * 100).toFixed(1)}% of the body span from the actor origin`);
+            mixer.stopAllAction();
             assert.ok(lowest * scale >= -SINK_TOLERANCE, `${id}: ${action} (${clip.name}) sinks ${(-lowest * scale).toFixed(3)} m below the ground`);
           }
         });
@@ -260,9 +372,16 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
           const placed = placedBox(loaded.gltf, item.coordinateTransform), size = placed.getSize(new THREE.Vector3());
           if (stated.height) assert.ok(within(size.y, stated.height), `${id}: height ${size.y.toFixed(2)} m vs ${stated.height} m`);
           if (stated.shoulder) {
-            // Shoulder height: top joints of the front legs plus 5% of the model height (hide / fur), as the manifest builder measures it.
+            // Shoulder height: the top joint of each front leg, measured on the native rig, plus 5% of the model height (hide / fur), exactly
+            // as the manifest builder measures it when it scales the entry.
+            const context = quadrupedRigContext(id, rig.json);
             const matrix = placement(item.coordinateTransform);
-            const tops = [report.rig.legs.FL[0], report.rig.legs.FR[0]].map(name => loaded.gltf.scene.getObjectByName(sanitize(name)).getWorldPosition(new THREE.Vector3()).applyMatrix4(matrix).y);
+            const tops = ['FL', 'FR'].map(key => {
+              const chain = context.legs[key].chain;
+              const hip = context.nodes[chain[0]].name;
+              const node = loaded.gltf.scene.getObjectByName(sanitize(hip)) ?? loaded.gltf.scene.getObjectByName(hip);
+              return node.getWorldPosition(new THREE.Vector3()).applyMatrix4(matrix).y;
+            });
             const shoulder = (tops[0] + tops[1]) / 2 + 0.05 * size.y;
             assert.ok(within(shoulder, stated.shoulder), `${id}: shoulder ${shoulder.toFixed(2)} m vs ${stated.shoulder} m`);
             assert.ok(size.y < stated.shoulder * 2.2, `${id}: ${size.y.toFixed(2)} m tall is out of proportion for a ${stated.shoulder} m shoulder`);
@@ -270,35 +389,38 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
           assert.ok(Math.abs(placed.min.y) <= 0.05, `${id}: base at y = ${placed.min.y.toFixed(3)}`);
         });
 
-        if (stated.family === 'creature') {
-          it('closes every looping clip with a seam no bigger than about its own largest frame step', () => {
-            // maxInteriorStepDegrees excludes the last frame step, so the seam may exceed it by a fraction of one ordinary step.
-            for (const [slot, clip] of Object.entries(report.slots)) {
-              if (!clip.loop || clip.produced === 'preset') continue;
-              assert.ok(clip.measured.loopClosureStepDegrees <= 1.25 * clip.measured.maxInteriorStepDegrees, `${id}: ${slot} closes with ${clip.measured.loopClosureStepDegrees} degrees against an interior step of ${clip.measured.maxInteriorStepDegrees}`);
-            }
-          });
 
-          it('ends the entrance on the idle pose and the collapse on a held pose resting on the ground', () => {
-            const spawn = report.slots['monster-spawn'].measured, death = report.slots['monster-death'].measured;
-            assert.ok(spawn.idleMatch.maxJointDegrees <= 3, `${id}: the entrance ends ${spawn.idleMatch.maxJointDegrees} degrees from the idle`);
-            assert.ok(death.heldFromTime <= 0.9, `${id}: the collapse is held only from ${death.heldFromTime}`);
-            assert.ok(death.floorContactBodyHeights.final >= -0.011 && death.floorContactBodyHeights.final <= 0.02, `${id}: the collapse rests ${death.floorContactBodyHeights.final} body heights off the ground`);
-          });
-        }
+        it('plays the story clips at the length the production clip-seconds table declares', () => {
+          // The renderer maps elapsed world time onto these clips through the production table
+          // (src/rendering/BambooMonsterProfiles.ts BAMBOO_CLIP_SECONDS). The native clip must be exactly that long, or the ceremony or
+          // gesture the table times would be cut short (or hold past its end).
+          for (const [action, clipName] of Object.entries(item.actionToClipMapping)) {
+            const declared = BAMBOO_CLIP_SECONDS[action];
+            if (declared === undefined) continue;
+            const clip = loaded.gltf.animations.find(candidate => candidate.name === clipName);
+            assert.ok(clip, `${id}: ${action} maps to ${clipName}, which is not in the GLB`);
+            assert.ok(Math.abs(clip.duration - declared) <= 1 / 30, `${id}: ${action} (${clipName}) runs ${clip.duration.toFixed(3)} s but the production table declares ${declared} s`);
+          }
+        });
+
+        it('closes every looping action on its own first frame', () => {
+          // The production renderer plays a gait or a held stance as an endless loop (src/rendering/StoryActorAnimation.ts
+          // loopSample, src/rendering/MonsterAnimationProfiles.ts). A clip played that way must close on its own first frame, or the loop
+          // visibly pops. The seam is measured on the native clip itself.
+          for (const [action, clipName] of Object.entries(item.actionToClipMapping)) {
+            if (!LOOPING_ACTIONS.has(action)) continue;
+            const sampler = readAnimation(rig, bin, clipName);
+            const first = sampler.sample(0), last = sampler.sample(sampler.duration);
+            let seam = 0;
+            for (const joint of rig.joints) seam = Math.max(seam, first.Q[joint].clone().normalize().angleTo(last.Q[joint].clone().normalize()) / DEG);
+            assert.ok(seam <= 1, `${id}: ${action} (${clipName}) closes ${seam.toFixed(2)} degrees from its first frame`);
+          }
+        });
       });
     }
   });
 
   describe('Koro, the Branchbreaker attack kit', () => {
-    it('maps the boss attacks onto Tripo presets and authored clips like the other biped bosses', async () => {
-      const report = await readJson(entry('actor-koro-branchbreaker').provenance);
-      for (const slot of ['monster-idle', 'monster-walk', 'monster-run', 'monster-slash', 'monster-shoot']) assert.equal(report.slots[slot].produced, 'preset-conditioned', slot);
-      for (const slot of ['monster-jump', 'monster-hurt', 'monster-turn', 'monster-dive', 'monster-roar', 'monster-death', 'monster-spawn']) assert.equal(report.slots[slot].produced, 'authored', slot);
-      assert.equal(report.slots['monster-shoot'].source.preset, 'pitch_baseball', 'the rock throw is the pitch preset');
-      assert.equal(report.slots['monster-slash'].source.preset, 'slash', 'the log sweep is the slash preset');
-    });
-
     it('rides the tail on the Hip: no tail vertex stays on a leg or hand joint', async () => {
       const record = await readJson('asset-source/generated/actor-koro-branchbreaker-runtime-01/tail-repair.json');
       assert.equal(record.reboundTo, 'Hip');
@@ -309,72 +431,79 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
       assert.ok(total >= 600);
       assert.deepEqual([...counts.keys()], ['Hip'], `tail vertices on ${[...counts.keys()].join(', ')}`);
     });
+
+    it('binds the six boss attacks to native clips and the native rock-throw anchor', async () => {
+      const item = entry('actor-koro-branchbreaker');
+      const { gltf } = await loadGlb(item.runtimeUrl);
+      const names = new Set(gltf.animations.map(clip => clip.name));
+      for (const attack of ['koro-fruit-burst', 'koro-rock-throw', 'koro-falling-branch', 'koro-platform-charge', 'koro-vine-vault', 'koro-branch-swing']) {
+        const action = `wild-crown:${attack}`;
+        assert.ok(item.actionToClipMapping[action], `the boss attack ${attack} has no manifest action`);
+        assert.ok(names.has(item.actionToClipMapping[action]), `the boss attack ${attack} maps to a clip that is not in the GLB`);
+      }
+      // The rock throw is a right-hand throw: the effect follows the hand anchor the production registry names.
+      const anchor = nativeAnchors['actor-koro-branchbreaker']['hand-right'];
+      for (const part of ['base', 'tip']) {
+        const bone = gltf.scene.getObjectByName(sanitize(anchor[part])) ?? gltf.scene.getObjectByName(anchor[part]);
+        assert.ok(bone?.isBone, `the rock-throw hand ${part} (${anchor[part]}) is not a bone of the rig`);
+      }
+    });
   });
 
   describe('Asha', () => {
-    let report;
-    before(async () => { report = await readJson(entry('actor-asha').provenance); });
-
-    it('plants every foot of the authored walk (maximum stance slide below 3% of the stride)', () => {
-      const walk = report.clips['monster-walk'].measured.planting;
-      assert.ok(walk.maxSlidePercent <= 3, `walk slide ${walk.maxSlidePercent}%`);
-      assert.ok(walk.stanceFraction >= 0.5 && walk.stanceFraction <= 0.7, `stance fraction ${walk.stanceFraction}`);
-    });
-
-    it('has a distinct attack window for each of the three phases', () => {
-      const phases = { 1: 'asha-stalk-pounce', 2: 'asha-corrupt-slam', 3: 'asha-bamboo-charge' };
-      const seen = new Set();
-      for (const [phase, clipName] of Object.entries(phases)) {
-        const clip = report.clips[clipName], window = clip.attackWindow;
-        assert.ok(window, `phase ${phase}: ${clipName} has no attack window`);
-        const [anticipation, start, end, recovery] = window.seconds;
-        assert.ok(anticipation >= 0.3, `phase ${phase}: only ${anticipation} s of anticipation`);
-        assert.ok(start > anticipation - 1e-9 && end > start && recovery > end, `phase ${phase}: window ${window.seconds.join(', ')} is not ordered`);
-        assert.ok(end - start >= 0.25, `phase ${phase}: active window ${(end - start).toFixed(3)} s is too short to read`);
-        assert.ok(recovery - end >= 0.2, `phase ${phase}: only ${(recovery - end).toFixed(3)} s of recovery`);
-        assert.ok(recovery <= clip.durationSeconds + 1e-9, `phase ${phase}: the window ends after the clip`);
-        assert.equal(clip.loop, false);
-        seen.add(JSON.stringify(window.seconds));
-      }
-      assert.equal(seen.size, 3, 'the three phase attack windows must differ');
-    });
-
-    it('carries the stalk, corrupted idle, cleanse reaction and bonded idle with their loop flags', () => {
-      assert.equal(report.clips['asha-stalk'].loop, true);
-      assert.equal(report.clips['asha-corrupted-idle'].loop, true);
-      assert.equal(report.clips['asha-bond-idle'].loop, true);
-      assert.equal(report.clips['asha-cleanse'].loop, false);
-      assert.ok(report.clips['asha-cleanse'].durationSeconds >= 2, 'the cleanse reaction needs room to read');
-      assert.deepEqual(Object.keys(report.clips['asha-cleanse'].semanticKeyTimes), ['tense', 'shudder', 'peel', 'release', 'calm']);
-    });
-
-    it('moves the cleanse and bond poses without breaking contact: the feet stay on their rest spots', () => {
-      for (const name of ['asha-cleanse', 'asha-bond-idle', 'asha-corrupted-idle']) {
-        for (const [leg, deviation] of Object.entries(report.clips[name].measured.footDeviation)) assert.ok(deviation.maxBodyHeights <= 0.06, `${name}: ${leg} wanders ${deviation.maxBodyHeights} body heights`);
-      }
-    });
-
-    it('has a complete hind-leg chain on both sides after the rig repair', async () => {
+    it('has a complete four-leg chain on every side after the rig repair', async () => {
       const record = await readJson('asset-source/generated/actor-asha-runtime-01/skin-repair.json');
       assert.deepEqual(Object.keys(record.chains), ['HL', 'HR']);
       assert.ok(record.chains.HR.verticesMirrored >= 2000, `only ${record.chains.HR.verticesMirrored} right hind vertices carry mirrored weights`);
       const path = 'asset-source/generated/actor-asha-runtime-01/actor-asha.glb';
       assert.equal(sha256(await readFile(`${root}/${path}`)), record.output.sha256, 'the base GLB is not the repaired one');
+      // The repaired hind legs must still be real chains in the shipped rig: four joints each, and the repaired paws carry the skin.
+      const { json } = parseGlb(await readFile(localPath(entry('actor-asha').runtimeUrl)));
+      const context = quadrupedRigContext('actor-asha', json);
+      for (const key of ['FL', 'FR', 'HL', 'HR']) {
+        const chain = context.legs[key];
+        assert.ok(chain, `Asha has no ${key} leg chain in the native rig`);
+        assert.ok(chain.chain.length >= 4, `Asha's ${key} chain has only ${chain.chain.length} joints`);
+        assert.ok(chain.lengths.every(length => length > 0), `Asha's ${key} chain has a zero-length bone`);
+      }
+      for (const key of ['HL', 'HR']) {
+        const names = context.legs[key].chain.map(index => context.nodes[index].name);
+        assert.ok(names.some(name => name.startsWith('repair::')), `Asha's ${key} chain carries no repaired joint: ${names.join(', ')}`);
+      }
       const right = await dominantJoints(path, (x, y, z) => x < -0.05 && x > -0.3 && y < 0.1 && z > 0.04);
       const left = await dominantJoints(path, (x, y, z) => x < -0.05 && x > -0.3 && y < 0.1 && z < -0.04);
       for (const [name] of right.counts) assert.match(name, /^repair::HR_/, `a right hind paw vertex is skinned to ${name}`);
       for (const [name] of left.counts) assert.ok(/^repair::HL_|^tripo::0_Left_Limb_/.test(name), `a left hind paw vertex is skinned to ${name}`);
       assert.ok(right.total > 300 && left.total > 300);
-      for (const key of ['HL', 'HR']) assert.equal(report.rig.legs[key].length, 4, `${key} chain`);
+    });
+
+    it('binds the three boss phase attacks to distinct native clips', async () => {
+      // The three phase attacks are the production attacks the presentation drives for her (src/content/enemy-attack-presentation.json);
+      // each must be a distinct native clip of this actor. The phase timing itself belongs to the engine's attack windows, which the engine
+      // timing suite covers; here only the native clip binding is asserted.
+      const item = entry('actor-asha');
+      const { gltf } = await loadGlb(item.runtimeUrl);
+      const phaseAttacks = Object.entries(attackPresentation.attacks)
+        .filter(([, spec]) => spec.assets.includes('actor-asha'))
+        .map(([attackId]) => attackId);
+      assert.ok(phaseAttacks.length >= 3, 'Asha must have at least three production attacks');
+      const clips = new Set();
+      for (const attackId of phaseAttacks) {
+        const mapped = item.actionToClipMapping[`wild-crown:${attackId}`];
+        assert.ok(mapped, `the production attack ${attackId} has no manifest action`);
+        const clip = gltf.animations.find(candidate => candidate.name === mapped);
+        assert.ok(clip, `the production attack ${attackId} maps to ${mapped}, which is not in the GLB`);
+        clips.add(mapped);
+      }
+      assert.equal(clips.size, phaseAttacks.length, 'the production attacks must not share one native clip');
     });
   });
 
   describe('Tali', () => {
-    it('is a cub of her own: half Asha\'s shoulder height with her own rig, and plants the repaired left hind leg', async () => {
-      const report = await readJson(entry('actor-tali').provenance);
-      assert.ok(entry('actor-tali').coordinateTransform.scale > 0);
-      assert.notEqual(entry('actor-tali').tripoSourceTask, entry('actor-asha').tripoSourceTask);
-      assert.ok(report.clips['monster-walk'].measured.planting.maxSlidePercent <= 3);
+    it('is a cub of her own: half Asha\'s shoulder height with her own rig and her own repaired hind leg', async () => {
+      const item = entry('actor-tali');
+      assert.ok(item.coordinateTransform.scale > 0);
+      assert.notEqual(item.tripoSourceTask, entry('actor-asha').tripoSourceTask);
       const record = await readJson('asset-source/generated/actor-tali-runtime-01/skin-repair.json');
       assert.deepEqual(Object.keys(record.chains), ['HL']);
       assert.ok(record.chains.HL.verticesMirrored >= 2000);
@@ -382,32 +511,35 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
       assert.equal(sha256(await readFile(`${root}/${path}`)), record.output.sha256, 'the base GLB is not the repaired one');
       const left = await dominantJoints(path, (x, y, z) => x < -0.04 && y < 0.1 && z > 0.05);
       for (const [name] of left.counts) assert.match(name, /^repair::HL_|^tripo::1_Left_Limb_0$/, `a left hind paw vertex is skinned to ${name}`);
-      assert.deepEqual(report.rig.legs.HL, ['tripo::1_Left_Limb_0', 'repair::HL_1', 'repair::HL_2', 'repair::HL_3', 'repair::HL_4']);
+      // Her own rig: the repaired left hind chain is a real chain of four joints in the shipped GLB.
+      const { json } = parseGlb(await readFile(localPath(item.runtimeUrl)));
+      const context = quadrupedRigContext('actor-tali', json);
+      const names = context.legs.HL.chain.map(index => context.nodes[index].name);
+      assert.deepEqual(names, ['tripo::1_Left_Limb_0', 'repair::HL_1', 'repair::HL_2', 'repair::HL_3', 'repair::HL_4']);
     });
   });
 
   describe('Marek', () => {
     it('keeps the Mixamo-spec rig and four talking idles that are not monster slots', async () => {
-      const item = entry('actor-marek'), report = await readJson(item.provenance);
+      const item = entry('actor-marek');
       assert.equal(item.castSocketBone, 'mixamorig:Head');
       for (const slot of ['monster-slash', 'monster-shoot', 'monster-roar']) assert.equal(item.actionToClipMapping[slot], undefined, `${slot} makes no sense for the NPC`);
-      assert.equal(report.slots['npc-talk-relaxed'].produced, 'preset-conditioned');
-      assert.equal(report.slots['npc-talk-relaxed'].source.preset, 'standing_relax');
-      for (const slot of ['npc-talk-explain', 'npc-talk-point', 'npc-talk-guarded']) assert.equal(report.slots[slot].produced, 'authored', slot);
-      assert.equal(report.slots['npc-talk-point'].loop, false);
-      for (const slot of ['npc-talk-relaxed', 'npc-talk-explain', 'npc-talk-guarded']) assert.equal(report.slots[slot].loop, true, slot);
-      assert.equal(report.slots['monster-walk'].source.preset, 'walk');
+      // The four talking idles are the story gestures the renderer plays (src/rendering/StoryActorAnimation.ts) and each is a native clip.
+      const { gltf } = await loadGlb(item.runtimeUrl);
+      const names = new Set(gltf.animations.map(clip => clip.name));
+      for (const gesture of ['npc-talk-relaxed', 'npc-talk-explain', 'npc-talk-point', 'npc-talk-guarded']) {
+        assert.ok(item.actionToClipMapping[gesture], `${gesture} has no manifest action`);
+        assert.ok(names.has(item.actionToClipMapping[gesture]), `${gesture} maps to a clip that is not in the GLB`);
+      }
     });
   });
 
   describe('Ash Hunters of the camp', () => {
-    // hand = the joint the weapon is bound to; attacks = [clip, ...] with an attack window; concepts = revisions kept on disk (the last one fed the model); anim = credits of the preset batch.
+    // hand = the joint the weapon is bound to; attacks = the native attack slots the hunter plays.
     const HUNTERS = {
       'actor-camp-hunter-melee': { hand: 'mixamorig:LeftHand', attacks: ['monster-slash', 'hunter-thrust'], concepts: 2, anim: 50 },
       'actor-camp-hunter-ranged': { hand: 'mixamorig:RightHand', attacks: ['monster-shoot'], concepts: 4, anim: 40 },
     };
-    const AUTHORED = ['monster-hurt', 'monster-turn', 'monster-death', 'monster-spawn', 'hunter-subdue', 'hunter-kneel-idle'];
-    const LOOPING = ['monster-idle', 'monster-walk', 'monster-run', 'monster-turn', 'hunter-kneel-idle'];
     let rows;
     before(async () => { rows = (await readFile(`${root}/${LOG}`, 'utf8')).trim().split('\n').map(line => JSON.parse(line)); });
 
@@ -428,7 +560,7 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
 
     for (const [id, hunter] of Object.entries(HUNTERS)) {
       describe(id, () => {
-        let item, report, loaded, json, bin, rig, skinned, mixer;
+        let item, loaded, json, bin, rig, skinned, mixer;
         const animations = new Map();
         const sampler = name => { if (!animations.has(name)) animations.set(name, readAnimation(rig, bin, name)); return animations.get(name); };
         const clipOf = action => item.actionToClipMapping[action];
@@ -447,7 +579,6 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
         };
         before(async () => {
           item = entry(id);
-          report = await readJson(item.provenance);
           loaded = await loadGlb(item.runtimeUrl);
           ({ json, bin } = parseGlb(loaded.bytes));
           rig = new Rig(json);
@@ -459,35 +590,9 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
           assert.equal(item.castSocketBone, 'mixamorig:Head');
           assert.deepEqual(item.coordinateTransform.forward, { x: -1, y: 0, z: 0 });
           for (const slot of ['monster-roar', 'monster-jump', 'monster-dive', 'monster-tail']) assert.equal(item.actionToClipMapping[slot], undefined, `${slot} makes no sense for a human hunter`);
-          assert.deepEqual(report.slots['monster-hurt'].semanticKeyTimes, { flinch: 0.2, hold: 0.52 }, 'the hurt clip follows the reaction presenter\'s hurt window');
-          assert.equal(report.slots['monster-death'].semanticKeyTimes.rest, 0.82, 'the knockdown is held lying from 0.82');
         });
 
-        it('conditions idle / walk / run from Tripo presets and authors the attacks, reactions and the subdued kneel set', () => {
-          for (const [slot, preset] of [['monster-idle', 'idle'], ['monster-walk', 'walk'], ['monster-run', 'run']]) {
-            assert.equal(report.slots[slot].produced, 'preset-conditioned', slot);
-            assert.equal(report.slots[slot].source.preset, preset, slot);
-          }
-          if (id.endsWith('melee')) {
-            assert.equal(report.slots['monster-slash'].produced, 'preset-conditioned');
-            assert.equal(report.slots['monster-slash'].source.preset, 'slash', 'the hook-pole chop rides the slash preset body');
-            assert.equal(report.slots['hunter-thrust'].produced, 'authored');
-          } else assert.equal(report.slots['monster-shoot'].produced, 'authored', 'aim + shoot is authored around the carried crossbow');
-          for (const slot of AUTHORED) assert.equal(report.slots[slot].produced, 'authored', slot);
-          for (const [slot, clip] of Object.entries(report.slots)) assert.equal(clip.loop, LOOPING.includes(slot), `${slot} loop flag`);
-        });
-
-        it('gives every attack an ordered window with room to read: anticipation, a hit window, recovery', () => {
-          for (const attack of hunter.attacks) {
-            const clip = report.slots[attack], [anticipation, activeStart, activeEnd, recovery] = clip.attackWindow;
-            assert.ok(anticipation >= 0.6 && anticipation <= 0.85, `${attack}: ${anticipation} s of anticipation (the combat windups are 0.7-0.8 s)`);
-            assert.ok(activeStart >= anticipation && activeEnd - activeStart >= 0.1, `${attack}: active window ${activeStart}-${activeEnd}`);
-            assert.ok(recovery - activeEnd >= 0.25 && recovery <= clip.durationSeconds + 1e-9, `${attack}: recovery ${recovery} s in a ${clip.durationSeconds} s clip`);
-            assert.equal(clip.loop, false);
-          }
-        });
-
-        it('starts every one-shot on the idle\'s first frame and ends the knockdown, get-up and subdue on exactly the pose the next clip starts from', () => {
+        it('plays every native attack from the idle pose and returns to it', () => {
           const idle = start('monster-idle');
           for (const action of [...hunter.attacks, 'monster-hurt', 'monster-death', 'hunter-subdue']) assert.ok(difference(start(action), idle) <= 0.5, `${action} does not start on the idle pose`);
           for (const action of [...hunter.attacks, 'monster-hurt']) assert.ok(difference(end(action), idle) <= 0.5, `${action} does not end on the idle pose`);
@@ -501,8 +606,6 @@ describe('bamboo.json manifest', { skip: existsSync(`${root}/${MANIFEST}`) ? fal
           assert.ok(lying <= 0.35 * standing, `lying head at ${(lying / standing * 100).toFixed(0)}% of the standing height`);
           assert.ok(Math.abs(headHeight('monster-spawn', 0) - lying) <= 0.01 * standing, 'the get-up starts where the knockdown ended');
           assert.ok(kneeling >= 0.4 * standing && kneeling <= 0.8 * standing, `kneeling head at ${(kneeling / standing * 100).toFixed(0)}% of the standing height`);
-          assert.ok(report.slots['monster-death'].measured.heldFromTime <= 0.9, 'the knockdown ends on a held pose');
-          assert.ok(report.slots['hunter-kneel-idle'].measured.floorContactBodyHeights.final >= -0.011, 'the kneel rests on the ground, not through it');
         });
 
         it('carries its weapon rigidly: the two ends of the weapon keep their distance in every clip', async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { CombatEngine, FIXED_STEP_SECONDS, createEngineState, type CombatInput } from '../../src/game/combat/CombatEngine.js';
+import { CombatEngine, FIXED_STEP_SECONDS, createEngineState, type CombatActor, type CombatInput, type EngineState, type LiveHazard } from '../../src/game/combat/CombatEngine.js';
 import { GREENWAKE_COMBAT_TRIALS } from '../../src/game/combat/CombatTrials.js';
 import { MONSTER_ACCEL, MONSTER_DECEL, MONSTER_PROFILES, ROAR_TICKS, TRIAL_ENGAGE_RANGE } from '../../src/game/combat/WildlifePressure.js';
 import { getWildlifePressure } from '../../src/game/combat/WildlifePressure.js';
@@ -70,17 +70,32 @@ function monsterOf(engine: CombatEngine, index: number) {
   return engine.snapshot().actors.find(actor => actor.id === GREENWAKE_COMBAT_TRIALS[index]!.monsterId)!;
 }
 
+/**
+ * The engine keeps its state private by design; these loops read it through the same test seam the other combat
+ * tests use. `snapshotState()` deep-copies the whole engine state (every actor, hazard, telegraph, prop and
+ * event) on each call, which cost 2.2 ms per read against 0.02 ms for the live state.
+ */
+function liveState(engine: CombatEngine): EngineState {
+  return (engine as unknown as { state: EngineState }).state;
+}
+
+/** The live monster actor: its position, facing and velocity are plain actor fields, so no snapshot is needed. */
+function liveMonster(engine: CombatEngine, index: number): CombatActor {
+  return liveState(engine).actors.find(actor => actor.id === GREENWAKE_COMBAT_TRIALS[index]!.monsterId)!;
+}
+
 describe('trial monster locomotion', () => {
   for (let index = 0; index < GREENWAKE_COMBAT_TRIALS.length; index++) {
     const trial = GREENWAKE_COMBAT_TRIALS[index]!;
     it(`${trial.title}: stays inside its arena circle, on walkable ground and out of colliders while the player moves randomly`, () => {
       const pillar: RegionColliderDefinition = { id: 'test-pillar', kind: 'box', from: vec(trial.monsterPosition.x + 3, 1, trial.monsterPosition.z + 3), halfExtents: vec(0.8, 1, 0.8), blocksMovement: true, blocksCamera: false };
       const engine = trialEngine(index, { room: true, colliders: [pillar] });
-      const arena = engine.snapshotState().arena;
+      const arena = liveState(engine).arena;
       const profile = MONSTER_PROFILES[trial.monsterId]!;
       const random = mulberry32(0xc0ffee + index);
       let move = vec(0, 0, 0), sprint = false, holdUntil = 0, travelled = 0, moving = 0;
-      let previous = monsterOf(engine, index).position;
+      const start = liveMonster(engine, index).position;
+      let previousX = start.x, previousZ = start.z;
       for (let tick = 0; tick < 3600; tick++) {
         if (tick >= holdUntil) {
           const angle = random() * Math.PI * 2;
@@ -90,7 +105,7 @@ describe('trial monster locomotion', () => {
         }
         engine.fixedStep({ ...idle, move, sprintHeld: sprint });
         engine.consumeEvents(); engine.drainPresentationCues();
-        const monster = monsterOf(engine, index);
+        const monster = liveMonster(engine, index);
         const { x, y, z } = monster.position;
         expect(Math.hypot(x - trial.arena.center.x, z - trial.arena.center.z)).toBeLessThanOrEqual(trial.arena.radius);
         expect(groundHeightAt(arena, x, z, y)).not.toBeNull();
@@ -98,10 +113,11 @@ describe('trial monster locomotion', () => {
         const nearestZ = Math.max(pillar.from.z - 0.8, Math.min(pillar.from.z + 0.8, z));
         expect(Math.hypot(x - nearestX, z - nearestZ)).toBeGreaterThanOrEqual(profile.radius - 0.05);
         expect(Math.hypot(monster.facing.x, monster.facing.z)).toBeCloseTo(1, 5);
-        const step = Math.hypot(x - previous.x, z - previous.z);
+        const step = Math.hypot(x - previousX, z - previousZ);
         travelled += step;
         if (step > 1e-4) moving++;
-        previous = monster.position;
+        previousX = x;
+        previousZ = z;
       }
       expect(travelled).toBeGreaterThan(8);
       expect(moving).toBeGreaterThan(150);
@@ -200,14 +216,18 @@ describe('attack movement', () => {
   function laneSetup(colliders: readonly RegionColliderDefinition[] = []) {
     const engine = trialEngine(0, { colliders });
     const cues: StoryCue[] = [];
-    let hazard: ReturnType<CombatEngine['snapshotState']>['hazards'][number] | undefined;
+    let hazard: LiveHazard | undefined;
     const positions = new Map<number, Vec3>();
-    for (let tick = 0; tick < 600 && !(hazard && engine.snapshotState().worldTick > hazard.recoveryUntil! + 1); tick++) {
+    for (let tick = 0; tick < 600 && !(hazard && liveState(engine).worldTick > hazard.recoveryUntil! + 1); tick++) {
       engine.fixedStep(idle);
       engine.consumeEvents();
       cues.push(...engine.drainPresentationCues());
-      hazard ??= engine.snapshotState().hazards.find(candidate => candidate.attackId === 'boar-charge');
-      positions.set(engine.snapshotState().worldTick, monsterOf(engine, 0).position);
+      const state = liveState(engine);
+      if (!hazard) {
+        const current = state.hazards.find(candidate => candidate.attackId === 'boar-charge');
+        if (current) hazard = structuredClone(current);
+      }
+      positions.set(state.worldTick, { ...liveMonster(engine, 0).position });
     }
     return { engine, cues, hazard: hazard!, positions };
   }
@@ -266,12 +286,16 @@ describe('attack movement', () => {
 
   it('root-rammer low wave takes a committed lunge of at most 1.5 m during its commit window', () => {
     const engine = trialEngine(2);
-    let hazard: ReturnType<CombatEngine['snapshotState']>['hazards'][number] | undefined;
+    let hazard: LiveHazard | undefined;
     const positions = new Map<number, Vec3>();
-    for (let tick = 0; tick < 900 && !(hazard && engine.snapshotState().worldTick > hazard.castUntil! + 2); tick++) {
+    for (let tick = 0; tick < 900 && !(hazard && liveState(engine).worldTick > hazard.castUntil! + 2); tick++) {
       engine.fixedStep(idle);
-      hazard ??= engine.snapshotState().hazards.find(candidate => candidate.attackId === 'root-rammer-low-wave');
-      positions.set(engine.snapshotState().worldTick, monsterOf(engine, 2).position);
+      const state = liveState(engine);
+      if (!hazard) {
+        const current = state.hazards.find(candidate => candidate.attackId === 'root-rammer-low-wave');
+        if (current) hazard = structuredClone(current);
+      }
+      positions.set(state.worldTick, { ...liveMonster(engine, 2).position });
     }
     expect(hazard).toBeDefined();
     const at = (tick: number) => positions.get(Math.round(tick))!;
@@ -301,11 +325,11 @@ describe('roars and pressure', () => {
       engine.fixedStep(idle);
       roars.push(...engine.drainPresentationCues().filter(cue => cue.kind === 'roar-cone'));
       damage += engine.consumeEvents().filter(event => event.kind === 'damage').length;
-      const monster = monsterOf(engine, 0);
-      if (monster.roarProgress !== undefined) {
+      const monster = liveMonster(engine, 0);
+      if (monster.motion && liveState(engine).worldTick < monster.motion.roarUntil) {
         pausedTicks++;
         moved = Math.max(moved, Math.hypot(monster.position.x - origin.x, monster.position.z - origin.z));
-        hazards += engine.snapshotState().hazards.length;
+        hazards += liveState(engine).hazards.length;
       }
     }
     expect(roars).toHaveLength(1);
@@ -366,7 +390,7 @@ describe('roars and pressure', () => {
       for (let tick = 0; tick < ticks; tick++) {
         engine.fixedStep(idle);
         engine.consumeEvents(); engine.drainPresentationCues();
-        const state = engine.snapshotState();
+        const state = liveState(engine);
         const monster = state.actors.find(actor => actor.id === 'corrupted-boar')!, player = state.actors.find(actor => actor.id === 'aren')!;
         for (const hazard of state.hazards) {
           if (seen.has(hazard.id)) continue;

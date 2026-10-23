@@ -1,0 +1,237 @@
+{
+  "scope": "Actual native pointer clicks on the mounted source game before the later Pause-controller affordance. Eight unique combinations plus the final state; every toggle returns pointer focus to gameplay. Not the remaining live/keyboard/controller/narrow acceptance.",
+  "states": [
+    {
+      "states": {
+        "hero": true,
+        "objective": true,
+        "skills": true
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 76.4375,
+          "controlsHidden": false
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "keyboard"
+    },
+    {
+      "states": {
+        "hero": true,
+        "objective": true,
+        "skills": false
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 44,
+          "controlsHidden": true
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": true,
+        "objective": false,
+        "skills": false
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 44,
+          "controlsHidden": true
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": true,
+        "objective": false,
+        "skills": true
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 76.4375,
+          "controlsHidden": false
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": false,
+        "objective": false,
+        "skills": true
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 76.4375,
+          "controlsHidden": false
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": false,
+        "objective": false,
+        "skills": false
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 44,
+          "controlsHidden": true
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": false,
+        "objective": true,
+        "skills": false
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 44,
+          "controlsHidden": true
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    },
+    {
+      "states": {
+        "hero": false,
+        "objective": true,
+        "skills": true
+      },
+      "targets": [
+        {
+          "group": "hero",
+          "w": 60.4375,
+          "h": 44,
+          "controlsHidden": true
+        },
+        {
+          "group": "objective",
+          "w": 92.3125,
+          "h": 44,
+          "controlsHidden": false
+        },
+        {
+          "group": "skills",
+          "w": 70.265625,
+          "h": 76.4375,
+          "controlsHidden": false
+        }
+      ],
+      "focus": "wc-input-host",
+      "modality": "pointer"
+    }
+  ]
+}

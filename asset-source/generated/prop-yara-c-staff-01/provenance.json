@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "taskId": "4e0784e2-8bdb-416a-ba10-3847593d7fab",
+  "type": "image_to_model",
+  "model": "v3.1-20260211",
+  "parameters": { "geometry_quality": "detailed", "texture_quality": "extreme", "pbr": true },
+  "input": "Staff isolated from Yara concept C (Tripo image-to-image c5fed6f8 banana_pro, cleaned e5afb980 chat_image_2) — twisted living wood, crook head cradling an amber blossom",
+  "creditsConsumed": 70,
+  "outputHash": "b0b8c9e289aff75a18ee9544dd45744d58ba966917c612265780984e47063864",
+  "output": "model.glb",
+  "evidenceStatus": "blocked"
+}

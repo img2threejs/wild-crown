@@ -1,0 +1,68 @@
+{
+  "issue": 134,
+  "title": "Aren and Yara skill animations rebuilt on captured glaive and staff motion, with flowing combos",
+  "observedAt": "2026-10-19",
+  "coordinator": "main session; no independent external reviewer; no subagents",
+  "problem": "Aren's and Yara's skills were cut from unrelated takes: sports/utility presets, then generic empty-handed Mixamo sword and spell takes. Poses did not read as a glaive warrior or a staff sorceress, limbs and weapon passed through the body, and each combo step started from an unrelated pose, so a chained combo snapped instead of flowing.",
+  "method": "Every skill is a Viggle/PINOC text-to-motion take generated for this hero and weapon (asset-source/viggle, ledger provenance.json: 29 requests, 97 credits, 17 samples kept) on the 65-joint Mixamo rig, played in place. Each combo is one continuous take cut at its quiet instants, every step ending on the pose the next starts from; charge loops and their releases are one take (or a seamFrom blend), so a release opens on the loop pose. Keyed warps land each blow's fastest hand motion on the simulation hit tick; the glaive follows the striking forearm frame by frame, the sigil clips aim it level. Yara keeps her staff arm layer (both fists on the staff for the slams and the aim, raised in front of the face), limitLean, clearArms and staffClearance.",
+  "mapping": {
+    "aren-light-1..4": "glaive-2 (one four-blow take)",
+    "aren-heavy": "aren-heavy-1",
+    "aren-charged-heavy-charge": "aren-cleave-charge-1",
+    "aren-charged-heavy": "aren-cleave-release-2 (seamFrom the charge loop)",
+    "aren-sigil-charge, aren-sigil-bolt": "aren-sigil-full-2 (one take)",
+    "aren-sigil-barrage": "aren-sigil-barrage-b-2 (three thrusts)",
+    "aren-judgement": "aren-judgement-2",
+    "aren-root-tether": "aren-root-tether-3",
+    "aren-cleanse": "aren-cleanse-2",
+    "aren-idle (Yara)": "y3-idle-1 (combat-ready stance, staff across her front)",
+    "yara-thornshot-1..3": "y3-thornshot-1 (open-palm thrust, horizontal staff swing, overhead staff whip; one take)",
+    "yara-root-spike, yara-root-eruption": "y3-root-spike-2 (lunge, staff butt stabbed into the ground; arm layer holds the staff upright in both fists)",
+    "yara-root-charge": "y3-root-full-2",
+    "yara-seed-charge, yara-sap-lance": "y3-seed-full-3 (lance stance and lunge; arm layer levels the staff at the enemy)",
+    "yara-seed-storm": "y3-seed-storm-3",
+    "yara-binding-vines": "y3-binding-vines-2 (staff held upright at her side by the arm layer)",
+    "yara-cleanse": "y3-cleanse-2",
+    "yara-heartroot-bloom": "y3-bloom-1",
+    "aren-forward-left-dive-roll (Petal Step / Yara's evasions)": "y3-petal-step-2"
+  },
+  "verification": {
+    "playedThroughHeroPreview": "aren-skills.webp and yara-skills.webp: every skill clip rendered through mountHeroPreview (the Skills tab path) at game speed (clipSlowdown 1.5); rows = clips, columns = time.",
+    "comboSeams": "Largest joint rotation between a step's last frame and the next step's first frame: 0.0 deg for Aren light 1->2->3->4, Yara thornshot 1->2->3, and every charge -> release pair (Thunder Cleave, Sigil Bolt/Barrage, Root Eruption, Sap Lance, Seed Storm).",
+    "game": "Greenwake trial, debug page exposing the running app: Aren J x4 inside the chain window played aren-light-1 -> 2 -> 3 -> 4 (aren-combo-ingame.webp); Yara J x3 played thornshot-1 -> 2 -> 3 (yara-combo-ingame.webp); held K -> root-charge -> root-eruption, held L -> seed-charge -> seed-storm, tapped L -> sap-lance, all with their VFX.",
+    "meshAudit": "audit-after.json (scripts/assets/audit-hero-mesh-intersection.mjs yara aren --corrected): over the 26 Aren/Yara skill and evasion clips mean buried vertices 1067 -> 34 against the clips before #134 (76 without the runtime solver).",
+    "tests": "aren-native-animation + aren-clip-sim-timing 58 pass, 2 failures that also fail on main (byte-identical rebuild under bun, ActorAnimationDriver monster clip); attack-posture, hero-limb-clearance, yara-anatomy, yara-knockdown-getup, LimbClearance and heartroot-skills 44 pass."
+  },
+  "vfx": "Yara's hand casts (Thornshot 1-3, Binding Vines, Cleanse) are cast by her left hand in the new takes; the launch flare, sap trail and drawn thorn/seed start at the left palm (ActorBounds.leftPalm) and ease onto the simulated path within 0.15 s. Seed Storm's seeds leave the raised staff head. Presentation only.",
+  "limits": [
+    "Aren's Thunder Cleave release and Heavy keep the deepest remaining overlaps: up to 51 and 23 buried vertices on one frame with the runtime solver (the two-handed overhead slam brings the upper arms against the head).",
+    "Aren's back handspring and second jump (aren-air-step) and Yara's air step were not re-authored.",
+    "The in-game camera shows the hero small; the contact sheets (HeroPreview path) are the close inspection."
+  ],
+  "files": [
+    "acceptance.json",
+    "aren-combo-ingame.webp",
+    "aren-skills.webp",
+    "audit-after.json",
+    "yara-combo-ingame.webp",
+    "yara-skills.mp4",
+    "yara-skills.webp"
+  ],
+  "yaraRemake": {
+    "request": "Yara remade from scratch as an alluring witch-sorceress (concept C chosen by the owner), Tripo highest options, Mixamo auto-rig, new staff, staff attack poses for every skill, staff per skill, no arm through the face, tick alignment, VFX.",
+    "model": "Tripo v3.1 multiview_to_model f1dd47dd (geometry detailed, texture extreme, PBR) from concept C; Mixamo auto-rig (65 joints, fingers); build-yara-mixamo-rig.mjs rebinds the leaf skirt, drops the knee web, bakes the T-pose rest",
+    "staff": "Tripo v3.1 image_to_model 4e0784e2 (Ultra, extreme, PBR) of the concept's staff, served as prop-heartroot-focus-staff; the finger chain wraps the shaft every frame (WardenWeapon heartroot: rigidFist false)",
+    "verification": {
+      "skillsTab": "yara-skills.webp / yara-skills.mp4: every Yara skill, the idle and the forward knockdown/get-up played through mountHeroPreview (Skills tab path) with the staff, 30 fps",
+      "game": "yara-combo-ingame.webp: Greenwake trial, J x3, K, hold K, L, hold L with their VFX, no console errors; Q needs 20 mana and a winding-up foe, F hides the body by design",
+      "meshAudit": "audit-hero-mesh-intersection yara --corrected: 0 buried vertices on the idle, Thornshot 3, Root Spike/Charge/Eruption, Binding Vines and Bloom; at most 3 per frame elsewhere (Cleanse 9 on one frame, hair against the forearm)",
+      "timing": "fastest staff-head or palm motion vs simulation tick: Thornshot 1 +1, Thornshot 3 on the tick, Binding Vines +2, Sap Lance -2, Bloom +2; Thornshot 2's fastest motion is its return swing (+10), Root Spike's and Eruption's is the lift/recovery: their stab lands on the tick, measured on the ground contact",
+      "tests": "tsc 0; vite build ok; yara-anatomy 4/4, yara-knockdown-getup, warden-weapon (Yara staff fist rewritten for the finger chain), hero-limb-clearance, attack-posture, LimbClearance, heartroot-skills, tests/effects, aren-native-animation, aren-clip-sim-timing: 398+55 pass, 2 known failures that also fail on main"
+    },
+    "limits": [
+      "Root Spike's fastest staff motion is its lift at tick 6, before the tick-20 stab (the stab itself lands on tick 20).",
+      "The in-game camera shows the hero small; the Skills-tab captures are the close inspection.",
+      "Walk, run, jump, hit, cheer and defeat still play the Tripo locomotion takes."
+    ]
+  }
+}

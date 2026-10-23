@@ -1,0 +1,1343 @@
+{
+  "scope": "Single owned native DEV map selector, real GameApplication frame polling virtual standard navigator gamepad; no physical hardware claim. All native canvases and outer ancestor bounds measured after region-driven animation settles.",
+  "records": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "sameCanvas": true,
+      "states": [
+        {
+          "step": "before",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-0",
+          "region": "whispering-canopy",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-1",
+          "region": "the-grove",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-2",
+          "region": "blood-bamboo-valley",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-3",
+          "region": "moonpine-ridge",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              }
+            }
+          ]
+        }
+      ],
+      "lockedActivation": {
+        "region": "whispering-canopy",
+        "screen": "map-select"
+      },
+      "screen": "map-select"
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 1
+      },
+      "sameCanvas": true,
+      "states": [
+        {
+          "step": "before",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 557,
+                "height": 348,
+                "top": 144.59375,
+                "right": 785.0625,
+                "bottom": 492.59375,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": 86.515625,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": 86.515625,
+                "right": 803.359375,
+                "bottom": 549.453125,
+                "left": 209.640625
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1065.015625,
+                "left": 187.125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1108.859375,
+                "left": 187.125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-0",
+          "region": "mistveil-basin",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 557,
+                "height": 348,
+                "top": 144.59375,
+                "right": 785.0625,
+                "bottom": 492.59375,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": 86.515625,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": 86.515625,
+                "right": 803.359375,
+                "bottom": 549.453125,
+                "left": 209.640625
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1065.015625,
+                "left": 187.125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1108.859375,
+                "left": 187.125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-1",
+          "region": "sunmane-expanse",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 557,
+                "height": 348,
+                "top": 144.59375,
+                "right": 785.0625,
+                "bottom": 492.59375,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": 86.515625,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": 86.515625,
+                "right": 803.359375,
+                "bottom": 549.453125,
+                "left": 209.640625
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1065.015625,
+                "left": 187.125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1108.859375,
+                "left": 187.125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-2",
+          "region": "heartroot-hollow",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 557,
+                "height": 348,
+                "top": 144.59375,
+                "right": 785.0625,
+                "bottom": 492.59375,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": 144.59375,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": 144.59375,
+                "right": 784.9375,
+                "bottom": 492.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": 86.515625,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": 86.515625,
+                "right": 803.359375,
+                "bottom": 549.453125,
+                "left": 209.640625
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1065.015625,
+                "left": 187.125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": 64,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": 64,
+                "right": 825.875,
+                "bottom": 1108.859375,
+                "left": 187.125
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-3",
+          "region": null,
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -228.40625,
+                "width": 557,
+                "height": 348,
+                "top": -228.40625,
+                "right": 785.0625,
+                "bottom": 119.59375,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -228.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -228.40625,
+                "right": 784.9375,
+                "bottom": 119.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -228.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -228.40625,
+                "right": 784.9375,
+                "bottom": 119.640625,
+                "left": 228.0625
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -286.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -286.484375,
+                "right": 803.359375,
+                "bottom": 176.453125,
+                "left": 209.640625
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -309,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -309,
+                "right": 825.875,
+                "bottom": 692.015625,
+                "left": 187.125
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -309,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -309,
+                "right": 825.875,
+                "bottom": 735.859375,
+                "left": 187.125
+              }
+            }
+          ]
+        }
+      ],
+      "lockedActivation": {
+        "region": "mistveil-basin",
+        "screen": "map-select"
+      },
+      "screen": "map-select"
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "dpr": 1
+      },
+      "sameCanvas": true,
+      "states": [
+        {
+          "step": "before",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 271,
+                "height": 169,
+                "top": -65.21875,
+                "right": 317.75,
+                "bottom": 103.78125,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -164,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -164,
+                "right": 331.25,
+                "bottom": 179.625,
+                "left": 32.75
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 717.421875,
+                "left": 18.75
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 780.109375,
+                "left": 18.75
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-0",
+          "region": null,
+          "action": "return-title",
+          "ariaDisabled": null,
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 271,
+                "height": 169,
+                "top": -65.21875,
+                "right": 317.75,
+                "bottom": 103.78125,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -164,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -164,
+                "right": 331.25,
+                "bottom": 179.625,
+                "left": 32.75
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 717.421875,
+                "left": 18.75
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 780.109375,
+                "left": 18.75
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-1",
+          "region": "greenwake",
+          "action": "select-map",
+          "ariaDisabled": null,
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 271,
+                "height": 169,
+                "top": -65.21875,
+                "right": 317.75,
+                "bottom": 103.78125,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -65.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -65.21875,
+                "right": 317.25,
+                "bottom": 103.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -164,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -164,
+                "right": 331.25,
+                "bottom": 179.625,
+                "left": 32.75
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 717.421875,
+                "left": 18.75
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -178,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -178,
+                "right": 345.25,
+                "bottom": 780.109375,
+                "left": 18.75
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-2",
+          "region": "whispering-canopy",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 271,
+                "height": 169,
+                "top": -28.21875,
+                "right": 317.75,
+                "bottom": 140.78125,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -28.21875,
+                "right": 317.25,
+                "bottom": 140.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -28.21875,
+                "right": 317.25,
+                "bottom": 140.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -127,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -127,
+                "right": 331.25,
+                "bottom": 216.625,
+                "left": 32.75
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -141,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -141,
+                "right": 345.25,
+                "bottom": 754.421875,
+                "left": 18.75
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -141,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -141,
+                "right": 345.25,
+                "bottom": 817.109375,
+                "left": 18.75
+              }
+            }
+          ]
+        },
+        {
+          "step": "dpad-right-3",
+          "region": "the-grove",
+          "action": null,
+          "ariaDisabled": "true",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 271,
+                "height": 169,
+                "top": -28.21875,
+                "right": 317.75,
+                "bottom": 140.78125,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -28.21875,
+                "right": 317.25,
+                "bottom": 140.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -28.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -28.21875,
+                "right": 317.25,
+                "bottom": 140.84375,
+                "left": 46.75
+              }
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -127,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -127,
+                "right": 331.25,
+                "bottom": 216.625,
+                "left": 32.75
+              }
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -141,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -141,
+                "right": 345.25,
+                "bottom": 754.421875,
+                "left": 18.75
+              }
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -141,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -141,
+                "right": 345.25,
+                "bottom": 817.109375,
+                "left": 18.75
+              }
+            }
+          ]
+        }
+      ],
+      "lockedActivation": {
+        "region": "whispering-canopy",
+        "screen": "map-select"
+      },
+      "screen": "map-select"
+    }
+  ]
+}

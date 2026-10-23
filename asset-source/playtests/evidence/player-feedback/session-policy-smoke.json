@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-10-22T05:40:29.371Z",
+  "scope": "Executed real SessionConfig and contracts modules; configuration isolation only, not native world acceptance",
+  "policySmoke": [
+    {
+      "kind": "training",
+      "assets": "candidate",
+      "region": "whispering-canopy",
+      "hasSaveScope": false,
+      "defaultBanner": "TRAINING GROUNDS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+      "explicitVerifiedBanner": "TRAINING GROUNDS · GENERATED ASSETS · NOT RELEASE-VERIFIED"
+    },
+    {
+      "kind": "training",
+      "assets": "verified",
+      "region": "whispering-canopy",
+      "hasSaveScope": false,
+      "defaultBanner": null,
+      "explicitVerifiedBanner": "TRAINING GROUNDS · VERIFIED ASSETS"
+    }
+  ],
+  "policyRefusals": [
+    {
+      "name": "DEV fixture in release",
+      "refused": true,
+      "error": "Trials are available only in DEV builds."
+    },
+    {
+      "name": "unknown practice map",
+      "refused": true,
+      "error": "Unknown Training Grounds map."
+    },
+    {
+      "name": "verified with candidate save scope",
+      "refused": true,
+      "error": "Asset policy and save scope must match: verified↔production, candidate↔candidate-chapters."
+    }
+  ]
+}

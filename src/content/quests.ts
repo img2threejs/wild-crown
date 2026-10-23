@@ -77,7 +77,7 @@ const mainSeeds: QuestSeed[] = [
         "When Vara warns of danger behind you, turn to face the threat.",
         "interact",
         ["semantic:warning-response"],
-        ["canopy-vara"],
+        ["canopy-howler"],
       ),
     ],
     dialogue: ["fallen-scout-open", "fallen-scout-close"],

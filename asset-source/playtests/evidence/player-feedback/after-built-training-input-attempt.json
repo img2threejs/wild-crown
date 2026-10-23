@@ -1,0 +1,3832 @@
+{
+  "startedAt": "2026-10-22T14:24:16.392Z",
+  "input": "trusted Puppeteer/CDP keyboard",
+  "observations": [
+    {
+      "kind": "target",
+      "targetId": "corrupted-boar",
+      "route": [
+        "greenwake-forest-entry",
+        "greenwake-boar-approach"
+      ],
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1508,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 115,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": -18,
+            "y": 0,
+            "z": -9
+          },
+          "facing": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1508,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 115,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": -18,
+            "y": 0,
+            "z": -9
+          },
+          "facing": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1593,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 115,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": -12.040229312997258,
+            "y": 0,
+            "z": -7.948275761117223
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1688,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 115,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": -5.179570519899016,
+            "y": 0,
+            "z": -6.737571268217593
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 6,
+            "y": 0,
+            "z": -3
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "interact",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1775,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 115,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 1.1033485853594194,
+            "y": 0,
+            "z": -5.628820837877932
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 5.933965110017528,
+            "y": 0,
+            "z": -3.0232245511671385
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1870,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 99,
+          "maxVitality": 115,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": -0.2861996639816231,
+            "y": 0,
+            "z": -6.248523872113687
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 0.5651427160338951,
+            "y": 0,
+            "z": -4.986355497301131
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 1965,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 99,
+          "maxVitality": 115,
+          "instinct": 16,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 0.134023852681802,
+            "y": 0,
+            "z": -6.025492903155064
+          },
+          "facing": {
+            "x": 0.8423293638691666,
+            "y": 0,
+            "z": 0.5389631181850622
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 2.6356760084380597,
+            "y": 0,
+            "z": -4.9242517446752725
+          },
+          "vitality": 139,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2051,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 99,
+          "maxVitality": 115,
+          "instinct": 24,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 1.473727312398199,
+            "y": 0,
+            "z": -5.535871298476343
+          },
+          "facing": {
+            "x": 0.9496491644902675,
+            "y": 0,
+            "z": 0.3133152795235766
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 3.6957773923508794,
+            "y": 0,
+            "z": -4.802756093463287
+          },
+          "vitality": 125,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2143,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 99,
+          "maxVitality": 115,
+          "instinct": 36,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 1.8076867992754455,
+            "y": 0,
+            "z": -5.451811386406422
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 5.690040637780441,
+            "y": 0,
+            "z": -4.144794006463775
+          },
+          "vitality": 99,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": "greenwake-boar-approach",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2221,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 36,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 2.9092375514960835,
+            "y": 0,
+            "z": -5.257420077191023
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 5.690040637780441,
+            "y": 0,
+            "z": -4.144794006463775
+          },
+          "vitality": 99,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": null,
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2328,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 56,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 3.930530163876397,
+            "y": 0,
+            "z": -4.869556189106798
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 5.690040637780441,
+            "y": 0,
+            "z": -4.144794006463775
+          },
+          "vitality": 55,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "corrupted-boar",
+      "next": null,
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2459,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 80,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 4.554738749360407,
+            "y": 0,
+            "z": -4.824072021822659
+          },
+          "facing": {
+            "x": 0.8581268997883855,
+            "y": 0,
+            "z": 0.51343765333249
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "corrupted-boar",
+          "position": {
+            "x": 5.690040637780441,
+            "y": 0,
+            "z": -4.144794006463775
+          },
+          "vitality": 2,
+          "downed": false
+        },
+        "trial": {
+          "stage": 1,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 0
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "target",
+      "targetId": "greenwake-sap-stalker",
+      "route": [
+        "greenwake-boar-approach",
+        "greenwake-boar-clearing",
+        "greenwake-root-ramp",
+        "greenwake-grove-gate",
+        "greenwake-gully-bridge-west",
+        "greenwake-gateway-ramp-entry",
+        "greenwake-grove-gateway",
+        "greenwake-forest-corridor-1",
+        "greenwake-forest-corridor-2",
+        "greenwake-forest-corridor-3",
+        "greenwake-forest-corridor-3-bypass"
+      ],
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2516,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 4.554738749360407,
+            "y": 0,
+            "z": -4.824072021822659
+          },
+          "facing": {
+            "x": 0.8581268997883855,
+            "y": 0,
+            "z": 0.51343765333249
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "open",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-boar-clearing",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2549,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 4.554738749360407,
+            "y": 0,
+            "z": -4.824072021822659
+          },
+          "facing": {
+            "x": 0.8581268997883855,
+            "y": 0,
+            "z": 0.51343765333249
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-boar-clearing",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2645,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 9.210501462723002,
+            "y": 0,
+            "z": -1.0183169452273388
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-root-ramp",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2736,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 8.45215123877168,
+            "y": 0.21342489289901517,
+            "z": 5.067124464495076
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-root-ramp",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2826,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 7.305168034972031,
+            "y": 0.2228534643275868,
+            "z": 5.114267321637934
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-grove-gate",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 2922,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 8.794726630659058,
+            "y": 1.1599830292811304,
+            "z": 9.799915146405652
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-gully-bridge-west",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3017,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 9.648466378349104,
+            "y": 2,
+            "z": 16.20297235531051
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-gateway-ramp-entry",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3110,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 15.53989473031985,
+            "y": 1.7365697774309552,
+            "z": 18.681223187908824
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-1",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3205,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 22.04198210901285,
+            "y": 0.31933929699571695,
+            "z": 19.508436399336144
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-2",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3298,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 26.772737702994835,
+            "y": 0,
+            "z": 20.6299310874958
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40,
+            "y": 0,
+            "z": 24
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3394,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 33.45023175221992,
+            "y": 0,
+            "z": 20.702714273716825
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 39.996965268328324,
+            "y": 0,
+            "z": 23.99862104576144
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3484,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 88,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 36.78255173743922,
+            "y": 0,
+            "z": 21.29077074169665
+          },
+          "facing": {
+            "x": 0.9847835588179369,
+            "y": 0,
+            "z": 0.1737853339090477
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 39.996965268328324,
+            "y": 0,
+            "z": 23.99862104576144
+          },
+          "vitality": 184,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3571,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 96,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 38.32894751986197,
+            "y": 0,
+            "z": 21.960335118800256
+          },
+          "facing": {
+            "x": 0.6335020823676656,
+            "y": 0,
+            "z": 0.7737409848494724
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40.000536968343994,
+            "y": 0,
+            "z": 23.99282475839468
+          },
+          "vitality": 170,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3657,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 89,
+          "maxVitality": 115,
+          "instinct": 96,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 38.32894751986197,
+            "y": 0,
+            "z": 21.960335118800256
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40.99145392971234,
+            "y": 0,
+            "z": 25.19768308022033
+          },
+          "vitality": 170,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3750,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 81,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 39.782710922809,
+            "y": 0,
+            "z": 23.863913856080607
+          },
+          "facing": {
+            "x": 0.6715238927240791,
+            "y": 0,
+            "z": 0.7409829022998438
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40.99145392971234,
+            "y": 0,
+            "z": 25.19768308022033
+          },
+          "vitality": 160,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3839,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 40.083095960332656,
+            "y": 0,
+            "z": 24.29303533825725
+          },
+          "facing": {
+            "x": 0.7085523568980445,
+            "y": 0,
+            "z": 0.7056582441481332
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40.99145392971234,
+            "y": 0,
+            "z": 25.19768308022033
+          },
+          "vitality": 128,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 3935,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 41.09601206887784,
+            "y": 0,
+            "z": 24.486527674089448
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 43.754808121614715,
+            "y": 0,
+            "z": 27.94975023239805
+          },
+          "vitality": 102,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4029,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 41.690774443174675,
+            "y": 0,
+            "z": 25.336188208799207
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 43.66451022408211,
+            "y": 0,
+            "z": 27.912464939019415
+          },
+          "vitality": 102,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4121,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 42.97571743715328,
+            "y": 0,
+            "z": 27.03734569986392
+          },
+          "facing": {
+            "x": 0.6150867957838223,
+            "y": 0,
+            "z": 0.78845940520257
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 44.545457967906756,
+            "y": 0,
+            "z": 29.04954413053094
+          },
+          "vitality": 88,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4213,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 43.56069808266932,
+            "y": 0,
+            "z": 27.860585989095288
+          },
+          "facing": {
+            "x": 0.6115089771127465,
+            "y": 0,
+            "z": 0.7912374933675238
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 42.62519967791319,
+            "y": 0,
+            "z": 28.32196326544551
+          },
+          "vitality": 39,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-sap-stalker",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4305,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 42.26324824422369,
+            "y": 0,
+            "z": 27.630595173948624
+          },
+          "facing": {
+            "x": -0.9695143494545283,
+            "y": 0,
+            "z": -0.2450345408340688
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-sap-stalker",
+          "position": {
+            "x": 40.53672034572701,
+            "y": 0,
+            "z": 27.194233431511943
+          },
+          "vitality": 28,
+          "downed": false
+        },
+        "trial": {
+          "stage": 2,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": false,
+          "level": 1
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "target",
+      "targetId": "greenwake-root-rammer",
+      "route": [
+        "greenwake-forest-corridor-3",
+        "greenwake-forest-corridor-4",
+        "greenwake-forest-corridor-cage-bypass",
+        "greenwake-forest-corridor-5"
+      ],
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4377,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 42.26324824422369,
+            "y": 0,
+            "z": 27.630595173948624
+          },
+          "facing": {
+            "x": -0.9695143494545283,
+            "y": 0,
+            "z": -0.2450345408340688
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": 46
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-3",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4389,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 42.26324824422369,
+            "y": 0,
+            "z": 27.630595173948624
+          },
+          "facing": {
+            "x": -0.9695143494545283,
+            "y": 0,
+            "z": -0.2450345408340688
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": 46
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4482,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 40.31014936241672,
+            "y": 0,
+            "z": 31.226186498395844
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": 46
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4560,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 39.31609725245647,
+            "y": 0,
+            "z": 36.859148454834674
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": 46
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4560,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 39.31609725245647,
+            "y": 0,
+            "z": 36.859148454834674
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": 46
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4591,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 77,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 39.29698086572645,
+            "y": 0,
+            "z": 36.96747464630469
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 46.74503011897115,
+            "y": 0,
+            "z": 45.70102347213773
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4683,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 58,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 92,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.84347085511071,
+            "y": 0,
+            "z": 35.2630953900827
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 45.77169752257667,
+            "y": 0,
+            "z": 44.55969807734622
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "approach",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4776,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 58,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 84,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.84347085511071,
+            "y": 1.06859410430839,
+            "z": 35.2630953900827
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 44.673691835390635,
+            "y": 0,
+            "z": 43.27218158087521
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4869,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 58,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 76,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.84347085511071,
+            "y": 0,
+            "z": 35.2630953900827
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 44.673691835390635,
+            "y": 0,
+            "z": 43.27218158087521
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 4961,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 43,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 68,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 0,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 43.60426813980337,
+            "y": 0,
+            "z": 43.00353050532392
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5059,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 43,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 60,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": -1.3877787807814457e-17,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 42.795308311987824,
+            "y": 0,
+            "z": 43.000827237496296
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5153,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 43,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 44,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 0.5243764172335601,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.77072023203563,
+            "y": 0,
+            "z": 41.9882033232569
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5249,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 43,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 36,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 1.06859410430839,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.77072023203563,
+            "y": 0,
+            "z": 41.9882033232569
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5342,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 25,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 28,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 0,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.77072023203563,
+            "y": 0,
+            "z": 41.9882033232569
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5434,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 25,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 12,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 0.9070294784580497,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.14859201059135,
+            "y": 0,
+            "z": 40.962066648109484
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5527,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 25,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 4,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.32436013703364,
+            "y": 0.7709750566893423,
+            "z": 34.65438851286057
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.14859201059135,
+            "y": 0,
+            "z": 40.962066648109484
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5622,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 6,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 4,
+          "maxMana": 100,
+          "flurryCharges": 2
+        },
+        "player": {
+          "position": {
+            "x": 37.009646207412366,
+            "y": 0,
+            "z": 34.135300173459335
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.06783036529722,
+            "y": 0,
+            "z": 40.828778378389394
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    },
+    {
+      "kind": "sample",
+      "targetId": "greenwake-root-rammer",
+      "next": "greenwake-forest-corridor-4",
+      "state": {
+        "screen": "game",
+        "tutorial": false,
+        "entryShot": false,
+        "outcome": null,
+        "complete": false,
+        "worldTick": 5714,
+        "resources": {
+          "heroId": "sakda",
+          "vitality": 6,
+          "maxVitality": 115,
+          "instinct": 100,
+          "mana": 4,
+          "maxMana": 100
+        },
+        "player": {
+          "position": {
+            "x": 37.009646207412366,
+            "y": 0,
+            "z": 34.135300173459335
+          },
+          "facing": {
+            "x": -0.1737853339090477,
+            "y": 0,
+            "z": 0.9847835588179369
+          },
+          "downed": false
+        },
+        "target": {
+          "id": "greenwake-root-rammer",
+          "position": {
+            "x": 41.06783036529722,
+            "y": 0,
+            "z": 40.828778378389394
+          },
+          "vitality": 458,
+          "downed": false
+        },
+        "trial": {
+          "stage": 3,
+          "totalStages": 3,
+          "status": "fighting",
+          "complete": false,
+          "boss": true,
+          "level": 2
+        },
+        "goal": {
+          "x": 70.1,
+          "y": 0,
+          "z": 39.7
+        },
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "actions": [
+          "hud-toggle",
+          "hud-toggle"
+        ]
+      }
+    }
+  ],
+  "completed": false,
+  "defeated": true,
+  "browserFocus": "Explicit browser focus-emulation fixture, not a bypass of application input guards.",
+  "final": {
+    "screen": "defeat",
+    "tutorial": false,
+    "entryShot": false,
+    "outcome": "defeat",
+    "complete": false,
+    "worldTick": 5729,
+    "resources": {
+      "heroId": "sakda",
+      "vitality": 0,
+      "maxVitality": 115,
+      "instinct": 100,
+      "mana": 4,
+      "maxMana": 100
+    },
+    "player": {
+      "position": {
+        "x": 37.009646207412366,
+        "y": 0,
+        "z": 34.135300173459335
+      },
+      "facing": {
+        "x": -0.1737853339090477,
+        "y": 0,
+        "z": 0.9847835588179369
+      },
+      "downed": true
+    },
+    "target": {
+      "id": "greenwake-root-rammer",
+      "position": {
+        "x": 41.06783036529722,
+        "y": 0,
+        "z": 40.828778378389394
+      },
+      "vitality": 458,
+      "downed": false
+    },
+    "trial": {
+      "stage": 3,
+      "totalStages": 3,
+      "status": "fighting",
+      "complete": false,
+      "boss": true,
+      "level": 2
+    },
+    "goal": {
+      "x": 70.1,
+      "y": 0,
+      "z": 39.7
+    },
+    "basis": {
+      "forward": {
+        "x": -0.5734623443633284,
+        "y": 0,
+        "z": -0.8192319205190406
+      },
+      "right": {
+        "x": 0.8192319205190406,
+        "y": 0,
+        "z": -0.5734623443633284
+      }
+    },
+    "actions": [
+      "leave-training"
+    ]
+  },
+  "finishedAt": "2026-10-22T14:25:32.668Z"
+}

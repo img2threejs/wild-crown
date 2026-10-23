@@ -1,5 +1,5 @@
-import { AmbientLight, Box3, DirectionalLight, Fog, Frustum, Group, HemisphereLight, InstancedBufferGeometry, InstancedMesh, Matrix4, Mesh, PerspectiveCamera, PropertyBinding, Scene, Sphere, Texture, Vector3, WebGLRenderer, type BufferGeometry, type Color, type Material, type Object3D } from 'three';
-import type { ActionId, ActorSnapshot, AssetManifestEntry, CombatSnapshot, EnvironmentRecipeDefinition, GameSettings, MovableObjectSnapshot, RegionColliderDefinition, RegionDefinition, RegionMovableObjectDefinition, Vec3, WorldAssetPlacement } from '../game/contracts';
+import { AmbientLight, Box3, CircleGeometry, CylinderGeometry, DirectionalLight, Fog, Frustum, Group, HemisphereLight, InstancedBufferGeometry, InstancedMesh, Matrix4, Mesh, MeshStandardMaterial, PerspectiveCamera, PropertyBinding, Scene, Sphere, Texture, Vector3, WebGLRenderer, type BufferGeometry, type Color, type Material, type Object3D } from 'three';
+import type { ActionId, ActorSnapshot, AssetManifestEntry, CombatSnapshot, EnvironmentRecipeDefinition, GameSettings, MovableObjectSnapshot, RegionColliderDefinition, RegionDefinition, RegionMovableObjectDefinition, Vec3, WorldAssetPlacement, WorldObjectiveCue } from '../game/contracts';
 import { OrunPresentation } from './OrunPresentation';
 import type { CameraDebugState } from './CameraDirector';
 import { MAX_SHOT_DISTANCE, planEstablishingShot, type EstablishingFraming } from './EstablishingShot';
@@ -27,6 +27,7 @@ import { EnvironmentPropVisuals } from './EnvironmentPropVisuals';
 import { ActorHitFlash } from '../effects/vfx/HitFlash';
 import { ActorBodies } from '../effects/vfx/ActorBounds';
 import { PostFX } from './PostFX';
+import { RenderResolutionBudget } from './RenderResolutionBudget';
 import { NativeTrialGates } from './NativeTrialGates';
 import { TRIAL_GATE_ASSET_ID, combatTrialSetFor, type CombatTrialDefinition } from '../game/combat/CombatTrials';
 import { driveActorAnimation } from './ActorAnimationDriver';
@@ -36,7 +37,10 @@ import { createStoryAnimationInput, type NpcTalk, type StoryAnimationInput } fro
 import { foliageLimitsFor } from './FoliagePresentation';
 import { MONSTER_HOVER, MONSTER_LOCOMOTION, monsterHoverHeight, settleMonsterHover } from './MonsterAnimationProfiles';
 import { WARDEN_WEAPON_ASSET_ID, WardenWeapon, weaponKindForGrip, type WardenSocketName, type WardenWeaponKind } from './WardenWeapon';
-import { ALL_COMPANION_SKILLS, type CompanionSkill } from '../game/companions/CompanionSkills';
+import { dodgeVanishWindow } from './DodgeVanish';
+import { playsExactTake } from './ExactTakes';
+import { ALL_COMPANION_SKILLS, companionSkillByAction, type CompanionSkill } from '../game/companions/CompanionSkills';
+import { createCompanionSkillMotion, sampleCompanionSkillMotion, type CompanionSkillMotion } from '../game/companions/CompanionSkillMotion';
 import { StoryEffects } from '../effects/StoryEffects';
 import type { CuePhase } from '../effects/story-cues';
 import { fitUnarmedFists, releaseHandGeometry, type HandGeometryEdit } from './NativeHandGrip';
@@ -44,6 +48,7 @@ import { solidPropKind } from '../content/solid-props';
 import { heroById, type HeroId } from '../game/heroes';
 import { HERO_COMBAT } from '../game/combat/HeroProfiles';
 import { WaystoneVisual, WAYSTONE_ASSET_ID } from './WaystoneVisual';
+import { ObjectiveGuidanceVisual } from './ObjectiveGuidanceVisual';
 import { enemyAttackAirborne } from './EnemyAttackPresentation';
 import enemyNativeAnchorSource from '../content/enemy-native-anchors.json';
 
@@ -194,6 +199,10 @@ export class GameRenderer {
   private playerOutcome: { instance: NativeAssetInstance; actionId: ActionId; elapsed: number; baseScale: number } | null = null;
   private trialGates: NativeTrialGates | null = null;
   private waystone: WaystoneVisual | null = null;
+  private objectiveGuidance: ObjectiveGuidanceVisual | null = null;
+  private exitGuidance: ObjectiveGuidanceVisual | null = null;
+  private objectiveCue: WorldObjectiveCue | null = null;
+  private exitCue: WorldObjectiveCue | null = null;
   private trialDefinitions: readonly CombatTrialDefinition[] = [];
   private readonly postFx: PostFX;
   private readonly hitFlash = new ActorHitFlash();
@@ -210,6 +219,10 @@ export class GameRenderer {
   private readonly trialMonsterRoles = new Map<string, { active: boolean; boss: boolean }>();
   private readonly bodySockets = new WeakMap<NativeAssetInstance, Map<string, Object3D | null>>();
   private readonly pixelRatioCap: number;
+  private readonly frameBudget = new RenderResolutionBudget();
+  private renderScale = 1;
+  private renderWidth = 0;
+  private renderHeight = 0;
   private readonly gateOpenings: Vec3[] = [];
   private readonly drainedGateOpenings: Vec3[] = [];
   /** In-flight variant loads by actor + asset (see `preloadActorVariant`). */
@@ -241,13 +254,14 @@ export class GameRenderer {
     this.orunPresentation = new OrunPresentation(this.scene);
     this.postFx = new PostFX(this.renderer, this.scene, this.camera, { pixelRatioCap: this.pixelRatioCap });
     this.scene.add(new AmbientLight(0xffffff, 0.05));
-    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver = new ResizeObserver(() => this.resize(true));
     this.resizeObserver.observe(options.canvas);
     this.resize();
   }
 
   async loadRegion(region: RegionDefinition, assets: readonly AssetManifestEntry[], environmentRecipe: EnvironmentRecipeDefinition, onProgress?: RegionLoadProgressCallback): Promise<void> {
     this.assertAlive();
+    this.resize(true);
     const loadEpoch = ++this.loadEpoch;
     this.loading = true;
     this.assetErrors.length = 0;
@@ -517,6 +531,7 @@ export class GameRenderer {
       stagedOrunWeapon = null;
       this.trialGates?.dispose(); this.trialGates = null; this.gateOpenings.length = 0;
       this.waystone?.dispose(); this.waystone = null;
+      this.clearChapterGuidance();
       this.afterimages = stagedAfterimages;
       stagedAfterimages = null;
       this.contactShadows?.dispose();
@@ -573,7 +588,8 @@ export class GameRenderer {
       this.missingActorAssets.clear();
       this.assetErrors.length = 0;
       this.syncActors(this.currentCombat?.actors ?? []);
-      this.hitFlash.forget(root => [...this.actorRoots.values()].some(instance => instance.root === root));
+      const retainedFlashRoots = new Set(this.actorRenderRoots());
+      this.hitFlash.forget(root => retainedFlashRoots.has(root));
       this.prewarmHitFlash();
     } catch (error) {
       stagedAfterimages?.dispose();
@@ -703,7 +719,7 @@ export class GameRenderer {
     this.wardenWeapon = weapon;
     this.afterimages = new PoseAfterimages(this.scene, player.root);
     this.afterimages.setStyle(hero.style);
-    this.dodgeVanish = hero.dodgeVanish ? { assetId: hero.variantAssetId, from: hero.style === 'umbral' ? 0.1 : 0.15, to: hero.style === 'umbral' ? 0.6 : 0.55 } : null;
+    this.dodgeVanish = hero.dodgeVanish ? { assetId: hero.variantAssetId, ...dodgeVanishWindow(hero.style) } : null;
     // The variant body, its weapon and the fresh ghost pool are hidden until the next sync; link and upload them now.
     this.prewarm([player.root]);
   }
@@ -749,7 +765,8 @@ export class GameRenderer {
         for (const entity of placements) this.actorManifests.set(entity.id, byId.get(entity.assetId!)!);
         this.assetCatalog = byId;
         this.region = region;
-        this.hitFlash.forget(root => [...this.actorRoots.values()].some(instance => instance.root === root));
+        const retainedFlashRoots = new Set(this.actorRenderRoots());
+        this.hitFlash.forget(root => retainedFlashRoots.has(root));
       },
     };
   }
@@ -820,6 +837,7 @@ export class GameRenderer {
     const frozen = (combat.hitStop?.remainingTicks ?? 0) > 0 || combat.worldClock.policy === 'paused';
     for (const actor of actors) {
       const animationDt = actor.allegiance === 'player' ? dt : this.renderWorldDeltaSeconds;
+      if (actor.allegiance === 'player') this.updateStaff(actor, animationDt);
       this.advanceAnimation(this.actorRoots.get(actor.id), animationDt, frozen);
       const requested = actor.renderVariantId;
       if (requested) this.advanceAnimation(this.actorVariants.get(actor.id)?.get(requested), animationDt, frozen);
@@ -1157,7 +1175,7 @@ export class GameRenderer {
   }
 
   /** Submit actual GPU draws while loading: linking shaders alone leaves first-use buffers and driver pipelines cold. */
-  warmGpu(): void {
+  async warmGpu(): Promise<void> {
     this.assertAlive();
     const hidden: Object3D[] = [], culled: Object3D[] = [];
     const emptyMeshes: InstancedMesh[] = [], emptyGeometry: InstancedBufferGeometry[] = [], emptyRanges: BufferGeometry[] = [];
@@ -1173,17 +1191,32 @@ export class GameRenderer {
         geometry.drawRange.count = Math.min(3, geometry.index?.count ?? geometry.getAttribute('position')?.count ?? 0);
       }
     });
-    try { this.postFx.warmGpu(this.scene, this.camera); } finally {
+    try {
+      this.postFx.warmGpu(this.scene, this.camera);
+      // Compile alone leaves onFirstUse/driver work deferred; draw the hit-rim twins while still loading.
+      this.hitFlash.prewarm(this.actorRenderRoots(), () => this.postFx.warmGpu(this.scene, this.camera));
+    } finally {
       for (const node of hidden) node.visible = false;
       for (const node of culled) node.frustumCulled = true;
       for (const mesh of emptyMeshes) mesh.count = 0;
       for (const geometry of emptyGeometry) geometry.instanceCount = 0;
       for (const geometry of emptyRanges) geometry.drawRange.count = 0;
     }
+    await this.calibrateResolution(this.loadEpoch);
+  }
+
+  /** Includes equipped hero/encounter variants, not only their canonical actor carriers. Load-time only. */
+  private actorRenderRoots(): Object3D[] {
+    const roots: Object3D[] = [];
+    for (const instance of this.actorRoots.values()) roots.push(instance.root);
+    for (const variants of this.actorVariants.values()) {
+      for (const instance of variants.values()) roots.push(instance.root);
+    }
+    return roots;
   }
 
   private prewarmHitFlash(): void {
-    const roots = [...this.actorRoots.values()].map(instance => instance.root);
+    const roots = this.actorRenderRoots();
     this.hitFlash.prewarm(roots, () => this.prewarm(roots));
   }
 
@@ -1239,6 +1272,26 @@ export class GameRenderer {
 
   updateWaystone(dt: number, open: boolean): void { this.waystone?.update(dt, open, this.reducedMotion); }
   beginWaystoneArrival(): void { this.waystone?.beginArrival(); }
+
+  /** Campaign projections own availability; these effects only make their authored locations readable. */
+  setChapterGuidance(objective: WorldObjectiveCue | null, exit: WorldObjectiveCue | null): void {
+    this.objectiveCue = objective;
+    this.exitCue = exit;
+  }
+
+  updateChapterGuidance(dt: number): void {
+    if (this.objectiveCue && !this.objectiveGuidance) this.objectiveGuidance = new ObjectiveGuidanceVisual(this.scene);
+    if (this.exitCue && !this.exitGuidance) this.exitGuidance = new ObjectiveGuidanceVisual(this.scene);
+    this.objectiveGuidance?.update(this.objectiveCue, dt, this.reducedMotion);
+    this.exitGuidance?.update(this.exitCue, dt, this.reducedMotion);
+  }
+
+  private clearChapterGuidance(): void {
+    this.objectiveGuidance?.dispose(); this.objectiveGuidance = null;
+    this.exitGuidance?.dispose(); this.exitGuidance = null;
+    this.objectiveCue = null;
+    this.exitCue = null;
+  }
 
   /**
    * Ground points of trial gates that started opening since the previous call (presentation burst
@@ -1309,8 +1362,25 @@ export class GameRenderer {
   resolveSocket(actorId: string, socketName: string): Object3D | undefined {
     const instance = this.displayedInstance(actorId);
     const weapon = this.orunWeapon?.carrier === instance?.root ? this.orunWeapon : this.wardenWeapon;
-    const weaponSocket = instance && weapon?.carrier === instance.root ? weapon.sockets[socketName as WardenSocketName] : undefined;
+    const own = instance && weapon?.carrier === instance.root ? weapon : undefined;
+    // `weapon-flight` is the flying Heartroot staff of Sap Lance (visible only while it is away from the fist).
+    const weaponSocket = socketName === 'weapon-flight' ? own?.flight ?? undefined : own?.sockets[socketName as WardenSocketName];
     return weaponSocket ?? instance?.sockets[socketName] ?? (instance ? this.bodySocket(instance, socketName) : undefined) ?? (socketName === 'root' ? instance?.root : undefined);
+  }
+
+  /** Sap Lance: the actor's Heartroot staff leaves the fist toward `to` (world) and flies back by itself. Presentation only. */
+  throwStaff(actorId: string, to: { readonly x: number; readonly y: number; readonly z: number }): void {
+    const instance = this.displayedInstance(actorId), weapon = this.wardenWeapon;
+    if (instance && weapon?.carrier === instance.root) weapon.throwStaff(to);
+  }
+
+  /** Eases the player's Heartroot staff into the profile of the clip it plays and advances a staff throw; a hit, knockdown or defeat snaps a flying staff back. */
+  private updateStaff(actor: ActorSnapshot, dt: number): void {
+    const weapon = this.wardenWeapon, requested = actor.renderVariantId;
+    const instance = requested ? this.actorVariants.get(actor.id)?.get(requested) : this.actorRoots.get(actor.id);
+    if (!weapon || !instance || weapon.carrier !== instance.root) return;
+    if (actor.downed || actor.reaction !== undefined) weapon.cancelThrow();
+    weapon.setClip(instance.animation.activeActionId ?? actor.actionId, dt);
   }
 
   /** Hero body sockets and authored enemy anatomy are cached per actual instance, including variant swaps. */
@@ -1369,6 +1439,7 @@ export class GameRenderer {
     this.orunPresentation.dispose();
     this.trialGates?.dispose(); this.trialGates = null;
     this.waystone?.dispose(); this.waystone = null;
+    this.clearChapterGuidance();
     this.playerOutcome = null;
     this.nativeSolidEntries.length = 0;
     this.sceneColliders.length = 0;
@@ -1528,7 +1599,9 @@ export class GameRenderer {
     const position = actor.position;
     const prior = previous?.position;
     // Finite enemy poses and contact cues use the current authoritative tick: a delayed root/yaw would detach the posed strike from its hazard.
-    const interpolate = previous && prior && previous.visible === actor.visible && !actor.downed && !actor.attackPhase
+    const nativeCompanionPose = actor.allegiance === 'ally' && (companionSkillByAction(actor.actionId) !== undefined
+      || actor.archetypeId === 'vara' && /^vara:(?:takeoff|fly|hover|land|dive|strike)$/.test(actor.actionId));
+    const interpolate = previous && prior && previous.visible === actor.visible && !actor.downed && !actor.attackPhase && !nativeCompanionPose
       && Math.hypot(position.x - prior.x, position.y - prior.y, position.z - prior.z) < 4;
     if (interpolate) {
       instance.root.position.set(
@@ -1540,7 +1613,7 @@ export class GameRenderer {
     // Drawn height: the simulation snaps up and down stairs and ledges (up to 0.45 m in one tick); the drawn root absorbs the pop and settles. Feet and shadow keep reading the real ground.
     const motion = this.motionFor(instance);
     const hovering = MONSTER_HOVER[instance.assetId] !== undefined;
-    const onGround = !actor.downed && actor.jumpPhase === undefined && !OFF_GROUND_ACTION.test(actor.actionId) && !enemyAttackAirborne(actor);
+    const onGround = !nativeCompanionPose && !actor.downed && actor.jumpPhase === undefined && !OFF_GROUND_ACTION.test(actor.actionId) && !enemyAttackAirborne(actor);
     instance.root.position.y = settleDrawnHeight(motion, instance.root.position.y, dt, onGround && !hovering, Boolean(interpolate));
     if (actor.allegiance !== 'player') {
       const hoverTarget = monsterHoverHeight(actor, instance.assetId, this.renderWorldTimeSeconds);
@@ -1584,7 +1657,7 @@ export class GameRenderer {
     context.attacking = monsterBody ? actor.attackPhase !== undefined : !LOCOMOTION_ACTION.test(actor.actionId);
     const pose = extras.reaction.update(reaction, context, dt);
     const reacting = extras.reaction.active;
-    const leaning = actor.allegiance === 'player' || actor.allegiance === 'ally';
+    const leaning = !nativeCompanionPose && (actor.allegiance === 'player' || actor.allegiance === 'ally');
     if (leaning) updateLean(motion, actor.velocity.x, actor.velocity.z, root.rotation.y, dt, !this.reducedMotion && onGround && !hovering && !reacting && Boolean(interpolate));
     // Creatures follow the slope they stand on (pitch and roll of the plane through the ground under their extents).
     const slope = extras.slope;
@@ -1594,7 +1667,7 @@ export class GameRenderer {
       else { this.slopeGoal.pitch = 0; this.slopeGoal.roll = 0; }
       settleSlopeAttitude(slope, this.slopeGoal, dt, onGround && !reacting && Boolean(interpolate) && !this.reducedMotion);
     }
-    let pitch = (leaning ? motion.pitch : 0) + slope.pitch, roll = (leaning ? motion.roll : 0) + slope.roll;
+    let pitch = (leaning ? motion.pitch : 0) + (nativeCompanionPose ? 0 : slope.pitch), roll = (leaning ? motion.roll : 0) + (nativeCompanionPose ? 0 : slope.roll);
     if (reacting) {
       // The top of the body tilts along the push; a lying body is shifted back over its footprint and rests on the ground, not in it.
       localReactionDirection(pose.dirX, pose.dirZ, root.rotation.y, this.localHit);
@@ -1608,7 +1681,7 @@ export class GameRenderer {
     if (rig.quad) rig.quad.grounded = onGround && !hovering && standing;
     const inputs = rig.procedural?.inputs;
     if (inputs) {
-      inputs.detail = this.reducedMotion && detail === 'full' ? 'reaction' : detail;
+      inputs.detail = nativeCompanionPose && !reacting ? 'off' : this.reducedMotion && detail === 'full' ? 'reaction' : detail;
       inputs.reaction = reacting ? pose : undefined;
       const gaze = !this.reducedMotion && !reacting && actor.visible && !actor.downed && (monsterBody
         ? actor.attackPhase === undefined && actor.roarProgress === undefined && !actor.weakPointExposed && (actor.vitality === undefined || actor.vitality > 0)
@@ -1616,8 +1689,9 @@ export class GameRenderer {
       inputs.lookEnabled = gaze && detail === 'full';
       inputs.hasTarget = inputs.lookEnabled && this.selectLookTarget(actor, this.lookTarget);
       if (inputs.hasTarget) { inputs.targetX = this.lookTarget.x; inputs.targetY = this.lookTarget.y; inputs.targetZ = this.lookTarget.z; }
-      // Biped heroes keep their arms out of their own body, and stage hand strikes with a chest coil timed to the action's contact.
-      inputs.limbClearance = !monsterBody && inputs.detail !== 'off' && actor.visible;
+      // Biped heroes keep their arms out of their own body, and stage hand strikes with a chest coil timed to the action's contact; a clip that plays a
+      // captured take exactly (ExactTakes) is left as captured.
+      inputs.limbClearance = !monsterBody && inputs.detail !== 'off' && actor.visible && !playsExactTake(instance.assetId, instance.animation.activeActionId ?? actor.actionId);
       const posture = monsterBody || reacting || actor.downed || inputs.detail === 'off' ? undefined : ATTACK_POSTURES[actor.actionId];
       if (posture) {
         let time = actor.normalizedTime;
@@ -1698,12 +1772,75 @@ export class GameRenderer {
     return found;
   }
 
-  private resize(): void {
+  /** RAF time affects only the 3D drawing buffer; simulation, camera framing and DOM HUD stay unchanged. */
+  observeFrameTime(deltaSeconds: number, actors: readonly ActorSnapshot[]): void {
+    const scale = this.frameBudget.observe(deltaSeconds);
+    if (scale === this.renderScale) return;
+    // Buffer allocation must not interrupt a run, attack, dodge or damage reaction.
+    for (let i = 0; i < actors.length; i++) {
+      const actor = actors[i]!;
+      if (actor.allegiance === 'player' && actor.actionId && !actor.actionId.endsWith('-idle')) return;
+    }
+    this.renderScale = scale;
+    this.resize();
+  }
+
+  /** Real scene raster budget, measured behind loading. Never synchronizes the GPU from the RAF path. */
+  private async calibrateResolution(epoch: number): Promise<void> {
+    const gl = this.renderer.getContext();
+    const gpu = this.renderer.capabilities.isWebGL2 ? gl as WebGL2RenderingContext : null;
+    const timer = gpu?.getExtension('EXT_disjoint_timer_query_webgl2');
+    let scale = 1;
+    for (;;) {
+      if (this.disposed || epoch !== this.loadEpoch) return;
+      if (scale !== this.renderScale) { this.renderScale = scale; this.resize(); }
+      // Prime allocations separately, otherwise a new target's one-off cost biases every candidate.
+      this.render();
+      gl.finish();
+      const query = gpu && timer ? gpu.createQuery() : null;
+      const start = performance.now();
+      let milliseconds: number;
+      try {
+        if (query && gpu) gpu.beginQuery(timer.TIME_ELAPSED_EXT, query);
+        try { this.render(); } finally { if (query && gpu) gpu.endQuery(timer.TIME_ELAPSED_EXT); }
+        gl.finish();
+        milliseconds = performance.now() - start;
+        if (query && gpu) {
+          for (let frame = 0; frame < 8 && !this.disposed && epoch === this.loadEpoch && !gpu.getQueryParameter(query, gpu.QUERY_RESULT_AVAILABLE); frame++) {
+            await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+          }
+          if (this.disposed || epoch !== this.loadEpoch) return;
+          if (gpu.getQueryParameter(query, gpu.QUERY_RESULT_AVAILABLE) && !gpu.getParameter(timer.GPU_DISJOINT_EXT)) {
+            milliseconds = gpu.getQueryParameter(query, gpu.QUERY_RESULT) / 1e6;
+          }
+        }
+      } finally {
+        if (query && gpu) gpu.deleteQuery(query);
+      }
+      if (milliseconds <= 14 || scale === 0.75) break;
+      scale = Math.max(0.75, Math.round((scale - 0.1) * 100) / 100);
+    }
+    this.frameBudget.reset(this.renderScale);
+  }
+
+  private resize(resetBudget = false): void {
     if (this.disposed) return;
     const width = Math.max(1, this.renderer.domElement.clientWidth);
     const height = Math.max(1, this.renderer.domElement.clientHeight);
-    this.renderer.setSize(width, height, false);
-    this.postFx.setSize(width, height, window.devicePixelRatio || 1);
+    const nativeRatio = Math.min(window.devicePixelRatio || 1, this.pixelRatioCap);
+    // The observer's initial notification must not discard the load-time calibration.
+    if (resetBudget && (width !== this.renderWidth || height !== this.renderHeight)) {
+      // Keep the previous pixel budget, rather than force native then reallocate down three times.
+      const previousPixels = this.renderer.domElement.width * this.renderer.domElement.height;
+      this.renderScale = this.renderWidth > 0
+        ? Math.max(0.75, Math.min(1, Math.sqrt(previousPixels / (width * height * nativeRatio * nativeRatio))))
+        : 1;
+      this.frameBudget.reset(this.renderScale);
+    }
+    this.renderWidth = width;
+    this.renderHeight = height;
+    const ratio = nativeRatio * this.renderScale;
+    this.postFx.setSize(width, height, ratio);
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
   }
@@ -1755,7 +1892,7 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
   scene.add(keyLight, fillLight);
   const camera = new PerspectiveCamera(34, 1, 0.1, 100);
   const previewCenter = new Vector3();
-  const viewDirection = new Vector3(0.55, 0.35, 1).normalize();
+  const viewDirection = new Vector3(1, 0.5, 0.8).normalize();
   let previewRadius = 0;
   const ownsLoader = !options.loader;
   const assetLoader = options.loader ?? new NativeAssetLoader({ allowMissingActionClips: options.allowCandidateActions === true });
@@ -1788,18 +1925,51 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
     canvas.remove();
     throw error;
   }
+  const restBounds = new Box3().setFromObject(instance.root);
+  const start = new Vector3(0, 0, -1.25), targetPosition = new Vector3(0, 0, 1);
+  const motionPoint = new Vector3(), handPoint = new Vector3(), otherHand = new Vector3();
+  instance.root.position.copy(start);
+  const target = new Group();
+  target.name = 'training-target';
+  const postGeometry = new CylinderGeometry(.19, .23, 1.3, 12);
+  const crossGeometry = new CylinderGeometry(.08, .08, .85, 10);
+  const postMaterial = new MeshStandardMaterial({ color: 0x8a7252, roughness: .9 });
+  const post = new Mesh(postGeometry, postMaterial), crossbar = new Mesh(crossGeometry, postMaterial);
+  post.position.y = .65; crossbar.position.y = .9; crossbar.rotation.z = Math.PI / 2;
+  target.add(post, crossbar); target.position.copy(targetPosition); target.visible = false;
+  const floorGeometry = new CircleGeometry(3.8, 64);
+  const floorMaterial = new MeshStandardMaterial({ color: 0x30483c, roughness: 1, transparent: true, opacity: .2 });
+  const floor = new Mesh(floorGeometry, floorMaterial);
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -.025;
+  scene.add(target, floor);
   let disposed = false;
-  const effects = new StoryEffects({ scene, reducedEffects: options.reducedEffects, resolveActorRoot: id => id === companionId ? instance.root : undefined });
+  const effects = new StoryEffects({ scene, reducedEffects: options.reducedEffects, resolveActorRoot: id => id === companionId ? instance.root : id === 'training-target' ? target : undefined });
   let previewClock = 0, showcaseStart = 0, sequence = 0, skill: CompanionSkill | undefined;
   let released = false, contacted = false;
+  let motion: CompanionSkillMotion | undefined;
+  const frame = () => {
+    const bounds = restBounds.clone().translate(start);
+    if (target.visible) bounds.union(new Box3().setFromObject(target));
+    if (motion) {
+      bounds.union(restBounds.clone().translate(new Vector3(motion.to.x, motion.height, motion.to.z)));
+      bounds.expandByPoint(new Vector3(motion.from.x + motion.sideX * motion.flank, .2, motion.from.z + motion.sideZ * motion.flank));
+    }
+    if (skill?.id === 'storm-talon') bounds.union(restBounds.clone().translate(new Vector3(0, 4, -2)));
+    bounds.getCenter(previewCenter);
+    previewRadius = Math.max(bounds.getSize(motionPoint).length() * .5, .3);
+  };
+  frame();
   const emit = (phase: CuePhase) => {
     if (!skill) return;
-    const storm = skill.id === 'storm-talon';
+    const storm = skill.id === 'storm-talon', guard = skill.id === 'fang-guard';
+    const at = guard || skill.target === 'search' ? instance.root.position : targetPosition;
     effects.emit({ instanceId: `preview:${sequence}:${phase}`, scopeId: `preview:${sequence}`, tick: previewClock * 60,
       worldTick: previewClock * 60, worldTimeSeconds: previewClock, actorId: companionId,
-      kind: storm ? 'storm-talon' : 'command', phase: storm && phase === 'commit' ? 'active' : phase,
-      actionId: skill.actionId as ActionId, from: { x: 0, y: .8, z: 0 }, to: { x: 1.5, y: .6, z: 0 },
-      position: phase === 'anticipation' ? { x: 0, y: 0, z: 0 } : { x: 1.5, y: 0, z: 0 },
+      kind: storm ? 'storm-talon' : guard ? 'guard' : skill.id === 'sky-mark' && phase === 'hit' ? 'mark' : 'command',
+      phase: phase === 'commit' ? storm ? 'active' : guard ? 'sustain' : phase : phase,
+      actionId: skill.actionId as ActionId, targetId: target.visible ? 'training-target' : undefined,
+      from: instance.root.position, to: at,
+      position: phase === 'anticipation' ? instance.root.position : at,
       durationTicks: Math.max(1, skill.ticks * (skill.contact - skill.release)), priority: 'essential', shape: 'burst' });
   };
   let observer: ResizeObserver | undefined;
@@ -1809,6 +1979,7 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
     observer?.disconnect();
     effects.dispose();
     instance.dispose();
+    postGeometry.dispose(); crossGeometry.dispose(); postMaterial.dispose(); floorGeometry.dispose(); floorMaterial.dispose();
     scene.clear();
     renderer.dispose();
     if (ownsLoader) assetLoader.dispose();
@@ -1824,7 +1995,7 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
     const verticalHalfFov = camera.fov * Math.PI / 360;
     const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * camera.aspect);
     const limitingHalfFov = Math.max(0.01, Math.min(verticalHalfFov, horizontalHalfFov));
-    const distance = previewRadius / Math.sin(limitingHalfFov) * 1.45;
+    const distance = previewRadius / Math.sin(limitingHalfFov) * 1.1;
     camera.position.copy(previewCenter).addScaledVector(viewDirection, distance);
     camera.near = Math.max(0.005, distance / 1000);
     camera.far = distance + previewRadius * 8;
@@ -1845,6 +2016,24 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
       if (!next) throw new Error('Unknown companion preview skill ' + id + '.');
       if (!instance.animation.hasAction(next.nativeAction as ActionId)) throw new Error('Missing native skill animation ' + next.nativeAction + '.');
       effects.cancelAll('load'); sequence++; skill = next; showcaseStart = previewClock; released = contacted = false;
+      start.y = next.companionId === 'vara' && next.id !== 'storm-talon' ? 2.4 : 0;
+      instance.root.position.copy(start); instance.root.rotation.set(0, 0, 0);
+      targetPosition.set(0, 0, 1); target.position.copy(targetPosition); target.visible = next.target !== 'search';
+      motion = ['asha-pin', 'sable-flank', 'nyra-ambush'].includes(next.nativeAction)
+        ? createCompanionSkillMotion(next.companionId, start, targetPosition, .78, next.release, next.contact) : undefined;
+      if (next.nativeAction === 'koro-push') {
+        instance.animation.play(next.nativeAction as ActionId, 'active', next.contact, previewClock, 1);
+        // Probe the full-weight contact pose offscreen to place the training prop, then rewind below.
+        instance.animation.update(1);
+        if (effects.companions.sockets.position(instance.root, 'koro', 'rightHand', handPoint)
+          && effects.companions.sockets.position(instance.root, 'koro', 'leftHand', otherHand)) {
+          targetPosition.set((handPoint.x + otherHand.x) * .5, 0, (handPoint.z + otherHand.z) * .5 + .19);
+          target.position.copy(targetPosition);
+        }
+      }
+      if (next.target === 'charge') { targetPosition.z = -2.1; target.position.copy(targetPosition); }
+      instance.animation.play(next.nativeAction as ActionId, 'anticipation', 0, previewClock, 1);
+      frame();
       host.dataset.previewSkill = id; emit('anticipation');
     },
     update: (dt) => {
@@ -1856,16 +2045,34 @@ export async function mountCompanionPreview(host: HTMLElement, companionId: stri
         const elapsed = (previewClock - showcaseStart) * 60;
         const progress = Math.min(1, elapsed / skill.ticks);
         let action = skill.nativeAction, sample = progress;
+        if (motion) {
+          sampleCompanionSkillMotion(motion, progress, motionPoint);
+          instance.root.position.copy(motionPoint);
+          instance.root.rotation.y = Math.atan2(targetPosition.x - motionPoint.x, targetPosition.z - motionPoint.z);
+        }
         if (skill.id === 'storm-talon') {
-          if (elapsed < 24) { action = 'vara:takeoff'; sample = Math.min(1, elapsed / 18); }
-          else if (elapsed < 45) { action = 'vara:dive'; sample = (elapsed - 24) / 21; }
-          else if (elapsed < 63) { action = 'vara:strike'; sample = .44 + .5 * (elapsed - 45) / 18; }
-          else { action = 'vara:fly'; sample = (elapsed - 63) / 36; }
+          if (elapsed < 24) {
+            action = elapsed < 18 ? 'vara:takeoff' : 'vara:hover'; sample = Math.min(1, elapsed / 18);
+            instance.root.position.set(0, 4 * elapsed / 24, start.z + (-2 - start.z) * elapsed / 24);
+          } else if (elapsed < 45) {
+            action = 'vara:dive'; sample = (elapsed - 24) / 21;
+            instance.root.position.set(0, 4 + (.8 - 4) * sample * sample, -2 + 2.4 * sample * sample);
+          } else if (elapsed < 63) { action = 'vara:strike'; sample = .44 + .5 * (elapsed - 45) / 18; }
+          else {
+            action = 'vara:fly'; sample = (elapsed - 63) / 36;
+            instance.root.position.set(-1.3 * sample, .8 + 1.6 * sample, .4 + (start.z + 1.2 - .4) * sample);
+          }
         }
         instance.animation.play(action as ActionId, 'active', sample, previewClock, 1);
+        // Finite sampling sets clip time, but update owns the idle-to-skill blend weights.
+        instance.animation.update(step);
+        if (skill.nativeAction === 'koro-push') target.position.z = targetPosition.z + Math.max(0, progress - skill.contact) * .5;
         if (!released && progress >= skill.release) { released = true; emit('commit'); }
         if (!contacted && progress >= skill.contact) { contacted = true; emit('hit'); }
-        if (progress >= 1) { skill = undefined; instance.animation.playPreview(options.idleActionId); }
+        if (progress >= 1) {
+          emit('resolve'); skill = undefined; motion = undefined;
+          instance.animation.playPreview((companionId === 'vara' && instance.root.position.y > .1 ? 'vara:hover' : options.idleActionId) as ActionId);
+        }
       } else instance.animation.update(step);
       effects.update({ simulationTick: previewClock * 60, worldTick: previewClock * 60, worldTimeSeconds: previewClock, timeScale: 1, policy: 'normal' }, camera.position);
       render();

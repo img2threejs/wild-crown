@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-23T07:47:21.471Z",
+  "build": {
+    "bundle": "main-1bL2ASaL.js",
+    "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+    "nativeViperSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
+  },
+  "asset": "actor-mire-viper",
+  "instance": "canopy-mire-viper",
+  "fixture": "Unmodified actual Canopy export from the coordinator-owned previously earned run; imported through normal Load Game and physically approached with native WASD.",
+  "before": {
+    "state": {
+      "screen": "game",
+      "player": {
+        "x": 48.823968827467354,
+        "y": 0,
+        "z": -9.623922109882894
+      },
+      "clip": "monster-idle",
+      "inputs": {
+        "detail": "full",
+        "lookEnabled": true,
+        "hasTarget": true,
+        "targetX": 48.823968827467354,
+        "targetY": 1.45,
+        "targetZ": -9.623922109882894,
+        "postureCoil": 0,
+        "postureLean": 0,
+        "limbClearance": false
+      },
+      "look": {
+        "strength": 0.9999850020945007
+      },
+      "head": [
+        {
+          "name": "tripoHead_0",
+          "quaternion": [
+            -0.0069396918183398,
+            -0.10698147163444821,
+            0.946945538984173,
+            0.3029867185247044
+          ]
+        },
+        {
+          "name": "tripoHead_1",
+          "quaternion": [
+            -0.09315745981965182,
+            0.6589256107868211,
+            -0.7188704054880833,
+            0.2009081064630387
+          ]
+        },
+        {
+          "name": "tripoHead_2",
+          "quaternion": [
+            0.30414065806666596,
+            0.2980352680537174,
+            -0.18695681745583725,
+            0.8852799486680522
+          ]
+        },
+        {
+          "name": "tripoHead_3",
+          "quaternion": [
+            -0.06077412646027856,
+            0.2992856949158058,
+            -0.32456786772607005,
+            0.8952040424459138
+          ]
+        },
+        {
+          "name": "tripoHead_4",
+          "quaternion": [
+            0.03031949366453637,
+            0.22105734507045519,
+            -0.2261459252038545,
+            0.9481942833660308
+          ]
+        },
+        {
+          "name": "tripoHead_5",
+          "quaternion": [
+            -0.017554429145282286,
+            0.0073393052897291235,
+            0.010097779438714332,
+            0.9997679788159123
+          ]
+        }
+      ],
+      "camera": {
+        "x": 55.85258950564334,
+        "y": 8.05,
+        "z": 0.5535367624131187
+      }
+    },
+    "screenshot": "viper-native-head-before-r9.png"
+  },
+  "isolationDiagnostic": {
+    "description": "In the isolated before tab only, temporarily removed the generic grounding/procedural slot. The authored native mixer, GLB, simulation and camera were not replaced. Diagnostic, not the shipped fix.",
+    "state": {
+      "screen": "game",
+      "clip": "monster-idle",
+      "player": {
+        "x": 48.823968827467354,
+        "y": 0,
+        "z": -9.623922109882894
+      }
+    },
+    "screenshot": "viper-native-head-no-overlay-diagnostic-r9.png"
+  },
+  "geometryRegression": {
+    "failingBefore": {
+      "command": "bun test tests/rendering/ActorProcedural.test.ts",
+      "passed": 9,
+      "failed": 1,
+      "maxSkinnedComponentDisplacement": 0.4555573015259047,
+      "units": "mesh-local units"
+    },
+    "passingAfter": {
+      "command": "bun test tests/rendering/ActorProcedural.test.ts",
+      "passed": 10,
+      "failed": 0
+    },
+    "sameIdlePoseProbe": {
+      "headTriangleEdges": 10896,
+      "before": {
+        "maxEdgeRatio": 7.544412778250043,
+        "p99EdgeRatio": 2.318250046204597
+      },
+      "after": {
+        "maxEdgeRatio": 1,
+        "p99EdgeRatio": 1
+      }
+    },
+    "nativeClipNames": [
+      "preset:serpentine:march",
+      "monster-idle",
+      "monster-run",
+      "monster-slash",
+      "monster-shoot",
+      "monster-jump",
+      "monster-hurt",
+      "monster-turn",
+      "monster-dive",
+      "monster-roar",
+      "monster-death",
+      "monster-spawn",
+      "monster-knockdown",
+      "monster-getup",
+      "monster-tail",
+      "wild-crown:viper-venom-spit",
+      "wild-crown:viper-tail-lash",
+      "wild-crown:viper-strike-lunge"
+    ]
+  },
+  "final": {
+    "approach": {
+      "goal": {
+        "x": 49,
+        "y": 0,
+        "z": -9
+      },
+      "input": "native WASD only",
+      "samples": [
+        {
+          "tick": 173,
+          "position": {
+            "x": 48.326240081762606,
+            "y": 0,
+            "z": -15.911447884257928
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 177,
+          "position": {
+            "x": 48.348463385649126,
+            "y": 0,
+            "z": -15.657931805361127
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 181,
+          "position": {
+            "x": 48.30096206104733,
+            "y": 0,
+            "z": -15.388757632617551
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 186,
+          "position": {
+            "x": 48.24158540529508,
+            "y": 0,
+            "z": -15.052289916688082
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 191,
+          "position": {
+            "x": 48.18220874954284,
+            "y": 0,
+            "z": -14.715822200758613
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 195,
+          "position": {
+            "x": 48.13470742494104,
+            "y": 0,
+            "z": -14.446648028015037
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 200,
+          "position": {
+            "x": 48.075330769188795,
+            "y": 0,
+            "z": -14.110180312085568
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 205,
+          "position": {
+            "x": 48.01595411343655,
+            "y": 0,
+            "z": -13.773712596156098
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 209,
+          "position": {
+            "x": 47.96845278883475,
+            "y": 0,
+            "z": -13.504538423412523
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 214,
+          "position": {
+            "x": 48.094572133998284,
+            "y": 0,
+            "z": -13.209377780819185
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 219,
+          "position": {
+            "x": 48.104920106734355,
+            "y": 0,
+            "z": -12.88856815873649
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 223,
+          "position": {
+            "x": 48.19185285836639,
+            "y": 0,
+            "z": -12.649388364045286
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 228,
+          "position": {
+            "x": 48.20220083110246,
+            "y": 0,
+            "z": -12.328578741962591
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 233,
+          "position": {
+            "x": 48.32832017626599,
+            "y": 0,
+            "z": -12.033418099369253
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 237,
+          "position": {
+            "x": 48.35054348015251,
+            "y": 0,
+            "z": -11.779902020472452
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 242,
+          "position": {
+            "x": 48.425600900634095,
+            "y": 0,
+            "z": -11.473428682595355
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 247,
+          "position": {
+            "x": 48.62153386829158,
+            "y": 0,
+            "z": -11.193524443084684
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 252,
+          "position": {
+            "x": 48.63188184102765,
+            "y": 0,
+            "z": -10.872714821001988
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 256,
+          "position": {
+            "x": 48.58438051642585,
+            "y": 0,
+            "z": -10.603540648258413
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 261,
+          "position": {
+            "x": 48.71049986158938,
+            "y": 0,
+            "z": -10.308380005665075
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 266,
+          "position": {
+            "x": 48.720847834325454,
+            "y": 0,
+            "z": -9.98757038358238
+          },
+          "resources": {
+            "heroId": "aren",
+            "vitality": 120,
+            "maxVitality": 120,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        }
+      ],
+      "final": {
+        "screen": "pause",
+        "p": {
+          "id": "aren",
+          "archetypeId": "aren",
+          "species": "human",
+          "allegiance": "player",
+          "position": {
+            "x": 48.846967179488985,
+            "y": 0,
+            "z": -9.692409740989042
+          },
+          "velocity": {
+            "x": 2.351195611889807,
+            "y": 0,
+            "z": 3.358850874128052
+          },
+          "facing": {
+            "x": 0.5734623443633284,
+            "y": 0,
+            "z": 0.8192319205190405
+          },
+          "actionId": "aren-walk",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 120,
+          "maxVitality": 120,
+          "renderVariantId": "actor-aren",
+          "sockets": {
+            "root": {
+              "x": 40,
+              "y": 0,
+              "z": -22.5
+            },
+            "head": {
+              "x": 40,
+              "y": 1.5,
+              "z": -22.5
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false
+        },
+        "r": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "tick": 271,
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "outcome": null,
+        "tutorial": null
+      }
+    },
+    "state": {
+      "screen": "game",
+      "bundle": "http://127.0.0.1:5218/assets/main-1bL2ASaL.js",
+      "player": {
+        "x": 48.908136496221104,
+        "y": 0,
+        "z": -9.605025002800332
+      },
+      "clip": "monster-idle",
+      "inputs": {
+        "detail": "full",
+        "lookEnabled": true,
+        "hasTarget": true,
+        "targetX": 48.908136496221104,
+        "targetY": 1.45,
+        "targetZ": -9.605025002800332,
+        "postureCoil": 0,
+        "postureLean": 0,
+        "limbClearance": false
+      },
+      "proceduralInstalled": true,
+      "lookAtInstalled": false,
+      "head": [],
+      "springs": 0,
+      "camera": {
+        "x": 55.963342314671415,
+        "y": 8.05,
+        "z": 0.5942432753565186
+      },
+      "error": null
+    },
+    "screenshot": "viper-native-head-after-r9.png"
+  },
+  "limits": [
+    "Native gameplay visual proof is close-range idle with the normal CameraDirector; no inspection camera override.",
+    "All native clips are geometry-checked at their sampled phase under gaze, movement and reactions; this is not a live boss-attack capture.",
+    "Model, materials, textures, authored clips and their GLB bytes are unchanged.",
+    "An intermediate observer used !== null for an optional LookAt object and misclassified undefined; final acceptance uses Boolean(p.lookAt)."
+  ]
+}

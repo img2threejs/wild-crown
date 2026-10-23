@@ -1,0 +1,2894 @@
+{
+  "scope": "Actual app-frame virtual-controller path, not physical hardware. Earlier mixed navigation includes off-map footer focus and raw viewport-coordinate displacement; the 1024px diagnosis measures its real 373px screen scrolling. Region-only comparisons explicitly start with the complete native canvas visible; scrolling is not disabled.",
+  "scrollDiagnosis": {
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "focus": "Return to Title",
+    "canvasRect": {
+      "x": 228.0625,
+      "y": -228.40625,
+      "width": 557,
+      "height": 348,
+      "top": -228.40625,
+      "right": 785.0625,
+      "bottom": 119.59375,
+      "left": 228.0625
+    },
+    "scrollOwners": [
+      {
+        "className": "wc-screen wc-state wc-selection",
+        "scrollTop": 373,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 768,
+          "top": 0,
+          "right": 1024,
+          "bottom": 768,
+          "left": 0
+        }
+      }
+    ]
+  },
+  "records": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "setup": "Focus Greenwake then scroll complete native canvas into view before comparing only region-marker navigation; off-map footer navigation measured separately.",
+      "sameCanvas": true,
+      "states": [
+        {
+          "focus": "greenwake",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "whispering-canopy",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "the-grove",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "blood-bamboo-valley",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "moonpine-ridge",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 626,
+                "height": 391,
+                "top": 163.265625,
+                "right": 816.578125,
+                "bottom": 554.265625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 190.578125,
+                "y": 163.265625,
+                "width": 625.84375,
+                "height": 391.140625,
+                "top": 163.265625,
+                "right": 816.421875,
+                "bottom": 554.40625,
+                "left": 190.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 168.578125,
+                "y": 92,
+                "width": 669.84375,
+                "height": 522.796875,
+                "top": 92,
+                "right": 838.421875,
+                "bottom": 614.796875,
+                "left": 168.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 760.15625,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 824.15625,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 140.578125,
+                "y": 64,
+                "width": 1147.84375,
+                "height": 804,
+                "top": 64,
+                "right": 1288.421875,
+                "bottom": 868,
+                "left": 140.578125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1440,
+                "height": 900,
+                "top": 0,
+                "right": 1440,
+                "bottom": 900,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        }
+      ],
+      "layoutShifts": []
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768,
+        "dpr": 1
+      },
+      "setup": "Focus Greenwake then scroll complete native canvas into view before comparing only region-marker navigation; off-map footer navigation measured separately.",
+      "sameCanvas": true,
+      "states": [
+        {
+          "focus": "greenwake",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 557,
+                "height": 348,
+                "top": -0.40625,
+                "right": 785.0625,
+                "bottom": 347.59375,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -58.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -58.484375,
+                "right": 803.359375,
+                "bottom": 404.453125,
+                "left": 209.640625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 920.015625,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 963.859375,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 145
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "whispering-canopy",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 557,
+                "height": 348,
+                "top": -0.40625,
+                "right": 785.0625,
+                "bottom": 347.59375,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -58.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -58.484375,
+                "right": 803.359375,
+                "bottom": 404.453125,
+                "left": 209.640625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 920.015625,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 963.859375,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 145
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "the-grove",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 557,
+                "height": 348,
+                "top": -0.40625,
+                "right": 785.0625,
+                "bottom": 347.59375,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -58.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -58.484375,
+                "right": 803.359375,
+                "bottom": 404.453125,
+                "left": 209.640625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 920.015625,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 963.859375,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 145
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "blood-bamboo-valley",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 557,
+                "height": 348,
+                "top": -0.40625,
+                "right": 785.0625,
+                "bottom": 347.59375,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -58.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -58.484375,
+                "right": 803.359375,
+                "bottom": 404.453125,
+                "left": 209.640625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 920.015625,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 963.859375,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 145
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "moonpine-ridge",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 557,
+                "height": 348,
+                "top": -0.40625,
+                "right": 785.0625,
+                "bottom": 347.59375,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 228.0625,
+                "y": -0.40625,
+                "width": 556.875,
+                "height": 348.046875,
+                "top": -0.40625,
+                "right": 784.9375,
+                "bottom": 347.640625,
+                "left": 228.0625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 209.640625,
+                "y": -58.484375,
+                "width": 593.71875,
+                "height": 462.9375,
+                "top": -58.484375,
+                "right": 803.359375,
+                "bottom": 404.453125,
+                "left": 209.640625
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1001.015625,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 920.015625,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 187.125,
+                "y": -81,
+                "width": 638.75,
+                "height": 1044.859375,
+                "top": -81,
+                "right": 825.875,
+                "bottom": 963.859375,
+                "left": 187.125
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 145
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 1024,
+                "height": 768,
+                "top": 0,
+                "right": 1024,
+                "bottom": 768,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        }
+      ],
+      "layoutShifts": []
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "dpr": 1
+      },
+      "setup": "Focus Greenwake then scroll complete native canvas into view before comparing only region-marker navigation; off-map footer navigation measured separately.",
+      "sameCanvas": true,
+      "states": [
+        {
+          "focus": "greenwake",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 271,
+                "height": 169,
+                "top": -0.21875,
+                "right": 317.75,
+                "bottom": 168.78125,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -99,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -99,
+                "right": 331.25,
+                "bottom": 244.625,
+                "left": 32.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 782.421875,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 845.109375,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 177
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "whispering-canopy",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 271,
+                "height": 169,
+                "top": -0.21875,
+                "right": 317.75,
+                "bottom": 168.78125,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -99,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -99,
+                "right": 331.25,
+                "bottom": 244.625,
+                "left": 32.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 782.421875,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 845.109375,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 177
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "the-grove",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 271,
+                "height": 169,
+                "top": -0.21875,
+                "right": 317.75,
+                "bottom": 168.78125,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -99,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -99,
+                "right": 331.25,
+                "bottom": 244.625,
+                "left": 32.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 782.421875,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 845.109375,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 177
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "blood-bamboo-valley",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 271,
+                "height": 169,
+                "top": -0.21875,
+                "right": 317.75,
+                "bottom": 168.78125,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -99,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -99,
+                "right": 331.25,
+                "bottom": 244.625,
+                "left": 32.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 782.421875,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 845.109375,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 177
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        },
+        {
+          "focus": "moonpine-ridge",
+          "outline": "rgb(44, 58, 36) solid 2px",
+          "geometry": [
+            {
+              "className": "",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 271,
+                "height": 169,
+                "top": -0.21875,
+                "right": 317.75,
+                "bottom": 168.78125,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__canvas",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__viewport",
+              "rect": {
+                "x": 46.75,
+                "y": -0.21875,
+                "width": 270.5,
+                "height": 169.0625,
+                "top": -0.21875,
+                "right": 317.25,
+                "bottom": 168.84375,
+                "left": 46.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__stage wc-sheet",
+              "rect": {
+                "x": 32.75,
+                "y": -99,
+                "width": 298.5,
+                "height": 343.625,
+                "top": -99,
+                "right": 331.25,
+                "bottom": 244.625,
+                "left": 32.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-map__layout",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 895.421875,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 782.421875,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-state wc-selection wc-map",
+              "rect": {
+                "x": 18.75,
+                "y": -113,
+                "width": 326.5,
+                "height": 958.109375,
+                "top": -113,
+                "right": 345.25,
+                "bottom": 845.109375,
+                "left": 18.75
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-screen wc-state wc-selection",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 177
+            },
+            {
+              "className": "wc-layer wc-layer--front",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-ui",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-overlay",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "wc-app",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            },
+            {
+              "className": "",
+              "rect": {
+                "x": 0,
+                "y": 0,
+                "width": 375,
+                "height": 812,
+                "top": 0,
+                "right": 375,
+                "bottom": 812,
+                "left": 0
+              },
+              "scrollTop": 0
+            }
+          ]
+        }
+      ],
+      "layoutShifts": []
+    }
+  ]
+}

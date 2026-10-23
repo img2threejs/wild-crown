@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'bun:test';
-import { CombatEngine, type CombatInput } from '../../src/game/combat/CombatEngine.js';
+import { CombatEngine, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
 import type { CombatTrialDefinition } from '../../src/game/combat/CombatTrials.js';
 import { arenaFromRegion, groundHeightAt, moveCircle, vec, type CombatArena } from '../../src/game/combat/geometry.js';
-import type { RegionColliderDefinition, RegionDefinition, RegionId, Vec3 } from '../../src/game/contracts.js';
+import type { PlayerSkillSnapshot, RegionColliderDefinition, RegionDefinition, RegionId, Vec3 } from '../../src/game/contracts.js';
 
 /**
  * Brute-force proof that a playtest region's combat-trial gates seal its walk-mesh, on the exact playtest data path:
@@ -31,6 +31,17 @@ const CELL = 0.5;
 const NEIGHBOURS: readonly (readonly [number, number])[] = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
 const IDLE: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 const DIRECTIONS = Array.from({ length: 16 }, (_, step) => vec(Math.cos(step / 16 * Math.PI * 2), 0, Math.sin(step / 16 * Math.PI * 2)));
+
+/**
+ * The engine keeps its state private by design; this harness reads the live state and the live skill readiness
+ * through the same test seam the other combat tests use, instead of building a full snapshot per tick.
+ * `snapshot()` copies every actor, hazard, telegraph, prop and event on each call, which dominated this loop.
+ */
+interface EngineInternals {
+  readonly state: EngineState;
+  readonly playerSkills: () => readonly PlayerSkillSnapshot[];
+}
+const internalsOf = (engine: CombatEngine): EngineInternals => engine as unknown as EngineInternals;
 
 interface Reach { readonly cells: Uint8Array; readonly y: Float32Array; count: number }
 type Script = (tick: number, direction: Vec3, diveReady: boolean) => CombatInput;
@@ -270,13 +281,13 @@ export function describeSealedRoute(config: SealedRouteConfig): void {
   /** Runs one script; reports the deepest point reached past the gate's centre plane and whether the player ever touched the far component. */
   function furthest(gate: number, startPoint: Start, script: { ticks: number; input: Script }, direction: Vec3): { depth: number; beyond: boolean } {
     const engine = spawnAt(gate, startPoint);
+    const internals = internalsOf(engine);
     let depth = -Infinity, beyond = false, diveReady = true;
     for (let tick = 0; tick < script.ticks; tick++) {
       engine.fixedStep(script.input(tick, direction, diveReady));
       engine.consumeEvents(); engine.drainPresentationCues();
-      const snapshot = engine.snapshot();
-      diveReady = snapshot.skills.find(skill => skill.id === 'dive')!.available;
-      const player = snapshot.actors.find(actor => actor.id === 'aren')!.position;
+      diveReady = internals.playerSkills().find(skill => skill.id === 'dive')!.available;
+      const player = internals.state.actors.find(actor => actor.id === 'aren')!.position;
       depth = Math.max(depth, side(gate, player.x, player.z));
       const index = cellIndex(player.x, player.z);
       for (const [dx, dz] of [[0, 0], ...NEIGHBOURS]) if (after[gate]!.cells[index + dz! * NX + dx!] === 1) beyond = true;

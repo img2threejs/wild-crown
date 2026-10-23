@@ -1,0 +1,1004 @@
+{
+  "fixture": "Authored DEV Canopy trial, Sakda/Asha; normal AI/damage/input, temporary prerequisite progress in owned browser; not proof of campaign reachability.",
+  "initial": {
+    "player": {
+      "heroId": "sakda",
+      "vitality": 115,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "actors": [
+      {
+        "id": "aren",
+        "vitality": 115,
+        "position": {
+          "x": -58,
+          "y": 0,
+          "z": -20
+        }
+      },
+      {
+        "id": "canopy-vara",
+        "vitality": 100,
+        "position": {
+          "x": -60,
+          "y": 0,
+          "z": -19
+        }
+      },
+      {
+        "id": "canopy-howler",
+        "vitality": 232,
+        "position": {
+          "x": -46,
+          "y": 0,
+          "z": -26
+        }
+      },
+      {
+        "id": "canopy-hornbill",
+        "vitality": 256,
+        "position": {
+          "x": 7,
+          "y": 4,
+          "z": -24
+        }
+      },
+      {
+        "id": "canopy-mire-viper",
+        "vitality": 616,
+        "position": {
+          "x": 49,
+          "y": 0,
+          "z": -20
+        }
+      },
+      {
+        "id": "asha__party_companion",
+        "vitality": 100,
+        "position": {
+          "x": -55.290695184962246,
+          "y": 0,
+          "z": -19.97345506781593
+        }
+      }
+    ],
+    "worldClock": {
+      "simulationTick": 6,
+      "worldTick": 6,
+      "worldTimeSeconds": 0.1,
+      "timeScale": 1,
+      "policy": "normal"
+    }
+  },
+  "measurement": {
+    "label": "after-dev-sakda-asha-canopy-real-combat-and-outcome",
+    "durationMs": 20005.899999976158,
+    "frames": 1452,
+    "frame": {
+      "p50": 13.300000000017462,
+      "p95": 15.300000000017462,
+      "p99": 26.70000000001164,
+      "max": 53.29999999998836,
+      "over25": 36,
+      "over50": 1
+    },
+    "longTasks": [
+      {
+        "start": 200904.19999998808,
+        "duration": 51
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1210,
+      "worldTick": 1179,
+      "worldTimeSeconds": 19.65,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 68,
+      "mana": 51,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -46.59339952353045,
+      "y": 0,
+      "z": -28.248058583508882
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 5411.151,
+      "taskMs": 6558.979,
+      "layoutMs": 38.572,
+      "recalcStyleMs": 481.166,
+      "heapUsedBytes": 113894400,
+      "domNodes": 12873
+    }
+  },
+  "final": {
+    "screen": "game",
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 68,
+      "mana": 51,
+      "maxMana": 100
+    },
+    "actors": [
+      {
+        "id": "aren",
+        "vitality": 115,
+        "position": {
+          "x": -46.59339952353045,
+          "y": 0,
+          "z": -28.248058583508882
+        }
+      },
+      {
+        "id": "canopy-vara",
+        "vitality": 100,
+        "position": {
+          "x": -60,
+          "y": 0,
+          "z": -19
+        }
+      },
+      {
+        "id": "canopy-howler",
+        "vitality": 77,
+        "position": {
+          "x": -52.383737241170415,
+          "y": 0,
+          "z": -28.58270633215927
+        }
+      },
+      {
+        "id": "canopy-hornbill",
+        "vitality": 256,
+        "position": {
+          "x": 7,
+          "y": 4,
+          "z": -24
+        }
+      },
+      {
+        "id": "canopy-mire-viper",
+        "vitality": 616,
+        "position": {
+          "x": 49,
+          "y": 0,
+          "z": -20
+        }
+      },
+      {
+        "id": "asha__party_companion",
+        "vitality": 100,
+        "position": {
+          "x": -46.610759248052766,
+          "y": 0,
+          "z": -26.06519503177828
+        }
+      }
+    ],
+    "eventKinds": {
+      "cue": 6,
+      "action": 20,
+      "companion": 2,
+      "attack-interrupted": 4,
+      "damage": 13
+    },
+    "damageEvents": [
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:358:26",
+        "tick": 358,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 18,
+          "position": {
+            "x": -45.85586809953113,
+            "y": 0,
+            "z": -26.818874910754104
+          },
+          "worldTick": 358
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:358:30",
+        "tick": 358,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 8,
+          "position": {
+            "x": -45.85586809953113,
+            "y": 0,
+            "z": -26.818874910754104
+          },
+          "worldTick": 358
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:437:38",
+        "tick": 437,
+        "kind": "damage",
+        "message": "sigil bolt connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "sigil_bolt",
+        "attackId": "aren-sigil_bolt",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 16,
+          "position": {
+            "x": -42.06686911991307,
+            "y": 0,
+            "z": -27.742718367435668
+          },
+          "worldTick": 432
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:504:45",
+        "tick": 504,
+        "kind": "damage",
+        "message": "light 1 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_1",
+        "attackId": "aren-light_1",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 10,
+          "position": {
+            "x": -42.46094285240547,
+            "y": 0,
+            "z": -27.92430652753199
+          },
+          "worldTick": 497
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:584:55",
+        "tick": 584,
+        "kind": "damage",
+        "message": "heavy connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "heavy",
+        "attackId": "aren-heavy",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 20,
+          "position": {
+            "x": -44.988442190685035,
+            "y": 0,
+            "z": -28.919863213158255
+          },
+          "worldTick": 574
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:652:64",
+        "tick": 652,
+        "kind": "damage",
+        "message": "light 1 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_1",
+        "attackId": "aren-light_1",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 15,
+          "position": {
+            "x": -44.988442190685035,
+            "y": 0,
+            "z": -28.919863213158255
+          },
+          "worldTick": 636
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:696:69",
+        "tick": 696,
+        "kind": "damage",
+        "message": "sigil bolt connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "sigil_bolt",
+        "attackId": "aren-sigil_bolt",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 16,
+          "position": {
+            "x": -44.98865382306626,
+            "y": 0,
+            "z": -28.919149742433138
+          },
+          "worldTick": 677
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:870:89",
+        "tick": 870,
+        "kind": "damage",
+        "message": "The howler heaves a sap-bound rock toward where Aren stood. Move off the mark before it lands.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "attackId": "howler-rock-hurl",
+        "damage": {
+          "targetId": "aren",
+          "amount": 14,
+          "position": {
+            "x": -43.99773089148504,
+            "y": 0,
+            "z": -28.09804407549325
+          },
+          "worldTick": 849
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:896:94",
+        "tick": 896,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 18,
+          "position": {
+            "x": -47.41860269476672,
+            "y": 0,
+            "z": -28.29575051391079
+          },
+          "worldTick": 875
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:896:100",
+        "tick": 896,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 8,
+          "position": {
+            "x": -47.41860269476672,
+            "y": 0,
+            "z": -28.29575051391079
+          },
+          "worldTick": 875
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:1093:116",
+        "tick": 1093,
+        "kind": "damage",
+        "message": "The howler crouches and leaps toward where Aren stood. Dive away from the landing.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "attackId": "howler-leap-slam",
+        "damage": {
+          "targetId": "aren",
+          "amount": 17,
+          "position": {
+            "x": -45.5950654342822,
+            "y": 0,
+            "z": -28.19036069581058
+          },
+          "worldTick": 1067
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:1137:122",
+        "tick": 1137,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 18,
+          "position": {
+            "x": -48.490234293102205,
+            "y": 0,
+            "z": -28.357684570135724
+          },
+          "worldTick": 1111
+        }
+      },
+      {
+        "id": "b1f39e71-6533-4b12-b6b1-c44e34919cf7:combat:1137:128",
+        "tick": 1137,
+        "kind": "damage",
+        "message": "light 4 connects.",
+        "actorId": "aren",
+        "targetId": "canopy-howler",
+        "actionId": "light_4",
+        "attackId": "aren-light_4",
+        "damage": {
+          "targetId": "canopy-howler",
+          "amount": 8,
+          "position": {
+            "x": -48.490234293102205,
+            "y": 0,
+            "z": -28.357684570135724
+          },
+          "worldTick": 1111
+        }
+      }
+    ],
+    "frameStates": {
+      "game": 1457
+    },
+    "transitions": [
+      {
+        "screen": "game",
+        "atMs": 15.199999988079071
+      }
+    ],
+    "assetErrors": [],
+    "glError": 0
+  },
+  "actions": [
+    {
+      "at": 0,
+      "key": "d",
+      "down": true
+    },
+    {
+      "at": 2200,
+      "key": "d",
+      "down": false
+    },
+    {
+      "at": 2700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 2770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 5370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 6670,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7250,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7320,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 7580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 7900,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7970,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 8550,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 8620,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 9200,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9270,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 9850,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9920,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 10500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 10570,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 11100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 11150,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11220,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11800,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11870,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12450,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 12500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 12520,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 13100,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13170,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 13750,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13820,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 14400,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 14470,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 15050,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15120,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 15700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 16000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 16100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 16350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 16420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 17580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 17650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 18370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 19600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19670,
+      "key": "j",
+      "down": false
+    }
+  ],
+  "rejectedPriorAttempt": {
+    "reason": "Rejected: the previous idle setup had already reached defeat before capture, so it was not a combat performance result.",
+    "measurement": {
+      "label": "after-dev-sakda-asha-canopy-real-combat",
+      "durationMs": 20003.299999952316,
+      "frames": 1499,
+      "frame": {
+        "p50": 13.300000000017462,
+        "p95": 15.200000000011642,
+        "p99": 15.300000000017462,
+        "max": 15.400000000023283,
+        "over25": 0,
+        "over50": 0
+      },
+      "longTasks": [],
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "bufferWidth": 1440,
+        "bufferHeight": 900,
+        "visibility": "visible"
+      },
+      "screen": "defeat",
+      "region": "whispering-canopy",
+      "worldClock": {
+        "simulationTick": 1579,
+        "worldTick": 1579,
+        "worldTimeSeconds": 26.316666666666666,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "player": {
+        "heroId": "sakda",
+        "vitality": 0,
+        "maxVitality": 115,
+        "instinct": 0,
+        "mana": 92,
+        "maxMana": 100
+      },
+      "initialPosition": {
+        "x": -58,
+        "y": 0,
+        "z": -20
+      },
+      "finalPosition": {
+        "x": -58,
+        "y": 0,
+        "z": -20
+      },
+      "actors": 6,
+      "rendererMemory": {
+        "geometries": 188,
+        "textures": 95
+      },
+      "programs": 105,
+      "assetErrors": [],
+      "counters": {
+        "scriptMs": 2483.1789999999996,
+        "taskMs": 2861.393,
+        "layoutMs": 0,
+        "recalcStyleMs": 45.877,
+        "heapUsedBytes": 114329772,
+        "domNodes": 4637
+      }
+    },
+    "initial": {
+      "player": {
+        "heroId": "sakda",
+        "vitality": 0,
+        "maxVitality": 115,
+        "instinct": 0,
+        "mana": 92,
+        "maxMana": 100
+      },
+      "actors": [
+        {
+          "id": "aren",
+          "vitality": 0,
+          "position": {
+            "x": -58,
+            "y": 0,
+            "z": -20
+          }
+        },
+        {
+          "id": "canopy-vara",
+          "vitality": 100,
+          "position": {
+            "x": -60,
+            "y": 0,
+            "z": -19
+          }
+        },
+        {
+          "id": "canopy-howler",
+          "vitality": 232,
+          "position": {
+            "x": -54.86192774729632,
+            "y": 0,
+            "z": -23.321559759334583
+          }
+        },
+        {
+          "id": "canopy-hornbill",
+          "vitality": 256,
+          "position": {
+            "x": 7,
+            "y": 4,
+            "z": -24
+          }
+        },
+        {
+          "id": "canopy-mire-viper",
+          "vitality": 616,
+          "position": {
+            "x": 49,
+            "y": 0,
+            "z": -20
+          }
+        },
+        {
+          "id": "asha__party_companion",
+          "vitality": 100,
+          "position": {
+            "x": -56.848616417422875,
+            "y": 0,
+            "z": -17.834958306331544
+          }
+        }
+      ],
+      "worldClock": {
+        "simulationTick": 1579,
+        "worldTick": 1579,
+        "worldTimeSeconds": 26.316666666666666,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "fixture": "Authored DEV Canopy trial, Sakda/Asha, original AI and damage; prerequisite progress isolated to owned browser and restored after smoke."
+    }
+  },
+  "comparisonLimit": "Additional combat/outcome smoke; not an equivalent before/after production comparison."
+}

@@ -21,12 +21,14 @@ export interface AfterimageLook {
   readonly opacity: number; readonly dashOpacity: number;
   /** Dodges are blinks for this hero: they use the dash look. */
   readonly dodgeDash: boolean;
+  /** Dodges leave silhouette ghosts (false: the dodge hides the body, so nothing of it trails). */
+  readonly dodgeGhosts: boolean;
 }
 export const AFTERIMAGE_STYLES: Readonly<Record<AfterimageStyle, AfterimageLook>> = {
-  warden: { tint: [0x8ee2be, 0xe7f0bf], dash: [0.5, 1.5, 2.4], spacing: 4, dashSpacing: 2, life: 18, dashLife: 14, opacity: 0.34, dashOpacity: 0.55, dodgeDash: false },
-  heartroot: { tint: [0xf1ba4a, 0xffd9c4], dash: [2.4, 1.4, 0.35], spacing: 4, dashSpacing: 2, life: 18, dashLife: 14, opacity: 0.34, dashOpacity: 0.55, dodgeDash: false },
-  umbral: { tint: [0x24104a, 0x7a1238], dash: [0.02, 0.004, 0.045], spacing: 3, dashSpacing: 2, life: 24, dashLife: 26, opacity: 0.42, dashOpacity: 0.38, dodgeDash: true },
-  ember: { tint: [0xff7a1a, 0xffd34d], dash: [1.15, 0.38, 0.06], spacing: 4, dashSpacing: 2, life: 18, dashLife: 16, opacity: 0.26, dashOpacity: 0.32, dodgeDash: false },
+  warden: { tint: [0x8ee2be, 0xe7f0bf], dash: [0.5, 1.5, 2.4], spacing: 4, dashSpacing: 2, life: 18, dashLife: 14, opacity: 0.34, dashOpacity: 0.55, dodgeDash: false, dodgeGhosts: true },
+  heartroot: { tint: [0xf1ba4a, 0xffd9c4], dash: [2.4, 1.4, 0.35], spacing: 4, dashSpacing: 2, life: 18, dashLife: 14, opacity: 0.34, dashOpacity: 0.55, dodgeDash: false, dodgeGhosts: false },
+  umbral: { tint: [0x24104a, 0x7a1238], dash: [0.02, 0.004, 0.045], spacing: 3, dashSpacing: 2, life: 24, dashLife: 26, opacity: 0.42, dashOpacity: 0.38, dodgeDash: true, dodgeGhosts: true },
+  ember: { tint: [0xff7a1a, 0xffd34d], dash: [1.15, 0.38, 0.06], spacing: 4, dashSpacing: 2, life: 18, dashLife: 16, opacity: 0.26, dashOpacity: 0.32, dodgeDash: false, dodgeGhosts: true },
 };
 
 /** Dash skills of Vesper and Sakda (they move the body through space), plus Aren's Judgement dash: each leaves ghosts even when the engine teleports the body. */
@@ -135,7 +137,8 @@ export class PoseAfterimages {
     const poseDisplaced = bladeSwing && (this.lastCapture === -Infinity || this.tipPosition.distanceToSquared(this.lastTip) >= 0.04);
     const displaced = this.lastCapture === -Infinity || this.position.distanceToSquared(this.lastPosition) >= (skill ? 0.01 : 0.04) || poseDisplaced;
     const moving = Math.hypot(actor.velocity.x, jump ? actor.velocity.y : 0, actor.velocity.z) > 0.5 || (skill && displaced) || poseDisplaced;
-    const eligible = jump || skill || dodge || action === 'aren-run' || bladeSwing;
+    // Yara's Petal Step is a blink (her body is hidden for the whole travel): petals mark it, not a silhouette trail of the hidden body.
+    const eligible = jump || skill || (dodge && look.dodgeGhosts) || action === 'aren-run' || bladeSwing;
     if (!eligible || !moving || !displaced || clock.worldTick - this.lastCapture < (dash ? look.dashSpacing : look.spacing)) return;
     const index = this.cursor, ghost = this.ghosts[index]!;
     this.cursor = (index + 1) % this.ghosts.length;

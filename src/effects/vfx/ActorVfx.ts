@@ -25,6 +25,14 @@ const DIVE_ACTION = /dive-roll|perfect-dodge|quick-step|shoulder-roll|back-hands
 function heroElement(hero: HeroId): VfxElement { return hero === 'yara' ? 'heartroot' : hero === 'vesper' ? 'umbral' : hero === 'sakda' ? 'ember' : 'arcane'; }
 /** Root Tether (Aren) and Binding Vines (Yara): the live lash is drawn while the action runs and a target is locked. */
 const TETHER_ACTION = /^(aren-root-tether|yara-binding-vines)$/;
+/** Yara's staff strikes: the share of the clip that is anticipation (authored release tick over total ticks), when the charge glow ends and the release flash fires. */
+const STAFF_RELEASE: Readonly<Record<string, number>> = {
+  'yara-thornshot-1': 9 / 26, 'yara-thornshot-2': 10 / 28, 'yara-thornshot-3': 10 / 34, 'yara-root-spike': 20 / 63, 'yara-root-eruption': 36 / 76,
+  'yara-seed-storm': 12 / 60, 'yara-binding-vines': 18 / 54,
+};
+/** The slams stamp the ground under the staff head on release (ring radius, m); the others get a small ring under the caster. */
+const STAFF_SLAM: Readonly<Record<string, number>> = { 'yara-root-spike': 1.2, 'yara-root-eruption': 1.7 };
+const STAFF_RING: Readonly<Record<string, number>> = { 'yara-thornshot-1': 0.9, 'yara-thornshot-2': 0.9, 'yara-thornshot-3': 1.1, 'yara-seed-storm': 1.2, 'yara-binding-vines': 1.0 };
 /** Boosted-jump air steps: the second step lands when the rising clip reaches this progress, at least `AIR_STEP_GAP` seconds after the first. */
 const AIR_STEP_PROGRESS = 0.38;
 const AIR_STEP_GAP = 0.1;
@@ -68,6 +76,11 @@ export class ActorVfx {
   private lastTime = 0;
   private streakAcc = 0;
   private tetherAcc = 0;
+  /** Yara's staff: charge-glow carries, the flight shedding carry, and whether the thrown staff was in flight last frame. */
+  private staffAcc = 0;
+  private glowAcc = 0;
+  private flightAcc = 0;
+  private staffFlying = false;
 
   constructor(
     private readonly vfx: VfxSystem,
@@ -100,6 +113,7 @@ export class ActorVfx {
     this.releaseTether();
     this.player.actionId = ''; this.player.phase = ''; this.player.diving = false; this.player.landed = true;
     this.player.airSteps = 0; this.player.fallSince = -1;
+    this.staffAcc = 0; this.glowAcc = 0; this.flightAcc = 0; this.staffFlying = false;
     this.hand.clear();
     this.auraAcc.clear();
   }
@@ -120,6 +134,7 @@ export class ActorVfx {
     this.updateJump(actor, state.actionId !== 'aren-jump');
     if (TETHER_ACTION.test(action) && actor.targetId) this.updateTether(actor, actor.targetId, dt);
     else this.releaseTether();
+    if (this.hero === 'yara') this.updateStaff(actor, dt);
     state.actionId = action; state.phase = phase; state.diving = diving;
   }
 
@@ -356,6 +371,87 @@ export class ActorVfx {
     if (this.tether) { this.vfx.beams.release(this.tether); this.tether = undefined; }
     if (this.wind) { this.vfx.beams.release(this.wind); this.wind = undefined; }
     this.tetherAcc = 0;
+  }
+
+  // ---- Yara's staff ----
+
+  /**
+   * Heartroot staff presentation from snapshot state and the rendered staff sockets: a charge glow at the staff head through each strike's anticipation, a
+   * release flash (and, for the slams, a ground impact under the staff head) when the anticipation ends, and the Sap Lance staff in flight (petals and sap
+   * shed along its path, a petal flash at the fist when it returns). Each cue-driven piece (projectiles, lanes, contacts) stays in `HeartrootCues`.
+   */
+  private updateStaff(actor: ActorSnapshot, dt: number): void {
+    const state = this.player, action = actor.actionId, release = STAFF_RELEASE[action];
+    if (release !== undefined) {
+      if (actor.phase === 'anticipation') this.staffCharge(Math.min(1, actor.normalizedTime / release), dt);
+      else if (state.actionId === action && state.phase === 'anticipation') this.staffRelease(action);
+    } else this.staffAcc = 0;
+    this.staffFlight(dt);
+  }
+
+  /** Converging motes and a growing glow at the staff head; `t` is the share of the anticipation played. */
+  private staffCharge(t: number, dt: number): void {
+    const tip = this.resolveSocket?.('aren', 'weapon-tip'), vfx = this.vfx;
+    if (!tip) return;
+    tip.updateWorldMatrix(true, false);
+    tip.getWorldPosition(this.a);
+    this.staffAcc += dt * (26 + 30 * t) * (vfx.reducedEffects ? 0.35 : 1);
+    const motes = Math.floor(this.staffAcc);
+    this.staffAcc -= motes;
+    if (motes > 0) vfx.gather(this.a.x, this.a.y, this.a.z, motes, 0.7 - 0.35 * t, 'heartroot', ACTOR_VFX_OWNER);
+    this.glowAcc += dt * 14 * (vfx.reducedEffects ? 0.5 : 1);
+    for (; this.glowAcc >= 1; this.glowAcc--) vfx.glow(this.a.x, this.a.y, this.a.z, 0.25 + 0.6 * t, 0.22, 'heartroot', 0.35 + 0.35 * t, ACTOR_VFX_OWNER);
+  }
+
+  /** The strike lets go: a flash at the staff head, a small heartroot ring under the caster, and for the slams a ground impact under the staff head. */
+  private staffRelease(action: string): void {
+    const tip = this.resolveSocket?.('aren', 'weapon-tip'), vfx = this.vfx, owner = ACTOR_VFX_OWNER, p = this.position;
+    this.staffAcc = 0;
+    if (tip) {
+      tip.updateWorldMatrix(true, false);
+      tip.getWorldPosition(this.a);
+      // Compact: the cast's own launch flare (HeartrootCues.launch) fires on the same tick, and the two together must not white out her upper body.
+      vfx.flash(this.a.x, this.a.y, this.a.z, 0.55, 'heartroot', owner, 0.12);
+      vfx.lights.pulse(this.a.x, this.a.y, this.a.z, PALETTE.heartroot.hot, 2, 4.5, 0.2, vfx.time, owner);
+    }
+    const slam = STAFF_SLAM[action];
+    if (slam !== undefined) {
+      const x = tip ? this.a.x : p.x, z = tip ? this.a.z : p.z, y = p.y;
+      this.slam.set('disk', x, y + 0.05, z, 0, slam, slam);
+      vfx.ground.spawn('shock', this.slam, 'heartroot', owner, vfx.time, 0.45, 0.9);
+      vfx.dustRing(x, y, z, slam * 0.7, 14, owner);
+      vfx.chunks(x, y + 0.05, z, 5, 3.4, 0.2, owner, false, this.slam);
+      vfx.sparks(x, y + 0.15, z, 10, 4, 'heartroot', owner, 0.6);
+    } else {
+      const ring = STAFF_RING[action] ?? 1;
+      this.slam.set('disk', p.x, p.y + 0.05, p.z, 0, ring, ring);
+      vfx.ground.spawn('shock', this.slam, 'heartroot', owner, vfx.time, 0.4, 0.8);
+    }
+  }
+
+  /** The thrown staff: petals and sap shed along its path while it flies, and a petal flash at the fist when it arrives. */
+  private staffFlight(dt: number): void {
+    const flight = this.resolveSocket?.('aren', 'weapon-flight'), vfx = this.vfx, owner = ACTOR_VFX_OWNER;
+    const flying = flight?.visible === true;
+    if (flight && flying) {
+      flight.updateWorldMatrix(true, false);
+      flight.getWorldPosition(this.a);
+      this.flightAcc += dt * 48 * (vfx.reducedEffects ? 0.35 : 1);
+      for (; this.flightAcc >= 1; this.flightAcc--) {
+        emitPetalSwirl(vfx, owner, this.a.x, this.a.y, this.a.z, 1, 0.5, 0.6, Math.floor(this.flightAcc) % 2 ? 1 : -1);
+        vfx.sparks(this.a.x, this.a.y, this.a.z, 1, 1.2, 'heartroot', owner, 0.4);
+      }
+    } else if (this.staffFlying) {
+      const fist = this.resolveSocket?.('aren', 'weapon');
+      if (fist) {
+        fist.updateWorldMatrix(true, false);
+        fist.getWorldPosition(this.a);
+        emitPetalSwirl(vfx, owner, this.a.x, this.a.y, this.a.z, 10, 0.3, 1.4, 1);
+        vfx.flash(this.a.x, this.a.y, this.a.z, 0.9, 'heartroot', owner, 0.14);
+      }
+      this.flightAcc = 0;
+    }
+    this.staffFlying = flying;
   }
 
   // ---- monster auras ----

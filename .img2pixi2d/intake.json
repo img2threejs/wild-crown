@@ -1,0 +1,22 @@
+{
+  "status": "proceed",
+  "reference": {
+    "src": "reference/working.png",
+    "sha256": "3c3382ec63d0a133e7b64fa8fdfa5e25b69f1af0ebb573d3e03f89492091a085",
+    "width": 1536,
+    "height": 960,
+    "originalSrc": "../public/ui/world-map-game.webp",
+    "originalHash": "ae6842605dc1c8c72cb6ce0a3befd1b98d98da9cf890106a371f71cab598c72e"
+  },
+  "metadata": {
+    "format": "WEBP",
+    "orientation": 1,
+    "colorProfile": "assumed-sRGB-no-profile",
+    "alpha": false,
+    "originalDimensions": [
+      1536,
+      960
+    ]
+  },
+  "issues": []
+}

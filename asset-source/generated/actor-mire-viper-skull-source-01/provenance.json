@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "assetId": "actor-mire-viper",
+  "generator": "scripts/assets/restore-viper-skull.mjs",
+  "source": {
+    "taskId": "8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6",
+    "sha256": "39ce6d0041cf424b91a94080de03a03846d2b8ce35bbd3b6652855abfd2c96c8",
+    "bytes": 75546864
+  },
+  "discardedSurfaceSource": {
+    "taskId": "80178975-e50c-4619-8743-99a6efa0bac8",
+    "sha256": "41536db824ee74903e24fb027d7c3ed94392d137f708129e0bdef9ca94858ee9"
+  },
+  "alignmentTranslation": [
+    -0.0012408867478370667,
+    0.27513694763183594,
+    -0.0008287727832794189
+  ],
+  "method": "Original exterior head triangles above the missing low-poly crown; no jaw inflation, sculpted cap or body replacement",
+  "selectedTriangles": 151732,
+  "output": {
+    "path": "asset-source/generated/actor-mire-viper-skull-source-01/skull.glb",
+    "sha256": "28f6367e858e9432d13db0156a176aa62012edba5ffecf87a240c9894bd4b6bf",
+    "bytes": 1159296,
+    "triangles": 7162,
+    "vertices": 7110
+  },
+  "relativeSimplificationError": 0.001950176665559411,
+  "textureMaxSize": 1024,
+  "evidenceStatus": "blocked",
+  "productionAcceptance": "NOT_ESTABLISHED"
+}

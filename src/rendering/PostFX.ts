@@ -3,6 +3,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { TexturePass } from 'three/addons/postprocessing/TexturePass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { COLOR_GRADE_FRAGMENT, COLOR_GRADE_VERTEX, neutralGradeSettings, type ColorGradeSettings } from './ColorGradeShader.js';
 import { HEIGHT_FOG_FRAGMENT, HEIGHT_FOG_VERTEX, IDENTITY_HEIGHT_FOG, type HeightFogSettings } from './HeightFogShader.js';
@@ -15,7 +16,7 @@ export interface PostFXOptions {
   readonly bloomRadius?: number;
   /** Linear HDR luminance above which pixels bloom; 1.0 means only emissive/additive overdrive glows. */
   readonly bloomThreshold?: number;
-  /** HDR target MSAA sample count (default 2; ×4 costs ~10 fps on the dense Greenwake ground at 1440×900). */
+  /** Scene geometry MSAA sample count (default 2); screen-space effects stay single-sampled. */
   readonly msaaSamples?: number;
   readonly exposure?: number;
 }
@@ -99,14 +100,16 @@ void main() {
 }`;
 
 /**
- * HDR pipeline: RenderPass into a half-float MSAA target → UnrealBloomPass (internally starts
- * at half resolution) → impact impulse pass (disabled, and therefore skipped, unless an impulse is live)
- * → OutputPass (ACES Filmic tone mapping + sRGB). Every consumer of the scene buffer sanitizes each texel,
- * so a single non-finite or runaway pixel can neither spread through the bloom mips nor black out the frame.
+ * HDR pipeline: scene geometry into a half-float MSAA target → resolved texture into single-sample
+ * postprocessing buffers → bloom → height fog → light shafts → impact impulse → colour grade
+ * → OutputPass (ACES Filmic tone mapping + sRGB). Geometry retains MSAA without repeatedly resolving
+ * multisampled fullscreen effects. Every HDR consumer sanitizes its texel reads.
  */
 export class PostFX {
   readonly composer: EffectComposer;
   private readonly renderPass: RenderPass;
+  private readonly sceneTarget: WebGLRenderTarget;
+  private readonly scenePass: TexturePass;
   private readonly bloom: UnrealBloomPass;
   private readonly output: OutputPass;
   private readonly impulsePass: ShaderPass;
@@ -133,16 +136,19 @@ export class PostFX {
     this.pixelRatioCap = options.pixelRatioCap ?? 1;
     this.bloomStrength = options.bloomStrength ?? 0.7;
     const samples = renderer.capabilities.isWebGL2 ? Math.min(options.msaaSamples ?? 2, renderer.capabilities.maxSamples) : 0;
-    const target = new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples });
+    this.sceneTarget = new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples });
+    this.sceneTarget.texture.name = 'postfx-scene-hdr';
+    const target = new WebGLRenderTarget(1, 1, { type: HalfFloatType, depthBuffer: false });
     target.texture.name = 'postfx-hdr';
     this.composer = new EffectComposer(renderer, target);
     this.renderPass = new RenderPass(scene, camera);
+    this.scenePass = new TexturePass(this.sceneTarget.texture);
     this.bloom = new UnrealBloomPass(new Vector2(1, 1), this.bloomStrength, options.bloomRadius ?? 0.45, options.bloomThreshold ?? 1);
     sanitizeRead(this.bloom.materialHighPassFilter, 'texture2D( tDiffuse, vUv )');
     this.output = new OutputPass();
     sanitizeRead(this.output.material, 'texture2D( tDiffuse, vUv )');
     this.output.needsSwap = false;
-    this.composer.addPass(this.renderPass);
+    this.composer.addPass(this.scenePass);
     const impulseMaterial = new ShaderMaterial({ name: 'postfx-impulse', vertexShader: IMPULSE_VERTEX, fragmentShader: IMPULSE_FRAGMENT, uniforms: { tDiffuse: { value: null }, uStrength: { value: 0 } } });
     this.impulsePass = new ShaderPass(impulseMaterial);
     this.impulsePass.enabled = false;
@@ -221,9 +227,10 @@ export class PostFX {
   setSize(width: number, height: number, devicePixelRatio: number): void {
     if (this.disposed) return;
     const ratio = Math.min(devicePixelRatio || 1, this.pixelRatioCap);
-    this.renderer.setPixelRatio(ratio);
+    this.renderer.setDrawingBufferSize(Math.max(1, width), Math.max(1, height), ratio);
     this.composer.setPixelRatio(ratio);
     this.composer.setSize(Math.max(1, width), Math.max(1, height));
+    this.sceneTarget.setSize(this.composer.readBuffer.width, this.composer.readBuffer.height);
   }
 
   /** Reduced effects keeps tone mapping identical but softens bloom so flashes never strobe. */
@@ -274,7 +281,13 @@ export class PostFX {
       this.impulsePass.uniforms.uStrength!.value = this.impulse.level;
     }
     this.impulsePass.enabled = this.impulse.active;
-    this.composer.render(deltaSeconds);
+    const previous = this.renderer.getRenderTarget();
+    try {
+      this.renderPass.render(this.renderer, this.sceneTarget, this.sceneTarget, deltaSeconds, false);
+      this.composer.render(deltaSeconds);
+    } finally {
+      this.renderer.setRenderTarget(previous);
+    }
   }
 
   /**
@@ -333,14 +346,14 @@ export class PostFX {
   compile(scene: Scene, camera: Camera): void {
     if (this.disposed) return;
     const previous = this.renderer.getRenderTarget();
-    this.renderer.setRenderTarget(this.composer.readBuffer);
+    this.renderer.setRenderTarget(this.sceneTarget);
     try { this.renderer.compile(scene, camera); this.renderer.compile(this.warmScene, camera); } finally { this.renderer.setRenderTarget(previous); }
   }
 
   /** One-pixel HDR draws use the real target format/MSAA. Drain them before exposing gameplay, never inside the frame loop. */
   warmGpu(scene: Scene, camera: Camera): void {
     if (this.disposed) return;
-    const previous = this.renderer.getRenderTarget(), target = this.composer.readBuffer, scissorTest = target.scissorTest;
+    const previous = this.renderer.getRenderTarget(), target = this.sceneTarget, scissorTest = target.scissorTest;
     this.warmViewport.copy(target.viewport);
     this.warmScissor.copy(target.scissor);
     try {
@@ -364,6 +377,8 @@ export class PostFX {
     if (this.disposed) return;
     this.disposed = true;
     this.renderPass.dispose();
+    this.scenePass.dispose();
+    this.sceneTarget.dispose();
     this.bloom.dispose();
     this.impulsePass.dispose();
     this.lightShaftsPass.dispose();

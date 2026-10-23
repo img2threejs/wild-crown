@@ -56,10 +56,18 @@ function rebuildCombatHash(id) {
 
 describe('native enemy attack artifact reproducibility', () => {
   for (const id of NATIVE_ATTACK_SOURCE_IDS) {
-    it(`${id}: rebuilds the manifest-selected attack runtime from its immutable source`, { timeout: 120_000 }, () => {
+    it(`${id}: rebuilds the immutable native attack input and verifies the selected runtime hash`, { timeout: 120_000 }, async () => {
       const manifest = PLAYTEST_ENTRIES.find(entry => entry.id === id);
       assert.ok(manifest, `${id}: missing runtime catalog entry`);
-      assert.equal(rebuildCombatHash(id), manifest.outputHash, `${id}: native attack runtime is stale`);
+      const runtime = await readFile(`${root}/${manifest.runtimeUrl.replace(/^\//, '')}`);
+      assert.equal(sha256(runtime), manifest.outputHash, `${id}: selected runtime hash is stale`);
+      let attackHash = manifest.outputHash;
+      if (manifest.runtimeUrl.endsWith('-companion.glb')) {
+        const report = JSON.parse(await readFile(`${root}/${manifest.provenance}`, 'utf8'));
+        const source = report.jawRepair?.source ?? report.source.path;
+        attackHash = sha256(await readFile(`${root}/${source}`));
+      }
+      assert.equal(rebuildCombatHash(id), attackHash, `${id}: native attack input is stale`);
     });
   }
 });

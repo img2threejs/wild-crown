@@ -1,0 +1,14 @@
+{
+  "task_id": "f8a314ba-f48d-40e5-a10d-b5aacc6a75dc",
+  "type": "text_to_image",
+  "status": "success",
+  "credits_consumed": 15,
+  "output_dir": "asset-source/generated/actor-camp-hunter-melee-concept-01/tripo-out/actor-camp-hunter-melee-concept-f8a314ba",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ],
+  "preview": "asset-source/generated/actor-camp-hunter-melee-concept-01/tripo-out/actor-camp-hunter-melee-concept-f8a314ba/preview.png",
+  "started": "2026-10-14T08:44:39.962Z",
+  "finished": "2026-10-14T08:46:01.648Z"
+}

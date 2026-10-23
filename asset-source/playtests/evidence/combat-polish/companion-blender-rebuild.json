@@ -1,0 +1,653 @@
+{
+  "scope": "User-approved Blender-script companion animation rebuild; not an asset-release approval or full campaign/performance certification.",
+  "authorship": "Blender Python native joint keyframes, not AI-generated animation.",
+  "blenderVersion": "4.5.14 LTS",
+  "authoredClips": 26,
+  "skillCoverage": 20,
+  "nativeReports": [
+    {
+      "report": "asset-source/generated/actor-asha-runtime-01/companion-clips-report.json",
+      "assetId": "actor-asha",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+        "sha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-companion.glb",
+        "sha256": "6d6abe449158754774f8989b02a509687c32fe41bf02b5da182a13a0cdce8718"
+      },
+      "clips": [
+        {
+          "name": "asha-guard",
+          "seconds": 1.4,
+          "frames": 44,
+          "markers": {
+            "release": 0.25,
+            "contact": 0.5
+          },
+          "channels": 44
+        },
+        {
+          "name": "asha-pin",
+          "seconds": 1.2,
+          "frames": 39,
+          "markers": {
+            "release": 0.36,
+            "contact": 0.55
+          },
+          "channels": 44
+        },
+        {
+          "name": "asha-search",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "release": 0.2,
+            "contact": 0.9
+          },
+          "channels": 44
+        },
+        {
+          "name": "asha-distract",
+          "seconds": 1.1,
+          "frames": 36,
+          "markers": {
+            "release": 0.32,
+            "contact": 0.5
+          },
+          "channels": 44
+        }
+      ]
+    },
+    {
+      "report": "asset-source/generated/actor-koro-runtime-01/companion-clips-report.json",
+      "assetId": "actor-koro",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+        "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb",
+        "sha256": "0c33cded1a3bf7570736d543d97b62be8a25d02e73e2b6a6fcddca07911feb26"
+      },
+      "clips": [
+        {
+          "name": "koro-throw",
+          "seconds": 1.2,
+          "frames": 41,
+          "markers": {
+            "windup": 0.3,
+            "release": 0.44,
+            "impact": 0.68,
+            "recover": 0.82
+          },
+          "channels": 42
+        },
+        {
+          "name": "koro-push",
+          "seconds": 1.5,
+          "frames": 49,
+          "markers": {
+            "plant": 0.24,
+            "push": 0.42,
+            "settle": 0.78
+          },
+          "channels": 42
+        },
+        {
+          "name": "koro-distract",
+          "seconds": 1.1,
+          "frames": 37,
+          "markers": {
+            "handsUp": 0.32,
+            "attention": 0.5,
+            "settle": 0.82
+          },
+          "channels": 42
+        },
+        {
+          "name": "koro-search",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "crouch": 0.2,
+            "inspect": 0.6,
+            "reveal": 0.9
+          },
+          "channels": 42
+        }
+      ]
+    },
+    {
+      "report": "asset-source/generated/actor-vara-harpy-runtime-01/companion-clips-report.json",
+      "assetId": "actor-vara",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+        "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb",
+        "sha256": "036b3c562277a7fdebb4d411e4b8f0a214b85e671515eeb978a79a633a17576e"
+      },
+      "clips": [
+        {
+          "name": "vara:idle",
+          "seconds": 3,
+          "frames": 91,
+          "markers": {},
+          "channels": 56
+        },
+        {
+          "name": "vara:takeoff",
+          "seconds": 0.6,
+          "frames": 20,
+          "markers": {
+            "liftoff": 0.48
+          },
+          "channels": 56
+        },
+        {
+          "name": "vara:fly",
+          "seconds": 0.7,
+          "frames": 22,
+          "markers": {},
+          "channels": 56
+        },
+        {
+          "name": "vara:hover",
+          "seconds": 0.9,
+          "frames": 28,
+          "markers": {},
+          "channels": 56
+        },
+        {
+          "name": "vara:land",
+          "seconds": 0.7,
+          "frames": 23,
+          "markers": {
+            "touch": 0.5
+          },
+          "channels": 56
+        },
+        {
+          "name": "vara:dive",
+          "seconds": 0.4,
+          "frames": 13,
+          "markers": {},
+          "channels": 56
+        },
+        {
+          "name": "vara:strike",
+          "seconds": 0.5667,
+          "frames": 20,
+          "markers": {
+            "contact": 0.44,
+            "flare": 0.62
+          },
+          "channels": 56
+        },
+        {
+          "name": "vara-sky-mark",
+          "seconds": 0.8,
+          "frames": 26,
+          "markers": {
+            "screech": 0.35,
+            "snap": 0.5
+          },
+          "channels": 56
+        },
+        {
+          "name": "vara-sky-survey",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "scanStart": 0.2,
+            "scanEnd": 0.9
+          },
+          "channels": 56
+        }
+      ]
+    },
+    {
+      "report": "asset-source/generated/actor-sable-runtime-01/companion-clips-report.json",
+      "assetId": "actor-sable",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-companion-rig.glb",
+        "sha256": "000d9729b6fba6718ffc87e45d704d7787f789f60b83c3c26486a49c9afede20"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-sable-runtime-01/actor-sable-companion.glb",
+        "sha256": "cae7c51ecd6263f8cff216d8da6563bc983b40a91fc6f2aae70bf0da4d04cbe8"
+      },
+      "clips": [
+        {
+          "name": "sable-flank",
+          "seconds": 1.2,
+          "frames": 39,
+          "markers": {
+            "release": 0.32,
+            "contact": 0.58
+          },
+          "channels": 35
+        },
+        {
+          "name": "sable-search",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "release": 0.2,
+            "contact": 0.9
+          },
+          "channels": 35
+        },
+        {
+          "name": "sable-distract",
+          "seconds": 1.1,
+          "frames": 36,
+          "markers": {
+            "release": 0.32,
+            "contact": 0.5
+          },
+          "channels": 35
+        }
+      ]
+    },
+    {
+      "report": "asset-source/generated/actor-nyra-runtime-01/companion-clips-report.json",
+      "assetId": "actor-nyra",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
+        "sha256": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-nyra-runtime-01/actor-nyra-companion.glb",
+        "sha256": "b8bd183a145ef59d52cf7958ec1412153ee4b053834901e54b9c42879b1b50c1"
+      },
+      "clips": [
+        {
+          "name": "nyra-ambush",
+          "seconds": 1,
+          "frames": 33,
+          "markers": {
+            "release": 0.26,
+            "contact": 0.52
+          },
+          "channels": 40
+        },
+        {
+          "name": "nyra-search",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "release": 0.2,
+            "contact": 0.9
+          },
+          "channels": 40
+        },
+        {
+          "name": "nyra-distract",
+          "seconds": 1.1,
+          "frames": 36,
+          "markers": {
+            "release": 0.32,
+            "contact": 0.5
+          },
+          "channels": 40
+        }
+      ]
+    },
+    {
+      "report": "asset-source/generated/actor-solkar-runtime-01/companion-clips-report.json",
+      "assetId": "actor-solkar",
+      "authoring": "Blender Python keyframes (user-approved)",
+      "blenderVersion": "4.5.14 LTS",
+      "source": {
+        "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion-rig.glb",
+        "sha256": "0dda0a2aed1b58c1212c96229aaeaa1fc5a5709fb5557b3364ce81788d0e37c2"
+      },
+      "output": {
+        "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb",
+        "sha256": "2407129dc5abbfb2e2aa80c9d3436ed7bc7a933462eb04baa1b584ae5597df21"
+      },
+      "clips": [
+        {
+          "name": "solkar-rally",
+          "seconds": 1.6,
+          "frames": 51,
+          "markers": {
+            "release": 0.28,
+            "contact": 0.48
+          },
+          "channels": 40
+        },
+        {
+          "name": "solkar-search",
+          "seconds": 1,
+          "frames": 31,
+          "markers": {
+            "release": 0.2,
+            "contact": 0.9
+          },
+          "channels": 39
+        },
+        {
+          "name": "solkar-distract",
+          "seconds": 1.1,
+          "frames": 36,
+          "markers": {
+            "release": 0.32,
+            "contact": 0.5
+          },
+          "channels": 40
+        }
+      ]
+    }
+  ],
+  "preservation": "Original surfaces, materials and approved hind-leg repairs retained. Sable/Solkar lower-jaw joints/weights repaired without changing neutral surfaces. Existing token costs, cooldowns and benefit magnitudes unchanged; generated asset governance statuses remain unchanged.",
+  "preview": {
+    "file": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/00-tro-thu-dung-lai-blender.mp4",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 960,
+          "height": 720,
+          "r_frame_rate": "30/1",
+          "nb_frames": "1132"
+        }
+      ],
+      "format": {
+        "duration": "37.733333"
+      }
+    },
+    "sha256": "9dbb8c2c4c5a65650491130d72c8b56211870ee1095060aed10de01eebd42a58",
+    "skills": 20,
+    "frames": 1132,
+    "manuallyReviewedContactSheets": 39,
+    "sheetDirectory": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/contact-sheets-preview",
+    "metadata": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/capture-evidence.json"
+  },
+  "combat": {
+    "file": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/07-combat-thuc.mp4",
+    "frames": 918,
+    "sha256": "7b1ae39f280ad9211aa9c40be8cd3dd77a503da04f8dbaa37b891d469295f888",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1280,
+          "height": 832,
+          "r_frame_rate": "30/1",
+          "nb_frames": "918"
+        }
+      ],
+      "format": {
+        "duration": "30.600000"
+      }
+    },
+    "skills": 20,
+    "manuallyReviewedFrames": 918,
+    "manuallyReviewedContactSheets": 41,
+    "sheetDirectory": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/contact-sheets-combat",
+    "metadata": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review/combat-capture-evidence.json",
+    "surface": "Real mounted GameApplication, CombatEngine and GameRenderer; controlled fixtures, WebGL canvas only. Player camera for guard/untargeted Asha search/Storm Talon; labeled inspection camera for remaining gestures. No played-through campaign or real-time performance claim.",
+    "clock": "One real CombatEngine tick per controlled app frame; captured every two ticks; not real-time performance or campaign-playthrough proof",
+    "retainedCaptures": [
+      {
+        "id": "asha_guard",
+        "source": "asha_guard_ab.json",
+        "sha256": "0da0d9123fbc8fce24dc9742ca9bd00459c94003cda05fece1ad083d5bd954d7",
+        "video": "combat-skills/asha_guard.mp4",
+        "first": "f002.jpg",
+        "last": "f098.jpg"
+      },
+      {
+        "id": "asha_pin",
+        "source": "asha_pin_fit.json",
+        "sha256": "50835277cfb5b3827475a4673f7b84a549c25dd51a1cdbcc21489a619efd6a45",
+        "video": "combat-skills/asha_pin.mp4",
+        "first": "f000.jpg",
+        "last": "f042.jpg"
+      },
+      {
+        "id": "asha_search",
+        "source": "asha_search_untargeted.json",
+        "sha256": "9718a8e8d5b6515a8dd51def1196119f00416cd631c9213f57d4ad41d0430634",
+        "video": "combat-skills/asha_search.mp4",
+        "first": "f000.jpg",
+        "last": "f036.jpg"
+      },
+      {
+        "id": "asha_distract",
+        "source": "asha_distract_fit.json",
+        "sha256": "4b4f5868a3fe0065460534576f7d99ad48adcc48cd3fce157bed0305024c17c7",
+        "video": "combat-skills/asha_distract.mp4",
+        "first": "f000.jpg",
+        "last": "f039.jpg"
+      },
+      {
+        "id": "koro_seed",
+        "source": "koro_special_seed_fit.json",
+        "sha256": "36f7aa443d163eec8d12a955d7b3f47a32e23fa3b60fbd2e568adac2df730768",
+        "video": "combat-skills/koro_seed.mp4",
+        "first": "f000.jpg",
+        "last": "f042.jpg"
+      },
+      {
+        "id": "koro_move",
+        "source": "koro_move_object_stable.json",
+        "sha256": "b9ea0f271599bb26facd10845c0b59101e4eea4aea638460f20068342bbdbe5d",
+        "video": "combat-skills/koro_move.mp4",
+        "first": "f000.jpg",
+        "last": "f069.jpg"
+      },
+      {
+        "id": "koro_distract",
+        "source": "koro_distract_fit.json",
+        "sha256": "468ead55879d9879609a6dfcc6e75d037b86829dd71137547e16de17a03d0add",
+        "video": "combat-skills/koro_distract.mp4",
+        "first": "f000.jpg",
+        "last": "f039.jpg"
+      },
+      {
+        "id": "koro_search",
+        "source": "koro_search_final.json",
+        "sha256": "226db1878d9eb5ca659aefe7bd592cf68b8ca2f49b9209e9587b4e41feab74d4",
+        "video": "combat-skills/koro_search.mp4",
+        "first": "f047.jpg",
+        "last": "f088.jpg"
+      },
+      {
+        "id": "vara_storm",
+        "source": "vara_storm_talon.json",
+        "sha256": "7c5be3b285af2760035560493af4871b6ab3874f0a8362b5802a67062a681e25",
+        "video": "combat-skills/vara_storm.mp4",
+        "first": "f000.jpg",
+        "last": "f054.jpg"
+      },
+      {
+        "id": "vara_mark",
+        "source": "vara_mark_complete.json",
+        "sha256": "f23e5864304394969501d1480b03db89c361b5ecb259a86b1287e15e412c0860",
+        "video": "combat-skills/vara_mark.mp4",
+        "first": "f000.jpg",
+        "last": "f030.jpg"
+      },
+      {
+        "id": "vara_search",
+        "source": "vara_search_fit.json",
+        "sha256": "3f6efff4cd8ed3c933db87354c7d7b6cda0b9c88c149673d8871a114b22f0e06",
+        "video": "combat-skills/vara_search.mp4",
+        "first": "f000.jpg",
+        "last": "f086.jpg"
+      },
+      {
+        "id": "sable_flank",
+        "source": "sable_special_fit.json",
+        "sha256": "4f52adc680c768b3b541dd1d41e9bcaa8717f875f7e9ffe05613ae0cb495b067",
+        "video": "combat-skills/sable_flank.mp4",
+        "first": "f000.jpg",
+        "last": "f042.jpg"
+      },
+      {
+        "id": "sable_search",
+        "source": "sable_search_fit.json",
+        "sha256": "a5552b8e5410fd9fee63bc6b876abaf6d47915c3b4dfad4ecabf1d5a4f9c85cd",
+        "video": "combat-skills/sable_search.mp4",
+        "first": "f047.jpg",
+        "last": "f088.jpg"
+      },
+      {
+        "id": "sable_distract",
+        "source": "sable_distract_fit.json",
+        "sha256": "e52e7ae27240c0b99d35a8aa973f4a7e157071200226a304b58e0812fc7f1250",
+        "video": "combat-skills/sable_distract.mp4",
+        "first": "f000.jpg",
+        "last": "f039.jpg"
+      },
+      {
+        "id": "nyra_ambush",
+        "source": "nyra_special_fit.json",
+        "sha256": "c99ad174645210c71cf683ef2ba94cbd027b5706bc796a8add00f9dd1fbbf804",
+        "video": "combat-skills/nyra_ambush.mp4",
+        "first": "f000.jpg",
+        "last": "f036.jpg"
+      },
+      {
+        "id": "nyra_search",
+        "source": "nyra_search_fit.json",
+        "sha256": "21c60a3217060013deaa6863d18a5cfe9086d87ea5533db464a8b88572d4e11e",
+        "video": "combat-skills/nyra_search.mp4",
+        "first": "f047.jpg",
+        "last": "f088.jpg"
+      },
+      {
+        "id": "nyra_distract",
+        "source": "nyra_distract_fit.json",
+        "sha256": "99c091229ff03cfb1e106ab6b3edb90b445ab833e7b1d6c22f19d94cda61188c",
+        "video": "combat-skills/nyra_distract.mp4",
+        "first": "f000.jpg",
+        "last": "f039.jpg"
+      },
+      {
+        "id": "solkar_rally",
+        "source": "solkar_rally_visible.json",
+        "sha256": "1cc3518f48c0a75d023dcc3fc15a08b1b925e746b5f49b9da98de112b3fa319b",
+        "video": "combat-skills/solkar_rally.mp4",
+        "first": "f000.jpg",
+        "last": "f054.jpg"
+      },
+      {
+        "id": "solkar_search",
+        "source": "solkar_search_visible.json",
+        "sha256": "08052eeff91b74a3e24b52219bac4c29f4e21a64e413699956ad6a54a5d36f41",
+        "video": "combat-skills/solkar_search.mp4",
+        "first": "f047.jpg",
+        "last": "f088.jpg"
+      },
+      {
+        "id": "solkar_distract",
+        "source": "solkar_distract_fit.json",
+        "sha256": "79416a41d5c442a928a28db41872a644fc749c57f2d7d4ef9cb2672db2c93663",
+        "video": "combat-skills/solkar_distract.mp4",
+        "first": "f000.jpg",
+        "last": "f039.jpg"
+      }
+    ],
+    "retainedEdgeCaptures": [
+      "koro_seed_miss_fit.json",
+      "nyra_special_moving_fit.json",
+      "asha_cancel_prerelease_run1.json",
+      "asha_cancel_pause2.json",
+      "vara_search_v2.json",
+      "vara_search_untargeted_v2.json"
+    ],
+    "fixtures": "Actual mounted GameApplication/CombatEngine/GameRenderer. Controlled placements, suppressed hostile AI and keep-alive only where declared by the raw sample record. Guard A/B, seed heal and seed-miss checks have keep-alive disabled. Bamboo object uses the retained controlled authored-level campaign bootstrap; not an unlocked UI entry or played-through chapter. Fixed inspection camera includes the complete object flight; original unstable camera and clipped Solkar search footage rejected and replaced.",
+    "observedOutcomes": [
+      {
+        "source": "asha_guard_ab.json",
+        "outcome": "Authored charge: unguarded vitality100→80; guarded100→100."
+      },
+      {
+        "source": "koro_special_seed_fit.json",
+        "outcome": "Successful hit: owner vitality70→79.6 (+8% of maximum120), release from actual hand; one committed ballistic aim."
+      },
+      {
+        "source": "koro_seed_miss_fit.json",
+        "outcome": "Target moves3 m after release: owner vitality remains70, no healing, job and seed settle."
+      },
+      {
+        "source": "koro_move_object_stable.json",
+        "outcome": "Actual camp-loose-snare prop leaves authored origin and settles at authored destination; real koro-push clip completes."
+      },
+      {
+        "source": "nyra_special_moving_fit.json",
+        "outcome": "Moving target drift3.44 m; native approach preserves0.18 m combined-radius surface clearance; heavy attack remaining148→117.6 at contact."
+      },
+      {
+        "source": "solkar_rally_visible.json",
+        "outcome": "Native jaw/roar effect and owner power boon observed."
+      },
+      {
+        "source": "vara_storm_talon.json",
+        "outcome": "Marked target160→154, mark consumed, owner tailwind+240 ticks; actual talon contact."
+      },
+      {
+        "sources": [
+          "vara_search_v2.json",
+          "vara_search_untargeted_v2.json"
+        ],
+        "outcome": "Grounded targeted/untargeted searches take off and reach survey before landing."
+      },
+      {
+        "sources": [
+          "asha_cancel_prerelease_run1.json",
+          "asha_cancel_pause2.json"
+        ],
+        "outcome": "Real pre/post-release Recall clears finite pose/effects; pause freezes world/clip/effects and resume reaches contact."
+      }
+    ],
+    "limits": "No actual Koro/Sable/Nyra/Vara cancellation/pause claim beyond retained evidence; relevant behavioral unit coverage is separate."
+  },
+  "verification": {
+    "focusedGate": {
+      "passed": 349,
+      "failed": 0,
+      "assertions": 862,
+      "files": 22,
+      "seconds": 92.99,
+      "rawOutput": "artifact://20030"
+    },
+    "build": {
+      "command": "tsc -b && vite build",
+      "modules": 341,
+      "seconds": 29.38,
+      "warning": "Large chunk warning retained"
+    },
+    "reproducibility": "All six generated outputs and catalog bindings matched the Blender build --check gate.",
+    "designDetector": [],
+    "fullRepository": "Not claimed; earlier full run exceeded900 seconds."
+  },
+  "fixedDefects": [
+    "Preview mixer idle-to-skill blend did not advance after normalized sampling.",
+    "Vara survey approach could ignore its destination or remain grounded.",
+    "Live moving/already-close targets could overlap finite native approaches.",
+    "Stationary job wire masked the hand-released ballistic seed in mounted combat.",
+    "Repeated Earth impact clouds hid limb poses."
+  ],
+  "deliveryDirectory": "/Users/hoainho/Document/Personal/wild-crown/companion-rebuilt-review"
+}

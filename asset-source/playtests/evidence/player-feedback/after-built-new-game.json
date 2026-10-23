@@ -1,0 +1,491 @@
+[
+  {
+    "hero": "yara",
+    "selection": {
+      "heroes": [
+        "aren",
+        "yara",
+        "vesper",
+        "sakda"
+      ],
+      "freeCompanionPicker": false,
+      "begin": "Begin with Yara"
+    },
+    "fresh": {
+      "screen": "game",
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "66f84378-3b6f-4e72-b86f-9567255aa732",
+      "heroId": "yara",
+      "worldReady": true,
+      "loading": {
+        "active": false,
+        "label": "",
+        "progress": null
+      },
+      "error": null,
+      "tutorial": false,
+      "entryShot": false,
+      "trainingReturn": false,
+      "training": {
+        "active": false,
+        "available": false,
+        "reason": "Pause at a safe checkpoint or visit a sanctuary to enter Training Grounds.",
+        "maps": [
+          {
+            "id": "greenwake",
+            "name": "Greenwake",
+            "regionId": "greenwake",
+            "unlocked": false,
+            "reason": "Finish the Greenwake story to unlock Greenwake practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/greenwake.jpg"
+          },
+          {
+            "id": "canopy",
+            "name": "Whispering Canopy",
+            "regionId": "whispering-canopy",
+            "unlocked": false,
+            "reason": "Finish the Whispering Canopy story to unlock Whispering Canopy practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/whispering-canopy.jpg"
+          },
+          {
+            "id": "grove",
+            "name": "The Grove",
+            "regionId": "the-grove",
+            "unlocked": false,
+            "reason": "Finish the The Grove story to unlock The Grove practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/the-grove.jpg"
+          },
+          {
+            "id": "moonpine",
+            "name": "Moonpine Ridge",
+            "regionId": "moonpine-ridge",
+            "unlocked": false,
+            "reason": "Finish the Moonpine Ridge story to unlock Moonpine Ridge practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/moonpine-ridge.jpg"
+          },
+          {
+            "id": "mistveil",
+            "name": "Mistveil Basin",
+            "regionId": "mistveil-basin",
+            "unlocked": false,
+            "reason": "Finish the Mistveil Basin story to unlock Mistveil Basin practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/mistveil-basin.jpg"
+          }
+        ]
+      },
+      "party": {},
+      "companions": {
+        "vara": {
+          "id": "vara",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "asha": {
+          "id": "asha",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "sable": {
+          "id": "sable",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "nyra": {
+          "id": "nyra",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "solkar": {
+          "id": "solkar",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        }
+      },
+      "resources": {
+        "heroId": "yara",
+        "vitality": 85,
+        "maxVitality": 85,
+        "instinct": 0,
+        "mana": 100,
+        "maxMana": 100
+      },
+      "position": {
+        "x": -18,
+        "y": 0,
+        "z": -9
+      },
+      "outcome": null,
+      "stageCompleted": false,
+      "actions": [
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Hero"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Objective"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Skills"
+        }
+      ]
+    }
+  },
+  {
+    "hero": "vesper",
+    "selection": {
+      "heroes": [
+        "aren",
+        "yara",
+        "vesper",
+        "sakda"
+      ],
+      "freeCompanionPicker": false,
+      "begin": "Begin with Vesper"
+    },
+    "fresh": {
+      "screen": "game",
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "9a204303-9459-42fe-964a-c927c2590b3c",
+      "heroId": "vesper",
+      "worldReady": true,
+      "loading": {
+        "active": false,
+        "label": "",
+        "progress": null
+      },
+      "error": null,
+      "tutorial": false,
+      "entryShot": false,
+      "trainingReturn": false,
+      "training": {
+        "active": false,
+        "available": false,
+        "reason": "Pause at a safe checkpoint or visit a sanctuary to enter Training Grounds.",
+        "maps": [
+          {
+            "id": "greenwake",
+            "name": "Greenwake",
+            "regionId": "greenwake",
+            "unlocked": false,
+            "reason": "Finish the Greenwake story to unlock Greenwake practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/greenwake.jpg"
+          },
+          {
+            "id": "canopy",
+            "name": "Whispering Canopy",
+            "regionId": "whispering-canopy",
+            "unlocked": false,
+            "reason": "Finish the Whispering Canopy story to unlock Whispering Canopy practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/whispering-canopy.jpg"
+          },
+          {
+            "id": "grove",
+            "name": "The Grove",
+            "regionId": "the-grove",
+            "unlocked": false,
+            "reason": "Finish the The Grove story to unlock The Grove practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/the-grove.jpg"
+          },
+          {
+            "id": "moonpine",
+            "name": "Moonpine Ridge",
+            "regionId": "moonpine-ridge",
+            "unlocked": false,
+            "reason": "Finish the Moonpine Ridge story to unlock Moonpine Ridge practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/moonpine-ridge.jpg"
+          },
+          {
+            "id": "mistveil",
+            "name": "Mistveil Basin",
+            "regionId": "mistveil-basin",
+            "unlocked": false,
+            "reason": "Finish the Mistveil Basin story to unlock Mistveil Basin practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/mistveil-basin.jpg"
+          }
+        ]
+      },
+      "party": {},
+      "companions": {
+        "vara": {
+          "id": "vara",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "asha": {
+          "id": "asha",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "sable": {
+          "id": "sable",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "nyra": {
+          "id": "nyra",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "solkar": {
+          "id": "solkar",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        }
+      },
+      "resources": {
+        "heroId": "vesper",
+        "vitality": 80,
+        "maxVitality": 80,
+        "instinct": 0,
+        "mana": 100,
+        "maxMana": 100
+      },
+      "position": {
+        "x": -18,
+        "y": 0,
+        "z": -9
+      },
+      "outcome": null,
+      "stageCompleted": false,
+      "actions": [
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Hero"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Objective"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Skills"
+        }
+      ]
+    }
+  },
+  {
+    "hero": "sakda",
+    "selection": {
+      "heroes": [
+        "aren",
+        "yara",
+        "vesper",
+        "sakda"
+      ],
+      "freeCompanionPicker": false,
+      "begin": "Begin with Sakda"
+    },
+    "fresh": {
+      "screen": "game",
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "3188fbdb-b34c-4573-ba80-363f9ceb72f8",
+      "heroId": "sakda",
+      "worldReady": true,
+      "loading": {
+        "active": false,
+        "label": "",
+        "progress": null
+      },
+      "error": null,
+      "tutorial": false,
+      "entryShot": false,
+      "trainingReturn": false,
+      "training": {
+        "active": false,
+        "available": false,
+        "reason": "Pause at a safe checkpoint or visit a sanctuary to enter Training Grounds.",
+        "maps": [
+          {
+            "id": "greenwake",
+            "name": "Greenwake",
+            "regionId": "greenwake",
+            "unlocked": false,
+            "reason": "Finish the Greenwake story to unlock Greenwake practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/greenwake.jpg"
+          },
+          {
+            "id": "canopy",
+            "name": "Whispering Canopy",
+            "regionId": "whispering-canopy",
+            "unlocked": false,
+            "reason": "Finish the Whispering Canopy story to unlock Whispering Canopy practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/whispering-canopy.jpg"
+          },
+          {
+            "id": "grove",
+            "name": "The Grove",
+            "regionId": "the-grove",
+            "unlocked": false,
+            "reason": "Finish the The Grove story to unlock The Grove practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/the-grove.jpg"
+          },
+          {
+            "id": "moonpine",
+            "name": "Moonpine Ridge",
+            "regionId": "moonpine-ridge",
+            "unlocked": false,
+            "reason": "Finish the Moonpine Ridge story to unlock Moonpine Ridge practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/moonpine-ridge.jpg"
+          },
+          {
+            "id": "mistveil",
+            "name": "Mistveil Basin",
+            "regionId": "mistveil-basin",
+            "unlocked": false,
+            "reason": "Finish the Mistveil Basin story to unlock Mistveil Basin practice.",
+            "thumbnailUrl": "/asset-source/ui/maps/mistveil-basin.jpg"
+          }
+        ]
+      },
+      "party": {},
+      "companions": {
+        "vara": {
+          "id": "vara",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "koro": {
+          "id": "koro",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "asha": {
+          "id": "asha",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "sable": {
+          "id": "sable",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "nyra": {
+          "id": "nyra",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        },
+        "solkar": {
+          "id": "solkar",
+          "recruited": false,
+          "bondLevel": 0,
+          "dominionLevel": 0,
+          "unlockedAbilityIds": [],
+          "storyFlags": {}
+        }
+      },
+      "resources": {
+        "heroId": "sakda",
+        "vitality": 115,
+        "maxVitality": 115,
+        "instinct": 0,
+        "mana": 100,
+        "maxMana": 100
+      },
+      "position": {
+        "x": -18,
+        "y": 0,
+        "z": -9
+      },
+      "outcome": null,
+      "stageCompleted": false,
+      "actions": [
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Hero"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Objective"
+        },
+        {
+          "action": "hud-toggle",
+          "disabled": false,
+          "label": "Skills"
+        }
+      ]
+    }
+  }
+]

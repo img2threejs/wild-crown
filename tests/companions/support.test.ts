@@ -113,3 +113,115 @@ describe('bounded, distinct companion benefits', () => {
     expect(companionOwnerMultiplier(state, 'power')).toBe(1);
   });
 });
+
+describe('support contact follows the committed animated motion', () => {
+  for (const id of ['asha', 'sable', 'nyra'] as const) {
+    it(`${id} travels to contact before applying its unchanged benefit`, () => {
+      const state = engine(id), ally = state.actors[1]!;
+      ally.position.x = -2;
+      state.skillReadyAt.heavy = 1000;
+      cast(state, id); stepCompanions(state);
+      const skill = state.companionState.slots[id]!.skill!;
+      while (state.worldTick < skill.contactAt - 1) advance(state, 1);
+      expect(ally.position.x).toBeGreaterThan(-1.2);
+      expect(hostile(state).reactionState).toBeUndefined();
+      expect(hostile(state).supportSlow).toBeUndefined();
+      expect(state.skillReadyAt.heavy).toBe(1000);
+      advance(state, 1);
+      expect(ally.position.y).toBeCloseTo(0, 5);
+      if (id === 'asha') expect(hostile(state).reactionState?.kind).toBe('stun');
+      if (id === 'sable') expect(hostile(state).supportSlow?.factor).toBe(.65);
+      if (id === 'nyra') expect(state.skillReadyAt.heavy).toBe(910);
+      expect(hostile(state).vitality).toBe(100);
+    });
+  }
+
+  for (const id of ['asha', 'sable', 'nyra'] as const) {
+    it(`${id} keeps body clearance when its target advances through the committed endpoint`, () => {
+      const state = engine(id), ally = state.actors[1]!, target = hostile(state);
+      ally.position.x = -2;
+      state.skillReadyAt.heavy = 1000;
+      cast(state, id); stepCompanions(state);
+      const skill = state.companionState.slots[id]!.skill!;
+      while (state.worldTick < skill.contactAt + 6) {
+        target.position.x -= .025;
+        advance(state, 1);
+        expect(Math.hypot(ally.position.x - target.position.x, ally.position.z - target.position.z)).toBeGreaterThanOrEqual(ally.radius + target.radius);
+      }
+      if (id === 'asha') expect(target.reactionState?.kind).toBe('stun');
+      if (id === 'sable') expect(target.supportSlow?.factor).toBe(.65);
+      if (id === 'nyra') expect(state.skillReadyAt.heavy).toBe(910);
+      expect(target.vitality).toBe(100);
+    });
+  }
+
+  it('an already-close pounce still separates from a target moving into its stance', () => {
+    const state = engine('nyra'), ally = state.actors[1]!, target = hostile(state);
+    ally.position.x = -.7;
+    state.skillReadyAt.heavy = 1000;
+    cast(state, 'nyra'); stepCompanions(state);
+    for (let tick = 0; tick < 40; tick++) {
+      target.position.x -= .025;
+      advance(state, 1);
+      expect(Math.hypot(ally.position.x - target.position.x, ally.position.z - target.position.z)).toBeGreaterThanOrEqual(ally.radius + target.radius);
+    }
+    expect(ally.position.y).toBe(0);
+    expect(state.skillReadyAt.heavy).toBe(910);
+  });
+
+  it('a committed pounce cannot hit a target that moves away; recall lands on the last safe ground', () => {
+    const state = engine('nyra'), ally = state.actors[1]!;
+    ally.position.x = -2; state.skillReadyAt.heavy = 1000;
+    cast(state, 'nyra'); stepCompanions(state);
+    const skill = state.companionState.slots.nyra!.skill!;
+    while (state.worldTick < skill.releaseAt + 4) advance(state, 1);
+    expect(ally.position.y).toBeGreaterThan(.1);
+    expect(commandCompanion(state, { companionId: 'nyra', command: 'recall' })).toBe(true);
+    expect(ally.position.y).toBe(0);
+    expect(state.companionState.slots.nyra!.skill).toBeUndefined();
+    advance(state, 40);
+    expect(state.skillReadyAt.heavy).toBe(1000);
+
+    const miss = engine('asha'); miss.actors[1]!.position.x = -2;
+    cast(miss, 'asha'); stepCompanions(miss);
+    const contact = miss.companionState.slots.asha!.skill!.contactAt;
+    hostile(miss).position.x = 6;
+    while (miss.worldTick < contact) advance(miss, 1);
+    expect(hostile(miss).reactionState).toBeUndefined();
+    expect(miss.actors[1]!.position.x).toBeLessThan(0);
+  });
+
+  it('a wall or low ceiling stops the swept gesture and prevents an unearned contact', () => {
+    for (const ceiling of [false, true]) {
+      const state = engine('nyra'), ally = state.actors[1]!;
+      ally.position.x = -2; state.skillReadyAt.heavy = 1000;
+      cast(state, 'nyra'); stepCompanions(state);
+      const contact = state.companionState.slots.nyra!.skill!.contactAt;
+      state.arena.colliders = [{
+        id: ceiling ? 'low-ceiling' : 'wall', kind: 'box',
+        from: ceiling ? { x: -1, y: 2, z: 0 } : { x: -1.35, y: 1, z: 0 },
+        halfExtents: ceiling ? { x: 3, y: .15, z: 3 } : { x: .08, y: 2, z: 3 },
+        blocksMovement: true, blocksCamera: false,
+      }];
+      let maxX = ally.position.x, maxY = 0;
+      while (state.worldTick < contact) {
+        advance(state, 1); maxX = Math.max(maxX, ally.position.x); maxY = Math.max(maxY, ally.position.y);
+      }
+      if (ceiling) expect(maxY).toBeLessThanOrEqual(.25001);
+      else expect(maxX + ally.radius).toBeLessThanOrEqual(-1.35 - .08 + 1e-6);
+      expect(state.skillReadyAt.heavy).toBe(1000);
+      expect(ally.position.y).toBe(0);
+    }
+  });
+
+  it('Mending Seed locks its aim on release and does not heal after the target dodges it', () => {
+    const state = engine('koro'); state.player.vitality = 40;
+    cast(state, 'koro'); stepCompanions(state);
+    const skill = state.companionState.slots.koro!.skill!;
+    while (state.worldTick < skill.releaseAt) advance(state, 1);
+    hostile(state).position.z = 2;
+    while (state.worldTick < skill.contactAt) advance(state, 1);
+    expect(state.player.vitality).toBe(40);
+    expect(hostile(state).vitality).toBe(100);
+  });
+});

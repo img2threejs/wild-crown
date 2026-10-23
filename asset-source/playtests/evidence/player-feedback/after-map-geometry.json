@@ -1,0 +1,941 @@
+{
+  "scope": "Actual native Pixi map selector, default motion settled; all eight authored markers at three widths.",
+  "rows": [
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "greenwake",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 391,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "canopy",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 391,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "grove",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 391,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "chapter-2",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 393,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "moonpine",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 398,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "mistveil",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 398,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "chapter-5",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 394,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "map": "chapter-8",
+      "canvasSame": true,
+      "layout": {
+        "x": 140.578125,
+        "y": 64,
+        "w": 1147.84375,
+        "h": 760.15625,
+        "scrollHeight": 760,
+        "clientHeight": 760
+      },
+      "stage": {
+        "x": 168.578125,
+        "y": 92,
+        "w": 669.84375,
+        "h": 522.796875,
+        "scrollHeight": 523,
+        "clientHeight": 523
+      },
+      "viewport": {
+        "x": 190.578125,
+        "y": 163.265625,
+        "w": 625.84375,
+        "h": 391.140625,
+        "scrollHeight": 391,
+        "clientHeight": 391
+      },
+      "panel": {
+        "x": 860.421875,
+        "y": 92,
+        "w": 400,
+        "h": 732.15625,
+        "scrollHeight": 732,
+        "clientHeight": 732
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "greenwake",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 348,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 699,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "canopy",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 348,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 723,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "grove",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 348,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 699,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "chapter-2",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 350,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 640,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "moonpine",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 353,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 699,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "mistveil",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 354,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 699,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "chapter-5",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 350,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 640,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "map": "chapter-8",
+      "canvasSame": true,
+      "layout": {
+        "x": 187.125,
+        "y": 64,
+        "w": 638.75,
+        "h": 1001.015625,
+        "scrollHeight": 1001,
+        "clientHeight": 1001
+      },
+      "stage": {
+        "x": 209.640625,
+        "y": 86.515625,
+        "w": 593.71875,
+        "h": 462.9375,
+        "scrollHeight": 463,
+        "clientHeight": 463
+      },
+      "viewport": {
+        "x": 228.0625,
+        "y": 144.59375,
+        "w": 556.875,
+        "h": 348.046875,
+        "scrollHeight": 348,
+        "clientHeight": 348
+      },
+      "panel": {
+        "x": 209.640625,
+        "y": 565.828125,
+        "w": 593.71875,
+        "h": 499.1875,
+        "scrollHeight": 640,
+        "clientHeight": 499
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "greenwake",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 172,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 555,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "canopy",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 171,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 579,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "grove",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 172,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 570,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "chapter-2",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 173,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 528,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "moonpine",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 174,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 579,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "mistveil",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 174,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 555,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "chapter-5",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 173,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 528,
+        "clientHeight": 528
+      },
+      "overflow": false
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "map": "chapter-8",
+      "canvasSame": true,
+      "layout": {
+        "x": 18.75,
+        "y": 64,
+        "w": 326.5,
+        "h": 895.421875,
+        "scrollHeight": 895,
+        "clientHeight": 895
+      },
+      "stage": {
+        "x": 32.75,
+        "y": 78,
+        "w": 298.5,
+        "h": 343.625,
+        "scrollHeight": 344,
+        "clientHeight": 344
+      },
+      "viewport": {
+        "x": 46.75,
+        "y": 176.78125,
+        "w": 270.5,
+        "h": 169.0625,
+        "scrollHeight": 170,
+        "clientHeight": 169
+      },
+      "panel": {
+        "x": 32.75,
+        "y": 431.625,
+        "w": 298.5,
+        "h": 527.796875,
+        "scrollHeight": 528,
+        "clientHeight": 528
+      },
+      "overflow": false
+    }
+  ]
+}

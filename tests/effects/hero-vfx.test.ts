@@ -250,3 +250,34 @@ describe('hero identity from the combat snapshot', () => {
     } finally { presentation.dispose(); }
   });
 });
+
+describe('Yara staff presentation cues', () => {
+  it('Sap Lance throws the staff toward the lane end and draws no beam line', () => {
+    const thrown: Array<{ actor: string; to: { x: number; y: number; z: number } }> = [];
+    const impact = Object.assign(sink(), { throwStaff: (actor: string, to: { x: number; y: number; z: number }) => { thrown.push({ actor, to: { ...to } }); } });
+    const effects = new StoryEffects({ scene: new Scene(), impact });
+    try {
+      const from = { x: 0, y: 1, z: 0 }, to = { x: 0, y: 1, z: 14 };
+      effects.emit(yara({ kind: 'beam', phase: 'active', actionId: 'yara-sap-lance' as ActionId, from, to, durationTicks: 30, footprint: { width: 0.65, length: 14 } }, 10));
+      clock(effects, 12);
+      expect(thrown).toEqual([{ actor: 'aren', to }]);
+      let beams = 0;
+      effects.group.traverse(node => { if (node instanceof Mesh && node.name === 'vfx-beam' && node.visible) beams++; });
+      expect(beams).toBe(0);
+    } finally { effects.dispose(); }
+  });
+
+  it('Petal Step lays its petal streak over the travel and blooms the arrival when the cue ends', () => {
+    const effects = new StoryEffects({ scene: new Scene() });
+    try {
+      effects.emit(yara({ kind: 'blink', phase: 'commit', from: { x: 0, y: 0, z: 0 }, to: { x: 6, y: 0, z: 0 }, durationTicks: 30 }, 0));
+      const vanish = spawned(effects);
+      expect(vanish).toBeGreaterThan(0);
+      let streak = vanish;
+      for (let tick = 3; tick <= 27; tick += 3) { clock(effects, tick); streak = spawned(effects); }
+      expect(streak).toBeGreaterThan(vanish);
+      clock(effects, 31);
+      expect(spawned(effects) - streak).toBeGreaterThan(20);
+    } finally { effects.dispose(); }
+  });
+});

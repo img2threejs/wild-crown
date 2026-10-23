@@ -5,13 +5,13 @@ import { parseGlb } from '../../scripts/assets/import-aren-animation-set.mjs';
 import { COMBAT_LIMITS, Rig, jointExcursions, readClipFrames } from '../../scripts/assets/retarget-aren-tripo-clips.mjs';
 import { interpolateFrame } from '../../scripts/assets/vesper-blade-clearance.mjs';
 import { HEROES } from '../../scripts/assets/hero-assets.mjs';
-import { openHero, penetrations } from '../../scripts/assets/audit-hero-mesh-intersection.mjs';
 import { ThreeSkeleton } from '../../scripts/assets/hero-harmony-harness.mjs';
+import { exactTakeClips, playsExactTake } from '../../src/rendering/ExactTakes';
+import { AREN_HERO_ASSET_ID, SAKDA_HERO_ASSET_ID, VESPER_HERO_ASSET_ID, YARA_HERO_ASSET_ID } from '../../src/game/heroes';
 
 /**
- * The limb-clearance solver on the four heroes' delivered clips: it leaves ordinary locomotion alone, never snaps, keeps the arms inside the
- * combat joint limits, and removes the arm-through-body overlap that the mesh-level audit (scripts/assets/audit-hero-mesh-intersection.mjs)
- * finds in the skill poses.
+ * The limb-clearance solver on the heroes' delivered clips: it leaves ordinary locomotion alone, never snaps and keeps the arms inside the combat
+ * joint limits; Yara's and Aren's exact Mixamo takes are not solved at runtime at all (src/rendering/ExactTakes.ts).
  */
 const root = new URL('../../', import.meta.url).pathname;
 const LOCOMOTION = ['aren-idle', 'aren-walk', 'aren-run'];
@@ -22,12 +22,13 @@ function open(hero: keyof typeof HEROES) {
 }
 
 describe('limb clearance on the delivered hero clips', () => {
-  /** Yara's idle holds a hand inside her thigh (166 buried mesh vertices before the solver), so it is the one gait that is corrected visibly. */
-  const MEAN_DEGREES = { yara: 12, vesper: 1, sakda: 1 };
+  /** Yara's idle is an exact Mixamo take the runtime solver skips (src/rendering/ExactTakes.ts); her walk and run are retargeted and solved. */
+  const MEAN_DEGREES = { yara: 1, vesper: 1, sakda: 1 };
+  const ASSET = { yara: YARA_HERO_ASSET_ID, vesper: VESPER_HERO_ASSET_ID, sakda: SAKDA_HERO_ASSET_ID };
   for (const hero of ['yara', 'vesper', 'sakda'] as const) {
     it(`${hero}: idle, walk and run are touched only where an arm really lies in the body (mean correction ≤ ${MEAN_DEGREES[hero]}°)`, () => {
       const { source, rig, skeleton } = open(hero);
-      for (const clip of LOCOMOTION.filter((name) => source.json.animations.some((a: { name: string }) => a.name === name))) {
+      for (const clip of LOCOMOTION.filter((name) => !playsExactTake(ASSET[hero], name) && source.json.animations.some((a: { name: string }) => a.name === name))) {
         const { frames, count } = readClipFrames(rig, clip), scratch = interpolateFrame(frames, 0);
         let sum = 0, samples = 0;
         for (let s = 0; s <= (count - 1) * 2; s += 1) {
@@ -83,17 +84,18 @@ describe('limb clearance on the delivered hero clips', () => {
     }
   }, 120_000);
 
-  it('keeps Yara’s Root Spike out of her own body: the authored clip and the solved pose bury at most a handful of mesh vertices (committed clip buried 194)', async () => {
-    const context = await openHero('yara'), { rig } = context, skeleton = new ThreeSkeleton(rig);
-    const { frames, count } = readClipFrames(rig, 'yara-root-spike'), scratch = interpolateFrame(frames, 0);
-    let authored = 0, solved = 0;
-    for (let frame = 0; frame <= count - 1; frame += 2) {
-      interpolateFrame(frames, frame, scratch);
-      authored = Math.max(authored, penetrations(context, rig.poseFrame(scratch, 0)).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
-      skeleton.setFrame(scratch, 0);
-      solved = Math.max(solved, penetrations(context, skeleton.solve()).reduce((n: number, e: { verts: number }) => n + e.verts, 0));
-    }
-    expect(authored).toBeLessThan(20);
-    expect(solved).toBeLessThan(20);
-  }, 240_000);
+  it('leaves exactly Yara’s exact Mixamo takes to play as captured: the runtime skip list is the provenance’s `exact` clips', () => {
+    const provenance = JSON.parse(readFileSync(root + 'asset-source/generated/actor-yara-hero-01/provenance.json', 'utf8')) as { clips: { clip: string; exact?: boolean }[] };
+    const exact = provenance.clips.filter((spec) => spec.exact).map((spec) => spec.clip).sort();
+    expect(exact.length).toBeGreaterThan(0);
+    expect(exactTakeClips(YARA_HERO_ASSET_ID).slice().sort()).toEqual(exact);
+  });
+
+  it('lists exactly the contract’s 14 Aren ids as exact takes, and the runtime solver skips each of them', () => {
+    const contract = ['aren-idle', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-heavy', 'aren-charged-heavy-charge', 'aren-charged-heavy', 'aren-sigil-charge', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-root-tether', 'aren-cleanse', 'aren-judgement'];
+    expect(exactTakeClips(AREN_HERO_ASSET_ID).slice().sort()).toEqual(contract.slice().sort());
+    for (const clip of contract) expect(playsExactTake(AREN_HERO_ASSET_ID, clip), clip).toBe(true);
+    expect(playsExactTake(AREN_HERO_ASSET_ID, 'aren-walk')).toBe(false);
+    expect(playsExactTake(AREN_HERO_ASSET_ID, 'dive.001')).toBe(false);
+  });
 });

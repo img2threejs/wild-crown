@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { encodeGlb, parseGlb, transplantAnimations } from './import-aren-animation-set.mjs';
 import { resolveMixamoSources } from './mixamo-import.mjs';
+import { AREN_EXACT, createMixamoExact, exactnessGate, exactTimeline, loopSeamDegrees, sampleExact } from './mixamo-exact.mjs';
 
 /**
  * Retargets Tripo combat clips onto Aren's 65-joint Mixamo skeleton and appends them to the playtest GLB.
@@ -43,62 +44,34 @@ const mirrorName = (name) => name.replace(/^(mixamorig:)(Left|Right)/, (_, prefi
  * `mirror` plays the donor reflected across the sagittal plane (left-hand strikes become right-hand ones); `parts`/`keys`/`loop`
  * are described at `buildClip`. `aim` ([tick, yaw°, pitch°, weight?], yaw 0 forward, + toward Aren's left) steers the glaive.
  */
-const RIGHT_HAND = ['RightHand'];
+/** An exact Mixamo take of Aren's (asset-source/mixamo/aren-skills): played as delivered, see `buildExactClip`. */
+const AX = (file) => ({ donor: 'aren-exact', file: `asset-source/mixamo/aren-skills/${file}` });
 const CARRY = [15, 30];
 export const CLIP_SPECS = [
-  // Warden Blade combo. Light 1: golf hip-led sweep (right → left); Light 2: Tripo slash mirrored and played backwards = rising diagonal return cut; Light 3: the box_03 hook held for the spin; Light 4: volleyball hop + spike = leaping overhead cleave.
-  { clip: 'aren-light-1', source: { donor: 'd', animation: 'golf' }, sim: { totalTicks: 26, activeTick: 9 }, window: [7.35, 9.0], contact: { joints: HANDS, search: [7.0, 8.6], settle: 0.12 },
-    torso: [[0, 0], [3, -25], [7, -12], [12, 35], [26, 0]],
-    aim: [[0, ...CARRY], [2, -70, 15], [5, -60, 10], [8, -5, 5, 3], [11, 50, 4, 3], [15, 85, 12], [26, ...CARRY]] },
-  { clip: 'aren-light-2', source: { donor: 'a', animation: 'slash' }, mirror: true, sim: { totalTicks: 28, activeTick: 10 }, window: [2.7, 1.45], contact: { joints: HANDS, search: [1.6, 2.4], settle: 0 },
-    torso: [[0, 0], [5, 30], [10, 5], [17, -30], [28, 0]],
-    aim: [[0, ...CARRY], [5, 60, -25], [10, 25, 0, 3], [13, -35, 50, 3], [17, -55, 65], [28, ...CARRY]] },
-  { clip: 'aren-light-3', source: { donor: 'c', animation: 'box_03' }, mirror: true, sim: { totalTicks: 34, activeTick: 10 },
-    keys: [[0, 0.4], [8, 0.55], [10, 0.66], [12, 0.74], [20, 0.82], [34, 1.3]],
-    torso: [[0, 0], [6, -35], [10, -10], [12, 30], [20, 30], [34, 0]],
-    aim: [[0, ...CARRY], [6, -80, 15], [10, -20, 5, 3], [12, 60, 3, 3], [20, 70, 3, 3], [34, ...CARRY]] },
-  { clip: 'aren-light-4', source: { donor: 'd', animation: 'volleyball' }, sim: { totalTicks: 40, activeTick: 15 }, window: [1.25, 2.8], contact: { joints: HANDS, search: [1.6, 2.3], settle: 0.05 }, airborne: true,
-    aim: [[0, ...CARRY], [7, -10, 75], [11, 5, 88], [15, 12, 25, 3], [18, 15, -45, 3], [26, 15, -35], [40, ...CARRY]] },
-  // Sigil casts: box_01 (mirrored) supplies the one-hand thrust of Bolt and Barrage; the charge loops Tripo's `fire` aiming pose.
-  { clip: 'aren-sigil-bolt', source: { donor: 'c', animation: 'box_01' }, mirror: true, sim: { totalTicks: 30, activeTick: 16 }, window: [0.3, 0.9], contact: { joints: RIGHT_HAND, search: [0.4, 0.65], settle: 0.1 },
-    aim: [[0, ...CARRY], [8, 10, 55], [16, 0, 12, 3], [22, 0, 10], [30, ...CARRY]] },
-  { clip: 'aren-sigil-barrage', source: { donor: 'c', animation: 'box_01' }, mirror: true, sim: { totalTicks: 40 },
-    keys: [[0, 0.4], [8, 0.62], [12, 0.42], [16, 0.62], [20, 0.42], [24, 0.62], [40, 1.2]],
-    aim: [[0, ...CARRY], [8, 0, 12, 3], [12, 5, 30], [16, 0, 12, 3], [20, 5, 30], [24, 0, 12, 3], [40, ...CARRY]] },
-  { clip: 'aren-sigil-charge', source: { donor: 'b', animation: 'fire' }, durationSeconds: 1.2, loop: { overlapSeconds: 0.4 }, window: [0, 1.5],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.03 }, aim: [[0, 0, 50], [36, 0, 50]] },
-  // Warden's Judgement: anticipation crouch 0–9, flee_02 low dash lunge 10–21, kneeling recovery 22–51 (deep crouch, then rising).
-  { clip: 'aren-judgement', sim: { totalTicks: 52 }, airborne: false,
-    parts: [
-      { ticks: [0, 10], source: { donor: 'native', animation: 'warm_up.001' }, window: [2.0, 2.6] },
-      { ticks: [10, 22], source: { donor: 'e', animation: 'flee_02' }, window: [0.45, 1.25] },
-      { ticks: [22, 40], source: { donor: 'native', animation: 'warm_up.001' }, window: [4.0, 5.4] },
-      { ticks: [40, 52], source: { donor: 'native', animation: 'warm_up.001' }, window: [5.5, 6.4] },
-    ],
-    aim: [[0, ...CARRY], [9, 10, 20], [10, 0, -5], [21, 0, -15], [24, 0, -35], [40, 0, -35], [52, ...CARRY]] },
-  // Heavy: Tripo's overhead chop, longer wind-up; Thunder Cleave: the volleyball leap, spike slam and heavy landing.
-  { clip: 'aren-heavy', source: { donor: 'a', animation: 'chop' }, sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, window: [1.35, 2.95], contact: { joints: HANDS, search: [1.9, 2.4], settle: 0.05 },
-    aim: [[0, ...CARRY], [12, -10, 70], [18, 0, 85], [20, 10, 40, 3], [24, 15, -35, 3], [34, 15, -30], [63, ...CARRY]] },
-  { clip: 'aren-charged-heavy', source: { donor: 'd', animation: 'volleyball' }, sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, window: [0.7, 3.0], contact: { joints: HANDS, search: [1.6, 2.3], settle: 0.1 }, airborne: true,
-    aim: [[0, ...CARRY], [20, -10, 60], [36, 10, 10, 3], [44, 10, -30], [76, ...CARRY]] },
-  { clip: 'aren-charged-heavy-charge', source: { donor: 'd', animation: 'lift_heavy' }, durationSeconds: 0.8, loop: { overlapSeconds: 0.3 }, window: [5.2, 6.4],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.025 }, aim: [[0, ...CARRY], [10, -10, 70], [48, -10, 75]] },
-  // Root Tether: pitch_baseball overhand lash; Cleanse: dig plants the glaive, a near-still channel, lift_heavy's rise.
-  { clip: 'aren-root-tether', sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, airborne: false,
-    parts: [
-      { ticks: [0, 34], source: { donor: 'd', animation: 'pitch_baseball' }, window: [1.15, 2.3], contact: { joints: RIGHT_HAND, search: [1.2, 1.9], settle: 0.05 } },
-      { ticks: [34, 54], source: { donor: 'd', animation: 'lift_heavy' }, window: [4.55, 5.25] },
-    ],
-    torso: [[0, 0], [6, -30], [12, 20], [30, 10], [54, 0]],
-    aim: [[0, ...CARRY], [6, -25, 70], [12, 10, 20, 3], [20, 12, 5], [36, 0, 30], [54, ...CARRY]] },
-  { clip: 'aren-cleanse', sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, airborne: false,
-    parts: [
-      { ticks: [0, 45], source: { donor: 'd', animation: 'dig' }, window: [0.7, 1.55], contact: { joints: HANDS, search: [0.8, 1.8], settle: 0.1 } },
-      { ticks: [45, 92], source: { donor: 'd', animation: 'dig' }, window: [2.2, 2.7] },
-      { ticks: [92, 108], source: { donor: 'd', animation: 'lift_heavy' }, window: [4.5, 5.3] },
-    ],
-    sway: { joints: ['Spine1', 'Spine2', 'Head'], amplitude: 0.02 },
-    aim: [[0, ...CARRY], [20, 0, -10, 2], [35, 0, -75, 3], [90, 0, -70], [108, ...CARRY]] },
+  // Aren's idle and every Warden skill play an Adobe Mixamo take exactly as delivered, exported onto his own uploaded character `aren-mixamo`
+  // (asset-source/mixamo/aren-skills, ledger provenance.json; mixamo-exact.mjs AREN_EXACT): no limits, no aim, no seam or idle blends. `keys`
+  // ([simulation tick, source seconds]) only warp time: each blow's fastest hand motion sits on the simulation's hit tick, so the cue timing holds.
+  // Loops (`window`) play their whole take, which starts and ends on the same pose (seam reported). The glaive is placed per clip at runtime
+  // (src/rendering/warden-glaive-profiles.json).
+  // Idle: a relaxed, attack-ready combat stance (the glaive held low and back, the free fist up).
+  { clip: 'aren-idle', exact: true, source: AX('sword-and-shield-idle.fbx'), loop: true, window: [0, 2.5333] },
+  { clip: 'aren-light-1', exact: true, source: AX('great-sword-low-slash.fbx'), sim: { totalTicks: 26, activeTick: 9 }, keys: [[0, 0.5], [9, 0.8], [26, 1.4]] },
+  { clip: 'aren-light-2', exact: true, source: AX('great-sword-downward-slash.fbx'), sim: { totalTicks: 28, activeTick: 10 }, keys: [[0, 0.3], [10, 0.57], [28, 1.2]] },
+  // Light 3 is the simulation's spin (it turns Aren 360° over ticks 12–30), so its take is a level sweep that does not turn the hips itself.
+  { clip: 'aren-light-3', exact: true, source: AX('standing-melee-attack-horizontal.fbx'), sim: { totalTicks: 34, activeTick: 10 }, keys: [[0, 0.62], [10, 0.97], [34, 1.75]] },
+  { clip: 'aren-light-4', exact: true, source: AX('great-sword-power-slash.fbx'), sim: { totalTicks: 40, activeTick: 15 }, keys: [[0, 0.35], [15, 0.73], [40, 1.55]] },
+  { clip: 'aren-sigil-charge', exact: true, source: AX('two-handed-sword-spell-cast.fbx'), loop: true, window: [0, 1.1333] },
+  { clip: 'aren-sigil-bolt', exact: true, source: AX('standing-2h-magic-attack-01.fbx'), sim: { totalTicks: 30, activeTick: 16 }, keys: [[0, 0.55], [16, 1.13], [30, 1.7]] },
+  // Barrage launches on ticks 8, 16 and 24: the take's thrust, then its sustained cast.
+  { clip: 'aren-sigil-barrage', exact: true, source: AX('standing-2h-magic-attack-04.fbx'), sim: { totalTicks: 40 }, keys: [[0, 0.5], [8, 0.93], [24, 2.2], [40, 3.0]] },
+  // Judgement dashes over ticks 10–21 of the clip (15–32 of the simulation): the take's slide, its slash at the end of the dash.
+  { clip: 'aren-judgement', exact: true, source: AX('great-sword-slide-attack.fbx'), sim: { totalTicks: 52 }, keys: [[0, 0.6], [10, 1.0], [21, 1.5], [52, 2.1]] },
+  { clip: 'aren-heavy', exact: true, source: AX('heavy-weapon-swing.fbx'), sim: { lockTicks: 45, recoveryTicks: 18, activeTick: 20 }, keys: [[0, 1.9], [20, 2.62], [63, 3.9]] },
+  { clip: 'aren-charged-heavy-charge', exact: true, source: AX('great-sword-power-up.fbx'), loop: true, window: [0, 3.5] },
+  { clip: 'aren-charged-heavy', exact: true, source: AX('standing-melee-run-jump-attack.fbx'), sim: { lockTicks: 58, recoveryTicks: 18, activeTick: 36 }, keys: [[0, 0.6], [36, 1.7], [76, 2.9]] },
+  { clip: 'aren-root-tether', exact: true, source: AX('standing-2h-magic-area-attack-02.fbx'), sim: { lockTicks: 36, recoveryTicks: 18, activeTick: 12 }, keys: [[0, 1.3], [12, 1.8], [54, 3.2]] },
+  // Cleanse plays at the simulation's own length (not stretched): its raised channel peaks on the cleanse tick 35.
+  { clip: 'aren-cleanse', exact: true, source: AX('standing-2h-cast-spell-01.fbx'), sim: { lockTicks: 90, recoveryTicks: 18, activeTick: 35 }, keys: [[0, 0], [35, 0.63], [108, 2.13]] },
   { clip: 'aren-hit', source: { donor: 'b', animation: 'hit_to_body_01' }, durationSeconds: 0.35, window: [0.12, 0.9], joints: UPPER_BODY },
   { clip: 'aren-stagger', source: { donor: 'b', animation: 'hit_to_stomach' }, durationSeconds: 0.7, window: [0.1, 1.2], aim: [[0, ...CARRY], [42, ...CARRY]] },
   // Tripo's flip is a forward somersault; Back Handspring travels backwards, so the segment plays in reverse.
@@ -717,6 +690,7 @@ const MAX_WRIST_SWING = 40 * DEGREES, MAX_WRIST_TWIST = 100 * DEGREES, SWING_PEN
 const AIM_CHAIN = [{ joint: 'RightHand', fraction: 0.6, cap: 70 }, { joint: 'RightForeArm', fraction: 0.5, cap: 100 }, { joint: 'RightArm', fraction: 0.35, cap: 60 }];
 const AIM_PASSES = 10;
 const BONE_AXIS = new Vector3(0, 1, 0);
+const UP_AXIS = new Vector3(0, 1, 0);
 const twistScratch = new Quaternion(), swingScratch = new Quaternion();
 
 /** Rotation about the bone axis (+Y) contained in `q` (radians, −π..π) and the angle of the remaining swing (`q = swing · twist`). */
@@ -738,9 +712,18 @@ function solveWrist(target, frames, count, aim, limits) {
   const hand = target.index.get('mixamorig:RightHand'), forearm = target.index.get('mixamorig:RightForeArm'), axis = bladeAxisLocal(target);
   const track = frames.rotations[hand], forearmTrack = frames.rotations[forearm];
   const quaternions = [], desired = [], weights = [], scratch = { direction: new Vector3(), weight: 1 };
+  const elbow = new Vector3(), wristPoint = new Vector3();
   for (let k = 0; k < count; k += 1) {
-    quaternions.push(worldQuaternion(target.poseFrame(frames, k)[hand], new Quaternion()));
-    aimAt(aim, k * TICKS_PER_SECOND / FPS, scratch);
+    const world = target.poseFrame(frames, k);
+    quaternions.push(worldQuaternion(world[hand], new Quaternion()));
+    if (Array.isArray(aim)) aimAt(aim, k * TICKS_PER_SECOND / FPS, scratch);
+    else {
+      // `{ along: 'forearm', lift }`: the blade continues the line of the striking forearm (elbow → wrist), tipped up by `lift` — the way a held
+      // polearm extends the arm through every captured swing, without hand-keyed aim curves.
+      elbow.setFromMatrixPosition(world[forearm]); wristPoint.setFromMatrixPosition(world[hand]);
+      scratch.direction.subVectors(wristPoint, elbow).normalize().addScaledVector(UP_AXIS, aim.lift ?? 0).normalize();
+      scratch.weight = 1;
+    }
     desired.push(scratch.direction.clone()); weights.push(scratch.weight);
   }
   const weightSum = weights.reduce((sum, w) => sum + w, 0), probe = new Vector3(), q = new Quaternion();
@@ -755,14 +738,16 @@ function solveWrist(target, frames, count, aim, limits) {
   };
   const best = axis.clone();
   let bestCost = cost(best);
-  const candidates = 6000, golden = Math.PI * (3 - Math.sqrt(5)), u = new Vector3();
+  // A forearm-aligned clip keeps the grip as fitted (no clip-wide wrist offset): stage 2 alone is a function of each frame, so two combo steps cut
+  // from one take produce the same pose at their shared boundary.
+  const candidates = Array.isArray(aim) ? 6000 : 0, golden = Math.PI * (3 - Math.sqrt(5)), u = new Vector3();
   for (let i = 0; i < candidates; i += 1) {
     const z = 1 - 2 * (i + 0.5) / candidates, r = Math.sqrt(1 - z * z);
     const c = cost(u.set(r * Math.cos(i * golden), r * Math.sin(i * golden), z));
     if (c < bestCost) { bestCost = c; best.copy(u); }
   }
   const e1 = new Vector3(), e2 = new Vector3(), next = new Vector3();
-  for (const step of [0.1, 0.05, 0.025, 0.0125, 0.006, 0.003]) {
+  for (const step of candidates ? [0.1, 0.05, 0.025, 0.0125, 0.006, 0.003] : []) {
     for (let improved = true; improved;) {
       improved = false;
       e1.set(1, 0, 0).cross(best).normalize(); e2.crossVectors(best, e1);
@@ -894,8 +879,18 @@ export function buildClip(spec, rigs) {
     // A loop's source window also covers the overlap frames (its tail continuation), so a held pose keeps playing instead of freezing on the window's end.
     const source = sourceFor(part, rigs), ticks = part.ticks ?? [0, (rawCount - 1) / FPS * TICKS_PER_SECOND];
     let contact, keys;
-    if (part.keys) keys = part.keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]);
-    else {
+    if (part.keys) {
+      keys = part.keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]);
+      // Keys that also name a contact: the warp is the keys' own (they place the blow and shape the recovery); the contact is reported from the
+      // measured peak and the key at the hit tick, so the timing checks see the same facts as a contact-warped clip.
+      if (part.contact) {
+        const scanCount = Math.floor(source.decoded.duration * FPS) + 1;
+        const peak = peakSpeedTime(target, resample(target, source, scanCount, (k) => k / FPS, part.mirror), scanCount, part.contact.joints, part.contact.search);
+        const hit = part.keys.find(([tick]) => tick === spec.sim.activeTick);
+        if (!hit) throw new Error(`${spec.clip}: keys need a key on the hit tick ${spec.sim.activeTick}`);
+        contact = { peakSource: peak.time, peakSpeed: peak.speed, source: hit[1], outputFraction: spec.sim.activeTick / totalTicks, window: [part.keys[0][1], part.keys.at(-1)[1]], settle: hit[1] - peak.time, keys };
+      }
+    } else {
       const [start, end] = part.window;
       if (part.contact) {
         const scanCount = Math.floor(source.decoded.duration * FPS) + 1;
@@ -955,11 +950,7 @@ if (spec.sway) addSway(target, frames, count, period, spec.sway.joints, spec.swa
   const keep = new Set(jointNodes);
   frames.rotations.forEach((track, node) => { if (track && !keep.has(node)) frames.rotations[node] = undefined; });
   frames.positions.forEach((track, node) => { if (track && !keep.has(node)) frames.positions[node] = undefined; });
-  for (const track of frames.rotations) if (track) for (let k = 1; k < count; k += 1) {
-    let dot = 0;
-    for (let c = 0; c < 4; c += 1) dot += track[k * 4 + c] * track[(k - 1) * 4 + c];
-    if (dot < 0) for (let c = 0; c < 4; c += 1) track[k * 4 + c] = -track[k * 4 + c];
-  }
+  signContinuity(frames, count);
   for (const track of [...frames.rotations, ...frames.positions]) if (track && track.some((value) => !Number.isFinite(value))) throw new Error(`${spec.clip} contains non-finite samples`);
   // Held section freeze: knockdowns expose `sim.totalTicks` and the brief mandates every key from tick 48 to clip end is identical.
   let heldLastFrame = null;
@@ -971,6 +962,45 @@ if (spec.sway) addSway(target, frames, count, period, spec.sway.joints, spec.swa
   const times = Float32Array.from({ length: count }, (_, k) => k / FPS);
   const contact = built.find((entry) => entry.contact)?.contact;
   return { spec, frames, times, count, duration: length, keys: built.flatMap((entry) => entry.keys), contact, totalTicks, jointNodes, aim: aimReport, guard: guardCorrections, heldLastFrame };
+}
+
+/** Flips each rotation key into the hemisphere of the key before it, so linear sampling between keys never takes the long way round. */
+function signContinuity(frames, count) {
+  for (const track of frames.rotations) if (track) for (let k = 1; k < count; k += 1) {
+    let dot = 0;
+    for (let c = 0; c < 4; c += 1) dot += track[k * 4 + c] * track[(k - 1) * 4 + c];
+    if (dot < 0) for (let c = 0; c < 4; c += 1) track[k * 4 + c] = -track[k * 4 + c];
+  }
+}
+
+/**
+ * An exact clip (`spec.exact`): the Mixamo take sampled at 30 Hz through the `keys` time warp (a loop: its `window`, at the take's speed), in Aren's rig
+ * frame with the Hips pinned horizontally (mixamo-exact.mjs). Nothing else touches it; the exactness gate fails the build if a key differs from the FBX
+ * local at its source time by more than 0.1°. A hit tick's key is reported as the contact, next to the measured fastest-hand instant around it.
+ */
+function buildExactClip(spec, take, target) {
+  const totalTicks = spec.sim?.totalTicks ?? (spec.sim ? spec.sim.lockTicks + spec.sim.recoveryTicks : undefined);
+  const keys = spec.keys ?? [[0, spec.window[0]], [(spec.window[1] - spec.window[0]) * TICKS_PER_SECOND, spec.window[1]]];
+  if (totalTicks !== undefined && keys.at(-1)[0] !== totalTicks) throw new Error(`${spec.clip}: keys must end on the clip's ${totalTicks} ticks`);
+  const period = Math.round(keys.at(-1)[0] / TICKS_PER_SECOND * FPS), count = period + 1;
+  const sourceTime = exactTimeline(keys), frames = sampleExact(target, take, count, sourceTime);
+  signContinuity(frames, count);
+  for (const track of [...frames.rotations, ...frames.positions]) if (track && track.some((value) => !Number.isFinite(value))) throw new Error(`${spec.clip} contains non-finite samples`);
+  const gate = exactnessGate(spec.clip, target, take, frames, count, sourceTime);
+  let contact;
+  if (spec.sim?.activeTick !== undefined) {
+    const hit = keys.find(([tick]) => tick === spec.sim.activeTick);
+    if (!hit) throw new Error(`${spec.clip}: keys need a key on the hit tick ${spec.sim.activeTick}`);
+    const scanCount = Math.floor(take.duration * FPS) + 1, scan = sampleExact(target, take, scanCount, (k) => k / FPS);
+    const peak = peakSpeedTime(target, scan, scanCount, ['RightHand'], [hit[1] - 0.2, hit[1] + 0.2]);
+    const secondsKeys = keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]);
+    contact = { peakSource: peak.time, peakSpeed: peak.speed, source: hit[1], outputFraction: spec.sim.activeTick / totalTicks, window: [keys[0][1], keys.at(-1)[1]], settle: round(hit[1] - peak.time), keys: secondsKeys };
+  }
+  const times = Float32Array.from({ length: count }, (_, k) => k / FPS);
+  return {
+    spec, frames, times, count, duration: period / FPS, keys: keys.map(([tick, seconds]) => [tick / TICKS_PER_SECOND, seconds]), contact, totalTicks, jointNodes: [...target.joints], aim: undefined, guard: {}, heldLastFrame: null,
+    exact: { file: spec.source.file, sha256: take.sha256, exactness: { maxDegrees: round(gate.maxDegrees, 5), keys: count }, ...spec.loop && { loopSeamDegrees: round(loopSeamDegrees(target, frames, count), 4) } },
+  };
 }
 
 export function appendClips(baseBytes, clips) {
@@ -1008,11 +1038,11 @@ export function appendClips(baseBytes, clips) {
 
 function round(value, digits = 4) { return Number(value.toFixed(digits)); }
 
-/** Glaive direction in the clip (yaw° 0 forward / + toward Aren's left, pitch° above horizontal) at every aim key, plus hand-speed peaks (ticks). */
+/** Glaive direction in the clip (yaw° 0 forward / + toward Aren's left, pitch° above horizontal) at every aim key (none for a forearm-aligned clip), plus hand-speed peaks (ticks). */
 function bladeReport(clip, target) {
   const hand = target.index.get('mixamorig:RightHand'), axis = bladeAxisLocal(target), quaternion = new Quaternion(), direction = new Vector3();
   const directionAt = (k) => direction.copy(axis).applyQuaternion(worldQuaternion(target.poseFrame(clip.frames, k)[hand], quaternion));
-  const keys = clip.spec.aim.map(([tick, yaw, pitch]) => {
+  const keys = (Array.isArray(clip.spec.aim) ? clip.spec.aim : []).map(([tick, yaw, pitch]) => {
     const k = Math.min(clip.count - 1, Math.round(tick * FPS / TICKS_PER_SECOND)), d = directionAt(k);
     return { tick, aimYawDegrees: yaw, aimPitchDegrees: pitch, yawDegrees: round(Math.atan2(d.x, d.z) / DEGREES, 1), pitchDegrees: round(Math.asin(Math.max(-1, Math.min(1, d.y))) / DEGREES, 1) };
   });
@@ -1048,7 +1078,8 @@ function clipReport(clip, target, ids) {
   const parts = spec.parts ?? [spec];
   const describe = (part) => {
     const isMixamo = part.source.donor?.startsWith('mixamo:');
-    const source = part.source.donor === 'native' ? { native: part.source.animation }
+    const source = part.source.donor === 'aren-exact' ? { mixamoFile: part.source.file, exact: true }
+      : part.source.donor === 'native' ? { native: part.source.animation }
       : isMixamo ? { mixamoFile: part.source.file, animation: part.source.animation }
       : { taskId: ids[part.source.donor], animation: part.source.animation };
     return {
@@ -1080,6 +1111,7 @@ function clipReport(clip, target, ids) {
     lowestFootY: round(probe.footY),
     maxHandHeightAboveHips: round(probe.handAboveHips),
     ...spec.aim && bladeReport(clip, target),
+    ...clip.exact && { exact: clip.exact },
   };
 }
 
@@ -1106,16 +1138,27 @@ export async function retargetAren() {
   // Deep-clone CLIP_SPECS into a per-call array so resolveMixamoSources's in-place rewrites of `donor: 'mixamo:…'`
   // never leak back into the exported CLIP_SPECS (would otherwise break the byte-identical rebuild gate on a second call).
   const specs = structuredClone(CLIP_SPECS);
-  await resolveMixamoSources(specs, rigs, fileURLToPath(new URL('../../', import.meta.url)));
-  const clips = specs.map((spec) => buildClip(spec, rigs));
+  const root = fileURLToPath(new URL('../../', import.meta.url));
+  await resolveMixamoSources(specs, rigs, root);
+  // Exact Mixamo takes (asset-source/mixamo/aren-skills): the loader checks the takes' skeleton against the rig before any is played.
+  const exactApi = await createMixamoExact({ root, rig: rigs.target, ...AREN_EXACT }), takes = new Map();
+  for (const spec of specs) if (spec.exact && !takes.has(spec.source.file)) takes.set(spec.source.file, await exactApi.load(spec.source.file));
+  const clips = specs.map((spec) => spec.exact ? buildExactClip(spec, takes.get(spec.source.file), rigs.target) : buildClip(spec, rigs));
   // Lying-seam pass: copy each knockdown's frozen last frame into its paired get-up's frame 0 (lying pose matches every joint within the brief tolerance).
   const heldByName = Object.fromEntries(clips.filter((clip) => clip.spec.lyingSurface && !clip.spec.seamFromHold).map((clip) => [clip.spec.clip, clip]));
   const target = rigs.target;
-  const idle = (() => {
+  const byName = Object.fromEntries(clips.map((clip) => [clip.spec.clip, clip]));
+  // Tails hand back to the idle the game plays: the authored `aren-idle` (its first key), else the native idle.001.
+  const idle = byName['aren-idle']?.frames ?? (() => {
     try { return readClipFrames(target, 'idle.001').frames; } catch { return undefined; }
   })();
   for (const clip of clips) {
     const spec = clip.spec;
+    // A release that follows a held charge (`seamFrom: { clip, ticks }`) starts on the charge loop's pose and blends into its own motion.
+    if (spec.seamFrom) {
+      const from = byName[spec.seamFrom.clip];
+      blendSeamFrames(from.frames, from.count - 1, clip.frames, Math.min(clip.count, Math.max(1, Math.round(spec.seamFrom.ticks * FPS / TICKS_PER_SECOND))));
+    }
     if (spec.seamFromHold && heldByName[spec.seamFromHold]) {
       const heldClip = heldByName[spec.seamFromHold];
       const blendTicks = spec.seamBlendTicks ?? 0;
@@ -1145,7 +1188,8 @@ export async function retargetAren() {
   const nativeDeformation = Object.fromEntries(NATIVE_CALIBRATION_CLIPS.map((name) => [name, deformation(name)]));
   const report = {
     schemaVersion: 3,
-    method: 'world-space rest-pose retarget per frame, resampled at 30 fps and warped so the contact frame meets the simulation hit tick; retargeted clips are clamped to COMBAT_LIMITS (swing/twist about the bone axis) before the glaive aim solve, which distributes the blade error over hand, forearm and upper arm inside those limits',
+    method: 'exact clips (idle and every Warden skill): Adobe Mixamo takes exported onto Aren\'s own character, sampled at 30 fps through a time warp that puts each blow on the simulation hit tick, every key within 0.1 degrees of the FBX (exactness gate); reaction and locomotion clips: world-space rest-pose retarget per frame, resampled at 30 fps, clamped to COMBAT_LIMITS (swing/twist about the bone axis)',
+    exactMapping: { ...exactApi.restCheck, ledger: 'asset-source/mixamo/aren-skills/provenance.json' },
     inputs: {
       parentSeamRepairedSha256: sha256(seam), animationSourceSha256: sha256(animationSource), nativeBaseOutputSha256: sha256(base.bytes), donorImportReport: 'animation-import.json',
       tripoRig: { taskId: DONORS.rig.taskId, sha256: sha256(rig) },
@@ -1193,13 +1237,8 @@ export function syncManifest(text, report) {
 }
 
 export const CLIP_NOTES = [
-  'Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope (see anatomy.nativeLimitRaises).',
-  'Tripo returned bit-identical data for the slash and chop presets earlier; Light 2 plays slash mirrored and backwards, Heavy plays chop, so they differ in side, direction and windows.',
-  'Light 1 plays Tripo golf (hip-led sweep); Light 4 and Thunder Cleave play the volleyball hop and spike with different windows and contact warps.',
-  'Light 3 and Sigil Bolt/Barrage mirror a left-hand Tripo punch (box_03 / box_01) onto the right hand that carries the glaive.',
-  'aren-sigil-charge and aren-charged-heavy-charge loop seamlessly (head fades from the tail continuation; chest sway keeps the held pose alive): fire aiming pose and lift_heavy brace.',
-  'aren-root-tether plays pitch_baseball (overhand throw); aren-cleanse chains dig (plant), a near-still dig channel and lift_heavy rise.',
-  'aren-judgement chains warm_up crouch, flee_02 low dash lunge and warm_up kneeling recovery, cross-faded over 3 ticks.',
+  'Anatomical guard: every clip with a retargeted segment is clamped to COMBAT_LIMITS (swing/twist about each bone axis, soft roll-off) before the glaive aim solve; the aim solve distributes the blade error over hand, forearm and upper arm inside the same limits. JOINT_LIMITS is the native-calibrated envelope and is only used to report.',
+  'Aren\'s idle and every Warden skill (Warden Blade 1-4, Heavy, Thunder Cleave charge and release, Sigil charge, Bolt and Barrage, Judgement, Root Tether, Cleanse) are Adobe Mixamo takes exported onto his own uploaded character aren-mixamo (asset-source/mixamo/aren-skills, ledger provenance.json) and played exactly as delivered: every key equals the FBX local at its warped source time within 0.1 degrees (`exactness`), the Hips pinned horizontally. Keys only warp time so each blow\'s fastest hand motion lands on the simulation hit tick; no limits, aim, seam or idle blend touch them. The glaive is placed per clip at runtime (src/rendering/warden-glaive-profiles.json).',
   'aren-back-handspring plays Tripo flip in reverse (forward somersault -> backward). aren-hit carries upper-body tracks only so the presentation overlay never disturbs legs or hips.',
   'aren-air-step is the in-place second-jump clip: run_upstairs air steps, flip somersault, open out and landing absorb; its Hips track is pinned horizontally and compressed vertically (IN_PLACE_VERTICAL_LIMIT).',
 ];

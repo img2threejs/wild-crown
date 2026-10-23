@@ -1,0 +1,194 @@
+{
+  "observedAt": "2026-10-22T02:05:25.431Z",
+  "bootObservedMs": 8492,
+  "idle": {
+    "label": "before-production-idle",
+    "durationMs": 6006.100000023842,
+    "frames": 376,
+    "frame": {
+      "p50": 13.400000000008731,
+      "p95": 26.70000000001164,
+      "p99": 28.5,
+      "max": 28.69999999999709,
+      "over25": 59,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 2327,
+      "worldTick": 2327,
+      "worldTimeSeconds": 38.78333333333333,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 91
+    },
+    "programs": 89,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2063.7490000000003,
+      "taskMs": 2222.159,
+      "layoutMs": 0,
+      "recalcStyleMs": 35.286,
+      "heapUsedBytes": 38379776,
+      "domNodes": 755
+    }
+  },
+  "mixed": {
+    "label": "before-production-movement-skills",
+    "durationMs": 9004.399999976158,
+    "frames": 552,
+    "frame": {
+      "p50": 13.400000000008731,
+      "p95": 26.80000000000291,
+      "p99": 28.69999999999709,
+      "max": 41.80000000000291,
+      "over25": 107,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 2868,
+      "worldTick": 2868,
+      "worldTimeSeconds": 47.8,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 81.06791756601936,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -17.054059132720344,
+      "y": 0,
+      "z": -7.585022201343214
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 91
+    },
+    "programs": 89,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2017.1260000000002,
+      "taskMs": 2374.454,
+      "layoutMs": 14.952,
+      "recalcStyleMs": 98.483,
+      "heapUsedBytes": 41192072,
+      "domNodes": 5573
+    }
+  },
+  "actionPlan": [
+    {
+      "at": 0,
+      "key": "w",
+      "down": true
+    },
+    {
+      "at": 1300,
+      "key": "w",
+      "down": false
+    },
+    {
+      "at": 1500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3200,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3500,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4300,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4700,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 5500,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 5900,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 6000,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "s",
+      "down": true
+    },
+    {
+      "at": 7800,
+      "key": "s",
+      "down": false
+    }
+  ]
+}

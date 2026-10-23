@@ -1,0 +1,24 @@
+{
+  "pointer": {
+    "screen": "map",
+    "activeAction": "map",
+    "ariaCurrent": "page",
+    "modality": "pointer",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(239, 232, 214)"
+  },
+  "keyboard": {
+    "screen": "map",
+    "activeAction": "journal",
+    "activeText": "Journal",
+    "selectedPage": "Map",
+    "modality": "keyboard",
+    "outlineStyle": "solid",
+    "outlineWidth": "2px",
+    "outlineColor": "rgb(230, 192, 105)"
+  },
+  "pointerImage": "after-menu-pointer-map.png",
+  "keyboardImage": "after-menu-keyboard-journal.png",
+  "controllerEvidence": "after-hud-focus-frame-controller.json"
+}

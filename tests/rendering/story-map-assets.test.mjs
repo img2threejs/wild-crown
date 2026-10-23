@@ -1,20 +1,45 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
-import { describe, it, before } from 'node:test';
+import { readFile, readdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { describe, it, before, after } from 'node:test';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { createServer } from 'vite';
 
 // Story-map playtest assets (asset-source/playtests/{grove,moonpine,mistveil}.json): runtime GLB hashes, the monster clip slots,
 // castSocketBone nodes, in-place clips, grounded feet, measured sizes against the stated sizes and the log bridge's level deck.
 // GLTFLoader parses the real GLBs in Node (a material-only plugin skips texture decoding, which needs DOM image APIs).
 // A map whose manifest has not been generated yet is skipped (scripts/assets/build-story-map-manifest.mjs --map=<id>).
+//
+// Everything below is measured from the native runtime the engine actually loads: the shipped GLB's skeleton, its clips and the real
+// consumers (the engine's own clip vocabulary, the companion skills' native actions, the enemy-attack catalog and the native socket
+// anchors the renderer binds). A manifest may bind more clips than the engine currently names (approved extras); it may never drop or
+// mis-bind a clip a consumer asks for.
 const root = process.cwd();
 const SLOTS = ['monster-idle', 'monster-walk', 'monster-run', 'monster-slash', 'monster-shoot', 'monster-jump', 'monster-hurt', 'monster-turn', 'monster-dive', 'monster-roar'];
 const TOLERANCE = 0.25;
 /** A skinned vertex may dip this far (metres, after scaling) below the ground in any clip: skin bulge around planted joints. A character may state its own (`sink`). */
 const SINK_TOLERANCE = 0.15;
+/** The engine's own monster clip vocabulary and lifecycle timings, read from the production module rather than restated here. */
+const vite = await createServer({ configFile: false, root, logLevel: 'silent', server: { middlewareMode: true }, appType: 'custom' });
+const { MONSTER_CLIP_ACTIONS, MONSTER_DEATH_SECONDS, MONSTER_SPAWN_SECONDS, MONSTER_KNOCKDOWN_SECONDS, MONSTER_GETUP_SECONDS } = await vite.ssrLoadModule('/src/rendering/MonsterAnimationProfiles.ts');
+const { ALL_COMPANION_SKILLS } = await vite.ssrLoadModule('/src/game/companions/CompanionSkills.ts');
+const { ACTORS } = await vite.ssrLoadModule('/src/content/world.ts');
+const { findRigBones } = await vite.ssrLoadModule('/src/rendering/RigBones.ts');
+const enemyAttackCatalog = JSON.parse(await readFile(`${root}/src/content/enemy-attack-presentation.json`, 'utf8'));
+const enemyNativeAnchors = JSON.parse(await readFile(`${root}/src/content/enemy-native-anchors.json`, 'utf8'));
+/** Which manifest asset each playable companion is drawn with (the engine loads that asset for the companion's skills). */
+const companionAssets = new Map(Object.values(ACTORS).map(actor => [actor.id, actor.assetId]));
+/** The lifecycle one-shots the engine plays over these exact durations (the production constants). */
+const LIFECYCLE_SECONDS = {
+  'monster-death': MONSTER_DEATH_SECONDS,
+  'monster-spawn': MONSTER_SPAWN_SECONDS,
+  'monster-knockdown': MONSTER_KNOCKDOWN_SECONDS,
+  'monster-getup': MONSTER_GETUP_SECONDS,
+};
+after(async () => vite.close());
 
 /**
  * Per map: the composed environment and built assets with their stated sizes in metres (height / width = larger footprint axis / length /
@@ -70,6 +95,105 @@ const sanitize = name => THREE.PropertyBinding.sanitizeNodeName(name);
 const localPath = url => `${root}/${url.replace(/^\//, '')}`;
 const within = (measured, stated) => Math.abs(measured - stated) <= stated * TOLERANCE;
 const readJson = async path => JSON.parse(await readFile(`${root}/${path}`, 'utf8'));
+
+/**
+ * The authoring chain behind one runtime GLB: the manifest's own provenance report plus every sibling report it was derived from
+ * (the report that produced its input, the report that produced its parent, the provider receipt). Used only to follow the real
+ * provider receipt and the report that actually produced the shipped GLB.
+ */
+async function authoringChain(firstReportPath) {
+  const dir = dirname(firstReportPath);
+  const siblings = new Map();
+  for (const name of await readdir(`${root}/${dir}`)) {
+    if (!name.endsWith('.json')) continue;
+    const path = `${dir}/${name}`;
+    siblings.set(path, await readJson(path));
+  }
+  const chain = new Map();
+  const visit = (path, report) => {
+    if (chain.has(path)) return;
+    chain.set(path, report);
+    for (const pointer of [report.inheritedProvenance?.path, report.input?.path, report.source?.path]) {
+      if (typeof pointer !== 'string') continue;
+      if (pointer.endsWith('.json')) {
+        if (siblings.has(pointer)) visit(pointer, siblings.get(pointer));
+        continue;
+      }
+      for (const [otherPath, other] of siblings) if (other.output?.path === pointer) visit(otherPath, other);
+    }
+  };
+  visit(firstReportPath, siblings.get(firstReportPath));
+  return chain;
+}
+
+/**
+ * The native in-place anchor of a rig, derived from the shipped skin: the skeleton root's child that carries the most skin weight.
+ * This is the hip the character's own weight hangs from, so a clip that keeps the body in place keeps it there.
+ */
+function nativeAnchor(skinned) {
+  const bones = skinned.skeleton.bones;
+  const boneSet = new Set(bones);
+  const roots = bones.filter(bone => !boneSet.has(bone.parent));
+  assert.equal(roots.length, 1, 'the native skin must have one skeleton root');
+  const childrenOf = new Map(bones.map(bone => [bone, bone.children.filter(child => boneSet.has(child))]));
+  const weight = new Map(bones.map(bone => [bone, 0]));
+  const skinIndex = skinned.geometry.attributes.skinIndex, skinWeight = skinned.geometry.attributes.skinWeight;
+  for (let vertex = 0; vertex < skinIndex.count; vertex++) {
+    for (let influence = 0; influence < 4; influence++) {
+      const w = skinWeight.getComponent(vertex, influence);
+      if (!w) continue;
+      const bone = bones[skinIndex.getComponent(vertex, influence)];
+      assert.ok(bone, 'a weighted skin influence must name a native bone');
+      weight.set(bone, weight.get(bone) + w);
+    }
+  }
+  const subtreeWeight = bone => {
+    let total = weight.get(bone);
+    for (const child of childrenOf.get(bone)) total += subtreeWeight(child);
+    return total;
+  };
+  let anchor = null, largest = 0;
+  for (const child of childrenOf.get(roots[0])) {
+    const total = subtreeWeight(child);
+    if (total > largest) { anchor = child; largest = total; }
+  }
+  assert.ok(anchor, 'the native skeleton root must have a weighted body branch');
+  return anchor;
+}
+
+/**
+ * The top joints of a rig's two front legs, found from the native skeleton the renderer itself resolves: the two limb chains whose
+ * foot sits furthest forward along the rig's own head axis (spine base towards the head tip). A quadruped's front legs are the two
+ * chains nearest the head.
+ */
+function frontLegTops(gltf) {
+  const rig = findRigBones(gltf.scene);
+  assert.ok(rig, 'the rig exposes no creature limb chains');
+  assert.ok(rig.limbs.length >= 2, `the rig exposes ${rig.limbs.length} limb chains, it needs two front legs`);
+  const spineBase = rig.spine[0].getWorldPosition(new THREE.Vector3());
+  const headTip = rig.head[rig.head.length - 1].getWorldPosition(new THREE.Vector3());
+  const forward = headTip.sub(spineBase).setY(0);
+  if (forward.lengthSq() === 0) throw new Error('the rig has no head axis to rank its legs along');
+  forward.normalize();
+  const ranked = rig.limbs.map(chain => ({
+    top: chain[0],
+    forward: chain[chain.length - 1].getWorldPosition(new THREE.Vector3()).dot(forward),
+  })).sort((a, b) => b.forward - a.forward);
+  return ranked.slice(0, 2).map(entry => entry.top);
+}
+
+/** The socket semantics the renderer binds for an attack socket (enemy-native-anchors.json pairs, mirrored by EnemyAttackFx.bind). */
+const socketSemantics = socket => socket === 'paws' ? ['paw-right', 'paw-left']
+  : socket === 'hands' || socket === 'wings' ? ['hand-right', 'hand-left']
+  : [socket];
+
+/** Preserve uniform coverage and include every native key, including the finite terminal pose without a repeat wrap. */
+function frameTimes(clip, steps = 12) {
+  const times = new Set();
+  for (let step = 0; step <= steps; step++) times.add(clip.duration * step / steps);
+  for (const track of clip.tracks) for (const key of track.times) times.add(key);
+  return [...times].filter(time => time >= 0 && time <= clip.duration).sort((a, b) => a - b);
+}
 
 async function loadGlb(url) {
   const bytes = await readFile(localPath(url));
@@ -157,23 +281,49 @@ for (const [map, config] of Object.entries(MAPS)) {
       }
     });
 
+    it('every built asset names a provider receipt task and a report that produced its GLB', async () => {
+      for (const [id, stated] of [...Object.entries(config.characters), ...Object.entries(config.props)]) {
+        const item = entry(id);
+        const chain = await authoringChain(item.provenance);
+        const own = chain.get(item.provenance);
+        assert.ok(own, `${id}: its provenance report ${item.provenance} is missing`);
+        assert.equal(own.output?.path, item.runtimeUrl.replace(/^\//, ''), `${id}: its provenance report produced a different GLB than the manifest ships`);
+        assert.equal(own.output?.sha256, item.outputHash, `${id}: its provenance report states a different hash than the manifest ships`);
+        // The provider receipt names the tasks that made the asset; the manifest's source task must be one of them.
+        const receipt = [...chain.values()].find(report => report.tasks);
+        assert.ok(receipt, `${id}: its authoring chain holds no provider receipt`);
+        const tasks = Object.values(receipt.tasks);
+        assert.ok(tasks.includes(item.tripoSourceTask), `${id}: Tripo task ${item.tripoSourceTask} is not one of the receipt's tasks (${tasks.join(', ')})`);
+      }
+    });
+
     describe('characters', () => {
       for (const [id, stated] of Object.entries(config.characters)) {
         describe(id, () => {
-          let item, loaded, report, skinned;
+          let item, loaded, skinned;
           before(async () => {
             item = entry(id);
             loaded = await loadGlb(item.runtimeUrl);
-            report = await readJson(item.provenance);
             loaded.gltf.scene.traverse(object => { if (object.isSkinnedMesh) skinned = object; });
           });
 
-          it('maps the engine-requested clip slots to native named clips, in place', () => {
+          it('binds every clip a consumer asks for to a native named clip, in place', () => {
             assert.equal(item.actorId, stated.actorId);
             assert.equal(item.kind, 'character');
             assert.equal(item.sourceType, 'native-glb');
-            assert.deepEqual(item.requiredActionIds, []);
+            // The engine's monster vocabulary: a full monster binds every slot the engine may request, and a restricted actor
+            // (Koro) binds exactly the slots it plays.
             for (const slot of stated.slots) assert.ok(slot in item.actionToClipMapping, `${id}: the mapping lacks the engine-requested slot ${slot}`);
+            for (const slot of MONSTER_CLIP_ACTIONS) {
+                if (!stated.slots.includes(slot)) continue;
+                assert.ok(slot in item.actionToClipMapping, `${id}: the engine's ${slot} slot is not bound`);
+                const clip = loaded.gltf.animations.find(candidate => candidate.name === item.actionToClipMapping[slot]);
+                assert.ok(clip, `${id}: the engine's ${slot} slot has no native clip`);
+            }
+            // Every required action the manifest declares is a real, exactly bound native clip (AssetGate.assertCandidateEntry).
+            for (const action of item.requiredActionIds) {
+              assert.ok(item.actionToClipMapping[action], `${id}: required action ${action} has no native clip mapping`);
+            }
             const names = new Set(loaded.gltf.animations.map(clip => clip.name));
             for (const slot of Object.keys(item.actionToClipMapping)) {
               const clipName = item.actionToClipMapping[slot];
@@ -184,41 +334,82 @@ for (const [map, config] of Object.entries(MAPS)) {
             }
           });
 
+          it('binds the companion skill gestures the engine plays for this actor', () => {
+            // A playable companion's skills are played by native action name; the engine refuses to run without them.
+            const gestures = new Set(ALL_COMPANION_SKILLS
+              .filter(skill => companionAssets.get(skill.companionId) === id)
+              .map(skill => skill.nativeAction));
+            for (const gesture of gestures) {
+              assert.ok(gesture in item.actionToClipMapping, `${id}: the companion skill gesture ${gesture} is not bound`);
+              assert.ok(item.requiredActionIds.includes(gesture), `${id}: the companion skill gesture ${gesture} is not a required action`);
+            }
+          });
+
+          it('binds the enemy-attack clips the catalog presents for this asset', () => {
+            for (const [attackId, spec] of Object.entries(enemyAttackCatalog.attacks)) {
+              if (!spec.assets.includes(id)) continue;
+              const action = `wild-crown:${attackId}`;
+              assert.ok(item.actionToClipMapping[action], `${id}: the catalog presents ${attackId} but the manifest binds no ${action} clip`);
+              assert.ok(item.requiredActionIds.includes(action), `${id}: ${action} must be a required action`);
+            }
+          });
+
           it('exposes the castSocketBone node', () => {
             assert.ok(item.castSocketBone, `${id} needs castSocketBone`);
             const bone = loaded.gltf.scene.getObjectByName(sanitize(item.castSocketBone)) ?? loaded.gltf.scene.getObjectByName(item.castSocketBone);
             assert.ok(bone?.isBone, `${id}: ${item.castSocketBone} is not a bone of the rig`);
           });
 
-          it('records how every clip was produced', () => {
-            for (const slot of stated.slots) {
-              const produced = report.slots ? report.slots[slot] : report.clips[slot] ?? { produced: 'preset', durationSeconds: 1 };
-              assert.ok(produced, `${id}: clips-report has no ${slot}`);
-              if (report.slots) assert.ok(['preset', 'preset-conditioned', 'authored'].includes(produced.produced), `${id}: ${slot} produced=${produced.produced}`);
-              assert.ok(produced.durationSeconds > 0);
+          it('resolves the native socket anchors the renderer binds for every presented attack', () => {
+            const table = enemyNativeAnchors[id];
+            assert.ok(table, `${id}: the renderer has no native socket anchors for this asset`);
+            for (const [attackId, spec] of Object.entries(enemyAttackCatalog.attacks)) {
+              if (!spec.assets.includes(id)) continue;
+              for (const semantic of socketSemantics(spec.socket)) {
+                const pair = table[semantic];
+                assert.ok(pair, `${id}: ${attackId} binds the socket ${semantic}, which has no native anchor`);
+                for (const boneName of [pair.base, pair.tip]) {
+                  const bone = loaded.gltf.scene.getObjectByName(sanitize(boneName)) ?? loaded.gltf.scene.getObjectByName(boneName);
+                  assert.ok(bone?.isBone, `${id}: ${attackId} socket ${semantic} needs the native bone ${boneName}`);
+                }
+              }
+            }
+          });
+
+
+          it('matches the lifecycle clip durations the engine plays them over', () => {
+            // The engine plays the lifecycle one-shots over fixed durations; the shipped native clip must cover that window.
+            for (const [slot, seconds] of Object.entries(LIFECYCLE_SECONDS)) {
+              if (!(slot in item.actionToClipMapping)) continue;
+              const clip = loaded.gltf.animations.find(candidate => candidate.name === item.actionToClipMapping[slot]);
+              assert.ok(clip, `${id}: ${slot} has no native clip`);
+              assert.ok(Math.abs(clip.duration - seconds) <= 0.05, `${id}: ${slot} is ${clip.duration.toFixed(3)} s but the engine plays it over ${seconds} s`);
             }
           });
 
           it('plays every slot clip in place and keeps the body on the ground plane', () => {
             assert.ok(skinned, 'runtime GLB must contain a skinned mesh');
-            const anchor = report.inPlaceAnchorBone ?? report.rig.hips;
-            const bone = skinned.skeleton.bones.find(candidate => candidate.name === sanitize(anchor));
-            assert.ok(bone, `anchor bone ${anchor} missing`);
+            // The in-place anchor is the hip the native skin actually hangs from, derived from the shipped rig.
+            const anchor = nativeAnchor(skinned);
+            const boneIndex = skinned.skeleton.bones.indexOf(anchor);
+            assert.ok(boneIndex >= 0, `${id}: the rig has no anchor bone`);
             const box = placedBox(loaded.gltf, item.coordinateTransform), scale = item.coordinateTransform.scale;
             const span = Math.max(box.max.x - box.min.x, box.max.z - box.min.z) / scale;
             const mixer = new THREE.AnimationMixer(loaded.gltf.scene), vertex = new THREE.Vector3();
-            const rest = bone.getWorldPosition(new THREE.Vector3());
+            const rest = anchor.getWorldPosition(new THREE.Vector3());
             for (const slot of Object.keys(item.actionToClipMapping)) {
               const clip = loaded.gltf.animations.find(candidate => candidate.name === item.actionToClipMapping[slot]);
               const action = mixer.clipAction(clip);
+              action.setLoop(THREE.LoopOnce, 1);
+              action.clampWhenFinished = true;
               action.play();
               let worstDrift = 0, lowest = Infinity;
-              for (let step = 0; step <= 12; step++) {
-                action.time = clip.duration * step / 12;
+              for (const time of frameTimes(clip)) {
+                action.time = time;
                 mixer.update(0);
                 loaded.gltf.scene.updateMatrixWorld(true);
                 skinned.skeleton.update();
-                const position = bone.getWorldPosition(new THREE.Vector3());
+                const position = anchor.getWorldPosition(new THREE.Vector3());
                 worstDrift = Math.max(worstDrift, Math.hypot(position.x - rest.x, position.z - rest.z));
                 for (let i = 0; i < skinned.geometry.attributes.position.count; i += 7) {
                   skinned.getVertexPosition(i, vertex).applyMatrix4(skinned.matrixWorld);
@@ -237,9 +428,11 @@ for (const [map, config] of Object.entries(MAPS)) {
             if (stated.wingspan) assert.ok(within(Math.max(size.x, size.z), stated.wingspan), `${id}: wingspan ${Math.max(size.x, size.z).toFixed(2)} m vs ${stated.wingspan} m`);
             if (stated.length) assert.ok(within(size.z, stated.length), `${id}: body length ${size.z.toFixed(2)} m vs ${stated.length} m (the model is turned to face +z)`);
             if (stated.shoulder) {
-              // Shoulder height: top joints of the front legs plus 5% of the model height (hide / fur), as the manifest builder measures it.
+              // Shoulder height: the top joints of the front legs plus 5% of the model height (hide / fur), as the manifest builder
+              // measures it. The front legs are the two native limb chains nearest the head.
               const matrix = placement(item.coordinateTransform);
-              const tops = [report.rig.legs.FL[0], report.rig.legs.FR[0]].map(name => loaded.gltf.scene.getObjectByName(sanitize(name)).getWorldPosition(new THREE.Vector3()).applyMatrix4(matrix).y);
+              const legs = frontLegTops(loaded.gltf);
+              const tops = legs.map(leg => leg.getWorldPosition(new THREE.Vector3()).applyMatrix4(matrix).y);
               const shoulder = (tops[0] + tops[1]) / 2 + 0.05 * size.y;
               assert.ok(within(shoulder, stated.shoulder), `${id}: shoulder ${shoulder.toFixed(2)} m vs ${stated.shoulder} m`);
               assert.ok(size.y < stated.shoulder * 2.2, `${id}: ${size.y.toFixed(2)} m tall is out of proportion for a ${stated.shoulder} m shoulder`);
@@ -255,10 +448,12 @@ for (const [map, config] of Object.entries(MAPS)) {
               for (const slot of SLOTS) {
                 const clip = loaded.gltf.animations.find(candidate => candidate.name === item.actionToClipMapping[slot]);
                 const action = mixer.clipAction(clip);
+                action.setLoop(THREE.LoopOnce, 1);
+                action.clampWhenFinished = true;
                 action.play();
                 let highestLowest = -Infinity, last = 0;
-                for (let step = 0; step <= 24; step++) {
-                  action.time = clip.duration * step / 24;
+                for (const time of frameTimes(clip, 24)) {
+                  action.time = time;
                   mixer.update(0);
                   loaded.gltf.scene.updateMatrixWorld(true);
                   skinned.skeleton.update();

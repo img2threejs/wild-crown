@@ -46,6 +46,14 @@ Memory Pool, which lies due north of the arena, appears up and to the right of t
 variant's bounds are (-64, 0, -150) to (46, 18, 58): the walk-mesh (x -37.5..34, z -109.5..48) and its set dressing (the pool, its
 cavern and the ruin) exceed the authored ones.
 
+Grove pollen, fireflies and petals remain anchored to world ground (`y = 0`). Their bounded particle volume follows the
+player only in X/Z; jumping, landing or falling must not translate the atmosphere vertically. The previous full-position
+focus made the whole field rise by the hero's jump height. Native compiled-game sampling recorded 1.249 m of coupled
+movement before the fix and zero vertical focus movement through a 1.249 m jump and landing afterward. Natural world-clock
+drift and blinking, horizontal streaming, fixed-zone spores/embers and ground glows are unchanged.
+Evidence: `asset-source/playtests/evidence/player-feedback/{before,after}-grove-fireflies-jump.json` and the ground,
+airborne and landed `after-grove-fireflies-jump-*.png` captures.
+
 | Surface | Footprint | Role |
 |---|---|---|
 | `grove-trial-trailhead` | x 5..15, z 26..48 | south trailhead; spawn `nodes[0]` (10, 0, 44) |
@@ -253,7 +261,8 @@ What the tests prove:
 - `grove-practice`: the stage-1 invariants carried over (set and encounter, contract attacks, live hazard geometry, roars, the gate refusing
   then admitting a run).
 - `grove-world`: biome only for the variant; terrain exact on every walkable (twelve flat surfaces); the mound clear of the walk-mesh; both
-  pools carved off every walkable with the water mesh clear of them; particles and water in one draw call; boundary rules; mesh, mask and
+  pools carved off every walkable with the water mesh clear of them; particles and water in one draw call; ambient particle
+  height invariant through jumping/falling while horizontal streaming remains active; boundary rules; mesh, mask and
   clutter budgets against Greenwake; the Black Sap field (none south of gate 1, dense in the hollow, total round the pool); the dead
   dressing (no stone, tree or shrub on a route or arena); the four merged blight meshes (finite, bounded, reduced effects still the
   sap, dispose frees them); the framing test (from the gameplay camera the pool and the ring stand behind the guardian).

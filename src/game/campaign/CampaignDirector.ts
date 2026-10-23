@@ -68,6 +68,15 @@ import {
   type CampaignProgressRecord,
 } from "../storage/SaveRepository.js";
 import { PACT_OPTION_IDS, pactForChoice, pendingPactChoice, RECRUITMENT_RULES } from "./authority.js";
+import {
+  companionAccessOf,
+  destinationChapterOf,
+  mapRegionAccessOf,
+  REGION_NOT_UNLOCKED,
+  transitionGateOf,
+  travelGateOf,
+  type AccessProjection,
+} from "./access.js";
 import { eventMatches } from "./events.js";
 import { hasSafeWalkSurface, liesOnSurface, resolveSafeNode, samePosition } from "./safeSpawn.js";
 import {
@@ -112,26 +121,23 @@ export class CampaignChoiceRejectedError extends Error {
   }
 }
 
-const REGION_CHAPTER: Partial<Record<RegionId, number>> = {
-  greenwake: 0,
-  "whispering-canopy": 1,
-  "blood-bamboo-valley": 2,
-  "moonpine-ridge": 3,
-  "mistveil-basin": 4,
-  "sunmane-expanse": 5,
-  "the-grove": 6,
-  refuge: 7,
-  "heartroot-hollow": 8,
-};
 /** Regions a replay-isolated showcase (local playtest map) can start in directly, with the story state that region expects. */
-export type ShowcaseRegionId = "whispering-canopy" | "the-grove" | "moonpine-ridge" | "mistveil-basin";
+export type ShowcaseRegionId = "greenwake" | "whispering-canopy" | "the-grove" | "moonpine-ridge" | "mistveil-basin";
 const SHOWCASE_STARTS: Readonly<Record<ShowcaseRegionId, { readonly chapter: number; readonly questIds: readonly string[]; readonly provisionalKoro: boolean }>> = {
+  // The Greenwake DEV map opens at the prologue, before anybody has joined the journey.
+  "greenwake": { chapter: 0, questIds: ["prologue"], provisionalKoro: false },
   "whispering-canopy": { chapter: 1, questIds: ["fallen-scout", "thief-in-the-branches"], provisionalKoro: true },
   // The early sanctuary opens once the Canopy accord is struck (Vara and Koro have arrived), before Blood Bamboo Valley.
   "the-grove": { chapter: 1, questIds: [], provisionalKoro: false },
   "moonpine-ridge": { chapter: 3, questIds: ["the-third-howl", "two-packs"], provisionalKoro: false },
   "mistveil-basin": { chapter: 4, questIds: ["eyes-in-the-mist", "the-black-river"], provisionalKoro: false },
 };
+/**
+ * The DEV showcase roster. A showcase is a replay-isolated QA fixture: its companions are available so the fixture
+ * may switch between them, and it has no event history that could have recruited them. A normal run never receives
+ * this roster — the training factory also refuses a replay source.
+ */
+const SHOWCASE_ROSTER: readonly CompanionId[] = ["vara", "koro", "asha", "sable", "nyra", "solkar"];
 const LEADER_IDS: readonly LeaderId[] = [
   "koro",
   "asha",
@@ -424,8 +430,12 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.resetRun(options.runId ?? createId(), DEFAULT_HERO_ID);
   }
 
-  private resetRun(runId: string, heroId: HeroId, companionId = DEFAULT_HERO_COMPANIONS[heroId]): void {
-    if (!isHeroId(heroId) || !isCompanionId(companionId)) throw new Error("Unknown hero or companion.");
+  /**
+   * A new run starts with a hero and no traveling companion. The companion is earned in the story and equipped by
+   * `selectParty` once it is available.
+   */
+  private resetRun(runId: string, heroId: HeroId): void {
+    if (!isHeroId(heroId)) throw new Error("Unknown hero.");
     this.epoch += 1;
     this.runId = runId;
     this.heroId = heroId;
@@ -443,7 +453,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.trackedObjectiveId = null;
     this.recoveryRequest = null;
     this.lastEvent = null;
-    this.party = { companionId };
+    this.party = {};
     this.endingId = null;
     this.eventKeys = new Set();
     this.eventLog = [];
@@ -455,18 +465,41 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
   }
 
+  /**
+   * A normal New Game: the hero is chosen, the companion is not. A fresh run has recruited nobody, so a passed
+   * companion is an unearned selection: it is refused before anything is reset, leaving the live journey intact.
+   */
   startChapterRun(input: { runId: string; heroId: HeroId; companionId?: CompanionId; saveScope: SaveScope }): CampaignSnapshot {
     if (input.saveScope !== this.scope) throw new Error("The run's save scope must match the Director's repository scope.");
     if (!isHeroId(input.heroId)) throw new Error("Unknown hero.");
-    this.resetRun(input.runId, input.heroId, input.companionId);
+    if (input.companionId !== undefined) {
+      if (!isCompanionId(input.companionId)) throw new Error("Unknown companion.");
+      throw new Error("A new journey starts without a traveling companion; companions are earned in the story.");
+    }
+    this.resetRun(input.runId, input.heroId);
     return this.publish();
   }
 
-  startNewRun(runId = createId(), heroId: HeroId = DEFAULT_HERO_ID, companionId = DEFAULT_HERO_COMPANIONS[heroId]): CampaignSnapshot {
-    this.resetRun(runId, heroId, companionId);
+  /**
+   * A normal New Game through the plain API. A new run has no recruited companions, so a supplied companion is
+   * refused before resetting the existing journey.
+   */
+  startNewRun(runId = createId(), heroId: HeroId = DEFAULT_HERO_ID, companionId?: CompanionId): CampaignSnapshot {
+    if (companionId !== undefined) {
+      if (!isCompanionId(companionId)) throw new Error("Unknown companion.");
+      throw new Error("A new journey starts without a traveling companion; companions are earned in the story.");
+    }
+    this.resetRun(runId, heroId);
     return this.publish();
   }
 
+  /**
+   * A replay-isolated DEV showcase (a local playtest map), never a campaign journey.
+   *
+   * The showcase is a QA fixture, so its roster is available by construction: the fixture may switch between the
+   * companions without earning them. This never reaches a normal run — a showcase has no event history and
+   * `replay: true` prevents persistence, and the training factory refuses a replay source.
+   */
   startShowcase(runId = "showcase-" + createId(), regionId: ShowcaseRegionId = "whispering-canopy", loadout?: { heroId: HeroId; companionId: CompanionId }): CampaignSnapshot {
     const heroId = loadout?.heroId ?? DEFAULT_HERO_ID;
     const companionId = loadout?.companionId ?? DEFAULT_HERO_COMPANIONS[heroId];
@@ -476,9 +509,10 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.epoch += 1;
     this.runId = runId;
     this.heroId = heroId;
-    this.campaign = recruitCompanion(
-      recruitCompanion({ ...createNewRun(runId), world: replayState.world }, "vara"),
-      "koro",
+    // The fixture roster: every companion is available, with no event history behind it.
+    this.campaign = SHOWCASE_ROSTER.reduce(
+      (state, id) => recruitCompanion(state, id),
+      { ...createNewRun(runId), world: replayState.world },
     );
     this.region = regionId;
     this.chapter = showcase.chapter;
@@ -499,6 +533,66 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.story = emptyStory();
     this.checkpoint = createCheckpoint(this.campaign);
     this.safeSpawn = this.safeSpawnFor(regionId);
+    this.normalizeStory();
+    this.lastSafeCheckpoint = this.createSafeCheckpoint();
+    return this.publish();
+  }
+
+  /**
+   * An isolated practice run in one region, derived from an already-earned campaign journey.
+   *
+   * The practice run is replay-isolated: it is never persisted, never autosaved and never advances story, quests or
+   * dialogue. It copies the source journey's earned companion progression, faction and region state and Dominion
+   * ledger by value — never by reference, so the source snapshot and the live journey are untouched — and it invents
+   * no recruitment, Bond, Dominion or story event. The traveling companion is carried over only when the source's
+   * equipped companion is actually available.
+   *
+   * A Director bound to a SaveRepository refuses this: practice must never overwrite a journey.
+   */
+  startPracticeRun(input: { runId: string; source: CampaignSnapshot; regionId: RegionId }): CampaignSnapshot {
+    if (this.saves) throw new Error("A practice run cannot be started on a Director that owns a save repository.");
+    if (!input.runId.trim()) throw new Error("A practice run requires a run id.");
+    if (!REGIONS.some((region) => region.id === input.regionId)) throw new Error("Unknown practice region.");
+    const source = input.source;
+    // The whole canonical campaign is copied by value; only the run id differs. Every earned field — recruitment,
+    // Bond, Dominion, story flags, faction and region state, the Dominion ledger — is preserved exactly, and nothing
+    // is invented: the practice run has no event history of its own.
+    const campaign: CampaignState = structuredClone(source.campaign);
+    campaign.runId = input.runId;
+    const practiceCompanion = source.party.companionId;
+    const eligible = practiceCompanion !== undefined
+      ? companionAccessOf(
+        practiceCompanion,
+        campaign.world.companions[practiceCompanion],
+        campaign,
+        source.worldFacts["solkar-exiled"] === true,
+        source.worldFacts.solkarPresent === false,
+      ).available
+      : false;
+    this.epoch += 1;
+    this.runId = input.runId;
+    this.heroId = source.session.heroId;
+    this.campaign = campaign;
+    this.region = input.regionId;
+    this.chapter = source.chapter;
+    this.replay = true;
+    this.revision = 0;
+    this.facts = factsWithRestorationDefaults({ ...source.worldFacts });
+    normalizeRestorationFacts(this.campaign, this.facts);
+    // A practice run carries no story progress: no quest, objective, beat or choice is in flight.
+    this.activeQuestIds = [];
+    this.completedQuestIds = [];
+    this.completedObjectiveIds = [];
+    this.trackedObjectiveId = null;
+    this.recoveryRequest = null;
+    this.lastEvent = null;
+    this.party = eligible && practiceCompanion !== undefined ? { companionId: practiceCompanion } : {};
+    this.endingId = null;
+    this.eventKeys = new Set();
+    this.eventLog = [];
+    this.story = emptyStory();
+    this.checkpoint = createCheckpoint(this.campaign);
+    this.safeSpawn = this.safeSpawnFor(input.regionId);
     this.normalizeStory();
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
     return this.publish();
@@ -591,6 +685,38 @@ export class CampaignDirector implements CampaignDirectorAPI {
   /** The authored definition of the current story segment, or undefined outside authored chapters. */
   chapterDefinition(): ChapterRuntimeDefinition | undefined {
     return findSegmentDefinition(this.chapters, deriveSegmentId(this.chapter, this.region, this.completedQuestIds, this.completedObjectiveIds, this.story.completedBeatIds));
+  }
+
+  /**
+   * The read-only facts every access question is answered from. The projection holds references to live state and is
+   * never mutated, so one projection may answer many access questions without copying a snapshot.
+   */
+  private accessProjection(): AccessProjection {
+    return {
+      chapter: this.chapter,
+      regionId: this.region,
+      worldFacts: this.facts,
+      choices: this.choices,
+      completedQuestIds: this.completedQuestIds,
+      completedObjectiveIds: this.completedObjectiveIds,
+      completedBeatIds: this.story.completedBeatIds,
+      pendingChoiceId: this.story.pendingChoiceId,
+      fragments: this.campaign.world.fragments,
+    };
+  }
+
+  /**
+   * The earned access of one world-map region and of every authored route from the current region into it.
+   *
+   * The Director delegates to the pure selector, which owns the route pairing, the authored unlock facts, the chapter
+   * reach and the story gates. The app layer calls the same pure function with the snapshot it already holds, so
+   * nine region queries cost one snapshot rather than nine copies.
+   */
+  mapRegionAccess(snapshot: CampaignSnapshot, regionId: RegionId): {
+    region: { unlocked: boolean; reason: string | null };
+    entrances: readonly { id: string; unlocked: boolean; reason: string | null }[];
+  } {
+    return mapRegionAccessOf(snapshot, regionId, REGIONS, this.chapters);
   }
 
   private async persistAutosave(): Promise<void> {
@@ -687,18 +813,6 @@ export class CampaignDirector implements CampaignDirectorAPI {
   private isObjectiveActive(objectiveId: string): boolean {
     return this.activeQuestIds.some((questId) =>
       this.objectivesFor(questId).some((objective) => objective.id === objectiveId && !this.completedObjectiveIds.includes(objective.id)));
-  }
-
-  /** Exit requirement grammar: fact | quest:<id> | objective:<id> | choice:<id>[:<option>] | beat:<id>. */
-  private requirementMet(requirement: string): boolean {
-    const [kind, target, option] = requirement.split(":");
-    switch (kind) {
-      case "quest": return this.completedQuestIds.includes(target ?? "");
-      case "objective": return this.completedObjectiveIds.includes(requirement.slice("objective:".length) as ObjectiveId);
-      case "choice": return target !== undefined && this.choices[target] !== undefined && (option === undefined || this.choices[target] === option);
-      case "beat": return this.story.completedBeatIds.includes(target ?? "");
-      default: return this.facts[requirement] === true;
-    }
   }
 
   /**
@@ -827,13 +941,18 @@ export class CampaignDirector implements CampaignDirectorAPI {
         (route) => route.traversalEvent === exit.traversalEvent && route.destinationRegionId === exit.destinationRegionId,
       );
       if (!destination || !entrance) throw new Error("The exit has no authored destination entrance.");
-      const unmet = definition.exitRequirements.filter((requirement) => !this.requirementMet(requirement));
-      if (unmet.length) throw new Error("Chapter exit requirements are not met: " + unmet.join(", "));
-      if (this.story.pendingChoiceId !== null) throw new Error("A required story choice must be resolved before leaving.");
-      for (const route of [exit, entrance]) {
-        if (route.unlockFact && this.facts[route.unlockFact] !== true) throw new Error("The selected route has not been discovered.");
-      }
       const destinationChapter = this.chapterFor(destination.id);
+      // The transition authority is shared with the map projection: the same gate answers both.
+      const gate = transitionGateOf({
+        projection: this.accessProjection(),
+        destinationRegionId: destination.id,
+        destinationChapter,
+        exitRequirements: definition.exitRequirements,
+        routeDiscovered: [exit, entrance].every(
+          (route) => !route.unlockFact || this.facts[route.unlockFact] === true,
+        ),
+      });
+      if (!gate.allowed) throw new Error(gate.reason ?? REGION_NOT_UNLOCKED);
       const events: WorldEvent[] = [];
       if (destinationChapter > this.chapter) {
         events.push({
@@ -860,31 +979,11 @@ export class CampaignDirector implements CampaignDirectorAPI {
 
   /** Destination chapter of a region: authored definition first (a hub preserves the current chapter), then the legacy mapping. */
   private chapterFor(regionId: RegionId): number {
-    if (regionId === "the-grove") {
-      // The Grove preserves the current chapter for ordinary visits, but a return to the Grove after Sunmane / Moonpine /
-      // Mistveil completion enters chapter 6 (the Fall of the Grove). The fallback of the authored `grove-fall` segment
-      // names chapter 6 explicitly.
-      const groveFall = this.chapters.find((item) => item.segmentId === "grove-fall");
-      const sunmaneResolution = this.choices["sunmane-resolution"];
-      const allFragments = FRAGMENT_IDS.every(fragment => this.campaign.world.fragments.includes(fragment));
-      const triggered = Boolean(sunmaneResolution) && allFragments && groveFall !== undefined;
-      if (triggered) return Math.max(this.chapter, groveFall.chapter);
-      return this.chapter;
-    }
-    // Prefer the return segment when current chapter is at or above 7: a return journey to a previously visited region
-    // never moves the chapter backwards. Return segments carry the same chapter as the chapter the player is in.
-    if (this.chapter >= 7) {
-      const returnSegment = this.chapters.find(
-        (item) => item.regionId === regionId && item.segmentId.startsWith("return-"),
-      );
-      if (returnSegment) return Math.max(returnSegment.chapter, this.chapter);
-      if (regionId === "refuge") return Math.max(7, this.chapter);
-    }
-    const authored = this.chapters.find(
-      (item) => item.regionId === regionId && item.segmentId !== "grove" && item.segmentId !== "prologue" && !item.segmentId.startsWith("return-"),
-    );
-    if (authored) return authored.chapter;
-    return REGION_CHAPTER[regionId] ?? this.chapter;
+    // The Fall of the Grove needs the earned Sunmane resolution and every Heartroot fragment.
+    const groveFallTriggered =
+      Boolean(this.choices["sunmane-resolution"]) &&
+      FRAGMENT_IDS.every((fragment) => this.campaign.world.fragments.includes(fragment));
+    return destinationChapterOf(regionId, this.chapter, this.chapters, groveFallTriggered);
   }
 
   advanceStory(input: { beatId: string; lineIndex: number; skip: boolean }): Promise<CampaignSnapshot> {
@@ -1492,13 +1591,24 @@ export class CampaignDirector implements CampaignDirectorAPI {
       return this.publish();
     });
   }
+  /**
+   * Durable replacement of the traveling companion. Only an earned companion may be equipped: the access authority
+   * reads the committed recruitment state and the narrative constraints that remove a companion from the journey, so
+   * an unrecruited or exiled companion is refused with its reason instead of being silently equipped.
+   */
   selectParty(companionId: CompanionId): Promise<CampaignSnapshot> {
     return this.serialize(async () => {
       if (!isCompanionId(companionId)) throw new Error("Unknown companion.");
       if (this.story.activeEncounterId !== null)
         throw new Error("The companion cannot change during an active encounter.");
-      if (companionId === "solkar" && this.campaign.world.factions.crown.leaderStatus === "exiled")
-        throw new Error("Solkar cannot return after your exile decision.");
+      const access = companionAccessOf(
+        companionId,
+        this.campaign.world.companions[companionId],
+        this.campaign,
+        this.facts["solkar-exiled"] === true,
+        this.facts.solkarPresent === false,
+      );
+      if (!access.available) throw new Error(access.reason ?? "This companion cannot join your party.");
       const party = { companionId };
       const rollback = this.rollbackState();
       const epoch = this.epoch;
@@ -1514,22 +1624,6 @@ export class CampaignDirector implements CampaignDirectorAPI {
     regionId: RegionId,
     entranceId: string,
   ): Promise<CampaignSnapshot> {
-    const chapter = REGION_CHAPTER[regionId];
-    if (chapter === undefined) throw new Error("Unknown campaign region.");
-    if (regionId === "heartroot-hollow" && this.chapter < 8)
-      throw new Error("Heartroot Hollow is not accessible before Chapter 8.");
-    if (
-      regionId === "refuge" &&
-      (this.chapter < 6 || this.facts.refugeOpen !== true)
-    ) {
-      throw new Error("The Refuge does not open before the Fall of the Grove.");
-    }
-    const refugeOpenOnFall =
-      regionId === "refuge" && this.chapter === 6 && this.facts.refugeOpen === true;
-    if (chapter > this.chapter && regionId !== "the-grove" && !refugeOpenOnFall)
-      throw new Error(
-        "This region has not been unlocked by campaign progression.",
-      );
     const target = REGIONS.find((item) => item.id === regionId);
     const entrance = target?.entrances.find(
       (route) =>
@@ -1545,9 +1639,16 @@ export class CampaignDirector implements CampaignDirectorAPI {
       throw new Error(
         "The selected route is not an authored connection from the current region.",
       );
-    if (entrance.unlockFact && this.facts[entrance.unlockFact] !== true) {
-      throw new Error("The selected route has not been discovered.");
-    }
+    // The travel authority is shared with the map projection: the same gate answers both.
+    const gate = travelGateOf({
+      projection: this.accessProjection(),
+      destinationRegionId: regionId,
+      destinationChapter: this.chapterFor(regionId),
+      routeDiscovered: (!entrance.unlockFact || this.facts[entrance.unlockFact] === true) &&
+        (!exit.unlockFact || this.facts[exit.unlockFact] === true),
+      refugeOpen: this.facts.refugeOpen === true,
+    });
+    if (!gate.allowed) throw new Error(gate.reason ?? REGION_NOT_UNLOCKED);
     // One key per transition request: a return journey to a previously visited region is a new request, never a consumed key.
     const priorJourneys = this.eventLog.filter(
       (event) =>
@@ -1809,6 +1910,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.choices = { ...progress.choices };
       this.facts = factsWithRestorationDefaults(progress.worldFacts);
       normalizeRestorationFacts(campaign, this.facts);
+      // An old save may carry a companion the run never recruited: the equipment is dropped, the earned progress stays.
+      this.party = this.adoptedParty(this.party);
       this.endingId = progress.ending;
       this.eventLog = progress.eventLog as WorldEvent[];
       this.eventKeys = new Set([
@@ -1838,6 +1941,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       this.activeQuestIds = firstQuest ? [firstQuest] : [];
       this.completedObjectiveIds = [];
       this.trackedObjectiveId = null;
+      // A legacy save may name a default companion the run never recruited: the equipment is dropped, not granted.
       this.party = { companionId: DEFAULT_HERO_COMPANIONS[this.heroId] };
       this.choices = {};
       this.facts = emptyWorldFacts(campaign);
@@ -1850,6 +1954,7 @@ export class CampaignDirector implements CampaignDirectorAPI {
       }
       if (campaign.world.factions.crown.leaderStatus === "exiled")
         this.facts.solkarPresent = false;
+      this.party = this.adoptedParty(this.party);
       this.endingId = null;
       this.eventLog = [];
       this.eventKeys.clear();
@@ -1874,6 +1979,26 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.lastSafeCheckpoint = this.createSafeCheckpoint();
   }
 
+  /**
+   * The traveling companion of an adopted save, narrowed to what the run has actually earned.
+   *
+   * An old save may carry a companion the campaign never recruited — a free selection from before companions were
+   * earned. Adoption keeps every earned progress record (recruitment, Bond, Dominion, story flags) and drops only the
+   * unearned equipment, so loading an old save never grants a companion and never loses earned progress.
+   */
+  private adoptedParty(party: CampaignSnapshot["party"]): CampaignSnapshot["party"] {
+    const id = party.companionId;
+    if (id === undefined) return {};
+    const access = companionAccessOf(
+      id,
+      this.campaign.world.companions[id],
+      this.campaign,
+      this.facts["solkar-exiled"] === true,
+      this.facts.solkarPresent === false,
+    );
+    return access.available ? { companionId: id } : {};
+  }
+
   private restoreProgress(progress: CampaignProgressCheckpoint): void {
     this.chapter = progress.chapter;
     this.region = progress.regionId;
@@ -1885,6 +2010,8 @@ export class CampaignDirector implements CampaignDirectorAPI {
     this.choices = { ...progress.choices };
     this.facts = factsWithRestorationDefaults(progress.worldFacts);
     normalizeRestorationFacts(this.campaign, this.facts);
+    // The restored facts decide the exile/absence constraints, so the earned-equipment strip runs after them.
+    this.party = this.adoptedParty(this.party);
     // Preserve the persisted `refugeOpen` (and `wardenCall`/`askSignal`) from the checkpoint. Save/restore never
     // reopens the Refuge based on chapter number; the bit was set by the earned `grove-collapse-escape` event.
     this.endingId = progress.ending;

@@ -99,6 +99,9 @@ export interface ProjectileVisual {
   readonly display: Vector3;
   readonly direction: Vector3;
   readonly scarFrom: Vector3;
+  /** Hand-thrown projectiles: palm minus simulated spawn point, eased out of the drawn position from `launchAt` (world seconds; -Infinity when unused). */
+  readonly launch: Vector3;
+  launchAt: number;
 }
 
 export const BOLT_TRUNK_LEVELS = 5;

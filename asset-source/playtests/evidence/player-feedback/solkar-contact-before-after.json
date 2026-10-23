@@ -1,0 +1,259 @@
+{
+  "scope": "Full skinned-mesh minimum comparison; pre-fix authored animation vs final companion; jaw-only skin repair does not affect reported foot vertices. Source units, not terrain or hardware qualification.",
+  "before": {
+    "path": "/tmp/wc-solkar-proof/actor-solkar-animated-PREFIX.glb",
+    "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+    "restFloor": 1.4102489442890942e-7,
+    "results": [
+      {
+        "clip": "monster-idle",
+        "minSkinY": -0.003966846036166094,
+        "belowRestFloor": 0.003966987061060523,
+        "worst": {
+          "y": -0.003966846036166094,
+          "index": 6998,
+          "influences": [
+            {
+              "bone": "tripo0_Right_Limb_3",
+              "weight": 0.68110591173172
+            },
+            {
+              "bone": "tripo0_Right_Limb_2",
+              "weight": 0.23636549711227417
+            },
+            {
+              "bone": "tripo0_Right_Limb_4",
+              "weight": 0.08241696655750275
+            },
+            {
+              "bone": "tripo0_Right_Limb_1",
+              "weight": 0.000111616391222924
+            }
+          ],
+          "time": 1.2333333333333334
+        }
+      },
+      {
+        "clip": "monster-walk",
+        "minSkinY": -0.02048398496972692,
+        "belowRestFloor": 0.02048412599462135,
+        "worst": {
+          "y": -0.02048398496972692,
+          "index": 28268,
+          "influences": [
+            {
+              "bone": "tripo1_Left_Limb_4",
+              "weight": 0.7379767298698425
+            },
+            {
+              "bone": "tripo1_Left_Limb_3",
+              "weight": 0.24734488129615784
+            },
+            {
+              "bone": "tripo1_Left_Limb_5",
+              "weight": 0.014571991749107838
+            },
+            {
+              "bone": "tripo0_Left_Limb_3",
+              "weight": 0.00010641902917996049
+            }
+          ],
+          "time": 0.7
+        }
+      },
+      {
+        "clip": "monster-run",
+        "minSkinY": -0.020951505922436775,
+        "belowRestFloor": 0.020951646947331204,
+        "worst": {
+          "y": -0.020951505922436775,
+          "index": 28268,
+          "influences": [
+            {
+              "bone": "tripo1_Left_Limb_4",
+              "weight": 0.7379767298698425
+            },
+            {
+              "bone": "tripo1_Left_Limb_3",
+              "weight": 0.24734488129615784
+            },
+            {
+              "bone": "tripo1_Left_Limb_5",
+              "weight": 0.014571991749107838
+            },
+            {
+              "bone": "tripo0_Left_Limb_3",
+              "weight": 0.00010641902917996049
+            }
+          ],
+          "time": 0.43333333333333335
+        }
+      },
+      {
+        "clip": "monster-turn",
+        "minSkinY": -0.0009135883063293715,
+        "belowRestFloor": 0.0009137293312238004,
+        "worst": {
+          "y": -0.0009135883063293715,
+          "index": 8485,
+          "influences": [
+            {
+              "bone": "tripo0_Right_Limb_3",
+              "weight": 0.5264908075332642
+            },
+            {
+              "bone": "tripo0_Right_Limb_4",
+              "weight": 0.45205456018447876
+            },
+            {
+              "bone": "tripo0_Right_Limb_2",
+              "weight": 0.021332331001758575
+            },
+            {
+              "bone": "bone_37",
+              "weight": 0.00012233201414346695
+            }
+          ],
+          "time": 0.3333333333333333
+        }
+      }
+    ]
+  },
+  "after": {
+    "path": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb",
+    "sha256": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb",
+    "restFloor": 1.4102489442890942e-7,
+    "results": [
+      {
+        "clip": "monster-idle",
+        "minSkinY": -0.003966846036166094,
+        "belowRestFloor": 0.003966987061060523,
+        "worst": {
+          "y": -0.003966846036166094,
+          "index": 6998,
+          "influences": [
+            {
+              "bone": "tripo0_Right_Limb_3",
+              "weight": 0.68110591173172
+            },
+            {
+              "bone": "tripo0_Right_Limb_2",
+              "weight": 0.23636549711227417
+            },
+            {
+              "bone": "tripo0_Right_Limb_4",
+              "weight": 0.08241696655750275
+            },
+            {
+              "bone": "tripo0_Right_Limb_1",
+              "weight": 0.000111616391222924
+            }
+          ],
+          "time": 1.2333333333333334
+        }
+      },
+      {
+        "clip": "monster-walk",
+        "minSkinY": -0.021594944082863166,
+        "belowRestFloor": 0.021595085107757594,
+        "worst": {
+          "y": -0.021594944082863166,
+          "index": 6087,
+          "influences": [
+            {
+              "bone": "tripo0_Right_Limb_3",
+              "weight": 0.5811302065849304
+            },
+            {
+              "bone": "tripo0_Right_Limb_2",
+              "weight": 0.41642525792121887
+            },
+            {
+              "bone": "tripo0_Right_Limb_4",
+              "weight": 0.002160784788429737
+            },
+            {
+              "bone": "tripo0_Right_Limb_1",
+              "weight": 0.0002837561478372663
+            }
+          ],
+          "time": 0.7333333333333333
+        }
+      },
+      {
+        "clip": "monster-run",
+        "minSkinY": -0.022908315529473866,
+        "belowRestFloor": 0.022908456554368295,
+        "worst": {
+          "y": -0.022908315529473866,
+          "index": 6089,
+          "influences": [
+            {
+              "bone": "tripo0_Left_Limb_3",
+              "weight": 0.6343013048171997
+            },
+            {
+              "bone": "tripo0_Left_Limb_2",
+              "weight": 0.3311440646648407
+            },
+            {
+              "bone": "tripo0_Left_Limb_4",
+              "weight": 0.034008074551820755
+            },
+            {
+              "bone": "tripo0_Left_Limb_1",
+              "weight": 0.0005465689464472234
+            }
+          ],
+          "time": 0.16666666666666666
+        }
+      },
+      {
+        "clip": "monster-turn",
+        "minSkinY": -0.0009135883063293715,
+        "belowRestFloor": 0.0009137293312238004,
+        "worst": {
+          "y": -0.0009135883063293715,
+          "index": 8485,
+          "influences": [
+            {
+              "bone": "tripo0_Right_Limb_3",
+              "weight": 0.5264908075332642
+            },
+            {
+              "bone": "tripo0_Right_Limb_4",
+              "weight": 0.45205456018447876
+            },
+            {
+              "bone": "tripo0_Right_Limb_2",
+              "weight": 0.021332331001758575
+            },
+            {
+              "bone": "bone_37",
+              "weight": 0.00012233201414346695
+            }
+          ],
+          "time": 0.3333333333333333
+        }
+      }
+    ]
+  },
+  "differences": [
+    {
+      "clip": "monster-idle",
+      "additionalDepth": 0
+    },
+    {
+      "clip": "monster-walk",
+      "additionalDepth": 0.001110959113136245
+    },
+    {
+      "clip": "monster-run",
+      "additionalDepth": 0.001956809607037091
+    },
+    {
+      "clip": "monster-turn",
+      "additionalDepth": 0
+    }
+  ]
+}

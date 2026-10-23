@@ -28,6 +28,14 @@ export type AttackId = string & { readonly __attackId?: unique symbol };
 export type ActionId = string & { readonly __actionId?: unique symbol };
 export type InteractionInputHint = "interact" | "heavy" | "ability";
 export type InteractionActivation = "press" | "press-release";
+
+/** Read-only presentation at an authored objective or an earned chapter exit; never grants progress. */
+export interface WorldObjectiveCue {
+  readonly id: string;
+  readonly position: Readonly<Vec3>;
+  readonly kind: "objective" | "exit";
+  readonly status: "approach" | "ready" | "blocked";
+}
 export interface InputBindingMaps {
   keyboard: Readonly<Record<string, string>>;
   gamepad: Readonly<Record<string, string>>;
@@ -1053,7 +1061,8 @@ export type AssetPolicy = "verified" | "candidate";
 export type SaveScope = "production" | "candidate-chapters";
 export type SessionConfig =
   | { kind: "chapters"; assets: AssetPolicy; saveScope: SaveScope }
-  | { kind: "trials"; assets: "candidate"; mapId: string };
+  | { kind: "trials"; assets: "candidate"; mapId: string }
+  | { kind: "training"; assets: AssetPolicy; mapId: string };
 
 /**
  * Verified chapters use production scope; playable candidate chapters use candidate scope. DEV-only Trials use their own
@@ -1063,6 +1072,10 @@ export function validateSessionConfig(config: SessionConfig, isDev: boolean): Se
   if (config.kind === "trials") {
     if (config.assets !== "candidate" || !config.mapId.trim()) throw new Error("Trials require candidate assets and a map id.");
     if (!isDev) throw new Error("Trials are available only in DEV builds.");
+    return config;
+  }
+  if (config.kind === "training") {
+    if (!config.mapId.trim() || !["candidate", "verified"].includes(config.assets)) throw new Error("Training Grounds require a map and an explicit asset policy.");
     return config;
   }
   const production = config.assets === "verified" && config.saveScope === "production";
@@ -1300,6 +1313,7 @@ export interface GameViewModel {
   screen:
     | "title"
     | "map-select"
+    | "training-select"
     | "hero-select"
     | "map-intro"
     | "chapters-menu"
@@ -1370,6 +1384,13 @@ export interface GameViewModel {
       monsters: readonly string[]; comingSoon: boolean; unlocked: boolean; cleared: boolean;
     }[];
   };
+  /** Campaign-earned practice choices; practice never contributes to campaign history or saves. */
+  training?: {
+    active: boolean;
+    available: boolean;
+    reason: string | null;
+    maps: readonly { id: string; name: string; regionId: RegionId; unlocked: boolean; reason: string | null; thumbnailUrl: string }[];
+  };
   campaign: CampaignSnapshot | null;
   journal: { quests: readonly QuestDefinition[]; region: RegionId | null };
   map: {
@@ -1378,8 +1399,9 @@ export interface GameViewModel {
       id: RegionId;
       name: string;
       unlocked: boolean;
+      reason?: string | null;
       restoration: RestorationState;
-      entrances: readonly { id: string; label: string; unlocked: boolean }[];
+      entrances: readonly { id: string; label: string; unlocked: boolean; reason?: string | null }[];
     }[];
   };
   party: CampaignSnapshot["party"] | null;
@@ -1394,6 +1416,8 @@ export interface GameViewModel {
     cooldownSeconds?: number;
     available: boolean;
     reason?: string;
+    previewAvailable: boolean;
+    previewReason: string | null;
   }[];
   relationships: CampaignState["world"]["factions"] | null;
   hub?: HubViewModel;
@@ -1418,7 +1442,7 @@ export interface GameViewModel {
   } | null;
   /** Chapter/trial/production session banner and entry-mode data. */
   session?: {
-    kind: "chapters" | "trials" | "production";
+    kind: "chapters" | "trials" | "training" | "production";
     banner: string | null;
     heroId: HeroId | null;
     saveScope: SaveScope | null;
@@ -1434,6 +1458,10 @@ export interface GameViewModel {
     step: { index: number; total: number } | null;
     counter: string | null;
     interaction: string | null;
+    interactionInputHint: InteractionDefinition['inputHint'] | 'companions' | 'commandWheel';
+    /** Authored story context and honest approach/requirement instructions. */
+    guidance?: string;
+    status?: "approach" | "ready" | "blocked";
     destination: { label: string; distanceMeters: number | null; bearingDegrees: number | null; hint: string | null } | null;
   };
   wheel?: {
@@ -1523,7 +1551,7 @@ export interface SaveSlotViewModel {
 export type UIAction =
   | { type: "new-game"; runId: string }
   | { type: "select-map"; mapId: string }
-  | { type: "select-hero"; heroId: HeroId; companionId: CompanionId; runId: string }
+  | { type: "select-hero"; heroId: HeroId; companionId?: CompanionId; runId: string }
   | { type: "select-hero-companion"; heroId: HeroId; companionId: CompanionId }
   | { type: "map-select" }
   | { type: "continue"; slotId: string }
@@ -1541,6 +1569,9 @@ export type UIAction =
   | { type: "open-journal" }
   | { type: "open-companions" }
   | { type: "open-hub" }
+  | { type: "open-training" }
+  | { type: "start-training"; mapId: string }
+  | { type: "leave-training" }
   | { type: "learn-upgrade"; upgradeId: string }
   | { type: "start-dodge-training" }
   | { type: "stop-dodge-training" }
@@ -1580,7 +1611,7 @@ export type UIAction =
 
 /** Operations Wave 2 adds to the Director; all serialize on the same queue as event writes. */
 export interface ChapterDirectorAPI {
-  /** Creates a normal campaign run (chapter 0, Prologue) with an immutable hero choice in the repository's save scope. */
+  /** Creates a normal Prologue run with an immutable hero and no traveling companion; supplied companion gifts are refused. */
   startChapterRun(input: { runId: string; heroId: HeroId; companionId?: CompanionId; saveScope: SaveScope }): CampaignSnapshot;
   /** Commits the named pre-fight checkpoint and the active-encounter intent before combat starts. */
   beginChapterEncounter(encounterId: string, checkpointId: string): Promise<CampaignSnapshot>;
@@ -1590,7 +1621,7 @@ export interface ChapterDirectorAPI {
   advanceChapter(input: { exitId: string; requestId: string }): Promise<CampaignSnapshot>;
   /** Acknowledges one dialogue line (or, with `skip`, the whole beat) while keeping any required choice pending. */
   advanceStory(input: { beatId: string; lineIndex: number; skip: boolean }): Promise<CampaignSnapshot>;
-  /** Durable replacement of the sole companion. Exile is the only narrative operation that dismisses them. */
+  /** Durable replacement of the sole earned, present companion outside an active encounter. */
   selectParty(companionId: CompanionId): Promise<CampaignSnapshot>;
   /** Persists the current progress to the run's autosave slot (serialized with event writes). */
   autosave(): Promise<void>;
@@ -1598,7 +1629,9 @@ export interface ChapterDirectorAPI {
 
 export interface CampaignDirectorAPI extends ChapterDirectorAPI {
   startNewRun(runId?: string, heroId?: HeroId, companionId?: CompanionId): CampaignSnapshot;
-  startShowcase(runId?: string, regionId?: "whispering-canopy" | "the-grove" | "moonpine-ridge" | "mistveil-basin", loadout?: { heroId: HeroId; companionId: CompanionId }): CampaignSnapshot;
+  startShowcase(runId?: string, regionId?: "greenwake" | "whispering-canopy" | "the-grove" | "moonpine-ridge" | "mistveil-basin", loadout?: { heroId: HeroId; companionId: CompanionId }): CampaignSnapshot;
+  /** Creates replay-isolated practice from earned state; a Director with a SaveRepository must refuse it. */
+  startPracticeRun(input: { runId: string; source: CampaignSnapshot; regionId: RegionId }): CampaignSnapshot;
   snapshot(): CampaignSnapshot;
   subscribe(listener: (snapshot: CampaignSnapshot) => void): () => void;
   processEvent(event: WorldEvent): Promise<CampaignSnapshot>;

@@ -1,0 +1,279 @@
+{
+  "scope": "Actual mouse menu navigation, trusted browser Tab/Shift-Tab on Pause, and clearly simulated navigator gamepad consumed by real application RAF. Tab during gameplay remains the documented Journal binding; HUD keyboard settings are accessible from Pause. No physical-controller qualification.",
+  "pointer": [
+    {
+      "screen": "map",
+      "hidden": false,
+      "modality": "pointer",
+      "active": {
+        "action": "map",
+        "focusKey": "map-Map",
+        "outlineStyle": "none",
+        "outlineWidth": "3px"
+      },
+      "selected": [
+        {
+          "action": "map",
+          "current": "page",
+          "selected": null
+        },
+        {
+          "action": "journal",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "companions",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "settings",
+          "current": "false",
+          "selected": null
+        }
+      ],
+      "visibleText": "WILD CROWN\nGreenwake · Prologue\nMAP\nJOURNAL\nCOMPANIONS\nSETTINGS\nGREENWAKE\n\nYou are in B1\n\nAREA\nWORLD\nA\nB\nC\nD\n1\n2\n3\n4\n5\n6\nHear the night of a thousand roars\nB2\nTo Whispering Canopy\nD6 · Requires: Open the settlement gate\nYou\nCurrent objective\nOther objective\nExit\nRoute\nTrail\nGrid 20 m\n\nThe Night of a Thousand Roars\nSTEP 1 OF 6\n\nHear the night of a thousand roars\n\nObserve fleeing animals and locate the sound beneath Greenwake.\n\nGRID\nB2\nDISTANCE\n17 m\nTHE NIGHT OF A THOUSAND ROARS\nHear the night of a thousand roars\nObserve fleeing animals and locate the sound beneath Greenwake.\nNow\nB2\nTend to Vara\nOpen\nB1\nTrack\nTend to Vara\nReceive Sky and witness its memory\nOpen\nB2\nTrack\nReceive Sky and witness its memory\nReceive the Warden Staff\nOpen\nB2\nTrack\nReceive the Warden Staff\nCleanse the corrupted boar\nOpen\nB2\nTrack\nCleanse the corrupted boar\nOpen the settlement gate\nOpen\nB3\nTrack\nOpen the settlement gate\n\nPoint at a region to read why it is open or closed.\n\nEXITS\nWhispering Canopy\nRequires: Open the settlement gate\nEsc  Back\nRoute follows the trails to your objective\nGreenwake",
+      "clock": {
+        "simulationTick": 27832,
+        "worldTick": 27832,
+        "worldTimeSeconds": 463.8666666666667,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "error": null
+    },
+    {
+      "screen": "journal",
+      "hidden": false,
+      "modality": "pointer",
+      "active": {
+        "action": "journal",
+        "focusKey": "journal-Journal",
+        "outlineStyle": "none",
+        "outlineWidth": "3px"
+      },
+      "selected": [
+        {
+          "action": "map",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "journal",
+          "current": "page",
+          "selected": null
+        },
+        {
+          "action": "companions",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "settings",
+          "current": "false",
+          "selected": null
+        }
+      ],
+      "visibleText": "WILD CROWN\nGreenwake · Prologue\nMAP\nJOURNAL\nCOMPANIONS\nSETTINGS\nJOURNAL\n\nThe Night of a Thousand Roars\nSTEP 1 OF 6\n\nHear the night of a thousand roars\n\nObserve fleeing animals and locate the sound beneath Greenwake.\n\nGRID\nB2\nDISTANCE\n17 m\nTHE STORY SO FAR\n\nReceive Sky, take the Warden Staff and cleanse the corrupted boar fleeing the roots.\n\nSIDE QUESTS\n\nNo side quests are waiting in the regions you have visited.\n\nTHE WORLD\n\n0 Heartroot fragments received.\n\nQUEST LOG\nThe Night of a Thousand Roars\nMAIN STORY\n\nReceive Sky, take the Warden Staff and cleanse the corrupted boar fleeing the roots.\n\nHear the night of a thousand roars\nObserve fleeing animals and locate the sound beneath Greenwake.\nNow\nB2\nTend to Vara\nOpen\nB1\nTrack\nTend to Vara\nReceive Sky and witness its memory\nOpen\nB2\nTrack\nReceive Sky and witness its memory\nReceive the Warden Staff\nOpen\nB2\nTrack\nReceive the Warden Staff\nCleanse the corrupted boar\nOpen\nB2\nTrack\nCleanse the corrupted boar\nOpen the settlement gate\nOpen\nB3\nTrack\nOpen the settlement gate\nEsc  Back\nTrack a step to follow it on the map\nJournal",
+      "clock": {
+        "simulationTick": 27832,
+        "worldTick": 27832,
+        "worldTimeSeconds": 463.8666666666667,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "error": null
+    },
+    {
+      "screen": "companions",
+      "hidden": false,
+      "modality": "pointer",
+      "active": {
+        "action": "companions",
+        "focusKey": "companions-Companions",
+        "outlineStyle": "none",
+        "outlineWidth": "3px"
+      },
+      "selected": [
+        {
+          "action": "map",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "journal",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "companions",
+          "current": "page",
+          "selected": null
+        },
+        {
+          "action": "settings",
+          "current": "false",
+          "selected": null
+        }
+      ],
+      "visibleText": "WILD CROWN\nGreenwake · Prologue\nMAP\nJOURNAL\nCOMPANIONS\nSETTINGS\nVara\nLoading native character…\n\nAnimation preview only · no tokens or story progress spent\n\nTRAVELING COMPANIONS\n\nBring exactly one companion. Each has a distinct support specialty, not a second hero’s damage output. Story choices build Bond independently of roster access.\n\nAsha\nRESERVE · Control\nKoro\nRESERVE · Healing\nVara\nRESERVE · Haste\nSable\nRESERVE · Slow\nNyra\nRESERVE · Cooldown\nSolkar\nRESERVE · Power\nONE COMPANION · 0 / 1\nVara\nThis companion has not joined your journey yet.\nKoro\nThis companion has not joined your journey yet.\nAsha\nThis companion has not joined your journey yet.\nSable\nThis companion has not joined your journey yet.\nNyra\nThis companion has not joined your journey yet.\nSolkar\nThis companion has not joined your journey yet.\nVARA’S SKILLS\n\nYour equipped companion supports you automatically and reserves one command token for your orders. Strong support has its own cooldown; buffs expire and cannot stack by swapping companions. Hold R to choose a command and target, then release. C opens this panel. “Use now” resumes the game and performs the real action.\n\nStorm Talon Wind\n\nA native climb-and-dive carries a tailwind to you: +12% movement speed for 4 seconds. Only 4 damage (6 if marked); consumes the mark. 10-second support cooldown.\n\nMarks an engaged threat, then dives to refresh your tailwind when a token can be spared.\n\n1 command token · This companion has not joined your journey yet.\n\nPreview animation + VFX\nUse now · return to game\nMark Weakness Lightning\n\nA wing-spread screech marks one visible enemy for 5 seconds. Free; the next dive consumes its small 2-damage bonus.\n\nMarks the current threat before her next dive.\n\n1 command token · This companion has not joined your journey yet.\n\nPreview animation + VFX\nUse now · return to game\nSky Survey Wind\n\nInvestigate a discovered trace or survey nearby ground to reveal traps. Free; available to your one equipped companion.\n\nSearching and story interactions wait for your order.\n\n1 command token · This companion has not joined your journey yet.\n\nPreview animation + VFX\nUse now · return to game\n\nAvailable now. Story choices build Bond independently.\n\nBond\n0\nDominion\n0\nEsc   Back\nEsc  Back\nChoose one companion · preview or command a skill\nCompanions",
+      "clock": {
+        "simulationTick": 27832,
+        "worldTick": 27832,
+        "worldTimeSeconds": 463.8666666666667,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "error": null
+    },
+    {
+      "screen": "settings",
+      "hidden": false,
+      "modality": "pointer",
+      "active": {
+        "action": "settings",
+        "focusKey": "settings-Settings",
+        "outlineStyle": "none",
+        "outlineWidth": "3px"
+      },
+      "selected": [
+        {
+          "action": "map",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "journal",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "companions",
+          "current": "false",
+          "selected": null
+        },
+        {
+          "action": "settings",
+          "current": "page",
+          "selected": null
+        }
+      ],
+      "visibleText": "WILD CROWN\nGreenwake · Prologue\nMAP\nJOURNAL\nCOMPANIONS\nSETTINGS\nSETTINGS\nAUDIO\nMaster Volume\nMusic Volume\nSound Effects Volume\nAmbience Volume\nDialogue Volume\nACCESSIBILITY\nSubtitles\nOn\nEcho Sense Subtitles\nOn\nSubtitle Size\nsmall\nmedium\nlarge\nSubtitle Background\noff\ntranslucent\nsolid\nSpeaker Labels\nOn\nMotion Blur\nOn\nReduced Motion\nOff\nReduced Camera Shake\nOff\nTelegraph Intensity\nstandard\nhigh\nOff-Screen Warning Strength\nlow\nstandard\nhigh\nHigh-Contrast Target Ring\nOff\nAuto-Target Assist\noff\nsubtle\nstrong\nPerfect Dodge Window\nstandard\nwide\nLock-On Mode\nhold\ntoggle\nControl Glyphs\nkeyboard mouse\ngamepad\nHow-to-play cards\nShow again\nREMAP CONTROLS\nStick Deadzone\nKEYBOARD AND MOUSE\n\nPress a key or controller button to assign it.\n\nmove Forward\nmove Back\nmove Left\nmove Right\ndodge\njump\nsprint\nlight\nheavy\nranged\nultimate\ninteract\nability\nmap\njournal\ncompanions\npause\ncommand Wheel\nlock On\nGAMEPAD\n\nFocus a binding and press a controller button.\n\nmove Forward\nmove Back\nmove Left\nmove Right\ndodge\njump\nsprint\nlight\nheavy\nranged\nultimate\ninteract\nability\nmap\njournal\ncompanions\npause\ncommand Wheel\nlock On\nEsc  Back\nEnter to capture a binding\nSettings",
+      "clock": {
+        "simulationTick": 27832,
+        "worldTick": 27832,
+        "worldTimeSeconds": 463.8666666666667,
+        "timeScale": 0,
+        "policy": "paused"
+      },
+      "error": null
+    }
+  ],
+  "tab": {
+    "screen": "pause",
+    "action": "save-screen",
+    "focusKey": "save-screen-Save Game",
+    "outline": "solid 2px"
+  },
+  "shiftTab": {
+    "screen": "pause",
+    "action": "resume",
+    "focusKey": "resume-Resume",
+    "outline": "solid 2px"
+  },
+  "pauseBefore": {
+    "screen": "pause",
+    "clock": {
+      "simulationTick": 27841,
+      "worldTick": 27841,
+      "worldTimeSeconds": 464.01666666666665,
+      "timeScale": 0,
+      "policy": "paused"
+    },
+    "simulationTick": 27841
+  },
+  "padSteps": [
+    {
+      "button": 15,
+      "screen": "pause",
+      "focusKey": "save-screen-Save Game",
+      "pressed": null,
+      "modality": "gamepad",
+      "outline": "solid 2px"
+    },
+    {
+      "button": 15,
+      "screen": "pause",
+      "focusKey": "load-screen-Load Game",
+      "pressed": null,
+      "modality": "gamepad",
+      "outline": "solid 2px"
+    },
+    {
+      "button": 15,
+      "screen": "pause",
+      "focusKey": "title-screen-Return to Title",
+      "pressed": null,
+      "modality": "gamepad",
+      "outline": "solid 2px"
+    },
+    {
+      "button": 15,
+      "screen": "pause",
+      "focusKey": "hud-toggle-hero",
+      "group": "hero",
+      "pressed": "true",
+      "modality": "gamepad",
+      "outline": "solid 2px"
+    },
+    {
+      "button": 0,
+      "screen": "pause",
+      "focusKey": "hud-toggle-hero",
+      "group": "hero",
+      "pressed": "false",
+      "modality": "gamepad",
+      "outline": "solid 2px"
+    },
+    {
+      "button": 1,
+      "screen": "game",
+      "pressed": null,
+      "modality": "gamepad",
+      "outline": "auto 1px"
+    }
+  ],
+  "pauseAfter": {
+    "screen": "pause",
+    "clock": {
+      "simulationTick": 27841,
+      "worldTick": 27841,
+      "worldTimeSeconds": 464.01666666666665,
+      "timeScale": 0,
+      "policy": "paused"
+    },
+    "simulationTick": 27841,
+    "controls": [
+      {
+        "group": "hero",
+        "pressed": "false"
+      },
+      {
+        "group": "objective",
+        "pressed": "true"
+      },
+      {
+        "group": "skills",
+        "pressed": "true"
+      }
+    ]
+  },
+  "resumed": {
+    "screen": "game",
+    "heroExpanded": "false",
+    "y": 0,
+    "error": null
+  },
+  "hookRemoved": true
+}

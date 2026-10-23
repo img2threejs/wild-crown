@@ -1,0 +1,53 @@
+{
+  "scope": "Local native requestAnimationFrame callback gaps, not GPU present-time or reference benchmark. Sakda contains a 52.4ms maximum callback gap; no performance qualification is claimed.",
+  "heroes": {
+    "aren": {
+      "samples": 148,
+      "uniqueRafTimestamps": 148,
+      "elapsedTimestampMs": 1960.0999999999767,
+      "rafGapMs": {
+        "min": 12.299999999988358,
+        "median": 13.300000000046566,
+        "p95": 14.100000000034925,
+        "max": 14.400000000023283
+      },
+      "qualification": "RAF callback timestamps from local native smoke; not GPU present-time/reference benchmark."
+    },
+    "yara": {
+      "samples": 152,
+      "uniqueRafTimestamps": 152,
+      "elapsedTimestampMs": 2013.9000000000233,
+      "rafGapMs": {
+        "min": 12.29999999993015,
+        "median": 13.300000000046566,
+        "p95": 14.199999999953434,
+        "max": 14.400000000023283
+      },
+      "qualification": "RAF callback timestamps from local native smoke; not GPU present-time/reference benchmark."
+    },
+    "vesper": {
+      "samples": 155,
+      "uniqueRafTimestamps": 155,
+      "elapsedTimestampMs": 2054,
+      "rafGapMs": {
+        "min": 12.29999999993015,
+        "median": 13.300000000046566,
+        "p95": 14.100000000093132,
+        "max": 14.400000000023283
+      },
+      "qualification": "RAF callback timestamps from local native smoke; not GPU present-time/reference benchmark."
+    },
+    "sakda": {
+      "samples": 129,
+      "uniqueRafTimestamps": 129,
+      "elapsedTimestampMs": 2067.399999999907,
+      "rafGapMs": {
+        "min": 12.299999999813735,
+        "median": 13.400000000139698,
+        "p95": 26.699999999953434,
+        "max": 52.4000000001397
+      },
+      "qualification": "RAF callback timestamps from local native smoke; not GPU present-time/reference benchmark."
+    }
+  }
+}

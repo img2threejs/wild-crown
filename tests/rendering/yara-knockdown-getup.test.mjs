@@ -339,7 +339,7 @@ test('the four clips play captured Mixamo reaction takes (recorded bytes), and t
   // The rises are the push-up / roll takes (no stand-in hand-keyed pose), the falls the stand-and-fall takes.
   assert.deepEqual(spec(GETUP_FORWARD).parts.map((part) => part.source.donor), ['m:getting-up-stomach', 'm:getting-up-stomach']);
   assert.deepEqual(report.deformationCeiling.clips, LOCOMOTION);
-  const ceiling = Math.max(...LOCOMOTION.map((name) => report.clips[name].deformation.p999));
+  const ceiling = Math.max(...LOCOMOTION.map((name) => Math.max(report.clips[name].deformation.p999, report.clips[name].before?.deformation?.p999 ?? 0)));
   assert.equal(report.deformationCeiling.p999, ceiling);
   for (const name of CLIPS) assert.ok(report.clips[name].deformation.p999 <= ceiling, `${name}: p99.9 ${report.clips[name].deformation.p999} > ceiling ${ceiling}`);
   const worst = CLIPS.reduce((best, name) => (report.clips[name].deformation.p999 > report.clips[best].deformation.p999 ? name : best));

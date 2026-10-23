@@ -1,0 +1,313 @@
+{
+  "scope": "Actual coordinator-owned normal campaign and renderer; source CSS correction only. Original functional scenario was executed in native browser, not offline shim. No physical-controller or release qualification.",
+  "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84",
+  "sourceChanges": {
+    "gameUI": "2CD8 unchanged",
+    "chapterCSS": "BCF2",
+    "sharedCSS": "C7C2"
+  },
+  "functionalReport": "after-hud-native-acceptance.json",
+  "supersededOriginalStep": "layout-bounds: Objective toggle clipped at375px before CSS correction; all other observed native keyboard/pointer/live-value/Pause-controller behavior uses unchanged GameUI code.",
+  "targetBounds": [
+    {
+      "width": 320,
+      "height": 900,
+      "screen": "game",
+      "overflow": false,
+      "groups": [
+        {
+          "group": "hero",
+          "expanded": "true",
+          "groupBox": {
+            "x": 6.3984375,
+            "y": 44,
+            "width": 140.796875,
+            "height": 158.5,
+            "right": 147.1953125,
+            "bottom": 202.5
+          },
+          "target": {
+            "x": 90.1953125,
+            "y": 55,
+            "width": 44,
+            "height": 44,
+            "right": 134.1953125,
+            "bottom": 99
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "objective",
+          "expanded": "true",
+          "groupBox": {
+            "x": 166.40625,
+            "y": 44,
+            "width": 147.1953125,
+            "height": 256.078125,
+            "right": 313.6015625,
+            "bottom": 300.078125
+          },
+          "target": {
+            "x": 256.6015625,
+            "y": 55,
+            "width": 44,
+            "height": 44,
+            "right": 300.6015625,
+            "bottom": 99
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "skills",
+          "expanded": "true",
+          "groupBox": {
+            "x": 12,
+            "y": 756.53125,
+            "width": 296,
+            "height": 111.46875,
+            "right": 308,
+            "bottom": 868
+          },
+          "target": {
+            "x": 12,
+            "y": 756.53125,
+            "width": 70.265625,
+            "height": 111.46875,
+            "right": 82.265625,
+            "bottom": 868
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "height": 900,
+      "screen": "game",
+      "overflow": false,
+      "groups": [
+        {
+          "group": "hero",
+          "expanded": "true",
+          "groupBox": {
+            "x": 7.5,
+            "y": 44,
+            "width": 165,
+            "height": 144,
+            "right": 172.5,
+            "bottom": 188
+          },
+          "target": {
+            "x": 115.5,
+            "y": 55,
+            "width": 44,
+            "height": 44,
+            "right": 159.5,
+            "bottom": 99
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "objective",
+          "expanded": "true",
+          "groupBox": {
+            "x": 195,
+            "y": 44,
+            "width": 172.5,
+            "height": 237.6796875,
+            "right": 367.5,
+            "bottom": 281.6796875
+          },
+          "target": {
+            "x": 310.5,
+            "y": 55,
+            "width": 44,
+            "height": 44,
+            "right": 354.5,
+            "bottom": 99
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "skills",
+          "expanded": "true",
+          "groupBox": {
+            "x": 12,
+            "y": 781.671875,
+            "width": 351,
+            "height": 86.328125,
+            "right": 363,
+            "bottom": 868
+          },
+          "target": {
+            "x": 12,
+            "y": 781.671875,
+            "width": 70.265625,
+            "height": 86.328125,
+            "right": 82.265625,
+            "bottom": 868
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "screen": "game",
+      "overflow": false,
+      "groups": [
+        {
+          "group": "hero",
+          "expanded": "true",
+          "groupBox": {
+            "x": 8.828125,
+            "y": 46,
+            "width": 184.3125,
+            "height": 156.3359375,
+            "right": 193.140625,
+            "bottom": 202.3359375
+          },
+          "target": {
+            "x": 134.046875,
+            "y": 57,
+            "width": 46.09375,
+            "height": 44,
+            "right": 180.140625,
+            "bottom": 101
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "objective",
+          "expanded": "true",
+          "groupBox": {
+            "x": 559.4921875,
+            "y": 46,
+            "width": 199.6796875,
+            "height": 242.734375,
+            "right": 759.171875,
+            "bottom": 288.734375
+          },
+          "target": {
+            "x": 653.8671875,
+            "y": 57,
+            "width": 92.3046875,
+            "height": 44,
+            "right": 746.171875,
+            "bottom": 101
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "skills",
+          "expanded": "true",
+          "groupBox": {
+            "x": 44,
+            "y": 795.5625,
+            "width": 680,
+            "height": 76.4375,
+            "right": 724,
+            "bottom": 872
+          },
+          "target": {
+            "x": 44,
+            "y": 795.5625,
+            "width": 70.265625,
+            "height": 76.4375,
+            "right": 114.265625,
+            "bottom": 872
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "screen": "game",
+      "overflow": false,
+      "groups": [
+        {
+          "group": "hero",
+          "expanded": "true",
+          "groupBox": {
+            "x": 16.5546875,
+            "y": 18.8984375,
+            "width": 230,
+            "height": 156.3359375,
+            "right": 246.5546875,
+            "bottom": 175.234375
+          },
+          "target": {
+            "x": 177.765625,
+            "y": 29.8984375,
+            "width": 55.7890625,
+            "height": 44,
+            "right": 233.5546875,
+            "bottom": 73.8984375
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "objective",
+          "expanded": "true",
+          "groupBox": {
+            "x": 1123.4453125,
+            "y": 18.8984375,
+            "width": 300,
+            "height": 187.0390625,
+            "right": 1423.4453125,
+            "bottom": 205.9375
+          },
+          "target": {
+            "x": 1318.140625,
+            "y": 29.8984375,
+            "width": 92.3046875,
+            "height": 44,
+            "right": 1410.4453125,
+            "bottom": 73.8984375
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        },
+        {
+          "group": "skills",
+          "expanded": "true",
+          "groupBox": {
+            "x": 380,
+            "y": 795.5625,
+            "width": 680,
+            "height": 76.4375,
+            "right": 1060,
+            "bottom": 872
+          },
+          "target": {
+            "x": 380,
+            "y": 795.5625,
+            "width": 70.265625,
+            "height": 76.4375,
+            "right": 450.265625,
+            "bottom": 872
+          },
+          "fullyWithinViewport": true,
+          "centerHitsButton": true
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    "after-hud-responsive-375.png",
+    "after-hud-responsive-1440.png"
+  ]
+}

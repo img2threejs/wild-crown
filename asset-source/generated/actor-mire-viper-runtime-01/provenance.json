@@ -27,18 +27,18 @@
   },
   "output": {
     "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper.glb",
-    "sha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
-    "bytes": 7526196,
-    "vertices": 30554,
-    "triangles": 23998,
+    "sha256": "920b4e0f2d82f3a3969322715acfc0594a3b4f6decc0519f8bc7c87e60e81fe3",
+    "bytes": 8827632,
+    "vertices": 37664,
+    "triangles": 31160,
     "boundsMin": [
       -0.23971,
       0,
-      -0.48901
+      -0.4901328384876251
     ],
     "boundsMax": [
       0.23971,
-      0.49477,
+      0.5488783717155457,
       0.48901
     ]
   },
@@ -86,5 +86,22 @@
     "evidenceStatus": "blocked",
     "productionAcceptance": "NOT_ESTABLISHED",
     "note": "Local playtest candidate; deformation and clip quality require in-game visual review."
+  },
+  "surfaceRestoration": {
+    "generator": "scripts/assets/restore-viper-skull.mjs",
+    "inputSha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
+    "reference": {
+      "path": "asset-source/generated/actor-mire-viper-skull-source-01/skull.glb",
+      "sha256": "28f6367e858e9432d13db0156a176aa62012edba5ffecf87a240c9894bd4b6bf"
+    },
+    "outputSha256": "920b4e0f2d82f3a3969322715acfc0594a3b4f6decc0519f8bc7c87e60e81fe3",
+    "addedTriangles": 7162,
+    "preserved": [
+      "original body, eyes, snout and jaw attributes",
+      "original material and texture bytes",
+      "skeleton and bind transforms",
+      "native clips"
+    ],
+    "note": "Restored the original outward-facing crown omitted by provider low-poly conversion; no runtime geometry or material overrides."
   }
 }

@@ -13,6 +13,7 @@ import { FACTION_IDS, REGION_IDS, REGIONAL_OBLIGATION_IDS } from "../../packages
 import { NativeAssetError } from "../../src/rendering/NativeAssetLoader.js";
 import type { AssetManifestEntry, CampaignSnapshot, UIAction, WorldEvent } from "../../src/game/contracts.js";
 import { CHAPTER_RUNTIME, LAYOUT_MIGRATIONS } from "../../src/content/chapters.js";
+import { autosaveSlotId } from "../../src/game/campaign/session.js";
 
 const movedFactId = "objectMoved:camp-loose-snare";
 const event = {
@@ -234,6 +235,7 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
   let current = { ...snapshot(false), regionId: "greenwake", runId: "failed-new-run" } as unknown as CampaignSnapshot;
   let loadCalls = 0;
   app.ready = true;
+  app.screen = "hero-select";
   app.slots = validSlots;
   app.renderer = null;
   app.combat.loadRegionCalls = 0;
@@ -247,9 +249,8 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
     load: async () => { loadCalls++; current = { ...snapshot(false), regionId: "greenwake", runId: "saved-run" } as unknown as CampaignSnapshot; return current; },
   };
 
-  await app.dispatch({ type: "new-game", runId: "failed-new-run" });
-  expect(app.screen).toBe("loading");
-  expect(app.combat.startNewRunCalls).toEqual(["failed-new-run"]);
+  await app.dispatch({ type: "select-hero", heroId: "aren", runId: "failed-new-run" });
+  expect(app.canPlayWorld()).toBe(false);
   expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
   expect(app.loading.operationId).toBe("region-load");
   expect(app.renderer).toBeNull();
@@ -260,7 +261,7 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
     expect(app.screen).not.toBe("game");
     expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
   }
-  expect(app.screen).toBe("loading");
+  expect(app.canPlayWorld()).toBe(false);
   await app.dispatch({ type: "return-title" });
   expect(app.screen).toBe("title");
   expect(app.campaign).toBeNull();
@@ -272,7 +273,7 @@ it("blocks a new game on real asset evidence and returns to valid title/load/set
 
   await app.dispatch({ type: "load", slotId: "valid-save" });
   expect(loadCalls).toBe(1);
-  expect(app.screen).toBe("loading");
+  expect(app.canPlayWorld()).toBe(false);
   expect(app.error).toMatchObject({ code: "asset-unavailable", recoverable: false });
   expect(app.renderer).toBeNull();
   expect(app.combat.loadRegionCalls).toBe(0);
@@ -339,6 +340,126 @@ it("routes the ability key through a real restoration pulse instead of rejecting
   expect(app.error).toBeNull();
   expect(app.screen).toBe("game");
   expect(director.snapshot().campaign.world.regions["moonpine-ridge"]).toBe("restored");
+});
+
+async function chapterExitApp(gateUnlocked: boolean, storyComplete: boolean) {
+  const app = headlessApp();
+  const saves = new SaveRepository(new FakeIDBFactory().asFactory(), { chapters: CHAPTER_RUNTIME });
+  const director = new CampaignDirector({ saves, chapters: CHAPTER_RUNTIME });
+  director.startChapterRun({ runId: "app-contextual-exit", heroId: "aren", saveScope: "production" });
+  const region = REGIONS.find(item => item.id === "greenwake")!;
+  const exit = region.exits.find(item => item.destinationRegionId === "whispering-canopy")!;
+  // Explicit authority fixture; the native acceptance earns these facts through combat and E.
+  const checkpoint = await director.captureCheckpoint();
+  checkpoint.progress.completedObjectiveIds = ["prologue:hear-roars", "prologue:tend-vara", "prologue:receive-sky", "prologue:take-staff", "prologue:cleanse-boar", "prologue:open-gate"];
+  checkpoint.progress.completedQuestIds = ["prologue"];
+  checkpoint.progress.activeQuestIds = [];
+  checkpoint.progress.worldFacts = { ...checkpoint.progress.worldFacts, "greenwake-boar-cleansed": true, "interaction:greenwake-gate": gateUnlocked };
+  checkpoint.progress.session.resume = {
+    ...checkpoint.progress.session.resume, segmentId: "greenwake", layoutRevision: 1,
+    checkpointId: "greenwake-forest-exit", activeEncounterId: null, requiredBeatQueue: [],
+    completedBeatIds: ["prologue-opening", "prologue-vision", ...(storyComplete ? ["greenwake-cleanse"] : [])],
+  };
+  const node = region.navigation.nodes.find(item => item.id === "greenwake-forest-corridor-6")!;
+  checkpoint.safeSpawn = { regionId: region.id, position: node.position, routeId: node.id, cameraAnchorId: "greenwake-exit-rail" };
+  expect(await director.restoreCheckpoint(checkpoint)).toBe(true);
+  app.campaignDirector = director;
+  app.campaign = director.snapshot();
+  app.region = region;
+  app.pendingWorldEvents = [];
+  app.combat = new CombatEngine();
+  app.combat.loadRegion({ regionId: region.id, runId: app.campaign.runId, presentActorIds: [], playerPosition: exit.from, worldFacts: app.campaign.worldFacts });
+  app.renderer = { getInputBasis: () => ({ forward: new Vector3(0, 0, -1), right: new Vector3(1, 0, 0) }) };
+  const notifications: string[] = [];
+  app.ui = { notify: (message: string) => notifications.push(message) };
+  app.input.sample = () => ({ moveX: 0, moveZ: 0, interactPressed: true });
+  // Rendering is outside this authority regression; reload a real engine at the Director's spawn.
+  app.prepareWorld = async (snapshot: CampaignSnapshot) => {
+    app.region = REGIONS.find(item => item.id === snapshot.regionId)!;
+    app.combat.loadRegion({ regionId: snapshot.regionId, runId: snapshot.runId, presentActorIds: [],
+      playerPosition: snapshot.lastSafeCheckpoint!.safeSpawn.position, worldFacts: snapshot.worldFacts });
+    app.refreshInteraction();
+    app.screen = "game";
+    app.loading = { active: false, label: "", progress: null };
+  };
+  return { app, director, exit, notifications };
+}
+
+it("uses contextual E at an earned chapter exit to persist and load the next region without granting its companion", async () => {
+  const { app, director, exit } = await chapterExitApp(true, true);
+  app.simulateTick();
+  await app.durableEvents;
+  expect(app.error).toBeNull();
+  expect(director.snapshot()).toMatchObject({ chapter: 1, regionId: "whispering-canopy", session: { heroId: "aren" } });
+  expect(app.region.id).toBe("whispering-canopy");
+  expect(JSON.parse(app.combat.serialize()).regionId).toBe("whispering-canopy");
+  expect(director.snapshot().companions.koro.recruited).toBe(false);
+  const saved = JSON.parse(await director.exportSave(autosaveSlotId(director.snapshot().runId)));
+  expect(saved.progress.regionId).toBe("whispering-canopy");
+  expect(saved.progress.session.resume.segmentId).toBe("canopy");
+  expect(saved.progress.session.resume.checkpointId).toBe("canopy-arrival");
+  expect(app.pendingWorldEvents).toEqual([]);
+  expect(app.interaction?.interactionId).not.toBe(exit.id);
+});
+
+it("does not offer or activate a chapter exit while its authored gate is locked", async () => {
+  const { app, director, exit } = await chapterExitApp(false, true);
+  const before = director.snapshot();
+  app.simulateTick();
+  await app.durableEvents;
+  expect(app.interaction?.interactionId).not.toBe(exit.id);
+  expect(director.snapshot()).toEqual(before);
+  expect(app.region.id).toBe("greenwake");
+  expect(app.error).toBeNull();
+});
+
+it("lets the Director refuse an exit with an unfinished required beat without changing the journey", async () => {
+  const { app, director, notifications } = await chapterExitApp(true, false);
+  const before = director.snapshot();
+  app.simulateTick();
+  await app.durableEvents;
+  expect(director.snapshot()).toEqual(before);
+  expect(app.region.id).toBe("greenwake");
+  expect(app.screen).toBe("game");
+  expect(app.error).toBeNull();
+  expect(notifications.some(message => message.includes("beat:greenwake-cleanse"))).toBe(true);
+  expect(app.pendingWorldEvents).toEqual([]);
+});
+
+it("leaves a pending spatial pact walkable until its actual choice site is available", () => {
+  const app = headlessApp();
+  const region = REGIONS.find(item => item.id === "whispering-canopy")!;
+  const site = region.entities.find(entity => entity.interactionId === "koro-pact")!;
+  app.session = PRODUCTION_SESSION;
+  app.region = region;
+  app.campaign.regionId = region.id;
+  app.campaign.worldFacts["encounter-koro-cleansed"] = true;
+  app.campaign.session.resume.pendingChoiceId = "koro-pact";
+  app.pendingWorldEvents = [];
+  app.combat = new CombatEngine();
+  const loadAt = (position: { x: number; y: number; z: number }) => {
+    app.combat.loadRegion({ regionId: region.id, regionDefinition: region, runId: app.campaign.runId,
+      presentActorIds: [], playerPosition: position, worldFacts: app.campaign.worldFacts });
+    app.refreshInteraction();
+  };
+  loadAt({ x: 46.3, y: 0, z: -24.1 });
+  app.screen = "dialogue";
+  const before = JSON.stringify(app.campaign);
+  app.presentChapterStory();
+  expect(app.screen).toBe("game");
+  expect(app.choice).toBeFalsy();
+  expect(JSON.stringify(app.campaign)).toBe(before);
+  expect(app.combat.resolveInteraction("koro-pact", "koro-pact", "bond")).toBe(false);
+  expect(app.combat.consumeWorldEvents()).toEqual([]);
+
+  loadAt(site.position);
+  app.presentChapterStory();
+  expect(app.screen).toBe("choice");
+  expect(app.choice.id).toBe("koro-pact");
+  expect(app.combat.resolveInteraction("koro-pact", "koro-pact", "bond")).toBe(true);
+  expect(app.combat.consumeWorldEvents()).toEqual([
+    expect.objectContaining({ type: "choice", choiceId: "koro-pact", optionId: "bond" }),
+  ]);
 });
 
 async function finalChoiceApp(eligible: boolean, saves?: SaveRepository, orunResolved = true): Promise<Record<string, any>> {

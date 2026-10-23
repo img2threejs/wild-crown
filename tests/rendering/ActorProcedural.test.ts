@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { Bone, Group, Vector3 } from 'three';
+import { readFile } from 'node:fs/promises';
+import { AnimationMixer, Bone, Group, MeshBasicMaterial, SkinnedMesh, Vector3 } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { GroundingSlot } from '../../src/rendering/AnimationController.js';
 import { ActorProcedural } from '../../src/rendering/ActorProcedural.js';
 import { createReactionPose, type ReactionPose } from '../../src/rendering/ReactionPresenter.js';
@@ -122,6 +124,80 @@ describe('procedural layer', () => {
     procedural.inputs.detail = 'reaction';
     for (let i = 0; i < 3; i += 1) frame(rig.root, procedural);
     expect(quaternions(rig.tail)).toEqual(clip);
+  });
+
+  it('keeps the native viper skull and body intact under gaze and reactions across its authored clips', async () => {
+    const bytes = await readFile(new URL('../../asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb', import.meta.url));
+    const gltf = await new GLTFLoader().register(() => ({
+      name: 'pose-only-material',
+      loadMaterial: () => Promise.resolve(new MeshBasicMaterial()),
+    })).parseAsync(Uint8Array.from(bytes).buffer, '');
+    const root = gltf.scene;
+    root.scale.setScalar(7.157);
+    root.rotation.y = Math.PI;
+    root.updateMatrixWorld(true);
+    const meshes: SkinnedMesh[] = [];
+    root.traverse(node => { if (node instanceof SkinnedMesh) meshes.push(node); });
+    const point = new Vector3();
+    const vertices = (): Float64Array[] => {
+      root.updateMatrixWorld(true);
+      return meshes.map(mesh => {
+        mesh.skeleton.update();
+        const positions = new Float64Array(mesh.geometry.getAttribute('position').count * 3);
+        for (let vertex = 0; vertex < positions.length / 3; vertex += 1) {
+          mesh.getVertexPosition(vertex, point);
+          point.toArray(positions, vertex * 3);
+        }
+        return positions;
+      });
+    };
+    const difference = (a: Float64Array[], b: Float64Array[]): number => {
+      let maximum = 0;
+      for (let mesh = 0; mesh < a.length; mesh += 1) {
+        for (let index = 0; index < a[mesh]!.length; index += 1) {
+          maximum = Math.max(maximum, Math.abs(a[mesh]![index]! - b[mesh]![index]!));
+        }
+      }
+      return maximum;
+    };
+    const mixer = new AnimationMixer(root);
+    const procedural = new ActorProcedural(root, findRigBones(root)!, null);
+    procedural.inputs.lookEnabled = true;
+    procedural.inputs.hasTarget = true;
+    procedural.inputs.targetX = -8;
+    procedural.inputs.targetY = 1.45;
+    procedural.inputs.targetZ = 1;
+    const reaction = resting();
+    reaction.kind = 'knockback'; reaction.dirX = 1; reaction.spine = 0.4; reaction.head = 0.5;
+    let previousPose: Float64Array[] | undefined;
+    let maximumNativeMotion = 0;
+    let maximumDistortion = 0;
+    for (const clip of gltf.animations) {
+      procedural.restore();
+      mixer.stopAllAction();
+      const action = mixer.clipAction(clip).play();
+      mixer.update(clip.duration * 0.4);
+      const nativePose = vertices();
+      if (previousPose) maximumNativeMotion = Math.max(maximumNativeMotion, difference(nativePose, previousPose));
+      previousPose = nativePose;
+      procedural.inputs.reaction = undefined;
+      for (let frame = 0; frame < 45; frame += 1) {
+        procedural.restore();
+        root.position.x += 0.02;
+        root.updateMatrixWorld(true);
+        procedural.apply(1 / 60);
+      }
+      maximumDistortion = Math.max(maximumDistortion, difference(vertices(), nativePose));
+      procedural.restore();
+      procedural.inputs.reaction = reaction;
+      procedural.apply(1 / 60);
+      maximumDistortion = Math.max(maximumDistortion, difference(vertices(), nativePose));
+      action.stop();
+    }
+    procedural.restore();
+    mixer.stopAllAction();
+    expect(maximumNativeMotion).toBeGreaterThan(0.01);
+    expect(maximumDistortion).toBeLessThan(1e-7);
   });
 
   it('LOD round trip: switching detail off and on again restarts the springs at rest, not with stale velocity', () => {

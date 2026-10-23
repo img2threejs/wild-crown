@@ -1,0 +1,139 @@
+{
+  "measurement": {
+    "label": "diagnostic-canopy-first-use-shader-identity",
+    "durationMs": 20005.30000001192,
+    "frames": 1232,
+    "frame": {
+      "p50": 13.399999999965075,
+      "p95": 26.70000000001164,
+      "p99": 27.399999999965075,
+      "max": 53.40000000002328,
+      "over25": 261,
+      "over50": 1
+    },
+    "longTasks": [
+      {
+        "start": 438561.59999996424,
+        "duration": 53
+      },
+      {
+        "start": 444206.1999999881,
+        "duration": 58
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1210,
+      "worldTick": 1210,
+      "worldTimeSeconds": 20.166666666666668,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 45,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -43.62275206039596,
+      "y": 0,
+      "z": -30.06407355772295
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 4577.961,
+      "taskMs": 5661.491,
+      "layoutMs": 32.781,
+      "recalcStyleMs": 372.056,
+      "heapUsedBytes": 101366956,
+      "domNodes": 1775
+    }
+  },
+  "shader": {
+    "links": [
+      {
+        "atMs": 891,
+        "ms": 26.100000023841858,
+        "draw": {
+          "material": "tripo_node_7fdedf2f-d9bd-45df-bd4c-dca0085e2c9d_material:hit-flash",
+          "type": "MeshStandardMaterial",
+          "customKey": "wild-crown-hit-rim",
+          "assetId": "actor-thornback-howler",
+          "actorId": "canopy-howler",
+          "object": "tripo_node_7fdedf2f-d9bd-45df-bd4c-dca0085e2c9d",
+          "target": "postfx-scene-hdr"
+        }
+      },
+      {
+        "atMs": 2177.600000023842,
+        "ms": 27.599999964237213,
+        "draw": {
+          "material": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059_material",
+          "type": "MeshStandardMaterial",
+          "customKey": "onBeforeCompile() {\n  }",
+          "object": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059",
+          "target": "postfx-scene-hdr"
+        }
+      },
+      {
+        "atMs": 2214.800000011921,
+        "ms": 1.199999988079071,
+        "draw": {
+          "material": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059_material",
+          "type": "MeshStandardMaterial",
+          "customKey": "onBeforeCompile() {\n  }",
+          "object": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059",
+          "target": "postfx-scene-hdr"
+        }
+      },
+      {
+        "atMs": 7573.5,
+        "ms": 41,
+        "draw": {
+          "material": "",
+          "type": "ShaderMaterial",
+          "customKey": "onBeforeCompile() {\n  }",
+          "object": "trial-gate:howler-pool:sap-seal",
+          "target": "postfx-scene-hdr"
+        }
+      },
+      {
+        "atMs": 13218.400000035763,
+        "ms": 47.69999998807907,
+        "draw": {
+          "material": "tripo_material_e43e454e-0f8e-4fd9-b284-f838ca4ed685:hit-flash",
+          "type": "MeshStandardMaterial",
+          "customKey": "wild-crown-hit-rim",
+          "assetId": "actor-sakda-hero",
+          "actorId": "aren",
+          "object": "tripo_node_e43e454e-0f8e-4fd9-b284-f838ca4ed685",
+          "target": "postfx-scene-hdr"
+        }
+      }
+    ],
+    "measurementOffsetMs": 58.30000001192093
+  }
+}

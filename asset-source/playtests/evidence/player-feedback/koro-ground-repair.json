@@ -1,0 +1,117 @@
+{
+  "issue": "actor-koro / koro-search sinks 0.169 m below the ground plane (tests/rendering/story-map-assets.test.mjs, grove.json manifest)",
+  "asset": {
+    "assetId": "actor-koro",
+    "runtimeUrl": "/asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb",
+    "shippedSha256": "0c33cded1a3bf7570736d543d97b62be8a25d02e73e2b6a6fcddca07911feb26",
+    "authoringPipeline": "scripts/assets/blender_companion_creatures.py (Blender Python keyframes), merged by scripts/assets/build-companion-blender-assets.mjs",
+    "pipelineProof": "A control re-bake of the unmodified authoring code reproduced asset-source/animation/companions-blender/koro.json byte-for-byte (sha256 03351f5de9d504b99779aba19705ea882b5c7ba810f15f47db54e17623218675), so the shipped koro-search is the Blender-authored clip. The author-creature-clips.mjs koro-search in actor-koro-combat.glb is the superseded one (it was replaced by the companion merge and sinks 0.0456 m)."
+  },
+  "diagnosis": {
+    "clip": "koro-search",
+    "measuredWith": "real GLTFLoader sampling with LoopOnce + clampWhenFinished, every native key time, 12 uniform samples per clip and the true terminal frame (the same sampler the failing gate uses), plus the evaluated skinned mesh inside Blender",
+    "shippedSinkMetres": 0.169,
+    "offendingBone": "R_Hand",
+    "offendingVertexIndices": [6433, 10003, 11627],
+    "worstTimeSeconds": 0.433333,
+    "cause": "koro_search aims the right arm's IK chain at a ground contact height of 0.035, but the chain's last joint is the R_Hand wrist, whose own skinned geometry (the fingers) hangs 0.15553 below that joint in the rest pose. The aim point was therefore a finger-contact height applied to a wrist joint, so the fingertips were driven 0.119 m below the ground at the deepest frame.",
+    "ruledOut": [
+      "the crouch itself: the crouch's own hip drop (0.12) and torso pitch (42 deg) only account for the Waist vertex at 0.0355 m sink, which is inside the 0.15 m tolerance",
+      "the body/leg pose: the feet and toes stay on the ground (R_Foot joint height constant at 0.02112 m for the whole clip) and the left hand never goes below the ground",
+      "an actor-lift or scale problem: the manifest's 1.422 scale is applied by the test itself and the other eleven clips of the same asset all pass",
+      "the renderer: the penetration is already present in the authored keyframes and is reproducible offline in Blender without the renderer"
+    ]
+  },
+  "fix": {
+    "file": "scripts/assets/blender_companion_creatures.py",
+    "change": "koro_search's right-hand reach now aims the wrist so the FINGERTIPS meet the authored ground contact height, instead of aiming the wrist joint at it. The wrist aim height is solved per frame (koro_reach_to_ground): the real, deformed fingertips are measured on the evaluated skinned mesh and the aim is corrected by the residual until the fingertips land on the intended height. The helper measurements (koro_hand_vertices, koro_hand_lowest, koro_hand_drop) read the imported skinned mesh, not the rig's joint offsets.",
+    "whyNotAConstantOffset": "A constant rest-pose offset was measured and rejected: the hand's effective vertical drop changes as the arm rotates, so a constant offset left the fingertips hovering 0.048-0.14 m above the ground. The per-frame solve lands them on the authored 0.035 contact height.",
+    "alsoFixed": "The shipped reach over-extended the arm to a locked straight elbow (0 deg, shoulder-to-wrist pinned at the full 0.39968 arm length) because the aim point was out of reach. The corrected aim keeps the elbow bent (68-93 deg through the inspect hold) and the reach inside the arm length.",
+    "notDone": [
+      "no constant actor lift, no mesh shrink, no renderer change, no tolerance change, no change to the shared authoring helpers"
+    ]
+  },
+  "stagedCandidate": {
+    "path": ".tmp-feedback-koro-stage/solved/actor-koro-companion.candidate.glb",
+    "sha256": "ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256",
+    "bakedJsonPath": ".tmp-feedback-koro-stage/solved/koro.json",
+    "source": "asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb (unchanged)",
+    "handoffStatus": "At worker handoff this was staged only and no live output was written. The coordinatorIntegration record below supersedes that integration state; this section preserves the original measured candidate.",
+    "candidateSinkMetres": 0.0512,
+    "sinkByClip": {
+      "koro-search": { "shipped": 0.169, "candidate": 0.0512 },
+      "koro-throw": { "shipped": 0.0355, "candidate": 0.0355 },
+      "koro-push": { "shipped": 0.0168, "candidate": 0.0168 },
+      "koro-distract": { "shipped": 0.0067, "candidate": 0.0067 },
+      "monster-idle": { "shipped": 0.0512, "candidate": 0.0512 },
+      "monster-walk": { "shipped": 0.089, "candidate": 0.089 },
+      "monster-death": { "shipped": 0.013, "candidate": 0.013 },
+      "monster-spawn": { "shipped": 0.0456, "candidate": 0.0456 },
+      "monster-knockdown": { "shipped": 0.0, "candidate": 0.0 },
+      "monster-getup": { "shipped": 0.0456, "candidate": 0.0456 },
+      "wild-crown:koro-fruit-burst": { "shipped": 0.0456, "candidate": 0.0456 },
+      "wild-crown:koro-falling-branch": { "shipped": 0.0456, "candidate": 0.0456 }
+    },
+    "gesturePreserved": {
+      "rightFingertipHeightDuringInspectHold": "0.035 (the authored contact height) at every held frame; the shipped clip had -0.11979",
+      "leftHandStaysOnTheKnee": true,
+      "crouchUnchanged": "hip 0.29399 -> 0.17399 and head 0.67051 -> 0.46381 are identical in the shipped clip and the candidate",
+      "feetUnchanged": "R_Foot joint height constant at 0.02112 m; zero foot slide in both"
+    }
+  },
+  "trackDiff": {
+    "method": "per clip, per joint track: sampled key times and values compared between the shipped GLB and the staged candidate",
+    "changed": {
+      "koro-search": [
+        { "track": "R_Upperarm|rotation", "maxDelta": 3.0e-1 },
+        { "track": "R_Forearm|rotation", "maxDelta": 7.152e-1 },
+        { "track": "R_Hand|rotation", "maxDelta": 5.96e-8 },
+        { "track": "R_UpperarmTwist01|rotation", "maxDelta": 6.286e-8 },
+        { "track": "R_UpperarmTwist02|rotation", "maxDelta": 4.319e-8 },
+        { "track": "R_ForearmTwist01|rotation", "maxDelta": 5.402e-8 },
+        { "track": "R_ForearmTwist02|rotation", "maxDelta": 7.73e-8 }
+      ]
+    },
+    "unchanged": [
+      "koro-throw (all 42 tracks identical)",
+      "koro-push (all 42 tracks identical)",
+      "koro-distract (all 42 tracks identical)",
+      "monster-idle, monster-walk, monster-death, monster-spawn, monster-knockdown, monster-getup (all 43 tracks identical each)",
+      "wild-crown:koro-fruit-burst, wild-crown:koro-falling-branch (all 43 tracks identical each)",
+      "mesh, skin, node hierarchy and materials: byte-identical (the candidate's binary buffer is the same length and the non-animation JSON payload hashes identically)",
+      "clip count, clip names, channel counts, clip durations and markers: unchanged"
+    ],
+    "noOtherClipChanged": true
+  },
+  "verification": {
+    "sampler": "throwaway real GLTFLoader sampler (.tmp-feedback-koro-ground-probe.mjs), not the suite",
+    "candidate": "koro-search sink 0.0512 m (limit 0.15 m); all twelve clips within tolerance",
+    "determinism": "two independent Blender bakes of the fixed authoring code produced byte-identical koro.json; a control re-bake of the unmodified code reproduced the shipped koro.json byte-for-byte",
+    "noCrossContamination": "a Vara re-bake with the fixed module produced byte-identical vara.json (sha256 11ffc552926b0756471004087c1729a595eaf7f6c709432997d8bf5e74535526)",
+    "suiteAgainstStagedCandidate": {
+      "command": "node --test tests/rendering/story-map-assets.test.mjs tests/rendering/bamboo-assets.test.mjs tests/rendering/quadruped-clips.test.mjs (run against a staged mirror serving the candidate; no live file written)",
+      "result": "tests 413, pass 413, fail 0"
+    },
+    "suiteAgainstLiveAsset": {
+      "command": "node --test tests/rendering/story-map-assets.test.mjs tests/rendering/bamboo-assets.test.mjs tests/rendering/quadruped-clips.test.mjs",
+      "result": "tests 413, pass 412, fail 1: actor-koro: koro-search (koro-search) sinks 0.169 m below the ground"
+    },
+    "reproducibleAuthoringCommand": "/tmp/wc-blender-mount/Blender.app/Contents/MacOS/Blender -b --python scripts/assets/blender_companion_creatures.py -- koro  (writes asset-source/animation/companions-blender/koro.json + koro.blend), then node scripts/assets/build-companion-blender-assets.mjs --ids=koro (writes asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb + companion-clips-report.json and re-binds the manifests)"
+  },
+  "coordinatorIntegration": {
+    "commands": [
+      "/tmp/wc-blender-mount/Blender.app/Contents/MacOS/Blender -b --python scripts/assets/blender_companion_creatures.py -- koro",
+      "/Users/hoainho/.nvm/versions/node/v24.22.0/bin/node scripts/assets/build-companion-blender-assets.mjs --ids=koro"
+    ],
+    "result": "Both commands completed successfully; wall time 19.34 seconds.",
+    "observedRuntimeSha256": "ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256",
+    "manifestChange": "Only actor-koro outputHash changed in grove.json and bamboo.json. Overall evidenceStatus stayed blocked; the canonical asset-source/manifest.json entry was unchanged.",
+    "nativeProof": "final-built-runtime-r3.json: actual earned Koro Search UI, visible native canvas, actual loader cache bound to this hash, fetched GLB bytes matching this SHA-256, unchanged campaign.",
+    "scope": "Koro-only authoring/bake/merge; eleven other clips, geometry, skin, materials and hierarchy retained. No asset approval or verified promotion."
+  },
+  "notes": [
+    "The staged candidate is Koro-only. The rig, mesh, skin and every other clip of actor-koro are preserved; the shared authoring helpers and all other companions are untouched.",
+    "The bamboo manifest also binds the Koro companion runtime URL, so integrating the candidate means updating the outputHash in asset-source/playtests/grove.json, asset-source/playtests/bamboo.json and the asset-source/generated/actor-koro-runtime-01/companion-clips-report.json output hash.",
+    "The per-frame fingertip solve costs eight evaluated-mesh measurements per baked frame, so the Blender bake is slower than the original (about 30 s for the four Koro clips against a few seconds before); the bake stays deterministic."
+  ]
+}

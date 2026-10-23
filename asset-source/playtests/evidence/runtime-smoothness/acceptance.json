@@ -1,0 +1,237 @@
+{
+  "recordedAt": "2026-10-22T02:52:12.637Z",
+  "scope": "Runtime smoothness optimization, not whole-campaign or all-hardware certification",
+  "machine": {
+    "soc": "Apple M1",
+    "ramGiB": 16,
+    "browser": "Managed headless Brave Chrome 155",
+    "cssViewport": [
+      1440,
+      900
+    ],
+    "dpr": 1
+  },
+  "productionBundle": [
+    "http://127.0.0.1:5224/assets/main-COE1gFAy.js"
+  ],
+  "sourceSha256": {
+    "src/rendering/PostFX.ts": "6ee86af88f35da44fa48d0615abc85eb5d99a18244f56fd377647e8000a74169",
+    "src/rendering/GameRenderer.ts": "d978c307fe9b4c3be826899874972b54ab86ff737566c19d674add15771cfae7",
+    "src/rendering/RenderResolutionBudget.ts": "79cd8b24fd1f09e6a886101382eb3d40181f8c64931006f4e46371bc9963ba9d",
+    "src/app/GameApplication.ts": "b2904a0b62eadb27b1b0a1232707e5445715db0b3d248c6d6aceab2df4139bbb",
+    "tests/rendering/render-resolution-budget.test.ts": "2eef9acdb852caacf695196ae91f2290eb45ba8953732fda07ba5b28741801e3"
+  },
+  "verification": {
+    "build": {
+      "command": "npm run build",
+      "passed": true,
+      "warning": "Existing >500 kB chunks remain"
+    },
+    "tests": {
+      "command": "bun test tests/app/GameApplication.test.ts tests/app/GameApplication.entry.test.ts tests/rendering/render-resolution-budget.test.ts tests/effects/vfx-hdr.test.ts tests/effects/postfx-impulse.test.ts tests/rendering/postfx-region-grading.test.ts tests/rendering/monster-lifecycle.test.ts",
+      "passed": 85,
+      "failed": 0,
+      "assertions": 588
+    },
+    "runtime": {
+      "production": "final-gpu-timed-production.json",
+      "canopy": "final-gpu-timed-canopy.json",
+      "resize": "final-pause-resize-lifetime.json",
+      "equalResolutionPixelParity": "framebuffer-parity.json",
+      "image": "final-gpu-timed-production.png"
+    }
+  },
+  "historicalNativeBaseline": {
+    "mixed": {
+      "label": "before-production-movement-skills",
+      "durationMs": 9004.399999976158,
+      "frames": 552,
+      "frame": {
+        "p50": 13.400000000008731,
+        "p95": 26.80000000000291,
+        "p99": 28.69999999999709,
+        "max": 41.80000000000291,
+        "over25": 107,
+        "over50": 0
+      },
+      "longTasks": [],
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "bufferWidth": 1440,
+        "bufferHeight": 900,
+        "visibility": "visible"
+      },
+      "screen": "game",
+      "region": "greenwake",
+      "worldClock": {
+        "simulationTick": 2868,
+        "worldTick": 2868,
+        "worldTimeSeconds": 47.8,
+        "timeScale": 1,
+        "policy": "normal"
+      },
+      "player": {
+        "heroId": "aren",
+        "vitality": 120,
+        "maxVitality": 120,
+        "instinct": 0,
+        "mana": 81.06791756601936,
+        "maxMana": 100
+      },
+      "initialPosition": {
+        "x": -18,
+        "y": 0,
+        "z": -9
+      },
+      "finalPosition": {
+        "x": -17.054059132720344,
+        "y": 0,
+        "z": -7.585022201343214
+      },
+      "actors": 7,
+      "rendererMemory": {
+        "geometries": 138,
+        "textures": 91
+      },
+      "programs": 89,
+      "assetErrors": [],
+      "counters": {
+        "scriptMs": 2017.1260000000002,
+        "taskMs": 2374.454,
+        "layoutMs": 14.952,
+        "recalcStyleMs": 98.483,
+        "heapUsedBytes": 41192072,
+        "domNodes": 5573
+      }
+    },
+    "gpu": {
+      "available": true,
+      "samples": 183,
+      "disjoint": false,
+      "pending": 0,
+      "p50Ms": 21.518499,
+      "p95Ms": 23.148749,
+      "maxMs": 26.092624,
+      "averageDrawCalls": 87,
+      "averageTriangles": 1262611.6284153005,
+      "gpu": "WebKit WebGL",
+      "vendor": "WebKit"
+    }
+  },
+  "final": {
+    "scale": 0.75,
+    "internalBuffer": [
+      1080,
+      675
+    ],
+    "idle": {
+      "p50": 13.30000000000291,
+      "p95": 14.099999999998545,
+      "p99": 14.299999999999272,
+      "max": 14.30000000000291,
+      "over25": 0,
+      "over50": 0
+    },
+    "mixed": {
+      "p50": 13.30000000000291,
+      "p95": 14.299999999999272,
+      "p99": 14.399999999997817,
+      "max": 14.400000000001455,
+      "over25": 0,
+      "over50": 0
+    },
+    "gpu": {
+      "label": "final-viewport-budget-production-gpu-separate-window",
+      "available": true,
+      "samples": 165,
+      "disjoint": false,
+      "pending": 0,
+      "p50Ms": 15.162791,
+      "p95Ms": 17.640125,
+      "targetSamples": [
+        0,
+        0
+      ]
+    },
+    "resizeRecovery": {
+      "p50": 13.30000000000291,
+      "p95": 14.30000000000291,
+      "p99": 14.39999999999418,
+      "max": 27.69999999999709,
+      "over25": 4,
+      "over50": 0
+    },
+    "postResizeEvents": [
+      {
+        "atMs": 26.100000023841858,
+        "viewport": true,
+        "scale": 1,
+        "buffer": [
+          960,
+          600
+        ],
+        "screen": "pause"
+      },
+      {
+        "atMs": 56.40000003576279,
+        "viewport": true,
+        "scale": 0.75,
+        "buffer": [
+          1080,
+          675
+        ],
+        "screen": "pause"
+      },
+      {
+        "atMs": 82.40000003576279,
+        "viewport": true,
+        "scale": 1,
+        "buffer": [
+          960,
+          600
+        ],
+        "screen": "pause"
+      },
+      {
+        "atMs": 110.5,
+        "viewport": true,
+        "scale": 0.75,
+        "buffer": [
+          1080,
+          675
+        ],
+        "screen": "pause"
+      }
+    ],
+    "resourceCounts": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "errors": [],
+    "titleReturn": {
+      "screen": "title",
+      "titleVisible": true
+    },
+    "devFixtureRestoration": {
+      "restored": true
+    }
+  },
+  "limits": [
+    "Adaptive output is 75% linear resolution on this machine, not equal-quality native throughput. HUD/text and game simulation are unchanged.",
+    "Preceding fresh-page steady-state measurement had the same 14.3 ms p95 but 26 rather than zero >25 ms intervals in nine seconds. Shared-host results vary.",
+    "Canopy still recorded one 53 ms frame and a 56 ms long task despite zero shader first-use calls. Its unchanged warmup/calibration path was measured before the final viewport-only adjustment.",
+    "Two resize cycles demonstrate bounded counts only over the exercised lifetime, not absence of all leaks.",
+    "Production CPU/RAF and GPU query windows are separate. No build or test jobs ran during these measurements."
+  ],
+  "cleanup": {
+    "devFixtureStorageRestored": true,
+    "managedAcceptanceTabReleased": true,
+    "ownedCdpTargetCloseResponse": "Target is closing",
+    "ownedProductionPreviewStopped": true,
+    "existingDevService": "MapNativeFinalNode24 left running",
+    "repositoryCommitOrPushByThisTask": false
+  }
+}

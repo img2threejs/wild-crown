@@ -1,0 +1,56 @@
+{
+  "assetId": "actor-asha",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-combat.glb",
+    "sha256": "636c265a326638faab83396511c3b65431c70320a25c531ab821b0422abf0e9c"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-asha-runtime-01/actor-asha-companion.glb",
+    "sha256": "6d6abe449158754774f8989b02a509687c32fe41bf02b5da182a13a0cdce8718"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "clips": [
+    {
+      "name": "asha-guard",
+      "seconds": 1.4,
+      "frames": 44,
+      "markers": {
+        "release": 0.25,
+        "contact": 0.5
+      },
+      "channels": 44
+    },
+    {
+      "name": "asha-pin",
+      "seconds": 1.2,
+      "frames": 39,
+      "markers": {
+        "release": 0.36,
+        "contact": 0.55
+      },
+      "channels": 44
+    },
+    {
+      "name": "asha-search",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "release": 0.2,
+        "contact": 0.9
+      },
+      "channels": 44
+    },
+    {
+      "name": "asha-distract",
+      "seconds": 1.1,
+      "frames": 36,
+      "markers": {
+        "release": 0.32,
+        "contact": 0.5
+      },
+      "channels": 44
+    }
+  ]
+}

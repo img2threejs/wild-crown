@@ -553,31 +553,28 @@ describe('hero kit host fixes', () => {
     expect(kitState(dodged.engine).log).toContain('shared:dodge');
   });
 
-  it('a long kit dodge never ends or passes through an unsupported capsule pose on real trial regions', () => {
-    KIT_FACTORIES.vesper = host => ({ ...testKit(host), dodge: { clip: 'test-dodge' as ActionId, distance: 6.5, durationTicks: 12, iframes: 14, recoveryTicks: 12, blinkCue: true } });
-    const directions = ['forward', 'back', 'left', 'right', 'back-left'] as const;
-    let tried = 0, shortened = 0;
-    for (const regionId of ['greenwake', 'canopy']) {
-      const definition = REGIONS.find(candidate => candidate.id === regionId);
-      if (!definition) continue;
-      const region = createCombatTrialRegion(definition);
-      const base = new CombatEngine();
-      base.loadRegion({ regionId, regionDefinition: region, runId: 'dodge-' + regionId, presentActorIds: [] });
-      const seed = base.snapshotState();
-      const { min, max } = seed.arena.bounds;
-      const probe = new CombatEngine(structuredClone(seed));
-      for (let x = min.x + 0.5; x < max.x; x += 4) for (let z = min.z + 0.5; z < max.z; z += 4) {
-        const origin = probe.snapshotState().actors.find(actor => actor.id === seed.playerId)!;
-        const y = groundHeightAt(seed.arena, x, z, origin.position.y);
-        if (y === null || !isSupportedCapsulePose(seed.arena, vec(x, y, z), 0.42, origin.collisionHeight)) continue;
-        for (const dodgeDirection of directions) {
+  for (const regionId of ['greenwake', 'whispering-canopy'] as const) {
+    for (const dodgeDirection of ['forward', 'back', 'left', 'right', 'back-left'] as const) {
+      it(`a long ${dodgeDirection} kit dodge stays supported throughout the ${regionId} trial region`, () => {
+        KIT_FACTORIES.vesper = host => ({ ...testKit(host), dodge: { clip: 'test-dodge' as ActionId, distance: 6.5, durationTicks: 12, iframes: 14, recoveryTicks: 12, blinkCue: true } });
+        const definition = REGIONS.find(candidate => candidate.id === regionId);
+        if (!definition) throw new Error(`Missing trial region: ${regionId}`);
+        const region = createCombatTrialRegion(definition);
+        const base = new CombatEngine();
+        base.loadRegion({ regionId, regionDefinition: region, runId: 'dodge-' + regionId, presentActorIds: [] });
+        const seed = base.snapshotState();
+        const { min, max } = seed.arena.bounds;
+        const origin = seed.actors.find(actor => actor.id === seed.playerId)!;
+        let shortened = 0;
+        for (let x = min.x + 0.5; x < max.x; x += 4) for (let z = min.z + 0.5; z < max.z; z += 4) {
+          const y = groundHeightAt(seed.arena, x, z, origin.position.y);
+          if (y === null || !isSupportedCapsulePose(seed.arena, vec(x, y, z), 0.42, origin.collisionHeight)) continue;
           const state = structuredClone(seed);
           const player = state.actors.find(actor => actor.id === state.playerId)!;
           player.position = vec(x, y, z);
           const engine = new CombatEngine(state);
           engine.setPlayerHero('vesper');
           liveState(engine).player.mana = 100;
-          tried++;
           engine.fixedStep({ ...idle, dodgePressed: true, dodgeDirection });
           for (let tick = 0; tick < 12; tick++) {
             const live = liveState(engine).actors.find(actor => actor.id === state.playerId)!;
@@ -587,11 +584,10 @@ describe('hero kit host fixes', () => {
           const end = liveState(engine).actors.find(actor => actor.id === state.playerId)!;
           if (Math.hypot(end.position.x - x, end.position.z - z) < 6.4) shortened++;
         }
-      }
+        expect(shortened).toBeGreaterThan(0);
+      });
     }
-    expect(tried).toBeGreaterThan(20);
-    expect(shortened).toBeGreaterThan(0);
-  });
+  }
 
   it('an untargetable player is not acquired by the live trial AI', () => {
     const playtest = ASSET_PLAYTESTS.find(candidate => candidate.regionId === 'greenwake')!;
@@ -609,7 +605,11 @@ describe('hero kit host fixes', () => {
       if (untargetable) seed.untargetableUntil = 1_000_000;
       const live = new CombatEngine(seed);
       let attacks = 0;
-      for (let tick = 0; tick < 900; tick++) { live.fixedStep(idle); attacks = Math.max(attacks, live.snapshotState().hazards.length + live.snapshotState().telegraphs.length); }
+      for (let tick = 0; tick < 900; tick++) {
+        live.fixedStep(idle);
+        const state = liveState(live);
+        attacks = Math.max(attacks, state.hazards.length + state.telegraphs.length);
+      }
       return attacks;
     };
     expect(run(false)).toBeGreaterThan(0);

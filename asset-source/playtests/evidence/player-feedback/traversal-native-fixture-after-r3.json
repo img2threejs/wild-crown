@@ -1,0 +1,46 @@
+{
+  "mode": "grouped-existing-canopy-pattern",
+  "wallMs": 381.03766600000006,
+  "rows": [
+    {
+      "region": "whispering-canopy",
+      "arcs": 4,
+      "placements": 16,
+      "nativeDecodeCalls": 5,
+      "decodeMs": 45.94179200000002,
+      "colliderMs": 50.87154099999998,
+      "colliderCount": 16,
+      "supportCount": 7
+    },
+    {
+      "region": "moonpine-ridge",
+      "arcs": 1,
+      "placements": 237,
+      "nativeDecodeCalls": 7,
+      "decodeMs": 38.41766599999991,
+      "colliderMs": 90.52683500000006,
+      "colliderCount": 237,
+      "supportCount": 42
+    },
+    {
+      "region": "mistveil-basin",
+      "arcs": 2,
+      "placements": 8,
+      "nativeDecodeCalls": 5,
+      "decodeMs": 25.336457000000053,
+      "colliderMs": 25.289625000000058,
+      "colliderCount": 71,
+      "supportCount": 3
+    },
+    {
+      "region": "sunmane-expanse",
+      "arcs": 2,
+      "placements": 94,
+      "nativeDecodeCalls": 5,
+      "decodeMs": 58.773456999999894,
+      "colliderMs": 44.293501000000106,
+      "colliderCount": 257,
+      "supportCount": 1
+    }
+  ]
+}

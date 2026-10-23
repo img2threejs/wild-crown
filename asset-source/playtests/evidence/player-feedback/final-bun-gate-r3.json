@@ -1,0 +1,3351 @@
+{
+  "startedAt": "2026-10-22T16:51:14.580Z",
+  "finishedAt": "2026-10-22T16:57:07.790Z",
+  "complete": true,
+  "strategy": "All 185 explicit TypeScript files; fresh sequential Bun process per file; original per-test deadlines, assertions, grids and case counts retained; no test-name filters or omission after failures.",
+  "bunVersion": "1.4.3",
+  "files": [
+    "tests/app/GameApplication.training.test.ts",
+    "tests/app/TrainingGrounds.test.ts",
+    "tests/campaign/earned-access.test.ts",
+    "tests/combat/airborne-movement-continuity.test.ts",
+    "tests/companions/earned-access.test.ts",
+    "tests/effects/companion-live-fx.test.ts",
+    "tests/rendering/dodge-vanish.test.ts",
+    "tests/rendering/render-resolution-budget.test.ts",
+    "packages/campaign/test/campaign.test.ts",
+    "packages/campaign/test/progression.test.ts",
+    "tests/app/AssetPlaytests.test.ts",
+    "tests/app/GameApplication.entry.test.ts",
+    "tests/app/GameApplication.recovery.test.ts",
+    "tests/app/GameApplication.test.ts",
+    "tests/app/LoadProgress.test.ts",
+    "tests/app/PlaytestProgress.test.ts",
+    "tests/app/SessionConfig.test.ts",
+    "tests/app/StageGoal.test.ts",
+    "tests/app/Tutorials.test.ts",
+    "tests/audio/audio-library.test.ts",
+    "tests/audio/audio-mapping.test.ts",
+    "tests/audio/canopy-audio.test.ts",
+    "tests/audio/elemental-audio.test.ts",
+    "tests/audio/grove-audio.test.ts",
+    "tests/audio/hero-audio.test.ts",
+    "tests/audio/mistveil-audio.test.ts",
+    "tests/audio/moonpine-audio.test.ts",
+    "tests/audio/music-mix.test.ts",
+    "tests/audio/story-audio-samples.test.ts",
+    "tests/audio/voice-limiter.test.ts",
+    "tests/audio/warden-audio.test.ts",
+    "tests/campaign/campaign.test.ts",
+    "tests/campaign/chapter-authority.test.ts",
+    "tests/campaign/invariants.test.ts",
+    "tests/campaign/later-chapter-authority.test.ts",
+    "tests/campaign/movable-object.test.ts",
+    "tests/campaign/save-adoption.test.ts",
+    "tests/campaign/session-segments.test.ts",
+    "tests/combat/accessibility.test.ts",
+    "tests/combat/act-one-asha.test.ts",
+    "tests/combat/air-and-contact.test.ts",
+    "tests/combat/canopy-sealed-route.test.ts",
+    "tests/combat/canopy-trials.test.ts",
+    "tests/combat/combat-obstacles.test.ts",
+    "tests/combat/combat-trials.test.ts",
+    "tests/combat/core.test.ts",
+    "tests/combat/damage-events.test.ts",
+    "tests/combat/environment-props.test.ts",
+    "tests/combat/fall-engine.test.ts",
+    "tests/combat/geometry-aerial.test.ts",
+    "tests/combat/geometry-routes.test.ts",
+    "tests/combat/geometry-support-collider.test.ts",
+    "tests/combat/geometry.test.ts",
+    "tests/combat/greenwake-elemental-combat.test.ts",
+    "tests/combat/greenwake-evasion.test.ts",
+    "tests/combat/greenwake-monster-behaviour.test.ts",
+    "tests/combat/greenwake-sealed-route.test.ts",
+    "tests/combat/grove-defence.test.ts",
+    "tests/combat/grove-practice.test.ts",
+    "tests/combat/grove-sealed-route.test.ts",
+    "tests/combat/heartroot-skills.test.ts",
+    "tests/combat/hero-kit-seam.test.ts",
+    "tests/combat/hub.test.ts",
+    "tests/combat/locomotion-feel.test.ts",
+    "tests/combat/mana-skills.test.ts",
+    "tests/combat/mistveil-sealed-route.test.ts",
+    "tests/combat/mistveil-trials.test.ts",
+    "tests/combat/monster-facing.test.ts",
+    "tests/combat/moonpine-sealed-route.test.ts",
+    "tests/combat/moonpine-trials.test.ts",
+    "tests/combat/orun-duel.test.ts",
+    "tests/combat/reactions.test.ts",
+    "tests/combat/run-reset.test.ts",
+    "tests/combat/sakda-kit.test.ts",
+    "tests/combat/side-quests.test.ts",
+    "tests/combat/smooth-player-motion.test.ts",
+    "tests/combat/story-encounter-readability.test.ts",
+    "tests/combat/terminal-authority.test.ts",
+    "tests/combat/time-dilation.test.ts",
+    "tests/combat/traversal.test.ts",
+    "tests/combat/trial-difficulty.test.ts",
+    "tests/combat/vesper-kit.test.ts",
+    "tests/combat/warden-arsenal.test.ts",
+    "tests/combat/wildlife-pressure.test.ts",
+    "tests/companions/CompanionSystem.test.ts",
+    "tests/companions/chargeAndMark.test.ts",
+    "tests/companions/commands.test.ts",
+    "tests/companions/greenwake-long-route.test.ts",
+    "tests/companions/instances.test.ts",
+    "tests/companions/locomotion.test.ts",
+    "tests/companions/movableObjects.test.ts",
+    "tests/companions/nyra.test.ts",
+    "tests/companions/party-replacement.test.ts",
+    "tests/companions/proactive-support.test.ts",
+    "tests/companions/slots.test.ts",
+    "tests/companions/storm-talon.test.ts",
+    "tests/companions/support.test.ts",
+    "tests/companions/vara-takeoff.test.ts",
+    "tests/companions/vara.test.ts",
+    "tests/content/act-i-levels.test.ts",
+    "tests/content/chapter-graph.test.ts",
+    "tests/content/later-act-levels.test.ts",
+    "tests/effects/bamboo-kits.test.ts",
+    "tests/effects/canopy-kits.test.ts",
+    "tests/effects/combat-obstacle-visuals.test.ts",
+    "tests/effects/companion-fx.test.ts",
+    "tests/effects/danger-audio.test.ts",
+    "tests/effects/danger-presentation.test.ts",
+    "tests/effects/grove-kits.test.ts",
+    "tests/effects/hero-kits.test.ts",
+    "tests/effects/hero-vfx.test.ts",
+    "tests/effects/hit-impact.test.ts",
+    "tests/effects/mistveil-kits.test.ts",
+    "tests/effects/moonpine-kits.test.ts",
+    "tests/effects/postfx-impulse.test.ts",
+    "tests/effects/reaction-fx.test.ts",
+    "tests/effects/residue.test.ts",
+    "tests/effects/story-effects.test.ts",
+    "tests/effects/telegraph-intensity.test.ts",
+    "tests/effects/thunder-cleave.test.ts",
+    "tests/effects/vfx-cancellation.test.ts",
+    "tests/effects/vfx-footprint.test.ts",
+    "tests/effects/vfx-hdr.test.ts",
+    "tests/effects/vfx-particles.test.ts",
+    "tests/effects/warden-fx.test.ts",
+    "tests/effects/warden-trail.test.ts",
+    "tests/input/CommandWheel.test.ts",
+    "tests/input/RuntimeInput.test.ts",
+    "tests/lab/simulation.test.ts",
+    "tests/rendering/ActorMotionSmoothing.test.ts",
+    "tests/rendering/ActorProcedural.test.ts",
+    "tests/rendering/CameraDirector-Greenwake.test.ts",
+    "tests/rendering/CameraDirector-motion.test.ts",
+    "tests/rendering/CameraDirector-punch.test.ts",
+    "tests/rendering/CameraDirector-shake.test.ts",
+    "tests/rendering/ContactShadows.test.ts",
+    "tests/rendering/EstablishingShot.test.ts",
+    "tests/rendering/FootGrounding.test.ts",
+    "tests/rendering/LimbClearance.test.ts",
+    "tests/rendering/LookAtIK.test.ts",
+    "tests/rendering/NativeSolidColliders.test.ts",
+    "tests/rendering/NativeSupportDecks.test.ts",
+    "tests/rendering/PoseAfterimages.test.ts",
+    "tests/rendering/ReactionPresenter.test.ts",
+    "tests/rendering/SlopeAttitude.test.ts",
+    "tests/rendering/SpringBones.test.ts",
+    "tests/rendering/actor-binding.test.ts",
+    "tests/rendering/aren-clip-sim-timing.test.ts",
+    "tests/rendering/aren-knockdown-getup.test.ts",
+    "tests/rendering/attack-posture.test.ts",
+    "tests/rendering/bamboo-monster-profiles.test.ts",
+    "tests/rendering/candidate-geometry.test.ts",
+    "tests/rendering/canopy-monster-profiles.test.ts",
+    "tests/rendering/grove-monster-profiles.test.ts",
+    "tests/rendering/hero-limb-clearance.test.ts",
+    "tests/rendering/instance-visibility.test.ts",
+    "tests/rendering/mistveil-monster-profiles.test.ts",
+    "tests/rendering/monster-facing.test.ts",
+    "tests/rendering/monster-hit-overlay.test.ts",
+    "tests/rendering/monster-lifecycle.test.ts",
+    "tests/rendering/moonpine-monster-profiles.test.ts",
+    "tests/rendering/postfx-region-grading.test.ts",
+    "tests/rendering/prop-instance-variation.test.ts",
+    "tests/rendering/reaction-driver.test.ts",
+    "tests/rendering/story-actor-animation.test.ts",
+    "tests/rendering/story-driver.test.ts",
+    "tests/rendering/vesper-animation.test.ts",
+    "tests/rendering/warden-weapon.test.ts",
+    "tests/storage/SaveRepository.test.ts",
+    "tests/storage/scoped-saves.test.ts",
+    "tests/ui/CombatReadability.test.ts",
+    "tests/ui/DamageNumbers.test.ts",
+    "tests/ui/GameUI.test.ts",
+    "tests/ui/loading-error-actions.test.ts",
+    "tests/ui/regionScenes.test.ts",
+    "tests/ui/worldMapSelect.test.ts",
+    "tests/world/atmospheric-sky.test.ts",
+    "tests/world/canopy-world.test.ts",
+    "tests/world/clustered-boundary-dressing.test.ts",
+    "tests/world/greenwake-ground.test.ts",
+    "tests/world/greenwake-ridge-creek.test.ts",
+    "tests/world/grove-world.test.ts",
+    "tests/world/mistveil-world.test.ts",
+    "tests/world/moonpine-world.test.ts",
+    "tests/world/region-atmosphere.test.ts"
+  ],
+  "results": [
+    {
+      "file": "tests/app/GameApplication.training.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/GameApplication.training.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.48662179200000005,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 22,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 22 expect() calls\nRan 3 tests across 1 file. [474.00ms]\n"
+    },
+    {
+      "file": "tests/app/TrainingGrounds.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/TrainingGrounds.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.27681100000000003,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 45,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 45 expect() calls\nRan 13 tests across 1 file. [263.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/earned-access.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/earned-access.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.2607516250000001,
+      "pass": 21,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 21 pass\n 0 fail\nRan 21 tests across 1 file. [248.00ms]\n"
+    },
+    {
+      "file": "tests/combat/airborne-movement-continuity.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/airborne-movement-continuity.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.26473895800000014,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 305,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 305 expect() calls\nRan 8 tests across 1 file. [247.00ms]\n"
+    },
+    {
+      "file": "tests/companions/earned-access.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/earned-access.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.17337587499999996,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 33,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 33 expect() calls\nRan 7 tests across 1 file. [160.00ms]\n"
+    },
+    {
+      "file": "tests/effects/companion-live-fx.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/companion-live-fx.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.5265035829999999,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 36,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 36 expect() calls\nRan 6 tests across 1 file. [513.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/dodge-vanish.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/dodge-vanish.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03827083300000004,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 4,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 1 pass\n 0 fail\n 4 expect() calls\nRan 1 test across 1 file. [26.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/render-resolution-budget.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/render-resolution-budget.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.05776604099999986,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\nRan 7 tests across 1 file. [45.00ms]\n"
+    },
+    {
+      "file": "packages/campaign/test/campaign.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "packages/campaign/test/campaign.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06202895799999988,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\nRan 11 tests across 1 file. [47.00ms]\n"
+    },
+    {
+      "file": "packages/campaign/test/progression.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "packages/campaign/test/progression.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.0686713749999999,
+      "pass": 40,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 40 pass\n 0 fail\nRan 40 tests across 1 file. [54.00ms]\n"
+    },
+    {
+      "file": "tests/app/AssetPlaytests.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/AssetPlaytests.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.381984042,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 102,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 102 expect() calls\nRan 14 tests across 1 file. [367.00ms]\n"
+    },
+    {
+      "file": "tests/app/GameApplication.entry.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/GameApplication.entry.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.4015593750000003,
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 111,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 18 pass\n 0 fail\n 111 expect() calls\nRan 18 tests across 1 file. [389.00ms]\n"
+    },
+    {
+      "file": "tests/app/GameApplication.recovery.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/GameApplication.recovery.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.4037319160000002,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 71,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 71 expect() calls\nRan 5 tests across 1 file. [387.00ms]\n"
+    },
+    {
+      "file": "tests/app/GameApplication.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/GameApplication.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.390818792,
+      "pass": 33,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 309,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 33 pass\n 0 fail\n 309 expect() calls\nRan 33 tests across 1 file. [379.00ms]\n"
+    },
+    {
+      "file": "tests/app/LoadProgress.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/LoadProgress.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.26188787499999944,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 28,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 28 expect() calls\nRan 4 tests across 1 file. [247.00ms]\n"
+    },
+    {
+      "file": "tests/app/PlaytestProgress.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/PlaytestProgress.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.0429414999999999,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 25,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 25 expect() calls\nRan 4 tests across 1 file. [30.00ms]\n"
+    },
+    {
+      "file": "tests/app/SessionConfig.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/SessionConfig.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04242270899999949,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 47,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 47 expect() calls\nRan 7 tests across 1 file. [32.00ms]\n"
+    },
+    {
+      "file": "tests/app/StageGoal.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/StageGoal.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.9606827499999999,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 140,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 15 pass\n 0 fail\n 140 expect() calls\nRan 15 tests across 1 file. [947.00ms]\n"
+    },
+    {
+      "file": "tests/app/Tutorials.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/app/Tutorials.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18525475000000005,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 11,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 11 expect() calls\nRan 3 tests across 1 file. [173.00ms]\n"
+    },
+    {
+      "file": "tests/audio/audio-library.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/audio-library.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.09592254200000025,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 3971,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 3971 expect() calls\nRan 8 tests across 1 file. [85.00ms]\n"
+    },
+    {
+      "file": "tests/audio/audio-mapping.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/audio-mapping.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.16857833299999947,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 443,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 443 expect() calls\nRan 14 tests across 1 file. [148.00ms]\n"
+    },
+    {
+      "file": "tests/audio/canopy-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/canopy-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.587387417,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1884,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 1884 expect() calls\nRan 7 tests across 1 file. [575.00ms]\n"
+    },
+    {
+      "file": "tests/audio/elemental-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/elemental-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.9066567090000007,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\nRan 6 tests across 1 file. [892.00ms]\n"
+    },
+    {
+      "file": "tests/audio/grove-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/grove-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6215972080000002,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2660,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 2660 expect() calls\nRan 8 tests across 1 file. [607.00ms]\n"
+    },
+    {
+      "file": "tests/audio/hero-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/hero-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6969592920000005,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2215,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 2215 expect() calls\nRan 9 tests across 1 file. [677.00ms]\n"
+    },
+    {
+      "file": "tests/audio/mistveil-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/mistveil-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.5887655840000007,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2346,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 2346 expect() calls\nRan 7 tests across 1 file. [578.00ms]\n"
+    },
+    {
+      "file": "tests/audio/moonpine-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/moonpine-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.5558783330000006,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2500,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 2500 expect() calls\nRan 9 tests across 1 file. [537.00ms]\n"
+    },
+    {
+      "file": "tests/audio/music-mix.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/music-mix.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.052978957999999694,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 166,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 166 expect() calls\nRan 16 tests across 1 file. [39.00ms]\n"
+    },
+    {
+      "file": "tests/audio/story-audio-samples.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/story-audio-samples.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1233934160000008,
+      "pass": 23,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 135,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 23 pass\n 0 fail\n 135 expect() calls\nRan 23 tests across 1 file. [106.00ms]\n"
+    },
+    {
+      "file": "tests/audio/voice-limiter.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/voice-limiter.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.05216095799999857,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 48,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 48 expect() calls\nRan 9 tests across 1 file. [38.00ms]\n"
+    },
+    {
+      "file": "tests/audio/warden-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/audio/warden-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6085465000000003,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 784,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 784 expect() calls\nRan 7 tests across 1 file. [592.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/campaign.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/campaign.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.8593809579999998,
+      "pass": 17,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 17 pass\n 0 fail\nRan 17 tests across 1 file. [1.85s]\n"
+    },
+    {
+      "file": "tests/campaign/chapter-authority.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/chapter-authority.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.813832708,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 19 pass\n 0 fail\nRan 19 tests across 1 file. [800.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/invariants.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/invariants.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.5433012920000001,
+      "pass": 44,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 44 pass\n 0 fail\nRan 44 tests across 1 file. [527.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/later-chapter-authority.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/later-chapter-authority.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.7067214590000003,
+      "pass": 25,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 25 pass\n 0 fail\nRan 25 tests across 1 file. [694.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/movable-object.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/movable-object.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.7486840830000001,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 569,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 10 pass\n 0 fail\n 569 expect() calls\nRan 10 tests across 1 file. [734.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/save-adoption.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/save-adoption.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.3018014579999999,
+      "pass": 45,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 45 pass\n 0 fail\nRan 45 tests across 1 file. [290.00ms]\n"
+    },
+    {
+      "file": "tests/campaign/session-segments.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/campaign/session-segments.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.3615120420000003,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [348.00ms]\n"
+    },
+    {
+      "file": "tests/combat/accessibility.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/accessibility.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.22135895799999888,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 56,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 19 pass\n 0 fail\n 56 expect() calls\nRan 19 tests across 1 file. [209.00ms]\n"
+    },
+    {
+      "file": "tests/combat/act-one-asha.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/act-one-asha.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.8703163330000008,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 82,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 82 expect() calls\nRan 8 tests across 1 file. [1.85s]\n"
+    },
+    {
+      "file": "tests/combat/air-and-contact.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/air-and-contact.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.27677037500000007,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 109,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 109 expect() calls\nRan 12 tests across 1 file. [263.00ms]\n"
+    },
+    {
+      "file": "tests/combat/canopy-sealed-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/canopy-sealed-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 21.149931834000004,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 28771,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 28771 expect() calls\nRan 14 tests across 1 file. [21.13s]\n"
+    },
+    {
+      "file": "tests/combat/canopy-trials.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/canopy-trials.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.7328530420000026,
+      "pass": 24,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 18487,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 24 pass\n 0 fail\n 18487 expect() calls\nRan 24 tests across 1 file. [1.71s]\n"
+    },
+    {
+      "file": "tests/combat/combat-obstacles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/combat-obstacles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.214853541000004,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 16,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 16 expect() calls\nRan 5 tests across 1 file. [1203.00ms]\n"
+    },
+    {
+      "file": "tests/combat/combat-trials.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/combat-trials.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.909523874999999,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 231,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 231 expect() calls\nRan 12 tests across 1 file. [899.00ms]\n"
+    },
+    {
+      "file": "tests/combat/core.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/core.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 5.768211292,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 76,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 76 expect() calls\nRan 12 tests across 1 file. [5.76s]\n"
+    },
+    {
+      "file": "tests/combat/damage-events.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/damage-events.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.7120326249999999,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 45,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 45 expect() calls\nRan 9 tests across 1 file. [701.00ms]\n"
+    },
+    {
+      "file": "tests/combat/environment-props.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/environment-props.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.24711591699999552,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 160,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 22 pass\n 0 fail\n 160 expect() calls\nRan 22 tests across 1 file. [230.00ms]\n"
+    },
+    {
+      "file": "tests/combat/fall-engine.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/fall-engine.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.9186150409999972,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\nRan 5 tests across 1 file. [903.00ms]\n"
+    },
+    {
+      "file": "tests/combat/geometry-aerial.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/geometry-aerial.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.033455374999997727,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 5,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 5 expect() calls\nRan 2 tests across 1 file. [24.00ms]\n"
+    },
+    {
+      "file": "tests/combat/geometry-routes.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/geometry-routes.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03202458399999887,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 1 pass\n 0 fail\n 2 expect() calls\nRan 1 test across 1 file. [23.00ms]\n"
+    },
+    {
+      "file": "tests/combat/geometry-support-collider.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/geometry-support-collider.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03711204200000066,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 6,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 6 expect() calls\nRan 3 tests across 1 file. [26.00ms]\n"
+    },
+    {
+      "file": "tests/combat/geometry.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/geometry.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04022245799999655,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 65,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 65 expect() calls\nRan 12 tests across 1 file. [31.00ms]\n"
+    },
+    {
+      "file": "tests/combat/greenwake-elemental-combat.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/greenwake-elemental-combat.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 3.484476917,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 3995,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 3995 expect() calls\nRan 16 tests across 1 file. [3.47s]\n"
+    },
+    {
+      "file": "tests/combat/greenwake-evasion.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/greenwake-evasion.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.7520391670000026,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 368,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\n 368 expect() calls\nRan 11 tests across 1 file. [736.00ms]\n"
+    },
+    {
+      "file": "tests/combat/greenwake-monster-behaviour.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/greenwake-monster-behaviour.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.687546875,
+      "pass": 23,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 53612,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 23 pass\n 0 fail\n 53612 expect() calls\nRan 23 tests across 1 file. [677.00ms]\n"
+    },
+    {
+      "file": "tests/combat/greenwake-sealed-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/greenwake-sealed-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 26.373562124999996,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 29661,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 29661 expect() calls\nRan 12 tests across 1 file. [26.36s]\n"
+    },
+    {
+      "file": "tests/combat/grove-defence.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/grove-defence.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.6866946670000034,
+      "pass": 31,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 17195,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 31 pass\n 0 fail\n 17195 expect() calls\nRan 31 tests across 1 file. [1.67s]\n"
+    },
+    {
+      "file": "tests/combat/grove-practice.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/grove-practice.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6821735829999962,
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 6205,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 18 pass\n 0 fail\n 6205 expect() calls\nRan 18 tests across 1 file. [670.00ms]\n"
+    },
+    {
+      "file": "tests/combat/grove-sealed-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/grove-sealed-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 21.557663875,
+      "pass": 19,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 43757,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 19 pass\n 0 fail\n 43757 expect() calls\nRan 19 tests across 1 file. [21.54s]\n"
+    },
+    {
+      "file": "tests/combat/heartroot-skills.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/heartroot-skills.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.284918875000003,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 42,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\n 42 expect() calls\nRan 11 tests across 1 file. [272.00ms]\n"
+    },
+    {
+      "file": "tests/combat/hero-kit-seam.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/hero-kit-seam.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 5.199375040999992,
+      "pass": 46,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 12542,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 46 pass\n 0 fail\n 12542 expect() calls\nRan 46 tests across 1 file. [5.18s]\n"
+    },
+    {
+      "file": "tests/combat/hub.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/hub.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.19879720800000358,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 16,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 16 expect() calls\nRan 3 tests across 1 file. [188.00ms]\n"
+    },
+    {
+      "file": "tests/combat/locomotion-feel.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/locomotion-feel.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18393416699999943,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 40,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 40 expect() calls\nRan 8 tests across 1 file. [173.00ms]\n"
+    },
+    {
+      "file": "tests/combat/mana-skills.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/mana-skills.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.2101169169999921,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 37,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 37 expect() calls\nRan 6 tests across 1 file. [199.00ms]\n"
+    },
+    {
+      "file": "tests/combat/mistveil-sealed-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/mistveil-sealed-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 30.111823042000005,
+      "pass": 17,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 44436,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 17 pass\n 0 fail\n 44436 expect() calls\nRan 17 tests across 1 file. [30.12s]\n"
+    },
+    {
+      "file": "tests/combat/mistveil-trials.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/mistveil-trials.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 13.955543540999992,
+      "pass": 37,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 24076,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 37 pass\n 0 fail\n 24076 expect() calls\nRan 37 tests across 1 file. [13.95s]\n"
+    },
+    {
+      "file": "tests/combat/monster-facing.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/monster-facing.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 4.054671333999984,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 250,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 250 expect() calls\nRan 13 tests across 1 file. [4.04s]\n"
+    },
+    {
+      "file": "tests/combat/moonpine-sealed-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/moonpine-sealed-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 19.630533792,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 27296,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 27296 expect() calls\nRan 16 tests across 1 file. [19.62s]\n"
+    },
+    {
+      "file": "tests/combat/moonpine-trials.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/moonpine-trials.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 3.525459999999992,
+      "pass": 37,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 22581,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 37 pass\n 0 fail\n 22581 expect() calls\nRan 37 tests across 1 file. [3.51s]\n"
+    },
+    {
+      "file": "tests/combat/orun-duel.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/orun-duel.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 62.689885416,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\nRan 11 tests across 1 file. [62.68s]\n"
+    },
+    {
+      "file": "tests/combat/reactions.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/reactions.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.417597208000021,
+      "pass": 33,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1220,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 33 pass\n 0 fail\n 1220 expect() calls\nRan 33 tests across 1 file. [1360.00ms]\n"
+    },
+    {
+      "file": "tests/combat/run-reset.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/run-reset.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.24848800000001212,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 13,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 13 expect() calls\nRan 3 tests across 1 file. [230.00ms]\n"
+    },
+    {
+      "file": "tests/combat/sakda-kit.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/sakda-kit.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.6588457500000078,
+      "pass": 48,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 276,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 48 pass\n 0 fail\n 276 expect() calls\nRan 48 tests across 1 file. [1.62s]\n"
+    },
+    {
+      "file": "tests/combat/side-quests.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/side-quests.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6016919170000183,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 104,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 104 expect() calls\nRan 7 tests across 1 file. [558.00ms]\n"
+    },
+    {
+      "file": "tests/combat/smooth-player-motion.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/smooth-player-motion.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.370696082999988,
+      "pass": 20,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1517,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 20 pass\n 0 fail\n 1517 expect() calls\nRan 20 tests across 1 file. [342.00ms]\n"
+    },
+    {
+      "file": "tests/combat/story-encounter-readability.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/story-encounter-readability.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18867362499999582,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 19,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 19 expect() calls\nRan 7 tests across 1 file. [177.00ms]\n"
+    },
+    {
+      "file": "tests/combat/terminal-authority.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/terminal-authority.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.25121966599998996,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 133,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 133 expect() calls\nRan 8 tests across 1 file. [234.00ms]\n"
+    },
+    {
+      "file": "tests/combat/time-dilation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/time-dilation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.0235637080000015,
+      "pass": 24,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 233,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 24 pass\n 0 fail\n 233 expect() calls\nRan 24 tests across 1 file. [993.00ms]\n"
+    },
+    {
+      "file": "tests/combat/traversal.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/traversal.test.ts"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 8.280549499999994,
+      "pass": 12,
+      "fail": 1,
+      "skip": 0,
+      "expectCalls": 350,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\ntests/combat/traversal.test.ts:\n(fail) contextual traversal lifetime > completes every authored type against the renderer-measured native props, not only their authored proxies [6661.79ms]\n  ^ this test timed out after 5000ms.\n\n 12 pass\n 1 fail\n 350 expect() calls\nRan 13 tests across 1 file. [8.22s]\n"
+    },
+    {
+      "file": "tests/combat/trial-difficulty.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/trial-difficulty.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.3221231249999836,
+      "pass": 21,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 238,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 21 pass\n 0 fail\n 238 expect() calls\nRan 21 tests across 1 file. [2.30s]\n"
+    },
+    {
+      "file": "tests/combat/vesper-kit.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/vesper-kit.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 7.3438375829999565,
+      "pass": 36,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1022,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 36 pass\n 0 fail\n 1022 expect() calls\nRan 36 tests across 1 file. [7.31s]\n"
+    },
+    {
+      "file": "tests/combat/warden-arsenal.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/warden-arsenal.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.45341774999996415,
+      "pass": 46,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 5977,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 46 pass\n 0 fail\n 5977 expect() calls\nRan 46 tests across 1 file. [442.00ms]\n"
+    },
+    {
+      "file": "tests/combat/wildlife-pressure.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/combat/wildlife-pressure.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.039197333999967665,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 32,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 32 expect() calls\nRan 5 tests across 1 file. [29.00ms]\n"
+    },
+    {
+      "file": "tests/companions/CompanionSystem.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/CompanionSystem.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.188929582999961,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 17,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 17 expect() calls\nRan 4 tests across 1 file. [178.00ms]\n"
+    },
+    {
+      "file": "tests/companions/chargeAndMark.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/chargeAndMark.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.20095933300000615,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 60,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 60 expect() calls\nRan 8 tests across 1 file. [190.00ms]\n"
+    },
+    {
+      "file": "tests/companions/commands.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/commands.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1561148750000284,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 15,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 15 expect() calls\nRan 2 tests across 1 file. [145.00ms]\n"
+    },
+    {
+      "file": "tests/companions/greenwake-long-route.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/greenwake-long-route.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1440405000000028,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [132.00ms]\n"
+    },
+    {
+      "file": "tests/companions/instances.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/instances.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.16091695800004527,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 11,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 11 expect() calls\nRan 2 tests across 1 file. [148.00ms]\n"
+    },
+    {
+      "file": "tests/companions/locomotion.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/locomotion.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18430074999999488,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 64,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 64 expect() calls\nRan 4 tests across 1 file. [170.00ms]\n"
+    },
+    {
+      "file": "tests/companions/movableObjects.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/movableObjects.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1684576670000097,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 23,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 23 expect() calls\nRan 2 tests across 1 file. [154.00ms]\n"
+    },
+    {
+      "file": "tests/companions/nyra.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/nyra.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1911831250000396,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 10,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 10 expect() calls\nRan 2 tests across 1 file. [177.00ms]\n"
+    },
+    {
+      "file": "tests/companions/party-replacement.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/party-replacement.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.19081600000004983,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 13,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 13 expect() calls\nRan 2 tests across 1 file. [181.00ms]\n"
+    },
+    {
+      "file": "tests/companions/proactive-support.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/proactive-support.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1931648330000462,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 30,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 30 expect() calls\nRan 6 tests across 1 file. [182.00ms]\n"
+    },
+    {
+      "file": "tests/companions/slots.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/slots.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.15137504199997057,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 31,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 31 expect() calls\nRan 6 tests across 1 file. [139.00ms]\n"
+    },
+    {
+      "file": "tests/companions/storm-talon.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/storm-talon.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1983504580000299,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 64,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 64 expect() calls\nRan 16 tests across 1 file. [187.00ms]\n"
+    },
+    {
+      "file": "tests/companions/support.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/support.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18256045799999265,
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 284,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 18 pass\n 0 fail\n 284 expect() calls\nRan 18 tests across 1 file. [171.00ms]\n"
+    },
+    {
+      "file": "tests/companions/vara-takeoff.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/vara-takeoff.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1696117920000106,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 45,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 45 expect() calls\nRan 6 tests across 1 file. [158.00ms]\n"
+    },
+    {
+      "file": "tests/companions/vara.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/companions/vara.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1631539160000393,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 20,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 20 expect() calls\nRan 4 tests across 1 file. [150.00ms]\n"
+    },
+    {
+      "file": "tests/content/act-i-levels.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/content/act-i-levels.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1741471250000177,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [162.00ms]\n"
+    },
+    {
+      "file": "tests/content/chapter-graph.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/content/chapter-graph.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.2244067090000026,
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 18 pass\n 0 fail\nRan 18 tests across 1 file. [213.00ms]\n"
+    },
+    {
+      "file": "tests/content/later-act-levels.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/content/later-act-levels.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.406123917000019,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\nRan 9 tests across 1 file. [394.00ms]\n"
+    },
+    {
+      "file": "tests/effects/bamboo-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/bamboo-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 3.192277833,
+      "pass": 31,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1691,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 31 pass\n 0 fail\n 1691 expect() calls\nRan 31 tests across 1 file. [3.18s]\n"
+    },
+    {
+      "file": "tests/effects/canopy-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/canopy-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.9135205000000424,
+      "pass": 34,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1936,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 34 pass\n 0 fail\n 1936 expect() calls\nRan 34 tests across 1 file. [2.90s]\n"
+    },
+    {
+      "file": "tests/effects/combat-obstacle-visuals.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/combat-obstacle-visuals.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.18898774999997112,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 36,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 36 expect() calls\nRan 5 tests across 1 file. [178.00ms]\n"
+    },
+    {
+      "file": "tests/effects/companion-fx.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/companion-fx.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.2963329590000212,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 46,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 10 pass\n 0 fail\n 46 expect() calls\nRan 10 tests across 1 file. [1285.00ms]\n"
+    },
+    {
+      "file": "tests/effects/danger-audio.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/danger-audio.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.445763917000033,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 1 pass\n 0 fail\nRan 1 test across 1 file. [434.00ms]\n"
+    },
+    {
+      "file": "tests/effects/danger-presentation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/danger-presentation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.5689582499999669,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [556.00ms]\n"
+    },
+    {
+      "file": "tests/effects/grove-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/grove-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.8686540000000385,
+      "pass": 28,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1632,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 28 pass\n 0 fail\n 1632 expect() calls\nRan 28 tests across 1 file. [2.85s]\n"
+    },
+    {
+      "file": "tests/effects/hero-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/hero-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.7005397909999593,
+      "pass": 24,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2955,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 24 pass\n 0 fail\n 2955 expect() calls\nRan 24 tests across 1 file. [2.69s]\n"
+    },
+    {
+      "file": "tests/effects/hero-vfx.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/hero-vfx.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.6200260419999832,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 89,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 89 expect() calls\nRan 13 tests across 1 file. [1.61s]\n"
+    },
+    {
+      "file": "tests/effects/hit-impact.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/hit-impact.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.8610131670000264,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 261,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 261 expect() calls\nRan 6 tests across 1 file. [850.00ms]\n"
+    },
+    {
+      "file": "tests/effects/mistveil-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/mistveil-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.951478332999977,
+      "pass": 34,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1933,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 34 pass\n 0 fail\n 1933 expect() calls\nRan 34 tests across 1 file. [2.94s]\n"
+    },
+    {
+      "file": "tests/effects/moonpine-kits.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/moonpine-kits.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 4.21948758299998,
+      "pass": 37,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 11422,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 37 pass\n 0 fail\n 11422 expect() calls\nRan 37 tests across 1 file. [4.21s]\n"
+    },
+    {
+      "file": "tests/effects/postfx-impulse.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/postfx-impulse.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06854495900002075,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 23,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 23 expect() calls\nRan 2 tests across 1 file. [56.00ms]\n"
+    },
+    {
+      "file": "tests/effects/reaction-fx.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/reaction-fx.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.2799583340000245,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 38,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 38 expect() calls\nRan 12 tests across 1 file. [1268.00ms]\n"
+    },
+    {
+      "file": "tests/effects/residue.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/residue.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.7669414589999942,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 27,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 27 expect() calls\nRan 7 tests across 1 file. [753.00ms]\n"
+    },
+    {
+      "file": "tests/effects/story-effects.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/story-effects.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.632382750000048,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\nRan 5 tests across 1 file. [622.00ms]\n"
+    },
+    {
+      "file": "tests/effects/telegraph-intensity.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/telegraph-intensity.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06440224999998463,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 13,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 13 expect() calls\nRan 5 tests across 1 file. [54.00ms]\n"
+    },
+    {
+      "file": "tests/effects/thunder-cleave.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/thunder-cleave.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.9438949579999899,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 331,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 331 expect() calls\nRan 7 tests across 1 file. [930.00ms]\n"
+    },
+    {
+      "file": "tests/effects/vfx-cancellation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/vfx-cancellation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.914165708000015,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 32,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 32 expect() calls\nRan 7 tests across 1 file. [903.00ms]\n"
+    },
+    {
+      "file": "tests/effects/vfx-footprint.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/vfx-footprint.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 4.746768749999989,
+      "pass": 24,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 70,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 24 pass\n 0 fail\n 70 expect() calls\nRan 24 tests across 1 file. [4.73s]\n"
+    },
+    {
+      "file": "tests/effects/vfx-hdr.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/vfx-hdr.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.12156320799997775,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 68,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\n 68 expect() calls\nRan 4 tests across 1 file. [110.00ms]\n"
+    },
+    {
+      "file": "tests/effects/vfx-particles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/vfx-particles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.3027019999999902,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 103,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 103 expect() calls\nRan 2 tests across 1 file. [291.00ms]\n"
+    },
+    {
+      "file": "tests/effects/warden-fx.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/warden-fx.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.1890765419999954,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 84,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 84 expect() calls\nRan 13 tests across 1 file. [1178.00ms]\n"
+    },
+    {
+      "file": "tests/effects/warden-trail.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/effects/warden-trail.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.2803667499999865,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 263264,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 263264 expect() calls\nRan 8 tests across 1 file. [269.00ms]\n"
+    },
+    {
+      "file": "tests/input/CommandWheel.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/input/CommandWheel.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.037198541999969165,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 23,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 23 expect() calls\nRan 8 tests across 1 file. [27.00ms]\n"
+    },
+    {
+      "file": "tests/input/RuntimeInput.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/input/RuntimeInput.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04540608299995074,
+      "pass": 27,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 128,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 27 pass\n 0 fail\n 128 expect() calls\nRan 27 tests across 1 file. [34.00ms]\n"
+    },
+    {
+      "file": "tests/lab/simulation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/lab/simulation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06708933300001081,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 14,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 14 expect() calls\nRan 5 tests across 1 file. [54.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/ActorMotionSmoothing.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/ActorMotionSmoothing.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03762966700003017,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 397,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 397 expect() calls\nRan 14 tests across 1 file. [27.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/ActorProcedural.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/ActorProcedural.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07600341699999989,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 26,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 26 expect() calls\nRan 9 tests across 1 file. [66.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/CameraDirector-Greenwake.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/CameraDirector-Greenwake.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.0844634579999838,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [73.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/CameraDirector-motion.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/CameraDirector-motion.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08300620800000616,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 787,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 787 expect() calls\nRan 16 tests across 1 file. [72.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/CameraDirector-punch.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/CameraDirector-punch.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.062476249999948774,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 37,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 37 expect() calls\nRan 2 tests across 1 file. [53.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/CameraDirector-shake.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/CameraDirector-shake.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06739595799997915,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 195,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 195 expect() calls\nRan 6 tests across 1 file. [55.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/ContactShadows.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/ContactShadows.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06638704200001666,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 52,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 10 pass\n 0 fail\n 52 expect() calls\nRan 10 tests across 1 file. [56.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/EstablishingShot.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/EstablishingShot.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07674287499999627,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 3076,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 3076 expect() calls\nRan 14 tests across 1 file. [65.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/FootGrounding.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/FootGrounding.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.09262079199997243,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 113,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 22 pass\n 0 fail\n 113 expect() calls\nRan 22 tests across 1 file. [81.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/LimbClearance.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/LimbClearance.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07492458299995633,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 41,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 41 expect() calls\nRan 7 tests across 1 file. [66.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/LookAtIK.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/LookAtIK.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.06761395800003084,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 37,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 37 expect() calls\nRan 14 tests across 1 file. [58.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/NativeSolidColliders.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/NativeSolidColliders.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.23153737500001442,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 46,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 46 expect() calls\nRan 13 tests across 1 file. [218.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/NativeSupportDecks.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/NativeSupportDecks.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.3798445410000277,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 5211,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\n 5211 expect() calls\nRan 12 tests across 1 file. [368.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/PoseAfterimages.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/PoseAfterimages.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08415308399999048,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 127,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 15 pass\n 0 fail\n 127 expect() calls\nRan 15 tests across 1 file. [71.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/ReactionPresenter.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/ReactionPresenter.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.042748749999969735,
+      "pass": 29,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 113,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 29 pass\n 0 fail\n 113 expect() calls\nRan 29 tests across 1 file. [34.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/SlopeAttitude.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/SlopeAttitude.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07127391699998406,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 25,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\n 25 expect() calls\nRan 11 tests across 1 file. [61.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/SpringBones.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/SpringBones.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08233791699999711,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 2770,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\n 2770 expect() calls\nRan 9 tests across 1 file. [70.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/actor-binding.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/actor-binding.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.036293125000025614,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 29,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 10 pass\n 0 fail\n 29 expect() calls\nRan 10 tests across 1 file. [27.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/aren-clip-sim-timing.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/aren-clip-sim-timing.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.1938732500000042,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 8,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 8 expect() calls\nRan 7 tests across 1 file. [183.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/aren-knockdown-getup.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/aren-knockdown-getup.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.42600333300000054,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 11652,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 11652 expect() calls\nRan 13 tests across 1 file. [410.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/attack-posture.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/attack-posture.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.3386133329999866,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 17,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\n 17 expect() calls\nRan 3 tests across 1 file. [322.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/bamboo-monster-profiles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/bamboo-monster-profiles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.042553832999954466,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 8,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 1 pass\n 0 fail\n 8 expect() calls\nRan 1 test across 1 file. [29.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/candidate-geometry.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/candidate-geometry.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.26546795800002293,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 37503,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 37503 expect() calls\nRan 5 tests across 1 file. [251.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/canopy-monster-profiles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/canopy-monster-profiles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04247099999996135,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 344,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 344 expect() calls\nRan 8 tests across 1 file. [32.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/grove-monster-profiles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/grove-monster-profiles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.0449702919999836,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 48,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 48 expect() calls\nRan 5 tests across 1 file. [31.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/hero-limb-clearance.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/hero-limb-clearance.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 1.0066980829999665,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1667,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 1667 expect() calls\nRan 7 tests across 1 file. [983.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/instance-visibility.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/instance-visibility.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.09682291699998313,
+      "pass": 7,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 30,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 7 pass\n 0 fail\n 30 expect() calls\nRan 7 tests across 1 file. [77.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/mistveil-monster-profiles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/mistveil-monster-profiles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04174179199995706,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 43,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 43 expect() calls\nRan 2 tests across 1 file. [30.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/monster-facing.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/monster-facing.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.09110029099998064,
+      "pass": 18,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 167,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 18 pass\n 0 fail\n 167 expect() calls\nRan 18 tests across 1 file. [76.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/monster-hit-overlay.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/monster-hit-overlay.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07665549999999348,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 26,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 26 expect() calls\nRan 5 tests across 1 file. [64.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/monster-lifecycle.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/monster-lifecycle.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08054141599999275,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 85,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\n 85 expect() calls\nRan 13 tests across 1 file. [69.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/moonpine-monster-profiles.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/moonpine-monster-profiles.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04194087499997113,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 42,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 42 expect() calls\nRan 2 tests across 1 file. [26.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/postfx-region-grading.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/postfx-region-grading.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07971950000000652,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 9 pass\n 0 fail\nRan 9 tests across 1 file. [69.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/prop-instance-variation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/prop-instance-variation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04210583300003782,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1843,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 1843 expect() calls\nRan 8 tests across 1 file. [30.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/reaction-driver.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/reaction-driver.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07529362499999115,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 18,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 8 pass\n 0 fail\n 18 expect() calls\nRan 8 tests across 1 file. [64.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/story-actor-animation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/story-actor-animation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03927512500004377,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 58,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\n 58 expect() calls\nRan 16 tests across 1 file. [28.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/story-driver.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/story-driver.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07245570799999404,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 13,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 13 expect() calls\nRan 5 tests across 1 file. [60.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/vesper-animation.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/vesper-animation.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04311608399997931,
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1066,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 2 pass\n 0 fail\n 1066 expect() calls\nRan 2 tests across 1 file. [30.00ms]\n"
+    },
+    {
+      "file": "tests/rendering/warden-weapon.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/rendering/warden-weapon.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 16.29311262500001,
+      "pass": 41,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 10459,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 41 pass\n 0 fail\n 10459 expect() calls\nRan 41 tests across 1 file. [16.23s]\n"
+    },
+    {
+      "file": "tests/storage/SaveRepository.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/storage/SaveRepository.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.20853149999998277,
+      "pass": 42,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 42 pass\n 0 fail\nRan 42 tests across 1 file. [196.00ms]\n"
+    },
+    {
+      "file": "tests/storage/scoped-saves.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/storage/scoped-saves.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.6038124170000083,
+      "pass": 17,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 17 pass\n 0 fail\nRan 17 tests across 1 file. [593.00ms]\n"
+    },
+    {
+      "file": "tests/ui/CombatReadability.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/CombatReadability.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.07328337499999907,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 108,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 108 expect() calls\nRan 14 tests across 1 file. [62.00ms]\n"
+    },
+    {
+      "file": "tests/ui/DamageNumbers.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/DamageNumbers.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.0686739579999703,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 43,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\n 43 expect() calls\nRan 14 tests across 1 file. [57.00ms]\n"
+    },
+    {
+      "file": "tests/ui/GameUI.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/GameUI.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.21354154100001324,
+      "pass": 37,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 274,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 37 pass\n 0 fail\n 274 expect() calls\nRan 37 tests across 1 file. [202.00ms]\n"
+    },
+    {
+      "file": "tests/ui/loading-error-actions.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/loading-error-actions.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04224729199998546,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 7,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 5 pass\n 0 fail\n 7 expect() calls\nRan 5 tests across 1 file. [29.00ms]\n"
+    },
+    {
+      "file": "tests/ui/regionScenes.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/regionScenes.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.04145991700002924,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 22,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 22 expect() calls\nRan 6 tests across 1 file. [30.00ms]\n"
+    },
+    {
+      "file": "tests/ui/worldMapSelect.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/ui/worldMapSelect.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.05141304199997103,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 1066,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 10 pass\n 0 fail\n 1066 expect() calls\nRan 10 tests across 1 file. [41.00ms]\n"
+    },
+    {
+      "file": "tests/world/atmospheric-sky.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/atmospheric-sky.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08212504199997056,
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 3 pass\n 0 fail\nRan 3 tests across 1 file. [71.00ms]\n"
+    },
+    {
+      "file": "tests/world/canopy-world.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/canopy-world.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 5.018610749999993,
+      "pass": 12,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 12 pass\n 0 fail\nRan 12 tests across 1 file. [5.00s]\n"
+    },
+    {
+      "file": "tests/world/clustered-boundary-dressing.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/clustered-boundary-dressing.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.03879470800003037,
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 24,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 6 pass\n 0 fail\n 24 expect() calls\nRan 6 tests across 1 file. [28.00ms]\n"
+    },
+    {
+      "file": "tests/world/greenwake-ground.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/greenwake-ground.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.111085542000015,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 14 pass\n 0 fail\nRan 14 tests across 1 file. [2.10s]\n"
+    },
+    {
+      "file": "tests/world/greenwake-ridge-creek.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/greenwake-ridge-creek.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 2.106424457999994,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\nRan 11 tests across 1 file. [2.09s]\n"
+    },
+    {
+      "file": "tests/world/grove-world.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/grove-world.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 3.2112412920000497,
+      "pass": 16,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 16 pass\n 0 fail\nRan 16 tests across 1 file. [3.20s]\n"
+    },
+    {
+      "file": "tests/world/mistveil-world.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/mistveil-world.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 4.849402874999971,
+      "pass": 11,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 11 pass\n 0 fail\nRan 11 tests across 1 file. [4.83s]\n"
+    },
+    {
+      "file": "tests/world/moonpine-world.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/moonpine-world.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 3.9395071250000036,
+      "pass": 13,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 13 pass\n 0 fail\nRan 13 tests across 1 file. [3.92s]\n"
+    },
+    {
+      "file": "tests/world/region-atmosphere.test.ts",
+      "command": [
+        "bun",
+        "test",
+        "tests/world/region-atmosphere.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallSeconds": 0.08990337499999441,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "expectCalls": 0,
+      "output": "bun test v1.4.3 (c6da4a4d3)\n\n 4 pass\n 0 fail\nRan 4 tests across 1 file. [79.00ms]\n"
+    }
+  ],
+  "wallSeconds": 353.145499125,
+  "totals": {
+    "files": 185,
+    "pass": 2389,
+    "fail": 1,
+    "skip": 0,
+    "failedFiles": [
+      "tests/combat/traversal.test.ts"
+    ]
+  }
+}

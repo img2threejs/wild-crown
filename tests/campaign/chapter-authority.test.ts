@@ -135,7 +135,8 @@ test("recruitment is an explicit committed outcome: a fragment alone never recru
   await atCanopy(director);
   await director.processEvent({ type: "fragment", eventId: "f", idempotencyKey: "story:f", fragmentId: "heartroot-canopy", sourceId: "koro" });
   assert.equal(director.snapshot().companions.koro.recruited, false);
-  await director.selectParty("koro");
+  // An unrecruited companion cannot be equipped: the party is earned, never selected freely.
+  await assert.rejects(director.selectParty("koro"), /has not joined your journey/);
   assert.equal(director.snapshot().companions.koro.recruited, false);
   await director.processEvent({ ...cleanseKoro, eventId: "koro-subdued", idempotencyKey: "story:koro-subdued", resolution: "subdued" });
   assert.equal(director.snapshot().companions.koro.recruited, false, "only a cleanse recruits");
@@ -144,6 +145,8 @@ test("recruitment is an explicit committed outcome: a fragment alone never recru
   assert.equal(koro.recruited, true);
   assert.equal(koro.bondLevel, RECRUITMENT_BOND);
   assert.deepEqual(director.snapshot().companions.asha.recruited, false);
+  // The earned companion may now travel with the party.
+  assert.deepEqual((await director.selectParty("koro")).party, { companionId: "koro" });
   // Vara is recruited by tending her or by the Sky fragment; neither recruits anyone else.
   await director.processEvent({ type: "rescue", eventId: "v", idempotencyKey: "story:v", targetId: "vara", locationId: "canopy-waterfall", safe: true });
   assert.equal(director.snapshot().companions.vara.recruited, true);

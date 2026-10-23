@@ -22,6 +22,7 @@ import { isBridgeDeckSurface, isFlatGroundSurface, isRaisedWalkSurface } from '.
 const authored = (AUTHORED_REGIONS as RegionDefinition[]).find((candidate) => candidate.id === 'mistveil-basin')!;
 const region = createCombatTrialRegion(authored);
 const field = new TerrainField(region, MISTVEIL_BIOME);
+const mask = bakeGroundMask(region, field, MISTVEIL_BIOME);
 const walkables = region.ground.surfaces.filter((surface) => surface.walkable);
 /** Authored set dressing (not boundary dressing): its plan-view radius per asset. */
 const AUTHORED_RADIUS: Readonly<Record<string, number>> = { 'prop-mistveil-root-tree': 4, 'prop-hunter-extraction-rig': 3.5, 'prop-black-sap-filter-drum': 1.3, 'prop-root-cavern-mouth': 4.5, 'prop-mistveil-reed-cluster': 1.2, 'prop-mire-bank-rock': 2 };
@@ -228,7 +229,6 @@ test('terrain mesh, mask textures, clutter and draw calls stay within Greenwake 
   const reference = buildTerrainMeshData(greenwakeField);
   assert.ok(mistveil.positions.length <= reference.positions.length, `${mistveil.positions.length / 3} vs ${reference.positions.length / 3} vertices`);
   assert.ok(mistveil.indices.length <= reference.indices.length, `${mistveil.indices.length / 3} vs ${reference.indices.length / 3} triangles`);
-  const mask = bakeGroundMask(region, field, MISTVEIL_BIOME);
   const greenwakeMask = bakeGroundMask(greenwake, greenwakeField, GREENWAKE_BIOME);
   assert.ok(mask.shade.length + mask.detail.length + mask.terrain.length < (greenwakeMask.shade.length + greenwakeMask.detail.length + greenwakeMask.terrain.length));
   const clutter = new GroundClutter(region, field, mask, { value: 0 }, MISTVEIL_BIOME);
@@ -251,7 +251,6 @@ test('terrain mesh, mask textures, clutter and draw calls stay within Greenwake 
 });
 
 test('the ground paints wet mud and bed stones round the water, and the trail only along the route', () => {
-  const mask = bakeGroundMask(region, field, MISTVEIL_BIOME);
   const s = createMaskSample();
   const sample = RIVER_SAMPLES[60]!;
   assert.ok(sampleMask(mask, sample.x, sample.z, s).bed >= 0.8, 'river gravel under the Black Sap');

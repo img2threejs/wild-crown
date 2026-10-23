@@ -1,4 +1,4 @@
-import { Box3, Mesh, type Object3D } from 'three';
+import { Box3, Mesh, type Object3D, type Vector3 } from 'three';
 
 export interface Body { readonly height: number; readonly radius: number }
 export const DEFAULT_BODY: Body = { height: 1.2, radius: 0.8 };
@@ -30,21 +30,54 @@ export class ActorBodies {
 
 const HAND_NAME = /RightHand$/;
 const FOREARM_NAME = /RightForeArm$/;
+const LEFT_HAND_NAME = /LeftHand$/;
+const LEFT_FOREARM_NAME = /LeftForeArm$/;
 
-/** Finds Aren's right hand/forearm bones once per rendered root (sanitized Mixamo names). */
+/** Finds the player's hand/forearm bones (right: the weapon arm; left: Yara's casting hand) once per rendered root (sanitized Mixamo names). */
 export class HandRig {
   hand: Object3D | undefined;
   forearm: Object3D | undefined;
+  leftHand: Object3D | undefined;
+  leftForearm: Object3D | undefined;
   private root: Object3D | undefined;
 
   resolve(root: Object3D | undefined): void {
     if (root === this.root) return;
-    this.root = root; this.hand = undefined; this.forearm = undefined;
+    this.root = root; this.hand = undefined; this.forearm = undefined; this.leftHand = undefined; this.leftForearm = undefined;
     root?.traverse(node => {
       if (!this.hand && HAND_NAME.test(node.name)) this.hand = node;
       if (!this.forearm && FOREARM_NAME.test(node.name)) this.forearm = node;
+      if (!this.leftHand && LEFT_HAND_NAME.test(node.name)) this.leftHand = node;
+      if (!this.leftForearm && LEFT_FOREARM_NAME.test(node.name)) this.leftForearm = node;
     });
   }
 
-  clear(): void { this.root = undefined; this.hand = undefined; this.forearm = undefined; }
+  clear(): void { this.root = undefined; this.hand = undefined; this.forearm = undefined; this.leftHand = undefined; this.leftForearm = undefined; }
+}
+
+/** Yara's one skill cast by her open left palm (Cleanse); every other skill, projectile and cast glow works through the staff head. */
+const YARA_HAND_CASTS: Readonly<Record<string, true>> = {
+  'yara-cleanse': true,
+};
+export function isYaraHandCast(actionId: string): boolean { return YARA_HAND_CASTS[actionId] === true; }
+
+/** Metres beyond the wrist bone where the palm's centre sits (along forearm → hand). */
+const PALM_OFFSET = 0.09;
+
+/**
+ * World position of the left palm and the forearm → hand direction (unit) for the current pose; false when the rig has no left arm.
+ * `rig` must already be resolved against the rendered root. Allocation-free.
+ */
+export function leftPalm(rig: HandRig, palm: Vector3, direction: Vector3): boolean {
+  const hand = rig.leftHand, forearm = rig.leftForearm;
+  if (!hand || !forearm) return false;
+  hand.updateWorldMatrix(true, false);
+  hand.getWorldPosition(palm);
+  forearm.getWorldPosition(direction);
+  direction.subVectors(palm, direction);
+  const length = direction.length();
+  if (length < 1e-6) return false;
+  direction.multiplyScalar(1 / length);
+  palm.addScaledVector(direction, PALM_OFFSET);
+  return true;
 }

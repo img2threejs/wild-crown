@@ -171,11 +171,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "9bcdfa94-80e0-457e-95a5-30ef3993145c",
-    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
-    "outputHash": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+    "runtimeUrl": "/asset-source/generated/actor-sable-runtime-01/actor-sable-companion.glb",
+    "outputHash": "cae7c51ecd6263f8cff216d8da6563bc983b40a91fc6f2aae70bf0da4d04cbe8",
     "lodIds": [],
     "requiredActionIds": [
-      "wild-crown:ruun-track-charge"
+      "wild-crown:ruun-track-charge",
+      "sable-flank",
+      "sable-search",
+      "sable-distract"
     ],
     "coordinateTransform": {
       "forward": {
@@ -201,7 +204,10 @@
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "wild-crown:ruun-track-charge": "wild-crown:ruun-track-charge"
+      "wild-crown:ruun-track-charge": "wild-crown:ruun-track-charge",
+      "sable-flank": "sable-flank",
+      "sable-search": "sable-search",
+      "sable-distract": "sable-distract"
     },
     "rootMotion": {
       "monster-idle": {
@@ -267,10 +273,22 @@
       "wild-crown:ruun-track-charge": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "sable-flank": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "sable-search": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "sable-distract": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-sable-runtime-01/combat-clips-report.json",
+    "provenance": "asset-source/generated/actor-sable-runtime-01/companion-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -281,11 +299,14 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_4",
     "tripoSourceTask": "ed043464-0230-4df6-9ebd-5885209e9064",
-    "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-combat.glb",
-    "outputHash": "2f2b7ed755e833d4724953dc94145af6139d82564e063c5c2ae0ea359f3ab68b",
+    "runtimeUrl": "/asset-source/generated/actor-nyra-runtime-01/actor-nyra-companion.glb",
+    "outputHash": "b8bd183a145ef59d52cf7958ec1412153ee4b053834901e54b9c42879b1b50c1",
     "lodIds": [],
     "requiredActionIds": [
-      "wild-crown:nyra-shadow-ambush"
+      "wild-crown:nyra-shadow-ambush",
+      "nyra-ambush",
+      "nyra-search",
+      "nyra-distract"
     ],
     "coordinateTransform": {
       "forward": {
@@ -311,7 +332,10 @@
       "monster-tail": "monster-tail",
       "monster-knockdown": "monster-knockdown",
       "monster-getup": "monster-getup",
-      "wild-crown:nyra-shadow-ambush": "wild-crown:nyra-shadow-ambush"
+      "wild-crown:nyra-shadow-ambush": "wild-crown:nyra-shadow-ambush",
+      "nyra-ambush": "nyra-ambush",
+      "nyra-search": "nyra-search",
+      "nyra-distract": "nyra-distract"
     },
     "rootMotion": {
       "monster-idle": {
@@ -377,10 +401,22 @@
       "wild-crown:nyra-shadow-ambush": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "nyra-ambush": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "nyra-search": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "nyra-distract": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-nyra-runtime-01/combat-clips-report.json",
+    "provenance": "asset-source/generated/actor-nyra-runtime-01/companion-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {
@@ -391,13 +427,16 @@
     "rigFamily": "quadruped",
     "castSocketBone": "tripo::Head_3",
     "tripoSourceTask": "99fc95a7-5394-4858-912e-c20e36af99b3",
-    "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
-    "outputHash": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+    "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb",
+    "outputHash": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb",
     "lodIds": [],
     "requiredActionIds": [
       "wild-crown:solkar-commanding-roar",
       "wild-crown:solkar-pride-rush",
-      "wild-crown:solkar-paw-slam"
+      "wild-crown:solkar-paw-slam",
+      "solkar-rally",
+      "solkar-search",
+      "solkar-distract"
     ],
     "coordinateTransform": {
       "forward": {
@@ -425,7 +464,10 @@
       "monster-getup": "monster-getup",
       "wild-crown:solkar-commanding-roar": "wild-crown:solkar-commanding-roar",
       "wild-crown:solkar-pride-rush": "wild-crown:solkar-pride-rush",
-      "wild-crown:solkar-paw-slam": "wild-crown:solkar-paw-slam"
+      "wild-crown:solkar-paw-slam": "wild-crown:solkar-paw-slam",
+      "solkar-rally": "solkar-rally",
+      "solkar-search": "solkar-search",
+      "solkar-distract": "solkar-distract"
     },
     "rootMotion": {
       "monster-idle": {
@@ -499,10 +541,22 @@
       "wild-crown:solkar-paw-slam": {
         "mode": "in-place",
         "evidenceStatus": "verified"
+      },
+      "solkar-rally": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "solkar-search": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
+      },
+      "solkar-distract": {
+        "mode": "in-place",
+        "evidenceStatus": "verified"
       }
     },
     "sockets": [],
-    "provenance": "asset-source/generated/actor-solkar-runtime-01/combat-clips-report.json",
+    "provenance": "asset-source/generated/actor-solkar-runtime-01/companion-clips-report.json",
     "evidenceStatus": "blocked"
   },
   {

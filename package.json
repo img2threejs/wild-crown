@@ -15,6 +15,7 @@
     "@fontsource/alegreya": "^5.3.0",
     "@fontsource/barlow": "^5.3.0",
     "@fontsource/barlow-condensed": "^5.3.0",
+    "pixi.js": "8.22.0",
     "three": "0.169.0"
   },
   "devDependencies": {

@@ -358,6 +358,7 @@ export interface AtmosphereProfile {
 /** A per-region visual feature built on the ground (waterfall, drifting leaves, light shafts); animated from the world clock. */
 export interface GroundFeature {
   readonly group: Object3D;
+  /** Horizontal player focus projected onto authored ground/decks; airborne Y never lifts the ambient volume. */
   update(worldTimeSeconds: number, focus: Readonly<Vec3> | undefined): void;
   /** Fewer / simpler particles for the Reduced Motion and Reduced Effects settings. */
   setReducedEffects(reduced: boolean): void;

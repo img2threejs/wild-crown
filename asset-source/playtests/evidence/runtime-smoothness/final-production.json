@@ -1,0 +1,211 @@
+{
+  "observedAt": "2026-10-22T02:25:58.871Z",
+  "bootObservedMs": 9812,
+  "idle": {
+    "label": "final-production-idle-both-fixes",
+    "durationMs": 6010.300000011921,
+    "frames": 319,
+    "frame": {
+      "p50": 13.5,
+      "p95": 27.200000000000728,
+      "p99": 27.69999999999891,
+      "max": 40.099999999998545,
+      "over25": 129,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 361,
+      "worldTick": 361,
+      "worldTimeSeconds": 6.016666666666667,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2573.07,
+      "taskMs": 2739.1800000000003,
+      "layoutMs": 0.57,
+      "recalcStyleMs": 35.738,
+      "heapUsedBytes": 93669028,
+      "domNodes": 1976
+    }
+  },
+  "mixed": {
+    "label": "final-production-movement-skills-both-fixes",
+    "durationMs": 9008,
+    "frames": 518,
+    "frame": {
+      "p50": 13.400000000001455,
+      "p95": 26.80000000000291,
+      "p99": 27.5,
+      "max": 40.10000000000218,
+      "over25": 154,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 902,
+      "worldTick": 902,
+      "worldTimeSeconds": 15.033333333333333,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 81.06791756601936,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -17.054059132720344,
+      "y": 0,
+      "z": -7.585022201343214
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2277.8179999999998,
+      "taskMs": 2615.3650000000002,
+      "layoutMs": 21.1,
+      "recalcStyleMs": 81.77199999999999,
+      "heapUsedBytes": 94209220,
+      "domNodes": 6794
+    }
+  },
+  "gpu": {
+    "label": "final-production-geometry-msaa2-post-msaa0-both-fixes",
+    "available": true,
+    "samples": 132,
+    "disjoint": false,
+    "pending": 0,
+    "p50Ms": 20.921375,
+    "p95Ms": 23.451749,
+    "targetSamples": [
+      0,
+      0
+    ]
+  },
+  "actionPlan": [
+    {
+      "at": 0,
+      "key": "w",
+      "down": true
+    },
+    {
+      "at": 1300,
+      "key": "w",
+      "down": false
+    },
+    {
+      "at": 1500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3200,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3500,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4300,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4700,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 5500,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 5900,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 6000,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "s",
+      "down": true
+    },
+    {
+      "at": 7800,
+      "key": "s",
+      "down": false
+    }
+  ],
+  "devStorageRestoration": {
+    "restored": true,
+    "keys": 0
+  }
+}

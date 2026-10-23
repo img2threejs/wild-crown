@@ -1,6 +1,7 @@
 import { Matrix4, Mesh, Quaternion, Vector3, type Material } from 'three';
 import type { ActorSnapshot, CombatSnapshot, JudgementMarkSnapshot, PlayerProjectileSnapshot } from '../../game/contracts.js';
 import { TARGETED_STRIKES, THUNDER_CLEAVE } from '../../game/combat/PlayerSkills.js';
+import { isYaraHandCast, leftPalm } from './ActorBounds.js';
 import { CRESCENT_CHORD } from './CrescentFx.js';
 import { Footprint } from './footprint.js';
 import { PALETTE, type VfxElement } from './palette.js';
@@ -29,6 +30,11 @@ const MOTE = { r: 0.8, g: 0.72, b: 0.5 };
 const FLECK = { r: 0.3, g: 0.46, b: 0.16 };
 /** Aren's action while Heavy is held; the release becomes a Thunder Cleave after `THUNDER_CLEAVE.holdTicks`. */
 const HEAVY_CHARGE_ACTION = 'aren-charged-heavy-charge';
+/** Yara's hand-cast trail: the streak runs from just behind the palm to this far ahead of it (m), along forearm → hand. */
+const PALM_TRAIL_BACK = 0.05;
+const PALM_TRAIL_AHEAD = 0.22;
+/** Seconds a hand-thrown thorn takes to ease from her palm onto its simulated flight path. */
+const PALM_LAUNCH_SECONDS = 0.15;
 
 type EdgeMaterial = Material & { emissiveIntensity: number };
 
@@ -171,7 +177,17 @@ export class WardenCombat {
   // ---- blade ----
 
   private bladePose(): boolean {
-    const w = this.w, tip = w.resolveSocket?.('aren', 'weapon-tip'), base = w.resolveSocket?.('aren', 'weapon-base');
+    const w = this.w;
+    // Yara's hand casts trail from the casting palm (forearm → hand line), not from the staff she holds still at her side.
+    if (w.player.hero === 'yara' && isYaraHandCast(w.player.actionId)) {
+      w.hand.resolve(w.resolveActorRoot?.('aren'));
+      if (leftPalm(w.hand, this.a, this.b)) {
+        this.base.copy(this.a).addScaledVector(this.b, -PALM_TRAIL_BACK);
+        this.tip.copy(this.a).addScaledVector(this.b, PALM_TRAIL_AHEAD);
+        return true;
+      }
+    }
+    const tip = w.resolveSocket?.('aren', 'weapon-tip'), base = w.resolveSocket?.('aren', 'weapon-base');
     if (tip && base) {
       base.updateWorldMatrix(true, false); tip.updateWorldMatrix(true, false);
       base.getWorldPosition(this.base); tip.getWorldPosition(this.tip);
@@ -318,6 +334,8 @@ export class WardenCombat {
         visual.simTick = snapshot.ageTicks; visual.hasPrev = true;
       }
       visual.display.lerpVectors(visual.prev, visual.cur, alpha);
+      const launched = (time - visual.launchAt) / PALM_LAUNCH_SECONDS;
+      if (launched < 1) { const rest = 1 - launched * launched * (3 - 2 * launched); visual.display.addScaledVector(visual.launch, rest); }
       const d = snapshot.direction, length = Math.hypot(d.x, d.y, d.z);
       if (length > 1e-6) visual.direction.set(d.x / length, d.y / length, d.z / length);
       if (visual.kind === 'sigil-bolt') { const wantLight: boolean = !lit; this.drawBolt(visual, time, dt, wantLight); lit = lit || wantLight; }
@@ -334,8 +352,18 @@ export class WardenCombat {
     const visual: ProjectileVisual = {
       id: snapshot.id, kind: snapshot.kind, seen: true, simTick: -1, hasPrev: false, radius: snapshot.radius, crescent: -1, owner: WARDEN_OWNER + 2,
       emitAcc: 0, scarDistance: 0, prev: new Vector3(), cur: new Vector3(), display: new Vector3(), direction: new Vector3(snapshot.direction.x, snapshot.direction.y, snapshot.direction.z),
-      scarFrom: new Vector3(snapshot.position.x, snapshot.position.y, snapshot.position.z),
+      scarFrom: new Vector3(snapshot.position.x, snapshot.position.y, snapshot.position.z), launch: new Vector3(), launchAt: -Infinity,
     };
+    // Yara's projectiles (every Thornshot, Seed Storm seed and Bloom seed) are drawn leaving the staff head and join their simulated path within
+    // PALM_LAUNCH_SECONDS; the simulation's spawn point ahead of her chest stays authoritative.
+    if (w.player.hero === 'yara' && (snapshot.kind === 'thorn-bolt' || snapshot.kind === 'bloom-seed' || snapshot.kind === 'storm-seed')) {
+      const tip = w.resolveSocket?.('aren', 'weapon-tip');
+      if (tip) {
+        tip.updateWorldMatrix(true, false); tip.getWorldPosition(visual.launch);
+        visual.launch.x -= snapshot.position.x; visual.launch.y -= snapshot.position.y; visual.launch.z -= snapshot.position.z;
+        visual.launchAt = time;
+      }
+    }
     if (visual.kind === 'crescent-wave') {
       const dx = visual.direction.x, dz = visual.direction.z, length = Math.hypot(dx, dz) || 1, fx = dx / length, fz = dz / length, tilt = 0.5;
       // Basis: X across the wave, Y forward (the convex edge), Z up-and-back; tilted 0.5 rad so it reads from the locked camera.

@@ -23,6 +23,7 @@ import { heroById, type HeroDefinition, type HeroId } from '../game/heroes';
 import { HERO_COMBAT } from '../game/combat/HeroProfiles';
 import { NativeAssetLoader, type NativeAssetInstance } from './NativeAssetLoader';
 import { WARDEN_EDGE_IDLE_INTENSITY, WardenWeapon, weaponKindForGrip } from './WardenWeapon';
+import { SAP_LANCE_RELEASE } from './ThrownStaff';
 import { fitUnarmedFists, releaseHandGeometry, type HandGeometryEdit } from './NativeHandGrip';
 import { VesperShowcaseFx } from './VesperShowcaseFx';
 import { vesperActionSeconds, vesperClipProgress } from './VesperAnimation';
@@ -162,6 +163,8 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
   const staged = new Map<HeroId, Promise<StagedHero>>();
   const ready = new Map<HeroId, StagedHero>();
   const target = new Vector3();
+  const throwPoint = new Vector3();
+  const throwForward = new Vector3();
   const corner = new Vector3();
   let current: StagedHero | null = null;
   let wanted: HeroId | null = null;
@@ -170,6 +173,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
   let stepElapsed = 0;
   let stepDuration = 0;
   let idleClock = 0;
+  let thrownStep = -1;
   let time = 0;
   let disposed = false;
   let sized = false;
@@ -282,6 +286,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     if (current) {
       current.actor.root.visible = current.pedestal.root.visible = false;
       current.showcaseFx?.reset();
+      current.weapon?.cancelThrow();
     }
     current = entry;
     entry.actor.root.visible = entry.pedestal.root.visible = true;
@@ -289,7 +294,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
     rimLight.color.copy(accent);
     motesMaterial.uniforms.uColor!.value.copy(accent);
     sequence = options.reducedMotion ? [] : entry.hero.revealActionIds;
-    step = 0; stepElapsed = 0; stepDuration = 0; idleClock = 0;
+    step = 0; stepElapsed = 0; stepDuration = 0; idleClock = 0; thrownStep = -1;
     frame();
     setStatus('ready');
   };
@@ -306,7 +311,7 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
         animation.play(actionId, 'active', 0);
         const unscaled = actionId.endsWith('-charge') || actionId === 'cleanse' || actionId.endsWith('-cleanse')
           || actionId === 'vesper-mist-blink' || actionId === 'sakda-guard-dash';
-        const rate = unscaled ? 1 : HERO_COMBAT[hero.id].attackPlaybackRate;
+        const rate = unscaled ? 1 : HERO_COMBAT[hero.id].attackPlaybackRate / HERO_COMBAT[hero.id].clipSlowdown;
         stepDuration = Math.max(0.1, (hero.id === 'vesper' ? vesperActionSeconds(actionId) : undefined) ?? (animation.activeDuration ?? 0.1) / rate);
       }
       stepElapsed += dt;
@@ -318,6 +323,15 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
       idleClock += dt;
       animation.play(hero.idleActionId, 'idle', undefined, idleClock);
       weapon?.setEdgeIntensity(WARDEN_EDGE_IDLE_INTENSITY);
+    }
+    weapon?.setClip(playedAction, dt);
+    // The preview has no simulation cues: the Sap Lance throw leaves the fist at the clip's authored release tick, like the cue does in play.
+    if (weapon && playedAction === SAP_LANCE_RELEASE.clipId && step < sequence.length && thrownStep !== step && progress >= SAP_LANCE_RELEASE.activeTick / SAP_LANCE_RELEASE.totalTicks) {
+      thrownStep = step;
+      weapon.sockets.weapon.getWorldPosition(throwPoint);
+      actor.root.getWorldDirection(throwForward);
+      throwPoint.addScaledVector(throwForward.setY(0).normalize(), SAP_LANCE_RELEASE.previewReach);
+      weapon.throwStaff(throwPoint);
     }
     animation.update(dt);
     current.showcaseFx?.update(playedAction, progress, stepDuration, dt, camera.position);
@@ -388,7 +402,8 @@ export function mountHeroPreview(host: HTMLElement, assets: readonly AssetManife
       if (disposed || !current) return;
       current.showcaseFx?.reset();
       sequence = actionIds;
-      step = 0; stepElapsed = 0; stepDuration = 0;
+      step = 0; stepElapsed = 0; stepDuration = 0; thrownStep = -1;
+      current.weapon?.cancelThrow();
     },
     update(dt) {
       if (disposed) return;

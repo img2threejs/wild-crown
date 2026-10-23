@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import type { ActorId, Bounds3, GroundSurfaceDefinition, Vec3 } from '../../src/game/contracts.js';
 import type { CombatActor, EngineState } from '../../src/game/combat/CombatEngine.js';
 import { arenaFromRegion } from '../../src/game/combat/geometry.js';
-import { createCompanionState, stepCompanions } from '../../src/game/companions/CompanionSystem.js';
+import { commandCompanion, createCompanionState, stepCompanions } from '../../src/game/companions/CompanionSystem.js';
 
 const bounds: Bounds3 = { min: { x: -16, y: -2, z: -16 }, max: { x: 16, y: 8, z: 16 } };
 const floor: GroundSurfaceDefinition = {
@@ -93,5 +93,42 @@ describe('Vara takeoff determinism (round-2 bug fixes)', () => {
         expect(clearance).toBeGreaterThanOrEqual(vara.radius + aren.radius - 0.05);
       }
     }
+  });
+});
+
+describe('Vara airborne field surveys', () => {
+  for (const phase of ['grounded', 'landing'] as const) {
+    it(`reaches an accepted search location from ${phase} instead of orbiting the stationary hero`, () => {
+      const state = makeEngine({ x: -1.3, y: phase === 'landing' ? 1.2 : 0, z: -2.8 }, { x: 0, y: 0, z: -4 });
+      state.regionId = 'greenwake';
+      const vara = state.actors[1]!, slot = state.companionState.slots.vara!;
+      slot.flight = { phase, phaseStartedAt: state.worldTick, perch: { x: -1.3, y: 0, z: -2.8 }, playerAnchor: { ...state.actors[0]!.position }, playerIdleSince: state.worldTick };
+      expect(commandCompanion(state, { companionId: 'vara', command: 'search', target: { kind: 'interaction', interactionId: 'greenwake-roars', targetId: 'greenwake-roars' } })).toBe(true);
+      let contactHeight = -1, contactDistance = Infinity;
+      for (let tick = 0; tick < 400; tick++) {
+        state.tick++; state.worldTick++; stepCompanions(state);
+        if (slot.skill?.kind === 'search' && slot.skill.resolved) {
+          contactHeight = vara.position.y;
+          contactDistance = Math.hypot(vara.position.x + 2, vara.position.z + 7);
+        }
+      }
+      expect(state.worldEvents.filter(event => event.type === 'semantic-interaction' && event.interactionId === 'greenwake-roars')).toHaveLength(1);
+      expect(contactDistance).toBeLessThan(1.4);
+      expect(contactHeight).toBeGreaterThan(1.8);
+    });
+  }
+
+  it('takes off before an untargeted survey rather than banking its wings through the ground', () => {
+    const state = makeEngine({ x: -1.3, y: 0, z: -2.8 }, { x: 0, y: 0, z: -4 });
+    const vara = state.actors[1]!, slot = state.companionState.slots.vara!;
+    slot.flight = { phase: 'grounded', phaseStartedAt: state.worldTick, perch: { ...vara.position }, playerAnchor: { ...state.actors[0]!.position }, playerIdleSince: state.worldTick };
+    expect(commandCompanion(state, { companionId: 'vara', command: 'search' })).toBe(true);
+    let contactHeight = -1;
+    for (let tick = 0; tick < 100; tick++) {
+      state.tick++; state.worldTick++; stepCompanions(state);
+      if (slot.skill?.kind === 'search' && slot.skill.resolved) contactHeight = vara.position.y;
+    }
+    expect(contactHeight).toBeGreaterThan(2);
+    expect(slot.job).toBeUndefined();
   });
 });
