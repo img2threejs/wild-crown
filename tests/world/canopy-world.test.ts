@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
+import type { Points, ShaderMaterial, Vector3 } from 'three';
 import { REGIONS as AUTHORED_REGIONS } from '../../src/content/campaign.js';
 import { REGIONS as WORLD_REGIONS } from '../../src/content/world.js';
 import type { EnvironmentRecipeDefinition, GroundSurfaceDefinition, RegionDefinition } from '../../src/game/contracts.js';
@@ -280,6 +281,23 @@ test('RegionEnvironment keeps Canopy walk surfaces and gorge aligned with visibl
     environment.update(5, { x: -50, y: 0, z: -28 });
     assert.ok(Math.abs(environment.visualGroundHeightAt(-20, -30) - 4) <= 0.02);
     assert.ok(environment.visualGroundHeightAt(-9, -28.5) <= 1.5);
+    const particles = environment.group.getObjectByName('canopy-particles') as Points;
+    const anchor = (particles.material as ShaderMaterial).uniforms.uFocus!.value as Vector3;
+    environment.update(6, { x: -50, y: 2.4, z: -28 });
+    assert.equal(anchor.y, 0, 'a jump must not lift the entire ambient particle volume');
+    assert.equal(environment.getLastFocus().y, 2.4, 'the camera/sky focus still follows the actor');
+    environment.update(7, { x: -50, y: 0, z: -28 });
+    assert.equal(anchor.y, 0, 'landing preserves the world anchor');
+    environment.update(8, { x: -30, y: 4, z: -28 });
+    assert.equal(anchor.y, 2, 'the volume follows the ramp floor, not airborne root height');
+    environment.update(9, { x: -20, y: 7, z: -28 });
+    assert.equal(anchor.y, 4, 'an elevated terrace stays readable during a jump');
+    environment.update(10, { x: -9, y: 7, z: -28.5 });
+    assert.equal(anchor.y, 4, 'a bridge anchors to its deck, not the carved gorge below it');
+    environment.update(11, { x: -9, y: 6, z: -24.5 });
+    assert.equal(anchor.y, 4, 'crossing unsupported space retains the last supporting height');
+    environment.update(12, { x: 47, y: 1.5, z: -22 });
+    assert.equal(anchor.y, 0, 'descending to the courtyard restores the ground-level volume');
     environment.setReducedEffects(true);
   } finally {
     environment.dispose();

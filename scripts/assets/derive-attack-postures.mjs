@@ -37,10 +37,11 @@ export function clipMetrics(rig, scale, name, { subdivisions = 2 } = {}) {
 }
 
 /** The staging a clip needs, or undefined when it is not a hand strike or already coils enough. */
-/** Clips the chest cannot stage: Yara's thornshot-2 is a straight staff thrust placed by the arm layer; the measured coil does not move the shoulders on the posed rig. */
-const UNSTAGED = new Set(['yara-thornshot-2']);
+/** Yara's and Aren's skills play Mixamo takes exactly as delivered (author-yara-hero-clips.mjs / retarget-aren-tripo-clips.mjs `exact`): no chest coil or lean is added over them. */
+const AREN_EXACT = new Set(['aren-idle', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-heavy', 'aren-charged-heavy-charge', 'aren-charged-heavy', 'aren-sigil-charge', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-root-tether', 'aren-cleanse', 'aren-judgement']);
+const UNSTAGED = (name) => name.startsWith('yara-') || AREN_EXACT.has(name);
 export function profileFor(m, name) {
-  if (UNSTAGED.has(name)) return undefined;
+  if (UNSTAGED(name)) return undefined;
   // One whip per clip: multi-strike chains (Thousand Cuts, Hundred Elbows), charge holds and slams do not follow a single coil-and-release envelope.
   const peak = m.peakFrame / (m.samples - 1);
   const strike = m.peakSpeed >= 8 && m.peakToWindup >= 1.4 && m.riseFrames <= 10 && peak >= 0.12 && peak <= 0.7 && m.duration <= 0.9 && m.handForward >= 0.1;

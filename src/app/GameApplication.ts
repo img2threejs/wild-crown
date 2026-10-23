@@ -1,7 +1,7 @@
 import { AudioContext as ThreeAudioContext, AudioListener, Color, Vector3 } from 'three';
 import { AppAudio } from '../audio/AppAudio.js';
 import type { RestorationState } from '../../packages/campaign/src/index.js';
-import { CampaignDirector, CampaignChoiceRejectedError, SaveRepository, SaveRepositoryError, REGIONS, QUESTS, CAMPAIGN_CHOICES, INTERACTIONS, ENVIRONMENT_RECIPES } from '../game/campaign/index.js';
+import { CampaignDirector, CampaignChoiceRejectedError, SaveRepository, SaveRepositoryError, REGIONS, QUESTS, CAMPAIGN_CHOICES, INTERACTIONS, ENVIRONMENT_RECIPES, companionAccess, mapRegionAccessOf } from '../game/campaign/index.js';
 import type { SaveSlotSummary } from '../game/campaign/index.js';
 import type { ActionId, ActorId, CampaignSnapshot, ChapterSpatialIntent, CombatSnapshot, CompanionId, CompanionTarget, EnvironmentRecipeDefinition, FieldCommand, GameSettings, GameViewModel, InputBindingMaps, RegionDefinition, RegionId, SaveScope, SceneRegionId, SessionConfig, UIAction, WorldEvent, ActorSnapshot } from '../game/contracts.js';
 import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, normalizeInputBindings, isCanonicalKeyboardRemap, validateSessionConfig } from '../game/contracts.js';
@@ -42,12 +42,22 @@ import { LoadProgress, type LoadPhaseSpec } from './LoadProgress.js';
 import { AssetGateError, PRODUCTION_MANIFEST_URL, assertTrialAssets, fetchManifest, isTerminalAssetError, type Manifest } from './AssetGate.js';
 import { assertAssetsForPolicy, loadChapterManifest, loadCompanionManifest, loadHeroKitManifest, regionForHero } from './ChapterAssets.js';
 import { projectPartyIntoRegion } from './ChapterParty.js';
-import { areaMapOf, chapterActOf, checkpointName, encounterVariantAssets, objectiveHudOf, questLogOf } from './ChapterFlow.js';
+import { areaMapOf, chapterActOf, chapterExitCueOf, checkpointName, encounterVariantAssets, objectiveCueOf, objectiveHudOf, questLogOf } from './ChapterFlow.js';
 import { NURSERY_ESCORT } from '../content/side-quests.js';
 import { CANDIDATE_CHAPTERS_SESSION, bannerOf, initialSession, isCandidateSession, sessionKindOf, trialMapOf, trialsSession } from './SessionConfig.js';
 import { companionDisplayName, companionProgressOf, partyPanelOf } from './PartyModel.js';
+import { createTrainingDirector, trainingEntryReason, trainingMapsOf } from './TrainingGrounds.js';
 const STEP = 1 / 60;
 const MAX_STEPS = 5;
+/** Presentation only: candidate evidence is always visible; verified QA can explicitly opt out of its extra notice. */
+const SHOW_VERIFIED_ASSET_BANNER = import.meta.env.VITE_SHOW_ASSET_BANNER === 'true'
+    || (import.meta.env.DEV && import.meta.env.VITE_SHOW_ASSET_BANNER !== 'false');
+/** Practice permits combat and presentation settings, never campaign transactions or save management. */
+const TRAINING_ACTIONS: ReadonlySet<UIAction['type']> = new Set([
+    'pause', 'resume', 'close-screen', 'open-map', 'open-companions', 'open-settings',
+    'select-companion', 'issue-command', 'use-ability', 'preview-companion-skill', 'wheel',
+    'update-settings', 'remap', 'dismiss-tutorial', 'reset-tutorials',
+]);
 /** Rim hues only (HitFlash normalises colour and caps the rim): red for Aren, warm gold for struck monsters. */
 const PLAYER_HIT_RIM = new Color().setRGB(1, 0.1, 0.05);
 const ACTOR_HIT_RIM = new Color().setRGB(1, 0.7, 0.25);
@@ -85,11 +95,17 @@ export function worldLoadPhases(playtest: boolean): LoadPhaseSpec[] {
     ];
 }
 type Screen = GameViewModel['screen'];
+interface TrainingReturnContext {
+    readonly session: Extract<SessionConfig, { kind: 'chapters' }>;
+    readonly director: CampaignDirector;
+    readonly snapshot: CampaignSnapshot;
+    readonly combat: string;
+}
 const mountedApplications = new WeakMap<HTMLElement, GameApplication>();
-const OVERLAY_SCREENS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'hub', 'settings', 'credits'];
+const OVERLAY_SCREENS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'hub', 'settings', 'credits', 'training-select'];
 /** Screens that share the menu tab bar: moving between them swaps the page, so Back leaves the menu instead of retracing tabs. */
 const MENU_TABS: readonly Screen[] = ['map', 'journal', 'companions', 'hub', 'settings'];
-const WORLD_PANELS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'hub', 'dialogue', 'choice', 'ending', 'stage-complete', 'defeat'];
+const WORLD_PANELS: readonly Screen[] = ['pause', 'map', 'journal', 'companions', 'hub', 'dialogue', 'choice', 'ending', 'stage-complete', 'defeat', 'training-select'];
 function endingViewModel(id: NonNullable<CampaignSnapshot['ending']>): NonNullable<GameViewModel['ending']> {
     const ending = ENDINGS[id];
     const lines = id === "living_pact"
@@ -100,6 +116,14 @@ function endingViewModel(id: NonNullable<CampaignSnapshot['ending']>): NonNullab
 const errorText = (error: unknown) => error instanceof Error ? error.message : String(error);
 export class GameApplication {
     private session: SessionConfig = initialSession(window.location.search, import.meta.env.DEV);
+    /** DEV combat fixtures are an explicit QA entry, never choices in a normal New Game. */
+    private readonly devFixtureControls = import.meta.env.DEV && new URLSearchParams(window.location.search).get('devFixtures') === 'true';
+    private trainingReturn: TrainingReturnContext | null = null;
+    private trainingReturning = false;
+    private trainingMapSource: CampaignSnapshot | null = null;
+    private trainingMapChoices: NonNullable<GameViewModel['training']>['maps'] = [];
+    private mapSource: CampaignSnapshot | null = null;
+    private mapCache: GameViewModel['map'] = { currentRegion: null, regions: [] };
     private readonly playtestProgress = browserPlaytestProgress();
     private selectedHero: HeroId = 'aren';
     private readonly root: HTMLElement;
@@ -312,7 +336,7 @@ export class GameApplication {
     /** The catalog previews read before any region loads: the Trials map's manifest, the candidate hero kits, or the public production manifest. */
     private async readManifest(): Promise<Manifest> {
         const trial = trialMapOf(this.session);
-        if (trial) return fetchManifest(trial.manifestUrl, trial.manifestLabel);
+        if (trial && this.session.assets === 'candidate') return fetchManifest(trial.manifestUrl, trial.manifestLabel);
         if (this.session.assets === 'candidate') return loadHeroKitManifest('candidate');
         return fetchManifest(PRODUCTION_MANIFEST_URL, 'Required public asset manifest');
     }
@@ -347,7 +371,7 @@ export class GameApplication {
         this.pendingAbility = null;
         this.input.clear();
         const trial = trialMapOf(this.session);
-        // A chapter run's hero is part of its saved session and never changes; Trials use the hero chosen at select.
+        // Campaign and player practice keep the saved hero; only DEV fixtures choose one independently.
         const heroId = this.session.kind === 'chapters' ? snapshot.session.heroId : this.selectedHero;
         this.selectedHero = heroId;
         this.screen = this.loadingScreen();
@@ -370,9 +394,10 @@ export class GameApplication {
         if (!authoredRecipe) throw new AssetGateError('No authored environment recipe for ' + region.id + '.');
         const recipe = region === authoredRegion ? authoredRecipe : { ...authoredRecipe, assetPlacementIds: region.props.map(prop => prop.id), groundSurfaceIds: region.ground.surfaces.map(surface => surface.id) };
         // Traveling allies are independent instances; narrative counterparts remain authored story actors.
-        const safeSpawn = snapshot.lastSafeCheckpoint?.safeSpawn.regionId === region.id ? snapshot.lastSafeCheckpoint.safeSpawn : null;
+        const safeSpawn = this.session.kind === 'chapters' && snapshot.lastSafeCheckpoint?.safeSpawn.regionId === region.id ? snapshot.lastSafeCheckpoint.safeSpawn : null;
         const partyProjection = projectPartyIntoRegion({
             region, party: snapshot.party, companions: snapshot.companions, worldFacts: snapshot.worldFacts,
+            campaign: this.session.kind === 'trials' ? undefined : snapshot.campaign,
             spawnPosition: safeSpawn?.position ?? null,
         });
         const enrichedRegion: RegionDefinition = partyProjection.entities.length
@@ -422,7 +447,8 @@ export class GameApplication {
             wardenCall: snapshot.worldFacts.wardenCall === true, dominionUsed: snapshot.campaign.dominionHistory.length > 0, worldFacts: snapshot.worldFacts,
             eventKeys: this.campaignDirector.committedEventKeys(),
             ...(spawn ? { playerPosition: spawn } : {}),
-            ...(this.session.kind === 'chapters' ? { chapterRuntime: this.campaignDirector.chapterDefinition(), companionProgress: snapshot.companions } : {}),
+            ...(this.session.kind === 'chapters' ? { chapterRuntime: this.campaignDirector.chapterDefinition() } : {}),
+            ...(this.session.kind !== 'trials' ? { companionProgress: snapshot.companions } : {}),
         });
         this.combat.setPlayerHero(heroId);
         this.combat.setSceneColliders(this.renderer.getNativeSolidColliders(), this.renderer.getNativeSupportFields());
@@ -442,6 +468,7 @@ export class GameApplication {
                 shake: (amplitude, duration, frequency) => this.renderer?.addCameraShake(amplitude, duration, frequency),
                 flashActor: (actor, color, intensity, duration, mode) => this.renderer?.flashActor(actor, color, intensity, duration, mode),
                 impulse: (strength, seconds) => this.renderer?.addScreenImpulse(strength, seconds),
+                throwStaff: (actor, to) => this.renderer?.throwStaff(actor, to),
             },
             audioListener: listener, reducedEffects: this.settings.reducedMotion,
         });
@@ -471,7 +498,8 @@ export class GameApplication {
         this.loadProgress.complete('effects');
         await this.beginLoadPhase('gpu', 'Uploading textures and warming the render pipeline.');
         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
-        this.renderer.warmGpu();
+        await this.renderer.warmGpu();
+        if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
         this.renderer.render();
         this.loadProgress.complete('gpu');
         this.sceneBlocked = false;
@@ -498,11 +526,12 @@ export class GameApplication {
             return loadChapterManifest(region, 'candidate', heroId);
         }
         const all = await this.readManifest();
-        const npc = this.session.kind === 'trials' ? heroById(heroId).npcActorId : undefined;
+        const candidateStage = this.session.kind !== 'chapters' && this.session.assets === 'candidate';
+        const npc = candidateStage ? heroById(heroId).npcActorId : undefined;
         const base = (npc ? all.filter(entry => entry.actorId !== npc) : all).map(entry =>
-            this.session.kind === 'trials' && region.id === 'the-grove' && entry.actorId === 'grove-koro'
+            candidateStage && region.id === 'the-grove' && entry.actorId === 'grove-koro'
                 ? { ...entry, id: 'actor-grove-koro-lookout' } : entry);
-        if (this.session.kind !== 'trials') return base;
+        if (this.session.kind === 'chapters') return base;
         const companions = await loadCompanionManifest(this.session.assets);
         const ids = new Set(partyAssetIds);
         const merged = new Map(base.map(entry => [entry.id, entry]));
@@ -741,11 +770,19 @@ export class GameApplication {
     /** The asset gate of the current session for one region: production verified, Trials' exact candidate catalog, or the strict candidate-chapter projection. */
     private assertAssets(region: RegionDefinition, manifest: Manifest, recipe: EnvironmentRecipeDefinition, heroId: HeroId = this.selectedHero): void {
         const trial = trialMapOf(this.session);
-        if (trial) assertTrialAssets(region, manifest, recipe, trial);
+        if (trial && this.session.assets === 'candidate') assertTrialAssets(region, manifest, recipe, trial);
         else assertAssetsForPolicy(this.session.assets, region, manifest, recipe, heroId);
     }
+    /** All player paths use the current journey's authority; only explicitly isolated DEV fixtures bypass recruitment. */
+    private companionRestriction(id: CompanionId): string | null {
+        if (this.session.kind === 'trials') return null;
+        const source = this.trainingReturn?.snapshot ?? this.campaign;
+        if (!source) return 'Meet this companion in your journey before calling on them.';
+        const access = companionAccess(source, id);
+        return access.available ? null : access.reason ?? 'This companion has not joined your journey.';
+    }
     private preview(host: HTMLElement, id: string | null): () => void {
-        if (!id) return () => host.replaceChildren();
+        if (!id || !isCompanionId(id) || this.companionRestriction(id)) return () => host.replaceChildren();
         let canceled = false;
         let handle: CompanionPreviewHandle | null = null;
         const disposeHandle = () => {
@@ -821,6 +858,29 @@ export class GameApplication {
             return;
         this.appAudio.action(action.type);
         if (action.type === 'retry-load' && this.error?.recoverable === false) return;
+        if (action.type === 'leave-training' || action.type === 'return-title' && this.trainingReturn) {
+            await this.leaveTraining();
+            return;
+        }
+        if (action.type === 'retry-load' && action.operationId === 'training-return' && this.trainingReturn) {
+            await this.leaveTraining();
+            return;
+        }
+        if (this.trainingReturning || this.trainingReturn && this.session.kind === 'chapters' && !this.canPlayWorld()) return;
+        if (action.type === 'open-training') {
+            const reason = this.trainingReason(this.combat.snapshot());
+            if (reason) this.ui.notify(reason);
+            else this.setScreen('training-select');
+            return;
+        }
+        if (action.type === 'start-training') {
+            await this.startTraining(action.mapId);
+            return;
+        }
+        if (this.session.kind === 'training' && !TRAINING_ACTIONS.has(action.type)) {
+            this.ui.notify('Return to your journey to continue the story, travel, or manage campaign saves.');
+            return;
+        }
         // The map intro is the entry through hero select only; Play Again, Try Again and retries load behind the loading scene.
         let enterThroughIntro = false;
         if (action.type === 'wheel') { this.handleWheelAction(action); return; }
@@ -831,11 +891,11 @@ export class GameApplication {
         }
         // Returning from Trials restores the playable campaign and its browser save list.
         if (action.type === 'return-title' && this.session.kind === 'trials') await this.useSession(CANDIDATE_CHAPTERS_SESSION);
-        if (action.type === 'new-game' && this.screen === 'title' && this.session.kind === 'chapters' && this.session.assets === 'candidate') {
+        if (action.type === 'new-game' && this.screen === 'title' && this.session.kind === 'chapters') {
             this.setScreen('hero-select');
             return;
         }
-        const trial = trialMapOf(this.session);
+        const trial = this.session.kind === 'trials' ? trialMapOf(this.session) : null;
         if (trial) {
             if (action.type === 'map-select') {
                 if (!['stage-complete', 'defeat', 'hero-select', 'map-select'].includes(this.screen)) return;
@@ -871,15 +931,14 @@ export class GameApplication {
             if (['continue', 'load', 'import', 'travel', 'save', 'create-save-slot', 'retry-checkpoint'].includes(action.type)) return;
         } else if (action.type === 'select-map') return;
         else if (action.type === 'select-hero') {
-            if (this.screen !== 'hero-select' || !isHeroId(action.heroId) || !isCompanionId(action.companionId) || this.session.assets !== 'candidate') return;
+            if (this.screen !== 'hero-select' || !isHeroId(action.heroId)) return;
             this.selectedHero = action.heroId;
-            requestedCompanion = action.companionId;
             enterThroughIntro = true;
             action = { type: 'new-game', runId: action.runId };
         } else if (action.type === 'map-select') {
             if (this.screen === 'hero-select') this.setScreen('title');
             return;
-        } else if (action.type === 'new-game' && this.session.assets === 'candidate' && this.pendingNewRunId !== action.runId) return;
+        } else if (action.type === 'new-game' && this.pendingNewRunId !== action.runId) return;
         if (this.playerOutcome && action.type !== 'new-game' && action.type !== 'return-title' && action.type !== 'retry-checkpoint') return;
         if (this.failedWorldEvent) {
             const retryingEvent = action.type === 'retry-load' && action.operationId === 'durable-event';
@@ -916,19 +975,17 @@ export class GameApplication {
                     this.pendingLoadSlotId = null;
                     this.pendingImportPayload = null;
                     this.pendingTravel = null;
-                    if (this.session.kind === 'chapters' && this.session.assets !== 'candidate') this.selectedHero = 'aren';
-                    await this.rememberCompanion(this.selectedHero, requestedCompanion ?? this.settings.heroCompanions[this.selectedHero]);
+                    if (this.session.kind === 'trials') await this.rememberCompanion(this.selectedHero, requestedCompanion ?? this.settings.heroCompanions[this.selectedHero]);
                     if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                     if (this.session.kind === 'chapters') {
-                        this.campaign = this.campaignDirector.startChapterRun({ runId: action.runId, heroId: this.selectedHero, companionId: this.settings.heroCompanions[this.selectedHero], saveScope: this.session.saveScope });
+                        this.campaign = this.campaignDirector.startChapterRun({ runId: action.runId, heroId: this.selectedHero, saveScope: this.session.saveScope });
                         await this.campaignDirector.autosave();
                         if (!this.isWorldGenerationCurrent(generation, lifecycleGeneration)) return;
                         await this.refreshSlots();
                     } else {
                         const showcaseRegion = trial?.showcaseRegionId;
-                        this.campaign = showcaseRegion
-                            ? this.campaignDirector.startShowcase(action.runId, showcaseRegion, { heroId: this.selectedHero, companionId: this.settings.heroCompanions[this.selectedHero] })
-                            : this.campaignDirector.startNewRun(action.runId, this.selectedHero, this.settings.heroCompanions[this.selectedHero]);
+                        if (!showcaseRegion) throw new Error('A DEV fixture requires an authored replay-isolated stage.');
+                        this.campaign = this.campaignDirector.startShowcase(action.runId, showcaseRegion, { heroId: this.selectedHero, companionId: this.settings.heroCompanions[this.selectedHero] });
                     }
                     this.combat.startNewRun(this.campaign.runId);
                     this.pendingNewRunId = null;
@@ -1215,17 +1272,21 @@ export class GameApplication {
                     await this.assignParty(action.companionId);
                     break;
                 case 'issue-command':
-                    if (!this.issueCommand(action.command.companionId, action.command.command, action.command.targetId))
-                        this.ui.notify('Companion is not available to receive this command.');
+                    this.issueCommand(action.command.companionId, action.command.command, action.command.targetId);
                     break;
-                case 'preview-companion-skill':
+                case 'preview-companion-skill': {
+                    const skill = ALL_COMPANION_SKILLS.find(candidate => candidate.id === action.abilityId);
+                    if (!skill || this.companionRestriction(skill.companionId)) break;
                     for (const [preview, host] of this.companionPreviews) {
-                        if (host.dataset.companion === ALL_COMPANION_SKILLS.find(skill => skill.id === action.abilityId)?.companionId) preview.showcase(action.abilityId);
+                        if (host.dataset.companion === skill.companionId) preview.showcase(action.abilityId);
                     }
                     break;
+                }
                 case 'use-ability': {
                     const skill = ALL_COMPANION_SKILLS.find(candidate => candidate.id === action.abilityId);
                     if (!skill) { this.pendingAbility = action.abilityId; break; }
+                    const restriction = this.companionRestriction(skill.companionId);
+                    if (restriction) { this.ui.notify(restriction); break; }
                     const request = this.skillRequest(skill);
                     if (!request) { this.ui.notify('Choose a nearby movable object with Koro in Utility.'); break; }
                     const availability = this.combat.commandAvailability(request);
@@ -1272,7 +1333,7 @@ export class GameApplication {
                     await this.travel(action.regionId, action.entranceId, generation);
                     break;
                 case 'select-hero-companion':
-                    if (this.screen !== 'hero-select' || !isHeroId(action.heroId) || !isCompanionId(action.companionId)) return;
+                    if (this.session.kind !== 'trials' || this.screen !== 'hero-select' || !isHeroId(action.heroId) || !isCompanionId(action.companionId)) return;
                     await this.rememberCompanion(action.heroId, action.companionId);
                     break;
                 case 'update-settings':
@@ -1421,9 +1482,7 @@ export class GameApplication {
         if (companionId && !entities.some(entity => entity.actorId === companionId && entity.id.includes('__party_'))) return null;
         return { companionId, present: entities.map(entity => entity.id) };
     }
-    /**
-     * Bond and story recruitment remain narrative state. Availability comes from the selected traveling party.
-     */
+    /** Synchronizes earned roster progress and the currently eligible traveling selection. */
     private syncCompanionProgress(): void {
         if (!this.campaign) return;
         this.combat.configureCompanionProgress(this.campaign.companions);
@@ -1580,29 +1639,41 @@ export class GameApplication {
             practice: { available: reason === null, reason, ...(snap.dodgePractice ?? { active: false, attempts: 0, dodged: 0, phase: 'idle' }) },
         };
     }
+    /** Story snapshots are immutable; route authority and labels need projecting once per committed change, not per frame. */
+    private campaignMap(): GameViewModel['map'] {
+        const source = this.campaign;
+        if (source === this.mapSource) return this.mapCache;
+        this.mapSource = source;
+        this.mapCache = {
+            currentRegion: source?.regionId ?? null,
+            regions: source ? REGIONS.map(region => {
+                const access = mapRegionAccessOf(source, region.id, REGIONS, CHAPTER_RUNTIME);
+                return {
+                    id: region.id, name: region.name, unlocked: access.region.unlocked, reason: access.region.reason,
+                    restoration: source.campaign.world.regions[region.id as keyof typeof source.campaign.world.regions] ?? 'unvisited',
+                    entrances: access.entrances.map(entrance => ({
+                        id: entrance.id, label: 'Travel to ' + region.name, unlocked: entrance.unlocked, reason: entrance.reason,
+                    })),
+                };
+            }) : [],
+        };
+        return this.mapCache;
+    }
+
 
     private model(snap: CombatSnapshot = this.combat.snapshot()): GameViewModel {
         const c = this.campaign;
         const last = this.slots.find(slot => slot.kind === 'campaign');
-        const regions = REGIONS.map(region => {
-            const exits = c ? REGIONS.find(item => item.id === c.regionId)?.exits.filter(route => route.destinationRegionId === region.id) ?? [] : [];
-            const entrances = exits.map(route => {
-                const entranceId = region.entrances.find(item => item.id === route.id.replace(/-out$/, '-in'))?.id ?? route.id;
-                return { id: entranceId, label: 'Travel to ' + region.name, unlocked: !route.unlockFact || c?.worldFacts[route.unlockFact] === true };
-            });
-            const restoration = c && ['whispering-canopy', 'blood-bamboo-valley', 'moonpine-ridge', 'mistveil-basin', 'sunmane-expanse'].includes(region.id)
-                ? c.campaign.world.regions[region.id as keyof typeof c.campaign.world.regions]
-                : 'unvisited';
-            return { id: region.id, name: region.name, unlocked: region.id === c?.regionId || region.id === 'greenwake' || entrances.some(entrance => entrance.unlocked), restoration, entrances };
-        });
         const companionState = this.screen === 'companions' ? this.combat.companions : null;
         const rosterAbilities = companionState ? ALL_COMPANION_SKILLS.map(skill => {
-            const request = this.skillRequest(skill);
-            const availability = request ? this.combat.commandAvailability(request) : { available: false, tokenCost: 1, readyAtWorldTick: 0, reason: 'Equip Koro and choose a nearby movable object.' };
+            const restriction = this.companionRestriction(skill.companionId);
+            const request = restriction ? null : this.skillRequest(skill);
+            const availability = request ? this.combat.commandAvailability(request) : { available: false, tokenCost: 1, readyAtWorldTick: 0, reason: restriction ?? 'Equip Koro and choose a nearby movable object.' };
             return {
                 id: skill.id, label: skill.label, companionId: skill.companionId, element: skill.element, description: skill.description, automatic: skill.automatic,
                 tokenCost: availability.tokenCost, cooldownSeconds: Math.max(0, Math.ceil((availability.readyAtWorldTick - snap.worldClock.worldTick) / 60)),
                 available: availability.available, reason: availability.reason ?? undefined,
+                previewAvailable: restriction === null, previewReason: restriction,
             };
         }) : [];
         const abilities = companionState ? rosterAbilities : [];
@@ -1619,12 +1690,13 @@ export class GameApplication {
             campaign: c,
             party: c?.party ?? null,
             relationships: c?.factions ?? null,
+            training: this.trainingModel(snap),
             hub: this.hubModel(snap),
             journal: { quests: QUESTS, region: c?.regionId ?? null },
             ...(c ? { questLog: questLogOf(c, QUESTS) } : {}),
-            map: { currentRegion: c?.regionId ?? null, regions },
+            map: this.campaignMap(),
             playtestStage: trial?.stage,
-            playtestSelection: trial ? {
+            playtestSelection: trial && this.session.kind === 'trials' ? {
                 selectedMapId: trial.id, heroId: this.selectedHero,
                 nextMapId: this.stageCompleted ? ASSET_PLAYTESTS[ASSET_PLAYTESTS.indexOf(trial) + 1]?.id : undefined,
                 progressWarning: this.playtestProgress.warning,
@@ -1713,7 +1785,7 @@ export class GameApplication {
         if (this.renderer) this.combat.setSceneColliders(this.renderer.getNativeSolidColliders(), this.renderer.getNativeSupportFields());
     }
     private queueEvents(events: readonly WorldEvent[]): void {
-        if (!events.length) return;
+        if (!events.length || this.session.kind === 'training') return;
         this.pendingWorldEvents.push(...events);
         const generation = this.worldGeneration;
         const lifecycleGeneration = this.lifecycleGeneration;
@@ -1850,31 +1922,34 @@ export class GameApplication {
         this.render();
     }
     // ---- Sessions: asset policy and save scope are explicit, never inferred from a boolean --------------------------------
-    /** The repository of the session's save scope; Trials have none (replay-isolated, never persisted). */
+    /** Only chapter journeys attach a save repository; DEV fixtures and player practice never persist runs. */
     private get activeSaves(): SaveRepository | null {
-        return this.session.kind === 'trials' ? null : this.scopeSaves(this.session.saveScope);
+        return this.session.kind === 'chapters' ? this.scopeSaves(this.session.saveScope) : null;
     }
     private scopeSaves(scope: SaveScope): SaveRepository {
         if (scope === 'production') return this.saves;
         return this.candidateSaves ??= new SaveRepository(undefined, { scope, chapters: CHAPTER_RUNTIME, layoutMigrations: LAYOUT_MIGRATIONS });
     }
-    /** A fresh Director on the session's repository; the old one stops publishing into this application. */
-    private bindDirector(): void {
+    /** Observes the active Director, reusing a suspended campaign Director when returning from isolated practice. */
+    private bindDirector(director?: CampaignDirector): void {
         this.unsubscribe?.();
-        const saves = this.activeSaves;
-        this.campaignDirector = new CampaignDirector({ ...(saves ? { saves } : {}), chapters: CHAPTER_RUNTIME, layoutMigrations: LAYOUT_MIGRATIONS, relationshipRules: RELATIONSHIP_RULES });
+        if (director) this.campaignDirector = director;
+        else {
+            const saves = this.activeSaves;
+            this.campaignDirector = new CampaignDirector({ ...(saves ? { saves } : {}), chapters: CHAPTER_RUNTIME, layoutMigrations: LAYOUT_MIGRATIONS, relationshipRules: RELATIONSHIP_RULES });
+        }
         this.unsubscribe = this.campaignDirector.subscribe(snapshot => {
             if (this.activeRunId && snapshot.runId !== this.activeRunId) return;
             const prev = this.campaign;
             this.activeRunId = snapshot.runId;
             this.campaign = snapshot;
-            if (prev?.segmentId !== snapshot.segmentId && this.region?.id === snapshot.regionId) {
+            if (this.session.kind === 'chapters' && prev?.segmentId !== snapshot.segmentId && this.region?.id === snapshot.regionId) {
                 this.combat.configureChapterRuntime(this.campaignDirector.chapterDefinition());
             }
             if (this.session.kind === 'chapters' && prev && prev.companions !== snapshot.companions && this.region?.id === snapshot.regionId) {
                 this.syncCompanionProgress();
             }
-            this.primeNarrativeCuesFromTransition(prev, snapshot);
+            if (this.session.kind !== 'training') this.primeNarrativeCuesFromTransition(prev, snapshot);
             this.render();
         });
     }
@@ -1923,8 +1998,116 @@ export class GameApplication {
         if (saves) await saves.init();
         this.slots = saves ? await saves.listSlots() : [];
     }
+    private trainingReason(snap: CombatSnapshot): string | null {
+        if (this.session.kind !== 'chapters' || !this.campaign || this.trainingReturn)
+            return 'Training Grounds require your campaign journey, not a DEV fixture or another practice session.';
+        if (!this.canPlayWorld() || this.worldBusy || this.storyBusy || this.partyChanging || this.combat.isTraversing || this.intentRunning || this.pendingWorldEvents.length
+            || this.failedWorldEvent || this.dialogue || this.choice || this.entryShot || this.tutorial || this.playerOutcome)
+            return 'Finish the current story, encounter, or activity before practicing.';
+        if (this.screen !== 'pause' && this.screen !== 'hub' && this.screen !== 'training-select')
+            return 'Pause at a safe checkpoint or visit a sanctuary to enter Training Grounds.';
+        return trainingEntryReason(this.campaign, snap);
+    }
+    private trainingModel(snap: CombatSnapshot): GameViewModel['training'] {
+        const source = this.trainingReturn?.snapshot ?? (this.session.kind === 'chapters' ? this.campaign : null);
+        if (!source) return undefined;
+        if (source !== this.trainingMapSource) {
+            this.trainingMapSource = source;
+            this.trainingMapChoices = trainingMapsOf(source);
+        }
+        const reason = this.trainingReason(snap);
+        return { active: this.session.kind === 'training', available: reason === null, reason, maps: this.trainingMapChoices };
+    }
+    private async startTraining(mapId: string): Promise<void> {
+        const reason = this.trainingReason(this.combat.snapshot());
+        if (reason || this.session.kind !== 'chapters' || !this.campaign) {
+            if (reason) this.ui.notify(reason);
+            return;
+        }
+        const source = this.campaign;
+        let generation = this.worldGeneration;
+        try {
+            // The factory independently refuses locked content and cannot change the journey's asset policy.
+            const practice = createTrainingDirector(source, mapId, this.session.assets);
+            const context: TrainingReturnContext = {
+                session: this.session, director: this.campaignDirector, snapshot: source, combat: this.combat.serialize(),
+            };
+            this.trainingReturn = context;
+            generation = this.beginWorldGeneration();
+            this.resetEntryFlow();
+            this.combat.setTimePolicy('paused');
+            this.input.clear();
+            this.input.setEnabled(false);
+            this.loading = { active: true, label: 'Preparing isolated Training Grounds', progress: null, operationId: 'training' };
+            this.screen = 'loading';
+            this.session = practice.session;
+            this.activeRunId = practice.snapshot.runId;
+            this.selectedHero = source.session.heroId;
+            this.campaign = practice.snapshot;
+            this.bindDirector(practice.director);
+            this.updateBanner();
+            this.render();
+            await this.durableEvents;
+            if (!this.isWorldGenerationCurrent(generation) || this.trainingReturn !== context) return;
+            this.pendingWorldEvents.length = 0;
+            this.failedWorldEvent = null;
+            this.chapterIntents.length = 0;
+            this.clearNarrativeCueQueue();
+            this.combat.startNewRun(practice.snapshot.runId);
+            await this.prepareWorld(practice.snapshot, generation);
+        } catch (error) {
+            if (!this.isWorldGenerationCurrent(generation)) return;
+            const notice = 'Training Grounds could not start: ' + errorText(error);
+            if (this.trainingReturn) await this.leaveTraining();
+            this.ui.notify(notice);
+        }
+    }
+    private async leaveTraining(): Promise<void> {
+        const context = this.trainingReturn;
+        if (!context || this.trainingReturning) return;
+        this.trainingReturning = true;
+        const generation = this.beginWorldGeneration();
+        try {
+            this.resetEntryFlow();
+            this.input.clear();
+            this.input.setEnabled(false);
+            this.combat.setTimePolicy('paused');
+            this.pendingWorldEvents.length = 0;
+            this.failedWorldEvent = null;
+            this.chapterIntents.length = 0;
+            this.clearNarrativeCueQueue();
+            this.error = null;
+            this.sceneBlocked = false;
+            this.loading = { active: true, label: 'Returning to your unchanged journey', progress: null, operationId: 'training-return' };
+            this.screen = 'loading';
+            this.session = context.session;
+            this.campaign = context.snapshot;
+            this.activeRunId = context.snapshot.runId;
+            this.selectedHero = context.snapshot.session.heroId;
+            this.bindDirector(context.director);
+            this.updateBanner();
+            this.render();
+            await this.prepareWorld(context.snapshot, generation);
+            if (!this.isWorldGenerationCurrent(generation)) return;
+            // World preparation rebuilds native geometry; hydrate the original simulation, then rebind its live collision fields.
+            this.combat.restore(context.combat);
+            if (!this.renderer) throw new Error('The journey renderer was not restored.');
+            this.combat.setSceneColliders(this.renderer.getNativeSolidColliders(), this.renderer.getNativeSupportFields());
+            const restored = this.combat.snapshot();
+            this.renderer.sync(restored.actors, restored, 0);
+            this.previousRenderSnapshot = undefined;
+            this.renderSnapshot = undefined;
+            this.trainingReturn = null;
+            this.setScreen('game');
+        } catch (error) {
+            if (this.isWorldGenerationCurrent(generation)) this.showWorldError(error, 'training-return');
+        } finally {
+            this.trainingReturning = false;
+            if (this.isWorldGenerationCurrent(generation)) this.render();
+        }
+    }
     private async enterMode(mode: 'chapters' | 'trials'): Promise<void> {
-        if (this.screen !== 'title' || !import.meta.env.DEV) return;
+        if (this.screen !== 'title' || !import.meta.env.DEV || !this.devFixtureControls) return;
         try {
             await this.useSession(mode === 'chapters' ? CANDIDATE_CHAPTERS_SESSION : trialsSession(trialMapOf(this.session)?.id ?? 'greenwake'));
             this.setScreen(mode === 'chapters' ? 'chapters-menu' : 'map-select');
@@ -1937,11 +2120,11 @@ export class GameApplication {
     private enterInitialMode(): void {
         if (this.screen !== 'title') return;
         if (this.session.kind === 'trials') this.setScreen('map-select');
-        else if (this.session.assets === 'candidate' && new URLSearchParams(window.location.search).get('chapters') === 'candidate') this.setScreen('chapters-menu');
+        else if (import.meta.env.DEV && this.session.assets === 'candidate' && new URLSearchParams(window.location.search).get('chapters') === 'candidate') this.setScreen('chapters-menu');
     }
-    /** The persistent session banner (candidate chapters and Trials); absent in production. */
+    /** Candidate sessions always disclose their evidence status; qualified verified releases have no banner or spacer. */
     private updateBanner(): void {
-        const text = bannerOf(this.session);
+        const text = bannerOf(this.session, SHOW_VERIFIED_ASSET_BANNER);
         let banner = this.root.querySelector<HTMLElement>('.wc-asset-playtest-banner');
         if (!text) { banner?.remove(); return; }
         if (!banner) {
@@ -1957,17 +2140,32 @@ export class GameApplication {
         const chapters = this.session.kind === 'chapters';
         return {
             kind: sessionKindOf(this.session),
-            banner: bannerOf(this.session),
-            heroId: chapters && c ? c.session.heroId : this.session.kind === 'trials' ? this.selectedHero : null,
+            banner: bannerOf(this.session, SHOW_VERIFIED_ASSET_BANNER),
+            heroId: chapters && c ? c.session.heroId : this.session.kind !== 'chapters' ? this.selectedHero : null,
             saveScope: this.session.kind === 'chapters' ? this.session.saveScope : null,
             checkpointName: chapters && c ? checkpointName(c.session.resume.checkpointId) : null,
             segmentId: chapters && c ? c.segmentId : null,
-            devModes: import.meta.env.DEV,
+            devModes: !!(import.meta.env.DEV && (this.devFixtureControls || this.session.kind === 'trials')),
         };
     }
     private announceSave(): void {
         const name = this.campaign ? checkpointName(this.campaign.session.resume.checkpointId) : null;
         this.ui.notify(name ? 'Saved at ' + name + '. Unfinished encounters restart here.' : 'Journey saved.');
+    }
+    private chapterObjectiveInput(snap: CombatSnapshot, campaign: CampaignSnapshot) {
+        const player = this.resolvePresentActor(snap.actors, 'aren');
+        return {
+            snapshot: campaign, quests: QUESTS, interactions: INTERACTIONS,
+            region: this.region?.id === campaign.regionId ? this.region : null,
+            actors: snap.actors, movableObjects: snap.movableObjects, player: player?.position ?? null,
+            nurseryEscortActive: snap.nurseryEscortActive,
+            basis: this.renderer ? this.renderer.getInputBasis() : null,
+            runtime: this.campaignDirector.chapterDefinition(), playerFacing: player?.facing ?? null,
+            chapters: CHAPTER_RUNTIME,
+            regionName: (id: RegionId) => REGIONS.find(item => item.id === id)?.name ?? id,
+            contextualInteractionId: this.interaction?.interactionId ?? null,
+            scoutWarningTargetId: this.combat.scoutWarningTargetId,
+        };
     }
     /** View-model parts only chapter sessions (and the wheel everywhere) provide. */
     private chapterModels(snap: CombatSnapshot, c: CampaignSnapshot | null): Partial<GameViewModel> {
@@ -1984,24 +2182,16 @@ export class GameApplication {
         const regionName = (id: RegionId) => REGIONS.find(item => item.id === id)?.name ?? id;
         const region = this.region && this.region.id === c.regionId ? this.region : null;
         if (this.screen === 'game' || this.screen === 'map' || this.screen === 'journal') {
-            const act = chapterActOf(region, c, regionName, QUESTS);
+            const act = chapterActOf(region, c, regionName, QUESTS, CHAPTER_RUNTIME);
             if (act) out.chapterAct = act;
         }
-        const objectiveInput = () => {
-            const player = this.resolvePresentActor(snap.actors, 'aren');
-            return {
-                snapshot: c, quests: QUESTS, interactions: INTERACTIONS, region, actors: snap.actors, movableObjects: snap.movableObjects, player: player?.position ?? null,
-                nurseryEscortActive: snap.nurseryEscortActive,
-                basis: this.renderer ? this.renderer.getInputBasis() : null, runtime: this.campaignDirector.chapterDefinition(),
-                playerFacing: player?.facing ?? null,
-            };
-        };
         if (this.screen === 'game' && !this.entryShot) {
-            const hud = objectiveHudOf(objectiveInput());
+            const input = this.chapterObjectiveInput(snap, c);
+            const hud = objectiveHudOf(input);
             if (hud) out.objectiveHud = hud;
         }
         if (this.screen === 'map' || this.screen === 'journal') {
-            const area = areaMapOf({ ...objectiveInput(), regionName });
+            const area = areaMapOf({ ...this.chapterObjectiveInput(snap, c), regionName });
             if (area) out.areaMap = area;
         }
         return out;
@@ -2012,7 +2202,7 @@ export class GameApplication {
     }
     // ---- Command wheel: GameUI-owned view, application-owned selection and time policy ----------------------------------
     private canOpenWheel(): boolean {
-        return !!this.activeCompanionId && this.screen === 'game' && this.canPlayWorld() && !this.entryShot && this.worldBusy === 0 && !this.playerOutcome && !this.dialogue;
+        return !!this.activeCompanionId && this.screen === 'game' && this.canPlayWorld() && !this.entryShot && this.worldBusy === 0 && !this.playerOutcome && !this.dialogue && this.companionRestriction(this.activeCompanionId) === null;
     }
     private openWheel(by: 'hold' | 'pointer'): void {
         if (!this.activeCompanionId) return;
@@ -2050,6 +2240,8 @@ export class GameApplication {
         return target ? { companionId, command, target } : { companionId, command };
     }
     private wheelAvailability(companionId: CompanionId, command: FieldCommand): { available: boolean; reason: string | null } {
+        const restriction = this.companionRestriction(companionId);
+        if (restriction) return { available: false, reason: restriction };
         const result = this.combat.commandAvailability(this.wheelRequest(companionId, command));
         return { available: result.available, reason: result.reason };
     }
@@ -2108,7 +2300,7 @@ export class GameApplication {
     /** The sole companion's eight verbs, using simulation-owned availability and cooldowns. */
     private wheelModel(snap: CombatSnapshot): GameViewModel['wheel'] | undefined {
         const companionId = this.activeCompanionId;
-        if (this.screen !== 'game' || !this.worldReady || !companionId) return undefined;
+        if (this.screen !== 'game' || !this.worldReady || !companionId || this.companionRestriction(companionId)) return undefined;
         const key = this.combat.simulationTick + '|' + companionId + '|' + this.wheel.open + '|' + this.wheel.selectedSector;
         if (this.wheelCache?.key === key) return this.wheelCache.model;
         const selected = this.wheel.selectedSector;
@@ -2142,8 +2334,8 @@ export class GameApplication {
         return this.screen === 'game' || this.screen === 'dialogue' || this.screen === 'choice';
     }
     /**
-     * Presents exactly what the Director's resume state says: the current line of the head beat, then the pending pact
-     * choice. Reloading restores both; skipping a beat never answers a pending choice.
+     * Presents the head beat, then a pending pact at its eligible contextual site. Non-spatial choices remain automatic.
+     * Reloading restores both; skipping a beat never answers a pending choice or bypasses its interaction requirements.
      */
     private presentChapterStory(): void {
         if (this.presentingStory || !this.campaign || !this.canPresentStoryNow()) return;
@@ -2163,7 +2355,8 @@ export class GameApplication {
                 return;
             }
             const pending = this.campaign.session.resume.pendingChoiceId;
-            if (pending) {
+            const site = pending ? INTERACTIONS.find(item => item.regionId === this.region?.id && item.success.type === 'choice' && item.success.choiceId === pending) : undefined;
+            if (pending && (!site || this.interaction?.interactionId === site.id)) {
                 const options = CAMPAIGN_CHOICES[pending] ?? [];
                 if (!options.length) throw new Error('The story choice ' + pending + ' has no authored options.');
                 if (this.choice?.id !== pending || this.screen !== 'choice') {
@@ -2206,6 +2399,8 @@ export class GameApplication {
     /** Asset loading is staged while paused; assignment never resets the live hero or encounter. */
     private async assignParty(companionId: CompanionId): Promise<void> {
         if (this.partyChanging || !this.campaign || !this.region || !this.renderer || this.campaign.party.companionId === companionId) return;
+        const restriction = this.companionRestriction(companionId);
+        if (restriction) { this.ui.notify(restriction); return; }
         if (this.combat.companionChangeBlocked) {
             this.ui.notify('The party cannot change during an active encounter.');
             return;
@@ -2221,18 +2416,19 @@ export class GameApplication {
             const retired = this.activeCompanionId ? ACTORS[this.activeCompanionId]!.assetId : null;
             const base = { ...this.region, assetIds: this.session.kind === 'chapters' ? authored.assetIds : this.region.assetIds.filter(id => id !== retired || used.has(id)), entities };
             const hero = this.combat.snapshot().actors.find(actor => actor.allegiance === 'player');
-            const projection = projectPartyIntoRegion({ region: base, party, companions: this.campaign.companions, worldFacts: this.campaign.worldFacts, spawnPosition: hero?.position ?? null });
+            const projection = projectPartyIntoRegion({ region: base, party, companions: this.campaign.companions, campaign: this.session.kind === 'trials' ? undefined : this.campaign.campaign, worldFacts: this.campaign.worldFacts, spawnPosition: hero?.position ?? null });
             const region = { ...base, assetIds: [...new Set([...base.assetIds, ...projection.assetIds])], entities: [...base.entities, ...projection.entities] };
             const assets = await this.loadWorldManifest(region, this.selectedHero, projection.assetIds);
             if (!this.isWorldGenerationCurrent(generation, lifecycle)) return;
             staged = await this.renderer.prepareCompanionParty(region, assets);
             if (!this.isWorldGenerationCurrent(generation, lifecycle)) return;
             const commitEngine = this.combat.prepareCompanionParty(region, companionId);
-            this.campaign = await this.campaignDirector.selectParty(companionId);
+            const selection = await this.campaignDirector.selectParty(companionId);
             if (!this.isWorldGenerationCurrent(generation, lifecycle)) return;
+            this.campaign = selection;
             commitEngine(); staged.commit();
             this.region = region; this.manifest = assets; this.manifestPromise = Promise.resolve(assets); this.activeCompanionId = companionId;
-            await this.rememberCompanion(this.selectedHero, companionId);
+            if (this.session.kind !== 'training') await this.rememberCompanion(this.selectedHero, companionId);
         } catch (error) { this.ui.notify(errorText(error)); }
         finally { staged?.dispose(); this.partyChanging = false; this.render(); }
     }
@@ -2244,8 +2440,17 @@ export class GameApplication {
     }
     /** One command request to the simulation; Ask/Signal remain the later-act interaction abilities. */
     private issueCommand(companionId: CompanionId, command: FieldCommand | 'ask' | 'signal', targetId?: ActorId): boolean {
-        if (command === 'ask' || command === 'signal') return this.combat.useAbility(command, targetId);
-        return this.combat.commandCompanion({ companionId, command, ...(targetId ? { target: { kind: 'actor', instanceId: targetId } as const } : {}) });
+        const restriction = this.companionRestriction(companionId);
+        if (restriction) { this.ui.notify(restriction); return false; }
+        if (command === 'ask' || command === 'signal') {
+            const accepted = this.combat.useAbility(command, targetId);
+            if (!accepted) this.ui.notify('Companion is not available to receive this command.');
+            return accepted;
+        }
+        const request = { companionId, command, ...(targetId ? { target: { kind: 'actor', instanceId: targetId } as const } : {}) };
+        if (this.combat.commandCompanion(request)) return true;
+        this.ui.notify(this.combat.commandAvailability(request).reason ?? 'Companion is not available to receive this command.');
+        return false;
     }
     // ---- Authored encounter and checkpoint transactions -----------------------------------------------------------------
     /** Queues the engine's one-shot spatial intents behind pending event commits; the simulation pauses while they run. */
@@ -2373,6 +2578,7 @@ export class GameApplication {
             const snapshot = this.renderSnapshot ?? this.combat.snapshot();
             this.renderSnapshot = snapshot;
             const alpha = this.previousRenderSnapshot ? this.accumulator / STEP : 1;
+            this.renderer.observeFrameTime(delta, snapshot.actors);
             this.renderer.sync(snapshot.actors, snapshot, delta, this.previousRenderSnapshot, alpha);
             this.maybeRevealBoss(snapshot);
             const camera = this.renderer.camera;
@@ -2386,6 +2592,13 @@ export class GameApplication {
             this.presentation?.presentFrame(snapshot, alpha, { position: camera.position, forward: this.listenerForward, up: camera.up });
             this.ui.setGateContact(this.renderer.closestClosedGateDistance <= 1.5);
             this.renderer.updateWaystone(delta, snapshot.encounterStatus?.trial?.complete === true);
+            if (this.session.kind === 'chapters' && this.campaign && !this.entryShot) {
+                const input = this.chapterObjectiveInput(snapshot, this.campaign);
+                this.renderer.setChapterGuidance(objectiveCueOf(input), chapterExitCueOf(input));
+            } else {
+                this.renderer.setChapterGuidance(null, null);
+            }
+            this.renderer.updateChapterGuidance(delta);
             this.damageNumbers.update(snapshot.worldClock, camera, this.root.clientWidth, this.root.clientHeight, this.settings.reducedMotion);
             this.monsterLabels.update(snapshot, camera, this.root.clientWidth, this.root.clientHeight, id => this.renderer?.resolveSocket(id, 'cast'));
             this.combatReadability.update(snapshot, camera, this.root.clientWidth, this.root.clientHeight);
@@ -2437,6 +2650,19 @@ export class GameApplication {
         const requested = this.combat.isTraversing || pendingTraversal ? null : this.pendingInteraction ?? (activateCurrentInteraction && this.interaction && !selectedRoute ? { interactionId: this.interaction.interactionId, targetId: this.interaction.targetId } : null);
         this.pendingInteraction = null;
         const traversalPressed = (actions.interactPressed || pendingTraversal) && !requested && Boolean(selectedRoute);
+        const chapterExit = this.session.kind === 'chapters' && requested
+            && this.interaction?.interactionId === requested.interactionId && this.interaction.targetId === requested.targetId
+            ? this.region?.exits.find(exit => exit.id === requested.interactionId && exit.destinationRegionId !== this.campaign?.regionId)
+            : undefined;
+        if (chapterExit && this.campaign) {
+            // Physics traversal stays local. The Director owns the atomic cross-region transition and its story gates.
+            const eventId = `${this.campaign.runId}:exit:${chapterExit.id}:${this.combat.simulationTick + 1}`;
+            this.queueEvents([{
+                type: 'traversal', eventId, idempotencyKey: eventId, routeId: chapterExit.id,
+                fromRegion: this.campaign.regionId, toRegion: chapterExit.destinationRegionId, landmarkId: chapterExit.id,
+            }]);
+            return;
+        }
         const requestedDefinition = requested ? INTERACTIONS.find(item => item.id === requested.interactionId) : undefined;
         if (requested && this.session.kind === 'chapters' && HUB_SERVICE_INTERACTION_IDS.some(id => id === requested.interactionId)
             && this.interaction?.interactionId === requested.interactionId && this.interaction.targetId === requested.targetId) {
@@ -2543,13 +2769,13 @@ export class GameApplication {
         };
     }
     private checkStageArrival(snapshot: CombatSnapshot): void {
-        if (this.session.kind !== 'trials' || !this.stageGoal || this.stageCompleted || this.screen !== 'game'
+        if (this.session.kind === 'chapters' || !this.stageGoal || this.stageCompleted || this.screen !== 'game'
             || !this.canPlayWorld() || snapshot.player.vitality <= 0) return;
         if (!snapshot.encounterStatus?.trial?.complete) return;
         const player = this.resolvePresentActor(snapshot.actors, 'aren');
         if (!player || !this.stageGoal.contains(player.position)) return;
         this.stageCompleted = true;
-        this.playtestProgress.complete(trialMapOf(this.session)!.id);
+        if (this.session.kind === 'trials') this.playtestProgress.complete(trialMapOf(this.session)!.id);
         this.combat.finishLocalStage();
         this.presentPlayerOutcome('victory', snapshot);
     }
@@ -2621,6 +2847,17 @@ export class GameApplication {
             if (distance <= interaction.radiusMeters && distance < nearest) {
                 nearest = distance;
                 found = { interactionId: interaction.id, targetId: actor?.id ?? movableDefinition?.id ?? interaction.targetId, label: interaction.promptLabel, actionId: interaction.actionId, inputHint: interaction.inputHint, activation: interaction.activation, requiresCompanionCommand: interaction.requiresCompanionCommand, playerActionId: interaction.playerActionId };
+            }
+        }
+        if (this.session.kind === 'chapters') {
+            for (const exit of this.region.exits) {
+                if (exit.destinationRegionId === this.region.id || exit.unlockFact && this.campaign.worldFacts[exit.unlockFact] !== true) continue;
+                const distance = Math.hypot(exit.from.x - position.x, exit.from.y - position.y, exit.from.z - position.z);
+                if (distance <= 2 && distance < nearest) {
+                    nearest = distance;
+                    const destination = REGIONS.find(region => region.id === exit.destinationRegionId);
+                    found = { interactionId: exit.id, targetId: exit.id, label: 'Follow the path to ' + (destination?.name ?? exit.destinationRegionId), actionId: exit.traversalActionId, inputHint: 'interact' };
+                }
             }
         }
         const route = this.nearestRoute(position);

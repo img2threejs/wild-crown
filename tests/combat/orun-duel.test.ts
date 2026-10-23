@@ -5,9 +5,9 @@ import type { CompanionCommandRequest, CompanionId, Vec3, WorldEvent } from "../
 import { CombatEngine, type CombatInput, type EngineState, type LiveHazard } from "../../src/game/combat/CombatEngine.js";
 
 /**
- * The Heartroot Hollow duel through public engine APIs only: CombatInput frames, companion commands and snapshots. The play
- * policy below reads what a player reads (telegraphed hazards, the Orun presentation snapshot) and answers with stick, dodge,
- * tether, light and cleanse input; nothing sets a phase, a fact or a flag.
+ * The Heartroot Hollow duel is driven only through public engine inputs and companion commands. Observations
+ * use the live read-only test seam for simulation state and the public Orun presentation snapshot, avoiding
+ * a full arena serialization on every frame. Nothing sets a phase, a fact or a flag.
  */
 const HOLLOW = REGIONS.find((region) => region.id === "heartroot-hollow")!;
 type Bonds = Partial<Record<CompanionId, { bond: number; dominion: number }>>;
@@ -15,7 +15,6 @@ type Bonds = Partial<Record<CompanionId, { bond: number; dominion: number }>>;
 class Duel {
   readonly engine = new CombatEngine();
   readonly events: WorldEvent[] = [];
-  private observedState?: EngineState;
   constructor(runId: string, companionId?: CompanionId, bonds: Bonds = {}, formation: Partial<Record<CompanionId, Vec3>> = {}) {
     const party = companionId ? [companionId] : [];
     const projected = party.map(id => ({ id: `${id}__party_companion`, actorId: id, kind: "actor", position: formation[id] ?? { x: 14, y: -7, z: -37 }, assetId: `actor-${id}`, placement: "underground" }));
@@ -29,16 +28,18 @@ class Duel {
     this.drain();
   }
   private drain(): void { this.events.push(...this.engine.consumeWorldEvents()); }
-  get s(): EngineState { return this.observedState ??= this.engine.snapshotState(); }
-  refresh(): void { this.observedState = undefined; }
+  get s(): EngineState {
+    // Known engine-owned state: this seam only observes it; all inputs remain public.
+    const observed = this.engine as unknown as { readonly state: EngineState };
+    return observed.state;
+  }
   actor(id: string) { return this.s.actors.find((actor) => actor.id === id || actor.archetypeId === id)!; }
   step(extra: Partial<CombatInput> = {}): void {
     this.engine.step({ tick: this.engine.simulationTick + 1, move: { x: 0, y: 0, z: 0 }, dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false, ...extra }, 1 / 60);
     this.engine.consumeEvents();
     this.drain();
-    this.refresh();
   }
-  command(request: CompanionCommandRequest): boolean { const accepted = this.engine.commandCompanion(request); this.refresh(); return accepted; }
+  command(request: CompanionCommandRequest): boolean { return this.engine.commandCompanion(request); }
   count(predicate: (event: WorldEvent) => boolean): number { return this.events.filter(predicate).length; }
   phaseEvents(): string[] { return this.events.flatMap((event) => event.type === "encounter-phase" ? [`${event.phaseIndex}:${event.state}`] : event.type === "encounter-resolved" ? [`resolved:${event.resolution}`] : []); }
 }
@@ -170,7 +171,7 @@ for (const id of ["vara", "koro", "asha"] as const) test(`one companion: ${id} r
     if (id === "vara" && !d.actor("orun").markState && (s.companionState.slots.vara?.suppressedUntil ?? 0) <= s.worldTick && s.phaseIndex <= 1 && !s.chapter.orun!.answered.includes("sky") && s.tick % 10 === 0) return { command: { companionId: "vara", command: "signal", targetId: "orun" } };
     if (id === "koro" && cast?.aspect === "canopy" && !cast.koroVine && !s.companionState.slots.koro?.job) d.command({ companionId: id, command: "special", target: { kind: "actor", instanceId: "orun" } });
     const vine = cast?.vine, p = d.actor("aren").position;
-    if (s.traversal?.gate.id === "orun-canopy-vine") vineLanding = s.traversal.gate.to;
+    if (s.traversal?.gate.id === "orun-canopy-vine") vineLanding = { ...s.traversal.gate.to };
     if (vineLanding && !s.traversal && Math.hypot(p.x - vineLanding.x, p.z - vineLanding.z) < .5) vineArrived = true;
     if (vine && Math.hypot(p.x - vine.from.x, p.z - vine.from.z) <= 2.4) return { interactPressed: true, traversalId: "orun-canopy-vine" };
   });
@@ -201,11 +202,12 @@ test("Asha's guard intercepts the Fang pounce on its committed lane: Charge Bloc
   for (let i = 0; i < 3200 && !duel.s.chapter.orun!.answered.includes("fang") && duel.s.player.vitality > 0; i++) {
     if (duel.s.companionState.slots.asha?.mode === "follow" && !duel.s.companionState.slots.asha?.guard) duel.command({ companionId: "asha", command: "stay" });
     const s = duel.s, cast = s.chapter.orun?.cast;
+    const aspect = cast?.aspect;
     const live = cast?.aspect === "fang" ? s.hazards.filter((h) => cast.hazardIds.includes(h.id) && h.activeFrom > s.worldTick) : [];
     if (live.length && !s.companionState.slots.asha?.guard && duel.command({ companionId: "asha", command: "special", target: { kind: "hazard", hazardId: live[0]!.id, protecteeId: "aren" } })) guarded++;
     const before = s.player.vitality;
     playFrame(duel);
-    if (cast?.aspect === "fang" && duel.s.player.vitality < before) pounced++;
+    if (aspect === "fang" && duel.s.player.vitality < before) pounced++;
   }
   assert.equal(guarded, 1, "the guard was accepted for the reachable charge");
   assert.equal(pounced, 0);
@@ -260,7 +262,6 @@ test("a checkpoint retry after real progress restarts the duel without re-emitti
   play(duel, 1700);
   assert.equal(duel.s.phaseIndex, 1, "the Crowned Beast was reached by play");
   duel.engine.resetToCheckpoint();
-  duel.refresh();
   assert.equal(duel.s.phaseIndex, 0);
   assert.equal(duel.s.chapter.orun!.answered.length, 0);
   play(duel, 9000);
@@ -276,7 +277,6 @@ test("a restored save continues the live duel exactly as the uninterrupted run",
   play(forked, 1700);
   const saved = forked.engine.serialize();
   forked.engine.restore(saved);
-  forked.refresh();
   play(forked, 9000);
   assert.deepEqual(forked.events.map((event) => event.idempotencyKey), straight.events.map((event) => event.idempotencyKey));
   assert.equal(forked.s.tick, straight.s.tick);

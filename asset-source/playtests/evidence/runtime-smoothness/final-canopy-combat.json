@@ -1,0 +1,532 @@
+{
+  "fixture": "Owned-browser authored DEV Canopy trial, Sakda/Asha, normal AI/damage and the same input plan; not production campaign reachability.",
+  "initial": {
+    "player": {
+      "heroId": "sakda",
+      "vitality": 115,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "screen": "pause",
+    "programs": 105,
+    "allVariantFlashStates": true
+  },
+  "measurement": {
+    "label": "final-dev-sakda-asha-canopy-combat",
+    "durationMs": 20006,
+    "frames": 1182,
+    "frame": {
+      "p50": 13.39999999999418,
+      "p95": 26.80000000000291,
+      "p99": 27.69999999999709,
+      "max": 94,
+      "over25": 299,
+      "over50": 2
+    },
+    "longTasks": [
+      {
+        "start": 81000.19999998808,
+        "duration": 57
+      },
+      {
+        "start": 89270.59999996424,
+        "duration": 70
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1196,
+      "worldTick": 1174,
+      "worldTimeSeconds": 19.566666666666666,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 81,
+      "maxVitality": 115,
+      "instinct": 44,
+      "mana": 39,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -44.8821646911482,
+      "y": 0,
+      "z": -24.48773395931547
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 4603.241,
+      "taskMs": 5744.077000000001,
+      "layoutMs": 36.644999999999996,
+      "recalcStyleMs": 403.16400000000004,
+      "heapUsedBytes": 65038976,
+      "domNodes": 7728
+    }
+  },
+  "final": {
+    "screen": "game",
+    "player": {
+      "heroId": "sakda",
+      "vitality": 81,
+      "maxVitality": 115,
+      "instinct": 44,
+      "mana": 39,
+      "maxMana": 100
+    },
+    "actors": [
+      {
+        "id": "aren",
+        "vitality": 115,
+        "position": {
+          "x": -44.8821646911482,
+          "y": 0,
+          "z": -24.48773395931547
+        }
+      },
+      {
+        "id": "canopy-vara",
+        "vitality": 100,
+        "position": {
+          "x": -60,
+          "y": 0,
+          "z": -19
+        }
+      },
+      {
+        "id": "canopy-howler",
+        "vitality": 120,
+        "position": {
+          "x": -44.912034248652084,
+          "y": 0,
+          "z": -21.71203244157491
+        }
+      },
+      {
+        "id": "canopy-hornbill",
+        "vitality": 256,
+        "position": {
+          "x": 7,
+          "y": 4,
+          "z": -24
+        }
+      },
+      {
+        "id": "canopy-mire-viper",
+        "vitality": 616,
+        "position": {
+          "x": 49,
+          "y": 0,
+          "z": -20
+        }
+      },
+      {
+        "id": "asha__party_companion",
+        "vitality": 100,
+        "position": {
+          "x": -46.89337951239122,
+          "y": 0,
+          "z": -24.75989455127792
+        }
+      }
+    ],
+    "firstUseShaderLinks": [],
+    "assetErrors": [],
+    "glError": 0
+  },
+  "actionPlan": [
+    {
+      "at": 0,
+      "key": "d",
+      "down": true
+    },
+    {
+      "at": 2200,
+      "key": "d",
+      "down": false
+    },
+    {
+      "at": 2700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 2770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 5370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 6670,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7250,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7320,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 7580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 7900,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7970,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 8550,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 8620,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 9200,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9270,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 9850,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9920,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 10500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 10570,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 11100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 11150,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11220,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11800,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11870,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12450,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 12500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 12520,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 13100,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13170,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 13750,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13820,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 14400,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 14470,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 15050,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15120,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 15700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 16000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 16100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 16350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 16420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 17580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 17650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 18370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 19600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19670,
+      "key": "j",
+      "down": false
+    }
+  ],
+  "limit": "Shader-info timing hook records only first-use calls; this is additional DEV combat acceptance, not the matched production before/after benchmark."
+}

@@ -1,5 +1,6 @@
 import { AmbientLight, BufferAttribute, BufferGeometry, Color, DirectionalLight, Fog, Group, HemisphereLight, Mesh, MeshStandardMaterial, Scene, Vector3 } from 'three';
 import type { EnvironmentRecipeDefinition, GroundSurfaceDefinition, RegionDefinition, RegionId, Vec3 } from '../game/contracts';
+import { arenaFromRegion, groundHeightAt, type CombatArena } from '../game/combat/geometry';
 import { AtmosphericSky, DEFAULT_SKY } from './AtmosphericSky';
 import { biomeProfileFor } from './Biomes';
 import type { BiomeProfile, GroundFeature, HeightFogProfile, RegionGradeProfile, SkyProfile } from './BiomeProfile';
@@ -39,6 +40,8 @@ export class RegionEnvironment {
   private readonly wind = { value: 0 };
   private understory: GroundUnderstory | undefined;
   private readonly features: GroundFeature[] = [];
+  private readonly featureArena: CombatArena | undefined;
+  private readonly featureFocus = new Vector3();
   /** Plan-view anchor radius per boundary rock (keyed by position): rocks stand on the lowest terrain under their footprint. */
   private readonly rockAnchors = new Map<string, number>();
   /** Resolves when the region's texture layers are uploaded (profiled ground); immediate elsewhere. */
@@ -60,6 +63,8 @@ export class RegionEnvironment {
   constructor(readonly region: RegionDefinition, readonly recipe: EnvironmentRecipeDefinition) {
     this.group.name = `environment:${region.id}`;
     this.profile = biomeProfileFor(region);
+    this.featureArena = this.profile?.features.length ? arenaFromRegion(region) : undefined;
+    this.featureFocus.y = region.ground.y;
     this.style = STYLES[region.id] ?? STYLES.greenwake!;
     this.sun = this.buildAtmosphere();
     const profile = this.profile;
@@ -154,10 +159,15 @@ export class RegionEnvironment {
     if (focus) {
       this.lastFocus.set(focus.x, focus.y, focus.z);
       this.skyDome?.update(worldTimeSeconds, this.lastFocus, this.reducedEffects);
+      if (this.featureArena) {
+        // Stream over authored floors/decks, not airborne actor Y or the terrain carved beneath a bridge.
+        // Across an unsupported traversal gap, retain the last supporting height.
+        this.featureFocus.set(focus.x, groundHeightAt(this.featureArena, focus.x, focus.z, this.featureFocus.y) ?? this.featureFocus.y, focus.z);
+      }
     }
     this.understory?.update(worldTimeSeconds, focus);
     this.ground?.update(worldTimeSeconds);
-    for (const feature of this.features) feature.update(worldTimeSeconds, focus);
+    for (const feature of this.features) feature.update(worldTimeSeconds, focus ? this.featureFocus : undefined);
     if (this.profile && this.sun.castShadow) this.updateBoundedShadow(focus);
   }
 

@@ -252,7 +252,7 @@ export class GroveAtmosphere implements GroundFeature {
         UniformsLib.fog,
         {
           uTime: { value: 0 },
-          uFocus: { value: new Vector3(start?.x ?? 0, start?.y ?? 0, start?.z ?? 0) },
+          uFocus: { value: new Vector3(start?.x ?? 0, 0, start?.z ?? 0) },
           uVolume: { value: VOLUME.clone() },
           uScale: { value: 600 },
           uReduced: { value: 0 },
@@ -291,7 +291,8 @@ export class GroveAtmosphere implements GroundFeature {
     this.points.material.uniforms.uTime!.value = worldTimeSeconds;
     this.heartrootGlow.material.uniforms.uPulse!.value = 0.85 + 0.15 * Math.sin(worldTimeSeconds * 0.6);
     this.poolGlow.material.uniforms.uPulse!.value = 0.8 + 0.2 * Math.sin(worldTimeSeconds * 0.9 + 1);
-    if (focus) (this.points.material.uniforms.uFocus!.value as Vector3).set(focus.x, focus.y, focus.z);
+    // Grove's walkable ground is y = 0; only stream horizontally, never lift the atmosphere with a jumping actor.
+    if (focus) (this.points.material.uniforms.uFocus!.value as Vector3).set(focus.x, 0, focus.z);
   }
 
   setReducedEffects(reduced: boolean): void {

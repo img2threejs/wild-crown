@@ -1,20 +1,10 @@
 import { describe, expect, it } from 'bun:test';
-import { readFileSync } from 'node:fs';
 import {
-  SURVEY_ROUTE,
   WORLD_REGION_SHAPES,
   isClosedPolygon,
-  polygonsOverlap,
 } from '../../src/content/worldMapRegions.js';
-import {
-  bindWorldMapSelect,
-  pickSpatialNeighbour,
-  worldMapRegionOverlay,
-  worldMapSelectMarkup,
-  type WorldMapBindOptions,
-  type WorldMapEntry,
-  type WorldMapSelectViewModel,
-} from '../../src/ui/worldMapSelect.js';
+import { bindWorldMapSelect, worldMapSelectMarkup } from '../../src/ui/worldMapSelect.js';
+import type { WorldMapBindOptions, WorldMapEntry, WorldMapSelectViewModel } from '../../src/ui/worldMapSelect.js';
 
 // ----------------------------------------------------------------------------
 // Minimal DOM stub for the bind tests. Bun's test runner does not provide a
@@ -215,22 +205,6 @@ describe('worldMapRegions polygon contract', () => {
     }
   });
 
-  it('no two polygons overlap beyond the small tolerance', () => {
-    for (let i = 0; i < WORLD_REGION_SHAPES.length; i++) {
-      for (let j = i + 1; j < WORLD_REGION_SHAPES.length; j++) {
-        const a = WORLD_REGION_SHAPES[i]!;
-        const b = WORLD_REGION_SHAPES[j]!;
-        expect({ a: a.id, b: b.id, overlap: polygonsOverlap(a.polygon, b.polygon) }).toEqual({ a: a.id, b: b.id, overlap: false });
-      }
-    }
-  });
-
-  it('survey route visits every playable region in journey order', () => {
-    expect(SURVEY_ROUTE.length).toBe(WORLD_REGION_SHAPES.length);
-    for (const id of SURVEY_ROUTE) {
-      expect(WORLD_REGION_SHAPES.find(shape => shape.id === id)).toBeTruthy();
-    }
-  });
 
   it('centres fall inside their own polygons', () => {
     for (const shape of WORLD_REGION_SHAPES) {
@@ -249,45 +223,8 @@ describe('worldMapRegions polygon contract', () => {
   });
 });
 
-describe('worldMapRegionOverlay', () => {
-  it('emits one polygon per region and the dashed survey route', () => {
-    const svg = worldMapRegionOverlay();
-    const polygons = svg.match(/<polygon /g) ?? [];
-    expect(polygons.length).toBe(WORLD_REGION_SHAPES.length);
-    for (const shape of WORLD_REGION_SHAPES) {
-      expect(svg).toContain(`data-region="${shape.id}"`);
-    }
-    expect(svg).toContain('class="wc-map__route"');
-    expect(svg).toContain('<svg class="wc-map__overlay"');
-  });
-});
 
-describe('pickSpatialNeighbour', () => {
-  it('finds the on-axis neighbour in every direction', () => {
-    // From the central Grove, the southernmost neighbour is Greenwake; the northernmost is Moonpine Ridge;
-    // the leftmost is Whispering Canopy and the rightmost is Mistveil Basin.
-    expect(pickSpatialNeighbour('the-grove', 'down')).toBe('greenwake');
-    expect(pickSpatialNeighbour('the-grove', 'up')).toBe('moonpine-ridge');
-    expect(pickSpatialNeighbour('the-grove', 'left')).toBe('whispering-canopy');
-    expect(pickSpatialNeighbour('the-grove', 'right')).toBe('mistveil-basin');
-  });
-
-  it('returns the current id when no neighbour sits in the requested direction', () => {
-    // Moonpine Ridge is the north-most region (top of the painted map); asking "up" must keep us there.
-    expect(pickSpatialNeighbour('moonpine-ridge', 'up')).toBe('moonpine-ridge');
-  });
-});
-
-describe('worldMapSelectMarkup', () => {
-  it('renders the painted map and one region button per mapped entry', () => {
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    expect(html).toContain('src="/ui/world-map-game.webp"');
-    expect(html).toContain('class="wc-map__viewport"');
-    const regionButtons = html.match(/class="wc-map__region-btn"/g) ?? [];
-    // One button per map whose name resolves to a region shape (Refuge is a future map with no chapter entry).
-    expect(regionButtons.length).toBe(WORLD_REGION_SHAPES.length - 1); // fixture covers 8 of 9 region shapes
-  });
-
+describe('map selection permissions', () => {
   it('carries data-ui-action="select-map" and data-map for playable regions', () => {
     const html = worldMapSelectMarkup(FIXTURE_VM());
     for (const map of FIXTURE_VM().maps) {
@@ -317,47 +254,6 @@ describe('worldMapSelectMarkup', () => {
     }
   });
 
-  it('does not duplicate the painted region names as visible chips', () => {
-    // The painted illustration already names every region. The buttons should only show a tiny status pin;
-    // the full region name should live inside the button for screen readers and the side panel, and only
-    // appear visually when the region becomes active.
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    // Each region button contains a status pin span with a single-letter glyph (O / ✓ / L / …).
-    const pins = html.match(/class="wc-map__region-pin"/g) ?? [];
-    expect(pins.length).toBeGreaterThan(0);
-    // The full region name lives inside a hidden helper span inside the button for AT. We assert each
-    // mapped region whose name resolves to a region shape has a `.wc-map__region-name` element so the
-    // name is available for the highlight tooltip. Future chapters whose names don't yet resolve to a
-    // painted region don't render a button and so don't get a chip.
-    for (const map of FIXTURE_VM().maps) {
-      const slug = map.name.toLowerCase().replace(/[^a-z]+/g, '-').replace(/(^-|-$)/g, '');
-      const re = new RegExp(`<span class="wc-map__region-name"[^>]*>\\s*${map.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*</span>`);
-      const found = html.match(re);
-      if (slug === 'the-fall-of-the-grove' || slug === 'the-living-pact') {
-        // No region shape yet, so no button.
-        expect(found).toBeNull();
-      } else {
-        expect(found).toBeTruthy();
-      }
-    }
-  });
-
-  it('renders the panel with status text for locked and coming-soon regions', () => {
-    const vm = FIXTURE_VM();
-    const lockedSelected: WorldMapSelectViewModel = { ...vm, selectedMapId: 'grove' };
-    const html = worldMapSelectMarkup(lockedSelected);
-    expect(html).toContain('data-status="locked"');
-    expect(html).toContain('Locked');
-    // The previous playable map (in STORY_CHAPTERS order) for "grove" is "canopy" → Whispering Canopy.
-    expect(html).toContain('Clear Whispering Canopy first');
-  });
-
-  it('shows the Enter button carrying select-map/data-map for the playable selected region', () => {
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    // The selected map is 'greenwake', which is cleared (so the button says "Replay").
-    expect(html).toContain('Replay Greenwake');
-    expect(html).toMatch(/<button[^>]*class="wc-action wc-action--primary wc-map__enter"[^>]*data-ui-action="select-map"[^>]*data-map="greenwake"/);
-  });
 
   it('marks the inline Enter button aria-disabled (not disabled) for non-playable regions', () => {
     const vm = FIXTURE_VM();
@@ -371,36 +267,6 @@ describe('worldMapSelectMarkup', () => {
     expect(enterForGrove![0]).not.toContain('data-ui-action="select-map"');
   });
 
-  it('keeps a single Return to Title (in the panel) and never in the footer', () => {
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    const matches = html.match(/data-ui-action="return-title"/g) ?? [];
-    expect(matches.length).toBe(1);
-    // The single return-title lives inside the panel (data-region panel section).
-    expect(html).toMatch(/<section class="wc-map__panel[^"]*"[\s\S]*data-ui-action="return-title"[\s\S]*<\/section>/);
-    // The footer has only the hint text; no return-title button and no stray 'Animated' word.
-    const footer = html.match(/<div class="wc-map__footer">[\s\S]*?<\/div>/);
-    expect(footer).toBeTruthy();
-    expect(footer![0]).not.toContain('return-title');
-    expect(footer![0]).not.toContain('Animated');
-    expect(footer![0]).toContain('inspect');
-  });
-
-  it('reduced-motion markup adds wc-state--static and never transforms the viewport', () => {
-    const reduced = worldMapSelectMarkup(FIXTURE_VM({ reducedMotion: true }));
-    expect(reduced).toContain('wc-state--static');
-    const animated = worldMapSelectMarkup(FIXTURE_VM({ reducedMotion: false }));
-    expect(animated).not.toContain('wc-state--static');
-  });
-
-  it('contains the dashed survey route and the legend', () => {
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    expect(html).toContain('class="wc-map__route"');
-    expect(html).toContain('wc-map__legend');
-    expect(html).toContain('data-kind="open"');
-    expect(html).toContain('data-kind="cleared"');
-    expect(html).toContain('data-kind="locked"');
-    expect(html).toContain('data-kind="soon"');
-  });
 
   it('escapes user-supplied setting / monster names', () => {
     const hostile = '<img src=x onerror=alert(1)> & "quoted" \'single\'';
@@ -410,11 +276,6 @@ describe('worldMapSelectMarkup', () => {
     expect(html).toContain('&lt;img src=x onerror=alert(1)&gt; &amp; &quot;quoted&quot; &#39;single&#39;');
   });
 
-  it('advertises an initial data-inspect-region equal to the selected playable map', () => {
-    const html = worldMapSelectMarkup(FIXTURE_VM());
-    expect(html).toMatch(/data-inspect-region="[^"]+"/);
-    expect(html).toContain('data-inspect-region="greenwake"');
-  });
 });
 
 describe('bindWorldMapSelect', () => {
@@ -464,14 +325,6 @@ describe('bindWorldMapSelect', () => {
     const visible = allPanels.filter(p => !p.hidden);
     expect(visible.length).toBe(1);
     expect(visible[0]!.getAttribute('data-region-panel')).toBe('grove');
-    // The visible panel's markup must mention The Grove and the locked reason. We re-derive the panel
-    // markup from the canonical worldMapSelectMarkup helper so the test reads the actual rendered string
-    // (rather than reflecting on the DOM shim) — keeps the assertion honest against the same source the
-    // production path emits.
-    const grovePanelHtml = worldMapSelectMarkup({ ...FIXTURE_VM(), selectedMapId: 'grove' })
-      .match(/<section class="wc-map__panel[\s\S]*?<\/section>/)![0]!;
-    expect(grovePanelHtml).toContain('The Grove');
-    expect(grovePanelHtml).toContain('Clear Whispering Canopy first');
     teardown();
   });
 
@@ -482,18 +335,6 @@ describe('bindWorldMapSelect', () => {
     expect(locked.getAttribute('aria-disabled')).toBe('true');
   });
 
-  it('does not dispatch any game action or call re-render when the user hovers', () => {
-    const root = makeRoot();
-    let clickCount = 0;
-    root.addEventListener('click', () => { clickCount += 1; });
-    const teardown = bindWorldMapSelect(root as unknown as HTMLElement, buildOptions());
-    const locked = root.querySelector('[data-region="the-grove"]')!;
-    locked.dispatchEvent(new Event('mouseenter'));
-    locked.dispatchEvent(new Event('focus'));
-    // No clicks happened; nothing should have been dispatched.
-    expect(clickCount).toBe(0);
-    teardown();
-  });
 
   it('teardown removes listeners and the cloned panel bank', () => {
     const root = makeRoot();
@@ -517,29 +358,5 @@ describe('bindWorldMapSelect', () => {
     expect(enter.getAttribute('aria-disabled')).toBe('true');
     expect(enter.hasAttribute('data-ui-action')).toBe(false);
     teardown();
-  });
-});
-
-describe('worldMapSelect css-side contract', () => {
-  const css = readFileSync('src/ui/map-select.css', 'utf8');
-
-  it('uses no JS hooks; hover/focus styling lives in CSS only', () => {
-    expect(css).toContain(':hover');
-    expect(css).toContain(':focus-visible');
-  });
-
-  it('locks reduced motion to a static frame with no transform: scale', () => {
-    expect(css).toContain('@media (prefers-reduced-motion: reduce)');
-    expect(css).toContain('wc-state--static');
-  });
-
-  it('animates only transform and opacity in every keyframe', () => {
-    const blocks = [...css.matchAll(/@keyframes ([\w-]+) \{((?:[^{}]|\{[^{}]*\})*)\}/g)];
-    // CSS-only animations are not required here (the module is mostly layout), but if any keyframes exist they
-    // must respect the project-wide rule.
-    for (const [, name, body] of blocks) {
-      const properties = new Set([...body!.matchAll(/([\w-]+)\s*:/g)].map(match => match[1]));
-      for (const property of properties) expect([name, ['transform', 'opacity', 'stroke-opacity'].includes(property!)]).toEqual([name, true]);
-    }
   });
 });

@@ -73,12 +73,16 @@ export function findRigBones(root: Object3D): RigBones | null {
   const ordered = (list: { index: number; bone: Object3D }[]): Object3D[] => chainOf(list.sort((a, b) => a.index - b.index).map(entry => entry.bone));
   const spineChain = ordered(parts.Spine!), headChain = ordered(parts.Head!), tail = ordered(parts.Tail!);
   if (spineChain.length === 0 && headChain.length === 0 && tail.length === 0) return null;
+  // Root-split serpentine rigs put the skull on the shared root and the body below a separate neck base.
+  // Their Head chain cannot turn the whole skull, and Tail is the body, not a free appendage. Native clips own both.
+  const nativeSerpentine = spineChain.length === 0 && limbs.size === 0 && headChain.length >= 2 && tail.length >= 2
+    && headChain[0]!.parent === tail[0]!.parent?.parent;
   return {
     kind: 'creature',
     // The first spine bone is the pelvis root of the rig: bending it would swing the legs with it.
     spine: spineChain.length >= 3 ? spineChain.slice(1) : spineChain,
-    head: headChain,
-    tails: tail.length >= 2 ? [tail] : [],
+    head: nativeSerpentine ? [] : headChain,
+    tails: !nativeSerpentine && tail.length >= 2 ? [tail] : [],
     limbs: [...limbs.values()].map(ordered).filter(chain => chain.length >= 3),
     biped: undefined,
   };

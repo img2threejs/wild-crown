@@ -1,0 +1,240 @@
+{
+  "resize": {
+    "before": {
+      "screen": "pause",
+      "scale": 0.75,
+      "memory": {
+        "geometries": 138,
+        "textures": 92
+      },
+      "programs": 95
+    },
+    "sizes": [
+      {
+        "screen": "pause",
+        "scale": 1,
+        "css": [
+          960,
+          600
+        ],
+        "dpr": 2,
+        "buffer": [
+          960,
+          600
+        ],
+        "scene": [
+          960,
+          600
+        ],
+        "composer": [
+          960,
+          600
+        ],
+        "glError": 0
+      },
+      {
+        "screen": "pause",
+        "scale": 0.75,
+        "css": [
+          1440,
+          900
+        ],
+        "dpr": 1,
+        "buffer": [
+          1080,
+          675
+        ],
+        "scene": [
+          1080,
+          675
+        ],
+        "composer": [
+          1080,
+          675
+        ],
+        "glError": 0
+      },
+      {
+        "screen": "pause",
+        "scale": 1,
+        "css": [
+          960,
+          600
+        ],
+        "dpr": 2,
+        "buffer": [
+          960,
+          600
+        ],
+        "scene": [
+          960,
+          600
+        ],
+        "composer": [
+          960,
+          600
+        ],
+        "glError": 0
+      },
+      {
+        "screen": "pause",
+        "scale": 0.75,
+        "css": [
+          1440,
+          900
+        ],
+        "dpr": 1,
+        "buffer": [
+          1080,
+          675
+        ],
+        "scene": [
+          1080,
+          675
+        ],
+        "composer": [
+          1080,
+          675
+        ],
+        "glError": 0
+      }
+    ],
+    "after": {
+      "screen": "pause",
+      "pausedCombatUnchanged": true,
+      "memory": {
+        "geometries": 138,
+        "textures": 78
+      },
+      "programs": 95
+    }
+  },
+  "resumed": {
+    "state": {
+      "screen": "game",
+      "scale": 0.75,
+      "memory": {
+        "geometries": 138,
+        "textures": 92
+      },
+      "programs": 95,
+      "events": [
+        {
+          "atMs": 26.100000023841858,
+          "viewport": true,
+          "scale": 1,
+          "buffer": [
+            960,
+            600
+          ],
+          "screen": "pause"
+        },
+        {
+          "atMs": 56.40000003576279,
+          "viewport": true,
+          "scale": 0.75,
+          "buffer": [
+            1080,
+            675
+          ],
+          "screen": "pause"
+        },
+        {
+          "atMs": 82.40000003576279,
+          "viewport": true,
+          "scale": 1,
+          "buffer": [
+            960,
+            600
+          ],
+          "screen": "pause"
+        },
+        {
+          "atMs": 110.5,
+          "viewport": true,
+          "scale": 0.75,
+          "buffer": [
+            1080,
+            675
+          ],
+          "screen": "pause"
+        }
+      ],
+      "glError": 0,
+      "assetErrors": []
+    },
+    "browserErrors": []
+  },
+  "recovery": {
+    "label": "final-preserved-pixel-budget-resize-recovery",
+    "durationMs": 9011.099999964237,
+    "frames": 670,
+    "frame": {
+      "p50": 13.30000000000291,
+      "p95": 14.30000000000291,
+      "p99": 14.39999999999418,
+      "max": 27.69999999999709,
+      "over25": 4,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1080,
+      "bufferHeight": 675,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 3899,
+      "worldTick": 3899,
+      "worldTimeSeconds": 64.98333333333333,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 81.06791756601936,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -17.054059132720344,
+      "y": 0,
+      "z": -7.585022201343214
+    },
+    "finalPosition": {
+      "x": -17.054059132720344,
+      "y": 0,
+      "z": -7.585022201343214
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2025.7230000000002,
+      "taskMs": 2250.6400000000003,
+      "layoutMs": 0.07200000000000001,
+      "recalcStyleMs": 51.017,
+      "heapUsedBytes": 51993264,
+      "domNodes": 636
+    }
+  },
+  "titleReturn": {
+    "screen": "title",
+    "titleVisible": true
+  },
+  "devFixtureStorageRestored": {
+    "restored": true
+  },
+  "limits": "Two resize cycles only, not proof against all lifetime leaks. Recovery window includes first draw after reallocating paused render targets, unlike the steady-state paired-input benchmark."
+}

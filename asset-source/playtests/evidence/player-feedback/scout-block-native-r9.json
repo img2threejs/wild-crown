@@ -1,0 +1,1393 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-23T07:47:21.457Z",
+  "build": {
+    "bundle": "main-1bL2ASaL.js",
+    "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+    "nativeViperSha256": "33c412ced3c9397e4fed4c9ce64b076dc8b006b185ae3d76bbf57bb51a8a6abe"
+  },
+  "fixture": {
+    "description": "CampaignDirector replay of 14 actually earned durable events from the coordinator-owned Greenwake-to-Canopy run; empty party; no scout mark/warning completion supplied.",
+    "replayedEventCount": 14,
+    "omittedOptionalSemantics": [
+      "bird-mark",
+      "warning-response"
+    ],
+    "scope": "candidate-chapters",
+    "userTabOrSaveAccessed": false
+  },
+  "before": {
+    "bundle": "main-C4zi34jX.js",
+    "state": {
+      "screen": "game",
+      "hud": {
+        "chapterLabel": "Chapter 1 · Whispering Canopy",
+        "questTitle": "The Fallen Scout",
+        "objectiveTitle": "Mark a visible threat",
+        "step": {
+          "index": 2,
+          "total": 3
+        },
+        "counter": null,
+        "interaction": null,
+        "guidance": "Command Vara with the companion wheel to mark the thornback howler in your sight. Follow the fireflies.",
+        "status": "approach",
+        "destination": {
+          "label": "Mark a visible threat",
+          "distanceMeters": 2.309047023152289,
+          "bearingDegrees": 123.96418982965415,
+          "hint": null
+        }
+      },
+      "party": {
+        "companionId": "vara"
+      },
+      "actors": [
+        {
+          "id": "aren",
+          "allegiance": "player",
+          "visible": true,
+          "position": {
+            "x": -48.30867549753786,
+            "y": 0,
+            "z": -25.958580171454326
+          }
+        },
+        {
+          "id": "canopy-vara",
+          "allegiance": "ally",
+          "visible": true,
+          "position": {
+            "x": -58,
+            "y": 0,
+            "z": -22
+          }
+        },
+        {
+          "id": "koro",
+          "allegiance": "ally",
+          "visible": true,
+          "position": {
+            "x": 47,
+            "y": 0,
+            "z": -24
+          }
+        },
+        {
+          "id": "canopy-howler",
+          "allegiance": "wild",
+          "visible": true,
+          "position": {
+            "x": -46,
+            "y": 0,
+            "z": -26
+          }
+        },
+        {
+          "id": "canopy-hornbill",
+          "allegiance": "wild",
+          "visible": true,
+          "position": {
+            "x": 7,
+            "y": 4,
+            "z": -24
+          }
+        },
+        {
+          "id": "canopy-mire-viper",
+          "allegiance": "wild",
+          "visible": true,
+          "position": {
+            "x": 49,
+            "y": 0,
+            "z": -4
+          }
+        },
+        {
+          "id": "vara__party_companion",
+          "allegiance": "ally",
+          "visible": true,
+          "position": {
+            "x": -52.13532627161702,
+            "y": 2.2954322429548406,
+            "z": -23.48035331000935
+          }
+        }
+      ],
+      "cue": {
+        "visible": true,
+        "position": {
+          "x": -46,
+          "y": 0,
+          "z": -26
+        }
+      },
+      "wheel": {
+        "open": true,
+        "selectedSector": null,
+        "tokens": 2,
+        "target": null,
+        "companion": {
+          "companionId": "vara",
+          "name": "Vara",
+          "commands": [
+            {
+              "command": "follow",
+              "label": "Follow",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "stay",
+              "label": "Stay",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "focus",
+              "label": "Mark Weakness",
+              "available": false,
+              "reason": "No target"
+            },
+            {
+              "command": "defend",
+              "label": "Defend",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "search",
+              "label": "Sky Survey",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "distract",
+              "label": "Distract",
+              "available": false,
+              "reason": "No target"
+            },
+            {
+              "command": "special",
+              "label": "Storm Talon",
+              "available": false,
+              "reason": "No target"
+            },
+            {
+              "command": "recall",
+              "label": "Recall",
+              "available": true,
+              "reason": null
+            }
+          ]
+        }
+      }
+    },
+    "screenshot": "scout-wheel-blocked-before-r9.png"
+  },
+  "final": {
+    "care": {
+      "screen": "game",
+      "focused": true,
+      "hidden": false,
+      "hud": {
+        "chapterLabel": "Chapter 1 · Whispering Canopy",
+        "questTitle": "The Fallen Scout",
+        "objectiveTitle": "Mark a visible threat",
+        "step": {
+          "index": 2,
+          "total": 3
+        },
+        "counter": null,
+        "interaction": "Equip Vara in Companions",
+        "interactionInputHint": "companions",
+        "guidance": "Command Vara with the companion wheel to mark the thornback howler in your sight. Open Companions and equip Vara first. Standing at a world marker cannot perform a companion command.",
+        "status": "blocked",
+        "destination": null
+      },
+      "completed": [
+        "prologue:hear-roars",
+        "prologue:tend-vara",
+        "prologue:receive-sky",
+        "prologue:take-staff",
+        "prologue:cleanse-boar",
+        "prologue:open-gate",
+        "fallen-scout:tend-vara"
+      ],
+      "party": {}
+    },
+    "equipped": {
+      "screen": "game",
+      "ready": true,
+      "hud": {
+        "chapterLabel": "Chapter 1 · Whispering Canopy",
+        "questTitle": "The Fallen Scout",
+        "objectiveTitle": "Mark a visible threat",
+        "step": {
+          "index": 2,
+          "total": 3
+        },
+        "counter": null,
+        "interaction": "Mark Weakness",
+        "interactionInputHint": "commandWheel",
+        "guidance": "Command Vara with the companion wheel to mark the thornback howler in your sight. Follow the fireflies to the threat and keep it in view. Hold Command Wheel, choose Mark Weakness, then release. This is not an Interact action.",
+        "status": "approach",
+        "destination": {
+          "label": "Mark a visible threat",
+          "distanceMeters": 13.416407864998739,
+          "bearingDegrees": 98.42696902148067,
+          "hint": null
+        }
+      },
+      "party": {
+        "companionId": "vara"
+      },
+      "traveling": true,
+      "completed": [
+        "prologue:hear-roars",
+        "prologue:tend-vara",
+        "prologue:receive-sky",
+        "prologue:take-staff",
+        "prologue:cleanse-boar",
+        "prologue:open-gate",
+        "fallen-scout:tend-vara"
+      ]
+    },
+    "approach": {
+      "goal": {
+        "x": -48.31,
+        "y": 0,
+        "z": -25.96
+      },
+      "input": "native WASD only",
+      "samples": [
+        {
+          "tick": 357,
+          "position": {
+            "x": -58,
+            "y": 0,
+            "z": -20
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 361,
+          "position": {
+            "x": -57.88605154941707,
+            "y": 0,
+            "z": -20.079763915408055
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 366,
+          "position": {
+            "x": -57.6061473099064,
+            "y": 0,
+            "z": -20.27569688306554
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 370,
+          "position": {
+            "x": -57.38222391829786,
+            "y": 0,
+            "z": -20.432443257191526
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 375,
+          "position": {
+            "x": -57.10231967878719,
+            "y": 0,
+            "z": -20.62837622484901
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 379,
+          "position": {
+            "x": -56.87839628717865,
+            "y": 0,
+            "z": -20.785122598974997
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 385,
+          "position": {
+            "x": -56.54251119976585,
+            "y": 0,
+            "z": -21.020242160163978
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 390,
+          "position": {
+            "x": -56.26260696025518,
+            "y": 0,
+            "z": -21.21617512782146
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 394,
+          "position": {
+            "x": -56.03868356864664,
+            "y": 0,
+            "z": -21.37292150194745
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 399,
+          "position": {
+            "x": -55.75877932913597,
+            "y": 0,
+            "z": -21.568854469604933
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 403,
+          "position": {
+            "x": -55.53485593752743,
+            "y": 0,
+            "z": -21.72560084373092
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 409,
+          "position": {
+            "x": -55.19897085011463,
+            "y": 0,
+            "z": -21.9607204049199
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 412,
+          "position": {
+            "x": -55.031028306408224,
+            "y": 0,
+            "z": -22.07828018551439
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 417,
+          "position": {
+            "x": -54.75112406689755,
+            "y": 0,
+            "z": -22.274213153171875
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 422,
+          "position": {
+            "x": -54.47121982738688,
+            "y": 0,
+            "z": -22.47014612082936
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 426,
+          "position": {
+            "x": -54.247296435778345,
+            "y": 0,
+            "z": -22.626892494955346
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 431,
+          "position": {
+            "x": -53.967392196267674,
+            "y": 0,
+            "z": -22.82282546261283
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 436,
+          "position": {
+            "x": -53.687487956757,
+            "y": 0,
+            "z": -23.018758430270314
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 441,
+          "position": {
+            "x": -53.40758371724633,
+            "y": 0,
+            "z": -23.214691397927798
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 445,
+          "position": {
+            "x": -53.183660325637796,
+            "y": 0,
+            "z": -23.371437772053785
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 450,
+          "position": {
+            "x": -52.903756086127125,
+            "y": 0,
+            "z": -23.56737073971127
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 454,
+          "position": {
+            "x": -52.67983269451859,
+            "y": 0,
+            "z": -23.724117113837256
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 460,
+          "position": {
+            "x": -52.34394760710578,
+            "y": 0,
+            "z": -23.959236675026236
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 464,
+          "position": {
+            "x": -52.120024215497246,
+            "y": 0,
+            "z": -24.115983049152224
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 469,
+          "position": {
+            "x": -51.840119975986575,
+            "y": 0,
+            "z": -24.311916016809707
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 474,
+          "position": {
+            "x": -51.560215736475904,
+            "y": 0,
+            "z": -24.50784898446719
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 478,
+          "position": {
+            "x": -51.33629234486737,
+            "y": 0,
+            "z": -24.66459535859318
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 482,
+          "position": {
+            "x": -51.11236895325883,
+            "y": 0,
+            "z": -24.821341732719166
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 487,
+          "position": {
+            "x": -50.83246471374816,
+            "y": 0,
+            "z": -25.01727470037665
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 492,
+          "position": {
+            "x": -50.55256047423749,
+            "y": 0,
+            "z": -25.213207668034133
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 496,
+          "position": {
+            "x": -50.32863708262895,
+            "y": 0,
+            "z": -25.36995404216012
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 501,
+          "position": {
+            "x": -50.04873284311828,
+            "y": 0,
+            "z": -25.565887009817605
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 506,
+          "position": {
+            "x": -49.76882860360761,
+            "y": 0,
+            "z": -25.76181997747509
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 510,
+          "position": {
+            "x": -49.515312524710815,
+            "y": 0,
+            "z": -25.78404328136163
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        },
+        {
+          "tick": 515,
+          "position": {
+            "x": -49.17884480878133,
+            "y": 0,
+            "z": -25.724666625609384
+          },
+          "resources": {
+            "heroId": "yara",
+            "vitality": 85,
+            "maxVitality": 85,
+            "instinct": 0,
+            "mana": 100,
+            "maxMana": 100
+          }
+        }
+      ],
+      "final": {
+        "screen": "pause",
+        "p": {
+          "id": "aren",
+          "archetypeId": "aren",
+          "species": "human",
+          "allegiance": "player",
+          "position": {
+            "x": -48.88368416618797,
+            "y": 0,
+            "z": -25.850785970772893
+          },
+          "velocity": {
+            "x": 3.358850874128052,
+            "y": 0,
+            "z": -2.351195611889807
+          },
+          "facing": {
+            "x": 0.8192319205190405,
+            "y": 0,
+            "z": -0.5734623443633284
+          },
+          "actionId": "aren-walk",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 85,
+          "maxVitality": 85,
+          "renderVariantId": "actor-yara-hero",
+          "sockets": {
+            "root": {
+              "x": -58,
+              "y": 0,
+              "z": -20
+            },
+            "head": {
+              "x": -58,
+              "y": 1.5,
+              "z": -20
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false
+        },
+        "r": {
+          "heroId": "yara",
+          "vitality": 85,
+          "maxVitality": 85,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        },
+        "tick": 520,
+        "basis": {
+          "forward": {
+            "x": -0.5734623443633284,
+            "y": 0,
+            "z": -0.8192319205190406
+          },
+          "right": {
+            "x": 0.8192319205190406,
+            "y": 0,
+            "z": -0.5734623443633284
+          }
+        },
+        "outcome": null,
+        "tutorial": null
+      }
+    },
+    "lesson": {
+      "wheel": {
+        "open": true,
+        "selectedSector": 2,
+        "tokens": 2,
+        "target": "canopy howler",
+        "companion": {
+          "companionId": "vara",
+          "name": "Vara",
+          "commands": [
+            {
+              "command": "follow",
+              "label": "Follow",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "stay",
+              "label": "Stay",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "focus",
+              "label": "Mark Weakness",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "defend",
+              "label": "Defend",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "search",
+              "label": "Sky Survey",
+              "available": true,
+              "reason": null
+            },
+            {
+              "command": "distract",
+              "label": "Distract",
+              "available": false,
+              "reason": "No target"
+            },
+            {
+              "command": "special",
+              "label": "Storm Talon",
+              "available": false,
+              "reason": "No target"
+            },
+            {
+              "command": "recall",
+              "label": "Recall",
+              "available": true,
+              "reason": null
+            }
+          ]
+        }
+      },
+      "marked": {
+        "screen": "game",
+        "hud": {
+          "chapterLabel": "Chapter 1 · Whispering Canopy",
+          "questTitle": "The Fallen Scout",
+          "objectiveTitle": "Answer Vara's warning",
+          "step": {
+            "index": 3,
+            "total": 3
+          },
+          "counter": null,
+          "interaction": null,
+          "guidance": "When Vara warns of danger behind you, turn to face the threat. Keep the threat nearby. Face away until Vara warns, then turn back toward it. No interaction key is required.",
+          "status": "approach",
+          "destination": {
+            "label": "Answer Vara's warning",
+            "distanceMeters": 2.797685179291507,
+            "bearingDegrees": 123.18859230272405,
+            "hint": null
+          }
+        },
+        "completed": [
+          "prologue:hear-roars",
+          "prologue:tend-vara",
+          "prologue:receive-sky",
+          "prologue:take-staff",
+          "prologue:cleanse-boar",
+          "prologue:open-gate",
+          "fallen-scout:tend-vara",
+          "fallen-scout:mark-threat"
+        ],
+        "quests": [
+          "prologue"
+        ],
+        "player": {
+          "id": "aren",
+          "archetypeId": "aren",
+          "species": "human",
+          "allegiance": "player",
+          "position": {
+            "x": -48.796299427999266,
+            "y": 0,
+            "z": -25.911955287504984
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "facing": {
+            "x": 0.8192319205190405,
+            "y": 0,
+            "z": -0.5734623443633284
+          },
+          "actionId": "aren-idle",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 85,
+          "maxVitality": 85,
+          "renderVariantId": "actor-yara-hero",
+          "sockets": {
+            "root": {
+              "x": -58,
+              "y": 0,
+              "z": -20
+            },
+            "head": {
+              "x": -58,
+              "y": 1.5,
+              "z": -20
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false
+        },
+        "target": {
+          "id": "canopy-howler",
+          "archetypeId": "canopy-howler",
+          "species": "howler-monkey",
+          "allegiance": "wild",
+          "position": {
+            "x": -46,
+            "y": 0,
+            "z": -26
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "facing": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "actionId": "wild-crown:actor-idle",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 100,
+          "maxVitality": 100,
+          "ferocity": 100,
+          "renderVariantId": "actor-thornback-howler",
+          "sockets": {
+            "root": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            },
+            "head": {
+              "x": -46,
+              "y": 1.5,
+              "z": -26
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false,
+          "mark": {
+            "sourceId": "vara__party_companion",
+            "remainingTicks": 299,
+            "landing": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            }
+          }
+        },
+        "wheel": {
+          "open": false,
+          "selectedSector": null,
+          "tokens": 2,
+          "target": null,
+          "companion": {
+            "companionId": "vara",
+            "name": "Vara",
+            "commands": []
+          }
+        },
+        "bundle": "http://127.0.0.1:5218/assets/main-1bL2ASaL.js",
+        "failed": null,
+        "error": null
+      },
+      "warned": {
+        "screen": "game",
+        "hud": {
+          "chapterLabel": "Chapter 1 · Whispering Canopy",
+          "questTitle": "The Fallen Scout",
+          "objectiveTitle": "Answer Vara's warning",
+          "step": {
+            "index": 3,
+            "total": 3
+          },
+          "counter": null,
+          "interaction": null,
+          "guidance": "When Vara warns of danger behind you, turn to face the threat. Turn your hero to face the indicated threat before the warning fades. No interaction key is required.",
+          "status": "approach",
+          "destination": {
+            "label": "Answer Vara's warning",
+            "distanceMeters": 2.86133407372868,
+            "bearingDegrees": 122.35883638015846,
+            "hint": null
+          }
+        },
+        "warning": "canopy-howler",
+        "completed": [
+          "prologue:hear-roars",
+          "prologue:tend-vara",
+          "prologue:receive-sky",
+          "prologue:take-staff",
+          "prologue:cleanse-boar",
+          "prologue:open-gate",
+          "fallen-scout:tend-vara",
+          "fallen-scout:mark-threat"
+        ],
+        "quests": [
+          "prologue"
+        ],
+        "player": {
+          "id": "aren",
+          "archetypeId": "aren",
+          "species": "human",
+          "allegiance": "player",
+          "position": {
+            "x": -48.85831287550952,
+            "y": 0,
+            "z": -25.868545874247822
+          },
+          "velocity": {
+            "x": -1.3975520993116675,
+            "y": 0,
+            "z": 0.9782864695178262
+          },
+          "facing": {
+            "x": -0.3646556585361319,
+            "y": 0,
+            "z": -0.9311424438277851
+          },
+          "actionId": "aren-walk",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 85,
+          "maxVitality": 85,
+          "renderVariantId": "actor-yara-hero",
+          "sockets": {
+            "root": {
+              "x": -58,
+              "y": 0,
+              "z": -20
+            },
+            "head": {
+              "x": -58,
+              "y": 1.5,
+              "z": -20
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false
+        },
+        "target": {
+          "id": "canopy-howler",
+          "archetypeId": "canopy-howler",
+          "species": "howler-monkey",
+          "allegiance": "wild",
+          "position": {
+            "x": -46,
+            "y": 0,
+            "z": -26
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "facing": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "actionId": "wild-crown:actor-idle",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 100,
+          "maxVitality": 100,
+          "ferocity": 100,
+          "renderVariantId": "actor-thornback-howler",
+          "sockets": {
+            "root": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            },
+            "head": {
+              "x": -46,
+              "y": 1.5,
+              "z": -26
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false,
+          "mark": {
+            "sourceId": "vara__party_companion",
+            "remainingTicks": 275,
+            "landing": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            }
+          }
+        },
+        "wheel": {
+          "open": false,
+          "selectedSector": null,
+          "tokens": 2,
+          "target": null,
+          "companion": {
+            "companionId": "vara",
+            "name": "Vara",
+            "commands": []
+          }
+        },
+        "bundle": "http://127.0.0.1:5218/assets/main-1bL2ASaL.js",
+        "failed": null,
+        "error": null
+      },
+      "completed": {
+        "screen": "dialogue",
+        "completed": [
+          "prologue:hear-roars",
+          "prologue:tend-vara",
+          "prologue:receive-sky",
+          "prologue:take-staff",
+          "prologue:cleanse-boar",
+          "prologue:open-gate",
+          "fallen-scout:tend-vara",
+          "fallen-scout:mark-threat",
+          "fallen-scout:answer-warning"
+        ],
+        "quests": [
+          "prologue",
+          "fallen-scout"
+        ],
+        "player": {
+          "id": "aren",
+          "archetypeId": "aren",
+          "species": "human",
+          "allegiance": "player",
+          "position": {
+            "x": -48.70888293739162,
+            "y": 0,
+            "z": -25.973146830930354
+          },
+          "velocity": {
+            "x": 3.2956764856206178,
+            "y": 0,
+            "z": -2.306973539934347
+          },
+          "facing": {
+            "x": 0.8192319205190405,
+            "y": 0,
+            "z": -0.5734623443633284
+          },
+          "actionId": "aren-walk",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 85,
+          "maxVitality": 85,
+          "renderVariantId": "actor-yara-hero",
+          "sockets": {
+            "root": {
+              "x": -58,
+              "y": 0,
+              "z": -20
+            },
+            "head": {
+              "x": -58,
+              "y": 1.5,
+              "z": -20
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false
+        },
+        "target": {
+          "id": "canopy-howler",
+          "archetypeId": "canopy-howler",
+          "species": "howler-monkey",
+          "allegiance": "wild",
+          "position": {
+            "x": -46,
+            "y": 0,
+            "z": -26
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "facing": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "actionId": "wild-crown:actor-idle",
+          "phase": "idle",
+          "normalizedTime": 0,
+          "vitality": 100,
+          "maxVitality": 100,
+          "ferocity": 100,
+          "renderVariantId": "actor-thornback-howler",
+          "sockets": {
+            "root": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            },
+            "head": {
+              "x": -46,
+              "y": 1.5,
+              "z": -26
+            }
+          },
+          "interactionRequirements": [],
+          "visible": true,
+          "downed": false,
+          "possessed": false,
+          "weakPointExposed": false,
+          "mark": {
+            "sourceId": "vara__party_companion",
+            "remainingTicks": 252,
+            "landing": {
+              "x": -46,
+              "y": 0,
+              "z": -26
+            }
+          }
+        },
+        "bundle": "http://127.0.0.1:5218/assets/main-1bL2ASaL.js",
+        "failed": null,
+        "error": null
+      }
+    }
+  },
+  "inputs": [
+    "Native E at Vara",
+    "Native C and manual Vara party selection",
+    "Native WASD approach",
+    "Native R hold, pointer hover Mark Weakness, R release",
+    "Native A to face away until real warning, D to turn toward same threat"
+  ],
+  "screenshots": [
+    "scout-equip-hint-after-r9.png",
+    "scout-command-hint-after-r9.png",
+    "scout-wheel-mark-available-after-r9.png",
+    "scout-mark-completed-after-r9.png",
+    "scout-warning-actual-target-after-r9.png",
+    "scout-lesson-unblocked-after-r9.png"
+  ],
+  "limits": [
+    "Proves The Fallen Scout progression; does not bypass remaining chapter exit requirements or claim a new full campaign run.",
+    "The first 16-event guidance fixture pre-earned optional scout semantics and was not evidence of this lesson.",
+    "Only the coordinator-owned isolated browser/profile was used. Earlier endpoint loss and menu/focus-selector retries were not game progression evidence. Final acceptance was replayed on the final bundle."
+  ]
+}

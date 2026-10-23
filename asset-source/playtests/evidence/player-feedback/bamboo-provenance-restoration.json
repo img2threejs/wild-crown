@@ -1,0 +1,60 @@
+{
+  "scope": "Authentic missing provenance restored byte-for-byte from existing sibling worktree. No runtime mesh, manifest, evidenceStatus, productionAcceptance, provider generation or credit spend changed.",
+  "ledger": {
+    "path": "asset-source/generated/bamboo-tripo-log.jsonl",
+    "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/bamboo-tripo-log.jsonl",
+    "rows": 53,
+    "bytes": 13725,
+    "sha256": "ca1302119aa776772f81b26423132f7f446ee2335943896070346bca142fc314"
+  },
+  "concepts": [
+    {
+      "path": "asset-source/generated/prop-bamboo-grove-cluster-concept-01/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/prop-bamboo-grove-cluster-concept-01/result.json",
+      "bytes": 549,
+      "sha256": "057cbd0321113ea373e6b35adc9a2136e513d0e21cc947e074ac4051fda484c9"
+    },
+    {
+      "path": "asset-source/generated/prop-bamboo-grove-cluster-concept-02/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/prop-bamboo-grove-cluster-concept-02/result.json",
+      "bytes": 553,
+      "sha256": "6e9fab895f0d1fc2c9cf38c8cee035ca2afc29fbd66a9952647d8996606b6b33"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-melee-concept-01/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-melee-concept-01/result.json",
+      "bytes": 543,
+      "sha256": "53283cdeb108960de451e4e6924a18c5abd8343081db6f8732b5b8b6aceb419b"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-melee-concept-02/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-melee-concept-02/result.json",
+      "bytes": 547,
+      "sha256": "7a4af9a576b14e60b6e5abfe6b6c3ba4d5cbd9e635f648e919ab580da8b81662"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-ranged-concept-01/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-ranged-concept-01/result.json",
+      "bytes": 547,
+      "sha256": "6f06d54bc3c5d589359473748a2e6f6a12fe1b6e2f499cb183b6d3c35ed22f73"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-ranged-concept-02/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-ranged-concept-02/result.json",
+      "bytes": 551,
+      "sha256": "18744e7b6fd26ff9b34c2d82560618b6aaae12c1d849e7cebe394e17d323e0ab"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-ranged-concept-03/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-ranged-concept-03/result.json",
+      "bytes": 551,
+      "sha256": "bec149c8d63fb24cfda264c088e1d0c97040267f9c0d405182eceb2d11bcdc2b"
+    },
+    {
+      "path": "asset-source/generated/actor-camp-hunter-ranged-concept-04/result.json",
+      "source": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-131-monster-boss-remake/asset-source/generated/actor-camp-hunter-ranged-concept-04/result.json",
+      "bytes": 551,
+      "sha256": "6f5be8384fca0b622e2a1aab46683cd57e63846be91fff4dc216006598f70f72"
+    }
+  ]
+}

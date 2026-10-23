@@ -1,0 +1,311 @@
+{
+  "startedAt": "2026-10-22T14:08:57.401Z",
+  "surface": "built-preview",
+  "url": "http://127.0.0.1:5214/",
+  "heroId": "aren",
+  "steps": [
+    {
+      "step": "enter-built-preview",
+      "url": "http://127.0.0.1:5214/",
+      "observed": {
+        "landedUrl": "http://127.0.0.1:5214/",
+        "landedScreen": "title",
+        "servedFromBuiltPreview": true,
+        "moduleScripts": [
+          "/assets/main-_RbZxzXD.js"
+        ],
+        "servesBuiltBundle": true
+      }
+    },
+    {
+      "step": "title",
+      "url": "http://127.0.0.1:5214/",
+      "screen": "title",
+      "headings": [
+        "WildCrown"
+      ],
+      "visibleActionNames": [
+        "new-game",
+        "continue",
+        "load-screen",
+        "settings",
+        "credits"
+      ],
+      "observed": {
+        "isTitle": true,
+        "hasNewGame": true,
+        "hasContinue": true,
+        "hasLoadScreen": true,
+        "hasSettings": true,
+        "hasCredits": true,
+        "hasDevModeEntry": false,
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+        "bannerVisible": true
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-01-title.png"
+    },
+    {
+      "step": "dev-query-ignored",
+      "attempted": true,
+      "observed": {
+        "url": "http://127.0.0.1:5214/?assetPlaytest=greenwake&devFixtures=true&chapters=candidate",
+        "screen": "title",
+        "visibleActionNames": [
+          "new-game",
+          "continue",
+          "load-screen",
+          "settings",
+          "credits"
+        ],
+        "isTitle": true,
+        "hasDevModeEntry": false,
+        "hasSelectMapEntry": false,
+        "hasStartTrainingEntry": false,
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED"
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-02-dev-query-ignored.png"
+    },
+    {
+      "step": "hero-select",
+      "screen": "hero-select",
+      "headings": [
+        "Choose your hero"
+      ],
+      "heroIds": [
+        "aren",
+        "yara",
+        "vesper",
+        "sakda"
+      ],
+      "heroNames": [
+        "Aren",
+        "Yara",
+        "Vesper",
+        "Sakda"
+      ],
+      "heroSelectCopy": "Your journey begins in the Prologue · Your companion joins you later, when the story earns them.",
+      "beginLabels": [
+        "Begin with Aren"
+      ],
+      "observed": {
+        "isHeroSelect": true,
+        "heroCount": 4,
+        "heroIds": [
+          "aren",
+          "yara",
+          "vesper",
+          "sakda"
+        ],
+        "heroNames": [
+          "Aren",
+          "Yara",
+          "Vesper",
+          "Sakda"
+        ],
+        "companionSectionPresent": false,
+        "companionChoices": [],
+        "mentionsPrologue": true,
+        "heroSelectCopy": "Your journey begins in the Prologue · Your companion joins you later, when the story earns them.",
+        "beginLabels": [
+          "Begin with Aren"
+        ],
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+        "bannerVisible": true
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-03-hero-select.png"
+    },
+    {
+      "step": "hero-focus",
+      "observed": {
+        "heroPresent": true,
+        "heroIds": [
+          "aren",
+          "yara",
+          "vesper",
+          "sakda"
+        ],
+        "beginLabels": [
+          "Begin with Aren"
+        ],
+        "selectedHeroLabel": "Begin with Aren"
+      }
+    },
+    {
+      "step": "map-intro",
+      "screen": "map-intro",
+      "region": "greenwake",
+      "chapter": "Prologue",
+      "beats": [
+        "Every creature in the forest is roaring at once, and not one of them is roaring at you.",
+        "A harpy eagle has fallen with a fragment of Heartroot in her talons. The Warden Staff is waiting.",
+        "Something beneath Erya is waking. The animals are fleeing it, not each other."
+      ],
+      "observed": {
+        "isMapIntro": true,
+        "region": "greenwake",
+        "chapter": "Prologue",
+        "beatCount": 3,
+        "mentionsPrologue": true,
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED"
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-04-map-intro.png"
+    },
+    {
+      "step": "establishing-shot",
+      "observed": {
+        "isShot": true,
+        "region": null,
+        "chapter": ""
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-05-establishing-shot.png"
+    },
+    {
+      "step": "authored-opening-dialogue",
+      "observed": {
+        "screen": "dialogue",
+        "skippedThroughRealControl": true
+      }
+    },
+    {
+      "step": "gameplay-hud",
+      "screen": "game",
+      "hudGroups": [
+        {
+          "group": "hero",
+          "expanded": "true"
+        },
+        {
+          "group": "objective",
+          "expanded": "true"
+        },
+        {
+          "group": "skills",
+          "expanded": "true"
+        }
+      ],
+      "hudToggleGroups": [
+        "hero",
+        "objective",
+        "skills"
+      ],
+      "objectiveTitle": "Hear the night of a thousand roars",
+      "objectiveQuest": "The Night of a Thousand Roars",
+      "controlsHint": "W A S D / ARROWS MOVE · SHIFT RUN · F DIVE · SPACE ×2 DOUBLE JUMP · PAUSE ESC",
+      "canvas": {
+        "present": true,
+        "className": "wc-world__canvas",
+        "width": 1080,
+        "height": 675,
+        "clientWidth": 1440,
+        "clientHeight": 900,
+        "visible": true
+      },
+      "pixels": {
+        "present": true,
+        "readable": true,
+        "method": "drawImage-2d-probe@raf",
+        "canvasWidth": 1080,
+        "canvasHeight": 675,
+        "sampledPixels": 4096,
+        "nonBlackPixels": 4096,
+        "nonBlackRatio": 1,
+        "meanBrightness": 65.19,
+        "distinctColourBuckets": 103,
+        "firstAttemptNonBlackRatio": 0
+      },
+      "observed": {
+        "isGame": true,
+        "hudGroupCount": 3,
+        "hudGroups": [
+          {
+            "group": "hero",
+            "expanded": "true"
+          },
+          {
+            "group": "objective",
+            "expanded": "true"
+          },
+          {
+            "group": "skills",
+            "expanded": "true"
+          }
+        ],
+        "hudToggleGroups": [
+          "hero",
+          "objective",
+          "skills"
+        ],
+        "objectivePresent": true,
+        "objectiveTitle": "Hear the night of a thousand roars",
+        "objectiveQuest": "The Night of a Thousand Roars",
+        "controlsHint": "W A S D / ARROWS MOVE · SHIFT RUN · F DIVE · SPACE ×2 DOUBLE JUMP · PAUSE ESC",
+        "canvasPresent": true,
+        "canvasClass": "wc-world__canvas",
+        "canvasSize": [
+          1080,
+          675
+        ],
+        "canvasVisible": true,
+        "nativePixelsDrawn": true,
+        "nonBlackRatio": 1,
+        "meanBrightness": 65.19,
+        "distinctColourBuckets": 103,
+        "inputHostFocused": true,
+        "activeElementLabel": "Game input focus",
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+        "bannerVisible": true
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-06-gameplay.png"
+    },
+    {
+      "step": "gameplay-input",
+      "observed": {
+        "inputRan": true,
+        "error": null,
+        "meanBrightnessBefore": 65.22,
+        "meanBrightnessAfter": 0.02,
+        "meanBrightnessDelta": 65.2,
+        "distinctColourBucketsBefore": 108,
+        "distinctColourBucketsAfter": 1,
+        "screenAfterInput": "pause",
+        "inputHostFocusedAfterInput": false,
+        "activeElementAfterInput": "hud-toggle-skills",
+        "objectiveStillPresent": false
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-07-gameplay-after-input.png"
+    },
+    {
+      "step": "pause",
+      "screen": "game",
+      "visibleActionNames": [
+        "hud-toggle",
+        "hud-toggle",
+        "hud-toggle"
+      ],
+      "pauseHudToggles": [],
+      "observed": {
+        "isPause": false,
+        "hasResume": false,
+        "hasReturnToTitle": false,
+        "hasHubServices": false,
+        "hudPanelsGroupPresent": false,
+        "pauseHudToggleCount": 0,
+        "pauseHudToggleGroups": [],
+        "pauseHudTogglePressed": [],
+        "pauseHudToggleHeights": [],
+        "activeElementLabel": "Game input focus",
+        "banner": "CANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED"
+      },
+      "screenshot": "/Users/hoainho/Document/Personal/wild-crown/wild-crown-worktrees/task-134-hero-pose-collision/asset-source/playtests/evidence/player-feedback/after-built-aren-08-pause.png"
+    }
+  ],
+  "limitations": [
+    "The built bundle exposes no app observer: this probe reads only the rendered DOM and the canvas pixels.",
+    "No source-module or window.__feedbackApp access is used, so no internal state (position, director, save payload) is asserted.",
+    "This scenario starts a real owned New Game; the application writes its candidate run. The coordinator separately records created IDs for narrow cleanup.",
+    "Native GLB asset quality, animation correctness and reference-hardware performance are NOT qualified by this probe.",
+    "Canvas pixels are sampled through a 2D probe; a WebGL context is never created or touched by the probe.",
+    "A how-to-play card was present and dismissed by the probe."
+  ],
+  "finishedAt": "2026-10-22T14:09:28.609Z"
+}

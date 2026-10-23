@@ -1,0 +1,18 @@
+{
+  "source": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+  "sourceSha256": "75e1253e00dd376af56fd3db8d242cacfa65f4d8dd779a1da4243209ca316ef3",
+  "joint": "repair::Jaw",
+  "parent": "tripo::Head_2",
+  "pivot": [
+    0.33,
+    0.4,
+    0.002
+  ],
+  "affectedVertices": 3047,
+  "fullyAssignedVertices": 2312,
+  "maximumDiscardedInfluence": 0.00806030612679487,
+  "maximumBindPositionError": 2.982059063785452e-7,
+  "preserved": "Positions, normals, UVs, indices, textures, materials, existing joints and clips. Only lower-muzzle skin weights and the added jaw joint/inverse bind matrix differ.",
+  "output": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion-rig.glb",
+  "sha256": "5721228d98c5458ebfa1f393fad5a461a9f621c861b36ddd9b53c31c43593141"
+}

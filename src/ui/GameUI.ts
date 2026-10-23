@@ -81,6 +81,8 @@ export interface GameUIInstance {
 }
 
 type Screen = GameViewModel['screen'];
+/** The three independently collapsible HUD groups. */
+type HudGroup = 'hero' | 'objective' | 'skills';
 
 const REGION_ORDER: readonly RegionId[] = [
   'whispering-canopy', 'blood-bamboo-valley', 'the-grove', 'greenwake',
@@ -103,7 +105,7 @@ const speakerName: Record<string, string> = {
 /** How a screen enters and leaves: whole scenes cross-fade with staggered content, panels scale over a dimmed backdrop, the HUD only fades. */
 type Motion = 'scene' | 'overlay' | 'hud';
 /** Screens that open as panels over the world or another screen. */
-const OVERLAY_KEYS: Record<string, true> = { pause: true, map: true, journal: true, companions: true, hub: true, settings: true, credits: true, save: true, load: true };
+const OVERLAY_KEYS: Record<string, true> = { pause: true, map: true, journal: true, companions: true, hub: true, settings: true, credits: true, save: true, load: true, 'training-select': true };
 /** Full-bleed scenes whose DOM is patched in place on every update, so their CSS animations never restart. */
 const SCENE_KEYS: Record<string, true> = { loading: true, 'map-intro': true, shot: true };
 /** Outgoing layer exit animation in ms; mirrors `--wc-leave-ms` in ui-motion.css. */
@@ -317,7 +319,8 @@ function gameUiSignature(viewModel: GameViewModel): string {
     viewModel.dialogue, viewModel.dialogueLineIndex, viewModel.choice, viewModel.ending,
     [viewModel.saves.continueSlotId, viewModel.saves.slots.map(slot => [slot.slotId, slot.label, slot.exists, slot.updatedAt, slot.chapter, slot.regionId, slot.scope, slot.heroId, slot.segmentId, slot.checkpointId, slot.autosave])],
     viewModel.session, viewModel.dialogueChoice, viewModel.partyPanel, viewModel.companionProgress, viewModel.chapterAct, viewModel.hasCandidateSaves,
-    viewModel.objectiveHud && [viewModel.objectiveHud.chapterLabel, viewModel.objectiveHud.questTitle, viewModel.objectiveHud.objectiveTitle, viewModel.objectiveHud.counter, viewModel.objectiveHud.interaction,
+    viewModel.training && [viewModel.training.active, viewModel.training.available, viewModel.training.reason, viewModel.training.maps.map(map => [map.id, map.name, map.unlocked, map.reason, map.thumbnailUrl])],
+    viewModel.objectiveHud && [viewModel.objectiveHud.chapterLabel, viewModel.objectiveHud.questTitle, viewModel.objectiveHud.objectiveTitle, viewModel.objectiveHud.counter, viewModel.objectiveHud.interaction, viewModel.objectiveHud.interactionInputHint, viewModel.objectiveHud.guidance, viewModel.objectiveHud.status,
       viewModel.objectiveHud.destination && [viewModel.objectiveHud.destination.label, viewModel.objectiveHud.destination.hint, viewModel.objectiveHud.destination.distanceMeters === null, viewModel.objectiveHud.destination.bearingDegrees === null]],
     viewModel.hub && [viewModel.hub.name, viewModel.hub.stage, viewModel.hub.upgrades.map(u => [u.id, u.learned, u.available, u.requirement]),
       viewModel.hub.memories.map(m => [m.id, m.title, m.lines.map(l => [l.speaker, l.text])]),
@@ -457,6 +460,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   const onPointerDown = (event: PointerEvent) => {
     const target = event.target;
     if (event.button !== 0 || !(target instanceof Element)) return;
+    lastModality = 'pointer';
+    container.dataset.inputModality = 'pointer';
     pointerControl = target.closest<HTMLElement>('button[data-ui-action],input[data-focus-key],select[data-focus-key]');
     releasedPointerControl = null;
   };
@@ -477,13 +482,19 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   let mapPan = { x: 0, y: 0 };
   /** Map screen view: the survey sheet of the current region, or the illustrated world of Erya. */
   let mapView: 'area' | 'world' = 'area';
+  /** Collapsed HUD groups: local to this mount, independent of each other, kept across re-renders and menu transitions. */
+  const hudGroups: Record<HudGroup, boolean> = { hero: true, objective: true, skills: true };
+  /** Which input device the player used last; it decides whether a focused HUD control keeps or yields gameplay focus. */
+  let lastModality: 'pointer' | 'keyboard' | 'gamepad' = 'keyboard';
+  /** The map region the player is inspecting (hover or focus); the detail panel reads it without dispatching travel. */
+  let inspectedRegion: RegionId | null = null;
   const dispatch = (action: UIAction) => options.onAction(action);
   const toolbar = (active: Screen, pause = false) => `
     <nav class="wc-tabs" aria-label="Game menu">
       ${vm?.canOpenWorldPanels ? button('Map', 'map', `aria-current="${active === 'map' ? 'page' : 'false'}"`) : ''}
-      ${vm?.canOpenWorldPanels ? button('Journal', 'journal', `aria-current="${active === 'journal' ? 'page' : 'false'}"`) : ''}
+      ${vm?.canOpenWorldPanels && !vm?.training?.active ? button('Journal', 'journal', `aria-current="${active === 'journal' ? 'page' : 'false'}"`) : ''}
       ${vm?.canOpenWorldPanels ? button('Companions', 'companions', `aria-current="${active === 'companions' ? 'page' : 'false'}"`) : ''}
-      ${vm?.canOpenWorldPanels && vm.hub ? button('Hub', 'open-hub', `aria-current="${active === 'hub' ? 'page' : 'false'}"`) : ''}
+      ${vm?.canOpenWorldPanels && vm.hub && !vm?.training?.active ? button('Hub', 'open-hub', `aria-current="${active === 'hub' ? 'page' : 'false'}"`) : ''}
       ${button('Settings', 'settings', `aria-current="${active === 'settings' ? 'page' : 'false'}"`)}
       ${pause && vm?.canOpenWorldPanels ? button('Resume', 'resume', '', 'wc-action--quiet') : ''}
     </nav>`;
@@ -500,6 +511,15 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     return { quest, objective: quest?.objectives.find(step => step.id === log?.currentObjectiveId) ?? null };
   }
 
+  /**
+   * One collapsible HUD group toggle: a real button with a visible label, `aria-expanded` and `aria-controls`.
+   * It carries its own pointer events so it never clicks through into an attack, and it is focusable by keyboard and gamepad.
+   */
+  const hudToggle = (group: HudGroup, label: string, expanded: boolean): string =>
+    `<button type="button" class="wc-hud__toggle" data-ui-action="hud-toggle" data-hud-group="${group}" data-focus-key="hud-toggle-${group}" aria-expanded="${expanded}" aria-controls="wc-hud-${group}-body" aria-label="${esc(label)}"><span class="wc-hud__toggle-label">${esc(label)}</span><span class="wc-hud__toggle-mark" aria-hidden="true"></span></button>`;
+  const pauseHudToggle = (group: HudGroup, label: string): string =>
+    `<button type="button" class="wc-action wc-hud__toggle" data-ui-action="hud-toggle" data-hud-group="${group}" data-focus-key="hud-toggle-${group}" aria-pressed="${hudGroups[group]}"><span class="wc-hud__toggle-label">${esc(label)}</span><span aria-hidden="true">${hudGroups[group] ? 'Expanded' : 'Collapsed'}</span></button>`;
+
   function playerHud(): string {
     if (!vm) return '';
     const { hud, campaign } = vm;
@@ -513,29 +533,46 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const companions: CompanionId[] = party?.companionId ? [party.companionId] : [];
     const portraitClass = (id: CompanionId) => COMPANIONS.find(x => x.id === id)?.portrait ?? id;
     const hero = heroById(hud.heroId ?? 'aren');
-    return containerScreen('wc-screen--game', `<div class="wc-hud" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}" aria-label="Exploration and combat HUD">
-      <section class="wc-panel wc-vitals" aria-label="${esc(hero.name)}'s resources">
-        <div class="wc-vitals__identity">${heroCrest(hero, 'wc-hero-crest')}<div><div class="wc-vitals__name">${esc(hero.name.toUpperCase())}</div><div class="wc-vitals__title">${esc(hero.title)}</div></div></div>
-        ${meter(playerCopy.hud.vitality, hud.vitality, hud.maxVitality, 'vitality', playerCopy.hud.vitality_description)}
-        ${meter(playerCopy.hud.mana, hud.mana, hud.maxMana, 'mana', playerCopy.hud.mana_description)}
+    // Hero group: collapsed keeps the crest, the name and the vitality bar — the number that decides whether to run.
+    // Mana and Instinct fold away; expanding restores them with their live values.
+    const heroExpanded = hudGroups.hero;
+    const heroIdentity = `<div class="wc-vitals__identity">${heroCrest(hero, 'wc-hero-crest')}<div><div class="wc-vitals__name">${esc(hero.name.toUpperCase())}</div><div class="wc-vitals__title">${esc(hero.title)}</div></div></div>`;
+    const heroVitality = meter(playerCopy.hud.vitality, hud.vitality, hud.maxVitality, 'vitality', playerCopy.hud.vitality_description);
+    const heroRest = `${meter(playerCopy.hud.mana, hud.mana, hud.maxMana, 'mana', playerCopy.hud.mana_description)}
         <p class="wc-mana-value">${Math.floor(hud.mana)} / ${hud.maxMana} <span>${esc(playerCopy.hud.mana_empty)}</span></p>
-        ${meter(playerCopy.hud.instinct, hud.instinct, 100, 'instinct', playerCopy.hud.instinct_description)}
-      </section>
+        ${meter(playerCopy.hud.instinct, hud.instinct, 100, 'instinct', playerCopy.hud.instinct_description)}`;
+    const heroGroup = `<section class="wc-panel wc-vitals wc-hud__group" data-hud-group="hero" data-expanded="${heroExpanded}" aria-label="${esc(hero.name)}'s resources">
+        <div class="wc-vitals__head">${heroIdentity}${hudToggle('hero', 'Hero', heroExpanded)}</div>
+        <div class="wc-vitals__vitality">${heroVitality}</div>
+        <div class="wc-hud__body wc-vitals__body" id="wc-hud-hero-body"${heroExpanded ? '' : ' hidden'}>${heroRest}</div>
+      </section>`;
+    // Skills group: collapsed keeps the ready count; expanded lists every card with its own key, price and reason.
+    const skillsExpanded = hudGroups.skills;
+    const readySkills = hud.skills.filter(skill => skill.available).length;
+    const skillCards = hud.skills.map(skill => `<div class="wc-skill" data-skill="${esc(skill.id)}" data-ready="${skill.available}" aria-disabled="${!skill.available}" title="${esc(skill.label)} — ${esc(skill.reason)} — ${skill.id === 'judgement' ? 'full Instinct' : skill.manaCost + ' mana'}"><div><kbd>${esc(controlBindingLabel(vm!, skill.binding))}</kbd><span>${skillCardCost(skill)}</span></div><strong>${esc(skill.label)}</strong><small>${esc(skill.reason)}</small></div>`).join('');
+    const skillsGroup = `<section class="wc-skill-bar wc-hud__group" data-hud-group="skills" data-expanded="${skillsExpanded}" aria-label="Player skills">
+        ${hudToggle('skills', 'Skills', skillsExpanded)}
+        <div class="wc-skill-bar__summary"${skillsExpanded ? ' hidden' : ''}><span>${readySkills} of ${hud.skills.length} ready</span></div>
+        <div class="wc-skill-bar__body wc-hud__body" id="wc-hud-skills-body"${skillsExpanded ? '' : ' hidden'}>${skillCards}</div>
+      </section>`;
+    return containerScreen('wc-screen--game', `<div class="wc-hud" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}" aria-label="Exploration and combat HUD">
+      ${heroGroup}
       ${boss && !trial ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
       ${encounter ? `<aside class="wc-panel wc-encounter" aria-label="Combat stage"><h2>${esc(encounter.title)}</h2>${encounter.step && !trial ? encounterStepMarkup(vm, encounter.step) : ''}
         ${trial ? `<div class="wc-trial-progress" data-trial-status="${trial.status}"><strong>${trial.complete ? 'All gates open' : `Stage ${trial.stage} / ${trial.totalStages} · Defeat the monster`}</strong>
           ${trial.complete ? `<p>Reach the ${esc(vm.playtestStage?.exitName ?? 'exit')} waystone.</p>` : ''}</div>` : ''}
         ${activeMonster ? `<div class="wc-encounter__monster"><strong>${esc(activeMonster.name)}</strong>${activeMonster.boss || trial?.boss ? BOSS_CHIP : ''}${monsterHealth(activeMonster.name, activeMonster.vitality, activeMonster.maxVitality, Boolean(activeMonster.boss || trial?.boss))}<p title="${esc(activeMonster.skills.join(' · '))}">${esc(activeMonster.skills.join(' · '))}</p></div>` : ''}</aside>` : ''}
       ${vm.hud.target?.weakPointExposed ? `<aside class="wc-panel wc-target-exposure" role="status"><strong>${esc(vm.hud.target.id.toString().replaceAll('-', ' ').toUpperCase())}</strong><span>WEAK POINT EXPOSED</span></aside>` : ''}
-      ${vm.objectiveHud && !boss && !encounter ? objectiveHudMarkup(vm.objectiveHud, controlBindingLabel(vm, 'interact')) : objective && !boss && !encounter ? `<aside class="wc-panel wc-objective"><strong>${esc(quest?.title ?? 'Current objective')}</strong><p>${esc(objective.title)}</p></aside>` : ''}
+      ${vm.objectiveHud && !boss && !encounter ? objectiveHudMarkup(vm.objectiveHud, controlBindingLabel(vm, vm.objectiveHud.interactionInputHint ?? 'interact'), { expanded: hudGroups.objective, toggle: hudToggle('objective', 'Objective', hudGroups.objective) }) : objective && !boss && !encounter ? `<aside class="wc-panel wc-objective wc-hud__group" data-hud-group="objective" data-expanded="${hudGroups.objective}" aria-label="Current objective"><div class="wc-objective__head"><p class="wc-objective__quest"><strong>${esc(quest?.title ?? 'Current objective')}</strong></p>${hudToggle('objective', 'Objective', hudGroups.objective)}</div><p class="wc-objective__title">${esc(objective.title)}</p><div class="wc-hud__body" id="wc-hud-objective-body"${hudGroups.objective ? '' : ' hidden'}>${objective.description ? `<p class="wc-objective__hint">${esc(objective.description)}</p>` : ''}</div></aside>` : ''}
       ${vm.chapterAct?.actTwoNotice ? `<aside class="wc-panel wc-act-notice" role="status"><strong>Act II</strong><p>${esc(vm.chapterAct.actTwoNotice)}</p></aside>` : ''}
       ${vm.wheel ? `<button type="button" class="wc-wheel-open" data-ui-action="wheel-open" data-focus-key="wheel-open" aria-label="Open companion command wheel"><kbd>${esc(controlBindingLabel(vm, 'commandWheel'))}</kbd> Command</button>` : ''}
       ${boss && !encounter ? `<div class="wc-brand-mark">${esc(playerCopy.title.name)}</div>` : ''}
       ${interactionPrompt(vm)}
       ${hud.destination ? `<aside class="wc-panel wc-destination" aria-label="Stage destination"><svg viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${hud.destination.bearingDegrees}deg)"><path d="M12 2 21 21 12 16 3 21Z" fill="currentColor"/></svg><div><strong>${esc(hud.destination.label)}</strong><p>Follow the trail · ${Math.ceil(hud.destination.distanceMeters)} m</p></div></aside>` : ''}
       <div class="wc-party-hud" aria-label="Traveling companions">${companions.map(id => `<div class="wc-party-hud__item"><span class="wc-portrait wc-portrait--${portraitClass(id)}" ${PORTRAIT_ASSETS[id] ? `style="background-image:url('${PORTRAIT_ASSETS[id]}')"` : ''} role="img" aria-label="${esc(COMPANIONS.find(x => x.id === id)?.name ?? id)} portrait"></span><span>${esc(COMPANIONS.find(x => x.id === id)?.name ?? id)}</span></div>`).join('')}</div>
-      <section class="wc-skill-bar" aria-label="Player skills">${hud.skills.map(skill => `<div class="wc-skill" data-skill="${esc(skill.id)}" data-ready="${skill.available}" aria-disabled="${!skill.available}" title="${esc(skill.label)} — ${esc(skill.reason)} — ${skill.id === 'judgement' ? 'full Instinct' : skill.manaCost + ' mana'}"><div><kbd>${esc(controlBindingLabel(vm!, skill.binding))}</kbd><span>${skillCardCost(skill)}</span></div><strong>${esc(skill.label)}</strong><small>${esc(skill.reason)}</small></div>`).join('')}</section>
+      ${skillsGroup}
       ${hubPracticeHudMarkup(vm)}
+      ${trainingHudMarkup(vm)}
       ${controlsHint ? `<span class="wc-controls-hint">${esc(controlsHint)}</span>` : ''}
       ${vm.tutorial ? tutorialMarkup(vm, vm.tutorial) : ''}
     </div>`);
@@ -573,26 +610,33 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   function heroSelectState(): string {
     if (!vm) return '';
     const selection = vm?.playtestSelection;
-    const chapters = vm?.session?.kind === 'chapters';
-    if (!selection && !chapters) return '';
+    // Both `chapters` and `production` are the campaign; only a DEV fixture may pick a companion.
+    const campaign = vm?.session?.kind === 'chapters' || vm?.session?.kind === 'production';
+    if (!selection && !campaign) return '';
     const map = selection?.maps.find(item => item.id === selection.selectedMapId);
     const hero = heroById(heroFocus);
     const skill = heroSkillIndex === null ? undefined : hero.skills[heroSkillIndex];
+    const devFixture = vm.session?.devModes === true && !campaign;
     const companionId = vm.settings.heroCompanions[hero.id];
     const companion = COMPANIONS.find(candidate => candidate.id === companionId)!;
     const support = COMPANION_SPECIALIZATIONS[companionId];
-    return containerScreen('wc-hero-select', `<div class="wc-hero-select__frame" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}">
-      <header class="wc-hero-select__head"><h1 class="wc-hero-select__title">Choose your hero &amp; companion</h1><p>${esc(chapters ? 'Candidate Journey · Act I' : map?.name ?? '')} · One hero, one companion. Each hero remembers their own choice.</p></header>
-      <div class="wc-hero-rosters"><nav class="wc-hero-roster" aria-label="Heroes">${HEROES.map(candidate => `<button type="button" class="wc-hero-pick" data-ui-action="hero-focus" data-hero="${candidate.id}" data-focus-key="hero-focus-${candidate.id}" aria-pressed="${candidate.id === hero.id}" style="--wc-hero-accent:${esc(candidate.accent)}">
-        ${heroCrest(candidate, 'wc-hero-pick__portrait')}<span class="wc-hero-pick__text"><strong>${esc(candidate.name)}</strong><span>${esc(candidate.title)}</span><span>${esc(candidate.role)}</span></span></button>`).join('')}</nav>
-      <section class="wc-hero-companion" aria-label="Companion for ${esc(hero.name)}"><h2>Companion <span>1 / 1</span></h2>
+    const companionSection = devFixture
+      ? `<section class="wc-hero-companion" aria-label="Companion for ${esc(hero.name)}"><h2>Companion <span>1 / 1</span></h2>
         <div class="wc-hero-companion__choices">${COMPANIONS.map(candidate => {
           const role = COMPANION_SPECIALIZATIONS[candidate.id];
           return `<button type="button" class="wc-companion-pick" data-ui-action="select-hero-companion" data-hero="${hero.id}" data-companion="${candidate.id}" data-element="${role.element}" data-focus-key="hero-companion-${candidate.id}" aria-pressed="${candidate.id === companionId}" aria-label="${esc(candidate.name + ' · ' + role.role + ' · ' + role.element)}"><span class="wc-portrait wc-companion-pick__portrait" style="background-image:url('${PORTRAIT_ASSETS[candidate.id]}')" aria-hidden="true"></span><strong>${esc(candidate.name)}</strong><small>${esc(role.role)}</small></button>`;
         }).join('')}</div>
         <p class="wc-hero-companion__selected" aria-live="polite"><strong>${esc(companion.name)}</strong> · ${esc(support.role)} <span class="wc-element" data-element="${support.element}">${esc(support.element)}</span></p>
-        <p class="wc-hero-companion__note">Saved for ${esc(hero.name)}. Replace outside encounters.</p>
-      </section></div>
+        <p class="wc-hero-companion__note">DEV fixture · saved for ${esc(hero.name)}.</p>
+      </section>`
+      : '';
+    const beginLabel = devFixture ? `Begin with ${hero.name} & ${companion.name}` : `Begin with ${hero.name}`;
+    const beginAttrs = devFixture ? `data-hero="${hero.id}" data-companion="${companionId}"` : `data-hero="${hero.id}"`;
+    return containerScreen('wc-hero-select', `<div class="wc-hero-select__frame" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}">
+      <header class="wc-hero-select__head"><h1 class="wc-hero-select__title">${devFixture ? 'Choose your hero &amp; companion' : 'Choose your hero'}</h1><p>${esc(campaign ? 'Your journey begins in the Prologue' : map?.name ?? '')}${devFixture ? ' · DEV fixture · one hero, one companion' : ' · Your companion joins you later, when the story earns them.'}</p></header>
+      <div class="wc-hero-rosters"><nav class="wc-hero-roster" aria-label="Heroes">${HEROES.map(candidate => `<button type="button" class="wc-hero-pick" data-ui-action="hero-focus" data-hero="${candidate.id}" data-focus-key="hero-focus-${candidate.id}" aria-pressed="${candidate.id === hero.id}" style="--wc-hero-accent:${esc(candidate.accent)}">
+        ${heroCrest(candidate, 'wc-hero-pick__portrait')}<span class="wc-hero-pick__text"><strong>${esc(candidate.name)}</strong><span>${esc(candidate.title)}</span><span>${esc(candidate.role)}</span></span></button>`).join('')}</nav>
+      ${companionSection}</div>
       <div class="wc-hero-stage" role="group" aria-label="Live 3D preview of ${esc(hero.name)}">
         <div class="wc-preview-host wc-hero-stage__view" data-preview-host data-hero-preview="true"><div class="wc-preview-empty" data-preview-placeholder>Bringing ${esc(hero.name)} forward…</div></div>
         <p class="wc-hero-stage__caption"><span aria-live="polite">${esc(skill ? 'Showing ' + skill.name : hero.name + ' at rest')}</span><span>Drag to turn</span></p>
@@ -604,7 +648,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
         <div class="wc-hero-tabs" role="tablist" aria-label="${esc(hero.name)} details">${HERO_TABS.map(tab => `<button type="button" role="tab" id="wc-hero-tab-${tab.id}" class="wc-hero-tab" data-ui-action="hero-tab" data-tab="${tab.id}" data-focus-key="hero-tab-${tab.id}" aria-selected="${tab.id === heroTab}" aria-controls="wc-hero-panel">${esc(tab.label)}</button>`).join('')}</div>
         <div id="wc-hero-panel" class="wc-hero-panel" data-slide="${heroPanelSlide}" role="tabpanel" aria-labelledby="wc-hero-tab-${heroTab}" tabindex="0">${heroPanel(hero)}</div>
       </article>
-      <footer class="wc-hero-select__foot">${button(chapters ? 'Back' : 'Back to Maps', 'map-select')}<p>Arrow keys browse · Enter chooses · Esc goes back</p>${button(`Begin with ${hero.name} & ${companion.name}`, 'select-hero', `data-hero="${hero.id}" data-companion="${companionId}"`, 'wc-action--primary')}</footer>
+      <footer class="wc-hero-select__foot">${button(campaign ? 'Back' : 'Back to Maps', campaign ? 'return-title' : 'map-select')}<p>Arrow keys browse · Enter chooses · Esc goes back</p>${button(beginLabel, 'select-hero', beginAttrs, 'wc-action--primary')}</footer>
     </div>`);
   }
 
@@ -624,8 +668,12 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const progress = typeof loading.progress === 'number' ? clamp(loading.progress) : null;
     // Saving and loading campaign slots are rejected in local playtests, so recovery never offers them there.
     const playtest = Boolean(vm!.playtestSelection);
+    // A failed return from practice is recovered by retrying that return: an import or a fresh run would
+    // replace the journey instead of restoring it.
+    const trainingReturn = loading.operationId === 'training-return';
     const actionMarkup = loadingErrorActions(error, loading.operationId, Boolean(vm!.campaign) && !playtest)
       .filter(action => !playtest || action.type !== 'load-screen')
+      .filter(action => !trainingReturn || action.type === 'retry-load')
       .map(action => {
         if (action.type === 'retry-load') return button('Retry', 'retry-load', 'data-operation-id="' + esc(action.operationId) + '"', 'wc-action--primary');
         if (action.type === 'save-screen') return button('Save Game', 'save-screen');
@@ -668,6 +716,12 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const map = vm?.playtestSelection?.maps.find(item => item.id === vm?.playtestSelection?.selectedMapId);
     const chapterContext = vm?.session?.kind === 'chapters' ? [vm.session.saveScope ? scopeLabel(vm.session.saveScope) : '', segmentLabel(vm.session.segmentId)].filter(Boolean).join(' · ') : '';
     const context = hero ? `<p class="wc-pause__context">${heroCrest(hero, 'wc-hero-crest')}<span>${esc([map?.name, chapterContext, `${hero.name}, ${hero.title}`].filter(Boolean).join(' · '))}</span></p>` : '';
+    const hudOptions = `<div role="group" aria-label="HUD panels"><p class="wc-meta">HUD panels</p><div class="wc-actions">${pauseHudToggle('hero', 'Hero details')}${pauseHudToggle('objective', 'Objective details')}${pauseHudToggle('skills', 'Skill details')}</div></div>`;
+    // During practice the journey is untouched: no saves, no hub, no story — only the way back.
+    if (vm?.training?.active) {
+      const card = `<section class="wc-panel wc-sheet wc-state__card wc-pause--training"><h1 class="wc-heading">Paused · Training Grounds</h1>${context}<p class="wc-state__copy">This is practice. Your journey, its saves and its history are unchanged.</p><div class="wc-actions">${button('Resume', 'resume', '', 'wc-action--primary')}${button('Return to Journey', 'leave-training')}</div>${hudOptions}<p class="wc-pause__note" id="wc-pause-training">Leaving practice returns you to the exact moment you left your journey.</p></section>`;
+      return containerScreen('wc-state wc-pause', card);
+    }
     // Local asset playtests never write campaign saves, so the controls stay visible but disabled, with the reason.
     const savesAvailable = !vm?.playtestSelection;
     const saveControls = savesAvailable
@@ -675,8 +729,41 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       : `${button('Save Game', 'save-screen', 'disabled aria-describedby="wc-pause-saves"')}${button('Load Game', 'load-screen', 'disabled aria-describedby="wc-pause-saves"')}`;
     const checkpointNote = vm?.session?.kind === 'chapters' && vm.session.checkpointName ? `<p class="wc-pause__note" id="wc-pause-checkpoint">Saved at ${esc(vm.session.checkpointName)}. Unfinished encounters restart here.</p>` : '';
     const savesNote = (savesAvailable ? '' : '<p class="wc-pause__note" id="wc-pause-saves">Local asset playtests do not write campaign saves, so saving and loading are unavailable here.</p>') + checkpointNote;
-    const card = `<section class="wc-panel wc-sheet wc-state__card"><h1 class="wc-heading">Paused</h1>${context}<p class="wc-state__copy">The world holds still until you return.</p><div class="wc-actions">${button('Resume', 'resume', '', 'wc-action--primary')}${vm?.hub ? button('Hub Services', 'open-hub') : ''}${saveControls}${button('Return to Title', 'title-screen')}</div>${savesNote}</section>`;
+    // The Training Grounds entry carries the authoritative reason: unavailable entries explain themselves instead of vanishing.
+    const training = vm?.training;
+    const trainingEntry = training
+      ? `<div class="wc-pause__training"><button type="button" class="wc-action" data-ui-action="open-training" data-focus-key="open-training"${training.available ? '' : ' disabled aria-describedby="wc-pause-training-reason"'}>Training Grounds</button><p class="wc-pause__note" id="wc-pause-training-reason">${esc(training.available ? 'Practice in a copy of your journey. Nothing you do there changes the campaign.' : training.reason ?? 'Training Grounds are not available right now.')}</p></div>`
+      : '';
+    const card = `<section class="wc-panel wc-sheet wc-state__card"><h1 class="wc-heading">Paused</h1>${context}<p class="wc-state__copy">The world holds still until you return.</p><div class="wc-actions">${button('Resume', 'resume', '', 'wc-action--primary')}${vm?.hub ? button('Hub Services', 'open-hub') : ''}${saveControls}${button('Return to Title', 'title-screen')}</div>${trainingEntry}${hudOptions}${savesNote}</section>`;
     return containerScreen('wc-state wc-pause', card);
+  }
+
+  /**
+   * Training Grounds selector: the maps the journey has already earned, each with its reason when it is still locked.
+   * No hero and no free companion are chosen here — the practice run uses the journey's own hero and earned party.
+   */
+  function trainingSelectState(): string {
+    const training = vm?.training;
+    if (!training) return '';
+    const regionName = (regionId: RegionId) => vm?.map.regions.find(region => region.id === regionId)?.name ?? regionId.replaceAll('-', ' ');
+    const maps = training.maps.map(map => {
+      const thumb = map.thumbnailUrl
+        ? `<figure class="wc-training__thumb" style="background-image:url('${esc(map.thumbnailUrl)}')" role="img" aria-label="${esc(map.name)} illustration"></figure>`
+        : `<figure class="wc-training__thumb wc-training__thumb--placeholder" role="img" aria-label="${esc(map.name)} illustration"></figure>`;
+      const start = map.unlocked
+        ? `<button type="button" class="wc-action wc-action--primary" data-ui-action="start-training" data-map="${esc(map.id)}" data-focus-key="training-start-${esc(map.id)}">Start practice</button>`
+        : '';
+      return `<li class="wc-training__map" data-unlocked="${map.unlocked}">${thumb}<div class="wc-training__body"><h3 class="wc-training__name">${esc(map.name)}</h3><p class="wc-meta">${esc(regionName(map.regionId))}</p>${map.unlocked ? '' : `<p class="wc-training__reason">${esc(map.reason ?? 'Not yet earned in your journey.')}</p>`}${start}</div></li>`;
+    }).join('');
+    const none = training.maps.length ? '' : '<p class="wc-meta">No practice maps have been earned yet.</p>';
+    const card = `<section class="wc-panel wc-sheet wc-state__card wc-training__card"><h1 class="wc-heading">Training Grounds</h1><p class="wc-state__copy">Practice in an isolated copy of your journey. Nothing you do here changes the campaign, its saves or its history.</p><ul class="wc-training__maps">${maps}</ul>${none}<div class="wc-actions">${button('Cancel', 'close', '', 'wc-action--quiet')}</div></section>`;
+    return containerScreen('wc-state wc-training-select', card);
+  }
+
+  /** The practice banner in the world HUD: it names the session honestly and offers the way back. */
+  function trainingHudMarkup(viewModel: GameViewModel): string {
+    if (!viewModel.training?.active) return '';
+    return `<aside class="wc-training-hud" aria-label="Training Grounds session" role="status"><span class="wc-label">PRACTICE</span><strong>Training Grounds</strong><small>Your journey is unchanged.</small></aside>`;
   }
 
   function mapState(): string {
@@ -685,21 +772,35 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const view = area ? mapView : 'world';
     const log = vm.questLog;
     const current = log?.active.find(entry => entry.id === log.currentQuestId);
-    const destination = vm.map.regions.find(region => region.id !== vm!.map.currentRegion && region.unlocked && region.entrances.some(entrance => entrance.unlocked));
+    // During practice the map is read-only: no region offers a route out of the isolated session.
+    const practice = vm.training?.active === true;
+    const destination = practice ? undefined : vm.map.regions.find(region => region.id !== vm!.map.currentRegion && region.unlocked && region.entrances.some(entrance => entrance.unlocked));
+    const destinationEntrance = destination?.entrances.find(entrance => entrance.unlocked);
     const regions = REGION_ORDER.map(id => {
       const region = vm!.map.regions.find(x => x.id === id);
       if (!region) return '';
-      const reachable = region.unlocked && region.entrances.some(entrance => entrance.unlocked);
+      const reachable = !practice && region.unlocked && region.entrances.some(entrance => entrance.unlocked);
       const here = region.id === vm!.map.currentRegion;
-      return `<button class="wc-region-chip" type="button" data-ui-action="travel" data-focus-key="region-${esc(region.id)}" data-region="${esc(region.id)}" data-here="${here}" data-entrance="${esc(region.entrances.find(entrance => entrance.unlocked)?.id ?? '')}" ${reachable ? '' : 'disabled'} aria-label="${esc(region.name)}${here ? ', you are here' : region.unlocked ? '' : ', locked'}" title="${esc(region.name)}">${icon(here ? 'pin' : region.unlocked ? 'exit' : 'lock')}</button>`;
+      // A locked region stays focusable so it can be inspected and explains itself, but it never dispatches travel.
+      const travelAttrs = reachable ? `data-ui-action="travel" data-entrance="${esc(region.entrances.find(entrance => entrance.unlocked)?.id ?? '')}"` : 'aria-disabled="true"';
+      const reason = region.reason ?? (region.unlocked ? '' : 'This region is still closed.');
+      const label = `${region.name}${here ? ', you are here' : region.unlocked ? '' : ', locked'}${reason ? '. ' + reason : ''}`;
+      return `<button class="wc-region-chip" type="button" data-focus-key="region-${esc(region.id)}" data-region="${esc(region.id)}" data-region-chip="true" data-here="${here}" ${travelAttrs} aria-label="${esc(label)}" title="${esc(label)}">${icon(here ? 'pin' : region.unlocked ? 'exit' : 'lock')}</button>`;
     }).join('');
     const sheet = view === 'area' && area
       ? `${areaMapMarkup(area)}${areaLegendMarkup(area)}`
       : `<div class="wc-map-art"><img class="wc-map-art__image" src="${mapArt}" alt="Illustrated world map of Erya with its named regions and Heartroot Hollow beneath the Grove"><div class="wc-map-regions" aria-label="Regions of Erya">${regions}</div></div><ul class="wc-legend" aria-label="Map legend"><li data-kind="current">${icon('pin')}You are here</li><li>${icon('exit')}Reachable region</li><li>${icon('lock')}Locked region</li></ul>`;
     const viewSwitch = area ? `<div class="wc-segmented" role="group" aria-label="Map view">${button('Area', 'map-view', `data-view="area" aria-pressed="${view === 'area'}"`)}${button('World', 'map-view', `data-view="world" aria-pressed="${view === 'world'}"`)}</div>` : '';
+    const inspected = vm.map.regions.find(region => region.id === inspectedRegion) ?? null;
+    const entrances = inspected
+      ? `<ul class="wc-region__entrances">${inspected.entrances.map(entrance => `<li data-unlocked="${entrance.unlocked}"><strong>${esc(entrance.label)}</strong><small>${esc(entrance.unlocked ? 'Open' : entrance.reason ?? 'Unavailable.')}</small></li>`).join('')}</ul>`
+      : '';
+    const regionDetail = `<section class="wc-region" aria-label="Region details" data-region-detail>${inspected
+      ? `<h3 class="wc-region__name">${esc(inspected.name)}</h3><p class="wc-region__state" data-open="${inspected.unlocked}">${esc(inspected.unlocked ? 'Open' : inspected.reason ?? 'This region is still closed.')}</p>${entrances}`
+      : '<p class="wc-meta">Point at a region to read why it is open or closed.</p>'}</section>`;
     return containerScreen('wc-menu', `${wordmark('map')}<div class="wc-menu__body wc-survey">
       <section class="wc-sheet wc-survey__map" aria-labelledby="wc-map-title"><header class="wc-sheet__head"><h1 id="wc-map-title" class="wc-heading">${esc(view === 'area' && area ? area.regionName : 'Erya')}</h1>${area?.player && view === 'area' ? `<p class="wc-meta">You are in <span class="wc-grid-ref">${esc(area.player.grid)}</span></p>` : ''}${viewSwitch}</header>${sheet}</section>
-      <aside class="wc-sheet wc-survey__side">${currentObjectiveMarkup(log, area)}${current ? `<section class="wc-steps-block" aria-label="${esc(current.title)} steps"><h3>${esc(current.title)}</h3>${questStepsMarkup(current, area, vm.trackedObjectiveId, true)}</section>` : ''}${exitsMarkup(vm.chapterAct)}${destination ? button(`Travel to ${esc(destination.name)}`, 'travel', `data-region="${esc(destination.id)}"`, 'wc-action--primary') : ''}</aside>
+      <aside class="wc-sheet wc-survey__side">${currentObjectiveMarkup(log, area)}${current ? `<section class="wc-steps-block" aria-label="${esc(current.title)} steps"><h3>${esc(current.title)}</h3>${questStepsMarkup(current, area, vm.trackedObjectiveId, true)}</section>` : ''}${regionDetail}${exitsMarkup(vm.chapterAct)}${destination && destinationEntrance ? button(`Travel to ${esc(destination.name)}`, 'travel', `data-region="${esc(destination.id)}" data-entrance="${esc(destinationEntrance.id)}"`, 'wc-action--primary') : ''}${practice ? '<p class="wc-map-footer__practice">Practice: the map is read-only while you are in Training Grounds.</p>' : ''}</aside>
       </div><footer class="wc-map-footer"><span>Esc&nbsp; Back</span><span>${view === 'world' ? 'W A S D&nbsp; Pan map' : 'Route follows the trails to your objective'}</span><span>${esc(activeRegionName(vm))}</span></footer>`);
   }
 
@@ -743,6 +844,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const selected = selectedCompanionId();
     const definition = selected ? COMPANIONS.find(item => item.id === selected) : null;
     const abilities = vm.abilities.filter(ability => ability.companionId === selected);
+    const previewAccess = abilities[0];
+    const previewAllowed = previewAccess?.previewAvailable === true;
     const roster = COMPANIONS.map(companion => {
       const role = `${companion.id === party?.companionId ? 'EQUIPPED' : 'RESERVE'} · ${COMPANION_SPECIALIZATIONS[companion.id].role}`;
       return inspectCard(companion, selected === companion.id, role);
@@ -752,10 +855,10 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       <div><h3>${esc(ability.label)}${ability.element ? ` <span class="wc-element" data-element="${ability.element}">${esc(ability.element)}</span>` : ''}</h3><p>${esc(ability.description ?? '')}</p>
       <p class="wc-meta">${esc(ability.automatic ?? '')}</p>
       <p class="wc-skill-status">${ability.tokenCost ? `${ability.tokenCost} command token` : 'Free'} · ${ability.cooldownSeconds ? `${ability.cooldownSeconds}s cooldown` : ability.available ? 'Ready' : esc(ability.reason ?? 'Equip this companion')}</p>
-      <div class="wc-actions"><button type="button" class="wc-action" data-ui-action="preview-skill" data-focus-key="preview-skill-${esc(ability.id)}" data-ability="${esc(ability.id)}" aria-label="Preview ${esc(ability.label)} animation and VFX">Preview animation + VFX</button><button type="button" class="wc-action" data-ui-action="ability" data-focus-key="ability-${esc(ability.id)}" data-ability="${esc(ability.id)}" aria-label="Use ${esc(ability.label)} and return to game" ${ability.available ? '' : 'disabled'}>Use now · return to game</button></div>
+      <div class="wc-actions"><button type="button" class="wc-action" data-ui-action="preview-skill" data-focus-key="preview-skill-${esc(ability.id)}" data-ability="${esc(ability.id)}" aria-label="Preview ${esc(ability.label)} animation and VFX"${previewAllowed ? '' : ' disabled'}>Preview animation + VFX</button><button type="button" class="wc-action" data-ui-action="ability" data-focus-key="ability-${esc(ability.id)}" data-ability="${esc(ability.id)}" aria-label="Use ${esc(ability.label)} and return to game" ${ability.available ? '' : 'disabled'}>Use now · return to game</button></div>
       </div></article>`).join('');
     return containerScreen('wc-menu', `${wordmark('companions')}<div class="wc-companions">
-      <div class="wc-preview-host" data-preview-host data-companion="${esc(selected)}" aria-label="Native companion animation preview"><div class="wc-preview-empty" data-preview-placeholder><strong>${esc(definition?.name ?? selected)}</strong><span>Loading native character…</span></div><p class="wc-preview-caption">Animation preview only · no tokens or story progress spent</p></div>
+      <div class="wc-preview-host" data-preview-host data-companion="${esc(selected)}" aria-label="Native companion animation preview"><div class="wc-preview-empty" data-preview-placeholder><strong>${esc(definition?.name ?? selected)}</strong><span>${esc(previewAllowed ? 'Loading native character…' : previewAccess?.previewReason ?? 'This companion is unavailable.')}</span></div><p class="wc-preview-caption">Animation preview only · no tokens or story progress spent</p></div>
       <aside class="wc-sheet wc-companion-details"><h1 class="wc-heading">Traveling Companions</h1>
       <p>Bring exactly one companion. Each has a distinct support specialty, not a second hero’s damage output. Story choices build Bond independently of roster access.</p>
       <div class="wc-party__grid" aria-label="All companions">${roster}</div>
@@ -802,6 +905,10 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   }
 
   function stageCompleteState(): string {
+    // Practice completion offers the way back; a next map would leave the isolated session.
+    if (vm?.training?.active) {
+      return containerScreen('wc-state wc-outcome wc-stage-complete', `<section class="wc-panel wc-state__card" aria-labelledby="stage-complete-title"><h1 id="stage-complete-title" class="wc-state__title">Practice Complete</h1><p class="wc-outcome__resolution">TRAINING GROUNDS</p><p class="wc-state__copy">Your journey, its saves and its history are unchanged.</p><div class="wc-actions">${button('Return to Journey', 'leave-training', '', 'wc-action--primary')}</div></section>`);
+    }
     const stage = vm?.playtestStage;
     const selection = vm?.playtestSelection;
     const hero = vm ? heroById(vm.hud.heroId ?? 'aren') : null;
@@ -811,6 +918,10 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
   }
 
   function defeatState(): string {
+    // Practice defeat offers the way back, never a new run that would escape the isolated session.
+    if (vm?.training?.active) {
+      return containerScreen('wc-state wc-outcome wc-defeat', `<section class="wc-panel wc-sheet wc-state__card" aria-labelledby="defeat-title"><h1 id="defeat-title" class="wc-state__title">Practice Over</h1><p class="wc-lore">The practice ground is still.</p><p class="wc-state__copy">Your journey and its saves are untouched.</p><div class="wc-actions">${button('Return to Journey', 'leave-training', '', 'wc-action--primary')}</div></section>`);
+    }
     const checkpoint = vm?.session?.kind === 'chapters' ? vm.session.checkpointName : null;
     const retry = checkpoint ? button('Retry from checkpoint', 'retry-checkpoint', '', 'wc-action--primary') : button('Try Again', 'new-game', '', 'wc-action--primary');
     const note = checkpoint ? `<p class="wc-state__copy">Your story progress is kept. Resume at ${esc(checkpoint)}; the unfinished encounter restarts.</p>` : '<p class="wc-state__copy">Take a breath. Find another way through.</p>';
@@ -843,6 +954,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       case 'stage-complete': return stageCompleteState();
       case 'defeat': return defeatState();
       case 'pause': return pauseState();
+      case 'training-select': return trainingSelectState();
       case 'map': return mapState();
       case 'journal': return journalState();
       case 'companions': return companionState();
@@ -862,7 +974,14 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       case 'new-game': return { type: 'new-game', runId: crypto.randomUUID() };
       case 'map-select': return { type: 'map-select' };
       case 'select-map': return buttonElement.dataset.map ? { type: 'select-map', mapId: buttonElement.dataset.map } : null;
-      case 'select-hero': return isHeroId(buttonElement.dataset.hero) && isCompanionId(buttonElement.dataset.companion) ? { type: 'select-hero', heroId: buttonElement.dataset.hero, companionId: buttonElement.dataset.companion, runId: crypto.randomUUID() } : null;
+      case 'select-hero': {
+        const heroId = buttonElement.dataset.hero;
+        if (!isHeroId(heroId)) return null;
+        // The campaign chooses a hero only: the companion is earned in the journey, so it is omitted.
+        const companion = buttonElement.dataset.companion;
+        if (companion !== undefined && !isCompanionId(companion)) return null;
+        return { type: 'select-hero', heroId, ...(companion ? { companionId: companion } : {}), runId: crypto.randomUUID() };
+      }
       case 'select-hero-companion': return isHeroId(buttonElement.dataset.hero) && isCompanionId(buttonElement.dataset.companion) ? { type: 'select-hero-companion', heroId: buttonElement.dataset.hero, companionId: buttonElement.dataset.companion } : null;
       case 'continue': return vm.saves.continueSlotId ? { type: 'continue', slotId: vm.saves.continueSlotId } : null;
       case 'pause': return { type: 'pause' };
@@ -878,6 +997,9 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       case 'settings': return { type: 'open-settings' };
       case 'open-settings': return { type: 'open-settings' };
       case 'open-hub': return vm.hub && vm.canOpenWorldPanels ? { type: 'open-hub' } : null;
+      case 'open-training': return vm.training ? { type: 'open-training' } : null;
+      case 'start-training': return buttonElement.dataset.map ? { type: 'start-training', mapId: buttonElement.dataset.map } : null;
+      case 'leave-training': return { type: 'leave-training' };
       case 'learn-upgrade': {
         const upgradeId = buttonElement.dataset.upgrade;
         if (!upgradeId) return null;
@@ -956,6 +1078,9 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     if (!(target instanceof Element)) return;
     const item = target.closest<HTMLElement>('[data-ui-action]');
     if (!item || item instanceof HTMLButtonElement && (item.disabled || item.getAttribute('aria-disabled') === 'true')) return;
+    // The HUD collapse is local UI state: it applies before the deferred-render ownership, so a view model that
+    // arrived between pointer-down and pointer-up never swallows the toggle.
+    if (item.dataset.uiAction === 'hud-toggle') { toggleHudGroup(item); return; }
     let action: UIAction | null = null;
     let actionResolved = false;
     const endingId = vm?.ending?.id;
@@ -1018,7 +1143,51 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const layer = frontLayer();
     const id = target.closest<HTMLElement>('[data-locate]')?.dataset.locate ?? null;
     for (const marker of layer.querySelectorAll<HTMLElement>('[data-marker]')) marker.toggleAttribute('data-located', marker.dataset.marker === id);
+    // Pointing at a region chip reads that region without dispatching anything: the detail panel is patched in place.
+    const chip = target.closest<HTMLElement>('[data-region-chip]');
+    const regionId = chip?.dataset.region as RegionId | undefined;
+    if (regionId && regionId !== inspectedRegion) {
+      inspectedRegion = regionId;
+      patchRegionDetail();
+    }
   }
+
+  /** Rewrites the map's region detail panel in place, so inspecting a region never reflows the map screen. */
+  function patchRegionDetail(): void {
+    const panel = frontLayer().querySelector<HTMLElement>('[data-region-detail]');
+    if (!panel || !vm) return;
+    const region = vm.map.regions.find(candidate => candidate.id === inspectedRegion) ?? null;
+    if (!region) {
+      panel.innerHTML = '<p class="wc-meta">Point at a region to read why it is open or closed.</p>';
+      return;
+    }
+    const entrances = region.entrances.map(entrance => `<li data-unlocked="${entrance.unlocked}"><strong>${esc(entrance.label)}</strong><small>${esc(entrance.unlocked ? 'Open' : entrance.reason ?? 'Unavailable.')}</small></li>`).join('');
+    panel.innerHTML = `<h3 class="wc-region__name">${esc(region.name)}</h3><p class="wc-region__state" data-open="${region.unlocked}">${esc(region.unlocked ? 'Open' : region.reason ?? 'This region is still closed.')}</p><ul class="wc-region__entrances">${entrances}</ul>`;
+  }
+  /**
+   * Collapses or expands one HUD group. The state is local to this mount and survives every re-render and menu
+   * transition; a pointer toggle hands the focus back to the game so the next Space is a jump, not a stuck button.
+   */
+  function toggleHudGroup(toggle: HTMLElement): void {
+    const group = toggle.dataset.hudGroup;
+    if (group !== 'hero' && group !== 'objective' && group !== 'skills') return;
+    hudGroups[group] = !hudGroups[group];
+    const pointerDriven = lastModality === 'pointer';
+    lastRenderSignature = '';
+    const current = deferredViewModel ?? vm;
+    if (current) render(current);
+    const next = frontLayer().querySelector<HTMLElement>(`[data-focus-key="hud-toggle-${group}"]`);
+    if (next) {
+      next.focus({ preventScroll: current?.screen === 'game' });
+      if (pointerDriven && current?.screen === 'game') {
+        // Gameplay keeps the keyboard: the input host takes the focus back so Space jumps instead of re-toggling.
+        const host = root.closest('.wc-app')?.querySelector<HTMLElement>('.wc-input-host');
+        (host ?? next).blur();
+        if (host) host.focus({ preventScroll: true });
+      }
+    }
+  }
+
   /** Hero-select browsing is UI-local: it re-renders the dossier and drives the live preview, never the run. */
   function browseHero(item: HTMLElement): void {
     if (!vm || vm.screen !== 'hero-select') return;
@@ -1165,7 +1334,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     front = 1 - front;
     frontKey = key;
     const controls = controlsIn(incoming);
-    const target = (focusKey ? controls.find(control => control.dataset.focusKey === focusKey) : null) ?? controls[0] ?? null;
+    const gameplayHost = key === 'game' && !vm?.tutorial ? root.closest('.wc-app')?.querySelector<HTMLElement>('.wc-input-host') : null;
+    const target = gameplayHost ?? (focusKey ? controls.find(control => control.dataset.focusKey === focusKey) : null) ?? controls[0] ?? null;
     target?.focus({ preventScroll: true });
     const index = target ? controls.indexOf(target) : -1;
     focusedIndex = index >= 0 ? index : 0;
@@ -1191,7 +1361,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
 
   function render(next: GameViewModel) {
     if (destroyed) return;
-    const signature = gameUiSignature(next);
+    const signature = gameUiSignature(next) + '|' + hudGroups.hero + '|' + hudGroups.objective + '|' + hudGroups.skills;
     const nextReduced = next.settings.reducedMotion || osReducedMotion;
     patchDestination(frontLayer(), next.hud.destination);
     patchObjectiveDestination(frontLayer(), next.objectiveHud?.destination);
@@ -1259,6 +1429,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       layer.replaceChildren(...staging.childNodes);
     }
     if (!keepPreview) bindPreview();
+    // The map's region detail is read from the inspected region; it is patched in place so inspecting never reflows.
+    if (key === 'map') patchRegionDetail();
     // Map select: hover or focus on a region highlights it and swaps the side panel locally (no dispatch).
     mapSelectCleanup?.();
     mapSelectCleanup = null;
@@ -1284,11 +1456,28 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       // The card freezes play; put the keyboard/gamepad on its Continue button so Enter or A dismisses it.
       const dismiss = frontLayer().querySelector<HTMLElement>('[data-ui-action="dismiss-tutorial"]');
       if (dismiss && document.activeElement !== dismiss) dismiss.focus({ preventScroll: true });
+    } else if (next.screen === 'game' && activeControl?.dataset.uiAction === 'dismiss-tutorial') {
+      root.closest('.wc-app')?.querySelector<HTMLElement>('.wc-input-host')?.focus({ preventScroll: true });
     }
     syncGateNotice();
   }
 
   const escKey = (event: KeyboardEvent) => {
+    lastModality = 'keyboard';
+    container.dataset.inputModality = 'keyboard';
+    // A focused HUD control owns Enter and Space: it activates instead of leaking into the gameplay bindings.
+    if (event.key === 'Enter' || event.key === ' ') {
+      const control = event.target instanceof Element ? event.target.closest<HTMLElement>('.wc-hud__toggle, .wc-interact, .wc-wheel-open') : null;
+      if (control) {
+        // This HUD is redrawn while play continues; activate on keydown before a cooldown redraw can replace the button.
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.repeat) return;
+        if (control.dataset.uiAction === 'hud-toggle') toggleHudGroup(control);
+        else control.click();
+        return;
+      }
+    }
     const remapInput = event.target instanceof HTMLInputElement && event.target.dataset.remap ? event.target : null;
     if (remapInput && event.key !== 'Tab') {
       if (remapInput.dataset.remapDevice !== 'keyboard') {
@@ -1370,7 +1559,7 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       return;
     }
     if (event.key === 'Escape' || event.key === 'Backspace') {
-      if (vm?.screen === 'hero-select') dispatch({ type: 'map-select' });
+      if (vm?.screen === 'hero-select') dispatch({ type: vm.session?.kind === 'chapters' || vm.session?.kind === 'production' ? 'return-title' : 'map-select' });
       else if (vm?.screen === 'map-select' || vm?.screen === 'chapters-menu') dispatch({ type: 'return-title' });
       else if (vm?.screen === 'choice') { /* a story choice is never dismissed into a default */ }
       else if (vm?.screen === 'pause') dispatch({ type: 'resume' });
@@ -1416,6 +1605,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
       if (isDown && newButton < 0) newButton = index;
     }
     if (!changed) return;
+    lastModality = 'gamepad';
+    container.dataset.inputModality = 'gamepad';
     const previous = new Set(lastGamepadButtons);
     lastGamepadButtons.clear();
     for (let index = 0; index < buttons.length; index++) if (buttons[index]!.pressed) lastGamepadButtons.add(index);

@@ -1,0 +1,245 @@
+{
+  "scope": "CSS-only synchronous absence diagnostic, not verified-assets boot or approval",
+  "measurements": [
+    {
+      "width": 320,
+      "height": 900,
+      "scope": "Synchronous CSS-only diagnostic: warning removed and restored before yielding/paint; no verified-assets qualification",
+      "before": {
+        "wc-vitals": {
+          "x": 6.3984375,
+          "y": 44,
+          "width": 140.796875,
+          "height": 158.5,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 166.40625,
+          "y": 44,
+          "width": 147.1953125,
+          "height": 256.078125,
+          "toggleCenterHit": true
+        }
+      },
+      "without": {
+        "wc-vitals": {
+          "x": 6.3984375,
+          "y": 18.8984375,
+          "width": 140.796875,
+          "height": 158.5,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 166.40625,
+          "y": 18.8984375,
+          "width": 147.1953125,
+          "height": 256.078125,
+          "toggleCenterHit": true
+        }
+      },
+      "restored": {
+        "wc-vitals": {
+          "x": 6.3984375,
+          "y": 44,
+          "width": 140.796875,
+          "height": 158.5,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 166.40625,
+          "y": 44,
+          "width": 147.1953125,
+          "height": 256.078125,
+          "toggleCenterHit": true
+        }
+      },
+      "warningRestored": true,
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84"
+    },
+    {
+      "width": 375,
+      "height": 900,
+      "scope": "Synchronous CSS-only diagnostic: warning removed and restored before yielding/paint; no verified-assets qualification",
+      "before": {
+        "wc-vitals": {
+          "x": 7.5,
+          "y": 44,
+          "width": 165,
+          "height": 144,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 195,
+          "y": 44,
+          "width": 172.5,
+          "height": 237.6796875,
+          "toggleCenterHit": true
+        }
+      },
+      "without": {
+        "wc-vitals": {
+          "x": 7.5,
+          "y": 18.8984375,
+          "width": 165,
+          "height": 144,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 195,
+          "y": 18.8984375,
+          "width": 172.5,
+          "height": 237.6796875,
+          "toggleCenterHit": true
+        }
+      },
+      "restored": {
+        "wc-vitals": {
+          "x": 7.5,
+          "y": 44,
+          "width": 165,
+          "height": 144,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 195,
+          "y": 44,
+          "width": 172.5,
+          "height": 237.6796875,
+          "toggleCenterHit": true
+        }
+      },
+      "warningRestored": true,
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84"
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "scope": "Synchronous CSS-only diagnostic: warning removed and restored before yielding/paint; no verified-assets qualification",
+      "before": {
+        "wc-vitals": {
+          "x": 8.828125,
+          "y": 46,
+          "width": 184.3125,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 559.4921875,
+          "y": 46,
+          "width": 199.6796875,
+          "height": 242.734375,
+          "toggleCenterHit": true
+        }
+      },
+      "without": {
+        "wc-vitals": {
+          "x": 8.828125,
+          "y": 18.8984375,
+          "width": 184.3125,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 559.4921875,
+          "y": 18.8984375,
+          "width": 199.6796875,
+          "height": 242.734375,
+          "toggleCenterHit": true
+        }
+      },
+      "restored": {
+        "wc-vitals": {
+          "x": 8.828125,
+          "y": 46,
+          "width": 184.3125,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 559.4921875,
+          "y": 46,
+          "width": 199.6796875,
+          "height": 242.734375,
+          "toggleCenterHit": true
+        }
+      },
+      "warningRestored": true,
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84"
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "scope": "Synchronous CSS-only diagnostic: warning removed and restored before yielding/paint; no verified-assets qualification",
+      "before": {
+        "wc-vitals": {
+          "x": 16.5546875,
+          "y": 18.8984375,
+          "width": 230,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 1123.4453125,
+          "y": 18.8984375,
+          "width": 300,
+          "height": 187.0390625,
+          "toggleCenterHit": true
+        }
+      },
+      "without": {
+        "wc-vitals": {
+          "x": 16.5546875,
+          "y": 18.8984375,
+          "width": 230,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 1123.4453125,
+          "y": 18.8984375,
+          "width": 300,
+          "height": 187.0390625,
+          "toggleCenterHit": true
+        }
+      },
+      "restored": {
+        "wc-vitals": {
+          "x": 16.5546875,
+          "y": 18.8984375,
+          "width": 230,
+          "height": 156.3359375,
+          "toggleCenterHit": true
+        },
+        "wc-objective": {
+          "x": 1123.4453125,
+          "y": 18.8984375,
+          "width": 300,
+          "height": 187.0390625,
+          "toggleCenterHit": true
+        }
+      },
+      "warningRestored": true,
+      "session": {
+        "kind": "chapters",
+        "assets": "candidate",
+        "saveScope": "candidate-chapters"
+      },
+      "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84"
+    }
+  ]
+}

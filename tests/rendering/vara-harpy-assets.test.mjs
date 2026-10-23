@@ -296,7 +296,8 @@ describe('vara harpy assets', { skip: existsSync(GLB) && existsSync(REPORT) ? fa
     assert.equal(av.animationStatus, 'complete', 'animation status complete');
     assert.equal(av.actionCoverageStatus, 'complete', 'action coverage complete');
     assert.equal(av.evidenceStatus, 'blocked', 'evidence stays blocked');
-    assert.equal(av.outputHash, sha256(loaded.bytes), 'outputHash matches the actual animated GLB');
+    const runtime = await readFile(`${root}/${av.runtimeUrl.replace(/^\//, '')}`);
+    assert.equal(av.outputHash, sha256(runtime), 'outputHash matches the selected companion GLB');
     for (const slot of SLOTS) assert.equal(av.actionToClipMapping[slot], slot, `manifest.json actionToClipMapping[${slot}]`);
   });
 

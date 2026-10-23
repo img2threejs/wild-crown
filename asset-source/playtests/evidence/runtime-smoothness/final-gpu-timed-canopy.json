@@ -1,0 +1,483 @@
+{
+  "initial": {
+    "player": {
+      "heroId": "sakda",
+      "vitality": 115,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "scale": 0.75,
+    "buffer": [
+      1080,
+      675
+    ],
+    "css": [
+      1440,
+      900
+    ],
+    "variantFlashStates": true
+  },
+  "measurement": {
+    "label": "final-gpu-timed-calibration-canopy-combat",
+    "durationMs": 20002.69999998808,
+    "frames": 1443,
+    "frame": {
+      "p50": 13.30000000000291,
+      "p95": 14.39999999999418,
+      "p99": 26.79999999998836,
+      "max": 53,
+      "over25": 54,
+      "over50": 1
+    },
+    "longTasks": [
+      {
+        "start": 113578.09999996424,
+        "duration": 56
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1080,
+      "bufferHeight": 675,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1207,
+      "worldTick": 1207,
+      "worldTimeSeconds": 20.116666666666667,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 8,
+      "maxMana": 100,
+      "flurryCharges": 2
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -39.17705350504622,
+      "y": 0,
+      "z": -33.176062546467946
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 6041.653,
+      "taskMs": 7298.985,
+      "layoutMs": 39.631,
+      "recalcStyleMs": 486.115,
+      "heapUsedBytes": 118813368,
+      "domNodes": 11187
+    }
+  },
+  "final": {
+    "screen": "game",
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 8,
+      "maxMana": 100,
+      "flurryCharges": 2
+    },
+    "boss": 232,
+    "scale": 0.75,
+    "shaderFirstUse": [],
+    "resizes": [],
+    "glError": 0,
+    "assetErrors": []
+  },
+  "actions": [
+    {
+      "at": 0,
+      "key": "d",
+      "down": true
+    },
+    {
+      "at": 2200,
+      "key": "d",
+      "down": false
+    },
+    {
+      "at": 2700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 2770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 4600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 4720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 5370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 5950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 6600,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 6670,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7250,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7320,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 7500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 7580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 7900,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 7970,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 8550,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 8620,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 9200,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9270,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 9600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 9850,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 9920,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 10500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 10570,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 11100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 11150,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11220,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 11800,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 11870,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12450,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 12500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 12520,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 12580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 13100,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13170,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 13750,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 13820,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14000,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 14400,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 14470,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 14600,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 15050,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15120,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 15700,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 15770,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 16000,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 16100,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 16350,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 16420,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17000,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17070,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 17500,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 17580,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 17650,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 17720,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18300,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 18370,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 18950,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19020,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 19600,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 19670,
+      "key": "j",
+      "down": false
+    }
+  ],
+  "limit": "Authored DEV fixture only; normal AI/damage; not a paired production comparison."
+}

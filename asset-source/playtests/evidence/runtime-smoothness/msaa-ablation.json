@@ -1,0 +1,33 @@
+{
+  "ablation": {
+    "label": "diagnostic-no-composer-msaa-restored-after",
+    "available": true,
+    "samples": 165,
+    "disjoint": false,
+    "pending": 0,
+    "p50Ms": 13.053625,
+    "p95Ms": 13.482499,
+    "targetSamples": [
+      0,
+      0
+    ],
+    "samplesRestored": [
+      2,
+      2
+    ]
+  },
+  "control": {
+    "label": "control-original-msaa2",
+    "available": true,
+    "samples": 135,
+    "disjoint": false,
+    "pending": 0,
+    "p50Ms": 21.489958,
+    "p95Ms": 22.484541,
+    "targetSamples": [
+      2,
+      2
+    ]
+  },
+  "limitation": "Temporary diagnostic change only; production pixels/AA are not accepted from the no-MSAA run. Pass-level queries flush tile work and are not additive whole-frame cost."
+}

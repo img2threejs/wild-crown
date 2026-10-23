@@ -1,7 +1,9 @@
+import type { CampaignState } from "../../packages/campaign/src/index.js";
 import type { CompanionId, CompanionParty, CompanionProgress, RegionDefinition, RegionEntityDefinition, Vec3 } from "../game/contracts.js";
 import { ACTORS } from "../content/world.js";
 import { arenaFromRegion, groundHeightAt, isCirclePathClear, isSupportedCapsulePose } from "../game/combat/geometry.js";
 import { actorCollisionBody } from "../game/combat/ActorBody.js";
+import { companionAccessOf } from "../game/campaign/access.js";
 
 interface PartyProjectionInput {
   readonly region: RegionDefinition;
@@ -9,6 +11,8 @@ interface PartyProjectionInput {
   readonly companions: Readonly<Record<CompanionId, CompanionProgress>>;
   readonly worldFacts: Readonly<Record<string, boolean | number | string>>;
   readonly spawnPosition: Vec3 | null;
+  /** The campaign state the companions' earned progression belongs to; the access authority reads its faction state. */
+  readonly campaign?: CampaignState;
 }
 
 const DIRECTIONS = [[1, 0], [-1, 0], [0, 1], [0, -1], [.707, .707], [-.707, .707], [.707, -.707], [-.707, -.707]] as const;
@@ -35,7 +39,19 @@ export function projectPartyIntoRegion(input: PartyProjectionInput): { entities:
   if (party.companionId) {
     const id = party.companionId;
     const progress = companions[id];
-    if (id === "solkar" && (worldFacts["solkar-exiled"] === true || progress?.storyFlags["solkar-exiled"] === true)) {
+    // Only an earned companion may be projected into the traveling party. The access authority is the same one the
+    // map, the party panel and the equip action read, so an unearned companion is refused before any asset loads.
+    if (input.campaign) {
+      const access = companionAccessOf(
+        id,
+        progress,
+        input.campaign,
+        worldFacts["solkar-exiled"] === true,
+        worldFacts.solkarPresent === false,
+      );
+      if (!access.available) throw new Error(access.reason ?? "This companion cannot join your party.");
+    } else if (id === "solkar" && (worldFacts["solkar-exiled"] === true || progress?.storyFlags["solkar-exiled"] === true)) {
+      // No campaign state to consult: the exile fact alone still refuses an exiled Solkar.
       throw new Error("An explicitly exiled Solkar cannot be projected into the traveling party.");
     }
     const definition = ACTORS[id];

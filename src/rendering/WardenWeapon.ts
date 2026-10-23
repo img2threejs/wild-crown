@@ -1,5 +1,8 @@
 import { BufferAttribute, BufferGeometry, Color, Group, Matrix4, Mesh, MeshStandardMaterial, Object3D, Quaternion, Vector3, type Material } from 'three';
 import { computeHandGrip, fitRigidNativeHand, referencedVertices, type HandGeometryEdit, type HandGrip, type HiltProfile } from './NativeHandGrip';
+import { ThrownStaff } from './ThrownStaff';
+import staffProfiles from './heartroot-staff-profiles.json' with { type: 'json' };
+import glaiveProfiles from './warden-glaive-profiles.json' with { type: 'json' };
 import { KATANA_GRIP } from './KatanaGrip.mjs';
 export { KATANA_GRIP } from './KatanaGrip.mjs';
 
@@ -45,10 +48,18 @@ interface WeaponProfile {
   readonly orientation: 'crescent' | 'guard';
   /** Katana only: the slender handle runs up to a thin collar right behind the guard instead of flaring back to the native radius. */
   readonly fuchi?: { readonly backFromPommel: number; readonly length: number; readonly scale: number };
+  /**
+   * Heartroot only: thin the whole shaft by one factor (measured over `handFrom`–`handTo`, fractions from the pommel, the stretch the fist slides
+   * along) and ease back to the native head over `headBlend` metres, instead of carving a waist around `shaftFraction`.
+   */
+  readonly uniformShaft?: { readonly handFrom: number; readonly handTo: number; readonly headBlend: number };
+  /** Finger-chain fist: radius of the shaft the fingers close on, as a multiple of the anatomical one (hand width × 0.16). */
+  readonly shaftScale?: number;
 }
 const WEAPON_PROFILES: Readonly<Record<WardenWeaponKind, WeaponProfile>> = Object.freeze({
-  warden: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: false, tilt: WARDEN_GRIP.tiltRadians, edgeColor: WARDEN_EDGE_COLOR, name: 'wc:warden-weapon', orientation: 'crescent' },
-  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .12, shaftOuter: .26, rigidFist: false, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent' },
+  // The glaive's fist tilt (WARDEN_GRIP.tiltRadians off the knuckle line toward the wrist) lives in warden-glaive-profiles.json as the default turn; the base fist is built untilted.
+  warden: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .1, shaftOuter: .22, rigidFist: false, tilt: 0, edgeColor: WARDEN_EDGE_COLOR, name: 'wc:warden-weapon', orientation: 'crescent' },
+  heartroot: { length: WARDEN_WEAPON_LENGTH, gripFraction: WARDEN_GRIP_FRACTION, shaftFraction: WARDEN_GRIP_FRACTION, bladeFraction: WARDEN_BLADE_FRACTION, shaftCore: .12, shaftOuter: .26, rigidFist: false, tilt: HEARTROOT_GRIP.diagonalRadians, edgeColor: 0xf1ba4a, name: 'wc:heartroot-staff', orientation: 'crescent', uniformShaft: { handFrom: .06, handTo: .64, headBlend: .08 }, shaftScale: 2.4 },
   katana: { length: KATANA_GRIP.length, gripFraction: KATANA_GRIP.gripFromPommel / KATANA_GRIP.length, shaftFraction: KATANA_GRIP.handleFromPommel / KATANA_GRIP.length, bladeFraction: KATANA_GRIP.bladeLength / KATANA_GRIP.length, shaftCore: .15, shaftOuter: .2, rigidFist: true, tilt: KATANA_GRIP.diagonalRadians, edgeColor: KATANA_EDGE_COLOR, name: 'wc:vesper-katana', orientation: 'guard', fuchi: { backFromPommel: KATANA_GRIP.tsubaBackFromPommel, length: KATANA_GRIP.fuchi.length, scale: KATANA_GRIP.fuchi.scale } },
 });
 
@@ -174,20 +185,32 @@ function fuchiGain(fuchi: NonNullable<WeaponProfile['fuchi']>, reduction: number
 }
 const fuchiSlope = { value: 0 };
 
-/** Fit the native handle continuously; the measurement band excludes decorative collars and the blade. */
+/**
+ * Fit the native handle continuously; the measurement band excludes decorative collars and the blade. A `uniformShaft` profile (the Heartroot staff,
+ * whose fist slides along the shaft from clip to clip) thins the whole shaft from the pommel to the head by one factor instead of carving a waist where
+ * the hand rests, so the shaft keeps its own even taper; the factor is measured over the stretch the fist uses.
+ */
 function fitShaft(geometry: BufferGeometry, frame: GlaiveFrame, radius: number, profile: WeaponProfile): void {
   const position = geometry.getAttribute('position'), normal = geometry.getAttribute('normal');
   const scale = profile.length / frame.length;
   const center = frame.origin.clone().addScaledVector(frame.axis, profile.shaftFraction * frame.length);
   const core = profile.shaftCore / scale, outer = profile.shaftOuter / scale;
+  const uniform = profile.uniformShaft;
   const measureCore = Math.min(core, .1 / scale);
+  // Uniform: from-centre bounds of the measured stretch and of the shaft (the head starts at 1 − bladeFraction), and the blend into the head.
+  const handFrom = uniform ? (uniform.handFrom - profile.shaftFraction) * frame.length : 0, handTo = uniform ? (uniform.handTo - profile.shaftFraction) * frame.length : 0;
+  const headStart = (1 - profile.bladeFraction - profile.shaftFraction) * frame.length, headBlend = (uniform?.headBlend ?? 0) / scale;
   let maximum = 0;
+  const radii: number[] = [];
   for (const vertex of referencedVertices(geometry)) {
     scratchA.fromBufferAttribute(position, vertex).sub(center);
     const along = scratchA.dot(frame.axis);
-    if (Math.abs(along) > measureCore) continue;
-    maximum = Math.max(maximum, scratchA.addScaledVector(frame.axis, -along).length() * scale);
+    if (uniform ? along < handFrom || along > handTo : Math.abs(along) > measureCore) continue;
+    const r = scratchA.addScaledVector(frame.axis, -along).length() * scale;
+    if (uniform) radii.push(r); else maximum = Math.max(maximum, r);
   }
+  // The staff's bark knots stand out of the stretch; its 90th-percentile radius is the shaft the fist closes on.
+  if (uniform && radii.length) maximum = radii.sort((a, b) => a - b)[Math.floor(radii.length * .9)]!;
   const reduction = Math.min(1, radius / maximum);
   if (reduction >= 1) return;
   const fuchi = profile.fuchi, fromPommel = profile.shaftFraction * profile.length;
@@ -195,7 +218,8 @@ function fitShaft(geometry: BufferGeometry, frame: GlaiveFrame, radius: number, 
     scratchA.fromBufferAttribute(position, vertex).sub(center);
     const along = scratchA.dot(frame.axis);
     const front = fuchi !== undefined && along > 0;
-    if (!front && Math.abs(along) >= outer) continue;
+    if (!front && !uniform && Math.abs(along) >= outer) continue;
+    if (uniform && along >= headStart) continue;
     scratchA.addScaledVector(frame.axis, -along);
     let gain: number, derivative: number;
     if (front) {
@@ -204,6 +228,11 @@ function fitShaft(geometry: BufferGeometry, frame: GlaiveFrame, radius: number, 
       const raw = fuchiGain(fuchi, reduction, fromPommel + along * scale, fuchiSlope);
       gain = 1 + (raw - 1) * weight;
       derivative = fuchiSlope.value * weight * scale;
+    } else if (uniform) {
+      // One factor along the whole shaft; only the last `headBlend` before the head eases back to the native size.
+      const t = Math.max(0, Math.min(1, (along - (headStart - headBlend)) / headBlend));
+      gain = reduction + (1 - reduction) * t * t * (3 - 2 * t);
+      derivative = (1 - reduction) * 6 * t * (1 - t) / headBlend;
     } else {
       const t = Math.max(0, Math.min(1, (Math.abs(along) - core) / (outer - core)));
       gain = reduction + (1 - reduction) * t * t * (3 - 2 * t);
@@ -292,6 +321,49 @@ export function splitBladeGeometry(source: BufferGeometry, frame: GlaiveFrame, b
 /** The part of the glaive instance the weapon uses; a `NativeAssetInstance` satisfies it. */
 export interface WeaponSource { readonly root: Object3D; dispose(): void }
 export interface WeaponOwner { readonly root: Object3D; readonly animation: { setPostPose(hook: (() => void) | undefined): void } }
+
+/** How a finger-chain fist holds a weapon in one clip: `turn` (radians) of the shaft from the knuckle line toward the fingers and the share of its length on the pommel side. */
+interface GripPose { readonly turn: number; readonly grip: number }
+interface GripProfileEntry { readonly turnDegrees: number; readonly gripFraction: number }
+export interface GripProfileFile { readonly default: GripProfileEntry; readonly blendSeconds: number; readonly clips: Readonly<Record<string, GripProfileEntry>> }
+/** A weapon kind's per-clip table: clips it does not list use `fallback`; `turns` is every distinct shaft turn (the finger fist is solved once for each at construction). */
+interface GripTable { readonly fallback: GripPose; readonly byClip: Readonly<Record<string, GripPose>>; readonly blendSeconds: number; readonly turns: readonly number[] }
+const gripPoseOf = (entry: GripProfileEntry): GripPose => ({ turn: entry.turnDegrees * Math.PI / 180, grip: entry.gripFraction });
+function gripTableOf(file: GripProfileFile): GripTable {
+  const fallback = gripPoseOf(file.default);
+  const byClip: Record<string, GripPose> = Object.fromEntries(Object.entries(file.clips).map(([clip, entry]) => [clip, gripPoseOf(entry)]));
+  return { fallback, byClip, blendSeconds: file.blendSeconds, turns: [fallback.turn, ...Object.values(byClip).map(entry => entry.turn)] };
+}
+const STAFF_TABLE = gripTableOf(staffProfiles), GLAIVE_TABLE = gripTableOf(glaiveProfiles);
+/** Weapon kinds whose fist follows the per-clip profile of the clip now playing (finger-chain hands only). */
+const GRIP_TABLES: Readonly<Partial<Record<WardenWeaponKind, GripTable>>> = { warden: GLAIVE_TABLE, heartroot: STAFF_TABLE };
+/** Seconds the staff takes to settle into the next clip's profile. */
+export const STAFF_BLEND_SECONDS: number = STAFF_TABLE.blendSeconds;
+/** Seconds the glaive takes to settle into the next clip's profile. */
+export const GLAIVE_BLEND_SECONDS: number = GLAIVE_TABLE.blendSeconds;
+/** The staff profile of a clip id; clips the table does not list use `default`. */
+export function staffProfileFor(clipId: string): GripPose { return STAFF_TABLE.byClip[clipId] ?? STAFF_TABLE.fallback; }
+/** The Warden glaive profile of a clip id (`warden-glaive-profiles.json`); clips the table does not list use `default`. */
+export function glaiveProfileFor(clipId: string): GripPose { return GLAIVE_TABLE.byClip[clipId] ?? GLAIVE_TABLE.fallback; }
+
+interface GripState {
+  clip: string | undefined;
+  /** Applied turn (radians) and pommel-side share, and the running blend between the previous and the target profile. */
+  turn: number; grip: number;
+  fromTurn: number; fromGrip: number; toTurn: number; toGrip: number; progress: number;
+  readonly restGrip: number;
+  readonly length: number;
+  readonly table: GripTable;
+  readonly knuckles: Vector3;
+  readonly direction: Vector3;
+  /** Rest-position of the glaive root and of the sockets that move with the weapon (weapon frame, at `restGrip`). */
+  readonly glaivePosition: Vector3;
+  readonly sockets: { readonly object: Object3D; readonly rest: Vector3 }[];
+  /** Staff centre in the weapon frame (the flying staff's origin); heartroot only. */
+  readonly centre: Object3D | undefined;
+}
+const scratchAxis = new Vector3(), scratchX = new Vector3(), scratchY = new Vector3(), scratchBasis = new Matrix4();
+const throwStart = new Vector3(), throwTarget = new Vector3(), throwHome = new Vector3(), throwHomeQuat = new Quaternion();
 
 const KATANA_EDGE_TINT = new Vector3();
 
@@ -404,8 +476,13 @@ export class WardenWeapon {
   private readonly materials: Material[];
   private readonly handGeometry: HandGeometryEdit | undefined;
   private disposed = false;
+  /** Finger-chain weapons (glaive, staff): the per-clip grip pose state. */
+  private readonly pose: GripState | undefined;
+  /** Heartroot only: the flying staff of Sap Lance. */
+  private readonly thrown: ThrownStaff | undefined;
 
-  constructor(glaive: WeaponSource, owner: WeaponOwner, kind: WardenWeaponKind = 'warden', rigidHand = WEAPON_PROFILES[kind].rigidFist) {
+  /** `profiles` replaces the kind's per-clip table (test seam: a table other than the shipped JSON). */
+  constructor(glaive: WeaponSource, owner: WeaponOwner, kind: WardenWeaponKind = 'warden', rigidHand = WEAPON_PROFILES[kind].rigidFist, profiles?: GripProfileFile) {
     const meshes: Mesh[] = [];
     glaive.root.traverse((node) => { if (node instanceof Mesh) meshes.push(node); });
     const mesh = meshes[0];
@@ -417,7 +494,8 @@ export class WardenWeapon {
     this.glaive = glaive;
     this.owner = owner;
     const profile = WEAPON_PROFILES[kind];
-    this.grip = computeHandGrip(owner.root, rigidHand, profile.tilt, kind === 'katana' ? KATANA_GRIP.edgeRadians : undefined);
+    const table = profiles ? gripTableOf(profiles) : GRIP_TABLES[kind];
+    this.grip = computeHandGrip(owner.root, rigidHand, profile.tilt, kind === 'katana' ? KATANA_GRIP.edgeRadians : undefined, table?.turns, profile.shaftScale);
 
     const position = mesh.geometry.getAttribute('position'), referenced = referencedVertices(mesh.geometry);
     let vertices: ArrayLike<number>;
@@ -476,6 +554,32 @@ export class WardenWeapon {
       'weapon-tip': place('weapon-tip', frame.tip),
       'weapon-pommel': place('weapon-pommel', frame.pommel),
     };
+    let centreSocket: Object3D | undefined;
+    if (kind === 'heartroot' && this.grip.knuckles && this.grip.direction) {
+      // The flying staff shares the held staff's geometry and materials; its frame is the weapon frame moved to the staff's centre.
+      const rest = profile.gripFraction, centre = (0.5 - rest) * profile.length;
+      const flight = new Mesh(this.geometry, mesh.material);
+      flight.castShadow = true;
+      flight.quaternion.copy(glaive.root.quaternion);
+      flight.scale.copy(glaive.root.scale);
+      flight.position.copy(glaive.root.position).z -= centre;
+      this.thrown = new ThrownStaff(flight, profile.length);
+      centreSocket = new Object3D();
+      centreSocket.name = 'wc:weapon-centre';
+      centreSocket.position.set(0, 0, centre);
+      this.root.add(centreSocket);
+    }
+    if (table && this.grip.knuckles && this.grip.direction) {
+      const rest = profile.gripFraction;
+      const pommel = this.sockets['weapon-pommel'], tip = this.sockets['weapon-tip'], base = this.sockets['weapon-base'];
+      this.pose = {
+        clip: undefined, turn: table.fallback.turn, grip: table.fallback.grip, fromTurn: table.fallback.turn, fromGrip: table.fallback.grip, toTurn: table.fallback.turn, toGrip: table.fallback.grip, progress: 1,
+        restGrip: rest, length: profile.length, table,
+        knuckles: this.grip.knuckles, direction: this.grip.direction, glaivePosition: glaive.root.position.clone(), centre: centreSocket,
+        sockets: [pommel, tip, base].map(object => ({ object, rest: object.position.clone() })),
+      };
+      this.poseGrip(this.pose);
+    }
     hand.add(this.root);
     // Only finger-chain hands need per-frame posing; the fixed Yara fist is baked into the hand mesh and follows the native skin weights.
     if (this.grip.joints.length) owner.animation.setPostPose(() => this.applyGrip());
@@ -483,10 +587,99 @@ export class WardenWeapon {
     hand.updateWorldMatrix(true, true);
   }
 
-  /** Reapply the authored finger grasp after animation sampling. */
+  /** Reapply the authored finger grasp after animation sampling (the fingers follow the take while the staff is away). */
   applyGrip(): void {
-    if (this.disposed) return;
+    if (this.disposed || this.thrown?.active) return;
     for (const joint of this.grip.joints) joint.bone.quaternion.copy(joint.grip);
+  }
+
+  /**
+   * Finger-chain weapons (the Warden glaive and the Heartroot staff), once per frame: eases the weapon toward the profile of the clip now playing (turn of
+   * the shaft in the fist and share of its length on the pommel side; `warden-glaive-profiles.json` / `heartroot-staff-profiles.json`) over the table's
+   * blend time, re-poses the weapon and its sockets, closes the fingers around the turned shaft, and (staff only) advances a staff throw. The first call
+   * snaps to the clip's profile.
+   */
+  setClip(clipId: string, dt: number): void {
+    const pose = this.pose;
+    if (!pose || this.disposed) return;
+    const target = pose.table.byClip[clipId] ?? pose.table.fallback;
+    if (pose.clip === undefined) {
+      pose.clip = clipId; pose.fromTurn = pose.toTurn = pose.turn = target.turn; pose.fromGrip = pose.toGrip = pose.grip = target.grip; pose.progress = 1;
+      this.poseGrip(pose);
+    } else {
+      if (clipId !== pose.clip) {
+        pose.clip = clipId; pose.fromTurn = pose.turn; pose.fromGrip = pose.grip; pose.toTurn = target.turn; pose.toGrip = target.grip; pose.progress = 0;
+      }
+      if (pose.progress < 1) {
+        pose.progress = Math.min(1, pose.progress + Math.max(0, dt) / pose.table.blendSeconds);
+        const eased = pose.progress * pose.progress * (3 - 2 * pose.progress);
+        pose.turn = pose.progress >= 1 ? pose.toTurn : pose.fromTurn + (pose.toTurn - pose.fromTurn) * eased;
+        pose.grip = pose.progress >= 1 ? pose.toGrip : pose.fromGrip + (pose.toGrip - pose.fromGrip) * eased;
+        this.poseGrip(pose);
+      }
+    }
+    const thrown = this.thrown;
+    if (thrown?.active) {
+      pose.centre!.updateWorldMatrix(true, false);
+      pose.centre!.getWorldPosition(throwHome);
+      this.root.getWorldQuaternion(throwHomeQuat);
+      if (thrown.update(Math.max(0, dt), throwHome, throwHomeQuat)) this.glaive.root.visible = true;
+    }
+  }
+
+  /** True while the staff is away from the fist on a throw. */
+  get throwing(): boolean { return this.thrown?.active === true; }
+
+  /** The flying staff (world space; visible only while it flies) of a heartroot weapon. */
+  get flight(): Object3D | null { return this.thrown?.root ?? null; }
+
+  /**
+   * Throws the held Heartroot staff toward `to` (world): the held staff hides and the flying instance starts from its world pose; the staff flies
+   * out, spins and returns to the fist on its own (`STAFF_THROW`). False when this weapon cannot throw or a throw is already running.
+   */
+  throwStaff(to: { readonly x: number; readonly y: number; readonly z: number }): boolean {
+    const thrown = this.thrown, pose = this.pose;
+    if (!thrown || !pose || this.disposed || thrown.active) return false;
+    pose.centre!.updateWorldMatrix(true, false);
+    pose.centre!.getWorldPosition(throwStart);
+    this.root.getWorldQuaternion(throwHomeQuat);
+    throwTarget.set(to.x, to.y, to.z);
+    // The flight lives in world space: under the topmost ancestor of the carrier (the scene), never under the hand.
+    let top: Object3D = this.carrier;
+    while (top.parent) top = top.parent;
+    thrown.attach(top);
+    thrown.launch(throwStart, throwHomeQuat, throwTarget);
+    this.glaive.root.visible = false;
+    return true;
+  }
+
+  /** Snaps a running throw back into the fist (the actor was hit, knocked down or defeated). */
+  cancelThrow(): void {
+    if (!this.thrown?.active) return;
+    this.thrown.stop();
+    this.glaive.root.visible = true;
+  }
+
+  private poseGrip(pose: GripState): void {
+    const { knuckles, direction, length } = pose;
+    scratchAxis.copy(knuckles).multiplyScalar(Math.cos(pose.turn)).addScaledVector(direction, Math.sin(pose.turn)).normalize();
+    scratchY.copy(this.grip.curl).addScaledVector(scratchAxis, -this.grip.curl.dot(scratchAxis)).normalize();
+    scratchX.crossVectors(scratchY, scratchAxis);
+    scratchBasis.makeBasis(scratchX, scratchY, scratchAxis);
+    this.root.quaternion.setFromRotationMatrix(scratchBasis);
+    // Slide the staff along the shaft so `grip` of its length lies on the pommel side of the fist (the sockets move with it).
+    const slide = -(pose.grip - pose.restGrip) * length;
+    this.glaive.root.position.copy(pose.glaivePosition).z += slide;
+    for (const socket of pose.sockets) socket.object.position.copy(socket.rest).z += slide;
+    pose.centre?.position.set(0, 0, (0.5 - pose.grip) * length);
+    // The fingers close around the turned shaft: slerp between the two precomputed fists that bracket the turn.
+    const turns = this.grip.turns;
+    if (!turns?.length) return;
+    let high = 0;
+    while (high < turns.length - 1 && turns[high]!.radians < pose.turn) high++;
+    const low = Math.max(0, high - 1), a = turns[low]!, b = turns[high]!;
+    const mix = high === low || b.radians === a.radians ? 0 : Math.max(0, Math.min(1, (pose.turn - a.radians) / (b.radians - a.radians)));
+    for (let i = 0; i < this.grip.joints.length; i++) this.grip.joints[i]!.grip.slerpQuaternions(a.grips[i]!, b.grips[i]!, mix);
   }
 
   setEdgeIntensity(intensity: number): void {
@@ -498,6 +691,7 @@ export class WardenWeapon {
     this.disposed = true;
     if (this.grip.joints.length) this.owner.animation.setPostPose(undefined);
     if (this.handGeometry) { this.handGeometry.mesh.geometry = this.handGeometry.original; this.handGeometry.edited.dispose(); }
+    this.thrown?.dispose();
     this.root.removeFromParent();
     this.geometry.dispose();
     for (const material of this.materials) material.dispose();

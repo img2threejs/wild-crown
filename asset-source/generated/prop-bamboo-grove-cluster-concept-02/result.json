@@ -1,0 +1,14 @@
+{
+  "task_id": "2f083796-5e44-4dfe-8ca7-1c25deea176a",
+  "type": "text_to_image",
+  "status": "success",
+  "credits_consumed": 15,
+  "output_dir": "asset-source/generated/prop-bamboo-grove-cluster-concept-02/tripo-out/prop-bamboo-grove-cluster-concep-2-2f083796",
+  "files": [
+    "generated_image.png",
+    "preview.png"
+  ],
+  "preview": "asset-source/generated/prop-bamboo-grove-cluster-concept-02/tripo-out/prop-bamboo-grove-cluster-concep-2-2f083796/preview.png",
+  "started": "2026-10-14T07:25:42.752Z",
+  "finished": "2026-10-14T07:26:34.516Z"
+}

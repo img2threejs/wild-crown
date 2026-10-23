@@ -1,6 +1,6 @@
 import type { ActionId, ActorId, CommandAvailability, CompanionCommandRequest, CompanionId, CompanionProgress, CompanionTarget, FieldCommand, InteractionDefinition, Vec3 } from '../contracts.js';
 import type { CombatActor, EngineState, LiveHazard, LiveMovableObject } from '../combat/CombatEngine.js';
-import { COMPANION_COPY, INTERACTIONS, REGIONS } from '../../content/campaign.js';
+import { ACTORS, COMPANION_COPY, INTERACTIONS, REGIONS } from '../../content/campaign.js';
 import { ENCOUNTER_RESETTABLE_OBJECT_IDS, GUARDABLE_ATTACK_IDS, TRAP } from '../combat/ActOneBossContent.js';
 import { revealTrapsNear } from '../combat/ChapterCombat.js';
 import { ATTACKS } from '../combat/content.js';
@@ -14,6 +14,7 @@ import { ORUN_GUARDABLE_ATTACK_IDS } from '../combat/OrunBossContent.js';
 import { orunAspectSupport } from '../combat/OrunPhases.js';
 import { COMPANION_BALANCE as BALANCE, COMPANION_SPECIALIZATIONS, companionSkillByAction, companionSkillFor, type CompanionSkill } from './CompanionSkills.js';
 import { isCompanionId } from './CompanionLoadout.js';
+import { createCompanionSkillMotion, sampleCompanionSkillMotion, type CompanionSkillMotion } from './CompanionSkillMotion.js';
 
 /** Every command a companion can receive: the eight field verbs plus the later-act Ask/Signal interaction abilities. */
 export type CompanionCommand = FieldCommand | 'ask' | 'signal';
@@ -38,6 +39,9 @@ export interface CompanionSkillState {
   actionId: string; kind: 'mark' | 'support' | 'search' | 'distract' | 'object';
   startedAt: number; releaseAt: number; contactAt: number; endsAt: number;
   released: boolean; resolved: boolean; scopeId: string;
+  motion?: CompanionSkillMotion;
+  /** Koro's seed commits to this point on release, not to a future enemy position. */
+  projectileAim?: Vec3;
 }
 /** Asha's finite charge intercept. */
 export interface GuardState { protecteeId: ActorId; hazardId: string; state: 'moving' | 'blocking' | 'recovery'; until: number; }
@@ -110,7 +114,7 @@ export interface CompanionRosterState {
   navNodes: readonly NavNode[];
   /** World ticks: `nextAt` is when the next token returns. */
   tokens: { available: number; maximum: number; nextAt: number };
-  /** Narrative Bond/Dominion; roster access does not require story recruitment. */
+  /** Narrative Bond/Dominion and earned recruitment; absent only for explicit fixtures and legacy sandboxes. */
   progress?: Partial<Record<CompanionId, CompanionProgress>>;
   /** Reservations must be recomputed (a target changed, died or a command was accepted). */
   reservationsDirty: boolean;
@@ -172,6 +176,8 @@ const COMPANION_COAST = 0.55;
 const COMPANION_STOP_SPEED = 0.05;
 const COMPANION_TURN_STEP = 0.17;
 const WORLD_STEP_SECONDS = 1 / 60;
+const skillMotionPoint = { x: 0, y: 0, z: 0 };
+const skillMotionGround = { x: 0, y: 0, z: 0 };
 
 /** Vara's Storm Talon (Harpy Eagle). Phases all run on the world clock. */
 const STORM_TALON_RISE_TICKS = 24; // ~0.4 s climb to ~4 m above the target
@@ -254,11 +260,52 @@ export function configureCompanions(state: EngineState, config: { chapter?: numb
   if (config.navNodes) companions.navNodes = structuredClone(config.navNodes);
 }
 
-/** Story relationship progress changes tuning, never access to the unlocked roster. */
+/**
+ * The earned roster, applied to the simulation.
+ *
+ * When a roster is supplied, it is authoritative: a companion the campaign has not recruited is not in the roster and
+ * may neither be commanded nor act on its own. A state with no roster at all keeps every slotted companion usable —
+ * that is the explicit fixture and legacy sandbox behaviour, not an earned journey.
+ *
+ * Solkar's durable exile flag and current world facts also constrain his availability without erasing earned progress.
+ */
 export function configureCompanionProgress(state: EngineState, progress: Readonly<Record<CompanionId, CompanionProgress>>): void {
   state.companionState.progress = structuredClone(progress);
+  enforceEarnedRoster(state);
+}
+
+/**
+ * Whether a companion belongs to the earned roster.
+ *
+ * `progress` is optional today: a state without one is a fixture or a legacy sandbox and keeps every companion
+ * usable. With a roster, only a recruited companion that is not exiled or absent is available.
+ */
+export function companionEarned(state: CompanionRosterState, id: CompanionId, facts?: Readonly<EngineState['worldFacts']>): boolean {
+  const progress = state.progress;
+  if (!progress) return true;
+  const entry = progress[id];
+  if (!entry || !entry.recruited) return false;
+  // An exiled or absent Solkar left the journey: the Crown council may represent Crown, but it never restores him.
+  if (id === 'solkar' && (entry.storyFlags['solkar-exiled'] === true || facts?.['solkar-exiled'] === true || facts?.solkarPresent === false)) return false;
+  return true;
 }
 function bondOf(state: CompanionRosterState, id: CompanionId): number { return state.progress?.[id]?.bondLevel ?? state.bond; }
+
+/**
+ * Applies the earned roster to a hydrated engine state.
+ *
+ * A restored or rehydrated engine may still carry a companion the campaign never recruited. When the roster says that
+ * companion is not earned, it is unequipped and its commands are dropped: the state never grants a companion the
+ * journey did not earn. A state without a roster keeps its companion (the explicit fixture and legacy sandbox).
+ */
+export function enforceEarnedRoster(engine: EngineState): void {
+  const state = engine.companionState;
+  const id = state.companionId;
+  if (id === undefined || companionEarned(state, id, engine.worldFacts)) return;
+  const actor = companionActor(engine, id);
+  configureCompanion(engine);
+  if (actor?.id.includes('__party_')) actor.visible = false;
+}
 function dominionOf(state: CompanionRosterState, id: CompanionId): number { return state.progress?.[id]?.dominionLevel ?? 0; }
 function cooldownOf(state: CompanionRosterState, id: CompanionId): number { return bondOf(state, id) >= BOND_BONUS ? Math.round(COMMAND_COOLDOWN * 0.8) : COMMAND_COOLDOWN; }
 
@@ -268,6 +315,8 @@ export function companionOwnerMultiplier(engine: EngineState, kind: 'haste' | 'p
   if (!boon || boon.kind !== kind || boon.sourceId !== state.companionId || boon.untilWorldTick <= engine.worldTick) return 1;
   const slot = state.slots[boon.sourceId], actor = companionActor(engine, boon.sourceId);
   if (!slot || !actor?.visible || actor.downed || isPossessed(engine, slot, actor) || (slot.suppressedUntil ?? 0) > engine.worldTick) return 1;
+  // An unearned companion grants no owner benefit.
+  if (!companionEarned(state, boon.sourceId, engine.worldFacts)) return 1;
   return kind === 'haste' ? BALANCE.hasteMultiplier : BALANCE.powerMultiplier;
 }
 
@@ -311,6 +360,8 @@ function planCommand(engine: EngineState, request: CompanionCommandRequest): Pla
   if (!definition) return reject('Unknown companion', cost);
   const slot = state.slots[id], actor = companionActor(engine, id);
   if (!slot || !isActive(state, id)) return reject('Not equipped', cost);
+  // The earned roster is authoritative when it is supplied: an unearned companion cannot be commanded.
+  if (!companionEarned(state, id, engine.worldFacts)) return reject('This companion is not available in the journey.', cost);
   if (!actor || !actor.visible || actor.downed) return reject('Not available', cost);
   if (isPossessed(engine, slot, actor)) return reject('Possessed', cost);
   if (command === 'follow' || command === 'recall' || command === 'stay') return { ok: true, kind: command, slot, actor, cost };
@@ -324,7 +375,7 @@ function planCommand(engine: EngineState, request: CompanionCommandRequest): Pla
   if (!player) return reject('No hero', cost);
   switch (command) {
     case 'focus': {
-      const hostile = hostileTarget(engine, player, target);
+      const hostile = hostileTarget(engine, player, target, id === 'vara');
       if (typeof hostile === 'string') return reject(hostile, cost);
       return { ok: true, kind: id === 'vara' ? 'mark' : 'support', slot, actor, cost, hostile };
     }
@@ -426,13 +477,17 @@ function guardPoint(hazard: LiveHazard, protectee: CombatActor): Vec3 {
   return { x: protectee.position.x - hazard.direction.x * GUARD_STANCE, y: protectee.position.y, z: protectee.position.z - hazard.direction.z * GUARD_STANCE };
 }
 
-/** A hostile instance the hero can see within command range, or the reason it cannot be targeted. */
-function hostileTarget(engine: EngineState, player: CombatActor, target: CompanionTarget | undefined): CombatActor | string {
+/** An unengaged wild combatant is a scout target, not an enemy for damage, support or encounters. */
+function isWildCombatant(actor: CombatActor): boolean {
+  return actor.allegiance === 'wild' && ACTORS[actor.archetypeId]?.combatRole === 'hostile';
+}
+/** A hostile instance the hero can see within command range, or the reason it cannot be targeted. `scout` also admits a wild combatant (Vara's Mark Weakness only). */
+function hostileTarget(engine: EngineState, player: CombatActor, target: CompanionTarget | undefined, scout = false): CombatActor | string {
   if (target?.kind !== 'actor') return 'No target';
   const resolved = resolveActor(engine, target.instanceId);
   if (typeof resolved === 'string') return resolved;
   if (!resolved.visible || resolved.downed) return 'Target is not available';
-  if (resolved.allegiance !== 'hostile') return 'Not a hostile target';
+  if (resolved.allegiance !== 'hostile' && !(scout && isWildCombatant(resolved))) return 'Not a hostile target';
   if (distance2(player.position, resolved.position) > FOCUS_RANGE) return 'Out of range';
   if (!hasLineOfSight(engine, player, resolved)) return 'Line of sight blocked';
   return resolved;
@@ -489,7 +544,7 @@ export function commandTargets(engine: EngineState, companionId: CompanionId, co
     if (companionId === 'koro' && command === 'special') {
       for (const object of engine.movableObjects) candidates.push({ kind: 'interaction', interactionId: object.authored.koroInteractionId, targetId: object.objectId });
     }
-    for (const actor of engine.actors) if (actor.allegiance === 'hostile') candidates.push({ kind: 'actor', instanceId: actor.id });
+    for (const actor of engine.actors) if (actor.allegiance === 'hostile' || companionId === 'vara' && command === 'focus' && isWildCombatant(actor)) candidates.push({ kind: 'actor', instanceId: actor.id });
   }
   const accepted = candidates.filter(target => planCommand(engine, { companionId, command, target }).ok);
   return accepted.sort((a, b) => targetDistance(engine, player, a) - targetDistance(engine, player, b) || targetKey(a).localeCompare(targetKey(b)));
@@ -675,6 +730,11 @@ function releaseSkillPose(actor: CombatActor | undefined, id: CompanionId): void
 function endCommand(engine: EngineState, slot: CompanionSlotState): void {
   const job = slot.job;
   if (slot.skill) appendCue(engine, { kind: 'cancel', phase: 'resolve', scopeId: slot.skill.scopeId, cancellationReason: 'interrupt' });
+  const actor = companionActor(engine, slot.companionId);
+  if (actor && slot.skill?.motion) {
+    actor.position = { ...slot.skill.motion.ground };
+    Object.assign(actor.velocity, { x: 0, y: 0, z: 0 });
+  }
   if (slot.stormTalon) appendCue(engine, { kind: 'cancel', phase: 'resolve', scopeId: `storm-talon:${companionActor(engine, slot.companionId)?.id ?? slot.companionId}:${slot.stormTalon.startedAt}`, cancellationReason: 'interrupt' });
   releaseSkillPose(companionActor(engine, slot.companionId), slot.companionId);
   slot.skill = undefined;
@@ -706,6 +766,8 @@ export function failCompanionJob(engine: EngineState, actorId: ActorId): void {
 export function companionSignal(engine: EngineState, id: CompanionId, targetId?: ActorId): boolean {
   const state = engine.companionState, slot = state.slots[id], actor = companionActor(engine, id);
   if (!slot || !actor || !actor.visible || actor.downed || isPossessed(engine, slot, actor) || engine.worldTick < slot.readyAt || (slot.suppressedUntil ?? 0) > engine.worldTick) return false;
+  // An unearned companion cannot be asked or signalled.
+  if (!companionEarned(state, id, engine.worldFacts)) return false;
   if (id === 'solkar' && state.dominionUsed && bondOf(state, id) < 40) return false;
   if (!state.wardenCall && bondOf(state, id) < 10) return false;
   if (!isActive(state, id) || state.tokens.available < ABILITY_COST) return false;
@@ -857,6 +919,8 @@ function beginSkill(engine: EngineState, actor: CombatActor, slot: CompanionSlot
     contactAt: now + definition.ticks * definition.contact, endsAt: now + definition.ticks,
     released: false, resolved: false, scopeId: `companion:${actor.id}:${slot.token}:${now}`,
   };
+  const target = slot.targetId ? actorById(engine, slot.targetId) : undefined;
+  if (kind === 'support' && target) skill.motion = createCompanionSkillMotion(slot.companionId, actor.position, target.position, actor.radius + target.radius + .18, definition.release, definition.contact);
   slot.skill = skill;
   if (slot.job) { slot.job.phase = 'act'; slot.job.endsAt = Math.max(slot.job.endsAt, skill.endsAt + 1); }
   slot.readyAt = Math.max(slot.readyAt, skill.endsAt);
@@ -870,14 +934,53 @@ function sampleSkill(engine: EngineState, actor: CombatActor, skill: CompanionSk
   actor.actionEndsTick = 0; // The world-clock skill, not updateActors' generic timer, owns this sample.
   actor.normalizedTime = Math.max(0, Math.min(1, (engine.worldTick - skill.startedAt) / (skill.endsAt - skill.startedAt)));
   actor.phase = engine.worldTick < skill.releaseAt ? 'anticipation' : engine.worldTick < skill.contactAt + 5 ? 'active' : 'recovery';
-  Object.assign(actor.velocity, { x: 0, y: 0, z: 0 });
+  if (!skill.motion) Object.assign(actor.velocity, { x: 0, y: 0, z: 0 });
+}
+
+/** Swept ground travel and bounded lift: never tunnel, jump a gap, or let the rendered pose move the collider. */
+function advanceSkillMotion(engine: EngineState, actor: CombatActor, skill: CompanionSkillState, target: CombatActor | undefined): void {
+  const motion = skill.motion;
+  if (!motion) return;
+  const progress = (engine.worldTick - skill.startedAt) / (skill.endsAt - skill.startedAt);
+  sampleCompanionSkillMotion(motion, progress, skillMotionPoint);
+  const lift = skillMotionPoint.y;
+  if (target && !motion.blocked) {
+    // A committed endpoint is not a live collider: an approaching hostile can cross it before contact.
+    const sx = skillMotionPoint.x - actor.position.x, sz = skillMotionPoint.z - actor.position.z;
+    const length2 = sx * sx + sz * sz;
+    const along = length2 > 0 ? Math.max(0, Math.min(1, ((target.position.x - actor.position.x) * sx + (target.position.z - actor.position.z) * sz) / length2)) : 0;
+    const clearance = actor.radius + target.radius + .18;
+    if (Math.hypot(actor.position.x + sx * along - target.position.x, actor.position.z + sz * along - target.position.z) < clearance) {
+      let nx = actor.position.x - target.position.x, nz = actor.position.z - target.position.z;
+      let length = Math.hypot(nx, nz);
+      if (length < 1e-8) { nx = -actor.facing.x; nz = -actor.facing.z; length = 1; }
+      skillMotionPoint.x = target.position.x + nx / length * clearance;
+      skillMotionPoint.z = target.position.z + nz / length * clearance;
+    }
+  }
+  if (!motion.blocked) {
+    const floor = groundHeightAt(engine.arena, skillMotionPoint.x, skillMotionPoint.z, motion.ground.y);
+    skillMotionPoint.y = floor ?? motion.ground.y;
+    if (floor === null || !isCirclePathClear(engine.arena, motion.ground, skillMotionPoint, actor.radius, actor.collisionHeight)) motion.blocked = true;
+  }
+  if (motion.blocked) Object.assign(skillMotionPoint, motion.ground);
+  skillMotionGround.x = skillMotionPoint.x; skillMotionGround.y = skillMotionPoint.y + lift; skillMotionGround.z = skillMotionPoint.z;
+  const from = actor.position;
+  if (isAerialCirclePathClear(engine.arena, from, skillMotionGround, actor.radius, actor.collisionHeight)) {
+    motion.ground.x = skillMotionPoint.x; motion.ground.y = skillMotionPoint.y; motion.ground.z = skillMotionPoint.z;
+    actor.position = { ...skillMotionGround };
+    recordCompanionMotion(engine, actor, from, actor.position);
+  } else {
+    motion.blocked = true;
+    Object.assign(actor.velocity, { x: 0, y: 0, z: 0 });
+  }
 }
 
 function appendSkillCue(engine: EngineState, actor: CombatActor, slot: CompanionSlotState, phase: 'anticipation' | 'commit' | 'hit' | 'resolve'): void {
   const skill = slot.skill!;
   const target = slot.targetId ? actorById(engine, slot.targetId) : undefined;
   const object = slot.job?.objectId ? engine.movableObjects.find(candidate => candidate.objectId === slot.job!.objectId) : undefined;
-  const at = target?.position ?? object?.position ?? slot.job?.point ?? actor.position;
+  const at = phase === 'commit' && skill.projectileAim ? skill.projectileAim : target?.position ?? object?.position ?? slot.job?.point ?? actor.position;
   appendCue(engine, { kind: 'command', phase, actorId: actor.id, targetId: target?.id, actionId: skill.actionId as never,
     from: { ...actor.position }, to: { ...at }, position: { ...at }, scopeId: skill.scopeId,
     durationTicks: Math.max(1, (phase === 'commit' ? skill.contactAt : skill.endsAt) - engine.worldTick), priority: 'essential', shape: phase === 'hit' ? 'burst' : 'trail' });
@@ -886,22 +989,30 @@ function appendSkillCue(engine: EngineState, actor: CombatActor, slot: Companion
 function advanceSkill(engine: EngineState, actor: CombatActor, slot: CompanionSlotState): void {
   const skill = slot.skill!, now = engine.worldTick;
   const target = slot.targetId ? actorById(engine, slot.targetId) : undefined;
+  if (skill.kind === 'support' && (!target || !target.visible || target.downed || target.allegiance !== 'hostile')) { endCommand(engine, slot); return; }
+  advanceSkillMotion(engine, actor, skill, target);
   if (target && skill.kind !== 'object') {
     const dx = target.position.x - actor.position.x, dz = target.position.z - actor.position.z, length = Math.hypot(dx, dz);
     if (length > .01) Object.assign(actor.facing, { x: dx / length, z: dz / length });
   }
   sampleSkill(engine, actor, skill);
-  if (!skill.released && now >= skill.releaseAt) { skill.released = true; appendSkillCue(engine, actor, slot, 'commit'); }
+  if (!skill.released && now >= skill.releaseAt) {
+    skill.released = true;
+    if (slot.companionId === 'koro' && skill.kind === 'support' && target) skill.projectileAim = { ...target.position };
+    appendSkillCue(engine, actor, slot, 'commit');
+  }
   if (!skill.resolved && now >= skill.contactAt) {
     skill.resolved = true;
     let landed = false;
     switch (skill.kind) {
       case 'mark':
-        if (target && typeof hostileTarget(engine, playerOf(engine)!, { kind: 'actor', instanceId: target.id }) !== 'string') { applyMark(engine, actor, target); landed = true; }
+        if (target && typeof hostileTarget(engine, playerOf(engine)!, { kind: 'actor', instanceId: target.id }, true) !== 'string') { applyMark(engine, actor, target); landed = true; }
         break;
       case 'support': {
-        const reach = slot.companionId === 'koro' || slot.companionId === 'solkar' ? 8 : (target?.radius ?? 0) + 2.4;
-        if (target?.visible && !target.downed && target.allegiance === 'hostile' && distance2(actor.position, target.position) <= reach && hasLineOfSight(engine, actor, target)) landed = applySupport(engine, actor, target);
+        const physical = slot.companionId === 'asha' || slot.companionId === 'sable' || slot.companionId === 'nyra';
+        const reach = physical ? actor.radius + (target?.radius ?? 0) + .65 : 8;
+        const seedReached = !skill.projectileAim || !!target && distance2(skill.projectileAim, target.position) <= target.radius + .45 && Math.abs(skill.projectileAim.y - target.position.y) <= 1;
+        if (!skill.motion?.blocked && seedReached && target?.visible && !target.downed && target.allegiance === 'hostile' && distance2(actor.position, target.position) <= reach && Math.abs(actor.position.y - target.position.y) <= 1 && hasLineOfSight(engine, actor, target)) landed = applySupport(engine, actor, target);
         break;
       }
       case 'distract':
@@ -955,6 +1066,8 @@ function sampleGuard(engine: EngineState, actor: CombatActor, slot: CompanionSlo
 function autoSupport(engine: EngineState, player: CombatActor): void {
   const state = engine.companionState, now = engine.worldTick, id = state.companionId;
   if (!id || engine.encounter && engine.rewardEmitted || now < (state.assistReadyAt ?? 0)) return;
+  // An unearned companion never acts on its own, not even automatically.
+  if (!companionEarned(state, id, engine.worldFacts)) return;
   state.assistReadyAt = now + 12;
   const slot = state.slots[id], actor = companionActor(engine, id);
   if (!slot || !actor?.visible || actor.downed || slot.mode !== 'follow' || slot.skill || slot.stormTalon || slot.job || slot.guard || now < slot.readyAt || isPossessed(engine, slot, actor) || (slot.suppressedUntil ?? 0) > now) return;
@@ -989,7 +1102,12 @@ function autoSupport(engine: EngineState, player: CombatActor): void {
 export function stepCompanions(engine: EngineState): void {
   const state = engine.companionState;
   const player = playerOf(engine);
-  if (!player || player.downed || engine.worldTimeScale <= 0) return;
+  if (!player || engine.worldTimeScale <= 0) return;
+  if (player.downed) {
+    const slot = state.companionId ? state.slots[state.companionId] : undefined;
+    if (slot?.skill || slot?.stormTalon || slot?.guard || slot?.job) endCommand(engine, slot);
+    return;
+  }
   if (state.ownerBoon && companionOwnerMultiplier(engine, state.ownerBoon.kind) === 1) state.ownerBoon = undefined;
   for (const actor of engine.actors) if (actor.supportSlow && actor.supportSlow.untilWorldTick <= engine.worldTick) actor.supportSlow = undefined;
   if (state.tokens.available < state.tokens.maximum && engine.worldTick >= state.tokens.nextAt) {
@@ -1026,7 +1144,7 @@ export function stepCompanions(engine: EngineState): void {
 
 function warningTargetValid(player: CombatActor, target: CombatActor): boolean {
   return target.visible && !target.downed && (target.vitality === undefined || target.vitality > 0)
-    && target.allegiance === 'hostile' && distance2(player.position, target.position) <= 16;
+    && (target.allegiance === 'hostile' || isWildCombatant(target)) && distance2(player.position, target.position) <= 16;
 }
 function warningFacing(player: CombatActor, target: CombatActor): number {
   const dx = target.position.x - player.position.x, dz = target.position.z - player.position.z;
@@ -1071,7 +1189,8 @@ function advanceCommand(engine: EngineState, actor: CombatActor, slot: Companion
   const now = engine.worldTick, job = slot.job;
   if (slot.targetId && slot.mode !== 'special' && slot.mode !== 'follow' && slot.mode !== 'stay') {
     const target = actorById(engine, slot.targetId);
-    if (!target || target.downed || !target.visible || (slot.mode !== 'defend' && target.allegiance !== 'hostile')) { endCommand(engine, slot); return; }
+    if (!target || target.downed || !target.visible || (slot.mode !== 'defend' && target.allegiance !== 'hostile'
+      && !(slot.companionId === 'vara' && slot.mode === 'focus' && isWildCombatant(target)))) { endCommand(engine, slot); return; }
     // A mark has no job: the scout keeps its station until the mark ends.
     if (!job && !slot.guard && slot.mode === 'focus' && target.markState?.sourceId !== actor.id) { endCommand(engine, slot); return; }
   }
@@ -1099,6 +1218,8 @@ function advanceGuard(engine: EngineState, slot: CompanionSlotState): void {
 }
 
 function advanceSearch(engine: EngineState, actor: CombatActor, slot: CompanionSlotState, job: CompanionJob): void {
+  const flight = slot.flight?.phase;
+  if (slot.companionId === 'vara' && flight !== 'flying' && flight !== 'hovering') return;
   if (job.point && distance2(actor.position, job.point) > 1.4) return;
   job.phase = 'act';
   beginSkill(engine, actor, slot, companionSkillFor(slot.companionId, 'search')!, 'search');
@@ -1402,6 +1523,13 @@ function updateFlightState(engine: EngineState, actor: CombatActor, slot: Compan
   }
   // The dive poses are owned by the Storm Talon advance; keep the flight machine dormant during the four dive phases.
   if (slot.stormTalon) return;
+  const approaching = slot.job?.phase === 'approach';
+  const approach = approaching ? slot.job!.point : undefined;
+  if (approaching && flight.phase === 'landing') {
+    flight.phase = 'flying';
+    flight.phaseStartedAt = now;
+    flight.perch = undefined;
+  }
   // Edge-detect travel: we only refresh playerAnchor when the player transitions from idle to moving, so
   // a slow walk (each tick the player moves 0.05 m, well under VARA_TAKEOFF_TRAVEL) still trips the gate
   // exactly once per travel stretch and the takeoff animation is not interrupted by the anchor reset.
@@ -1412,7 +1540,7 @@ function updateFlightState(engine: EngineState, actor: CombatActor, slot: Compan
     flight.playerIdleSince = now;
   }
   const hostileNear = varaHostileNearby(engine, actor);
-  const moving = travel || hostileNear;
+  const moving = travel || hostileNear || approaching;
   switch (flight.phase) {
     case 'grounded': {
       actor.actionId = 'vara:idle' as never;
@@ -1488,8 +1616,10 @@ function updateFlightState(engine: EngineState, actor: CombatActor, slot: Compan
     case 'flying': {
       actor.actionId = 'vara:fly' as never;
       actor.phase = 'active';
-      // The wider banking orbit above Aren keeps Vara in clear sky at VARA_FLY_ALTITUDE.
-      moveVaraAerial(engine, actor, { x: player.position.x - 1.3, y: player.position.y + VARA_FLY_ALTITUDE, z: player.position.z + 1.2 }, FOLLOW_DISTANCE + 0.35);
+      // An accepted field job owns the flight destination until its finite gesture begins.
+      moveVaraAerial(engine, actor,
+        approach?.x ?? player.position.x - 1.3, (approach?.y ?? player.position.y) + VARA_FLY_ALTITUDE,
+        approach?.z ?? player.position.z + 1.2, approach ? 1.2 : FOLLOW_DISTANCE + .35);
       if (!moving && now - flight.playerIdleSince >= VARA_PERCH_IDLE_TICKS) {
         const perch = perchNearPlayer(engine, player, actor);
         if (perch) {
@@ -1515,7 +1645,7 @@ function updateFlightState(engine: EngineState, actor: CombatActor, slot: Compan
         return;
       }
       // Hold position above the flight head (no travel, so no movement).
-      moveVaraAerial(engine, actor, { x: player.position.x - 1.3, y: player.position.y + VARA_FLY_ALTITUDE, z: player.position.z + 1.2 }, ARRIVE_DISTANCE);
+      moveVaraAerial(engine, actor, player.position.x - 1.3, player.position.y + VARA_FLY_ALTITUDE, player.position.z + 1.2, FOLLOW_DISTANCE);
       return;
     }
     case 'landing': {
@@ -1672,16 +1802,13 @@ function settleCompanion(engine: EngineState, actor: CombatActor): void {
 }
 
 /** Aerial locomotion through the shared arena path-clearance check; reports 3D world-time velocity and never writes lateral. */
-function moveVaraAerial(engine: EngineState, actor: CombatActor, target: Vec3, arrive: number): void {
+function moveVaraAerial(engine: EngineState, actor: CombatActor, x: number, y: number, z: number, arrive: number): void {
   const arena = engine.arena;
-  const goal = {
-    x: Math.max(arena.bounds.min.x + COMPANION_RADIUS, Math.min(arena.bounds.max.x - COMPANION_RADIUS, target.x)),
-    y: target.y,
-    z: Math.max(arena.bounds.min.z + COMPANION_RADIUS, Math.min(arena.bounds.max.z - COMPANION_RADIUS, target.z)),
-  };
-  const dx = goal.x - actor.position.x, dy = goal.y - actor.position.y, dz = goal.z - actor.position.z;
+  const goalX = Math.max(arena.bounds.min.x + COMPANION_RADIUS, Math.min(arena.bounds.max.x - COMPANION_RADIUS, x));
+  const goalZ = Math.max(arena.bounds.min.z + COMPANION_RADIUS, Math.min(arena.bounds.max.z - COMPANION_RADIUS, z));
+  const dx = goalX - actor.position.x, dy = y - actor.position.y, dz = goalZ - actor.position.z;
   const distance = Math.hypot(dx, dy, dz);
-  if (distance < Math.max(arrive, FOLLOW_DISTANCE)) { settleCompanion(engine, actor); return; }
+  if (distance < arrive) { settleCompanion(engine, actor); return; }
   const stride = Math.min(COMPANION_STRIDE, COMPANION_STRIDE_RAMP * 12 + COMPANION_STRIDE_RAMP, distance) * engine.worldTimeScale;
   const from = actor.position;
   const next = moveAerialCircle(arena, from, { x: dx / distance * stride, y: dy / distance * stride, z: dz / distance * stride }, COMPANION_RADIUS, actor.collisionHeight);
@@ -1793,6 +1920,8 @@ export function companionActor<T extends { readonly id: ActorId; readonly archet
 
 export function configureCompanion(engine: EngineState, companionId?: CompanionId): boolean {
   if (companionId !== undefined && !isCompanionId(companionId)) return false;
+  // Only a companion in the earned roster may be equipped: an unrecruited companion is never slotted.
+  if (companionId !== undefined && !companionEarned(engine.companionState, companionId, engine.worldFacts)) return false;
   const actor = companionId ? companionActor(engine, companionId) : undefined;
   if (companionId && (!actor || !actor.visible || actor.downed || actor.possessed || actor.possessedUntil > engine.worldTick || engine.companionState.slots[companionId]?.possessed)) return false;
   const state = engine.companionState;

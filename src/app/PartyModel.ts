@@ -1,21 +1,27 @@
 import type { CampaignSnapshot, CompanionId, GameViewModel } from '../game/contracts.js';
+import { companionAccess } from '../game/campaign/access.js';
 
 const NAMES: Readonly<Record<CompanionId, string>> = { vara: 'Vara', koro: 'Koro', asha: 'Asha', sable: 'Sable', nyra: 'Nyra', solkar: 'Solkar' };
 
 export const companionDisplayName = (id: CompanionId): string => NAMES[id];
 
 /**
- * One traveling companion, independent of narrative Bond. Explicit exile and active encounters still constrain replacement.
+ * One traveling companion, independent of narrative Bond.
+ *
+ * Only an earned companion may be equipped: the shared access authority reads the committed recruitment state and the
+ * narrative constraints that remove a companion from the journey, so an unrecruited or exiled companion is listed as
+ * unavailable with its reason instead of being offered as a choice. An active encounter still blocks a replacement.
  */
 export function partyPanelOf(snapshot: CampaignSnapshot, encounterActive: boolean): NonNullable<GameViewModel['partyPanel']> {
     const { party } = snapshot;
-    const crown = snapshot.campaign.world.factions.crown;
     return {
         companionId: party.companionId ?? null,
         name: 'Traveling companion',
         options: (Object.keys(NAMES) as CompanionId[]).map(id => {
-            const reason = encounterActive ? 'The companion cannot change during an active encounter.'
-                : id === 'solkar' && crown.leaderStatus === 'exiled' ? 'Solkar left after your exile decision.' : null;
+            const access = companionAccess(snapshot, id);
+            const reason = encounterActive
+                ? 'The companion cannot change during an active encounter.'
+                : access.reason;
             return { companionId: id, name: NAMES[id], available: reason === null, reason };
         }),
     };

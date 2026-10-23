@@ -1,0 +1,7088 @@
+{
+  "startedAt": "2026-10-23T05:41:49.209Z",
+  "before": {
+    "label": "canopy-before-r8",
+    "before": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 12,
+      "player": {
+        "x": 40,
+        "y": 0,
+        "z": -22.5
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 47,
+        "y": 8.05,
+        "z": -12.5
+      }
+    },
+    "samples": [
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 12,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 17,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 20,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 20,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 22,
+        "player": {
+          "x": 40,
+          "y": 0.22675736961451246,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.17701247165528916,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.060848033871785,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 24,
+        "player": {
+          "x": 40,
+          "y": 0.4308390022675737,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.4264739229024735,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.127339506810717,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 26,
+        "player": {
+          "x": 40,
+          "y": 0.6122448979591836,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.5781519274376212,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.196927530094454,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 27,
+        "player": {
+          "x": 40,
+          "y": 0.6944444444444444,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.6454535147392333,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.235768726694966,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 29,
+        "player": {
+          "x": 40,
+          "y": 0.8418367346938775,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.7709750566893423,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.32613555620307,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 29,
+        "player": {
+          "x": 40,
+          "y": 0.8418367346938775,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.8241213151927377,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.371759843835612,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 32,
+        "player": {
+          "x": 40,
+          "y": 1.020408163265306,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0.9749546485260575,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.528011346376971,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 32,
+        "player": {
+          "x": 40,
+          "y": 1.020408163265306,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 1.0198696145124735,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.582507321211649,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 34,
+        "player": {
+          "x": 40,
+          "y": 1.1111111111111112,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 1.094529478458036,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.686395973768702,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 36,
+        "player": {
+          "x": 40,
+          "y": 1.1791383219954648,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 1.1779535147392206,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.829808836069843,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 66,
+        "player": {
+          "x": 40,
+          "y": -1.3877787807814457e-17,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": -1.3877787807814457e-17,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.424019345460184,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 68,
+        "player": {
+          "x": 40,
+          "y": -1.3877787807814457e-17,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": -1.3877787807814457e-17,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.336532422222264,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 70,
+        "player": {
+          "x": 40,
+          "y": -1.3877787807814457e-17,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": -1.3877787807814457e-17,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.236806004521537,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 71,
+        "player": {
+          "x": 40,
+          "y": -1.3877787807814457e-17,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": -1.3877787807814457e-17,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.211613736532055,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 73,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.168603221026572,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 73,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.151682875278276,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 75,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.123978882171519,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 77,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.103539610092112,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 77,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.095702957089987,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 79,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.082651259036426,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 81,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.073337395150995,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 81,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.06971296111684,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 82,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.066636183504125,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 85,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.059936437190597,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 86,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.057100919176426,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 88,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.055002384043062,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 88,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.054197571788047,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 90,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.052927180498479,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 91,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.052439155565194,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 93,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.051706963476654,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 93,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.051427933559813,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 96,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050831547828036,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 97,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05057979544605,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 98,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050483218430893,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 100,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050336218148557,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 101,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050233319768303,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 102,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050194409831944,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 104,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050134489032416,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 105,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050093192926514,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 107,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050064423115439,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 109,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050044492610319,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 110,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.0500310441237,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 112,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050021165939043,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 113,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05001460126364,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 115,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050010051033738,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 116,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050008342725572,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 117,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050005736805383,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 118,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050004819917996,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 120,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050003292626329,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 120,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050002745783479,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 122,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050001871358177,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 124,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050001276452436,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 125,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050001057722579,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 126,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000724971891,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 127,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000608215488,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 129,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05000034055405,
+          "z": -12.5
+        }
+      }
+    ],
+    "after": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 131,
+      "player": {
+        "x": 40,
+        "y": 0,
+        "z": -22.5
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 47,
+        "y": 8.05000023607971,
+        "z": -12.5
+      }
+    },
+    "input": "Trusted native Space; no simulation or camera writes",
+    "screenshot": "asset-source/playtests/evidence/player-feedback/jump-anchor-canopy-before-r8.png"
+  },
+  "after": {
+    "label": "canopy-after-r8",
+    "before": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 18,
+      "player": {
+        "x": 40,
+        "y": 0,
+        "z": -22.5
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 47,
+        "y": 8.05,
+        "z": -12.5
+      }
+    },
+    "samples": [
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 21,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 22,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 23,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 25,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 27,
+        "player": {
+          "x": 40,
+          "y": 0.11621315192743761,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.051253843861373,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 29,
+        "player": {
+          "x": 40,
+          "y": 0.33163265306122447,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.06570141298101,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 30,
+        "player": {
+          "x": 40,
+          "y": 0.4308390022675737,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.106711270554145,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 32,
+        "player": {
+          "x": 40,
+          "y": 0.6122448979591836,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.169479720100462,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 33,
+        "player": {
+          "x": 40,
+          "y": 0.6944444444444444,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.208092614687038,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 34,
+        "player": {
+          "x": 40,
+          "y": 0.7709750566893423,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.296326571506599,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 36,
+        "player": {
+          "x": 40,
+          "y": 0.9070294784580497,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.397811709731169,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 38,
+        "player": {
+          "x": 40,
+          "y": 1.020408163265306,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.504051340938043,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 38,
+        "player": {
+          "x": 40,
+          "y": 1.020408163265306,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.557284564331315,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 41,
+        "player": {
+          "x": 40,
+          "y": 1.1479591836734693,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.715801566379664,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 42,
+        "player": {
+          "x": 40,
+          "y": 1.1791383219954648,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.766135269562659,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 44,
+        "player": {
+          "x": 40,
+          "y": 1.2244897959183672,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.904354535878106,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 46,
+        "player": {
+          "x": 40,
+          "y": 1.2471655328798186,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 9.020867414847938,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 48,
+        "player": {
+          "x": 40,
+          "y": 1.2471655328798186,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 9.086298495838534,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 49,
+        "player": {
+          "x": 40,
+          "y": 1.2386621315192743,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 9.11274449369367,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 80,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.141934924941314,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 82,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.116773929836043,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 83,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.098743985119206,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 85,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.084622890777839,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 86,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.07478565389633,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 88,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.067651097190465,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 89,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.064885154717716,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 90,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.06053272008705,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 92,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.057450189873933,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 93,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.055318511363243,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 95,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.053694114960887,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 96,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.053096486726135,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 98,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05216940723066,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 99,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.051537501345987,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 101,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.0510733032147,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 102,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050884766988414,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 103,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050616136498753,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 105,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050430792895284,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 106,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050297946583555,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 107,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050248004229704,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 110,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050143168462064,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 111,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05009935239498,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 114,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050056971644478,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 114,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050047970286096,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 116,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050032691550854,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 117,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05002694098606,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 118,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05001872347746,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 120,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050012715092688,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 122,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050008749733454,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 123,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050006025282757,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 124,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050005019858425,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 126,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05000343408029,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 127,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050002371058932,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 129,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050001620080971,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 130,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050001138053739,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 131,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000919234073,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 133,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000629901717,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 134,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000435110919,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 135,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000359775694,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 137,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000244498127,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 138,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000167504173,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 139,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05000013921489,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 142,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05000007874432,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 143,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000053804697,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 145,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.05000003754587,
+          "z": -12.5
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 146,
+        "player": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 47,
+          "y": 8.050000030216395,
+          "z": -12.5
+        }
+      }
+    ],
+    "after": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 147,
+      "player": {
+        "x": 40,
+        "y": 0,
+        "z": -22.5
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 47,
+        "y": 8.050000020656801,
+        "z": -12.5
+      }
+    },
+    "input": "Trusted native Space; no simulation or camera writes",
+    "screenshot": "asset-source/playtests/evidence/player-feedback/jump-anchor-canopy-after-r8.png"
+  },
+  "rampWalk": {
+    "goal": {
+      "x": 25,
+      "y": 4,
+      "z": -23.5
+    },
+    "input": "native WASD only",
+    "samples": [
+      {
+        "tick": 147,
+        "position": {
+          "x": 40,
+          "y": 0,
+          "z": -22.5
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 92,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 149,
+        "position": {
+          "x": 39.965568040282385,
+          "y": 0,
+          "z": -22.50607622818546
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 92.13985594868763,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 149,
+        "position": {
+          "x": 39.965568040282385,
+          "y": 0,
+          "z": -22.50607622818546
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 92.13985594868763,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 149,
+        "position": {
+          "x": 39.965568040282385,
+          "y": 0,
+          "z": -22.50607622818546
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 92.13985594868763,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 154,
+        "position": {
+          "x": 39.67781105351846,
+          "y": 0,
+          "z": -22.556856872908497
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 93.30866907188528,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 158,
+        "position": {
+          "x": 39.40863688077487,
+          "y": 0,
+          "z": -22.604358197510294
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 94.4020024052187,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 164,
+        "position": {
+          "x": 39.00487562165949,
+          "y": 0,
+          "z": -22.67561018441299
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 96.04200240521882,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 169,
+        "position": {
+          "x": 38.66840790573,
+          "y": 0,
+          "z": -22.734986840165234
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 97.4086690718856,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 174,
+        "position": {
+          "x": 38.33194018980051,
+          "y": 0,
+          "z": -22.79436349591748
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 98.77533573855237,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 178,
+        "position": {
+          "x": 38.06276601705692,
+          "y": 0,
+          "z": -22.841864820519277
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 99.86866907188579,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 182,
+        "position": {
+          "x": 37.79359184431333,
+          "y": 0.0589737587676189,
+          "z": -22.889366145121073
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 187,
+        "position": {
+          "x": 37.457124128383846,
+          "y": 0.15510739189033007,
+          "z": -22.94874280087332
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 194,
+        "position": {
+          "x": 36.986069326082564,
+          "y": 0.28969447826212447,
+          "z": -23.031870118926463
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 198,
+        "position": {
+          "x": 36.716895153338974,
+          "y": 0.3666013847602927,
+          "z": -23.07937144352826
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 202,
+        "position": {
+          "x": 36.447720980595385,
+          "y": 0.44350829125846136,
+          "z": -23.126872768130056
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 207,
+        "position": {
+          "x": 36.1112532646659,
+          "y": 0.5396419243811725,
+          "z": -23.186249423882302
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 213,
+        "position": {
+          "x": 35.70749200555051,
+          "y": 0.6550022841284249,
+          "z": -23.257501410784997
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 217,
+        "position": {
+          "x": 35.43831783280692,
+          "y": 0.7319091906265935,
+          "z": -23.305002735386793
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 221,
+        "position": {
+          "x": 35.169143660063334,
+          "y": 0.8088160971247622,
+          "z": -23.35250405998859
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 226,
+        "position": {
+          "x": 34.83267594413385,
+          "y": 0.904949730247472,
+          "z": -23.411880715740836
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 231,
+        "position": {
+          "x": 34.49620822820436,
+          "y": 1.0010833633701832,
+          "z": -23.47125737149308
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 236,
+        "position": {
+          "x": 34.15974051227487,
+          "y": 1.0972169964928935,
+          "z": -23.530634027245327
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 241,
+        "position": {
+          "x": 33.823272796345385,
+          "y": 1.1933506296156042,
+          "z": -23.590010682997573
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 245,
+        "position": {
+          "x": 33.554098623601796,
+          "y": 1.270257536113773,
+          "z": -23.63751200759937
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 250,
+        "position": {
+          "x": 33.21763090767231,
+          "y": 1.3663911692364832,
+          "z": -23.696888663351615
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 254,
+        "position": {
+          "x": 32.94845673492872,
+          "y": 1.4432980757346514,
+          "z": -23.74438998795341
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 259,
+        "position": {
+          "x": 32.61198901899923,
+          "y": 1.5394317088573626,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 265,
+        "position": {
+          "x": 32.20822775988385,
+          "y": 1.6547920686046154,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 270,
+        "position": {
+          "x": 31.871760043954374,
+          "y": 1.7509257017273216,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 274,
+        "position": {
+          "x": 31.602585871210813,
+          "y": 1.8278326082254823,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 279,
+        "position": {
+          "x": 31.26611815528136,
+          "y": 1.9239662413481824,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 284,
+        "position": {
+          "x": 30.92965043935191,
+          "y": 2.020099874470883,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 289,
+        "position": {
+          "x": 30.59318272342246,
+          "y": 2.1162335075935834,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 294,
+        "position": {
+          "x": 30.256715007493007,
+          "y": 2.2123671407162835,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 297,
+        "position": {
+          "x": 30.054834377935336,
+          "y": 2.270047320589904,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 303,
+        "position": {
+          "x": 29.651073118819994,
+          "y": 2.3854076803371447,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 308,
+        "position": {
+          "x": 29.314605402890543,
+          "y": 2.4815413134598447,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 312,
+        "position": {
+          "x": 29.04543123014698,
+          "y": 2.5584482199580054,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 318,
+        "position": {
+          "x": 28.64166997103164,
+          "y": 2.6738085797052458,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 322,
+        "position": {
+          "x": 28.372495798288078,
+          "y": 2.750715486203406,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 326,
+        "position": {
+          "x": 28.103321625544517,
+          "y": 2.8276223927015667,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 331,
+        "position": {
+          "x": 27.766853909615065,
+          "y": 2.923756025824267,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 337,
+        "position": {
+          "x": 27.363092650499723,
+          "y": 3.0391163855715075,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 341,
+        "position": {
+          "x": 27.093918477756162,
+          "y": 3.116023292069668,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 346,
+        "position": {
+          "x": 26.75745076182671,
+          "y": 3.2121569251923683,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 350,
+        "position": {
+          "x": 26.48827658908315,
+          "y": 3.2890638316905285,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 355,
+        "position": {
+          "x": 26.151808873153698,
+          "y": 3.3851974648132295,
+          "z": -23.75626531910386
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 360,
+        "position": {
+          "x": 25.861317625599682,
+          "y": 3.4681949641143763,
+          "z": -23.597765119972337
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      }
+    ],
+    "final": {
+      "screen": "pause",
+      "p": {
+        "id": "aren",
+        "archetypeId": "aren",
+        "species": "human",
+        "allegiance": "player",
+        "position": {
+          "x": 25.522453638272015,
+          "y": 3.5650132462079958,
+          "z": -23.59060321169125
+        },
+        "velocity": {
+          "x": -2.0680454735174436,
+          "y": 0.590870135290702,
+          "z": -0.364949201209086
+        },
+        "facing": {
+          "x": -0.9847835588179369,
+          "y": 0,
+          "z": -0.1737853339090477
+        },
+        "actionId": "aren-walk",
+        "phase": "idle",
+        "normalizedTime": 0,
+        "vitality": 120,
+        "maxVitality": 120,
+        "renderVariantId": "actor-aren",
+        "sockets": {
+          "root": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          },
+          "head": {
+            "x": 40,
+            "y": 1.5,
+            "z": -22.5
+          }
+        },
+        "interactionRequirements": [],
+        "visible": true,
+        "downed": false,
+        "possessed": false,
+        "weakPointExposed": false
+      },
+      "r": {
+        "heroId": "aren",
+        "vitality": 120,
+        "maxVitality": 120,
+        "instinct": 0,
+        "mana": 100,
+        "maxMana": 100
+      },
+      "tick": 366,
+      "basis": {
+        "forward": {
+          "x": -0.5734623443633284,
+          "y": 0,
+          "z": -0.8192319205190406
+        },
+        "right": {
+          "x": 0.8192319205190406,
+          "y": 0,
+          "z": -0.5734623443633284
+        }
+      },
+      "outcome": null,
+      "tutorial": null
+    }
+  },
+  "bridgeWalk": {
+    "goal": {
+      "x": 18.5,
+      "y": 4,
+      "z": -23.5
+    },
+    "input": "native WASD only",
+    "samples": [
+      {
+        "tick": 366,
+        "position": {
+          "x": 25.522453638272015,
+          "y": 3.5650132462079958,
+          "z": -23.59060321169125
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 370,
+        "position": {
+          "x": 25.27672669311936,
+          "y": 3.6352209448230397,
+          "z": -23.633966790247595
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 374,
+        "position": {
+          "x": 25.0075525203758,
+          "y": 3.7121278513212,
+          "z": -23.68146811484939
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 378,
+        "position": {
+          "x": 24.73837834763224,
+          "y": 3.7890347578193606,
+          "z": -23.728969439451188
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 385,
+        "position": {
+          "x": 24.267323545331006,
+          "y": 3.9236218441911412,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 389,
+        "position": {
+          "x": 23.998149372587445,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 394,
+        "position": {
+          "x": 23.661681656657993,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 397,
+        "position": {
+          "x": 23.459801027100323,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 404,
+        "position": {
+          "x": 22.98874622479909,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 409,
+        "position": {
+          "x": 22.65227850886964,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 413,
+        "position": {
+          "x": 22.383104336126078,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 418,
+        "position": {
+          "x": 22.046636620196626,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 422,
+        "position": {
+          "x": 21.777462447453065,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 427,
+        "position": {
+          "x": 21.440994731523613,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 433,
+        "position": {
+          "x": 21.03723347240827,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 437,
+        "position": {
+          "x": 20.76805929966471,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 442,
+        "position": {
+          "x": 20.43159158373526,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 447,
+        "position": {
+          "x": 20.095123867805807,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 451,
+        "position": {
+          "x": 19.825949695062246,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      },
+      {
+        "tick": 457,
+        "position": {
+          "x": 19.422188435946904,
+          "y": 4.0177522323982595,
+          "z": -23.75865776732731
+        },
+        "resources": {
+          "heroId": "aren",
+          "vitality": 120,
+          "maxVitality": 120,
+          "instinct": 0,
+          "mana": 100,
+          "maxMana": 100
+        }
+      }
+    ],
+    "final": {
+      "screen": "pause",
+      "p": {
+        "id": "aren",
+        "archetypeId": "aren",
+        "species": "human",
+        "allegiance": "player",
+        "position": {
+          "x": 19.187678036295022,
+          "y": 4.0177522323982595,
+          "z": -23.639344161727283
+        },
+        "velocity": {
+          "x": -3.358850874128052,
+          "y": 0,
+          "z": 2.351195611889807
+        },
+        "facing": {
+          "x": -0.8192319205190405,
+          "y": 0,
+          "z": 0.5734623443633284
+        },
+        "actionId": "aren-walk",
+        "phase": "idle",
+        "normalizedTime": 0,
+        "vitality": 120,
+        "maxVitality": 120,
+        "renderVariantId": "actor-aren",
+        "sockets": {
+          "root": {
+            "x": 40,
+            "y": 0,
+            "z": -22.5
+          },
+          "head": {
+            "x": 40,
+            "y": 1.5,
+            "z": -22.5
+          }
+        },
+        "interactionRequirements": [],
+        "visible": true,
+        "downed": false,
+        "possessed": false,
+        "weakPointExposed": false
+      },
+      "r": {
+        "heroId": "aren",
+        "vitality": 120,
+        "maxVitality": 120,
+        "instinct": 0,
+        "mana": 100,
+        "maxMana": 100
+      },
+      "tick": 461,
+      "basis": {
+        "forward": {
+          "x": -0.5734623443633284,
+          "y": 0,
+          "z": -0.8192319205190406
+        },
+        "right": {
+          "x": 0.8192319205190406,
+          "y": 0,
+          "z": -0.5734623443633284
+        }
+      },
+      "outcome": null,
+      "tutorial": null
+    }
+  },
+  "elevated": {
+    "label": "bridge-after-r8",
+    "before": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 468,
+      "player": {
+        "x": 19.100293298106326,
+        "y": 4.0177522323982595,
+        "z": -23.578174844995193
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 19.100293298106326,
+          "y": 4,
+          "z": -23.578174844995193
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 25.796314120760666,
+        "y": 12.067752211390545,
+        "z": -13.542308295581194
+      }
+    },
+    "samples": [
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 472,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.83888078576351,
+          "y": 12.06775222419127,
+          "z": -13.540365762161326
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 472,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.847364593550083,
+          "y": 12.067752225519456,
+          "z": -13.54061096255754
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 474,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.86552340723718,
+          "y": 12.067752227682274,
+          "z": -13.541560648002385
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 475,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.875034517858314,
+          "y": 12.06775222853543,
+          "z": -13.542249749764434
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 477,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.1339653843256965,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.892707790761328,
+          "y": 12.067809579594268,
+          "z": -13.543815946715394
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 479,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.349384885459483,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.91790115502705,
+          "y": 12.09077334196741,
+          "z": -13.546577856252156
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 480,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.448591234665833,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.93361991989072,
+          "y": 12.131830092922357,
+          "z": -13.54856222243686
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 481,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.542128649631819,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.940722365796802,
+          "y": 12.158914440699675,
+          "z": -13.54951641264407
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 483,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.712196676842704,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.954719875219975,
+          "y": 12.228735747467994,
+          "z": -13.551492975869643
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 484,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.788727289087602,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.968831399816573,
+          "y": 12.321587763148955,
+          "z": -13.553605381868085
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 486,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.924781710856308,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.98074852929644,
+          "y": 12.416445707819264,
+          "z": -13.555476140986706
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 488,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.038160395663565,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 25.992957934648928,
+          "y": 12.52775755334146,
+          "z": -13.557470305439587
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 489,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.086346336706649,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.00306295641316,
+          "y": 12.62895299093002,
+          "z": -13.559177398698562
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 490,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.128863343509371,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.008356620754082,
+          "y": 12.684721794446133,
+          "z": -13.560091523780482
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 492,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.1968905543937245,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.017946665510163,
+          "y": 12.78928101996005,
+          "z": -13.561781515473605
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 493,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.222400758475357,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.026116478954126,
+          "y": 12.88040208224382,
+          "z": -13.563255205312739
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 494,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.2422420283166264,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.02998596606151,
+          "y": 12.923561679621763,
+          "z": -13.563963989442335
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 496,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.264917765278078,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.037610573524944,
+          "y": 13.007216428478221,
+          "z": -13.565380834546474
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 497,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 5.2677522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.044227877922417,
+          "y": 13.07630478564135,
+          "z": -13.56663227123882
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 523,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.01775223239826,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09187964754648,
+          "y": 12.396255367548886,
+          "z": -13.576295325139522
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 524,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.01775223239826,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09290457264846,
+          "y": 12.314021699069023,
+          "z": -13.576518947237162
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 526,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.01775223239826,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.093777446580432,
+          "y": 12.251706756243095,
+          "z": -13.576710230741579
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 528,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.094568778081857,
+          "y": 12.202574520959814,
+          "z": -13.576884359954732
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 529,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.095220928836245,
+          "y": 12.167855801277092,
+          "z": -13.577028412673585
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 531,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.095845092054955,
+          "y": 12.139728978621157,
+          "z": -13.57716678470118
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 532,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.096366183968144,
+          "y": 12.120110312651331,
+          "z": -13.577282711783578
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 532,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.096366183968144,
+          "y": 12.120110312651331,
+          "z": -13.577282711783578
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 536,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.097200419032553,
+          "y": 12.095884492512333,
+          "z": -13.577469151411563
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 536,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.097200419032553,
+          "y": 12.095884492512333,
+          "z": -13.577469151411563
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 538,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09774551862765,
+          "y": 12.084597885726833,
+          "z": -13.577591605923654
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 539,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.097903467427667,
+          "y": 12.081955335230628,
+          "z": -13.577627192756506
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 541,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.098191116301308,
+          "y": 12.07782474497871,
+          "z": -13.577692132806433
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 542,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.098440256484512,
+          "y": 12.074921442310037,
+          "z": -13.577748525543601
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 543,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.098550768127417,
+          "y": 12.073822607085749,
+          "z": -13.577773586523865
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 544,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09876316784325,
+          "y": 12.072017462689594,
+          "z": -13.577821839490355
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 546,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09895659979015,
+          "y": 12.070702747270886,
+          "z": -13.577865889962844
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 548,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099112770557138,
+          "y": 12.0698523119794,
+          "z": -13.577901535954172
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 550,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099323250783236,
+          "y": 12.068976696639282,
+          "z": -13.577949705210123
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 552,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099437966583803,
+          "y": 12.06861777341934,
+          "z": -13.577976026587464
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 553,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099550322656345,
+          "y": 12.068338786952118,
+          "z": -13.578001858613014
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 555,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099641721832846,
+          "y": 12.06816004565335,
+          "z": -13.57802291418701
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 557,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099721732177677,
+          "y": 12.068035785171167,
+          "z": -13.578041380033454
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 558,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099792280493933,
+          "y": 12.067948875609183,
+          "z": -13.578057690997309
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 559,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099824142588798,
+          "y": 12.067916031185318,
+          "z": -13.578065067224166
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 561,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09988198437955,
+          "y": 12.067865790619472,
+          "z": -13.578078474461428
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 562,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.09993008053242,
+          "y": 12.067832526849013,
+          "z": -13.578089640358446
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 564,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.099975149733012,
+          "y": 12.067807713341423,
+          "z": -13.578100119508242
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 565,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100016891617194,
+          "y": 12.067789690411102,
+          "z": -13.578109840241574
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 566,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100032911456736,
+          "y": 12.067783933678982,
+          "z": -13.578113575128121
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 568,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100066807416475,
+          "y": 12.067773695899469,
+          "z": -13.578121486104997
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 568,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.10008006824316,
+          "y": 12.06777036195231,
+          "z": -13.57812458437516
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 570,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100107787880013,
+          "y": 12.067764509100032,
+          "z": -13.578131067399227
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 572,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100130964583435,
+          "y": 12.067760679996127,
+          "z": -13.578136495366309
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 573,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.10015027154739,
+          "y": 12.067758156456659,
+          "z": -13.578141022773153
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 574,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100159087521313,
+          "y": 12.067757188726041,
+          "z": -13.578143091968755
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 576,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100177076701762,
+          "y": 12.067755542820805,
+          "z": -13.578147318200752
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 577,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100184581958946,
+          "y": 12.0677549774647,
+          "z": -13.578149083126906
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 578,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.10019808563142,
+          "y": 12.067754124420007,
+          "z": -13.578152261392166
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 579,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100204423841145,
+          "y": 12.067753791792434,
+          "z": -13.578153754484582
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 580,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100214772755333,
+          "y": 12.067753333986392,
+          "z": -13.578156194341307
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 582,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.10022465613458,
+          "y": 12.067752987449648,
+          "z": -13.57815852691753
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 583,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.1002291085111,
+          "y": 12.067752857829426,
+          "z": -13.578159578584025
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 586,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.10024440253531,
+          "y": 12.067752523571302,
+          "z": -13.57816319568942
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 587,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.1002479278846,
+          "y": 12.067752468358192,
+          "z": -13.578164030579394
+        }
+      },
+      {
+        "screen": "game",
+        "tutorial": false,
+        "tick": 588,
+        "player": {
+          "x": 19.100293298106326,
+          "y": 4.0177522323982595,
+          "z": -23.578174844995193
+        },
+        "ambient": {
+          "name": "canopy-atmosphere",
+          "focus": {
+            "x": 19.100293298106326,
+            "y": 4,
+            "z": -23.578174844995193
+          }
+        },
+        "cue": {
+          "x": 46.5,
+          "y": 0,
+          "z": -29
+        },
+        "camera": {
+          "x": 26.100253440312795,
+          "y": 12.067752396363815,
+          "z": -13.578165337024863
+        }
+      }
+    ],
+    "after": {
+      "screen": "game",
+      "tutorial": false,
+      "tick": 590,
+      "player": {
+        "x": 19.100293298106326,
+        "y": 4.0177522323982595,
+        "z": -23.578174844995193
+      },
+      "ambient": {
+        "name": "canopy-atmosphere",
+        "focus": {
+          "x": 19.100293298106326,
+          "y": 4,
+          "z": -23.578174844995193
+        }
+      },
+      "cue": {
+        "x": 46.5,
+        "y": 0,
+        "z": -29
+      },
+      "camera": {
+        "x": 26.100258657985247,
+        "y": 12.067752342935211,
+        "z": -13.578166574802506
+      }
+    },
+    "input": "Trusted native Space; no simulation or camera writes",
+    "screenshot": "asset-source/playtests/evidence/player-feedback/jump-anchor-bridge-after-r8.png"
+  },
+  "summary": {
+    "before": {
+      "playerY": {
+        "min": -1.3877787807814457e-17,
+        "max": 1.1791383219954648,
+        "range": 1.1791383219954648
+      },
+      "ambientAnchorY": {
+        "min": -1.3877787807814457e-17,
+        "max": 1.1779535147392206,
+        "range": 1.1779535147392206
+      },
+      "questAnchorY": {
+        "min": 0,
+        "max": 0,
+        "range": 0
+      },
+      "cameraY": {
+        "min": 8.05,
+        "max": 8.829808836069843,
+        "range": 0.7798088360698419
+      }
+    },
+    "after": {
+      "playerY": {
+        "min": 0,
+        "max": 1.2471655328798186,
+        "range": 1.2471655328798186
+      },
+      "ambientAnchorY": {
+        "min": 0,
+        "max": 0,
+        "range": 0
+      },
+      "questAnchorY": {
+        "min": 0,
+        "max": 0,
+        "range": 0
+      },
+      "cameraY": {
+        "min": 8.05,
+        "max": 9.11274449369367,
+        "range": 1.0627444936936694
+      }
+    },
+    "elevated": {
+      "playerY": {
+        "min": 4.0177522323982595,
+        "max": 5.2677522323982595,
+        "range": 1.25
+      },
+      "ambientAnchorY": {
+        "min": 4,
+        "max": 4,
+        "range": 0
+      },
+      "questAnchorY": {
+        "min": 0,
+        "max": 0,
+        "range": 0
+      },
+      "cameraY": {
+        "min": 12.06775222419127,
+        "max": 13.07630478564135,
+        "range": 1.0085525614500792
+      }
+    }
+  },
+  "validation": {
+    "nativeAssertions": 16,
+    "worldTests": {
+      "command": "bun test tests/world",
+      "passed": 90,
+      "failed": 0
+    },
+    "regressionBefore": {
+      "command": "bun test tests/world/canopy-world.test.ts --test-name-pattern \"RegionEnvironment keeps Canopy\"",
+      "actual": 2.4,
+      "expected": 0
+    },
+    "regressionAfter": {
+      "passed": 1,
+      "failed": 0
+    },
+    "build": {
+      "command": "npm run build -- --outDir dist-jump-anchor",
+      "passed": true,
+      "modules": 1069,
+      "warning": "Existing >500kB chunks warning"
+    },
+    "console": {
+      "entries": [],
+      "nextSeq": 8,
+      "dropped": 0
+    },
+    "errors": {
+      "entries": [
+        {
+          "seq": 1,
+          "ts": 1792734291760,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/title.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/title.ogg"
+        },
+        {
+          "seq": 2,
+          "ts": 1792734291761,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/title.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/title.ogg"
+        },
+        {
+          "seq": 3,
+          "ts": 1792734291761,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/title.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/title.ogg"
+        },
+        {
+          "seq": 4,
+          "ts": 1792734291762,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/title.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/title.ogg"
+        },
+        {
+          "seq": 5,
+          "ts": 1792734303595,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/layer-corrupted.ogg"
+        },
+        {
+          "seq": 6,
+          "ts": 1792734303595,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/layer-corrupted.ogg"
+        },
+        {
+          "seq": 7,
+          "ts": 1792734303595,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/layer-corrupted.ogg"
+        },
+        {
+          "seq": 8,
+          "ts": 1792734316352,
+          "type": "requestfailed",
+          "level": "error",
+          "text": "GET http://127.0.0.1:5218/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+          "location": "http://127.0.0.1:5218/audio/music/layer-corrupted.ogg"
+        }
+      ],
+      "nextSeq": 8,
+      "dropped": 0
+    }
+  },
+  "scope": {
+    "region": "whispering-canopy",
+    "beforeOrigin": 5217,
+    "afterOrigin": 5218,
+    "fixture": "Unmodified import of prior coordinator-owned Canopy export; no direct gameplay, camera or state writes",
+    "movement": "Trusted WASD climbed from courtyard to 4 m bridge before the elevated Space jump",
+    "notClaimed": [
+      "Native jump in every biome",
+      "Full release approval",
+      "Reference-hardware performance qualification"
+    ],
+    "userOrigin5214": "Browser tab/save untouched; static build assets will be merged only after proof"
+  },
+  "delivery": {
+    "preview": "http://127.0.0.1:5214/",
+    "indexByteIdenticalToTestedBuild": true,
+    "main": "assets/main-C4zi34jX.js",
+    "mainSHA256": "d498d8d3c4d4a77aa659b8e43d2e327d861b5ff2038efd2941ae5aa16b9bbcb6",
+    "merge": "Added tested hashed assets, replaced only index.html; retained previous assets and same save origin",
+    "servedByteIdentityAssertions": 3
+  },
+  "completedAt": "2026-10-23T05:47:48.876Z"
+}

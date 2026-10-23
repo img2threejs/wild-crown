@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { REGIONS } from '../../src/content/campaign.js';
 import { solidPropKind } from '../../src/content/solid-props.js';
-import { CombatEngine, type CombatInput } from '../../src/game/combat/CombatEngine.js';
+import { CombatEngine, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
 import { MOONPINE_COMBAT_TRIALS, MOONPINE_TRIAL_SET } from '../../src/game/combat/MoonpineContent.js';
 import { createMoonpineTrialRegion, MOONPINE_SURFACE_PREFIX } from '../../src/game/combat/MoonpineTrialRegion.js';
 import { createCombatTrialRegion } from '../../src/game/combat/TrialRegions.js';
@@ -173,6 +173,15 @@ describe('Moonpine Ridge trial region', () => {
 
 const IDLE: CombatInput = { tick: 0, move: vec(0, 0, 0), dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false };
 
+/**
+ * The engine keeps its state private by design; this loop reads the player's live position through the same test
+ * seam the other combat tests use. `snapshot()` rebuilds a whole snapshot (every actor, hazard, telegraph, prop
+ * and event) on each call, and this loop calls it once per tick.
+ */
+function liveState(engine: CombatEngine): EngineState {
+  return (engine as unknown as { state: EngineState }).state;
+}
+
 /** Walks Aren along the navigation nodes with the real engine (monsters hidden), returning the furthest node reached and the final position. */
 function walkRoute(openGates: number): { reached: number; position: Vec3 } {
   const engine = new CombatEngine();
@@ -189,7 +198,7 @@ function walkRoute(openGates: number): { reached: number; position: Vec3 } {
   for (let target = 1; target < points.length; target++) {
     const goal = points[target]!;
     for (let tick = 0; tick < 900; tick++) {
-      position = walker.snapshot().actors.find(actor => actor.id === 'aren')!.position;
+      position = liveState(walker).actors.find(actor => actor.id === 'aren')!.position;
       const dx = goal.x - position.x, dz = goal.z - position.z, length = Math.hypot(dx, dz);
       if (length < 0.7) { reached = target; break; }
       walker.fixedStep({ ...IDLE, move: vec(dx / length, 0, dz / length), sprintHeld: true });
@@ -197,7 +206,7 @@ function walkRoute(openGates: number): { reached: number; position: Vec3 } {
     }
     if (reached !== target) break;
   }
-  return { reached, position: walker.snapshot().actors.find(actor => actor.id === 'aren')!.position };
+  return { reached, position: liveState(walker).actors.find(actor => actor.id === 'aren')!.position };
 }
 
 describe('Moonpine Ridge route with the real engine', () => {

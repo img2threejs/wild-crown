@@ -1,0 +1,44 @@
+{
+  "subject": "Existing Erya world-map selection surface",
+  "reference": {
+    "source": "public/ui/world-map-game.webp",
+    "originalSha256": "ae6842605dc1c8c72cb6ce0a3befd1b98d98da9cf890106a371f71cab598c72e",
+    "working": "reference/working.png",
+    "workingSha256": "3c3382ec63d0a133e7b64fa8fdfa5e25b69f1af0ebb573d3e03f89492091a085",
+    "width": 1536,
+    "height": 960,
+    "observed": "One continuous painted biome map, eight named journey regions, painted serif labels and leader diamonds, coastline and one detached underground inset. No artist-authored region mattes or hidden layers are supplied."
+  },
+  "ownership": {
+    "backdrop": "One atomic, unchanged Sprite containing the existing artwork and painted lettering. No region pixels are cut, duplicated, repainted or independently translated.",
+    "regions": "Eight independent native Pixi Containers with Graphics borders and matching Polygon hit areas. Stable ids and status/entry permissions remain sourced from the existing region and playtest data. Existing DOM marker buttons supply the semantic keyboard/gamepad controls and licensed UI typography.",
+    "route": "Independent native Graphics survey route retaining the existing journey order.",
+    "host": "The real map binder owns async Application setup, shared Assets texture loading, resize, bounded ticker activity, reduced-motion and visibility listeners. The typed scene factory owns only its Container hierarchy and federated listeners.",
+    "inference": "Image-guided region contours follow visible coast/biome transitions. Interior boundaries on this continuous painting are inferred gameplay partitions, not recovered artist mattes. The Refuge is not a named selectable chapter in the current map and is not given a new entry permission."
+  },
+  "occlusion": {
+    "order": ["unchanged painted map", "survey route", "independent region border/fill", "existing semantic marker buttons"],
+    "completion": "None. The camera zooms the complete registered scene, never extracts a moving land cutout. No underlying layer is exposed and no hidden content is invented.",
+    "protected": "All original decoded image pixels, painted labels, unrelated UI, region information and release/progression gates. Only native overlay nodes and the common camera transform change."
+  },
+  "motion": {
+    "focalMoment": "Hover or focus a geographic region: a closed warm survey border identifies its full footprint while the intact map eases toward that region.",
+    "zoom": 1.1,
+    "durationMs": 300,
+    "easing": "quartic ease-out",
+    "pivot": "Authoritative region centre, constrained to keep its outline inside the viewport and prevent uncovered canvas.",
+    "reset": "Pointer leave with no focused region returns the common camera to scale1. The last inspected info panel remains readable. Switching regions starts from the current transform; zoom never compounds.",
+    "reducedMotion": "User setting or system preference suppresses camera movement and tweening while retaining the border and inspection feedback.",
+    "idle": "No continuous effect loop. Stop the host ticker when the bounded transition settles or the document is hidden."
+  },
+  "acceptance": [
+    "Use the normal existing application, not a demo or alternative map.",
+    "All eight named region footprints respond to actual geographic pointer movement, not just tiny markers; borders align with the source painting.",
+    "Native scene nodes and hit areas remain independently controllable; hiding/moving a border cannot change any artwork pixels or reveal a ghost/hole.",
+    "At source dimensions, the actual native backdrop render compares with the admitted working image; metrics are diagnostics, not invented fidelity scores.",
+    "Inspect intermediate motion, every region extreme, switching, leave/reset and repeated use at desktop and mobile widths.",
+    "Existing keyboard/gamepad focus, playable selection, unavailable chapters and Return to Title retain their behavior.",
+    "Verify system and application Reduced Motion, resize, disposal/re-entry and missing-resource behavior; inspect browser errors and run the integrated build."
+  ],
+  "review": {"maximumCorrectionsPerPass": 3, "maximumTotalCorrections": 6, "decision": "stop", "reason": "Requested map interaction accepted; no further corrections. The user explicitly authorized one additional bounded pointer-up teardown repair after the original correction limit. Final evidence and history bindings are in review.json."}
+}

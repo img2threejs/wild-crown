@@ -118,6 +118,11 @@
 /* ---------- Loading scene recovery: the error takes its own row above the actions ---------- */
 .wc-scene__actions .wc-error { flex: 1 0 100%; max-width: 64ch; margin: 0 auto 4px; text-align: center; overflow-wrap: anywhere; }
 
+/* ---------- HUD groups: the collapse is instant, the state is announced by the button ---------- */
+.wc-hud__toggle { transition: color 160ms ease, border-color 160ms ease; }
+.wc-hud__toggle-mark { transition: transform 180ms var(--wc-ease-out, ease); }
+.wc-reduced-motion .wc-hud__toggle, .wc-reduced-motion .wc-hud__toggle-mark { transition: none !important; }
+
 /* ---------- Reduced motion: authored static alternatives ---------- */
 .wc-reduced-motion .wc-sheet, .wc-reduced-motion .wc-areamap__route, .wc-reduced-motion .wc-areamap__marker,
 .wc-reduced-motion .wc-dialogue__card, .wc-reduced-motion .wc-hero-panel > *, .wc-reduced-motion .wc-state__title,

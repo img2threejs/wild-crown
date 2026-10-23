@@ -1,0 +1,310 @@
+{
+  "freshPage": true,
+  "machine": "Apple M1 / 16 GiB / managed headless Brave Chrome 155",
+  "bootMs": 10374,
+  "initial": {
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "scale": 0.75,
+    "buffer": [
+      1080,
+      675
+    ],
+    "css": [
+      1440,
+      900
+    ],
+    "bundle": [
+      "http://127.0.0.1:5224/assets/main-COE1gFAy.js"
+    ]
+  },
+  "settling": {
+    "label": "final-viewport-budget-production-settling",
+    "durationMs": 6003.099999964237,
+    "frames": 449,
+    "frame": {
+      "p50": 13.300000000001091,
+      "p95": 14,
+      "p99": 14.200000000000728,
+      "max": 14.300000000001091,
+      "over25": 0,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1080,
+      "bufferHeight": 675,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 361,
+      "worldTick": 361,
+      "worldTimeSeconds": 6.016666666666667,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2613.719,
+      "taskMs": 2781.574,
+      "layoutMs": 0.486,
+      "recalcStyleMs": 39.497,
+      "heapUsedBytes": 26530904,
+      "domNodes": 972
+    }
+  },
+  "idle": {
+    "label": "final-viewport-budget-production-idle",
+    "durationMs": 6002.600000023842,
+    "frames": 449,
+    "frame": {
+      "p50": 13.30000000000291,
+      "p95": 14.099999999998545,
+      "p99": 14.299999999999272,
+      "max": 14.30000000000291,
+      "over25": 0,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1080,
+      "bufferHeight": 675,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 722,
+      "worldTick": 722,
+      "worldTimeSeconds": 12.033333333333333,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2340.674,
+      "taskMs": 2486.1969999999997,
+      "layoutMs": 0,
+      "recalcStyleMs": 30.868,
+      "heapUsedBytes": 29842188,
+      "domNodes": 972
+    }
+  },
+  "mixed": {
+    "label": "final-viewport-budget-production-identical-input-plan",
+    "durationMs": 9001.899999976158,
+    "frames": 674,
+    "frame": {
+      "p50": 13.30000000000291,
+      "p95": 14.299999999999272,
+      "p99": 14.399999999997817,
+      "max": 14.400000000001455,
+      "over25": 0,
+      "over50": 0
+    },
+    "longTasks": [],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1080,
+      "bufferHeight": 675,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "greenwake",
+    "worldClock": {
+      "simulationTick": 1262,
+      "worldTick": 1262,
+      "worldTimeSeconds": 21.03333333333333,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "aren",
+      "vitality": 120,
+      "maxVitality": 120,
+      "instinct": 0,
+      "mana": 81.06791756601936,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "finalPosition": {
+      "x": -17.054059132720344,
+      "y": 0,
+      "z": -7.585022201343214
+    },
+    "actors": 7,
+    "rendererMemory": {
+      "geometries": 138,
+      "textures": 92
+    },
+    "programs": 95,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 2346.937,
+      "taskMs": 2650.2439999999997,
+      "layoutMs": 15.48,
+      "recalcStyleMs": 76.17699999999999,
+      "heapUsedBytes": 56983044,
+      "domNodes": 5644
+    }
+  },
+  "gpuSeparateWindow": {
+    "label": "final-viewport-budget-production-gpu-separate-window",
+    "available": true,
+    "samples": 165,
+    "disjoint": false,
+    "pending": 0,
+    "p50Ms": 15.162791,
+    "p95Ms": 17.640125,
+    "targetSamples": [
+      0,
+      0
+    ]
+  },
+  "final": {
+    "screen": "game",
+    "scale": 0.75,
+    "buffer": [
+      1080,
+      675
+    ],
+    "css": [
+      1440,
+      900
+    ],
+    "glError": 0,
+    "assetErrors": []
+  },
+  "actions": [
+    {
+      "at": 0,
+      "key": "w",
+      "down": true
+    },
+    {
+      "at": 1300,
+      "key": "w",
+      "down": false
+    },
+    {
+      "at": 1500,
+      "key": "j",
+      "down": true
+    },
+    {
+      "at": 3200,
+      "key": "j",
+      "down": false
+    },
+    {
+      "at": 3500,
+      "key": "k",
+      "down": true
+    },
+    {
+      "at": 4300,
+      "key": "k",
+      "down": false
+    },
+    {
+      "at": 4700,
+      "key": "l",
+      "down": true
+    },
+    {
+      "at": 5500,
+      "key": "l",
+      "down": false
+    },
+    {
+      "at": 5900,
+      "key": "f",
+      "down": true
+    },
+    {
+      "at": 6000,
+      "key": "f",
+      "down": false
+    },
+    {
+      "at": 6500,
+      "key": "s",
+      "down": true
+    },
+    {
+      "at": 7800,
+      "key": "s",
+      "down": false
+    }
+  ],
+  "sourceGameRendererSha256": "d978c307fe9b4c3be826899874972b54ab86ff737566c19d674add15771cfae7",
+  "limits": "Local warm network, shared-host timing, CSS 1440x900 DPR 1. Quality scale changes only 3D buffer, not HUD. GPU timing is a separate instrumented window. Historical native-resolution baseline is not equal-quality adaptive output."
+}

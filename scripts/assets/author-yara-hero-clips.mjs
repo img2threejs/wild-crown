@@ -7,15 +7,22 @@ import { parseGlb, encodeGlb } from './import-aren-animation-set.mjs';
 import { readAccessorAny } from './creature-rig-kit.mjs';
 import { Rig, buildClip, appendClips, limitJoints, jointExcursions, skinDeformationReport, JOINT_LIMITS, COMBAT_LIMITS, FPS } from './retarget-aren-tripo-clips.mjs';
 import { loadMixamoDonor, resolveMixamoSources } from './mixamo-import.mjs';
+import { createMixamoExact, YARA_EXACT, EXACT_TOLERANCE_DEGREES, exactTimeline, sampleExact, exactnessGate, loopSeamDegrees } from './mixamo-exact.mjs';
 import { armDepth, capsules as bodyCapsules, clearArms } from './arm-body-clearance.mjs';
 
 /**
- * Authors Yara's Heartroot clip set on her native 23-joint Tripo skeleton.
+ * Authors Yara's Heartroot clip set on her 65-joint Mixamo rig (asset-source/generated/actor-yara-c-rig-01).
  *
- * Bodies come from Tripo preset donors (retargeted by the shared toolkit, anatomically limited by `limitJoints`); the staff arm is then
- * authored by `armLayer`: a two-bone solve of the right arm to a hand target plus a staff direction, so the staff is held in the fixed fist of
- * `src/rendering/NativeHandGrip.ts` (no wrist twisting at runtime) and aims where the choreography wants it. A second solve can seat the left
- * palm on the shaft for the two-hand actions.
+ * Her idle, Petal Step and every Heartroot skill play an Adobe Mixamo take exactly as Mixamo delivered it: 14 FBX exports of Yara's own uploaded character
+ * (asset-source/mixamo/yara-skills, ledger provenance.json there), so a take's skeleton is her rig and its bone rotations are her rig's (mixamo-exact.mjs).
+ * The ONLY processing of such a spec (`exact: true`) is the time warp onto the simulation ticks (linear `keys`, or a loop `window`) and the in-place Hips pin;
+ * there is no retarget, joint limit, arm layer, clearance pass, lean or facing correction, and no seam, tail or loop blend. The build measures every output key
+ * against the FBX locals (`exactness`, failing above 0.1°) and reports the staff (the per-clip profile of src/rendering/heartroot-staff-profiles.json: the staff
+ * adapts to the take, never the take to the staff) against the body capsules and the floor (`staffClearance`) without changing a frame.
+ *
+ * Walk, run, jump, hit, cheer, defeat and the second jump (`aren-air-step`) keep the Tripo donor presets, retargeted by the shared toolkit and anatomically
+ * limited by `limitJoints`; the staff arm of the gait clips is authored by `armLayer`, a two-bone solve of the right arm, so the staff is held in the fixed fist
+ * of `src/rendering/NativeHandGrip.ts` (no wrist twisting at runtime).
  *
  * Knockdown / get-up (aren-knockdown, aren-knockdown-forward, aren-getup, aren-getup-forward): four 60 Hz clips that play captured Mixamo reaction takes
  * (asset-source/mixamo/reactions) through the world-space retarget of mixamo-import.mjs; see `lieClip`, `buildGetup`, `floorCorrect` and `staffClearance`.
@@ -130,17 +137,11 @@ function handAnatomy(base, side) {
     let surface = 0;
     for (const point of handOnly) if (point.dot(direction) > middle.dot(direction) * 0.5 && point.dot(direction) < middle.dot(direction)) surface = Math.max(surface, point.dot(normal));
     anatomy.s = s;
+    anatomy.knuckles = knuckleLine;
+    anatomy.direction = direction;
     anatomy.dPerp = direction.clone().addScaledVector(s, -direction.dot(s)).normalize();
     anatomy.shaftRadius = shaftRadius;
     anatomy.palm = middle.clone().multiplyScalar(0.92).addScaledVector(normal, surface + shaftRadius);
-  } else {
-    // The free left hand lays its flat palm on the shaft: the contact point is the palm-side surface over the palm centroid.
-    const bend = d, lengths = points.map((point) => point.dot(bend)).sort((x, y) => x - y), hinge = lengths[Math.floor(lengths.length * 0.98)] * 0.42;
-    const palmPoints = points.filter((point) => point.dot(bend) < hinge);
-    let across = 0, along = 0, surface = -Infinity;
-    for (const point of palmPoints) { across += point.dot(thumb); along += point.dot(d); surface = Math.max(surface, point.dot(n)); }
-    across /= palmPoints.length; along /= palmPoints.length;
-    anatomy.palmSurface = d.clone().multiplyScalar(along).addScaledVector(thumb, across).addScaledVector(n, surface);
   }
   return anatomy;
 }
@@ -152,23 +153,17 @@ const rigDirection = (yaw, pitch) => new Vector3(Math.cos(pitch * DEG) * Math.co
 const smooth = (x) => { const t = Math.max(0, Math.min(1, x)); return t * t * (3 - 2 * t); };
 const quaternionOf = (matrix, out = new Quaternion()) => out.setFromRotationMatrix(matrix);
 
-/** Named staff-arm poses: `hand` is the wrist offset from the shoulder in chest axes (forward, up, right; rig units, 1.7 m = 1.0), `staff` the shaft head's [yaw° (+ toward her left), pitch°] about the chest heading. */
+/** The staff-arm pose of the gait clips: `hand` is the wrist offset from the shoulder in chest axes (out to her right, up, forward; rig units, 1.7 m = 1.0), `staff` the shaft head's [yaw° (0 = out to her right, −90 = forward), pitch° above the horizontal] about the chest heading. */
 const POSES = {
   carry: { hand: [0.13, -0.105, 0.065], staff: [0, 86] },
-  ready: { hand: [0.2, -0.04, 0.04], staff: [0, 62] },
-  guard: { hand: [0.17, -0.05, 0.1], staff: [-12, 28] },
-  hip: { hand: [0.1, -0.16, 0.1], staff: [0, 12] },
-  thrust: { hand: [0.29, 0.0, 0.03], staff: [0, 8] },
-  high: { hand: [0.1, 0.27, 0.06], staff: [0, 90] },
-  overhead: { hand: [0.14, 0.22, 0.05], staff: [0, 62] },
-  low: { hand: [0.2, -0.22, 0.08], staff: [0, -30] },
-  plant: { hand: [0.2, 0.005, 0.05], staff: [0, 84] },
 };
 
 const BONE_Y = new Vector3(0, 1, 0);
 const SWIVELS = [0, -20, 20, -40, 40, -60, 60, -80, 80, -100, 100];
 /** Cost per rig unit of arm-in-body depth: a centimetre of overlap outweighs the whole preference for a small swivel. */
 const BODY_PRICE = 14;
+/** Cost per degree of a resting (hinge-layer) upper arm away from the trunk's down axis. */
+const HANG_PRICE = 0.1;
 /** Rest-relative swing and twist (radians) of a local rotation about the bone's +Y axis (the limitJoints convention of the retarget toolkit). */
 function swingTwist(local, restInverse, scratch) {
   const rel = scratch.copy(restInverse).multiply(local);
@@ -180,19 +175,20 @@ function swingTwist(local, restInverse, scratch) {
 
 /**
  * The arm solve fixes the world pose; how its roll is shared between upper arm, forearm and hand is free (rolling a parent about its bone axis and
- * counter-rolling the child leaves every world pose unchanged). Picks the shares that keep the three joints furthest inside their limits.
+ * counter-rolling the child leaves every world pose unchanged). Picks the shares that keep the three joints furthest inside their limits. A hinge solve
+ * (`fixedArm`) has already chosen the upper-arm roll (it sets the elbow's bend plane), so only the forearm/hand share is free.
  */
-function balanceRoll(target, ids, local, limits, side, memory) {
+function balanceRoll(target, ids, local, limits, side, memory, fixedArm = false) {
   const names = ['arm', 'fore', 'hand'], suffix = { arm: 'Arm', fore: 'ForeArm', hand: 'Hand' };
   const restInverse = names.map((name) => target.restQuaternion[ids[name]].clone().invert());
   const lim = names.map((name) => limits[`mixamorig:${side}${suffix[name]}`]);
   const scratch = new Quaternion(), arm = new Quaternion(), fore = new Quaternion(), hand = new Quaternion(), rollA = new Quaternion(), rollB = new Quaternion();
   let best = { cost: Infinity };
-  for (let ta = -80; ta <= 80; ta += 20) {
+  for (let ta = fixedArm ? 0 : -80; ta <= (fixedArm ? 0 : 80); ta += 20) {
     rollA.setFromAxisAngle(BONE_Y, ta * DEG);
     arm.copy(local.arm).multiply(rollA);
     const armPart = swingTwist(arm, restInverse[0], scratch);
-    for (let tf = -150; tf <= 150; tf += 6) {
+    const tryRoll = (tf) => {
       rollB.setFromAxisAngle(BONE_Y, tf * DEG);
       fore.copy(rollA).invert().multiply(local.fore).multiply(rollB);
       hand.copy(rollB).invert().multiply(local.hand);
@@ -201,7 +197,10 @@ function balanceRoll(target, ids, local, limits, side, memory) {
       parts.forEach((part, i) => { cost = Math.max(cost, Math.abs(part.twist) / (lim[i].twist * DEG), part.swing / (lim[i].swing * DEG)); });
       cost += 0.0004 * (Math.abs(ta - memory.ta) + Math.abs(tf - memory.tf));
       if (cost < best.cost) best = { cost, ta, tf };
-    }
+    };
+    for (let tf = -150; tf <= 150; tf += 6) tryRoll(tf);
+    // The hinge solve refines the share the same way it refines the swivel, so the forearm and wrist roll does not step by the 6° grid.
+    if (fixedArm) for (const step of [1.5, 0.25]) { const centre = best.tf; for (const offset of [-3, -2, -1, 1, 2, 3]) tryRoll(centre + offset * step); }
   }
   rollA.setFromAxisAngle(BONE_Y, best.ta * DEG); rollB.setFromAxisAngle(BONE_Y, best.tf * DEG);
   const nextArm = local.arm.clone().multiply(rollA), nextFore = rollA.clone().invert().multiply(local.fore).multiply(rollB), nextHand = rollB.clone().invert().multiply(local.hand);
@@ -218,6 +217,8 @@ function armSolver(target, side) {
   const L1 = restU.length(), L2 = restF.length();
   restU.normalize(); restF.normalize();
   const pole = new Vector3(-0.15, -0.65, side === 'Right' ? 0.75 : -0.75).normalize();
+  // Elbow hinge in rest world axes: the forearm's local −Z (Mixamo takes bend the elbow about it, measured 87–91° in the bone's XZ plane).
+  const elbowHinge = new Vector3(0, 0, -1).applyQuaternion(rq(ids.fore));
   const chestRestInverse = rq(ids.chest).clone().invert();
   const scratch = { a: new Quaternion(), b: new Quaternion(), c: new Quaternion(), v: new Vector3(), w: new Vector3(), m: new Matrix4() };
   return {
@@ -229,7 +230,7 @@ function armSolver(target, side) {
      * Writes the solved local rotations of arm/forearm/hand into `out` for a wrist target `T` (world) and a hand frame: local vectors
      * (`a1`, `a2`) of the hand map onto world vectors (`b1`, `b2`) (`b2` is only used as the plane; the forearm direction supplies it when absent).
      */
-    solve(world, T, a1, a2, b1, b2, out, roll = 0, swivel = 0) {
+    solve(world, T, a1, a2, b1, b2, out, roll = 0, swivel = 0, hinge = false) {
       const S = scratch.v.setFromMatrixPosition(world[ids.arm]).clone();
       const toTarget = T.clone().sub(S);
       const reach = Math.min(Math.max(toTarget.length(), Math.abs(L1 - L2) + 1e-3), L1 + L2 - 1e-3);
@@ -241,8 +242,23 @@ function armSolver(target, side) {
       if (swivel) bendPlane.applyAxisAngle(u, swivel);
       const elbow = S.clone().addScaledVector(u, a).addScaledVector(bendPlane, h);
       const U = elbow.clone().sub(S).normalize(), F = S.clone().addScaledVector(u, reach).sub(elbow).normalize();
-      const qa = new Quaternion().setFromUnitVectors(restU, U).multiply(rq(ids.arm));
-      const qf = new Quaternion().setFromUnitVectors(restF, F).multiply(rq(ids.fore));
+      let qa, qf;
+      if (hinge) {
+        // Anatomical elbow: the humerus rolls so the elbow's hinge axis is normal to the arm's bend plane, and the forearm turns about that axis only
+        // (its own roll, pronation, is shared with the hand by balanceRoll).
+        const deltaArm = new Quaternion().setFromUnitVectors(restU, U);
+        const axisNow = elbowHinge.clone().applyQuaternion(deltaArm), axisWanted = U.clone().cross(F);
+        if (axisWanted.lengthSq() > 1e-10) {
+          axisWanted.normalize();
+          deltaArm.premultiply(new Quaternion().setFromAxisAngle(U, Math.atan2(U.dot(axisNow.clone().cross(axisWanted)), axisNow.dot(axisWanted))));
+        }
+        const deltaFore = new Quaternion().setFromAxisAngle(axisWanted.lengthSq() > 1e-10 ? axisWanted : elbowHinge.clone().applyQuaternion(deltaArm), U.angleTo(F)).multiply(deltaArm);
+        deltaFore.premultiply(new Quaternion().setFromUnitVectors(restF.clone().applyQuaternion(deltaFore), F));
+        qa = deltaArm.multiply(rq(ids.arm)); qf = deltaFore.multiply(rq(ids.fore));
+      } else {
+        qa = new Quaternion().setFromUnitVectors(restU, U).multiply(rq(ids.arm));
+        qf = new Quaternion().setFromUnitVectors(restF, F).multiply(rq(ids.fore));
+      }
       // Hand: local frame (a1, a2) → world frame (b1, b2'), with b2' the part of b2 (or the forearm) perpendicular to b1.
       const second = (b2 ?? F).clone().addScaledVector(b1, -(b2 ?? F).dot(b1));
       if (second.lengthSq() < 1e-8) second.set(1, 0, 0).addScaledVector(b1, -b1.x);
@@ -289,15 +305,16 @@ const slerpDirection = (from, to, t) => {
 };
 
 /**
- * Authors the staff arm. `layer = { keys, follow, pitchPerUnit, left }`: keys `{ t, pose?, hand?, staff?, w?, grip?, gw?, roll? }` in ticks. `w` blends donor →
+ * Authors the staff arm of the gait clips. `layer = { keys, follow, pitchPerUnit, hinge, smooth, loop }` (`hinge`: the anatomical elbow of
+ * `armSolver.solve`; `smooth`/`loop`: the temporal filter below): keys `{ t, pose?, hand?, staff?, w?, roll? }` in ticks. `w` blends donor →
  * authored arm (0 leaves the donor's arm untouched); `follow` keeps that fraction of the donor hand's motion (chest axes, deviation from its mean) so a
- * gait still swings the arm; `grip` is the distance (rig units) from the fist along the shaft where the left palm lands with weight `gw`.
+ * gait still swings the arm.
  * Returns the staff-direction trace (degrees from vertical per frame) for the report.
  */
 function armLayer(context, frames, count, layer, limits) {
-  const { target, right, left, grip, leftGrip } = context;
-  const keys = resolveKeys(layer.keys, { t: 0, hand: POSES.carry.hand, staff: POSES.carry.staff, w: 1, grip: 0.3, gw: 0, roll: 0 });
-  const rightArm = armSolver(target, 'Right'), leftArm = layer.keys.some((key) => (key.gw ?? 0) > 0) ? armSolver(target, 'Left') : undefined;
+  const { target, grip } = context;
+  const keys = resolveKeys(layer.keys, { t: 0, hand: POSES.carry.hand, staff: POSES.carry.staff, w: 1, roll: 0 });
+  const rightArm = armSolver(target, 'Right');
   const follow = layer.follow ?? 0, pitchPerUnit = layer.pitchPerUnit ?? 0;
   const q = { chest: new Quaternion(), tmp: new Quaternion(), tmp2: new Quaternion() };
   // Donor hand offsets in chest axes (for `follow`).
@@ -314,27 +331,35 @@ function armLayer(context, frames, count, layer, limits) {
   const trial = { arm: new Quaternion(), fore: new Quaternion(), hand: new Quaternion() };
   /** Body volumes of the frame being solved (set per frame): an elbow placement that sinks the arm into the trunk, head or legs is priced out. */
   let body;
+  // Hinge layers (an arm at rest) also prefer the upper arm hanging along the trunk: an elbow lifted away from her side reads as a strained, bent arm.
+  const trunkDown = new Vector3(), upper = new Vector3();
+  const hangCost = (trial) => (layer.hinge ? HANG_PRICE * upper.copy(trial.elbow).sub(trial.shoulder).normalize().angleTo(trunkDown) / DEG : 0);
   const solveBest = (solver, side, memory, out, solveWith) => {
     let best = { cost: Infinity };
-    for (const swivel of SWIVELS) {
+    const tryAt = (swivel) => {
       solveWith(swivel * DEG, trial);
       const rolls = { ta: memory.ta, tf: memory.tf };
-      const cost = balanceRoll(target, solver.ids, trial, limits, side, rolls) + 0.0008 * Math.abs(swivel) + 0.0004 * Math.abs(swivel - memory.swivel) + BODY_PRICE * armDepth(body, trial.shoulder, trial.elbow, trial.wrist);
+      const cost = balanceRoll(target, solver.ids, trial, limits, side, rolls, layer.hinge) + 0.0008 * Math.abs(swivel) + 0.0004 * Math.abs(swivel - memory.swivel) + BODY_PRICE * armDepth(body, trial.shoulder, trial.elbow, trial.wrist) + hangCost(trial);
       if (cost < best.cost) best = { cost, swivel, rolls, arm: trial.arm.clone(), fore: trial.fore.clone(), hand: trial.hand.clone() };
-    }
+    };
+    for (const swivel of SWIVELS) tryAt(swivel);
+    // A resting (hinge) arm breathes slowly: the coarse 20° swivel grid would make the elbow jump between grid points as the optimum drifts, so the
+    // swivel is refined to a quarter degree around the best coarse choice and follows the optimum continuously.
+    if (layer.hinge) for (const step of [5, 1, 0.25]) { const centre = best.swivel; for (const offset of [-2, -1, 1, 2]) tryAt(centre + offset * step); }
     out.arm = best.arm; out.fore = best.fore; out.hand = best.hand; out.reach = 0;
     memory.ta = best.rolls.ta; memory.tf = best.rolls.tf; memory.swivel = best.swivel;
   };
   const t = [0, 0, 0], st = [0, 0];
   const donorLocal = { arm: new Quaternion(), fore: new Quaternion(), hand: new Quaternion() };
-  const solved = {}, solvedLeft = {}, memoryRight = { ta: 0, tf: 0, swivel: 0 }, memoryLeft = { ta: 0, tf: 0, swivel: 0 };
+  const solved = {}, memoryRight = { ta: 0, tf: 0, swivel: 0 };
   const read = (track, k, out) => out.fromArray(track, k * 4);
   for (let k = 0; k < count; k += 1) {
     const tick = k * TICKS_PER_SECOND / FPS;
-    const w = sampleKey(keys, tick, 'w'), gw = sampleKey(keys, tick, 'gw');
+    const w = sampleKey(keys, tick, 'w');
     const world = target.poseFrame(frames, k);
     body = bodyCapsules(target, world);
     const delta = rightArm.chestDelta(world, q.chest);
+    trunkDown.set(0, -1, 0).applyQuaternion(delta);
     const forward = new Vector3(1, 0, 0).applyQuaternion(delta), yaw = Math.atan2(-forward.z, forward.x), heading = new Quaternion().setFromAxisAngle(UP, yaw);
     const shoulder = rightArm.position(world, rightArm.ids.arm, new Vector3());
     const donorWrist = rightArm.position(world, rightArm.ids.hand, new Vector3());
@@ -348,7 +373,7 @@ function armLayer(context, frames, count, layer, limits) {
       const staffAuthored = rigDirection(st[0], pitch).applyQuaternion(heading);
       const staffDonor = grip.s.clone().applyQuaternion(donorHandQ);
       const wrist = donorWrist.clone().lerp(authoredWrist, w), staff = slerpDirection(staffDonor, staffAuthored, w);
-      solveBest(rightArm, 'Right', memoryRight, solved, (swivel, out) => rightArm.solve(world, wrist, grip.s, grip.dPerp, staff, undefined, out, roll, swivel));
+      solveBest(rightArm, 'Right', memoryRight, solved, (swivel, out) => rightArm.solve(world, wrist, grip.s, grip.dPerp, staff, undefined, out, roll, swivel, layer.hinge));
       if (process.env.YARA_DUMP) console.error('k', k, 'reach', solved.reach.toFixed(3), 'wristRel', wrist.clone().sub(shoulder).toArray().map((x) => x.toFixed(2)).join(','), 'staff', staff.toArray().map((x) => x.toFixed(2)).join(','), 'yaw', (yaw / DEG).toFixed(0), 'chestdelta', delta.toArray().map((x) => x.toFixed(2)).join(','), 'donorWristRel', donorWrist.clone().sub(shoulder).toArray().map((x) => x.toFixed(2)).join(','));
       const mix = smooth(w);
       for (const [name, id] of [['arm', rightArm.ids.arm], ['fore', rightArm.ids.fore], ['hand', rightArm.ids.hand]]) {
@@ -356,89 +381,30 @@ function armLayer(context, frames, count, layer, limits) {
         donorLocal[name].slerp(solved[name], mix).normalize().toArray(frames.rotations[id], k * 4);
       }
     }
-    // Staff direction actually carried (after the solve) for reporting; also the left-hand seat.
-    const after = target.poseFrame(frames, k);
-    body = bodyCapsules(target, after);
-    const handQ = quaternionOf(after[rightArm.ids.hand]);
-    const staffNow = grip.s.clone().applyQuaternion(handQ);
-    trace.push(staffNow.angleTo(UP) / DEG);
-    if (leftArm && gw > 1e-4) {
-      const wrist = rightArm.position(after, rightArm.ids.hand, new Vector3());
-      const fist = wrist.clone().add(grip.palm.clone().applyQuaternion(handQ));
-      const along = sampleKey(keys, tick, 'grip');
-      const seat = fist.clone().addScaledVector(staffNow, along);
-      const rightward = new Vector3(0, 0, 1).applyQuaternion(heading);
-      const palmNormal = rightward.clone().addScaledVector(staffNow, -rightward.dot(staffNow));
-      if (palmNormal.lengthSq() < 1e-6) palmNormal.set(0, 1, 0);
-      palmNormal.normalize();
-      const fingers = staffNow.clone().cross(palmNormal).normalize();
-      const global = new Matrix4().makeBasis(staffNow, fingers, palmNormal.clone().cross(fingers)); // thumb along the shaft, fingers across
-      const local = new Matrix4().makeBasis(leftGrip.thumb, leftGrip.d, leftGrip.thumb.clone().cross(leftGrip.d));
-      const handLeft = quaternionOf(global.clone().multiply(local.clone().invert()));
-      const contact = seat.clone().addScaledVector(palmNormal, -grip.shaftRadius);
-      const leftWrist = contact.clone().sub(leftGrip.palmSurface.clone().applyQuaternion(handLeft));
-      solveBest(leftArm, 'Left', memoryLeft, solvedLeft, (swivel, out) => leftArm.solve(after, leftWrist, leftGrip.thumb, leftGrip.d, staffNow, fingers, out, 0, swivel));
-      const mix = smooth(gw);
-      for (const [name, id] of [['arm', leftArm.ids.arm], ['fore', leftArm.ids.fore], ['hand', leftArm.ids.hand]]) {
-        read(frames.rotations[id], k, donorLocal[name]);
-        donorLocal[name].slerp(solvedLeft[name], mix).normalize().toArray(frames.rotations[id], k * 4);
+  }
+  // `smooth`: Gaussian σ in frames over the three solved local rotations. Each frame's solve is a discrete search, so its choice still ticks by
+  // fractions of a degree frame to frame; a resting arm must flow as smoothly as the take's own free arm. `loop` wraps the filter across the seam (the
+  // last frame repeats the first, so the period is count − 1 and the last frame is rewritten to match the first).
+  if (layer.smooth) {
+    const sigma = layer.smooth, reachFrames = Math.ceil(3 * sigma), period = layer.loop ? count - 1 : count;
+    const sum = new Quaternion(), sample = new Quaternion(), centre = new Quaternion();
+    for (const id of [rightArm.ids.arm, rightArm.ids.fore, rightArm.ids.hand]) {
+      const source = Float32Array.from(frames.rotations[id]), track = frames.rotations[id];
+      for (let k = 0; k < period; k += 1) {
+        centre.fromArray(source, k * 4); sum.set(0, 0, 0, 0);
+        for (let j = -reachFrames; j <= reachFrames; j += 1) {
+          const at = layer.loop ? ((k + j) % period + period) % period : Math.min(count - 1, Math.max(0, k + j));
+          const weight = Math.exp(-0.5 * (j / sigma) ** 2) * (centre.dot(sample.fromArray(source, at * 4)) < 0 ? -1 : 1);
+          sum.set(sum.x + sample.x * weight, sum.y + sample.y * weight, sum.z + sample.z * weight, sum.w + sample.w * weight);
+        }
+        sum.normalize().toArray(track, k * 4);
       }
+      if (layer.loop) for (let c = 0; c < 4; c += 1) track[(count - 1) * 4 + c] = track[c];
     }
   }
+  // Staff direction actually carried (after the solve), for the report.
+  for (let k = 0; k < count; k += 1) trace.push(grip.s.clone().applyQuaternion(quaternionOf(target.poseFrame(frames, k)[rightArm.ids.hand])).angleTo(UP) / DEG);
   return trace;
-}
-
-/**
- * Donor stances turn the body sideways to cast. The simulation aims along the actor's facing, so the chest heading is kept within `maxDegrees` of the facing:
- * the excess is a smooth (tanh) rotation of the hips about the vertical, which carries the whole body.
- */
-/**
- * Keeps the trunk upright: wherever the Hips → Neck line leans more than `maxDegrees` from vertical (a donor hunching or bowing over its cast), the
- * excess is rotated back out of the spine, shared over Spine, Spine1 and Spine2 (rotation about the horizontal axis across the lean, in world space),
- * with a soft knee (tanh) so a lean just past the limit is barely touched. Legs, hips and arms keep their captured motion.
- */
-const UPRIGHT_SHARES = [['Spine', 0.34], ['Spine1', 0.33], ['Spine2', 0.33]];
-function limitLean(target, frames, count, maxDegrees) {
-  const hips = target.index.get('mixamorig:Hips'), neck = target.index.get('mixamorig:Neck'), limit = maxDegrees * DEG;
-  const h = new Vector3(), n = new Vector3(), dir = new Vector3(), axis = new Vector3(), parentWorld = new Quaternion(), turn = new Quaternion(), local = new Quaternion();
-  for (let k = 0; k < count; k += 1) {
-    let world = target.poseFrame(frames, k);
-    h.setFromMatrixPosition(world[hips]); n.setFromMatrixPosition(world[neck]);
-    dir.subVectors(n, h).normalize();
-    const lean = Math.acos(Math.min(1, Math.max(-1, dir.dot(UP))));
-    if (lean <= limit * 0.5) continue;
-    const allowed = limit * 0.5 + limit * 0.5 * Math.tanh((lean - limit * 0.5) / (limit * 0.5)), correction = lean - allowed;
-    if (correction < 1e-4) continue;
-    axis.crossVectors(dir, UP);
-    if (axis.lengthSq() < 1e-10) continue;
-    axis.normalize();
-    for (const [name, share] of UPRIGHT_SHARES) {
-      const node = target.index.get(`mixamorig:${name}`);
-      world = target.poseFrame(frames, k);
-      quaternionOf(world[target.parent[node]], parentWorld);
-      turn.setFromAxisAngle(axis, correction * share);
-      local.fromArray(frames.rotations[node], k * 4);
-      local.premultiply(parentWorld.clone().invert().multiply(turn).multiply(parentWorld)).normalize().toArray(frames.rotations[node], k * 4);
-    }
-  }
-}
-
-function faceForward(target, frames, count, maxDegrees) {
-  const hips = target.index.get('mixamorig:Hips'), chest = target.index.get('mixamorig:Spine2'), parent = target.parent[hips];
-  const chestRestInverse = target.restWorldQuaternion[chest].clone().invert();
-  const limit = maxDegrees * DEG, track = frames.rotations[hips];
-  const local = new Quaternion(), turn = new Quaternion(), parentWorld = new Quaternion(), delta = new Quaternion(), forward = new Vector3();
-  for (let k = 0; k < count; k += 1) {
-    const world = target.poseFrame(frames, k);
-    delta.copy(quaternionOf(world[chest])).multiply(chestRestInverse);
-    forward.set(1, 0, 0).applyQuaternion(delta);
-    const yaw = Math.atan2(-forward.z, forward.x), correction = limit * Math.tanh(yaw / limit) - yaw;
-    if (Math.abs(correction) < 1e-6) continue;
-    quaternionOf(world[parent], parentWorld);
-    local.fromArray(track, k * 4);
-    turn.setFromAxisAngle(UP, correction);
-    local.premultiply(parentWorld.clone().invert().multiply(turn).multiply(parentWorld)).normalize().toArray(track, k * 4);
-  }
 }
 
 /** Staff shaft head direction per frame as [yaw°, pitch°] about the chest heading (+yaw toward her left) and its angle from vertical. */
@@ -855,16 +821,23 @@ const add = (clip, donor, animation, ticks, window, extra = {}) => specs.push({ 
 const compose = (clip, ticks, parts, extra = {}) => specs.push({ clip, sim: { totalTicks: ticks }, parts: parts.map(({ donor, animation, ...rest }) => ({ source: { donor, animation }, ...rest })), ...extra });
 const LOCOMOTION = JOINT_LIMITS;
 
-// Idle: the combat-ready stance of a staff fighter (a Viggle take): weight on the back leg, the staff held across her front in the right fist, head raised
-// forward. Walk, run and jump keep the relaxed carry of the Tripo locomotion.
-specs.push({ clip: 'aren-idle', source: { donor: 'mixamo', file: 'asset-source/viggle/y3-idle-1.glb', inPlace: true }, sim: { totalTicks: 240 }, window: [0.3, 3.7], loop: { overlapSeconds: 0.4 }, limits: LOCOMOTION, upright: 26 });
+// Exact Mixamo takes (see the header): `exact(clip, file, totalTicks, timing, activeTick?)`. `timing` is `{ keys: [[tick, source seconds], …] }` (piecewise linear) or a
+// loop `{ window: [from, to], loop: true }` (the take is loopable: its first and last frame match, so nothing is blended at the seam). `activeTick` is the
+// simulation's release tick, kept for documentation: the keys are given, nothing is warped from a measured contact.
+const YARA_SKILLS = 'asset-source/mixamo/yara-skills/';
+const exact = (clip, file, totalTicks, timing, activeTick) => specs.push({ clip, exact: true, source: { donor: 'yara-exact', file: YARA_SKILLS + file }, sim: { totalTicks, ...(activeTick === undefined ? {} : { activeTick }) }, ...timing });
+// Idle: Mixamo "Breathing Idle" exact for the body, head and free left arm (a relaxed hip sway, the left arm drifting with the breath). Her right arm is the
+// one authored layer (`hold`, the gait clips' `armLayer` with the anatomical `hinge` elbow): the upper arm hangs close to her side, the elbow bends
+// forward about its hinge only (~60°), the forearm runs 20° below the horizontal and 40° outward to the fist at hip height, and the staff stands 16° off
+// vertical, leaning out and forward away from her face, which keeps the wrist within 24° of straight. `follow` keeps part of the take's own right-arm drift
+// so the hold breathes with her, and `smooth` (σ = 4 frames, wrapped over the loop) makes it flow like her free arm. The exactness gate covers every joint but the three it solves (RightArm, RightForeArm, RightHand).
+const HIP_HOLD = { hand: [0.1095, -0.199, 0.121], staff: [-30, 74] };
+exact('aren-idle', 'breathing-idle.fbx', 596, { window: [0, 9.9333], loop: true, hold: { follow: 0.35, hinge: true, smooth: 4, loop: true, keys: [{ t: 0, ...HIP_HOLD, w: 1 }] } });
 add('aren-walk', 'a', 'walk', 142, [0, 2.3666665554], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.5, pitchPerUnit: 90, keys: [{ t: 0, pose: 'carry' }] } });
 add('aren-run', 'a', 'run', 76, [0, 1.26666665], { loop: { overlapSeconds: 0.1 }, limits: LOCOMOTION, arm: { follow: 0.45, pitchPerUnit: 50, keys: [{ t: 0, pose: 'carry', hand: [0.19, -0.1, 0.03] }] } });
 add('aren-jump', 'b', 'jump', 42, [0, 2.23333335], { airborne: true, limits: LOCOMOTION, arm: { follow: 0.25, keys: [{ t: 0, pose: 'carry', w: 0.9 }] } });
-// Petal Step (every evasion action plays it): two light steps forward with the staff across her body in both hands (a Viggle take, in place: the simulation
-// moves her).
-specs.push({ clip: 'aren-forward-left-dive-roll', source: { donor: 'mixamo', file: 'asset-source/viggle/y3-petal-step-2.glb', inPlace: true }, sim: { totalTicks: 42 }, window: [0.05, 1.9], airborne: true,
-  upright: 26, clearStaff: true, idleBlendTail: 0.25 });
+// Petal Step (every evasion action plays it): Mixamo "Standing Dodge Forward", in place (the simulation moves her).
+exact('aren-forward-left-dive-roll', 'standing-dodge-forward.fbx', 42, { keys: [[0, 0.0], [42, 1.0]] });
 add('aren-hit', 'b', 'hurt', 24, [0, 1.4]);
 add('aren-cheer', 'b', 'cheer', 300, [0, 5], { limits: LOCOMOTION });
 add('aren-defeat', 'b', 'defeat_02', 360, [0, 8.46666622], { limits: LOCOMOTION });
@@ -886,55 +859,22 @@ lieClip('aren-getup-forward', 66, [
   reaction('getting-up-stomach', [[36, 4.25], [66, 5.05]], { ticks: [36] }),
 ], { getup: { from: 'aren-knockdown-forward', blend: 8, travel: [8, 46], idleFrom: 50 } });
 
-// Heartroot skills. Release ticks are the simulation's (HEARTROOT_* / LIGHT_STEPS / SIGIL in src/game/combat): thorn bolts on tick 9/10/10, Root Spike on 20 (of 63),
-// Eruption on 36 (of 76), Sap Lance launch on 16, Seed Storm launches on 12–42 every 6, Bloom meteors from 30 and its pulse on 132 (of 156).
-const FACE = 28;
-// Every Heartroot skill is a Viggle/PINOC text-to-motion take of a battle sorceress fighting with a quarterstaff, on the Mixamo rig
-// (asset-source/viggle/y3-<name>.glb, ledger asset-source/viggle/provenance.json), played in place. The takes carry the staff: her right hand grips it
-// near the middle and the left joins it on the shaft or casts with an open palm, so both arms play as captured; the runtime fist (finger chain wrapped
-// around the shaft, src/rendering/NativeHandGrip.ts) holds the staff along her knuckle line, and `clearStaff` only turns the hand where the shaft would
-// pass through her legs, trunk, head or the floor. Keyed warps ([tick, source seconds]) land each strike's fastest staff or palm motion on the
-// simulation release tick. Thornshot 1–3 are one continuous three-strike take cut at its quiet instants (steps 2 and 3 open on the previous step's last
-// pose, `seamFrom`); charges loop a held pose and their releases start from it the same way.
-const VG = (name) => ({ donor: 'mixamo', file: `asset-source/viggle/${name}.glb`, inPlace: true });
-const cast = (clip, name, ticks, extra) => specs.push({ clip, source: VG(name), sim: { totalTicks: ticks }, ...extra });
-const LEFT = ['LeftHand'], RIGHT = ['RightHand'], BOTH = ['LeftHand', 'RightHand'];
-// Thornshot 1–3 (y3-thornshot-1): an open-palm thrust at the enemy, a horizontal staff swing from right to left, an overhead whip of the staff head.
-cast('yara-thornshot-1', 'y3-thornshot-1', 26, { sim: { totalTicks: 26, activeTick: 9 }, keys: [[0, 0.42], [9, 0.77], [22, 0.9], [26, 0.93]], contact: { joints: LEFT, search: [0.65, 0.9] } });
-cast('yara-thornshot-2', 'y3-thornshot-1', 28, { sim: { totalTicks: 28, activeTick: 10 }, keys: [[0, 0.93], [10, 1.25], [24, 1.75], [28, 1.8]], contact: { joints: RIGHT, search: [1.1, 1.35] }, seamFrom: { clip: 'yara-thornshot-1', ticks: 4 } });
-cast('yara-thornshot-3', 'y3-thornshot-1', 34, { sim: { totalTicks: 34, activeTick: 10 }, keys: [[0, 1.8], [10, 2.23], [34, 3.2]], contact: { joints: RIGHT, search: [2.1, 2.35] }, seamFrom: { clip: 'yara-thornshot-2', ticks: 4 }, idleBlendTail: 0.3 });
-// Root Spike (y3-root-spike-2): the body plays the take's lift and lunge; the arm layer holds the staff upright in both fists (left below right), raised
-// in front of her face, and drives its butt into the ground before her front foot on tick 20, held, lifted away (the take's own hands turn the shaft
-// sideways across her head).
-const RAISED_TWO = { pose: 'high', hand: [0.26, 0.21, 0.08], gw: 1, grip: -0.26, w: 1 };
-const PLANT_TWO = { pose: 'plant', gw: 1, grip: -0.26, w: 1 };
-const HOLD_TWO = { hand: [0.22, 0.02, 0.06], staff: [0, 88], gw: 1, grip: -0.26, w: 1 };
-// (A key inherits every field it leaves out from the previous key, `w` included: these poses set `w: 1` so they follow a `w: 0` key.)
-cast('yara-root-spike', 'y3-root-spike-2', 63, { sim: { totalTicks: 63, activeTick: 20 }, keys: [[0, 0.9], [17, 1.66], [20, 1.78], [23, 1.88], [40, 2.5], [63, 3.0]], contact: { joints: BOTH, search: [1.65, 1.9] }, idleBlendTail: 0.25,
-  arm: { follow: 0, keys: [{ t: 0, ...HOLD_TWO, w: 0 }, { t: 9, ...HOLD_TWO }, { t: 14, ...RAISED_TWO }, { t: 17, ...RAISED_TWO }, { t: 20, ...PLANT_TWO }, { t: 40, ...PLANT_TWO }, { t: 63, ...PLANT_TWO, w: 0 }] } });
-// Root charge (held): the staff upright before her chest in both hands, head lowered (y3-root-full-2). Heartroot Eruption is Root Spike's stab, slower,
-// opening on the charge.
-cast('yara-root-charge', 'y3-root-full-2', 90, { window: [0.6, 1.4], loop: { overlapSeconds: 0.2 }, arm: { follow: 0, keys: [{ t: 0, ...HOLD_TWO }] } });
-cast('yara-root-eruption', 'y3-root-spike-2', 76, { sim: { totalTicks: 76, activeTick: 36 }, keys: [[0, 1.2], [33, 1.66], [36, 1.78], [39, 1.88], [55, 2.5], [76, 3.0]], contact: { joints: BOTH, search: [1.65, 1.9] }, seamFrom: { clip: 'yara-root-charge', ticks: 18 }, idleBlendTail: 0.25,
-  arm: { follow: 0, keys: [{ t: 0, ...HOLD_TWO }, { t: 24, ...HOLD_TWO }, { t: 31, ...RAISED_TWO }, { t: 33, ...RAISED_TWO }, { t: 36, ...PLANT_TWO }, { t: 58, ...PLANT_TWO }, { t: 76, ...PLANT_TWO, w: 0 }] } });
-// Seed charge (held) and Sap Lance are one take (y3-seed-full-3): the body plays the take's lance stance and lunge; the arm layer levels the staff at the
-// enemy (the take's right hand turns it sideways): the right fist back at the hip line, the left hand forward on the shaft (`gw`, `grip` metres toward
-// the head), driven to full reach on the release tick. Seed Storm (y3-seed-storm-3) opens on the same aim: the staff swung above her head, then three
-// flicked volleys at the enemy.
-const AIM = { hand: [0.2, -0.04, 0.06], staff: [0, 6], gw: 1, grip: 0.36, w: 1 };
-const THRUST = { hand: [0.33, 0.0, 0.04], staff: [0, 4], gw: 1, grip: 0.36, w: 1 };
-cast('yara-seed-charge', 'y3-seed-full-3', 90, { window: [0.9, 1.7], loop: { overlapSeconds: 0.2 }, arm: { follow: 0, keys: [{ t: 0, ...AIM }] } });
-cast('yara-sap-lance', 'y3-seed-full-3', 30, { sim: { totalTicks: 30, activeTick: 16 }, keys: [[0, 1.75], [13, 2.3], [16, 2.43], [19, 2.52], [30, 3.0]], contact: { joints: BOTH, search: [2.25, 2.55] }, seamFrom: { clip: 'yara-seed-charge', ticks: 6 }, idleBlendTail: 0.3,
-  arm: { follow: 0, keys: [{ t: 0, ...AIM }, { t: 12, ...AIM, hand: [0.14, -0.04, 0.06] }, { t: 16, ...THRUST }, { t: 22, ...THRUST }, { t: 30, ...AIM }] } });
-cast('yara-seed-storm', 'y3-seed-storm-3', 60, { keys: [[0, 0.4], [12, 0.95], [42, 2.9], [60, 3.4]], seamFrom: { clip: 'yara-seed-charge', ticks: 8 }, idleBlendTail: 0.25 });
-// Binding Vines (y3-binding-vines-2): the open left hand shot at the enemy on tick 18, then the fist yanked back to the hip; the staff stays upright at her
-// right side through the cast (the take swings it down behind her).
-cast('yara-binding-vines', 'y3-binding-vines-2', 54, { sim: { totalTicks: 54, activeTick: 18 }, keys: [[0, 0.05], [18, 0.37], [40, 2.6], [54, 3.0]], contact: { joints: LEFT, search: [0.25, 0.5] }, idleBlendTail: 0.3,
-  arm: { follow: 0.25, keys: [{ t: 0, pose: 'carry', w: 0 }, { t: 8, pose: 'carry', w: 1 }, { t: 44, pose: 'carry', w: 1 }, { t: 54, pose: 'carry', w: 0 }] } });
-// Cleanse (y3-cleanse-2): the staff planted upright beside her right foot, the open left palm raised forward, channelling.
-cast('yara-cleanse', 'y3-cleanse-2', 108, { window: [0.05, 4.0], idleBlendTail: 0.2 });
-// Heartroot Bloom (y3-bloom-1): the staff raised high in both hands, the invocation, then swung down to strike the ground for the final pulse on tick 132.
-cast('yara-heartroot-bloom', 'y3-bloom-1', 156, { keys: [[0, 0.1], [30, 1.2], [124, 3.25], [132, 3.46], [156, 4.9]], idleBlendTail: 0.15 });
+// Heartroot skills: each plays one Mixamo take unchanged (asset-source/mixamo/yara-skills; ledger provenance.json there). Release ticks are the simulation's
+// (HEARTROOT_* / LIGHT_STEPS / SIGIL in src/game/combat): thorn bolts on tick 9/10/10, Root Spike on 20 (of 63), Eruption on 36 (of 76), Sap Lance launch on 16, Seed
+// Storm launches on 12-42 every 6, Bloom meteors from 30 and its pulse on 132 (of 156). Keys are [tick, source seconds]: the warp lands each take's strike on its
+// release tick. The charges loop a held Mixamo idle.
+exact('yara-thornshot-1', 'standing-1h-magic-attack-01.fbx', 26, { keys: [[0, 0.47], [9, 0.80], [26, 1.20]] }, 9);
+exact('yara-thornshot-2', 'standing-1h-magic-attack-02.fbx', 28, { keys: [[0, 0.30], [10, 0.52], [28, 1.03]] }, 10);
+exact('yara-thornshot-3', 'standing-1h-magic-attack-03.fbx', 34, { keys: [[0, 0.40], [10, 0.93], [34, 1.40]] }, 10);
+exact('yara-root-spike', 'standing-melee-attack-downward.fbx', 63, { keys: [[0, 0.20], [20, 0.85], [63, 2.10]] }, 20);
+exact('yara-root-charge', 'great-sword-idle.fbx', 120, { window: [0, 2.0], loop: true });
+exact('yara-root-eruption', 'great-sword-jump-attack.fbx', 76, { keys: [[0, 0.27], [36, 1.067], [76, 2.13]] }, 36);
+exact('yara-seed-charge', 'standing-idle-ready-to-cast.fbx', 112, { window: [0, 1.8667], loop: true });
+exact('yara-sap-lance', 'frisbee-throw.fbx', 30, { keys: [[0, 0.60], [16, 1.30], [30, 1.95]] }, 16);
+exact('yara-seed-storm', 'standing-melee-attack-360-high.fbx', 60, { keys: [[0, 0.27], [12, 0.87], [42, 1.40], [60, 1.80]] });
+exact('yara-binding-vines', 'casting-spell.fbx', 54, { keys: [[0, 4.80], [18, 5.40], [54, 6.10]] }, 18);
+exact('yara-cleanse', 'magic-heal.fbx', 108, { keys: [[0, 0.10], [35, 0.70], [108, 2.60]] });
+exact('yara-heartroot-bloom', 'great-sword-casting.fbx', 156, { keys: [[0, 0.27], [40, 2.27], [110, 3.47], [132, 4.00], [156, 4.80]] });
 // Second jump ("treading the wind"): two air steps, a somersault tuck, open-out and a soft landing, in place.
 compose('aren-air-step', 60, [
   { donor: 'd', animation: 'run_upstairs', window: [0, 0.8], ticks: [0, 60] },
@@ -942,11 +882,9 @@ compose('aren-air-step', 60, [
   { donor: 'b', animation: 'jump', window: [1.2, 2.2], ticks: [40, 60] },
 ], { airborne: true, idleBlendTail: 0.3, crossfadeTicks: 4, pin: { maxVertical: 0.08 }, arm: { follow: 0.3, keys: [{ t: 0, pose: 'carry', w: 0.8 }, { t: 14, w: 0.8 }, { t: 24, w: 0.2 }, { t: 44, w: 0.2 }, { t: 54, w: 0.8 }, { t: 60, w: 0.8 }] } });
 
-// Every skill faces the target along the simulation's facing, and keeps the trunk within UPRIGHT_DEGREES of vertical (a caster stands tall).
-const UPRIGHT_DEGREES = 26;
-for (const spec of specs) if (spec.clip.startsWith('yara-')) { spec.facing = FACE; spec.upright = UPRIGHT_DEGREES; spec.clearStaff = true; }
-// Every clip built from donor motion keeps the arms out of the trunk, head and legs (arm-body-clearance.mjs); the captured knockdown and get-up takes are left as recorded.
-for (const spec of specs) if (!spec.lie && !spec.getup) spec.clearArms = true;
+// Every clip built from donor motion keeps the arms out of the trunk, head and legs (arm-body-clearance.mjs); the captured knockdown and get-up takes and the exact
+// Mixamo takes are left as recorded.
+for (const spec of specs) if (!spec.lie && !spec.getup && !spec.exact) spec.clearArms = true;
 
 /* ------------------------------------------------------------------ build */
 
@@ -960,8 +898,8 @@ const rigs = { target: new Rig(baseGlb) };
 for (const [key, path] of Object.entries(sources)) rigs[key] = new Rig(parseGlb(await readFile(root + path)));
 const target = rigs.target;
 await resolveMixamoSources(specs, rigs, root);
-const grip = handAnatomy(baseGlb, 'Right'), leftGrip = handAnatomy(baseGlb, 'Left');
-const context = { target, grip, leftGrip };
+const grip = handAnatomy(baseGlb, 'Right');
+const context = { target, grip };
 /** The Mixamo reaction donors (asset-source/mixamo/reactions/<name>.fbx; ledger in asset-source/mixamo/provenance.json): the fall, lie and get-up takes. Only the takes a clip plays are loaded. */
 const REACTION_FILES = ['knocked-out-back', 'falling-back', 'flying-back', 'react-backward', 'getting-up-back', 'stand-up-back', 'kip-up',
   'fall-flat-hit-back', 'knocked-down-stomach', 'react-forward', 'getting-up-stomach', 'stand-up-stomach', 'getting-up-knocked'];
@@ -1136,11 +1074,101 @@ function lieReport(spec, clip, knock, idle, corrections) {
   return result;
 }
 
+/* ------------------------------------------------------------------ exact Mixamo takes (`spec.exact`) */
+
+/** A loop whose first and last key differ by more than this is reported (never blended). */
+const LOOP_SEAM_DEGREES = 1;
+/** The staff's radius (metres): the shaft axis closer than this to the floor is inside it. */
+const STAFF_RADIUS = 0.012;
+/** A penetration under 1 mm is not counted. */
+const PENETRATION_EPSILON = 0.001;
+const exactApi = await createMixamoExact({ root, rig: target, ...YARA_EXACT });
+const staffProfiles = JSON.parse(await readFile(root + 'src/rendering/heartroot-staff-profiles.json', 'utf8'));
+const exactTakes = new Map(), yaraSkillProvenance = {};
+for (const spec of specs) {
+  if (!spec.exact) continue;
+  for (const file of [spec.source.file]) {
+    if (!file || exactTakes.has(file)) continue;
+    const take = await exactApi.load(file);
+    exactTakes.set(file, take);
+    yaraSkillProvenance[file] = { sha256: take.sha256, bytes: take.bytes, durationSeconds: Math.round(take.duration * 1e4) / 1e4, frames: take.frames };
+  }
+}
+const roundTo = (value, digits) => Math.round(value * 10 ** digits) / 10 ** digits;
+
+/** Source seconds of output key `k` (30 Hz): through the spec's `keys` ([tick, seconds]) or its loop `window`. */
+const exactSourceTime = (spec) => exactTimeline(spec.keys ?? [[0, spec.window[0]], [spec.sim.totalTicks, spec.window[1]]]);
+
+/**
+ * The staff of one exact clip against the body and the floor, over every output key: the shaft is turned in the hand by the clip's profile (`turnDegrees` from the
+ * knuckle line toward the fingers) and holds `gripFraction` of its length on the pommel side of the fist. Counts the keys whose shaft sinks into a limb of
+ * `STAFF_BODY` (the radii include the staff's) or whose shaft axis is closer than its radius to the floor, and the deepest of either. Reports only: no key is changed.
+ */
+function measureStaff(clipName, frames, count) {
+  const profile = staffProfiles.clips[clipName] ?? staffProfiles.default, turn = profile.turnDegrees * DEG;
+  const axis = grip.knuckles.clone().multiplyScalar(Math.cos(turn)).addScaledVector(grip.direction, Math.sin(turn)).normalize();
+  const below = profile.gripFraction * STAFF.length, above = (1 - profile.gripFraction) * STAFF.length;
+  const bones = STAFF_BODY.map(([from, to, radius]) => ({ from: target.index.get(`mixamorig:${from}`), to: target.index.get(`mixamorig:${to}`), radius: radius / RIG_SCALE }));
+  const samples = [];
+  for (let t = -below; t <= above + 1e-9; t += 0.015 / RIG_SCALE) if (Math.abs(t) >= STAFF_HAND_SPAN / RIG_SCALE) samples.push(t);
+  const hand = target.index.get('mixamorig:RightHand'), handQ = new Quaternion(), fist = new Vector3(), d = new Vector3(), point = new Vector3(), a = new Vector3(), b = new Vector3(), ab = new Vector3();
+  let framesIntoBody = 0, framesIntoFloor = 0, deepest = 0;
+  for (let k = 0; k < count; k += 1) {
+    const world = target.poseFrame(frames, k);
+    quaternionOf(world[hand], handQ);
+    fist.setFromMatrixPosition(world[hand]).add(point.copy(grip.palm).applyQuaternion(handQ));
+    d.copy(axis).applyQuaternion(handQ);
+    let depth = 0;
+    for (const bone of bones) {
+      a.setFromMatrixPosition(world[bone.from]); b.setFromMatrixPosition(world[bone.to]); ab.subVectors(b, a);
+      const lengthSq = ab.lengthSq();
+      for (const t of samples) {
+        point.copy(fist).addScaledVector(d, t);
+        const u = Math.max(0, Math.min(1, point.sub(a).dot(ab) / lengthSq));
+        depth = Math.max(depth, bone.radius - point.addScaledVector(ab, -u).length());
+      }
+    }
+    const low = Math.min(fist.y - below * d.y, fist.y + above * d.y), floorDepth = Math.max(0, STAFF_RADIUS / RIG_SCALE - (low - soles.rest));
+    if (depth * RIG_SCALE > PENETRATION_EPSILON) framesIntoBody += 1;
+    if (floorDepth * RIG_SCALE > PENETRATION_EPSILON) framesIntoFloor += 1;
+    deepest = Math.max(deepest, depth, floorDepth);
+  }
+  return { profile: { ...profile, source: staffProfiles.clips[clipName] ? 'clip' : 'default' }, frames: count, framesIntoBody, framesIntoFloor, deepestCm: roundTo(deepest * RIG_SCALE * 100, 1) };
+}
+
+/**
+ * An exact clip: the Mixamo take sampled at 30 Hz through the time warp, in the rig frame, with the Hips pinned in place (`mixamo-exact.mjs`). Nothing else touches it.
+ * Throws when a key differs from the FBX local at its warped source time by more than `EXACT_TOLERANCE_DEGREES`; a loop's seam is measured and reported, not blended.
+ */
+function makeExactClip(spec) {
+  const take = exactTakes.get(spec.source.file), totalTicks = spec.sim.totalTicks, period = Math.round(totalTicks / TICKS_PER_SECOND * FPS), count = period + 1;
+  const sourceTime = exactSourceTime(spec), hips = target.index.get('mixamorig:Hips');
+  const frames = sampleExact(target, take, count, sourceTime);
+  // `spec.hold`: the right arm only, authored over the exact body (armLayer); the gate below skips the joints it solves.
+  const held = new Set(spec.hold ? ['RightArm', 'RightForeArm', 'RightHand'].map((name) => target.index.get(`mixamorig:${name}`)) : []);
+  const holdTilt = spec.hold ? armLayer(context, frames, count, spec.hold, JOINT_LIMITS) : undefined;
+  for (const track of [...frames.rotations, ...frames.positions]) if (track && track.some((value) => !Number.isFinite(value))) throw new Error(`${spec.clip} contains non-finite samples`);
+  continuity(frames, count);
+  const { maxDegrees } = exactnessGate(spec.clip, target, take, frames, count, sourceTime, held);
+  const times = Float32Array.from({ length: count }, (_, k) => k / FPS);
+  report[spec.clip] = { limits: 'EXACT', source: { file: spec.source.file, sha256: take.sha256 }, ...(spec.hold ? { hold: { joints: ['RightArm', 'RightForeArm', 'RightHand'], staffTiltMaxDegrees: roundTo(Math.max(...holdTilt), 1) } } : {}), exactness: { maxDegrees: roundTo(maxDegrees, 5), keys: count, toleranceDegrees: EXACT_TOLERANCE_DEGREES } };
+  if (spec.loop) {
+    const seam = loopSeamDegrees(target, frames, count);
+    const hipsDelta = Math.abs(frames.positions[hips][1] - frames.positions[hips][(count - 1) * 3 + 1]) * RIG_SCALE * 1e3;
+    report[spec.clip].loopSeam = { maxDegrees: roundTo(seam, 4), hipsVerticalMillimetres: roundTo(hipsDelta, 3), blended: false };
+    if (seam > LOOP_SEAM_DEGREES) console.warn(`${spec.clip}: loop seam ${seam.toFixed(3)}° (first vs last key; not blended)`);
+  }
+  const travel = hipsTravel(target, frames, count);
+  report[spec.clip].hipsTravel = { horizontalMetres: roundTo(travel.horizontal * RIG_SCALE, 4), verticalMetres: roundTo(travel.vertical * RIG_SCALE, 4) };
+  report[spec.clip].staffClearance = measureStaff(spec.clip, frames, count);
+  return { spec, frames, times, count, duration: period / FPS, keys: spec.keys ?? [], contact: undefined, totalTicks, jointNodes: [...target.joints], aim: undefined, guard: {} };
+}
+
 /** Builds one clip (memoised: a get-up needs its knockdown and the idle, which are themselves clips of the set). */
 const clips = [], report = {}, produced = new Map();
 const specOf = (name) => specs.find((item) => item.clip === name);
 function produce(spec) {
-  if (!produced.has(spec.clip)) produced.set(spec.clip, spec.lie || spec.getup ? makeLieClip(spec) : makeClip(spec));
+  if (!produced.has(spec.clip)) produced.set(spec.clip, spec.exact ? makeExactClip(spec) : spec.lie || spec.getup ? makeLieClip(spec) : makeClip(spec));
   return produced.get(spec.clip);
 }
 
@@ -1168,14 +1196,10 @@ function makeClip(spec) {
   if (spec.idleBlendTail) blendTailToIdle(clip, produce(specOf('aren-idle')), spec.idleBlendTail);
   const limits = spec.limits ?? COMBAT_LIMITS;
   if (spec.pin) pinHips(target, clip.frames, clip.count, spec.pin.maxVertical);
-  if (spec.upright) limitLean(target, clip.frames, clip.count, spec.upright);
-  if (spec.facing !== undefined) faceForward(target, clip.frames, clip.count, spec.facing);
   let staffTilt;
   if (spec.arm) staffTilt = armLayer(context, clip.frames, clip.count, spec.arm, limits);
   // Loops keep their seam bit-exact: the pass is a pure function of a frame, but the time smoothing is not periodic, so loops skip it.
   const armClearance = spec.clearArms ? clearArms(target, clip.frames, clip.count, { smooth: spec.loop ? 0 : 0.5 }) : undefined;
-  // Skills: the staff shaft is kept out of her legs, trunk and the floor by turning the hand (the same layer the falls use).
-  const staffReport = spec.clearStaff ? staffClearance(target, clip.frames, clip.count, spec.limits ?? COMBAT_LIMITS, { pinFirst: Boolean(spec.loop) }) : undefined;
   if (process.env.YARA_DEBUG) { const pre = jointExcursions(target, clip.frames, clip.count, limits); console.error(spec.clip, 'pre-limit', JSON.stringify(Object.fromEntries(Object.entries(pre).filter(([j]) => /Right(Arm|ForeArm|Hand|Shoulder)|Left(Arm|ForeArm|Hand)/.test(j)).map(([j, e]) => [j.replace('mixamorig:', ''), [Math.round(e.swing), Math.round(e.twist)]])))); }
   if (process.env.YARA_TRACE === spec.clip) {
     for (let k = 0; k < clip.count; k += 1) {
@@ -1185,11 +1209,6 @@ function makeClip(spec) {
     }
   }
   const corrections = limitJoints(target, clip.frames, clip.count, limits);
-  // A release that follows a held charge starts on the charge loop's pose and blends into its own motion over `seamFrom.ticks`.
-  if (spec.seamFrom) {
-    const from = produce(specOf(spec.seamFrom.clip)), n = Math.max(1, Math.round(spec.seamFrom.ticks * FPS / TICKS_PER_SECOND));
-    for (let k = 0; k < Math.min(n, clip.count); k += 1) blendInto(clip.frames, from.frames, k, from.count - 1, 1 - smooth(k / n));
-  }
   continuity(clip.frames, clip.count);
   if (process.env.YARA_STAFF === spec.clip) staffTrace(context, clip.frames, clip.count).forEach((e, k) => { if (k % 2 === 0) console.error('tick', k * 2, 'yaw', e.yaw.toFixed(0), 'pitch', e.pitch.toFixed(0), 'tilt', e.tilt.toFixed(0), 'pommelY', e.pommelY.toFixed(2), 'headY', e.headY.toFixed(2)); });
   const excursions = jointExcursions(target, clip.frames, clip.count, limits);
@@ -1200,7 +1219,6 @@ function makeClip(spec) {
     ...(staffTilt ? { staffTiltMax: Math.round(Math.max(...staffTilt) * 10) / 10, staffTiltMean: Math.round(staffTilt.reduce((s, v) => s + v, 0) / staffTilt.length * 10) / 10 } : {}),
     corrections,
     ...(armClearance ? { armClearance } : {}),
-    ...(staffReport ? { staffClearance: staffReport } : {}),
     ...(spec.pin ? { hipsTravel: (() => { const t = hipsTravel(target, clip.frames, clip.count); return { horizontalMetres: Math.round(t.horizontal * RIG_SCALE * 1e4) / 1e4, verticalMetres: Math.round(t.vertical * RIG_SCALE * 1e4) / 1e4 }; })() } : {}),
   };
   return clip;
@@ -1210,9 +1228,10 @@ function makeLieClip(spec) {
   const limits = spec.limits;
   const knock = spec.getup ? produce(specOf(spec.getup.from)) : undefined, idle = spec.getup || spec.lie?.fromIdle ? produce(specOf('aren-idle')) : undefined;
   const clip = spec.getup ? buildGetup(spec, knock, idle) : buildLieClip(spec);
-  // A knockdown starts where the hero stands: its first frame is `aren-idle`'s first frame, cross-faded over `fromIdle` ticks into the take's own stance.
-  if (spec.lie?.fromIdle) for (let k = 0; k < spec.lie.fromIdle; k += 1) blendInto(clip.frames, idle.frames, k, 0, 1 - smooth(k / spec.lie.fromIdle));
+  // A knockdown starts where the hero stands: its first frame is `aren-idle`'s first frame, cross-faded over `fromIdle` ticks into the take's own (joint-guarded) stance.
+  // The idle is a Mixamo take played as delivered and may sit past the guard's limits (a head turn): it is blended in after the guard so tick 0 stays the idle's frame exactly.
   const corrections = spec.getup ? clip.corrections : guardJoints(target, clip.frames, clip.count, limits);
+  if (spec.lie?.fromIdle) for (let k = 0; k < spec.lie.fromIdle; k += 1) blendInto(clip.frames, idle.frames, k, 0, 1 - smooth(k / spec.lie.fromIdle));
   // Lying clips keep their vertical Hips motion (the fall reaches the floor, the rise leaves it); only the lowest skinned vertex of the WHOLE mesh is held to the floor,
   // frame by frame. A knockdown is grounded as a whole (its lie is held from `holdFrom`). A get-up is grounded as the bare take first, then the knockdown's lie (already
   // grounded) is blended in, then the last quarter into the idle, and a last pass lifts what the blends pushed into the floor and seats the flat frames (the idle itself rests
@@ -1224,7 +1243,8 @@ function makeLieClip(spec) {
     blendIdle(clip.frames, clip.count, idle, spec.getup.idleFrom);
     spec.floor = { take: taken, final: keepAboveFloor(target, clip.frames, clip.count, body, { pinFirst: true }) };
   } else spec.floor = floorCorrect(target, clip.frames, clip.count, body, { holdFrom: spec.lie.holdFrom });
-  spec.staff = staffClearance(target, clip.frames, clip.count, limits, { pinFirst: Boolean(spec.getup), pinFrom: spec.lie?.holdFrom });
+  // A get-up keeps its first frame (the knockdown's last); a knockdown keeps its first frame too (the idle's, whose staff the pass must not turn).
+  spec.staff = staffClearance(target, clip.frames, clip.count, limits, { pinFirst: Boolean(spec.getup || spec.lie?.fromIdle), pinFrom: spec.lie?.holdFrom });
   // The staff pass turns the right hand, and a turned fist can dip below the floor: a get-up is lifted once more (frame 0 stays the knockdown's last frame).
   if (spec.getup) spec.floor.afterStaff = keepAboveFloor(target, clip.frames, clip.count, body, { pinFirst: true });
   continuity(clip.frames, clip.count);
@@ -1343,10 +1363,13 @@ const locomotion = ['aren-idle', 'aren-walk', 'aren-run', 'aren-jump', 'aren-for
 const ceiling = Math.max(...locomotion.map((name) => Math.max(deformation[name].p999, baseline[name]?.deformation?.p999 ?? 0)));
 const anatomy = {
   schemaVersion: 1,
+  exactMapping: { ...exactApi.restCheck, takes: yaraSkillProvenance, exactnessToleranceDegrees: EXACT_TOLERANCE_DEGREES },
+  staffProfiles: { file: 'src/rendering/heartroot-staff-profiles.json', blendSeconds: staffProfiles.blendSeconds, floorRigUnits: Math.round(soles.rest * 1e6) / 1e6, staffRadiusMetres: STAFF_RADIUS, bodyCapsules: STAFF_BODY, handSpanMetres: STAFF_HAND_SPAN, penetrationEpsilonMetres: PENETRATION_EPSILON },
   grip: {
     staffDiagonalDegrees: STAFF_DIAGONAL / DEG, staffToMiddleFingerDegrees: Math.acos(grip.s.dot(grip.fingers)) / DEG, staffToPrincipalAxisDegrees: Math.acos(grip.s.dot(grip.d)) / DEG, middleFingerHand: grip.fingers.toArray().map((v) => Math.round(v * 1e6) / 1e6), staffAxisHand: grip.s.toArray().map((v) => Math.round(v * 1e6) / 1e6),
     palmHand: grip.palm.toArray().map((v) => Math.round(v * 1e6) / 1e6), shaftRadiusRig: Math.round(grip.shaftRadius * 1e6) / 1e6, metacarpalHand: grip.d.toArray().map((v) => Math.round(v * 1e6) / 1e6),
     thumbSideHand: grip.thumb.toArray().map((v) => Math.round(v * 1e6) / 1e6), palmNormalHand: grip.n.toArray().map((v) => Math.round(v * 1e6) / 1e6),
+    knucklesHand: grip.knuckles.toArray().map((v) => Math.round(v * 1e6) / 1e6), fingerDirectionHand: grip.direction.toArray().map((v) => Math.round(v * 1e6) / 1e6),
   },
   deformationCeiling: { clips: locomotion, includesBaseline: true, p999: ceiling },
   clips: Object.fromEntries(clips.map((clip) => [clip.spec.clip, { ...report[clip.spec.clip], deformation: deformation[clip.spec.clip], before: baseline[clip.spec.clip] ?? null }])),
@@ -1354,9 +1377,9 @@ const anatomy = {
 await writeFile(root + output + '/anatomy-report.json', JSON.stringify(anatomy, null, 2) + '\n');
 await writeFile(root + output + '/provenance.json', JSON.stringify({
   schemaVersion: 1, originalModelTask: 'f5c49b45-1eee-47e7-84fc-e6e592ae5c29', tasks, sources, presets, sourceHash: hash(base), outputHash: hash(bytes),
-  operation: 'Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.',
-  grip: anatomy.grip, credits, mixamo: mixamoProvenance, creditTotal: Object.values(credits).reduce((sum, value) => sum + value, 0), evidenceStatus: 'blocked',
-  clips: specs.map((spec) => ({ ...spec, limits: spec.limits === JOINT_LIMITS ? 'JOINT_LIMITS' : 'COMBAT_LIMITS' })),
+  operation: 'Walk, run, jump, hit, cheer, defeat and the second jump: offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit, the staff arm authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts. Idle, Petal Step and every Heartroot skill: Adobe Mixamo takes exported onto Yara\'s own character (asset-source/mixamo/yara-skills), played exactly as delivered (bone rotations equal the rig\'s; only the time warp and the in-place Hips pin). The knockdown / get-up clips retarget Mixamo reaction takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.',
+  grip: anatomy.grip, credits, mixamo: mixamoProvenance, mixamoYaraSkills: yaraSkillProvenance, creditTotal: Object.values(credits).reduce((sum, value) => sum + value, 0), evidenceStatus: 'blocked',
+  clips: specs.map((spec) => ({ ...spec, limits: spec.exact ? 'EXACT' : spec.limits === JOINT_LIMITS ? 'JOINT_LIMITS' : 'COMBAT_LIMITS' })),
 }, null, 2) + '\n');
 console.log(JSON.stringify({ output: output + '/yara-hero-animated.glb', hash: hash(bytes), clips: clips.length, actions: Object.keys(mapping).length, deformationCeiling: ceiling }));
 

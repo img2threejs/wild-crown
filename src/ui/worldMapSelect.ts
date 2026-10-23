@@ -1,33 +1,14 @@
 /**
- * Interactive world map select: the Warden's illustrated survey of Erya.
- *
- * Replaces the previous card grid (`GameUI.ts:564-590 mapSelectState`) with one full-bleed painted map plus an SVG
- * overlay of clickable region polygons. The output is the inner body of a `.wc-state wc-selection` screen, so the
- * outer chrome (`containerScreen`, header copy, progress warning, Return to Title button) stays in GameUI; this
- * module owns the map art, the polygons, the side info panel and the spatial keyboard / gamepad navigation.
- *
- * The screen is intentionally reduced-motion aware: `.wc-state--static` (set by `GameUI` when `settings.reducedMotion`
- * is true) and `prefers-reduced-motion: reduce` both resolve to a static frame with no zoom transform, no shimmer and
- * no scanline pulse; spatial key navigation still works under reduced motion.
- *
- * The overlay also exposes `worldMapRegionOverlay` as a reusable export so the coordinator can later reuse the
- * polygons on the in-game World map (`GameUI.ts:704-719`).
+ * The existing illustrated map, native Pixi geographic inspection, and semantic menu controls.
+ * The painting and progression gates are unchanged; the binder owns presentation and its async renderer.
+ * Keyboard/gamepad selection remains with GameUI's existing focus navigation.
  */
 import './map-select.css';
 import { esc } from './markup.js';
 import { icon } from './icons.js';
-import {
-  LOCKED_COLOUR,
-  REGION_BY_PLAYTEST_ID,
-  ROUTE_COLOUR,
-  SURVEY_ROUTE,
-  WORLD_REGION_SHAPES,
-  polygonArea,
-  polygonBounds,
-  type WorldRegionId,
-  type WorldRegionShape,
-  type WorldRegionStatus,
-} from '../content/worldMapRegions.js';
+import { REGION_BY_PLAYTEST_ID, WORLD_REGION_SHAPES } from '../content/worldMapRegions.js';
+import type { WorldRegionId, WorldRegionShape, WorldRegionStatus } from '../content/worldMapRegions.js';
+import type { EryaMapController, EryaMapRegion } from './eryaWorldMap.js';
 import type { AssetPlaytestId } from '../app/AssetPlaytests.js';
 
 const MAP_ART = '/ui/world-map-game.webp';
@@ -84,82 +65,12 @@ function shapeFor(map: PlaytestMapEntry): WorldRegionShape | null {
 
 type PlaytestMapEntry = WorldMapSelectViewModel['maps'][number];
 
-/** SVG polygon `points` attribute string from a 0–100 polygon. */
-function polygonPoints(polygon: ReadonlyArray<readonly [number, number]>): string {
-  return polygon.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' ');
-}
-
-/** Stroke colour a region renders with: route colour for playable, neutral for locked/coming-soon. */
-const strokeFor = (status: WorldRegionStatus): string => status === 'playable' ? ROUTE_COLOUR : LOCKED_COLOUR;
-
-/** Fill colour (rgba) for the hovered region: route colour for playable, neutral ink for the rest. */
-const fillFor = (status: WorldRegionStatus, alpha: number): string => {
-  if (status === 'playable') return `rgba(168, 23, 79, ${alpha.toFixed(2)})`;
-  if (status === 'coming-soon') return `rgba(140, 90, 43, ${alpha.toFixed(2)})`;
-  return `rgba(100, 95, 78, ${alpha.toFixed(2)})`;
-};
-
 /** The status mark drawn in a region's pin: the survey icon set, never a letter. */
 function statusPinIcon(status: WorldRegionStatus, map: PlaytestMapEntry): string {
   if (status === 'playable') return icon(map.cleared ? 'check' : 'pin');
   return icon('lock');
 }
 
-/** The dashed survey route across the journey order, connecting region centres. */
-function surveyRouteMarkup(): string {
-  const byId = SHAPE_BY_ID;
-  const points = SURVEY_ROUTE
-    .map(id => byId[id])
-    .filter((shape): shape is WorldRegionShape => Boolean(shape))
-    .map(shape => shape.centre);
-  if (points.length < 2) return '';
-  return `<path class="wc-map__route" d="${points.map(([x, y], index) => `${index === 0 ? 'M' : 'L'}${x.toFixed(2)},${y.toFixed(2)}`).join(' ')}" aria-hidden="true" />`;
-}
-
-/**
- * Reusable SVG overlay: an `aspect-ratio: 8 / 5` viewBox with one polygon per region, the dashed survey route and
- * the painted map's locked regions. The overlay is purely presentation — hover/focus styling lives in the consuming
- * screen, so the same shapes can be reused on the in-game World map later.
- */
-export function worldMapRegionOverlay(): string {
-  const polygons = WORLD_REGION_SHAPES
-    .map(shape => `<polygon class="wc-map__region" data-region="${shape.id}" points="${polygonPoints(shape.polygon)}" />`)
-    .join('');
-  return `<svg class="wc-map__overlay" viewBox="0 0 100 62.5" preserveAspectRatio="none" aria-hidden="true" focusable="false">`
-    + `<g class="wc-map__routes">${surveyRouteMarkup()}</g>`
-    + `<g class="wc-map__shapes">${polygons}</g>`
-    + `</svg>`;
-}
-
-/** Find the spatially nearest region in `direction` from `currentId`; ties broken by smaller angular offset. */
-export function pickSpatialNeighbour(currentId: WorldRegionId, direction: 'up' | 'down' | 'left' | 'right'): WorldRegionId {
-  const current = SHAPE_BY_ID[currentId];
-  if (!current) return currentId;
-  const [cx, cy] = current.centre;
-  let bestId: WorldRegionId = currentId;
-  let bestScore = Number.POSITIVE_INFINITY;
-  for (const shape of WORLD_REGION_SHAPES) {
-    if (shape.id === currentId) continue;
-    const [x, y] = shape.centre;
-    const dx = x - cx;
-    const dy = y - cy;
-    let aligned = 0;
-    let cross = 0;
-    if (direction === 'left') { aligned = -dx; cross = dy; }
-    else if (direction === 'right') { aligned = dx; cross = dy; }
-    else if (direction === 'up') { aligned = -dy; cross = dx; }
-    else { aligned = dy; cross = dx; }
-    if (aligned <= 0) continue;
-    // Score is the squared tangent: `(cross/aligned)²`. The on-axis neighbour (cross ≈ 0) always wins over an
-    // off-axis one (cross large). Ties broken by smaller distance. This matches the visual arrow-key expectation:
-    // "down" from the Grove goes to the painted region directly below it, even if it's farther away than a
-    // diagonal neighbour.
-    const tangent = cross / aligned;
-    const score = tangent * tangent * 1e6 + (dx * dx + dy * dy);
-    if (score < bestScore) { bestScore = score; bestId = shape.id; }
-  }
-  return bestId;
-}
 
 /** Status label: Open / Cleared / Locked: reason / Coming soon. */
 function statusLabel(map: PlaytestMapEntry, previous: PlaytestMapEntry | undefined): { tone: 'open' | 'cleared' | 'locked' | 'soon'; text: string } {
@@ -175,7 +86,7 @@ function infoPanelMarkup(map: PlaytestMapEntry, previous: PlaytestMapEntry | und
   const monsterList = map.monsters.length ? `<ul class="wc-map__monsters">${map.monsters.map(monster => `<li>${esc(monster)}</li>`).join('')}</ul>` : `<p class="wc-map__monsters-empty">No encounters listed.</p>`;
   const thumbnail = map.thumbnailUrl
     ? `<figure class="wc-map__thumb" style="background-image:url('${esc(map.thumbnailUrl)}')" role="img" aria-label="${esc(map.name)} illustration"></figure>`
-    : `<figure class="wc-map__thumb wc-map__thumb--placeholder" role="img" aria-label="${esc(map.name)} on the map of Erya"></figure>`;
+    : `<figure class="wc-map__thumb wc-map__thumb--placeholder"${map.mapArt ? ` style="background-size:${esc(map.mapArt.size)};background-position:${esc(map.mapArt.position)}"` : ''} role="img" aria-label="${esc(map.name)} on the map of Erya"></figure>`;
   const playable = !map.comingSoon && (map.unlocked || map.cleared);
   const actionAttrs = playable
     ? `data-ui-action="select-map" data-map="${esc(map.id)}"`
@@ -218,24 +129,16 @@ function regionButtonMarkup(map: PlaytestMapEntry, status: WorldRegionStatus, sh
   const ariaPressed = map.id === viewModel.selectedMapId ? 'true' : 'false';
   const statusAttr = `data-status="${status}"`;
   const selectedAttr = map.id === viewModel.selectedMapId ? 'data-selected="true"' : '';
-  const area = polygonArea(shape.polygon).toFixed(1);
-  const bounds = polygonBounds(shape.polygon);
-  const cx = (bounds.minX + bounds.maxX) / 2;
-  const cy = (bounds.minY + bounds.maxY) / 2;
-  const stroke = strokeFor(status);
-  const fill = fillFor(status, 0.18);
-  // The button itself sits over the polygon so screen readers and pointer events work; the SVG polygon
-  // provides the visual fill, stroke and hatch. A small status pin (survey icon) is always visible so the
-  // player can scan the map at a glance; the full painted name only renders on the hovered/focused/
-  // selected region so we never duplicate the names already painted on the illustration.
+  const [cx, cy] = shape.chipPosition;
+  // Native polygons own geographic hit areas; these markers retain semantic focus and selection.
   const pin = statusPinIcon(status, map);
-  return `<button type="button" class="wc-map__region-btn" data-region="${shape.id}" data-map-id="${esc(map.id)}" ${action} ${focusability} ${statusAttr} ${selectedAttr} aria-label="${esc(ariaLabel)}" aria-pressed="${ariaPressed}" data-focus-key="map-region-${esc(map.id)}" style="--wc-map-fill:${fill};--wc-map-stroke:${stroke};--wc-map-cx:${cx.toFixed(2)}%;--wc-map-cy:${cy.toFixed(2)}%;--wc-map-area:${area}%">
+  return `<button type="button" class="wc-map__region-btn" data-region="${shape.id}" data-map-id="${esc(map.id)}" ${action} ${focusability} ${statusAttr} ${selectedAttr} aria-label="${esc(ariaLabel)}" aria-pressed="${ariaPressed}" data-focus-key="map-region-${esc(map.id)}" style="--wc-map-cx:${cx.toFixed(2)}%;--wc-map-cy:${cy.toFixed(2)}%">
       <span class="wc-map__region-pin" aria-hidden="true">${pin}</span>
       <span class="wc-map__region-name" aria-hidden="true">${esc(map.name)}</span>
     </button>`;
 }
 
-/** The full screen body: map art, SVG overlay with polygons, region buttons, info panel for the selected map. */
+/** Existing map screen and information panels; the native renderer is mounted by the binder. */
 export function worldMapSelectMarkup(viewModel: WorldMapSelectViewModel): string {
   const selected = viewModel.maps.find(map => map.id === viewModel.selectedMapId) ?? viewModel.maps[0];
   if (!selected) return '';
@@ -260,29 +163,12 @@ export function worldMapSelectMarkup(viewModel: WorldMapSelectViewModel): string
     <div class="wc-map__layout">
       <section class="wc-map__stage wc-sheet" aria-label="Illustrated world map of Erya with regions">
         <header class="wc-sheet__head">
-          <p class="wc-label">The Warden's survey</p>
           <h1 class="wc-heading">Choose your path</h1>
           <p class="wc-meta">Follow the journey through Erya. Clear each map to open the next.</p>
         </header>
-        <div class="wc-map__viewport" style="--wc-map-zoom:1">
+        <div class="wc-map__viewport">
           <img class="wc-map__art" src="${MAP_ART}" alt="Illustrated world map of Erya with named regions and Heartroot Hollow beneath the Grove">
-          <svg class="wc-map__overlay wc-map__overlay--interactive" viewBox="0 0 100 62.5" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <defs>
-              <pattern id="wc-map-hatch" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
-                <line x1="0" y1="0" x2="0" y2="2.4" stroke="rgba(30, 35, 27, 0.45)" stroke-width="0.4" />
-              </pattern>
-            </defs>
-            <g class="wc-map__routes">${surveyRouteMarkup()}</g>
-            <g class="wc-map__shapes">${WORLD_REGION_SHAPES.map(shape => {
-              const matching = viewModel.maps.find(map => shapeFor(map)?.id === shape.id);
-              const status: WorldRegionStatus = matching ? statusFor(matching) : 'coming-soon';
-              return `<polygon class="wc-map__shape" data-region="${shape.id}" data-status="${status}" points="${polygonPoints(shape.polygon)}" />`;
-            }).join('')}</g>
-            <g class="wc-map__lock-icons">${WORLD_REGION_SHAPES.map(shape => {
-              const [x, y] = shape.centre;
-              return `<g class="wc-map__lock" data-region="${shape.id}" transform="translate(${x.toFixed(2)},${y.toFixed(2)})" aria-hidden="true">${icon('lock')}</g>`;
-            }).join('')}</g>
-          </svg>
+          <div class="wc-map__canvas"></div>
           <div class="wc-map__buttons">${regionMarkup}</div>
         </div>
         <ul class="wc-legend wc-map__legend" aria-label="Map legend">
@@ -308,23 +194,7 @@ export function worldMapPanels(viewModel: WorldMapSelectViewModel): Record<strin
   return panels;
 }
 
-/**
- * Wires UI-local hover/focus/inspection behaviour to the rendered map select screen. This is a presentation-only
- * binder: it does not dispatch any game action, it does not re-render the screen, and it only swaps the side
- * info panel markup by cloning the pre-rendered panels and toggling their visibility, plus a per-button
- * `data-active` flag for the highlight.
- *
- * On mount the binder expects a single visible panel whose markup matches the selected map; to support
- * inspecting any region (including locked/coming-soon), the binder clones every region's panel into an
- * internal template bank so the same DOM nodes can be swapped in place. Existing focus on buttons survives
- * because the binder never replaces the buttons.
- *
- * The caller passes a `panels` map keyed by `mapId`; the markup of one such panel is the same as
- * `infoPanelMarkup(map, previous)`. When the caller cannot supply a panel for a map (e.g. the playable list
- * is empty for that map id), the binder falls back to whatever the current root renders.
- *
- * @returns A teardown function that removes all listeners and clears the panel bank.
- */
+/** Presentation-only inspection; no game dispatch or replacement of focused region buttons. */
 export interface WorldMapBindOptions {
   /** All panels keyed by map id. The binder keeps one node per map in a hidden bank and shows the
    *  matching one. The map id strings are exactly the values of `data-map-id` on the region buttons. */
@@ -373,29 +243,40 @@ export function bindWorldMapSelect(screenRoot: HTMLElement, options: WorldMapBin
     if (bank.has(mapId)) continue;
     register(mapId, html, false);
   }
-  const shapes = [...root.querySelectorAll<SVGElement>('.wc-map__shape')];
-  const setInspect = (mapId: string, regionId: string | undefined): void => {
-    if (options.resolveMap && !options.resolveMap(mapId)) return;
+  const byRegion = new Map<WorldRegionId, HTMLButtonElement>();
+  for (const button of buttons) byRegion.set(button.dataset.region as WorldRegionId, button);
+  let controller: EryaMapController | null = null;
+  let hovered: WorldRegionId | null = null;
+  let focused: WorldRegionId | null = null;
+  let inspected: WorldRegionId | null = null;
+  let disposed = false;
+  const abort = new AbortController();
+  const setInspect = (mapId: string, regionId: WorldRegionId): boolean => {
+    if (options.resolveMap && !options.resolveMap(mapId)) return false;
+    inspected = regionId;
     root.setAttribute('data-inspect-region', mapId);
     for (const [id, node] of bank) node.hidden = id !== mapId;
-    // The painted land mass of the inspected region lights up; the others dim through the root attribute.
-    for (const shape of shapes) {
-      if (shape.getAttribute('data-region') === regionId) shape.setAttribute('data-active', 'true');
-      else shape.removeAttribute('data-active');
+    for (const button of buttons) {
+      if (button.dataset.region === regionId) button.setAttribute('data-active', 'true');
+      else button.removeAttribute('data-active');
     }
+    return true;
   };
-  const setActive = (button: HTMLButtonElement, active: boolean): void => {
-    if (active) button.setAttribute('data-active', 'true');
-    else button.removeAttribute('data-active');
+  const present = (): void => {
+    const region = hovered ?? focused;
+    const button = region ? byRegion.get(region) : null;
+    if (button && !setInspect(button.dataset.mapId!, region!)) return;
+    controller?.inspect(inspected, region !== null);
   };
   const handlers: Array<() => void> = [];
   const attach = (button: HTMLButtonElement): void => {
     const mapId = button.dataset.mapId ?? '';
     if (!mapId) return;
-    const onEnter = (): void => { setActive(button, true); setInspect(mapId, button.dataset.region); };
-    const onLeave = (): void => { setActive(button, false); };
-    const onFocus = (): void => { setActive(button, true); setInspect(mapId, button.dataset.region); };
-    const onBlur = (): void => { setActive(button, false); };
+    const region = button.dataset.region as WorldRegionId;
+    const onEnter = (): void => { hovered = region; present(); };
+    const onLeave = (): void => { if (hovered === region) hovered = null; present(); };
+    const onFocus = (): void => { hovered = null; focused = region; present(); };
+    const onBlur = (): void => { if (focused === region) focused = null; present(); };
     button.addEventListener('mouseenter', onEnter);
     button.addEventListener('mouseleave', onLeave);
     button.addEventListener('focus', onFocus);
@@ -406,18 +287,50 @@ export function bindWorldMapSelect(screenRoot: HTMLElement, options: WorldMapBin
     handlers.push(() => button.removeEventListener('blur', onBlur));
   };
   buttons.forEach(attach);
-  // First paint: the inspected (selected) region is already lit.
+  // First paint retains the selected region without pre-zooming the map.
   const initialButton = buttons.find(button => button.dataset.mapId === initialMapId);
-  if (initialButton) setInspect(initialMapId, initialButton.dataset.region);
+  if (initialButton) setInspect(initialMapId, initialButton.dataset.region as WorldRegionId);
+  const canvasHost = root.querySelector<HTMLElement>('.wc-map__canvas');
+  const buttonsLayer = root.querySelector<HTMLElement>('.wc-map__buttons');
+  if (canvasHost && buttonsLayer && doc.defaultView) {
+    const entries: EryaMapRegion[] = [];
+    for (const [id, button] of byRegion) entries.push({ shape: SHAPE_BY_ID[id], status: button.dataset.status as WorldRegionStatus });
+    void import('./eryaWorldMap.js').then(module => {
+      if (disposed) return null;
+      return module.mountEryaWorldMap(canvasHost, buttonsLayer, entries, {
+        hover(id) { hovered = id; present(); },
+        activate(id) {
+          const button = byRegion.get(id);
+          button?.focus({ preventScroll: true });
+          button?.click();
+        },
+      }, root.classList.contains('wc-state--static'), abort.signal);
+    }).then(mounted => {
+      if (!mounted) return;
+      if (disposed) mounted.dispose();
+      else { controller = mounted; present(); }
+    }).catch(error => {
+      if (disposed) return;
+      const message = doc.createElement('p');
+      message.className = 'wc-map__render-error';
+      message.setAttribute('role', 'status');
+      message.textContent = 'Interactive map unavailable. Use the region markers to choose a path.';
+      canvasHost.parentElement!.after(message);
+      console.error('Erya map renderer failed', error);
+    });
+  }
   return () => {
+    if (disposed) return;
+    disposed = true;
+    abort.abort();
+    controller?.dispose();
     for (const off of handlers) off();
     for (const node of bank.values()) {
       if (node !== initialPanel) node.remove();
     }
     bank.clear();
+    byRegion.clear();
+    initialPanel.hidden = false;
   };
 }
 
-// Re-export region helpers and shapes so consumers (notably the deterministic test) can import the whole surface
-// from this module without reaching into the content module.
-export { WORLD_REGION_SHAPES, SURVEY_ROUTE, isClosedPolygon, polygonsOverlap, polygonArea, polygonBounds } from '../content/worldMapRegions.js';

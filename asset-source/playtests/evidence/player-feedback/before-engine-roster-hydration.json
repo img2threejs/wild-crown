@@ -1,0 +1,24 @@
+{
+  "scope": "Fresh Bun process, real CombatEngine serialize/restore, explicit stale-equipment fixture; observed before hydration roster enforcement",
+  "steps": [
+    "Create CombatEngine and parse serialize()",
+    "Set companionState=createCompanionState('koro')",
+    "Supply progress.koro with recruited=false, bondLevel=0, dominionLevel=0, no unlocked abilities or story flags",
+    "Set command tokens.available=1",
+    "Restore the serialized state and read the public companions getter"
+  ],
+  "observed": {
+    "selected": "koro",
+    "slots": ["koro"],
+    "progress": {
+      "id": "koro",
+      "recruited": false,
+      "bondLevel": 0,
+      "dominionLevel": 0,
+      "unlockedAbilityIds": [],
+      "storyFlags": {}
+    },
+    "tokens": {"available": 1, "maximum": 2, "nextAt": 0}
+  },
+  "defect": "An unearned companion remained selected and slotted after restore; command tokens were not refilled."
+}

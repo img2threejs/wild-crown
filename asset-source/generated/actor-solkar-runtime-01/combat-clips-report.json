@@ -5,11 +5,11 @@
   "method": "continuous conditioned native skeletal motion with anatomical action mechanics",
   "input": {
     "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
-    "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a"
+    "sha256": "d0fd54830fa02330c7ab7782dc4467a3f5a0475a5c7158a1f8653453583bb262"
   },
   "output": {
     "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
-    "sha256": "abc05b14b299cd14651fa0f0f1cae563dffb2a1f639f6d79d303cc3627acdf93",
+    "sha256": "75e1253e00dd376af56fd3db8d242cacfa65f4d8dd779a1da4243209ca316ef3",
     "bytes": 8015636
   },
   "preserved": [
@@ -230,7 +230,7 @@
   },
   "inheritedProvenance": {
     "path": "asset-source/generated/actor-solkar-runtime-01/clips-report.json",
-    "sha256": "51614ba246ed5880cccb66b0a847e605f16535b96a0c1e128828cd99b2c40a64"
+    "sha256": "63f9b56a2d93690cc98349e5053985798d8dcc84c101e24191d0f13e404d3b0a"
   },
   "rig": {
     "root": "tripo::Root",
@@ -350,10 +350,10 @@
       "loop": true,
       "semanticKeyTimes": {},
       "measured": {
-        "measuredStrikeTime": 0.647,
-        "peakHeadSpeedUnitsPerSecond": 0.451,
-        "peakHeadDisplacementTime": 0.824,
-        "peakHeadDisplacementBodyHeights": 0.045,
+        "measuredStrikeTime": 0.706,
+        "peakHeadSpeedUnitsPerSecond": 0.454,
+        "peakHeadDisplacementTime": 0.588,
+        "peakHeadDisplacementBodyHeights": 0.063,
         "rootPeakBodyHeights": -0.0502,
         "rootPeakTime": 0.235,
         "rootMinBodyHeights": -0.07,
@@ -378,8 +378,8 @@
         "rootMeanRiseBodyHeights": -0.06,
         "planting": {
           "plantedSpeedUnitsPerSecond": 1.3454,
-          "strideUnits": 0.3251,
-          "stanceFraction": 0.426,
+          "strideUnits": 0.3476,
+          "stanceFraction": 0.456,
           "maxSlidePercent": 0.6,
           "meanSlidePercent": 0.3
         }
@@ -837,10 +837,10 @@
       "loop": true,
       "semanticKeyTimes": {},
       "measured": {
-        "measuredStrikeTime": 0.042,
-        "peakHeadSpeedUnitsPerSecond": 0.389,
-        "peakHeadDisplacementTime": 0.625,
-        "peakHeadDisplacementBodyHeights": 0.059,
+        "measuredStrikeTime": 0.417,
+        "peakHeadSpeedUnitsPerSecond": 0.299,
+        "peakHeadDisplacementTime": 0.583,
+        "peakHeadDisplacementBodyHeights": 0.044,
         "rootPeakBodyHeights": -0.04,
         "rootPeakTime": 0.333,
         "rootMinBodyHeights": -0.05,

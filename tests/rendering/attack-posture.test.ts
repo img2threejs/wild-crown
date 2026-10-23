@@ -10,6 +10,8 @@ import { ThreeSkeleton } from '../../scripts/assets/hero-harmony-harness.mjs';
 import { TARGET, derive, render } from '../../scripts/assets/derive-attack-postures.mjs';
 import { applyPosture, postureEnvelope } from '../../src/rendering/AttackPosture.js';
 import { ATTACK_POSTURES } from '../../src/rendering/AttackPostures.js';
+import { exactTakeClips } from '../../src/rendering/ExactTakes.js';
+import { AREN_HERO_ASSET_ID } from '../../src/game/heroes.js';
 
 const root = new URL('../../', import.meta.url).pathname;
 const NAMES = ['Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head', 'LeftShoulder', 'RightShoulder', 'LeftArm', 'RightArm', 'LeftForeArm', 'RightForeArm', 'LeftHand', 'RightHand', 'LeftUpLeg', 'RightUpLeg', 'LeftLeg', 'RightLeg', 'LeftFoot', 'RightFoot'];
@@ -17,6 +19,10 @@ const NAMES = ['Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head', 'LeftShoulde
 describe('attack posture profiles', () => {
   it('are the deterministic function of the delivered hero clips (rerun scripts/assets/derive-attack-postures.mjs after re-authoring one)', () => {
     expect(readFileSync(`${root}src/rendering/AttackPostures.ts`, 'utf8')).toBe(render(derive().table));
+  });
+
+  it('stage no coil or lean over Aren’s exact Mixamo takes (the generator skips every id ExactTakes lists for Aren)', () => {
+    for (const clip of exactTakeClips(AREN_HERO_ASSET_ID)) expect(ATTACK_POSTURES[clip], clip).toBeUndefined();
   });
 
   it('stage every profiled strike: a coil reaches the reference game’s shoulder travel, and no profile costs more than 12% of the hand’s peak speed', () => {

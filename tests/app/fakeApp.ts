@@ -16,5 +16,8 @@ export function appDefaults(): Record<string, unknown> {
     combatReadability: { clear() {}, update() {}, setSettings() {}, dispose() {} },
     bossIntro: { show() {}, dispose() {} }, revealedBosses: new Set<string>(),
     worldBusy: 0, storyBusy: false, chapterIntents: [], intentRunning: false, presentingStory: false, choiceFromResume: false, choiceNotice: null,
+    pendingWorldEvents: [], failedWorldEvent: null, pendingNarrativeCues: [],
+    devFixtureControls: false, trainingReturn: null, trainingReturning: false, trainingMapSource: null, trainingMapChoices: [],
+    mapSource: null, mapCache: { currentRegion: null, regions: [] },
   };
 }

@@ -20,7 +20,7 @@ class FallRun {
     this.drain();
   }
   private drain(): void { this.events.push(...this.engine.consumeWorldEvents()); }
-  actor(id: string) { return this.engine.snapshotState().actors.find((actor) => actor.id === id || actor.archetypeId === id)!; }
+  actor(id: string) { return this.engine.snapshot().actors.find((actor) => actor.id === id || actor.archetypeId === id)!; }
   step(extra: Partial<CombatInput> = {}): void {
     this.engine.step({ tick: this.engine.simulationTick + 1, move: { x: 0, y: 0, z: 0 }, dodgePressed: false, lightPressed: false, heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false, ...extra }, 1 / 60);
     this.drain();
@@ -115,7 +115,7 @@ test("Fall resolves a projected party instance by its canonical recruit and hono
   run.idle(1200, () => run.actor("sable").possessed);
   const began = run.engine.snapshotState().worldTick;
   assert.equal(run.count((event) => event.type === "possession" && event.state === "began" && event.targetId === projected.id), 1);
-  assert.equal(run.actor("sable").possessedUntil - began, 120, "Bond 30 halves the 240-tick hold");
+  assert.equal(run.engine.snapshotState().actors.find((actor) => actor.id === projected.id)!.possessedUntil - began, 120, "Bond 30 halves the 240-tick hold");
   run.idle(60, () => run.engine.snapshotState().hazards.some((hazard) => hazard.sourceId === projected.id));
   assert.ok(run.engine.snapshotState().hazards.some((hazard) => hazard.sourceId === projected.id && hazard.attackId === "ruun-track-charge"));
   run.idle(400, () => run.protectionCleared() > 0);

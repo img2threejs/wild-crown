@@ -1,0 +1,4052 @@
+{
+  "startedAt": "2026-10-22T19:04:56.838Z",
+  "plannedSlots": {
+    "origin": "http://127.0.0.1:5214",
+    "screen": "pause",
+    "trainingReturn": false,
+    "candidate": [
+      {
+        "slotId": "autosave:8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "scope": "candidate-chapters",
+        "heroId": "aren"
+      },
+      {
+        "slotId": "import-mvjwdm6c",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "scope": "candidate-chapters",
+        "heroId": "aren"
+      },
+      {
+        "slotId": "autosave:9da00a80-aa60-4d1f-9051-9b7957463ec3",
+        "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+        "scope": "candidate-chapters",
+        "heroId": "aren"
+      },
+      {
+        "slotId": "import-mvjte00z",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "scope": "candidate-chapters",
+        "heroId": "aren"
+      }
+    ],
+    "production": []
+  },
+  "scaffolds": {
+    "filesDeleted": 25,
+    "stagingDirectoryDeleted": ".tmp-feedback-koro-stage",
+    "productionTemporaryReferencesFound": false,
+    "finalGlobMatches": 0
+  },
+  "rawBefore": {
+    "wild-crown-candidate-chapter-saves": {
+      "runs": [
+        {
+          "runId": "3188fbdb-b34c-4573-ba80-363f9ceb72f8",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678579853
+        },
+        {
+          "runId": "42cb67d9-cdc8-4c95-b7b4-2fe84e474911",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686916748
+        },
+        {
+          "runId": "66f84378-3b6f-4e72-b86f-9567255aa732",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678524521
+        },
+        {
+          "runId": "830049c2-beaf-4f01-83dc-9e54e330ac20",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686842120
+        },
+        {
+          "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:3:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:companion-search:koro-thorn",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-restoration",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:canopy-bamboo-out:1130:chapter",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:canopy-bamboo-out:1130:travel"
+          ],
+          "updatedAt": 1792695150607
+        },
+        {
+          "runId": "9a204303-9459-42fe-964a-c927c2590b3c",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678552821
+        },
+        {
+          "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792694712107
+        },
+        {
+          "runId": "b68e15e1-ff72-4dbf-9842-fc4547ff478f",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686946599
+        },
+        {
+          "runId": "be7bd339-fdf6-43e3-babb-3e6219e95d91",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678161034
+        },
+        {
+          "runId": "d4f0b685-eb44-42d9-aea3-9fc62591e6c6",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686482149
+        },
+        {
+          "runId": "e1b44ace-2fee-4649-8c88-e988c4c6d0bb",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686786888
+        },
+        {
+          "runId": "feedback-allmaps-canopy-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16"
+          ],
+          "updatedAt": 1792685369838
+        },
+        {
+          "runId": "feedback-allmaps-greenwake-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:feedback-native-safe-point-r3:chapter",
+            "transition:feedback-native-safe-point-r3:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "feedback-allmaps-greenwake-mvjjtb64:encounter-koro:phase:0:entered"
+          ],
+          "updatedAt": 1792686144291
+        },
+        {
+          "runId": "feedback-allmaps-grove-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-grove-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34",
+            "transition:to-mistveil:chapter",
+            "transition:to-mistveil:travel",
+            "story:mist-eyes:35",
+            "story:reed-track:36",
+            "story:infection-evidence:37",
+            "story:nyra-truth:38",
+            "story:river-upstream:39",
+            "story:marek-rig:40",
+            "choice:marek-fate:cleanse",
+            "choice:river-route:repair",
+            "story:polluted-source:41",
+            "story:encounter-ghor",
+            "story:river-source:42",
+            "story:mistveil-restoration:43",
+            "story:shadow-fragment:44",
+            "transition:to-sunmane:chapter",
+            "transition:to-sunmane:travel",
+            "story:silent-crossing:45",
+            "story:tribute-record:46",
+            "story:herd-route:47",
+            "story:herd-testimony:48",
+            "story:tribute-ledger:49",
+            "story:migration-gate:50",
+            "story:solkar-echo:51",
+            "story:encounter-solkar",
+            "choice:sunmane-resolution:bond",
+            "story:crown-fragment:52",
+            "story:sunmane-restoration:53",
+            "transition:back-to-mistveil:travel",
+            "transition:back-to-moonpine:travel",
+            "transition:back-to-bamboo:travel",
+            "transition:to-grove-fall:chapter",
+            "transition:to-grove-fall:travel",
+            "story:warden-call:54",
+            "story:grove-tali-rescue:55",
+            "story:grove-pillar:56",
+            "story:encounter-fall:phase:0:cleared",
+            "story:grove-collapse-escape:57",
+            "story:encounter-fall",
+            "story:grove-services:58",
+            "choice:chapter-six-response:ask"
+          ],
+          "updatedAt": 1792687195591
+        },
+        {
+          "runId": "feedback-allmaps-mistveil-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-mistveil-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34",
+            "transition:to-mistveil:chapter",
+            "transition:to-mistveil:travel",
+            "story:mist-eyes:35",
+            "story:reed-track:36",
+            "story:infection-evidence:37",
+            "story:nyra-truth:38",
+            "story:river-upstream:39",
+            "story:marek-rig:40",
+            "choice:marek-fate:cleanse",
+            "choice:river-route:repair",
+            "story:polluted-source:41",
+            "story:encounter-ghor",
+            "story:river-source:42",
+            "story:mistveil-restoration:43",
+            "story:shadow-fragment:44"
+          ],
+          "updatedAt": 1792679307442
+        },
+        {
+          "runId": "feedback-allmaps-moonpine-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-moonpine-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34"
+          ],
+          "updatedAt": 1792679291674
+        }
+      ],
+      "settings": [],
+      "slots": [
+        {
+          "slotId": "autosave:8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "label": "Autosave",
+          "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "kind": "campaign",
+          "updatedAt": 1792695150607,
+          "chapter": 1,
+          "regionId": "whispering-canopy",
+          "scope": "candidate-chapters",
+          "heroId": "aren",
+          "segmentId": "canopy",
+          "checkpointId": "canopy-post-koro",
+          "autosave": true,
+          "envelope": {
+            "format": "wild-crown-save",
+            "schemaVersion": 3,
+            "scope": "candidate-chapters",
+            "kind": "campaign",
+            "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+            "checkpoint": {
+              "kind": "campaign-checkpoint",
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky",
+                  "heartroot-canopy"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 30,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": true,
+                    "bondLevel": 65,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "distract",
+                      "move-object"
+                    ],
+                    "storyFlags": {
+                      "koro-pact-bond": true
+                    }
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              }
+            },
+            "campaign": {
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky",
+                  "heartroot-canopy"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 30,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": true,
+                    "bondLevel": 65,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "distract",
+                      "move-object"
+                    ],
+                    "storyFlags": {
+                      "koro-pact-bond": true
+                    }
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              },
+              "dominionHistory": []
+            },
+            "progress": {
+              "chapter": 1,
+              "regionId": "whispering-canopy",
+              "activeQuestIds": [
+                "empty-orchard"
+              ],
+              "completedQuestIds": [
+                "prologue",
+                "fallen-scout",
+                "thief-in-the-branches"
+              ],
+              "completedObjectiveIds": [
+                "prologue:hear-roars",
+                "prologue:tend-vara",
+                "prologue:receive-sky",
+                "prologue:take-staff",
+                "prologue:cleanse-boar",
+                "prologue:open-gate",
+                "fallen-scout:mark-threat",
+                "fallen-scout:answer-warning",
+                "fallen-scout:tend-vara",
+                "thief-in-the-branches:vault-branch",
+                "thief-in-the-branches:vine-route",
+                "thief-in-the-branches:koro-trail",
+                "empty-orchard:monkey-rescue",
+                "empty-orchard:share-seeds",
+                "empty-orchard:water-flow",
+                "empty-orchard:koro-thorn",
+                "empty-orchard:cleanse-koro",
+                "empty-orchard:koro-pact",
+                "empty-orchard:canopy-fragment"
+              ],
+              "trackedObjectiveId": null,
+              "party": {
+                "companionId": "vara"
+              },
+              "choices": {
+                "koro-pact": "bond"
+              },
+              "worldFacts": {
+                "marekPresent": true,
+                "taliSafe": false,
+                "taliNeedsRescue": true,
+                "taliInBamboo": true,
+                "taliInGrove": false,
+                "taliCageOpen": false,
+                "solkarPresent": true,
+                "crownCouncilAvailable": false,
+                "mistveil_nyra_hidden_route": false,
+                "wardenCall": false,
+                "askSignal": false,
+                "refugeOpen": false,
+                "chapter": 1,
+                "objectMoved:camp-loose-snare": false,
+                "objectMoved:asha-shrine-bundle": false,
+                "canopy_water_seed_accord": false,
+                "bamboo_tali_safe": false,
+                "bamboo_snare_source": false,
+                "moonpine_settlement": false,
+                "mistveil_river_source": false,
+                "mistveil_nyra_truth": false,
+                "sunmane_tribute_ended": false,
+                "sunmane_voluntary_governance": false,
+                "restoration:greenwake:state": "unvisited",
+                "restoration:greenwake:partial": false,
+                "restoration:greenwake:restored": false,
+                "restoration:whispering-canopy:state": "unvisited",
+                "restoration:whispering-canopy:partial": false,
+                "restoration:whispering-canopy:restored": false,
+                "canopy_restored": false,
+                "restoration:blood-bamboo-valley:state": "unvisited",
+                "restoration:blood-bamboo-valley:partial": false,
+                "restoration:blood-bamboo-valley:restored": false,
+                "bamboo_restored": false,
+                "restoration:the-grove:state": "unvisited",
+                "restoration:the-grove:partial": false,
+                "restoration:the-grove:restored": false,
+                "restoration:moonpine-ridge:state": "unvisited",
+                "restoration:moonpine-ridge:partial": false,
+                "restoration:moonpine-ridge:restored": false,
+                "moonpine_restored": false,
+                "restoration:mistveil-basin:state": "unvisited",
+                "restoration:mistveil-basin:partial": false,
+                "restoration:mistveil-basin:restored": false,
+                "mistveil_restored": false,
+                "restoration:sunmane-expanse:state": "unvisited",
+                "restoration:sunmane-expanse:partial": false,
+                "restoration:sunmane-expanse:restored": false,
+                "sunmane_restored": false,
+                "restoration:refuge:state": "unvisited",
+                "restoration:refuge:partial": false,
+                "restoration:refuge:restored": false,
+                "restoration:heartroot-hollow:state": "unvisited",
+                "restoration:heartroot-hollow:partial": false,
+                "restoration:heartroot-hollow:restored": false,
+                "prologueStarted": true,
+                "checkpoint:prologue-run-entry": true,
+                "interaction:greenwake-roars": true,
+                "interaction:tend-vara": true,
+                "relationship:vara-recruited": true,
+                "checkpoint:prologue-after-sky": true,
+                "interaction:warden-staff": true,
+                "checkpoint:greenwake-pre-boar": true,
+                "encounterPhase:greenwake-boar:0:entered": true,
+                "interaction:bird-mark": true,
+                "relationship:vara-first-mark": true,
+                "interaction:warning-response": true,
+                "encounterPhase:greenwake-boar:0:cleared": true,
+                "encounterPhase:greenwake-boar:1:entered": true,
+                "encounterPhase:greenwake-boar:1:cleared": true,
+                "encounterPhase:greenwake-boar:2:entered": true,
+                "encounterPhase:greenwake-boar:2:cleared": true,
+                "greenwake-boar-cleansed": true,
+                "checkpoint:greenwake-post-cleanse": true,
+                "interaction:greenwake-gate": true,
+                "sky-fragment": true,
+                "checkpoint:greenwake-forest-exit": true,
+                "visited:whispering-canopy": true,
+                "checkpoint:canopy-arrival": true,
+                "interaction:canopy-tend-vara": true,
+                "relationship:vara-basin-care": true,
+                "interaction:canopy-vault": true,
+                "interaction:canopy-vine-route": true,
+                "interaction:koro-trail": true,
+                "checkpoint:canopy-roost-after-chase": true,
+                "interaction:monkey-rescue": true,
+                "interaction:orchard-seeds": true,
+                "interaction:canopy-waterwheel": true,
+                "checkpoint:canopy-pre-koro": true,
+                "encounterPhase:encounter-koro:0:entered": true,
+                "interaction:koro-thorn": true,
+                "encounterPhase:encounter-koro:0:cleared": true,
+                "encounterPhase:encounter-koro:1:entered": true,
+                "encounterPhase:encounter-koro:1:cleared": true,
+                "encounter-koro-cleansed": true,
+                "relationship:koro-recruited": true,
+                "relationship:koro-water-restored": true,
+                "relationship:koro-monkeys-freed": true,
+                "relationship:koro-seeds-shared": true,
+                "checkpoint:canopy-post-koro": true,
+                "choice:koro-pact": true,
+                "pact:koro-pact": "bond",
+                "relationship:koro-bond-pact": true
+              },
+              "ending": null,
+              "eventLog": [
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "actorId": "aren",
+                  "interactionId": "greenwake-roars",
+                  "kind": "inspect",
+                  "targetId": "greenwake-roars",
+                  "position": {
+                    "x": -3.7025615595041863,
+                    "y": 0,
+                    "z": -6.750055244608183
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "actorId": "aren",
+                  "interactionId": "tend-vara",
+                  "kind": "tend",
+                  "targetId": "vara",
+                  "position": {
+                    "x": -10.536023849728307,
+                    "y": 0,
+                    "z": -7.955960354647662
+                  }
+                },
+                {
+                  "type": "fragment",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "fragmentId": "heartroot-sky",
+                  "sourceId": "vara"
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "actorId": "aren",
+                  "interactionId": "warden-staff",
+                  "kind": "collect",
+                  "targetId": "warden-staff",
+                  "position": {
+                    "x": -5.452223061923243,
+                    "y": 0,
+                    "z": -5.572938237386617
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "charge-lane",
+                  "phaseIndex": 0,
+                  "state": "entered",
+                  "simulationTick": 5095
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "bird-mark",
+                  "kind": "inspect",
+                  "targetId": "bird-mark",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "warning-response",
+                  "kind": "signal",
+                  "targetId": "warning-response",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "charge-lane",
+                  "phaseIndex": 0,
+                  "state": "cleared",
+                  "simulationTick": 140
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "sap-opening",
+                  "phaseIndex": 1,
+                  "state": "entered",
+                  "simulationTick": 140
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "sap-opening",
+                  "phaseIndex": 1,
+                  "state": "cleared",
+                  "simulationTick": 438
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "root-pressure",
+                  "phaseIndex": 2,
+                  "state": "entered",
+                  "simulationTick": 438
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "root-pressure",
+                  "phaseIndex": 2,
+                  "state": "cleared",
+                  "simulationTick": 1058
+                },
+                {
+                  "type": "encounter-resolved",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                  "encounterId": "greenwake-boar",
+                  "resolution": "cleansed",
+                  "actorIds": [
+                    "corrupted-boar",
+                    "greenwake-sap-stalker",
+                    "greenwake-root-rammer"
+                  ]
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                  "actorId": "aren",
+                  "interactionId": "greenwake-gate",
+                  "kind": "traverse",
+                  "targetId": "greenwake-gate",
+                  "position": {
+                    "x": 9.416646538776531,
+                    "y": 2,
+                    "z": 15.310936065101583
+                  }
+                },
+                {
+                  "type": "chapter-transition",
+                  "eventId": "9c8529cf-4651-4651-8b5c-8f4627a7423f",
+                  "idempotencyKey": "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+                  "fromChapter": 0,
+                  "toChapter": 1,
+                  "triggerId": "greenwake-canopy-out"
+                },
+                {
+                  "type": "traversal",
+                  "eventId": "357899f8-67d0-4339-8b77-85c52f95b528",
+                  "idempotencyKey": "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+                  "routeId": "greenwake-canopy",
+                  "fromRegion": "greenwake",
+                  "toRegion": "whispering-canopy",
+                  "landmarkId": "greenwake-canopy-in"
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                  "actorId": "aren",
+                  "interactionId": "canopy-tend-vara",
+                  "kind": "tend",
+                  "targetId": "canopy-vara",
+                  "position": {
+                    "x": -58,
+                    "y": 0,
+                    "z": -20
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                  "actorId": "aren",
+                  "interactionId": "canopy-vault",
+                  "kind": "traverse",
+                  "targetId": "canopy-vault",
+                  "position": {
+                    "x": -17.200469220480983,
+                    "y": 4,
+                    "z": -26.19746815822986
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                  "actorId": "aren",
+                  "interactionId": "canopy-vine-route",
+                  "kind": "traverse",
+                  "targetId": "canopy-vine-route",
+                  "position": {
+                    "x": -7.267419877830231,
+                    "y": 4.0177522323982595,
+                    "z": -28.427809577681117
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                  "actorId": "aren",
+                  "interactionId": "koro-trail",
+                  "kind": "track",
+                  "targetId": "koro-trail",
+                  "position": {
+                    "x": 9.430966483204369,
+                    "y": 4,
+                    "z": -23.04629257064507
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                  "actorId": "aren",
+                  "interactionId": "monkey-rescue",
+                  "kind": "rescue",
+                  "targetId": "monkey-rescue",
+                  "position": {
+                    "x": 11.113604917859474,
+                    "y": 4,
+                    "z": -38.11461052169959
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                  "actorId": "aren",
+                  "interactionId": "orchard-seeds",
+                  "kind": "collect",
+                  "targetId": "orchard-seeds",
+                  "position": {
+                    "x": 13.949122638951224,
+                    "y": 4,
+                    "z": -40.09947292646399
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                  "actorId": "aren",
+                  "interactionId": "canopy-waterwheel",
+                  "kind": "repair",
+                  "targetId": "canopy-waterwheel",
+                  "position": {
+                    "x": 37.09740341261793,
+                    "y": 0,
+                    "z": 4.2466140287642995
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "broken-branches",
+                  "phaseIndex": 0,
+                  "state": "entered",
+                  "simulationTick": 2472
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                  "actorId": "aren",
+                  "interactionId": "koro-thorn",
+                  "kind": "inspect",
+                  "targetId": "koro-thorn",
+                  "position": {
+                    "x": 44.07827727140193,
+                    "y": 0,
+                    "z": -24.021183162878213
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "broken-branches",
+                  "phaseIndex": 0,
+                  "state": "cleared",
+                  "simulationTick": 2754
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "canopy-escape",
+                  "phaseIndex": 1,
+                  "state": "entered",
+                  "simulationTick": 2754
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "canopy-escape",
+                  "phaseIndex": 1,
+                  "state": "cleared",
+                  "simulationTick": 2978
+                },
+                {
+                  "type": "encounter-resolved",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+                  "encounterId": "encounter-koro",
+                  "resolution": "cleansed",
+                  "actorIds": [
+                    "koro"
+                  ]
+                },
+                {
+                  "type": "choice",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+                  "choiceId": "koro-pact",
+                  "optionId": "bond"
+                },
+                {
+                  "type": "fragment",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment",
+                  "fragmentId": "heartroot-canopy",
+                  "sourceId": "koro"
+                }
+              ],
+              "eventKeys": [
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+                "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment"
+              ],
+              "revision": 54,
+              "safeSpawn": {
+                "regionId": "whispering-canopy",
+                "position": {
+                  "x": 47,
+                  "y": 0,
+                  "z": -22
+                },
+                "routeId": "canopy-trial-courtyard",
+                "cameraAnchorId": "canopy-trial-courtyard-rail"
+              },
+              "session": {
+                "saveScope": "candidate-chapters",
+                "assetPolicy": "candidate",
+                "heroId": "aren",
+                "resume": {
+                  "segmentId": "canopy",
+                  "layoutRevision": 1,
+                  "checkpointId": "canopy-post-koro",
+                  "activeEncounterId": null,
+                  "requiredBeatQueue": [],
+                  "dialogue": null,
+                  "completedBeatIds": [
+                    "prologue-opening",
+                    "prologue-vision",
+                    "greenwake-cleanse",
+                    "fallen-scout-open",
+                    "fallen-scout-close",
+                    "branches-open",
+                    "branches-close",
+                    "orchard-open",
+                    "koro-thorn-reveal",
+                    "koro-cleanse",
+                    "koro-pact-close"
+                  ],
+                  "pendingChoiceId": null
+                }
+              }
+            },
+            "eventKeys": [
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+              "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+              "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment"
+            ],
+            "savedAt": 1792695150607
+          }
+        },
+        {
+          "slotId": "autosave:9da00a80-aa60-4d1f-9051-9b7957463ec3",
+          "label": "Autosave",
+          "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+          "kind": "campaign",
+          "updatedAt": 1792694712107,
+          "chapter": 0,
+          "regionId": "greenwake",
+          "scope": "candidate-chapters",
+          "heroId": "aren",
+          "segmentId": "prologue",
+          "checkpointId": "prologue-run-entry",
+          "autosave": true,
+          "envelope": {
+            "format": "wild-crown-save",
+            "schemaVersion": 3,
+            "scope": "candidate-chapters",
+            "kind": "campaign",
+            "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+            "checkpoint": {
+              "kind": "campaign-checkpoint",
+              "schemaVersion": 2,
+              "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+              "world": {
+                "fragments": [],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              }
+            },
+            "campaign": {
+              "schemaVersion": 2,
+              "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+              "world": {
+                "fragments": [],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              },
+              "dominionHistory": []
+            },
+            "progress": {
+              "chapter": 0,
+              "regionId": "greenwake",
+              "activeQuestIds": [
+                "prologue"
+              ],
+              "completedQuestIds": [],
+              "completedObjectiveIds": [],
+              "trackedObjectiveId": null,
+              "party": {},
+              "choices": {},
+              "worldFacts": {
+                "marekPresent": true,
+                "taliSafe": false,
+                "taliNeedsRescue": true,
+                "taliInBamboo": true,
+                "taliInGrove": false,
+                "taliCageOpen": false,
+                "solkarPresent": true,
+                "crownCouncilAvailable": false,
+                "mistveil_nyra_hidden_route": false,
+                "wardenCall": false,
+                "askSignal": false,
+                "refugeOpen": false,
+                "chapter": 0,
+                "objectMoved:camp-loose-snare": false,
+                "objectMoved:asha-shrine-bundle": false,
+                "canopy_water_seed_accord": false,
+                "bamboo_tali_safe": false,
+                "bamboo_snare_source": false,
+                "moonpine_settlement": false,
+                "mistveil_river_source": false,
+                "mistveil_nyra_truth": false,
+                "sunmane_tribute_ended": false,
+                "sunmane_voluntary_governance": false,
+                "restoration:greenwake:state": "unvisited",
+                "restoration:greenwake:partial": false,
+                "restoration:greenwake:restored": false,
+                "restoration:whispering-canopy:state": "unvisited",
+                "restoration:whispering-canopy:partial": false,
+                "restoration:whispering-canopy:restored": false,
+                "canopy_restored": false,
+                "restoration:blood-bamboo-valley:state": "unvisited",
+                "restoration:blood-bamboo-valley:partial": false,
+                "restoration:blood-bamboo-valley:restored": false,
+                "bamboo_restored": false,
+                "restoration:the-grove:state": "unvisited",
+                "restoration:the-grove:partial": false,
+                "restoration:the-grove:restored": false,
+                "restoration:moonpine-ridge:state": "unvisited",
+                "restoration:moonpine-ridge:partial": false,
+                "restoration:moonpine-ridge:restored": false,
+                "moonpine_restored": false,
+                "restoration:mistveil-basin:state": "unvisited",
+                "restoration:mistveil-basin:partial": false,
+                "restoration:mistveil-basin:restored": false,
+                "mistveil_restored": false,
+                "restoration:sunmane-expanse:state": "unvisited",
+                "restoration:sunmane-expanse:partial": false,
+                "restoration:sunmane-expanse:restored": false,
+                "sunmane_restored": false,
+                "restoration:refuge:state": "unvisited",
+                "restoration:refuge:partial": false,
+                "restoration:refuge:restored": false,
+                "restoration:heartroot-hollow:state": "unvisited",
+                "restoration:heartroot-hollow:partial": false,
+                "restoration:heartroot-hollow:restored": false,
+                "prologueStarted": true,
+                "checkpoint:prologue-run-entry": true
+              },
+              "ending": null,
+              "eventLog": [],
+              "eventKeys": [],
+              "revision": 2,
+              "safeSpawn": {
+                "regionId": "greenwake",
+                "position": {
+                  "x": -18,
+                  "y": 0,
+                  "z": -9
+                },
+                "routeId": "greenwake-forest-entry",
+                "cameraAnchorId": "greenwake-entry-rail"
+              },
+              "session": {
+                "saveScope": "candidate-chapters",
+                "assetPolicy": "candidate",
+                "heroId": "aren",
+                "resume": {
+                  "segmentId": "prologue",
+                  "layoutRevision": 1,
+                  "checkpointId": "prologue-run-entry",
+                  "activeEncounterId": null,
+                  "requiredBeatQueue": [],
+                  "dialogue": null,
+                  "completedBeatIds": [
+                    "prologue-opening"
+                  ],
+                  "pendingChoiceId": null
+                }
+              }
+            },
+            "eventKeys": [],
+            "savedAt": 1792694712107
+          }
+        },
+        {
+          "slotId": "import-mvjte00z",
+          "label": "Imported Journey",
+          "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "kind": "campaign",
+          "updatedAt": 1792690081958,
+          "chapter": 0,
+          "regionId": "greenwake",
+          "scope": "candidate-chapters",
+          "heroId": "aren",
+          "segmentId": "greenwake",
+          "checkpointId": "greenwake-pre-boar",
+          "autosave": false,
+          "envelope": {
+            "format": "wild-crown-save",
+            "schemaVersion": 3,
+            "scope": "candidate-chapters",
+            "kind": "campaign",
+            "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+            "checkpoint": {
+              "kind": "campaign-checkpoint",
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 25,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              }
+            },
+            "campaign": {
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 25,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              },
+              "dominionHistory": []
+            },
+            "progress": {
+              "chapter": 0,
+              "regionId": "greenwake",
+              "activeQuestIds": [
+                "prologue"
+              ],
+              "completedQuestIds": [],
+              "completedObjectiveIds": [
+                "prologue:hear-roars",
+                "prologue:tend-vara",
+                "prologue:receive-sky",
+                "prologue:take-staff"
+              ],
+              "trackedObjectiveId": null,
+              "party": {
+                "companionId": "vara"
+              },
+              "choices": {},
+              "worldFacts": {
+                "marekPresent": true,
+                "taliSafe": false,
+                "taliNeedsRescue": true,
+                "taliInBamboo": true,
+                "taliInGrove": false,
+                "taliCageOpen": false,
+                "solkarPresent": true,
+                "crownCouncilAvailable": false,
+                "mistveil_nyra_hidden_route": false,
+                "wardenCall": false,
+                "askSignal": false,
+                "refugeOpen": false,
+                "chapter": 0,
+                "objectMoved:camp-loose-snare": false,
+                "objectMoved:asha-shrine-bundle": false,
+                "canopy_water_seed_accord": false,
+                "bamboo_tali_safe": false,
+                "bamboo_snare_source": false,
+                "moonpine_settlement": false,
+                "mistveil_river_source": false,
+                "mistveil_nyra_truth": false,
+                "sunmane_tribute_ended": false,
+                "sunmane_voluntary_governance": false,
+                "restoration:greenwake:state": "unvisited",
+                "restoration:greenwake:partial": false,
+                "restoration:greenwake:restored": false,
+                "restoration:whispering-canopy:state": "unvisited",
+                "restoration:whispering-canopy:partial": false,
+                "restoration:whispering-canopy:restored": false,
+                "canopy_restored": false,
+                "restoration:blood-bamboo-valley:state": "unvisited",
+                "restoration:blood-bamboo-valley:partial": false,
+                "restoration:blood-bamboo-valley:restored": false,
+                "bamboo_restored": false,
+                "restoration:the-grove:state": "unvisited",
+                "restoration:the-grove:partial": false,
+                "restoration:the-grove:restored": false,
+                "restoration:moonpine-ridge:state": "unvisited",
+                "restoration:moonpine-ridge:partial": false,
+                "restoration:moonpine-ridge:restored": false,
+                "moonpine_restored": false,
+                "restoration:mistveil-basin:state": "unvisited",
+                "restoration:mistveil-basin:partial": false,
+                "restoration:mistveil-basin:restored": false,
+                "mistveil_restored": false,
+                "restoration:sunmane-expanse:state": "unvisited",
+                "restoration:sunmane-expanse:partial": false,
+                "restoration:sunmane-expanse:restored": false,
+                "sunmane_restored": false,
+                "restoration:refuge:state": "unvisited",
+                "restoration:refuge:partial": false,
+                "restoration:refuge:restored": false,
+                "restoration:heartroot-hollow:state": "unvisited",
+                "restoration:heartroot-hollow:partial": false,
+                "restoration:heartroot-hollow:restored": false,
+                "prologueStarted": true,
+                "checkpoint:prologue-run-entry": true,
+                "interaction:greenwake-roars": true,
+                "interaction:tend-vara": true,
+                "relationship:vara-recruited": true,
+                "checkpoint:prologue-after-sky": true,
+                "interaction:warden-staff": true,
+                "checkpoint:greenwake-pre-boar": true,
+                "encounterPhase:greenwake-boar:0:entered": true,
+                "interaction:bird-mark": true,
+                "relationship:vara-first-mark": true,
+                "interaction:warning-response": true
+              },
+              "ending": null,
+              "eventLog": [
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "actorId": "aren",
+                  "interactionId": "greenwake-roars",
+                  "kind": "inspect",
+                  "targetId": "greenwake-roars",
+                  "position": {
+                    "x": -3.7025615595041863,
+                    "y": 0,
+                    "z": -6.750055244608183
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "actorId": "aren",
+                  "interactionId": "tend-vara",
+                  "kind": "tend",
+                  "targetId": "vara",
+                  "position": {
+                    "x": -10.536023849728307,
+                    "y": 0,
+                    "z": -7.955960354647662
+                  }
+                },
+                {
+                  "type": "fragment",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "fragmentId": "heartroot-sky",
+                  "sourceId": "vara"
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "actorId": "aren",
+                  "interactionId": "warden-staff",
+                  "kind": "collect",
+                  "targetId": "warden-staff",
+                  "position": {
+                    "x": -5.452223061923243,
+                    "y": 0,
+                    "z": -5.572938237386617
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "charge-lane",
+                  "phaseIndex": 0,
+                  "state": "entered",
+                  "simulationTick": 5095
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "bird-mark",
+                  "kind": "inspect",
+                  "targetId": "bird-mark",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "warning-response",
+                  "kind": "signal",
+                  "targetId": "warning-response",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                }
+              ],
+              "eventKeys": [
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response"
+              ],
+              "revision": 14,
+              "safeSpawn": {
+                "regionId": "greenwake",
+                "position": {
+                  "x": 4,
+                  "y": 0,
+                  "z": -4
+                },
+                "routeId": "greenwake-boar-approach",
+                "cameraAnchorId": "greenwake-boar-arena"
+              },
+              "session": {
+                "saveScope": "candidate-chapters",
+                "assetPolicy": "candidate",
+                "heroId": "aren",
+                "resume": {
+                  "segmentId": "greenwake",
+                  "layoutRevision": 1,
+                  "checkpointId": "greenwake-pre-boar",
+                  "activeEncounterId": "greenwake-boar",
+                  "requiredBeatQueue": [],
+                  "dialogue": null,
+                  "completedBeatIds": [
+                    "prologue-opening",
+                    "prologue-vision"
+                  ],
+                  "pendingChoiceId": null
+                }
+              }
+            },
+            "eventKeys": [
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response"
+            ],
+            "savedAt": 1792684924527
+          }
+        },
+        {
+          "slotId": "import-mvjwdm6c",
+          "label": "Imported Journey",
+          "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "kind": "campaign",
+          "updatedAt": 1792695102853,
+          "chapter": 1,
+          "regionId": "whispering-canopy",
+          "scope": "candidate-chapters",
+          "heroId": "aren",
+          "segmentId": "canopy",
+          "checkpointId": "canopy-pre-koro",
+          "autosave": false,
+          "envelope": {
+            "format": "wild-crown-save",
+            "schemaVersion": 3,
+            "scope": "candidate-chapters",
+            "kind": "campaign",
+            "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+            "checkpoint": {
+              "kind": "campaign-checkpoint",
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 30,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": true,
+                    "bondLevel": 35,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "distract",
+                      "move-object"
+                    ],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              }
+            },
+            "campaign": {
+              "schemaVersion": 2,
+              "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+              "world": {
+                "fragments": [
+                  "heartroot-sky"
+                ],
+                "factions": {
+                  "sky": {
+                    "leaderId": null,
+                    "leaderStatus": "leaderless",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "vara",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "canopy": {
+                    "leaderId": "koro",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "koro",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "fang": {
+                    "leaderId": "asha",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "asha",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "pack": {
+                    "leaderId": "ruun",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "sable",
+                      "source": "envoy",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "shadow": {
+                    "leaderId": "nyra",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "nyra",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  },
+                  "crown": {
+                    "leaderId": "solkar",
+                    "leaderStatus": "active",
+                    "bondTier": 0,
+                    "representative": {
+                      "id": "solkar",
+                      "source": "leader",
+                      "present": true,
+                      "willing": false
+                    }
+                  }
+                },
+                "regions": {
+                  "whispering-canopy": "unvisited",
+                  "blood-bamboo-valley": "unvisited",
+                  "moonpine-ridge": "unvisited",
+                  "mistveil-basin": "unvisited",
+                  "sunmane-expanse": "unvisited"
+                },
+                "hollowReady": false,
+                "regionalObligations": {
+                  "canopy_water_seed_accord": false,
+                  "bamboo_tali_safe": false,
+                  "bamboo_snare_source": false,
+                  "moonpine_settlement": false,
+                  "mistveil_river_source": false,
+                  "mistveil_nyra_truth": false,
+                  "sunmane_tribute_ended": false,
+                  "sunmane_voluntary_governance": false
+                },
+                "renewedCommitments": {
+                  "sky": false,
+                  "canopy": false,
+                  "fang": false,
+                  "pack": false,
+                  "shadow": false,
+                  "crown": false
+                },
+                "marekPresent": true,
+                "companions": {
+                  "vara": {
+                    "id": "vara",
+                    "recruited": true,
+                    "bondLevel": 30,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "mark"
+                    ],
+                    "storyFlags": {
+                      "marked-first-threat": true
+                    }
+                  },
+                  "koro": {
+                    "id": "koro",
+                    "recruited": true,
+                    "bondLevel": 35,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [
+                      "distract",
+                      "move-object"
+                    ],
+                    "storyFlags": {}
+                  },
+                  "asha": {
+                    "id": "asha",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "sable": {
+                    "id": "sable",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "nyra": {
+                    "id": "nyra",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  },
+                  "solkar": {
+                    "id": "solkar",
+                    "recruited": false,
+                    "bondLevel": 0,
+                    "dominionLevel": 0,
+                    "unlockedAbilityIds": [],
+                    "storyFlags": {}
+                  }
+                }
+              },
+              "dominionHistory": []
+            },
+            "progress": {
+              "chapter": 1,
+              "regionId": "whispering-canopy",
+              "activeQuestIds": [
+                "empty-orchard"
+              ],
+              "completedQuestIds": [
+                "prologue",
+                "fallen-scout",
+                "thief-in-the-branches"
+              ],
+              "completedObjectiveIds": [
+                "prologue:hear-roars",
+                "prologue:tend-vara",
+                "prologue:receive-sky",
+                "prologue:take-staff",
+                "prologue:cleanse-boar",
+                "prologue:open-gate",
+                "fallen-scout:mark-threat",
+                "fallen-scout:answer-warning",
+                "fallen-scout:tend-vara",
+                "thief-in-the-branches:vault-branch",
+                "thief-in-the-branches:vine-route",
+                "thief-in-the-branches:koro-trail",
+                "empty-orchard:monkey-rescue",
+                "empty-orchard:share-seeds",
+                "empty-orchard:water-flow",
+                "empty-orchard:koro-thorn",
+                "empty-orchard:cleanse-koro"
+              ],
+              "trackedObjectiveId": null,
+              "party": {
+                "companionId": "vara"
+              },
+              "choices": {},
+              "worldFacts": {
+                "marekPresent": true,
+                "taliSafe": false,
+                "taliNeedsRescue": true,
+                "taliInBamboo": true,
+                "taliInGrove": false,
+                "taliCageOpen": false,
+                "solkarPresent": true,
+                "crownCouncilAvailable": false,
+                "mistveil_nyra_hidden_route": false,
+                "wardenCall": false,
+                "askSignal": false,
+                "refugeOpen": false,
+                "chapter": 1,
+                "objectMoved:camp-loose-snare": false,
+                "objectMoved:asha-shrine-bundle": false,
+                "canopy_water_seed_accord": false,
+                "bamboo_tali_safe": false,
+                "bamboo_snare_source": false,
+                "moonpine_settlement": false,
+                "mistveil_river_source": false,
+                "mistveil_nyra_truth": false,
+                "sunmane_tribute_ended": false,
+                "sunmane_voluntary_governance": false,
+                "restoration:greenwake:state": "unvisited",
+                "restoration:greenwake:partial": false,
+                "restoration:greenwake:restored": false,
+                "restoration:whispering-canopy:state": "unvisited",
+                "restoration:whispering-canopy:partial": false,
+                "restoration:whispering-canopy:restored": false,
+                "canopy_restored": false,
+                "restoration:blood-bamboo-valley:state": "unvisited",
+                "restoration:blood-bamboo-valley:partial": false,
+                "restoration:blood-bamboo-valley:restored": false,
+                "bamboo_restored": false,
+                "restoration:the-grove:state": "unvisited",
+                "restoration:the-grove:partial": false,
+                "restoration:the-grove:restored": false,
+                "restoration:moonpine-ridge:state": "unvisited",
+                "restoration:moonpine-ridge:partial": false,
+                "restoration:moonpine-ridge:restored": false,
+                "moonpine_restored": false,
+                "restoration:mistveil-basin:state": "unvisited",
+                "restoration:mistveil-basin:partial": false,
+                "restoration:mistveil-basin:restored": false,
+                "mistveil_restored": false,
+                "restoration:sunmane-expanse:state": "unvisited",
+                "restoration:sunmane-expanse:partial": false,
+                "restoration:sunmane-expanse:restored": false,
+                "sunmane_restored": false,
+                "restoration:refuge:state": "unvisited",
+                "restoration:refuge:partial": false,
+                "restoration:refuge:restored": false,
+                "restoration:heartroot-hollow:state": "unvisited",
+                "restoration:heartroot-hollow:partial": false,
+                "restoration:heartroot-hollow:restored": false,
+                "prologueStarted": true,
+                "checkpoint:prologue-run-entry": true,
+                "interaction:greenwake-roars": true,
+                "interaction:tend-vara": true,
+                "relationship:vara-recruited": true,
+                "checkpoint:prologue-after-sky": true,
+                "interaction:warden-staff": true,
+                "checkpoint:greenwake-pre-boar": true,
+                "encounterPhase:greenwake-boar:0:entered": true,
+                "interaction:bird-mark": true,
+                "relationship:vara-first-mark": true,
+                "interaction:warning-response": true,
+                "encounterPhase:greenwake-boar:0:cleared": true,
+                "encounterPhase:greenwake-boar:1:entered": true,
+                "encounterPhase:greenwake-boar:1:cleared": true,
+                "encounterPhase:greenwake-boar:2:entered": true,
+                "encounterPhase:greenwake-boar:2:cleared": true,
+                "greenwake-boar-cleansed": true,
+                "checkpoint:greenwake-post-cleanse": true,
+                "interaction:greenwake-gate": true,
+                "sky-fragment": true,
+                "checkpoint:greenwake-forest-exit": true,
+                "visited:whispering-canopy": true,
+                "checkpoint:canopy-arrival": true,
+                "interaction:canopy-tend-vara": true,
+                "relationship:vara-basin-care": true,
+                "interaction:canopy-vault": true,
+                "interaction:canopy-vine-route": true,
+                "interaction:koro-trail": true,
+                "checkpoint:canopy-roost-after-chase": true,
+                "interaction:monkey-rescue": true,
+                "interaction:orchard-seeds": true,
+                "interaction:canopy-waterwheel": true,
+                "checkpoint:canopy-pre-koro": true,
+                "encounterPhase:encounter-koro:0:entered": true,
+                "interaction:koro-thorn": true,
+                "encounterPhase:encounter-koro:0:cleared": true,
+                "encounterPhase:encounter-koro:1:entered": true,
+                "encounterPhase:encounter-koro:1:cleared": true,
+                "encounter-koro-cleansed": true,
+                "relationship:koro-recruited": true,
+                "relationship:koro-water-restored": true,
+                "relationship:koro-monkeys-freed": true,
+                "relationship:koro-seeds-shared": true
+              },
+              "ending": null,
+              "eventLog": [
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                  "actorId": "aren",
+                  "interactionId": "greenwake-roars",
+                  "kind": "inspect",
+                  "targetId": "greenwake-roars",
+                  "position": {
+                    "x": -3.7025615595041863,
+                    "y": 0,
+                    "z": -6.750055244608183
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                  "actorId": "aren",
+                  "interactionId": "tend-vara",
+                  "kind": "tend",
+                  "targetId": "vara",
+                  "position": {
+                    "x": -10.536023849728307,
+                    "y": 0,
+                    "z": -7.955960354647662
+                  }
+                },
+                {
+                  "type": "fragment",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                  "fragmentId": "heartroot-sky",
+                  "sourceId": "vara"
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                  "actorId": "aren",
+                  "interactionId": "warden-staff",
+                  "kind": "collect",
+                  "targetId": "warden-staff",
+                  "position": {
+                    "x": -5.452223061923243,
+                    "y": 0,
+                    "z": -5.572938237386617
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "charge-lane",
+                  "phaseIndex": 0,
+                  "state": "entered",
+                  "simulationTick": 5095
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "bird-mark",
+                  "kind": "inspect",
+                  "targetId": "bird-mark",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                  "actorId": "vara__party_companion",
+                  "interactionId": "warning-response",
+                  "kind": "signal",
+                  "targetId": "warning-response",
+                  "position": {
+                    "x": 10,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "charge-lane",
+                  "phaseIndex": 0,
+                  "state": "cleared",
+                  "simulationTick": 140
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "sap-opening",
+                  "phaseIndex": 1,
+                  "state": "entered",
+                  "simulationTick": 140
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "sap-opening",
+                  "phaseIndex": 1,
+                  "state": "cleared",
+                  "simulationTick": 438
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "root-pressure",
+                  "phaseIndex": 2,
+                  "state": "entered",
+                  "simulationTick": 438
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                  "encounterId": "greenwake-boar",
+                  "actorId": "corrupted-boar",
+                  "phaseId": "root-pressure",
+                  "phaseIndex": 2,
+                  "state": "cleared",
+                  "simulationTick": 1058
+                },
+                {
+                  "type": "encounter-resolved",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                  "encounterId": "greenwake-boar",
+                  "resolution": "cleansed",
+                  "actorIds": [
+                    "corrupted-boar",
+                    "greenwake-sap-stalker",
+                    "greenwake-root-rammer"
+                  ]
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                  "actorId": "aren",
+                  "interactionId": "greenwake-gate",
+                  "kind": "traverse",
+                  "targetId": "greenwake-gate",
+                  "position": {
+                    "x": 9.416646538776531,
+                    "y": 2,
+                    "z": 15.310936065101583
+                  }
+                },
+                {
+                  "type": "chapter-transition",
+                  "eventId": "9c8529cf-4651-4651-8b5c-8f4627a7423f",
+                  "idempotencyKey": "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+                  "fromChapter": 0,
+                  "toChapter": 1,
+                  "triggerId": "greenwake-canopy-out"
+                },
+                {
+                  "type": "traversal",
+                  "eventId": "357899f8-67d0-4339-8b77-85c52f95b528",
+                  "idempotencyKey": "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+                  "routeId": "greenwake-canopy",
+                  "fromRegion": "greenwake",
+                  "toRegion": "whispering-canopy",
+                  "landmarkId": "greenwake-canopy-in"
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                  "actorId": "aren",
+                  "interactionId": "canopy-tend-vara",
+                  "kind": "tend",
+                  "targetId": "canopy-vara",
+                  "position": {
+                    "x": -58,
+                    "y": 0,
+                    "z": -20
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                  "actorId": "aren",
+                  "interactionId": "canopy-vault",
+                  "kind": "traverse",
+                  "targetId": "canopy-vault",
+                  "position": {
+                    "x": -17.200469220480983,
+                    "y": 4,
+                    "z": -26.19746815822986
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                  "actorId": "aren",
+                  "interactionId": "canopy-vine-route",
+                  "kind": "traverse",
+                  "targetId": "canopy-vine-route",
+                  "position": {
+                    "x": -7.267419877830231,
+                    "y": 4.0177522323982595,
+                    "z": -28.427809577681117
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                  "actorId": "aren",
+                  "interactionId": "koro-trail",
+                  "kind": "track",
+                  "targetId": "koro-trail",
+                  "position": {
+                    "x": 9.430966483204369,
+                    "y": 4,
+                    "z": -23.04629257064507
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                  "actorId": "aren",
+                  "interactionId": "monkey-rescue",
+                  "kind": "rescue",
+                  "targetId": "monkey-rescue",
+                  "position": {
+                    "x": 11.113604917859474,
+                    "y": 4,
+                    "z": -38.11461052169959
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                  "actorId": "aren",
+                  "interactionId": "orchard-seeds",
+                  "kind": "collect",
+                  "targetId": "orchard-seeds",
+                  "position": {
+                    "x": 13.949122638951224,
+                    "y": 4,
+                    "z": -40.09947292646399
+                  }
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                  "actorId": "aren",
+                  "interactionId": "canopy-waterwheel",
+                  "kind": "repair",
+                  "targetId": "canopy-waterwheel",
+                  "position": {
+                    "x": 37.09740341261793,
+                    "y": 0,
+                    "z": 4.2466140287642995
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "broken-branches",
+                  "phaseIndex": 0,
+                  "state": "entered",
+                  "simulationTick": 2472
+                },
+                {
+                  "type": "semantic-interaction",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                  "actorId": "aren",
+                  "interactionId": "koro-thorn",
+                  "kind": "inspect",
+                  "targetId": "koro-thorn",
+                  "position": {
+                    "x": 44.07827727140193,
+                    "y": 0,
+                    "z": -24.021183162878213
+                  }
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "broken-branches",
+                  "phaseIndex": 0,
+                  "state": "cleared",
+                  "simulationTick": 2754
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "canopy-escape",
+                  "phaseIndex": 1,
+                  "state": "entered",
+                  "simulationTick": 2754
+                },
+                {
+                  "type": "encounter-phase",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                  "encounterId": "encounter-koro",
+                  "actorId": "koro",
+                  "phaseId": "canopy-escape",
+                  "phaseIndex": 1,
+                  "state": "cleared",
+                  "simulationTick": 2978
+                },
+                {
+                  "type": "encounter-resolved",
+                  "eventId": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+                  "idempotencyKey": "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+                  "encounterId": "encounter-koro",
+                  "resolution": "cleansed",
+                  "actorIds": [
+                    "koro"
+                  ]
+                }
+              ],
+              "eventKeys": [
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+                "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+                "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+                "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved"
+              ],
+              "revision": 50,
+              "safeSpawn": {
+                "regionId": "whispering-canopy",
+                "position": {
+                  "x": 40,
+                  "y": 0,
+                  "z": -22.5
+                },
+                "routeId": "canopy-story-courtyard-west",
+                "cameraAnchorId": "canopy-trial-courtyard-rail"
+              },
+              "session": {
+                "saveScope": "candidate-chapters",
+                "assetPolicy": "candidate",
+                "heroId": "aren",
+                "resume": {
+                  "segmentId": "canopy",
+                  "layoutRevision": 1,
+                  "checkpointId": "canopy-pre-koro",
+                  "activeEncounterId": null,
+                  "requiredBeatQueue": [],
+                  "dialogue": null,
+                  "completedBeatIds": [
+                    "prologue-opening",
+                    "prologue-vision",
+                    "greenwake-cleanse",
+                    "fallen-scout-open",
+                    "fallen-scout-close",
+                    "branches-open",
+                    "branches-close",
+                    "orchard-open",
+                    "koro-thorn-reveal",
+                    "koro-cleanse"
+                  ],
+                  "pendingChoiceId": "koro-pact"
+                }
+              }
+            },
+            "eventKeys": [
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+              "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+              "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+              "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved"
+            ],
+            "savedAt": 1792693856889
+          }
+        }
+      ]
+    },
+    "wild-crown-saves": {
+      "runs": [],
+      "settings": [
+        {
+          "id": "global",
+          "settings": {
+            "masterVolume": 1,
+            "musicVolume": 0.8,
+            "effectsVolume": 1,
+            "ambienceVolume": 0.7,
+            "dialogueVolume": 1,
+            "subtitles": true,
+            "echoSubtitles": true,
+            "subtitleSize": "medium",
+            "subtitleBackground": "translucent",
+            "subtitleSpeakerLabels": true,
+            "reducedMotion": false,
+            "motionBlur": true,
+            "reducedCameraShake": false,
+            "telegraphIntensity": "standard",
+            "offscreenWarningStrength": "standard",
+            "highContrastTarget": false,
+            "autoTargetAssist": "subtle",
+            "perfectDodgeWindow": "standard",
+            "lockOnMode": "toggle",
+            "controlGlyphs": "keyboard-mouse",
+            "gamepadDeadzone": 0.18,
+            "heroCompanions": {
+              "aren": "koro",
+              "yara": "vara",
+              "vesper": "nyra",
+              "sakda": "solkar"
+            },
+            "seenTutorials": [
+              "controls",
+              "cleanse-boss",
+              "tether",
+              "cleanse"
+            ]
+          },
+          "bindings": {
+            "keyboard": {
+              "moveForward": "w",
+              "moveBack": "s",
+              "moveLeft": "a",
+              "moveRight": "d",
+              "dodge": "f",
+              "jump": "space",
+              "sprint": "shift",
+              "light": "j",
+              "heavy": "k",
+              "ranged": "l",
+              "ultimate": "u",
+              "interact": "e",
+              "ability": "q",
+              "map": "m",
+              "journal": "tab",
+              "companions": "c",
+              "pause": "escape",
+              "commandWheel": "r",
+              "lockOn": "t"
+            },
+            "gamepad": {
+              "dodge": "Gamepad Button 1",
+              "ability": "Gamepad Button 2",
+              "light": "Gamepad Button 3",
+              "interact": "Gamepad Button 4",
+              "map": "Gamepad Button 5",
+              "heavy": "Gamepad Button 6",
+              "ranged": "Gamepad Button 12",
+              "ultimate": "Gamepad Button 11",
+              "commandWheel": "Gamepad Button 7",
+              "journal": "Gamepad Button 8",
+              "companions": "Gamepad Button 9",
+              "pause": "Gamepad Button 10",
+              "jump": "Gamepad Button 13",
+              "sprint": "Gamepad Button 14",
+              "lockOn": "Gamepad Button 16"
+            }
+          }
+        }
+      ],
+      "slots": []
+    }
+  },
+  "browser": {
+    "alias": "player-feedback-campaign-transition-r4",
+    "targetId": "1DD78F6CA90F15C9178F15B8AC324B92",
+    "closed": true,
+    "physical": {
+      "closed": true
+    }
+  },
+  "preview": {
+    "service": "FeedbackGateClosePreview",
+    "stopped": true,
+    "observedResult": "Stopped FeedbackGateClosePreview [service] — exited — up 3h47m"
+  },
+  "scope": "Only the exact owned feedback scaffolds and slots of the two observed owned run ids at origin 5214. Never clear a database, settings or run ledger; never mutate origin 5210.",
+  "slots": {
+    "before": [
+      {
+        "slotId": "autosave:8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "label": "Autosave",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "kind": "campaign",
+        "updatedAt": 1792695150607,
+        "chapter": 1,
+        "regionId": "whispering-canopy",
+        "scope": "candidate-chapters",
+        "heroId": "aren",
+        "segmentId": "canopy",
+        "checkpointId": "canopy-post-koro",
+        "autosave": true
+      },
+      {
+        "slotId": "import-mvjwdm6c",
+        "label": "Imported Journey",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "kind": "campaign",
+        "updatedAt": 1792695102853,
+        "chapter": 1,
+        "regionId": "whispering-canopy",
+        "scope": "candidate-chapters",
+        "heroId": "aren",
+        "segmentId": "canopy",
+        "checkpointId": "canopy-pre-koro",
+        "autosave": false
+      },
+      {
+        "slotId": "autosave:9da00a80-aa60-4d1f-9051-9b7957463ec3",
+        "label": "Autosave",
+        "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+        "kind": "campaign",
+        "updatedAt": 1792694712107,
+        "chapter": 0,
+        "regionId": "greenwake",
+        "scope": "candidate-chapters",
+        "heroId": "aren",
+        "segmentId": "prologue",
+        "checkpointId": "prologue-run-entry",
+        "autosave": true
+      },
+      {
+        "slotId": "import-mvjte00z",
+        "label": "Imported Journey",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "kind": "campaign",
+        "updatedAt": 1792690081958,
+        "chapter": 0,
+        "regionId": "greenwake",
+        "scope": "candidate-chapters",
+        "heroId": "aren",
+        "segmentId": "greenwake",
+        "checkpointId": "greenwake-pre-boar",
+        "autosave": false
+      }
+    ],
+    "removed": [
+      {
+        "slotId": "autosave:8903b022-4d0f-4a06-9db2-b1db9921c967",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967"
+      },
+      {
+        "slotId": "import-mvjwdm6c",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967"
+      },
+      {
+        "slotId": "autosave:9da00a80-aa60-4d1f-9051-9b7957463ec3",
+        "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3"
+      },
+      {
+        "slotId": "import-mvjte00z",
+        "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967"
+      }
+    ],
+    "retained": [],
+    "productionRetained": []
+  },
+  "rawAfter": {
+    "wild-crown-candidate-chapter-saves": {
+      "runs": [
+        {
+          "runId": "3188fbdb-b34c-4573-ba80-363f9ceb72f8",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678579853
+        },
+        {
+          "runId": "42cb67d9-cdc8-4c95-b7b4-2fe84e474911",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686916748
+        },
+        {
+          "runId": "66f84378-3b6f-4e72-b86f-9567255aa732",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678524521
+        },
+        {
+          "runId": "830049c2-beaf-4f01-83dc-9e54e330ac20",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686842120
+        },
+        {
+          "runId": "8903b022-4d0f-4a06-9db2-b1db9921c967",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-roars",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:tend-vara",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:vara-fragment",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:warden-staff",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:bird-mark",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:warning-response",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:0:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:1:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:2:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:phase:3:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:greenwake-boar:resolved",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:greenwake-gate",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:chapter",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:greenwake-canopy-out:12553:travel",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-tend-vara",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vault",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-vine-route",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-trail",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:monkey-rescue",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:orchard-seeds",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-waterwheel",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-thorn",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:0:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:entered",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:phase:1:cleared",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:encounter-koro:resolved",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:koro-pact",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-fragment",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:companion-search:koro-thorn",
+            "8903b022-4d0f-4a06-9db2-b1db9921c967:interaction:canopy-restoration",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:canopy-bamboo-out:1130:chapter",
+            "transition:8903b022-4d0f-4a06-9db2-b1db9921c967:exit:canopy-bamboo-out:1130:travel"
+          ],
+          "updatedAt": 1792695150607
+        },
+        {
+          "runId": "9a204303-9459-42fe-964a-c927c2590b3c",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678552821
+        },
+        {
+          "runId": "9da00a80-aa60-4d1f-9051-9b7957463ec3",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792694712107
+        },
+        {
+          "runId": "b68e15e1-ff72-4dbf-9842-fc4547ff478f",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686946599
+        },
+        {
+          "runId": "be7bd339-fdf6-43e3-babb-3e6219e95d91",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792678161034
+        },
+        {
+          "runId": "d4f0b685-eb44-42d9-aea3-9fc62591e6c6",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686482149
+        },
+        {
+          "runId": "e1b44ace-2fee-4649-8c88-e988c4c6d0bb",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [],
+          "updatedAt": 1792686786888
+        },
+        {
+          "runId": "feedback-allmaps-canopy-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16"
+          ],
+          "updatedAt": 1792685369838
+        },
+        {
+          "runId": "feedback-allmaps-greenwake-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:feedback-native-safe-point-r3:chapter",
+            "transition:feedback-native-safe-point-r3:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "feedback-allmaps-greenwake-mvjjtb64:encounter-koro:phase:0:entered"
+          ],
+          "updatedAt": 1792686144291
+        },
+        {
+          "runId": "feedback-allmaps-grove-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-grove-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34",
+            "transition:to-mistveil:chapter",
+            "transition:to-mistveil:travel",
+            "story:mist-eyes:35",
+            "story:reed-track:36",
+            "story:infection-evidence:37",
+            "story:nyra-truth:38",
+            "story:river-upstream:39",
+            "story:marek-rig:40",
+            "choice:marek-fate:cleanse",
+            "choice:river-route:repair",
+            "story:polluted-source:41",
+            "story:encounter-ghor",
+            "story:river-source:42",
+            "story:mistveil-restoration:43",
+            "story:shadow-fragment:44",
+            "transition:to-sunmane:chapter",
+            "transition:to-sunmane:travel",
+            "story:silent-crossing:45",
+            "story:tribute-record:46",
+            "story:herd-route:47",
+            "story:herd-testimony:48",
+            "story:tribute-ledger:49",
+            "story:migration-gate:50",
+            "story:solkar-echo:51",
+            "story:encounter-solkar",
+            "choice:sunmane-resolution:bond",
+            "story:crown-fragment:52",
+            "story:sunmane-restoration:53",
+            "transition:back-to-mistveil:travel",
+            "transition:back-to-moonpine:travel",
+            "transition:back-to-bamboo:travel",
+            "transition:to-grove-fall:chapter",
+            "transition:to-grove-fall:travel",
+            "story:warden-call:54",
+            "story:grove-tali-rescue:55",
+            "story:grove-pillar:56",
+            "story:encounter-fall:phase:0:cleared",
+            "story:grove-collapse-escape:57",
+            "story:encounter-fall",
+            "story:grove-services:58",
+            "choice:chapter-six-response:ask"
+          ],
+          "updatedAt": 1792687195591
+        },
+        {
+          "runId": "feedback-allmaps-mistveil-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-mistveil-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34",
+            "transition:to-mistveil:chapter",
+            "transition:to-mistveil:travel",
+            "story:mist-eyes:35",
+            "story:reed-track:36",
+            "story:infection-evidence:37",
+            "story:nyra-truth:38",
+            "story:river-upstream:39",
+            "story:marek-rig:40",
+            "choice:marek-fate:cleanse",
+            "choice:river-route:repair",
+            "story:polluted-source:41",
+            "story:encounter-ghor",
+            "story:river-source:42",
+            "story:mistveil-restoration:43",
+            "story:shadow-fragment:44"
+          ],
+          "updatedAt": 1792679307442
+        },
+        {
+          "runId": "feedback-allmaps-moonpine-mvjjtb64",
+          "kind": "campaign",
+          "dominionHistory": [],
+          "eventKeys": [
+            "story:greenwake-roars:0",
+            "story:tend-vara:1",
+            "story:vara-fragment:2",
+            "story:warden-staff:3",
+            "story:greenwake-boar",
+            "story:greenwake-gate:4",
+            "transition:to-canopy:chapter",
+            "transition:to-canopy:travel",
+            "story:canopy-vine-route:5",
+            "story:canopy-vault:6",
+            "story:koro-trail:7",
+            "story:canopy-tend-vara:8",
+            "story:bird-mark:9",
+            "story:warning-response:10",
+            "story:canopy-waterwheel:11",
+            "story:monkey-rescue:12",
+            "story:orchard-seeds:13",
+            "story:koro-thorn:14",
+            "story:encounter-koro",
+            "story:canopy-fragment:15",
+            "choice:koro-pact:bond",
+            "story:canopy-restoration:16",
+            "transition:to-bamboo:chapter",
+            "transition:to-bamboo:travel",
+            "story:bamboo-tracks:17",
+            "story:tali-trail:18",
+            "story:hunter-camp:19",
+            "story:camp-approach:20",
+            "story:camp-disable:21",
+            "story:camp-hunters",
+            "story:tali-cage:22",
+            "story:tali-refuge:23",
+            "story:encounter-asha:phase:0:cleared",
+            "story:encounter-asha:phase:1:cleared",
+            "story:encounter-asha:phase:2:cleared",
+            "story:encounter-asha",
+            "story:feedback-allmaps-moonpine-mvjjtb64:encounter-asha:tali-safe",
+            "story:fang-fragment:24",
+            "choice:asha-pact:bond",
+            "story:snare-source:25",
+            "transition:to-moonpine:chapter",
+            "transition:to-moonpine:travel",
+            "story:howl-one:26",
+            "story:howl-two:27",
+            "story:howl-three:28",
+            "story:pack-pups:29",
+            "story:winter-stores:30",
+            "story:pack-scouts:31",
+            "story:temple-route:32",
+            "story:temple-restraints:33",
+            "story:encounter-ruun",
+            "choice:pack-leadership:ruun",
+            "story:pack-fragment:34"
+          ],
+          "updatedAt": 1792679291674
+        }
+      ],
+      "settings": [],
+      "slots": []
+    },
+    "wild-crown-saves": {
+      "runs": [],
+      "settings": [
+        {
+          "id": "global",
+          "settings": {
+            "masterVolume": 1,
+            "musicVolume": 0.8,
+            "effectsVolume": 1,
+            "ambienceVolume": 0.7,
+            "dialogueVolume": 1,
+            "subtitles": true,
+            "echoSubtitles": true,
+            "subtitleSize": "medium",
+            "subtitleBackground": "translucent",
+            "subtitleSpeakerLabels": true,
+            "reducedMotion": false,
+            "motionBlur": true,
+            "reducedCameraShake": false,
+            "telegraphIntensity": "standard",
+            "offscreenWarningStrength": "standard",
+            "highContrastTarget": false,
+            "autoTargetAssist": "subtle",
+            "perfectDodgeWindow": "standard",
+            "lockOnMode": "toggle",
+            "controlGlyphs": "keyboard-mouse",
+            "gamepadDeadzone": 0.18,
+            "heroCompanions": {
+              "aren": "koro",
+              "yara": "vara",
+              "vesper": "nyra",
+              "sakda": "solkar"
+            },
+            "seenTutorials": [
+              "controls",
+              "cleanse-boss",
+              "tether",
+              "cleanse"
+            ]
+          },
+          "bindings": {
+            "keyboard": {
+              "moveForward": "w",
+              "moveBack": "s",
+              "moveLeft": "a",
+              "moveRight": "d",
+              "dodge": "f",
+              "jump": "space",
+              "sprint": "shift",
+              "light": "j",
+              "heavy": "k",
+              "ranged": "l",
+              "ultimate": "u",
+              "interact": "e",
+              "ability": "q",
+              "map": "m",
+              "journal": "tab",
+              "companions": "c",
+              "pause": "escape",
+              "commandWheel": "r",
+              "lockOn": "t"
+            },
+            "gamepad": {
+              "dodge": "Gamepad Button 1",
+              "ability": "Gamepad Button 2",
+              "light": "Gamepad Button 3",
+              "interact": "Gamepad Button 4",
+              "map": "Gamepad Button 5",
+              "heavy": "Gamepad Button 6",
+              "ranged": "Gamepad Button 12",
+              "ultimate": "Gamepad Button 11",
+              "commandWheel": "Gamepad Button 7",
+              "journal": "Gamepad Button 8",
+              "companions": "Gamepad Button 9",
+              "pause": "Gamepad Button 10",
+              "jump": "Gamepad Button 13",
+              "sprint": "Gamepad Button 14",
+              "lockOn": "Gamepad Button 16"
+            }
+          }
+        }
+      ],
+      "slots": []
+    }
+  },
+  "storageChecks": {
+    "onlyFourExactOwnedSlotsRemoved": true,
+    "noDatabaseWipe": true,
+    "allNonSlotStoresUnchanged": true,
+    "unplannedSlotsRetained": true,
+    "productionSlotsUnchanged": true
+  },
+  "finishedAt": "2026-10-22T19:07:31.951Z"
+}

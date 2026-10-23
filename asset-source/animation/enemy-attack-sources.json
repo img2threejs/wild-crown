@@ -32,7 +32,7 @@
     },
     "actor-mire-viper": {
       "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
-      "sha256": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
+      "sha256": "8a0b19796a097e9cfcfeff16e085e9eaed8311067e013e1c1f04ba9644c72d2a",
       "rigFamily": "serpentine"
     },
     "actor-koro": {
@@ -117,7 +117,7 @@
     },
     "actor-solkar": {
       "runtimeUrl": "/asset-source/generated/actor-solkar-runtime-01/actor-solkar-animated.glb",
-      "sha256": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+      "sha256": "d0fd54830fa02330c7ab7782dc4467a3f5a0475a5c7158a1f8653453583bb262",
       "rigFamily": "quadruped"
     },
     "actor-orun": {

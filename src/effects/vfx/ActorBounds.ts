@@ -55,9 +55,9 @@ export class HandRig {
   clear(): void { this.root = undefined; this.hand = undefined; this.forearm = undefined; this.leftHand = undefined; this.leftForearm = undefined; }
 }
 
-/** Yara's skills cast by her open left palm (Thornshot 1's thrust, Binding Vines, Cleanse); the others work through the staff (swung, levelled, stabbed or raised). */
+/** Yara's one skill cast by her open left palm (Cleanse); every other skill, projectile and cast glow works through the staff head. */
 const YARA_HAND_CASTS: Readonly<Record<string, true>> = {
-  'yara-thornshot-1': true, 'yara-binding-vines': true, 'yara-cleanse': true,
+  'yara-cleanse': true,
 };
 export function isYaraHandCast(actionId: string): boolean { return YARA_HAND_CASTS[actionId] === true; }
 

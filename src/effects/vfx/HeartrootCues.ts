@@ -1,11 +1,11 @@
 import { ConeGeometry, Vector3 } from 'three';
 import type { KitSlot } from './ElementKits.js';
-import { isYaraHandCast, leftPalm } from './ActorBounds.js';
+import type { SigilSlot } from './SigilFx.js';
 import { CrystalSpikesFx } from './InstancedFx.js';
 import { Footprint } from './footprint.js';
 import { HEARTROOT_IMPACT, HEARTROOT_TRAIL, type HeartrootKitId } from './HeroKits.js';
 import { PALETTE } from './palette.js';
-import { emitPetalSwirl } from './PetalFx.js';
+import { emitPetalRing, emitPetalSwirl } from './PetalFx.js';
 import { VFX_FRAME } from './VfxAtlas.js';
 import type { VfxSystem } from './VfxSystem.js';
 import type { WardenFx } from './WardenFx.js';
@@ -19,6 +19,8 @@ const LEDGER_SIZE = 16;
 const POINT_MARGIN = 1.6;
 const AREA_MARGIN = 1.6;
 const BLOOM_FAMILY: Readonly<Partial<Record<HeartrootKitId, true>>> = { 'heartroot-bloom': true, 'heartroot-meteor': true };
+/** Share of the Bloom cast at which the staff plants: authored tick 40 of the `yara-heartroot-bloom` take's 156. */
+const BLOOM_PLANT = 40 / 156;
 const BARK = { r: 0.55, g: 0.32, b: 0.12 };
 const THORN = { r: 0.45, g: 0.95, b: 0.2 };
 
@@ -26,7 +28,7 @@ interface Burst { tick: number; kit: HeartrootKitId; owner: number; x: number; z
 
 /**
  * Heartroot (Yara) presentation: one kit per skill, each with its own contact (thorn, seed, root spike, eruption, sap lance, seed storm,
- * vines, cleanse, bloom, meteor), a sap trail on the staff head (or, for the hand casts, on her casting hand), shake/rim/light scaled by `HEARTROOT_IMPACT`, and a Petal Step petal swirl.
+ * vines, cleanse, bloom, meteor), a sap trail on the staff head, shake/rim/light scaled by `HEARTROOT_IMPACT`, and the Petal Step blink (vanish burst, petal streak, arrival burst).
  * A recent-burst ledger keys a projectile hit (impact cue + hit cue) or an area burst (bloom cue + per-target hit cues) to the engine's
  * same-tick duplicate cue of the same skill, so one contact draws one burst.
  */
@@ -37,6 +39,8 @@ export class HeartrootCues {
   private readonly footprint = new Footprint();
   private readonly ledger: Burst[] = Array.from({ length: LEDGER_SIZE }, () => ({ tick: -Infinity, kit: 'heartroot-thorn' as HeartrootKitId, owner: -1, x: 0, z: 0, radius: 0, target: '', area: false, used: false }));
   private ledgerCursor = 0;
+  /** The ground rune circle of the Bloom cast being drawn (planted at the staff plant, ended by the pulse). */
+  private bloomRune: SigilSlot | undefined;
 
   constructor(private readonly vfx: VfxSystem, private readonly warden?: WardenFx) {
     const mesh = this.roots.mesh;
@@ -72,12 +76,16 @@ export class HeartrootCues {
     slot.lastTime = vfx.time;
     switch (cue.kind) {
       case 'sigil': case 'bloom':
-        if (cue.kind === 'sigil' || cue.phase === 'anticipation') {
-          slot.sigil = w?.sigils.spawn(owner, 'ground', vfx.time, this.a.set(point.x, point.y + .05, point.z), UP, cue.kind === 'sigil' ? 1.6 : radius, .45, .8, 'heartroot');
-          slot.tracked = cue.kind === 'sigil';
+        if (cue.kind === 'bloom' && cue.phase === 'anticipation') {
+          // The rune circle is drawn when the staff plants (`plantBloomRune`), not at the start of the cast.
+          this.openTrail(kit, 40);
+          return;
+        }
+        if (cue.kind === 'sigil') {
+          slot.sigil = w?.sigils.spawn(owner, 'ground', vfx.time, this.a.set(point.x, point.y + .05, point.z), UP, 1.6, .45, .8, 'heartroot');
+          slot.tracked = true;
           this.petals(owner, point.x, point.y + .1, point.z, 18, radius);
-          if (cue.kind === 'sigil') vfx.lights.pulse(point.x, point.y + .5, point.z, PALETTE.heartroot.hot, HEARTROOT_IMPACT['heartroot-sigil'].light, 5, .3, vfx.time, owner);
-          else this.openTrail(kit, 40);
+          vfx.lights.pulse(point.x, point.y + .5, point.z, PALETTE.heartroot.hot, HEARTROOT_IMPACT['heartroot-sigil'].light, 5, .3, vfx.time, owner);
           return;
         }
         this.areaBurst(slot, kit, point.x, point.y, point.z, radius);
@@ -85,7 +93,7 @@ export class HeartrootCues {
       case 'beam': case 'tether':
         if (kit === 'heartroot-meteor') this.meteorFall(slot);
         else if (kit === 'heartroot-vines') this.vinesSnap(slot);
-        else this.lanceBeam(slot, life);
+        else this.lanceThrow(slot);
         return;
       case 'blink': this.petalStep(slot); return;
       case 'root-eruption': this.rootEruption(slot, kit, point.x, point.y, point.z, radius, life); return;
@@ -100,17 +108,8 @@ export class HeartrootCues {
     const kit = slot.kit as HeartrootKitId, vfx = this.vfx, w = this.warden, dt = Math.max(0, vfx.time - slot.lastTime);
     slot.lastTime = vfx.time;
     if (kit === 'heartroot-cleanse') { this.cleanseUpdate(slot, dt); return; }
-    if (kit === 'heartroot-lance' && slot.beam && slot.beam.owner === slot.owner) {
-      const tip = w?.resolveSocket?.('aren', 'weapon-tip');
-      if (tip) { tip.updateWorldMatrix(true, false); tip.getWorldPosition(slot.beam.a); }
-      slot.beam.alpha = Math.min(1, .35 + Math.sin(Math.PI * Math.min(1, Math.max(0, (vfx.time - slot.cue.worldTimeSeconds) / Math.max(.1, (slot.cue.durationTicks ?? 30) / 60)))) * .65);
-      const n = this.due(slot, 1, 40, dt);
-      for (let i = 0; i < n; i++) {
-        this.a.lerpVectors(slot.beam.a, slot.beam.b, vfx.random());
-        vfx.sparks(this.a.x, this.a.y, this.a.z, 1, 1.4, 'heartroot', slot.owner, .5);
-        if (i % 2) this.drops(slot.owner, this.a.x, this.a.y, this.a.z, 1, 1.2);
-      }
-    }
+    if (kit === 'heartroot-petal-step') { this.petalStreak(slot, dt); return; }
+    if (kit === 'heartroot-bloom' && !slot.sigil && slot.cue.kind === 'bloom' && slot.cue.phase === 'anticipation') this.plantBloomRune(slot);
     if (!slot.sigil) return;
     const player = w?.player;
     if (slot.tracked && player?.valid && slot.sigil.owner === slot.owner) {
@@ -123,7 +122,9 @@ export class HeartrootCues {
 
   end(slot: KitSlot, natural: boolean): void {
     if (!natural) this.forget(slot.owner);
+    if (slot.kit === 'heartroot-petal-step' && natural) this.petalArrival(slot);
     if (slot.sigil?.owner === slot.owner) this.warden?.sigils.finish(slot.sigil, this.vfx.time, natural ? .35 : .12);
+    if (slot.sigil && slot.sigil === this.bloomRune) this.bloomRune = undefined;
     slot.sigil = undefined;
     if (slot.beam?.owner === slot.owner) this.vfx.beams.release(slot.beam);
     slot.beam = undefined;
@@ -131,27 +132,24 @@ export class HeartrootCues {
 
   // ---- launch and projectile impacts ----
 
-  /** Thornshot / seed / storm-seed launch: a flare where the spell leaves her (the palm for the hand casts, the staff head for her staff strikes and Seed Storm) and a short sap trail. */
+  /** Thornshot / seed / storm-seed launch: a flare at the staff head, where every one of Yara's projectiles leaves her, and a short sap trail. */
   private launch(slot: KitSlot, kit: HeartrootKitId, x: number, y: number, z: number): void {
     const vfx = this.vfx, owner = slot.owner;
-    // The flare sits on what casts the spell, not on the simulation's spawn point ahead of the chest.
-    if (this.castingPalm()) { x = this.a.x; y = this.a.y; z = this.a.z; }
-    else if (this.warden?.player.hero === 'yara') {
-      const tip = this.warden.resolveSocket?.('aren', 'weapon-tip');
-      if (tip) { tip.updateWorldMatrix(true, false); tip.getWorldPosition(this.a); x = this.a.x; y = this.a.y; z = this.a.z; }
-    }
+    // The flare sits on the staff head, not on the simulation's spawn point ahead of the chest.
+    if (this.warden?.player.hero === 'yara' && this.staffTip(this.a)) { x = this.a.x; y = this.a.y; z = this.a.z; }
     this.openTrail(kit, kit === 'heartroot-storm' ? 8 : 10);
     vfx.gather(x, y, z, kit === 'heartroot-seed' ? 12 : 8, .5, 'heartroot', owner);
     vfx.flash(x, y, z, kit === 'heartroot-seed' ? 1.2 : .8, 'heartroot', owner, .14);
     if (kit !== 'heartroot-storm') vfx.lights.pulse(x, y, z, PALETTE.heartroot.hot, 1.8, 4, .2, vfx.time, owner);
   }
 
-  /** Writes the left palm into `this.a` (direction into `this.b`) while Yara plays a hand-cast skill; false otherwise. */
-  private castingPalm(): boolean {
-    const w = this.warden;
-    if (!w || w.player.hero !== 'yara' || !isYaraHandCast(w.player.actionId)) return false;
-    w.hand.resolve(w.resolveActorRoot?.('aren'));
-    return leftPalm(w.hand, this.a, this.b);
+  /** Writes the world position of the staff head (the `weapon-tip` socket) into `out`; false when the hero carries no staff socket. */
+  private staffTip(out: Vector3): boolean {
+    const tip = this.warden?.resolveSocket?.('aren', 'weapon-tip');
+    if (!tip) return false;
+    tip.updateWorldMatrix(true, false);
+    tip.getWorldPosition(out);
+    return true;
   }
 
   private projectileImpact(slot: KitSlot, kit: HeartrootKitId, x: number, y: number, z: number): void {
@@ -231,7 +229,8 @@ export class HeartrootCues {
         vfx.sparks(x, y + .3, z, 14, 4, 'heartroot', owner, .5);
         break;
       case 'heartroot-bloom':
-        // Bloom pulse: two expanding rings, a wide petal burst and a rising column of pollen.
+        // Bloom pulse: the planted rune circle flares out, two expanding rings, a wide petal burst and a rising column of pollen.
+        this.endBloomRune();
         this.shockDisk(owner, x, y, z, radius, .7);
         this.shockDisk(owner, x, y, z, radius * .6, .55, .16);
         vfx.flash(x, y + .5, z, Math.min(5, radius * .6), 'heartroot', owner, .3);
@@ -273,15 +272,19 @@ export class HeartrootCues {
     this.petals(owner, x, y + .2, z, lane ? 18 : 28, radius);
   }
 
-  private lanceBeam(slot: KitSlot, life: number): void {
+  /**
+   * Sap Lance: the staff itself is the lance. The renderer hides the held staff and flies a spinning instance toward the lane end and back (`ThrownStaff`); a flash
+   * leaves the fist and sparks mark the far end. The lane's hit and damage come from the simulation, unchanged; the static beam line is gone.
+   */
+  private lanceThrow(slot: KitSlot): void {
     const cue = slot.cue, vfx = this.vfx, owner = slot.owner;
     if (!cue.from || !cue.to) return;
     this.openTrail('heartroot-lance', 14);
-    slot.beam = vfx.beams.acquire(owner, vfx.time, life, cue.footprint?.width ?? .65, .04, 'heartroot');
-    if (slot.beam) { slot.beam.a.set(cue.from.x, cue.from.y, cue.from.z); slot.beam.b.set(cue.to.x, cue.to.y, cue.to.z); }
-    vfx.flash(cue.from.x, cue.from.y, cue.from.z, 1.2, 'heartroot', owner, .16);
+    const fist = this.staffTip(this.a) ? this.a : cue.from;
+    vfx.flash(fist.x, fist.y, fist.z, 1.2, 'heartroot', owner, .16);
+    vfx.lights.pulse(fist.x, fist.y, fist.z, PALETTE.heartroot.hot, HEARTROOT_IMPACT['heartroot-lance'].light, 6, .3, vfx.time, owner);
+    this.warden?.impact?.throwStaff?.('aren', cue.to);
     vfx.sparks(cue.to.x, cue.to.y, cue.to.z, 22, 4, 'heartroot', owner);
-    vfx.lights.pulse(cue.from.x, cue.from.y, cue.from.z, PALETTE.heartroot.hot, HEARTROOT_IMPACT['heartroot-lance'].light, 6, .3, vfx.time, owner);
   }
 
   /** Bloom meteor: a falling seed streak (thin beam) shedding petals; its ground impact is the following `bloom` hit cue. */
@@ -298,8 +301,8 @@ export class HeartrootCues {
     const cue = slot.cue, to = cue.to ?? cue.position;
     if (!to) return;
     this.openTrail('heartroot-vines', 14);
-    // The vines are flung from her raised hand: a sap flare and a short spray of leaves along the throw.
-    if (this.castingPalm()) {
+    // The vines are flung from the staff head: a sap flare and a short spray of leaves along the throw.
+    if (this.staffTip(this.a)) {
       this.vfx.flash(this.a.x, this.a.y, this.a.z, .7, 'heartroot', slot.owner, .12);
       this.drops(slot.owner, this.a.x, this.a.y, this.a.z, 6, 1.6);
     }
@@ -315,8 +318,8 @@ export class HeartrootCues {
     slot.tracked = false;
     slot.acc[0] = 0;
     vfx.flash(x, y + .5, z, 1, 'heartroot', owner, .2);
-    // The healing light gathers in her open palm before the ring rises.
-    if (this.castingPalm()) vfx.gather(this.a.x, this.a.y, this.a.z, 10, .45, 'heartroot', owner);
+    // The healing light gathers at the staff head before the ring rises.
+    if (this.staffTip(this.a)) vfx.gather(this.a.x, this.a.y, this.a.z, 10, .45, 'heartroot', owner);
     this.pollen(owner, x, y + .1, z, 14, .9);
     this.sink('heartroot-cleanse', slot.cue.targetId, x, y + 1, z, owner);
   }
@@ -333,18 +336,57 @@ export class HeartrootCues {
 
   // ---- Petal Step ----
 
-  /** Petal Step: a petal swirl lifts off at the start point, spirals along the path and blooms open at the destination (no wind dust). */
+  /**
+   * Petal Step is a blink. The vanish burst (petal swirl and flash) fires at the start point the moment she leaves; a faint petal streak is laid along the path
+   * while she travels (`petalStreak`) and the arrival burst blooms at the destination when she reappears (`petalArrival`, at the cue's end).
+   */
   private petalStep(slot: KitSlot): void {
     const cue = slot.cue, owner = slot.owner;
     if (!cue.from || !cue.to) return;
     const vfx = this.vfx;
+    slot.acc[0] = 0;
     emitPetalSwirl(vfx, owner, cue.from.x, cue.from.y, cue.from.z, 24, .55, 2.4, 1);
-    for (let i = 1; i < 6; i++) {
-      const t = i / 6;
-      emitPetalSwirl(vfx, owner, cue.from.x + (cue.to.x - cue.from.x) * t, cue.from.y + .2, cue.from.z + (cue.to.z - cue.from.z) * t, 5, .35, 1.4, i % 2 ? 1 : -1);
+    vfx.flash(cue.from.x, cue.from.y + .9, cue.from.z, 1.2, 'heartroot', owner, .16);
+  }
+
+  /** A faint trickle of petals at the point she has reached along from → to, spawned over the travel time. */
+  private petalStreak(slot: KitSlot, dt: number): void {
+    const cue = slot.cue, vfx = this.vfx;
+    if (!cue.from || !cue.to) return;
+    const t = Math.min(1, Math.max(0, (vfx.time - cue.worldTimeSeconds) / Math.max(.1, (cue.durationTicks ?? 30) / 60)));
+    for (let n = this.due(slot, 0, 40, dt); n > 0; n--) {
+      emitPetalSwirl(vfx, slot.owner, cue.from.x + (cue.to.x - cue.from.x) * t, cue.from.y + (cue.to.y - cue.from.y) * t + .3, cue.from.z + (cue.to.z - cue.from.z) * t, 1, .2, .8, n % 2 ? 1 : -1);
     }
+  }
+
+  /** She reappears: a ring of petals thrown out along the ground, a blooming swirl and a flash at the destination. */
+  private petalArrival(slot: KitSlot): void {
+    const cue = slot.cue, owner = slot.owner;
+    if (!cue.to) return;
+    const vfx = this.vfx;
+    emitPetalRing(vfx, owner, cue.to.x, cue.to.y, cue.to.z, 18, 1.1);
     emitPetalSwirl(vfx, owner, cue.to.x, cue.to.y, cue.to.z, 28, .7, 2, -1);
     vfx.flash(cue.to.x, cue.to.y + .9, cue.to.z, 1.2, 'heartroot', owner, .18);
+  }
+
+  // ---- Bloom ----
+
+  /** Bloom: the ground rune circle is drawn when the staff plants (authored tick 40 of the take's 156), once the cue's cast has run that share of its length, and stays until the pulse. */
+  private plantBloomRune(slot: KitSlot): void {
+    const cue = slot.cue, vfx = this.vfx, point = cue.position ?? cue.from ?? cue.to;
+    if (!point || !this.warden) return;
+    if (vfx.time - cue.worldTimeSeconds < BLOOM_PLANT * Math.max(.1, (cue.durationTicks ?? 30) / 60)) return;
+    const radius = (cue.footprint?.width ?? 2) / 2;
+    slot.sigil = this.warden.sigils.spawn(slot.owner, 'ground', vfx.time, this.a.set(point.x, point.y + .05, point.z), UP, radius, .45, .8, 'heartroot');
+    slot.tracked = false;
+    this.bloomRune = slot.sigil;
+    this.petals(slot.owner, point.x, point.y + .1, point.z, 18, radius);
+  }
+
+  /** The pulse lands: the planted rune circle flares and fades. */
+  private endBloomRune(): void {
+    if (this.bloomRune) this.warden?.sigils.finish(this.bloomRune, this.vfx.time, .35);
+    this.bloomRune = undefined;
   }
 
   // ---- shared pieces ----

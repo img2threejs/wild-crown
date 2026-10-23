@@ -1,0 +1,13 @@
+{
+  "available": true,
+  "samples": 183,
+  "disjoint": false,
+  "pending": 0,
+  "p50Ms": 21.518499,
+  "p95Ms": 23.148749,
+  "maxMs": 26.092624,
+  "averageDrawCalls": 87,
+  "averageTriangles": 1262611.6284153005,
+  "gpu": "WebKit WebGL",
+  "vendor": "WebKit"
+}

@@ -62,6 +62,18 @@ async function directorAtCamp(runId: string, utility?: "koro", saves?: SaveRepos
       party: utility ? { companionId: utility } : {},
       worldFacts: { ...checkpoint.progress.worldFacts, chapter: 2 },
     },
+    // A traveling companion is earned: Koro's committed cleanse recruited him in Chapter 1, so the camp fixture
+    // carries that earned recruitment rather than a free selection.
+    worldCheckpoint: {
+      ...checkpoint.worldCheckpoint,
+      world: {
+        ...checkpoint.worldCheckpoint.world,
+        companions: {
+          ...checkpoint.worldCheckpoint.world.companions,
+          koro: { ...checkpoint.worldCheckpoint.world.companions.koro, recruited: true },
+        },
+      },
+    },
   });
   expect(restored).toBe(true);
   return director;

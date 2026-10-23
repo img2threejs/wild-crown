@@ -1,0 +1,219 @@
+{
+  "beforeHash": "b2f236c0dbe09df219baa6b05d958f985c8a02c24ca30a704f39112bdae0d71a",
+  "afterHash": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb",
+  "results": [
+    {
+      "clip": "preset:quadruped:walk",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-idle",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-run",
+      "changedTracks": 35,
+      "tracks": [
+        "tripo::Head_0:rotation",
+        "tripo::Head_1:rotation",
+        "tripo::Head_2:rotation",
+        "tripo::Head_3:rotation",
+        "bone_7:rotation",
+        "tripo::0_Left_Limb_0:rotation",
+        "tripo::0_Left_Limb_1:rotation",
+        "tripo::0_Left_Limb_2:rotation",
+        "tripo::0_Left_Limb_3:rotation",
+        "tripo::0_Left_Limb_4:rotation",
+        "bone_13:rotation",
+        "tripo::0_Right_Limb_0:rotation",
+        "tripo::0_Right_Limb_1:rotation",
+        "tripo::0_Right_Limb_2:rotation",
+        "tripo::0_Right_Limb_3:rotation",
+        "tripo::0_Right_Limb_4:rotation",
+        "tripo::1_Left_Limb_0:rotation",
+        "tripo::1_Left_Limb_1:rotation",
+        "tripo::1_Left_Limb_2:rotation",
+        "tripo::1_Left_Limb_3:rotation",
+        "tripo::1_Left_Limb_4:rotation",
+        "tripo::1_Left_Limb_5:rotation",
+        "bone_25:rotation",
+        "bone_26:rotation",
+        "bone_27:rotation",
+        "bone_28:rotation",
+        "bone_29:rotation",
+        "bone_30:rotation",
+        "bone_31:rotation",
+        "tripo::Tail_0:rotation",
+        "tripo::Tail_1:rotation",
+        "tripo::Tail_2:rotation",
+        "tripo::Tail_3:rotation",
+        "tripo::Tail_4:rotation",
+        "bone_37:rotation"
+      ]
+    },
+    {
+      "clip": "monster-slash",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-shoot",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-jump",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-hurt",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-turn",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-dive",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-roar",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-death",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-spawn",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-knockdown",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-getup",
+      "changedTracks": 0,
+      "tracks": []
+    },
+    {
+      "clip": "monster-walk",
+      "changedTracks": 24,
+      "tracks": [
+        "tripo::Head_0:rotation",
+        "tripo::Head_1:rotation",
+        "tripo::Head_2:rotation",
+        "tripo::Head_3:rotation",
+        "bone_7:rotation",
+        "tripo::0_Left_Limb_0:rotation",
+        "tripo::0_Left_Limb_1:rotation",
+        "tripo::0_Left_Limb_2:rotation",
+        "tripo::0_Left_Limb_3:rotation",
+        "tripo::0_Left_Limb_4:rotation",
+        "bone_13:rotation",
+        "tripo::0_Right_Limb_0:rotation",
+        "tripo::0_Right_Limb_1:rotation",
+        "tripo::0_Right_Limb_2:rotation",
+        "tripo::0_Right_Limb_3:rotation",
+        "tripo::0_Right_Limb_4:rotation",
+        "bone_30:rotation",
+        "bone_31:rotation",
+        "tripo::Tail_0:rotation",
+        "tripo::Tail_1:rotation",
+        "tripo::Tail_2:rotation",
+        "tripo::Tail_3:rotation",
+        "tripo::Tail_4:rotation",
+        "bone_37:rotation"
+      ]
+    },
+    {
+      "clip": "monster-tail",
+      "changedTracks": 0,
+      "tracks": []
+    }
+  ],
+  "walk": {
+    "before": {
+      "measuredStrikeTime": 0.042,
+      "peakHeadSpeedUnitsPerSecond": 0.389,
+      "peakHeadDisplacementTime": 0.625,
+      "peakHeadDisplacementBodyHeights": 0.059,
+      "rootPeakBodyHeights": -0.04,
+      "rootPeakTime": 0.333,
+      "rootMinBodyHeights": -0.05,
+      "rootMeanRiseBodyHeights": -0.045,
+      "planting": {
+        "plantedSpeedUnitsPerSecond": 0.4425,
+        "strideUnits": 0.2212,
+        "stanceFraction": 0.625,
+        "maxSlidePercent": 0.8,
+        "meanSlidePercent": 0.4
+      }
+    },
+    "after": {
+      "measuredStrikeTime": 0.417,
+      "peakHeadSpeedUnitsPerSecond": 0.299,
+      "peakHeadDisplacementTime": 0.583,
+      "peakHeadDisplacementBodyHeights": 0.044,
+      "rootPeakBodyHeights": -0.04,
+      "rootPeakTime": 0.333,
+      "rootMinBodyHeights": -0.05,
+      "rootMeanRiseBodyHeights": -0.045,
+      "planting": {
+        "plantedSpeedUnitsPerSecond": 0.4425,
+        "strideUnits": 0.2212,
+        "stanceFraction": 0.625,
+        "maxSlidePercent": 0.8,
+        "meanSlidePercent": 0.4
+      }
+    }
+  },
+  "run": {
+    "before": {
+      "measuredStrikeTime": 0.647,
+      "peakHeadSpeedUnitsPerSecond": 0.451,
+      "peakHeadDisplacementTime": 0.824,
+      "peakHeadDisplacementBodyHeights": 0.045,
+      "rootPeakBodyHeights": -0.0502,
+      "rootPeakTime": 0.235,
+      "rootMinBodyHeights": -0.07,
+      "rootMeanRiseBodyHeights": -0.06,
+      "planting": {
+        "plantedSpeedUnitsPerSecond": 1.3454,
+        "strideUnits": 0.3251,
+        "stanceFraction": 0.426,
+        "maxSlidePercent": 0.6,
+        "meanSlidePercent": 0.3
+      }
+    },
+    "after": {
+      "measuredStrikeTime": 0.706,
+      "peakHeadSpeedUnitsPerSecond": 0.454,
+      "peakHeadDisplacementTime": 0.588,
+      "peakHeadDisplacementBodyHeights": 0.063,
+      "rootPeakBodyHeights": -0.0502,
+      "rootPeakTime": 0.235,
+      "rootMinBodyHeights": -0.07,
+      "rootMeanRiseBodyHeights": -0.06,
+      "planting": {
+        "plantedSpeedUnitsPerSecond": 1.3454,
+        "strideUnits": 0.3476,
+        "stanceFraction": 0.456,
+        "maxSlidePercent": 0.6,
+        "meanSlidePercent": 0.3
+      }
+    }
+  }
+}

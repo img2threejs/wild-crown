@@ -1,0 +1,62 @@
+{
+  "assetId": "actor-solkar",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion-rig.glb",
+    "sha256": "5721228d98c5458ebfa1f393fad5a461a9f621c861b36ddd9b53c31c43593141"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-companion.glb",
+    "sha256": "eec7b5cd8f37323dd3f37abcb85ff385b19848649b9505f77d3d4c4eb57d65fb"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "jawRepair": {
+    "source": "asset-source/generated/actor-solkar-runtime-01/actor-solkar-combat.glb",
+    "sourceSha256": "75e1253e00dd376af56fd3db8d242cacfa65f4d8dd779a1da4243209ca316ef3",
+    "joint": "repair::Jaw",
+    "parent": "tripo::Head_2",
+    "pivot": [
+      0.33,
+      0.4,
+      0.002
+    ],
+    "affectedVertices": 3047,
+    "fullyAssignedVertices": 2312,
+    "maximumDiscardedInfluence": 0.00806030612679487,
+    "maximumBindPositionError": 2.982059063785452e-7,
+    "preserved": "Positions, normals, UVs, indices, textures, materials, existing joints and clips. Only lower-muzzle skin weights and the added jaw joint/inverse bind matrix differ."
+  },
+  "clips": [
+    {
+      "name": "solkar-rally",
+      "seconds": 1.6,
+      "frames": 51,
+      "markers": {
+        "release": 0.28,
+        "contact": 0.48
+      },
+      "channels": 40
+    },
+    {
+      "name": "solkar-search",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "release": 0.2,
+        "contact": 0.9
+      },
+      "channels": 39
+    },
+    {
+      "name": "solkar-distract",
+      "seconds": 1.1,
+      "frames": 36,
+      "markers": {
+        "release": 0.32,
+        "contact": 0.5
+      },
+      "channels": 40
+    }
+  ]
+}

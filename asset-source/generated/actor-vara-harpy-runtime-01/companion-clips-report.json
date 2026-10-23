@@ -1,0 +1,92 @@
+{
+  "assetId": "actor-vara",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb",
+    "sha256": "881fad73dbfa7762a2919bd0678d26c075b62b225eff815c0f5130ca4c602b60"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb",
+    "sha256": "036b3c562277a7fdebb4d411e4b8f0a214b85e671515eeb978a79a633a17576e"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "clips": [
+    {
+      "name": "vara:idle",
+      "seconds": 3,
+      "frames": 91,
+      "markers": {},
+      "channels": 56
+    },
+    {
+      "name": "vara:takeoff",
+      "seconds": 0.6,
+      "frames": 20,
+      "markers": {
+        "liftoff": 0.48
+      },
+      "channels": 56
+    },
+    {
+      "name": "vara:fly",
+      "seconds": 0.7,
+      "frames": 22,
+      "markers": {},
+      "channels": 56
+    },
+    {
+      "name": "vara:hover",
+      "seconds": 0.9,
+      "frames": 28,
+      "markers": {},
+      "channels": 56
+    },
+    {
+      "name": "vara:land",
+      "seconds": 0.7,
+      "frames": 23,
+      "markers": {
+        "touch": 0.5
+      },
+      "channels": 56
+    },
+    {
+      "name": "vara:dive",
+      "seconds": 0.4,
+      "frames": 13,
+      "markers": {},
+      "channels": 56
+    },
+    {
+      "name": "vara:strike",
+      "seconds": 0.5667,
+      "frames": 20,
+      "markers": {
+        "contact": 0.44,
+        "flare": 0.62
+      },
+      "channels": 56
+    },
+    {
+      "name": "vara-sky-mark",
+      "seconds": 0.8,
+      "frames": 26,
+      "markers": {
+        "screech": 0.35,
+        "snap": 0.5
+      },
+      "channels": 56
+    },
+    {
+      "name": "vara-sky-survey",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "scanStart": 0.2,
+        "scanEnd": 0.9
+      },
+      "channels": 56
+    }
+  ]
+}

@@ -24,19 +24,54 @@ After Warden’s Call is lost, Ask/Signal remains gated by Bond rather than a ch
 |---|---|---|
 | Vara | Storm Talon: takeoff → dive → strike → fly; Mark: `vara-sky-mark`; Sky Survey: `vara-sky-survey` | Wind spiral/streaks and owner tailwind; Lightning marker; Wind search fan |
 | Koro | Mending Seed: `koro-throw`; Move Object: `koro-push`; Distract: `koro-distract`; Canopy Search: `koro-search` | Wood seed/leaves and owner healing flourish; Earth hand strands/dust; Wood attention glyph and leaf traces |
-| Asha | Charge Block: native roar; Searing Pin: native slash; Fang Search: native shoot gesture; Distract: native turn | Earth guard arch; Fire cuts/embers; Earth claw tracks; Fire challenge slashes |
-| Sable | Undertow Flank: native jump/lunge; Track: native shoot gesture; Distract: native turn | Water arcs, moving ripples and falling droplets; Water paw traces; Ice attention chevrons |
-| Nyra | Static Ambush: native dive/pounce; Reveal Traces: native shoot gesture; Distract: native turn | Lightning zigzags/sparks and owner tempo flourish; Shadow trace ribbons/wisps |
-| Solkar | Ember Rally: native roar; Pride Survey: native shoot gesture; Distract: native turn | Fire sound rings/embers and owner-only link; Light survey/crown challenge |
+| Asha | Charge Block: `asha-guard`; Searing Pin: `asha-pin`; Fang Search: `asha-search`; Distract: `asha-distract` | Forepaw guard arch; moving-paw fire cuts; small Earth scraping accents; braced head/jaw challenge |
+| Sable | Undertow Flank: `sable-flank`; Track: `sable-search`; Distract: `sable-distract` | Paw-driven Water wake and jaw contact splash; nose-down tracking; Ice mouth accents |
+| Nyra | Static Ambush: `nyra-ambush`; Reveal Traces: `nyra-search`; Distract: `nyra-distract` | Lightning paw trails during the physical pounce; owner tempo flourish only on contact; Shadow tracking accents |
+| Solkar | Ember Rally: `solkar-rally`; Pride Survey: `solkar-search`; Distract: `solkar-distract` | Fire roar rings/cone from the animated mouth; owner-only power aura on successful rally; Light survey/challenge |
 
 Each ground species uses its own native GLB/skeleton, not the enemy idle resolver. Simulation cues own anticipation, release, actual contact and resolution; reactions retain priority. Clip samples, gameplay contact, VFX lifetime, cancellation and pause all follow the same authoritative world clock. Preview runs the same native actions/VFX on a separate clock and never changes tokens, quests or Bond.
+
+## Approved Blender animation rebuild
+
+The six companions use 26 Blender-keyframed clips, covering all 20 skills plus Vara's flight poses. `scripts/assets/blender_companion_common.py` samples the imported pose/rest world delta and reconstructs each original glTF joint's local transform. The merger appends those tracks to native GLBs without re-exporting their surfaces, materials or textures. Existing locomotion, enemy actions and hind-leg repairs remain available.
+
+Sable and Solkar lacked a separate lower-jaw joint. `prepare-companion-jaws.mjs` adds `repair::Jaw` and lower-jaw weights without changing surface positions, UVs, normals, indices or original joints. The repair reports retain the source hash and measured neutral skin error (below \(3\times10^{-7}\) model units). Asha and Nyra retain their existing jaw/lip joints. The authoring source is explicitly Blender Python, not AI-generated animation.
+
+Editable actions and baked original-joint samples live in `asset-source/animation/companions-blender/*.blend` and `*.json`. Source paths are repository-relative; source hashes prevent baking against a different native rig. Release/contact marker samples are included exactly alongside the 30 Hz keys, with continuous quaternion signs and strictly increasing Float32 times. Existing runtime catalogs select `*-companion.glb` and `companion-clips-report.json`; candidate/blocked evidence is not promoted.
+
+Rebuild with Blender 4.5 LTS (`BLENDER` is its executable path):
+
+```sh
+node scripts/assets/prepare-companion-jaws.mjs
+"$BLENDER" --background --factory-startup --python scripts/assets/blender_companion_quadrupeds.py -- all
+"$BLENDER" --background --factory-startup --python scripts/assets/blender_companion_creatures.py -- all
+node scripts/assets/build-companion-blender-assets.mjs
+node scripts/assets/build-companion-blender-assets.mjs --check
+```
+Base native-attack and catalog authoring remains an input stage. After regenerating those inputs, rerun this final Blender pipeline before using the companion bindings; `--check` rejects stale outputs or catalog selections.
+
+
+`CompanionSkillMotion.ts` supplies the physical approach/pounce path shared by simulation and preview. The simulation sweeps both grounded and airborne capsules, commits only safe ground positions, rechecks live target reach at contact, and grounds a cancelled pounce at its last safe point. A moving target cannot overlap the committed approach: the swept path stops on the actor's current side of the live combined-radius clearance, without homing the endpoint. Already-close gestures retain that collision ownership even when their planned travel is zero. Koro commits the seed's aim at release; a dodged endpoint cannot grant healing. Existing token costs, cooldowns and benefit magnitudes remain unchanged.
+
+`CompanionSockets.ts` resolves the drawn mesh's actual paw, hand, mouth, wing and talon joints. Seed release, claw/water/lightning trails and roar cones follow those animated sockets; confirmed-contact cues own target impacts and owner benefits. Finite jobs retain their target status ring, not the obsolete stationary actor-centre-to-target wire that masked the actual projectile in mounted combat. Repeated Earth accents use small, short-lived dust rather than the metre-wide impact cloud that obscured limb poses. Scoped cancellation, actor hiding/downing and world pause govern live effects.
+
+The finite preview player must call `AnimationController.update(step)` after sampling its normalized clip time: sampling alone does not advance idle-to-skill blend weights. The old missing update could show idle while the reported clip time advanced. Gameplay already advances the mixer, and now disables procedural grounding/lean layers while a native companion skill owns the pose.
+
+The rebuilt preview capture covers all 20 skills at 960×720, 30 fps: 1,132 frames / 37.733333 seconds, with release/contact snapshots and per-skill-frame socket samples. All frames were manually inspected in 39 contact sheets, with full-size primary poses checked separately. This is controlled preview-clock evidence, not a damage, real-time performance or played-through campaign claim. Older accelerated capture records below are historical and do not validate this rebuild.
+
+The mounted `GameApplication`/`CombatEngine`/`GameRenderer` capture now covers all 20 skills at 1280×832, 30 fps: 918 frames / 30.6 seconds, manually inspected across 41 contact sheets. Player-camera and inspection-camera shots are labeled; the Bamboo object shot uses one fixed camera covering its full flight. Clipped/unstable inspection shots were rejected and recaptured. These are controlled fixtures with WebGL-only capture, not a played-through campaign, normal HUD capture or real-time performance measurement. Retained engine samples include guard A/B damage prevention, hit-only seed healing and a dodged seed, live target separation, native object movement, marked Storm Talon, grounded survey takeoff, and Asha Recall/pause behavior. `asset-source/playtests/evidence/combat-polish/companion-blender-rebuild.json` binds the six native clip reports, delivery hashes, exact source ranges, reviewed sheets and verification limits; generated asset release statuses are unchanged.
+
+The rebuild's final focused gate passed 349 tests across 22 files (862 assertions): companion behavior, companion effects, actor binding, story animation/driver contracts and native asset inputs/bindings. The seed trajectory regression also runs with a live special-job snapshot, so a stationary job wire cannot silently return alongside the socket-driven seed; the obsolete line-rendering test was deleted. `tsc -b && vite build` passed with 341 modules; Vite retained its large-chunk warning. All six generated outputs and catalog bindings passed the reproducibility check. No full-repository pass is claimed: the earlier full attempt exceeded 900 seconds with timeouts in other suite scopes.
+
 
 
 ## Vara harpy flight and Storm Talon
 
-Vara's runtime body is a `HARPY` capsule (radius 0.55 m, height 1.3 m, `isAerialSpecies`) bound to `asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-animated.glb` (23,716 tris, 50 joints; evidence status `blocked`). Its eleven authored clips are `vara:idle` 3.0 s loop, `vara:walk` 0.8 s loop, `vara:takeoff` 0.6 s, `vara:fly` 0.7 s loop, `vara:hover` 0.9 s loop, `vara:land` 0.7 s, `vara:dive` 0.4 s, `vara:strike` 0.55 s, `vara-sky-mark` 0.8 s, `vara-sky-survey` 1.0 s and `vara:hurt` 0.5 s. The returning `actor-roost-hornbill` retains its separate original hornbill asset.
+Vara's runtime body is a `HARPY` capsule (radius 0.55 m, height 1.3 m, `isAerialSpecies`) bound to `asset-source/generated/actor-vara-harpy-runtime-01/actor-vara-harpy-companion.glb` (23,716 tris, 50 joints; evidence status `blocked`). The original `actor-vara-harpy-animated.glb` remains the immutable input. Blender replaces nine poses: `vara:idle` 3.0 s loop, `vara:takeoff` 0.6 s, `vara:fly` 0.7 s loop, `vara:hover` 0.9 s loop, `vara:land` 0.7 s, `vara:dive` 0.4 s, `vara:strike` approximately 0.567 s, `vara-sky-mark` 0.8 s and `vara-sky-survey` 1.0 s. Native walk and hurt clips are retained. The returning `actor-roost-hornbill` retains its separate original hornbill asset.
 
 The flight state machine in `src/game/companions/CompanionSystem.ts` runs grounded / takeoff / flying / hovering / landing. Vara perches after `VARA_PERCH_IDLE_TICKS` 240 idle ticks (≥4 s) within `VARA_PERCH_REACH` 1.7 m of Aren at flight altitude `VARA_FLY_ALTITUDE` 2.4 m. She takes off when Aren has travelled `VARA_TAKEOFF_TRAVEL` 3 m or when a live hostile is within `VARA_THREAT_RADIUS` 14 m; takeoff locks the perch so altitude rises monotonically while Aren keeps moving. A fresh slot overlapping the hero snaps to a perch clearing hero radius + Vara radius + 0.25 m. Navigation consumes the same authored `navigation.nodes` and `moveAerialCircle` sweeps as the rest of the system; colliders and world bounds constrain flight.
+
+An approaching survey job owns Vara's flight destination instead of following the hero. It interrupts landing, triggers takeoff even without a nearby hostile, and uses a 1.2 m arrival threshold so it can reach the 1.4 m interaction radius. Survey begins only after takeoff, not while the wings remain grounded.
 
 Storm Talon costs one token: climb 24 ticks to 4 m above the target, then dive 21 ticks toward its current body mid-height, with at most 12 pursuit ticks. Actual 3D contact delivers only 4 damage/2 poise/0.15 m knockback once; a marked target takes 6 damage/3 poise and consumes the mark. It grants the owner tailwind rather than heavy crowd control. The strike clip continues for 18 ticks before 36 ticks of flying recovery; a genuine miss recovers for 18 ticks and refunds once. Every finite phase samples advancing normalized clip time; recovery follows a captured origin rather than repeatedly lerping an already moved position.
 
@@ -52,9 +87,9 @@ Choose one helper in hero select, or open Companions with the configured binding
 
 Stay holds an ally and prevents new automatic support; Follow resumes it. Finishing a manual skill returns that ally to Follow. For a planned interception, hold Asha near the committed charge lane rather than sending her away on Pin; guard availability accounts for actual reach and remaining windup. Orun's manual integration policies use these real orders and an explicit starting formation, not disabled automation or altered boss state.
 
-## Single-companion acceptance
+## Historical single-companion acceptance (before Blender rebuild)
 
-[The current evidence record](../../asset-source/playtests/evidence/combat-polish/companion-single-support-native.json) covers all 20 skills on the actual native models, across nine elements. Each produced advancing clip samples, changed bone poses, release/contact cues and finite effects. This is a controlled accelerated preview clock, not a production-rate timing or damage claim. Reduced Nyra effects emitted 15 rather than 32 particles; cancellation left zero active effects, ground quads, particles and beams.
+[The pre-rebuild evidence record](../../asset-source/playtests/evidence/combat-polish/companion-single-support-native.json) recorded all 20 skills on the native models, across nine elements, using a controlled accelerated preview clock. It does not validate the rebuilt assets or the corrected finite-preview blend path. Its reduced-effects and cancellation observations are historical, not new acceptance results.
 
 The final integrated gameplay gate passed **1,897 tests across 136 files** (648,601 assertions, 166.16 seconds). Scope: combat, companions, app/UI, campaign/content, effects/input/storage, audio/world/lab and the campaign package. `tsc -b && vite build` passed with 325 modules; Vite retained its >500 kB chunk warning. An earlier full-repository attempt exceeded 600 seconds while including native asset/release rebuild suites, so no full-repository gate is claimed. Koro, Vara and the unrelated Vesper GLBs retain their measured SHA-256 hashes.
 
@@ -62,7 +97,7 @@ The actual browser retained four independent hero choices through reload. A save
 
 A separate real-engine input smoke measured player strike damage 9 → 10.08 and steady movement 2.05 → 2.296 m over the same input interval, with haste expiry. All four heroes completed the authored player-heavy object route without Koro. The full 24 hero/companion combinations projected exactly one helper without granting recruitment or Bond.
 
-Current captures: [hero select desktop](../../asset-source/playtests/evidence/combat-polish/companion-single-hero-desktop.png), [390×844 mobile](../../asset-source/playtests/evidence/combat-polish/companion-single-hero-mobile.png), [Water](../../asset-source/playtests/evidence/combat-polish/companion-single-water.png), [Lightning](../../asset-source/playtests/evidence/combat-polish/companion-single-lightning.png), and [Fire](../../asset-source/playtests/evidence/combat-polish/companion-single-fire.png). Mobile has one selected helper and no horizontal document overflow. Native assets remain candidate/blocked; these captures do not certify production assets or audio.
+Historical captures: [hero select desktop](../../asset-source/playtests/evidence/combat-polish/companion-single-hero-desktop.png), [390×844 mobile](../../asset-source/playtests/evidence/combat-polish/companion-single-hero-mobile.png), [Water](../../asset-source/playtests/evidence/combat-polish/companion-single-water.png), [Lightning](../../asset-source/playtests/evidence/combat-polish/companion-single-lightning.png), and [Fire](../../asset-source/playtests/evidence/combat-polish/companion-single-fire.png). Mobile had one selected helper and no horizontal document overflow. Native assets remain candidate/blocked; these older captures do not certify the rebuild, production assets or audio.
 
 
 

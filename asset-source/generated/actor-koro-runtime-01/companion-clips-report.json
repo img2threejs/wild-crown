@@ -1,0 +1,61 @@
+{
+  "assetId": "actor-koro",
+  "authoring": "Blender Python keyframes (user-approved)",
+  "blenderVersion": "4.5.14 LTS",
+  "source": {
+    "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-combat.glb",
+    "sha256": "90fb03cedea2b11001e2b0eca1d437d6b5099f254ef04d68178c705b312098d7"
+  },
+  "output": {
+    "path": "asset-source/generated/actor-koro-runtime-01/actor-koro-companion.glb",
+    "sha256": "ecabfa4dee276d3fbb31b58bd8055e7d933e1cfeb79fc55c79d6fc9be0382256"
+  },
+  "geometry": "Surface positions, normals, UVs, indices and materials preserved; non-replaced original clips retained. Approved lower-jaw joint/weight repairs are recorded separately when present.",
+  "clips": [
+    {
+      "name": "koro-throw",
+      "seconds": 1.2,
+      "frames": 41,
+      "markers": {
+        "windup": 0.3,
+        "release": 0.44,
+        "impact": 0.68,
+        "recover": 0.82
+      },
+      "channels": 42
+    },
+    {
+      "name": "koro-push",
+      "seconds": 1.5,
+      "frames": 49,
+      "markers": {
+        "plant": 0.24,
+        "push": 0.42,
+        "settle": 0.78
+      },
+      "channels": 42
+    },
+    {
+      "name": "koro-distract",
+      "seconds": 1.1,
+      "frames": 37,
+      "markers": {
+        "handsUp": 0.32,
+        "attention": 0.5,
+        "settle": 0.82
+      },
+      "channels": 42
+    },
+    {
+      "name": "koro-search",
+      "seconds": 1,
+      "frames": 31,
+      "markers": {
+        "crouch": 0.2,
+        "inspect": 0.6,
+        "reveal": 0.9
+      },
+      "channels": 42
+    }
+  ]
+}

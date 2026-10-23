@@ -40,6 +40,16 @@ describe('airborne Vesper actions',()=>{
     expect(landed.player.mana).toBe(dashed.player.mana);
     expect(landed.actors[0]!.position.x).toBeGreaterThan(before.actors[0]!.position.x+1);
   });
+  it('keeps the planned Mist Blink burst instead of braking it to ordinary airborne movement',()=>{
+    const engine=bench();airborne(engine);step(engine,1,{dodgePressed:true,move:vec(1,0,0)});
+    const dashed=engine.snapshotState(),jump=dashed.playerJump!,start=dashed.actors[0]!.position.x;
+    const ticks=VESPER.mistBlink.durationTicks-1;
+    const remaining=jump.flightStartedAtTick+jump.flightTicks-dashed.tick;
+    const expected=(jump.to.x-start)*ticks/remaining;
+    // The locked dash follows its clear planned path even while ordinary steering requests another direction.
+    step(engine,ticks,{move:vec(0,0,1)});
+    expect(engine.snapshotState().actors[0]!.position.x-start).toBeCloseTo(expected,6);
+  });
   it('keeps the true-blink protection in the air and ends it at the authored iframe boundary',()=>{
     const initial=bench();airborne(initial);step(initial,1,{dodgePressed:true,move:vec(1,0,0)});
     const seed=initial.snapshotState(),attack=ATTACKS['koro-fruit-burst']!;

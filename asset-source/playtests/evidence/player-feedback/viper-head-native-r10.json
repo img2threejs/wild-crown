@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "feedback": "Vẫn lỗi, tôi thấy lõm ở đầu rắn",
+  "recordedAt": "2026-10-23T09:33:36.948Z",
+  "assetId": "actor-mire-viper",
+  "scope": "Local snake-head feedback verification, not full release or production acceptance",
+  "findings": [
+    {
+      "cause": "Procedural-only r9 correction was insufficient",
+      "evidence": "Native-equivalent deformation can preserve a defective source mesh and defective authored clips."
+    },
+    {
+      "cause": "Authored Head_0..5 rotations folded a skull shared with Root",
+      "failingBefore": {
+        "test": "moves the complete skull without folding its surface in native clips or crossfades",
+        "pose": "monster-death at 29/49",
+        "edgeDistortionPercent": 1296.31
+      },
+      "correction": "Keep skull-chain bind locals; carry raised-neck/head motion with Root, retaining body wave/lash and reactions."
+    },
+    {
+      "cause": "Provider low-poly conversion omitted the original outward-facing crown, exposing the jaw underside",
+      "sourceTask": "8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6",
+      "lowPolyTask": "80178975-e50c-4619-8743-99a6efa0bac8",
+      "diagnosticProbe": {
+        "x": 0,
+        "z": -0.36,
+        "originalSurfaceY": 0.5327675874595736,
+        "lowPolySurfaceY": 0.3748026713380642,
+        "runtimeRawSurfaceY": 0.37480300715744175,
+        "runtimeSkinnedBindSurfaceY": 0.3748029993193872,
+        "exposedFaceNormalY": -0.9784701840882181,
+        "alignmentNote": "Diagnostic comparison uniformly fitted each source to runtime Z extent and floor; restoration itself instead uses the unchanged native Armature translation, without independent fitting."
+      },
+      "failingBefore": {
+        "test": "has a continuous outward-facing crown, not an exposed underside above the jaw",
+        "x": -0.045,
+        "z": -0.4,
+        "topY": 0.4077135215539476,
+        "status": "0 pass / 1 fail"
+      },
+      "correction": "Recover only missing exterior triangles from the approved pre-retopology model. Do not inflate the intact underside, sculpt a substitute head, replace the body, or conceal the defect with camera/material overrides."
+    }
+  ],
+  "restoration": {
+    "schemaVersion": 1,
+    "assetId": "actor-mire-viper",
+    "generator": "scripts/assets/restore-viper-skull.mjs",
+    "source": {
+      "taskId": "8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6",
+      "sha256": "39ce6d0041cf424b91a94080de03a03846d2b8ce35bbd3b6652855abfd2c96c8",
+      "bytes": 75546864
+    },
+    "discardedSurfaceSource": {
+      "taskId": "80178975-e50c-4619-8743-99a6efa0bac8",
+      "sha256": "41536db824ee74903e24fb027d7c3ed94392d137f708129e0bdef9ca94858ee9"
+    },
+    "alignmentTranslation": [
+      -0.0012408867478370667,
+      0.27513694763183594,
+      -0.0008287727832794189
+    ],
+    "method": "Original exterior head triangles above the missing low-poly crown; no jaw inflation, sculpted cap or body replacement",
+    "selectedTriangles": 151732,
+    "output": {
+      "path": "asset-source/generated/actor-mire-viper-skull-source-01/skull.glb",
+      "sha256": "28f6367e858e9432d13db0156a176aa62012edba5ffecf87a240c9894bd4b6bf",
+      "bytes": 1159296,
+      "triangles": 7162,
+      "vertices": 7110
+    },
+    "relativeSimplificationError": 0.001950176665559411,
+    "textureMaxSize": 1024,
+    "evidenceStatus": "blocked",
+    "productionAcceptance": "NOT_ESTABLISHED",
+    "baseBeforeSha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
+    "baseAfterSha256": "920b4e0f2d82f3a3969322715acfc0594a3b4f6decc0519f8bc7c87e60e81fe3",
+    "animatedAfterSha256": "8a0b19796a097e9cfcfeff16e085e9eaed8311067e013e1c1f04ba9644c72d2a",
+    "combatAfterSha256": "af54b886b0311374d44abb7e0016d7c88837b5fd68d9e7143fd4eec4f047caf6",
+    "originalDataPreservation": {
+      "originalBinBytes": 7518248,
+      "originalBinSha256": "b7e0507f8c8b148cf843854e8c32dd92c1db5d97e6d423346589edbed060b0da",
+      "restoredPrefixSha256": "b7e0507f8c8b148cf843854e8c32dd92c1db5d97e6d423346589edbed060b0da",
+      "unchanged": [
+        "all original position/normal/UV/index/skin buffers",
+        "original texture bytes and material definitions",
+        "native skeleton and node bind transforms",
+        "original preset clip"
+      ],
+      "addedCrownPrimitives": 1
+    },
+    "nativeClipNames": [
+      "preset:serpentine:march",
+      "monster-idle",
+      "monster-run",
+      "monster-slash",
+      "monster-shoot",
+      "monster-jump",
+      "monster-hurt",
+      "monster-turn",
+      "monster-dive",
+      "monster-roar",
+      "monster-death",
+      "monster-spawn",
+      "monster-knockdown",
+      "monster-getup",
+      "monster-tail",
+      "wild-crown:viper-venom-spit",
+      "wild-crown:viper-tail-lash",
+      "wild-crown:viper-strike-lunge"
+    ],
+    "newGenerationRequests": 0
+  },
+  "verification": {
+    "integratedNativeGate": {
+      "command": "node --test tests/rendering/*.test.mjs tests/release/*.test.mjs tests/asset-lab/*.test.mjs",
+      "tests": 875,
+      "suites": 103,
+      "pass": 875,
+      "fail": 0,
+      "durationMs": 72114.124334,
+      "artifact": "artifact://23384",
+      "coverage": "Includes continuous outward-facing crown and both skull surfaces at 30 Hz in all 18 clips plus idle/spit crossfades at 0.25/0.5/0.75; each surface must actually move."
+    },
+    "proceduralGate": {
+      "command": "bun test tests/rendering/ActorProcedural.test.ts",
+      "pass": 10,
+      "fail": 0,
+      "expects": 28,
+      "durationSeconds": 3.07
+    },
+    "build": {
+      "command": "npm run build -- --outDir dist-feedback-viper-head-r10-final",
+      "status": "passed",
+      "modules": 1069,
+      "viteBuildSeconds": 18.27,
+      "wallSeconds": 48.05,
+      "artifact": "artifact://23388",
+      "warning": "Existing >500 kB chunk warning"
+    },
+    "unacceptedAttempt": {
+      "command": "bun test tests/rendering/*.test.ts tests/combat/*.test.ts",
+      "phase": "Earlier animation-only candidate",
+      "status": "Timed out at 120 seconds; no whole-suite result claimed"
+    }
+  },
+  "runtime": {
+    "origin": "http://127.0.0.1:5220/",
+    "browser": "One coordinator-owned headless Brave profile; requested ANGLE Metal; reported renderer string was Brave, not an independently identified GPU.",
+    "viewport": {
+      "width": 1280,
+      "height": 760
+    },
+    "observer": "Owned-tab-only bootstrap assignment window.__feedbackApp=Bce(kR). Published JavaScript bytes unchanged; no simulation, progress, camera, or material assignments in the game.",
+    "checkpoint": "Unmodified coordinator-owned earned checkpoint, continued through normal UI; no user-origin save access.",
+    "startPlayer": {
+      "x": 47,
+      "y": 0,
+      "z": -22
+    },
+    "approach": {
+      "input": "native WASD only; read-only observer; no teleport/camera/state assignment",
+      "samples": [
+        {
+          "goal": {
+            "x": 49,
+            "z": -15.5
+          },
+          "arrived": {
+            "screen": "game",
+            "error": null,
+            "tick": 7452,
+            "p": {
+              "x": 48.87394924664071,
+              "y": 0,
+              "z": -15.661432815267306
+            },
+            "f": {
+              "x": -0.4939385627022433,
+              "z": -0.7056265181460614
+            }
+          }
+        },
+        {
+          "goal": {
+            "x": 49,
+            "z": -9.5
+          },
+          "arrived": {
+            "screen": "game",
+            "error": null,
+            "tick": 7547,
+            "p": {
+              "x": 49.003589206584685,
+              "y": 0,
+              "z": -9.547419886902473
+            },
+            "f": {
+              "x": -0.4939385627022433,
+              "z": -0.7056265181460614
+            }
+          }
+        }
+      ],
+      "final": {
+        "screen": "game",
+        "error": null,
+        "tick": 7547,
+        "p": {
+          "x": 49.003589206584685,
+          "y": 0,
+          "z": -9.547419886902473
+        },
+        "f": {
+          "x": -0.4939385627022433,
+          "z": -0.7056265181460614
+        }
+      }
+    },
+    "screen": "game",
+    "error": null,
+    "assetErrors": [],
+    "animationIssues": [],
+    "actionId": "monster-idle",
+    "player": {
+      "x": 49.064758523316804,
+      "y": 0,
+      "z": -9.460035148713763
+    },
+    "viper": {
+      "position": {
+        "x": 49,
+        "y": 0,
+        "z": -4
+      }
+    },
+    "camera": [
+      56.064758523316804,
+      8.05,
+      0.5399648512862374
+    ],
+    "nativeMeshes": [
+      {
+        "vertices": 30554,
+        "material": "tripo_node_8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6_material"
+      },
+      {
+        "vertices": 7110,
+        "material": "Approved original viper crown"
+      }
+    ],
+    "crop": {
+      "x": 328,
+      "y": 231,
+      "width": 332,
+      "height": 341
+    },
+    "liveMotion": {
+      "observationMs": 700,
+      "nativeSkullRootMoved": true,
+      "before": {
+        "tick": 19751,
+        "position": [
+          -0.05346548471600733,
+          -0.24028175017725842,
+          0.01489203235313788
+        ],
+        "quaternion": [
+          0.0022947188416957464,
+          -0.9904605016748098,
+          0.01726385873625895,
+          -0.13669203747727476
+        ]
+      },
+      "after": {
+        "tick": 19794,
+        "position": [
+          0.010870133883483912,
+          -0.25702460210683137,
+          -0.018814900975951527
+        ],
+        "quaternion": [
+          0.03257718127591561,
+          -0.9983624887049851,
+          -0.03280415281546288,
+          -0.033688951150884786
+        ]
+      }
+    },
+    "http": {
+      "assets/main-1bL2ASaL.js": {
+        "status": 200,
+        "bytes": 2222865,
+        "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a"
+      },
+      "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb": {
+        "status": 200,
+        "bytes": 9200972,
+        "sha256": "af54b886b0311374d44abb7e0016d7c88837b5fd68d9e7143fd4eec4f047caf6"
+      },
+      "asset-source/playtests/canopy.json": {
+        "status": 200,
+        "bytes": 177697,
+        "sha256": "8a6753984c8f25c1872e8c868ea2329a6bf8de46ce657c7e86b89cb32636ef18"
+      },
+      "viperCatalog": {
+        "runtimeUrl": "/asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb",
+        "outputHash": "af54b886b0311374d44abb7e0016d7c88837b5fd68d9e7143fd4eec4f047caf6",
+        "evidenceStatus": "blocked"
+      }
+    },
+    "diagnosticOverrides": "Plain clay materials and head-freeze isolation were used only in the throwaway diagnostic viewer, never in the actual game or shipped assets."
+  },
+  "images": [
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-missing-crown-bind-clay-r10.png",
+      "bytes": 400700,
+      "width": 1280,
+      "height": 760,
+      "sha256": "d7babb0cac961d21dbf94887b2e10ce60fb0bfcfc8710f60e2d34792e9ccf1aa"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-missing-crown-game-before-r10.png",
+      "bytes": 89947,
+      "width": 300,
+      "height": 260,
+      "sha256": "bf1cd12f05aad8d3695538aa06956524e2c57cf02c4ab9a04b385b0eb216599b"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-restored-native-comparison-r10.png",
+      "bytes": 357291,
+      "width": 1280,
+      "height": 760,
+      "sha256": "ee33134e5d9e363d4afc065415c44dd8190463db17f0fd6079133f2a602e20f9"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-restored-geometry-clay-r10.png",
+      "bytes": 230852,
+      "width": 1280,
+      "height": 760,
+      "sha256": "a88cdcb702d9e3e2f3a9f6c640d156703d49a38c4066871007c9616329639d60"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-game-full-after-r10.png",
+      "bytes": 939629,
+      "width": 1280,
+      "height": 760,
+      "sha256": "a8853eaa9d231128b507a8659d241a44c2f57cf1c4fdb03c1b42af64b7d7f190"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-game-close-after-r10.png",
+      "bytes": 115410,
+      "width": 332,
+      "height": 341,
+      "sha256": "3585347011f912a77f6e4a46856347d19cfae5d7a7b1a696d8ff8123d6fd4481"
+    },
+    {
+      "path": "asset-source/playtests/evidence/player-feedback/viper-head-game-moving-after-r10.png",
+      "bytes": 941347,
+      "width": 1280,
+      "height": 760,
+      "sha256": "acc231bf3ecdb778a626aeb897772e9d12f4fc95c2d2c25cb849b0eb87b8d98e"
+    }
+  ],
+  "limits": [
+    "Only normal close-range monster-idle was live-captured; other native attacks/reactions were geometry-checked, not claimed as live combat captures.",
+    "No frame-performance benchmark was taken. The restored crown adds one primitive/material, 7,162 triangles and three 1,024 px PBR maps.",
+    "Four audio requests were aborted during scene loading; audio was not diagnosed in this head-mesh scope. Native asset and animation issue arrays were empty.",
+    "An earlier SwiftShader full-scene attempt did not complete; the final owned Brave session was relaunched requesting ANGLE Metal.",
+    "Asset evidenceStatus remains blocked and productionAcceptance remains NOT_ESTABLISHED."
+  ],
+  "publication": {
+    "status": "verified",
+    "targetOrigin": "http://127.0.0.1:5214/",
+    "method": "Merge verified static artifact while retaining existing hashed assets; stage native assets and evidence first, atomically replace lab and main index last.",
+    "http": {
+      "index.html": {
+        "status": 200,
+        "bytes": 682,
+        "sha256": "b7710564e40a53befc24195b11a19774717dbf7504e736a31bcc269466efe158",
+        "contentType": "text/html"
+      },
+      "assets/main-1bL2ASaL.js": {
+        "status": 200,
+        "bytes": 2222865,
+        "sha256": "326f75ae7f301d3bfe82e52beb9ff67bf12eb6038b022514a92dc59e8cea129a",
+        "contentType": "text/javascript"
+      },
+      "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-combat.glb": {
+        "status": 200,
+        "bytes": 9200972,
+        "sha256": "af54b886b0311374d44abb7e0016d7c88837b5fd68d9e7143fd4eec4f047caf6",
+        "contentType": "model/gltf-binary"
+      },
+      "asset-source/playtests/canopy.json": {
+        "status": 200,
+        "bytes": 177697,
+        "sha256": "8a6753984c8f25c1872e8c868ea2329a6bf8de46ce657c7e86b89cb32636ef18",
+        "contentType": "application/json"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-missing-crown-bind-clay-r10.png": {
+        "status": 200,
+        "bytes": 400700,
+        "sha256": "d7babb0cac961d21dbf94887b2e10ce60fb0bfcfc8710f60e2d34792e9ccf1aa",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-missing-crown-game-before-r10.png": {
+        "status": 200,
+        "bytes": 89947,
+        "sha256": "bf1cd12f05aad8d3695538aa06956524e2c57cf02c4ab9a04b385b0eb216599b",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-restored-native-comparison-r10.png": {
+        "status": 200,
+        "bytes": 357291,
+        "sha256": "ee33134e5d9e363d4afc065415c44dd8190463db17f0fd6079133f2a602e20f9",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-restored-geometry-clay-r10.png": {
+        "status": 200,
+        "bytes": 230852,
+        "sha256": "a88cdcb702d9e3e2f3a9f6c640d156703d49a38c4066871007c9616329639d60",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-game-full-after-r10.png": {
+        "status": 200,
+        "bytes": 939629,
+        "sha256": "a8853eaa9d231128b507a8659d241a44c2f57cf1c4fdb03c1b42af64b7d7f190",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-game-close-after-r10.png": {
+        "status": 200,
+        "bytes": 115410,
+        "sha256": "3585347011f912a77f6e4a46856347d19cfae5d7a7b1a696d8ff8123d6fd4481",
+        "contentType": "image/png"
+      },
+      "asset-source/playtests/evidence/player-feedback/viper-head-game-moving-after-r10.png": {
+        "status": 200,
+        "bytes": 941347,
+        "sha256": "acc231bf3ecdb778a626aeb897772e9d12f4fc95c2d2c25cb849b0eb87b8d98e",
+        "contentType": "image/png"
+      }
+    },
+    "userTabReloaded": false,
+    "userStorageAccessed": false,
+    "userProgressModified": false
+  }
+}

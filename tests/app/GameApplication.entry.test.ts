@@ -7,7 +7,7 @@ import { appDefaults } from './fakeApp.js';
 import { CampaignDirector } from '../../src/game/campaign/CampaignDirector.js';
 import { LoadProgress } from '../../src/app/LoadProgress.js';
 import { CombatEngine } from '../../src/game/combat/CombatEngine.js';
-import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, type CampaignSnapshot, type GameViewModel, type UIAction } from '../../src/game/contracts.js';
+import { DEFAULT_GAME_SETTINGS, DEFAULT_INPUT_BINDINGS, type GameViewModel, type UIAction } from '../../src/game/contracts.js';
 import { createFakeAppAudio } from './fakeAppAudio.js';
 import { SaveRepository } from '../../src/game/storage/SaveRepository.js';
 import { FakeIDBFactory } from '../storage/fakeIndexedDB.js';
@@ -26,6 +26,8 @@ function fakeRenderer() {
     skipEstablishingShot() { calls.push('skip'); renderer.shotActive = false; },
     sync() { calls.push('sync'); },
     updateWaystone() { calls.push('waystone'); },
+    setChapterGuidance() {},
+    updateChapterGuidance() {},
     render() { calls.push('render'); },
     dispose() {},
     calls,
@@ -42,6 +44,8 @@ function entryApp(overrides: AppRecord = {}) {
   const setPolicy = combat.setTimePolicy.bind(combat);
   combat.setTimePolicy = (policy: Parameters<CombatEngine['setTimePolicy']>[0]) => { policies.push(policy); setPolicy(policy); };
   const region = REGIONS.find(item => item.id === 'whispering-canopy')!;
+  const director = new CampaignDirector();
+  const campaign = director.startShowcase('entry-run', 'whispering-canopy', { heroId: 'aren', companionId: 'koro' });
   const models: GameViewModel[] = [];
   const inputEnabled: boolean[] = [];
   const renderer = fakeRenderer();
@@ -51,8 +55,7 @@ function entryApp(overrides: AppRecord = {}) {
     session: trialsSession('canopy'), selectedHero: 'aren', playtestProgress: { isUnlocked: () => true, isCleared: () => false },
     settings: { ...DEFAULT_GAME_SETTINGS }, bindings: { keyboard: { ...DEFAULT_INPUT_BINDINGS.keyboard }, gamepad: { ...DEFAULT_INPUT_BINDINGS.gamepad } },
     slots: [], region, renderer, combat, activeCompanionId: undefined, companionPreviews: new Map(),
-    campaign: { ...new CampaignDirector().snapshot(), regionId: 'whispering-canopy', runId: 'entry-run', party: { companionId: 'koro' }, chapter: 1, activeQuestIds: [] } satisfies CampaignSnapshot,
-    campaignDirector: { startShowcase: (runId: string) => ({ ...app.campaign, runId }), startNewRun: (runId: string) => ({ ...app.campaign, runId }) },
+    campaign, campaignDirector: director,
     screen: 'hero-select', loading: { active: false, label: '', progress: null }, error: null, sceneBlocked: false, stageCompleted: false, playerOutcome: null,
     stageGoal: null, dialogue: null, dialogueLineIndex: 0, choice: null, ending: null, interaction: undefined,
     pendingWorldEvents: [], failedWorldEvent: null, durableEvents: Promise.resolve(), pendingNarrativeCues: [], lastCueSnapshot: null, loadingFromSave: false,
@@ -87,7 +90,7 @@ describe('map intro entry', () => {
     expect(app.appAudio.calls).toContainEqual(['syncScreen', 'map-intro']);
   });
 
-  it('loads behind the plain loading scene for Play Again and for the production campaign: no intro, no shot', async () => {
+  it('loads behind the plain loading scene for Play Again without another intro or shot', async () => {
     const replay = entryApp({ screen: 'stage-complete' });
     let seenScreen = '';
     replay.app.prepareWorld = async () => { seenScreen = replay.app.screen; };
@@ -95,43 +98,40 @@ describe('map intro entry', () => {
     expect([seenScreen, replay.app.mapIntroHold, replay.app.entryShotWanted]).toEqual(['loading', false, false]);
     expect(last(replay.models).scene?.regionId).toBe('canopy');
 
-    const production = entryApp({ session: PRODUCTION_SESSION, screen: 'title', saves: { listSlots: async () => [] }, campaignDirector: { startChapterRun: (input: { runId: string }) => ({ ...replay.app.campaign, runId: input.runId }), autosave: async () => undefined } });
-    production.app.prepareWorld = async () => { seenScreen = production.app.screen; };
-    await dispatch(production.app, { type: 'new-game', runId: 'campaign' });
-    expect([seenScreen, production.app.mapIntroHold, production.app.entryShotWanted]).toEqual(['loading', false, false]);
-    // The production prologue region uses its own scene (canopy here, from the campaign snapshot), never a playtest id.
-    expect(last(production.models).scene).toEqual({ regionId: 'canopy', heroName: null, establishingShot: false });
   });
 
-  it('preserves the existing browser run until hero confirmation, then persists the selected loadout for Continue', async () => {
-    const factory = new FakeIDBFactory() as unknown as IDBFactory;
-    const saves = new SaveRepository(factory, { scope: 'candidate-chapters' });
-    await saves.init();
-    const director = new CampaignDirector({ saves });
-    director.startChapterRun({ runId: 'existing', heroId: 'aren', companionId: 'koro', saveScope: 'candidate-chapters' });
-    await director.autosave();
-    const before = await saves.listSlots();
-    const { app } = entryApp({
-      session: CANDIDATE_CHAPTERS_SESSION, screen: 'title', candidateSaves: saves, campaignDirector: director,
-      slots: before, campaign: director.snapshot(), prepareWorld: async () => {},
-      saves: { saveSettings: async () => {} },
+  for (const [session, scope] of [[CANDIDATE_CHAPTERS_SESSION, 'candidate-chapters'], [PRODUCTION_SESSION, 'production']] as const) {
+    it(`${scope}: waits for hero confirmation and Continue restores that hero without a companion gift`, async () => {
+      const factory = new FakeIDBFactory() as unknown as IDBFactory;
+      const saves = new SaveRepository(factory, { scope });
+      await saves.init();
+      const director = new CampaignDirector({ saves });
+      director.startChapterRun({ runId: 'existing', heroId: 'aren', saveScope: scope });
+      await director.autosave();
+      const before = await saves.listSlots();
+      const { app } = entryApp({
+        session, screen: 'title', saves, candidateSaves: scope === 'candidate-chapters' ? saves : null, campaignDirector: director,
+        slots: before, campaign: director.snapshot(), prepareWorld: async () => {},
+      });
+      await dispatch(app, { type: 'new-game', runId: 'not-confirmed' });
+      expect(app.screen).toBe('hero-select');
+      expect(director.snapshot().runId).toBe('existing');
+      expect(await saves.listSlots()).toEqual(before);
+      await dispatch(app, { type: 'map-select' });
+      expect(app.screen).toBe('title');
+      await dispatch(app, { type: 'new-game', runId: 'still-not-confirmed' });
+      await dispatch(app, { type: 'select-hero', runId: 'confirmed', heroId: 'sakda', companionId: 'solkar' });
+      expect(app.error).toBeNull();
+      const reopened = new SaveRepository(factory, { scope });
+      await reopened.init();
+      const slots = await reopened.listSlots();
+      const continued = await new CampaignDirector({ saves: reopened }).load(slots.find(slot => slot.runId === 'confirmed')!.slotId);
+      expect(continued).toMatchObject({ runId: 'confirmed', regionId: 'greenwake', chapter: 0, session: { heroId: 'sakda', saveScope: scope } });
+      expect(continued.party).toEqual({});
+      expect(continued.companions.solkar.recruited).toBe(false);
+      expect(slots.some(slot => slot.runId === 'existing')).toBe(true);
     });
-    await dispatch(app, { type: 'new-game', runId: 'not-confirmed' });
-    expect(app.screen).toBe('hero-select');
-    expect(director.snapshot().runId).toBe('existing');
-    expect(await saves.listSlots()).toEqual(before);
-    await dispatch(app, { type: 'map-select' });
-    expect(app.screen).toBe('title');
-    await dispatch(app, { type: 'new-game', runId: 'still-not-confirmed' });
-    await dispatch(app, { type: 'select-hero', runId: 'confirmed', heroId: 'sakda', companionId: 'solkar' });
-    expect(app.error).toBeNull();
-    const reopened = new SaveRepository(factory, { scope: 'candidate-chapters' });
-    await reopened.init();
-    const slots = await reopened.listSlots();
-    const continued = await new CampaignDirector({ saves: reopened }).load(slots.find(slot => slot.runId === 'confirmed')!.slotId);
-    expect(continued).toMatchObject({ runId: 'confirmed', party: { companionId: 'solkar' }, session: { heroId: 'sakda', saveScope: 'candidate-chapters' } });
-    expect(slots.some(slot => slot.runId === 'existing')).toBe(true);
-  });
+  }
 
   it('maps campaign regions without authored scene art to the prologue scene', () => {
     const { app } = entryApp({ session: PRODUCTION_SESSION, campaign: { regionId: 'sunmane-expanse' } });

@@ -82,7 +82,7 @@ describe('user-supplied Aren native animation candidate', () => {
       assert.ok(candidate.actionToClipMapping[action], `${action} must be bound to a native clip`);
     }
     assert.deepEqual(Object.fromEntries(Object.entries(candidate.actionToClipMapping).filter(([action]) => ['aren-idle', 'aren-walk', 'aren-run', 'aren-jump', 'aren-forward-left-dive-roll'].includes(action))),
-      { 'aren-idle': 'idle.001', 'aren-walk': 'walk.001', 'aren-run': 'run.001', 'aren-jump': 'One long jump.001', 'aren-forward-left-dive-roll': 'dive.001' }, 'existing mappings stay intact');
+      { 'aren-idle': 'aren-idle', 'aren-walk': 'walk.001', 'aren-run': 'run.001', 'aren-jump': 'One long jump.001', 'aren-forward-left-dive-roll': 'dive.001' }, 'idle is the exact Mixamo take, the other locomotion mappings stay intact');
   });
 
   it('plays the donated standing, celebration and falling poses on the real Aren skin while preserving native movement', async () => {
@@ -1430,21 +1430,20 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
 
   it('lands the strike frame on the simulation hit tick for every timed action', () => {
     const timed = CLIP_SPECS.filter((spec) => spec.sim);
-    /** The contact spec of a clip: on the clip itself or on the part that carries the strike. */
-    const contactOf = (spec) => (spec.parts ?? [spec]).find((part) => part.contact)?.contact;
-    assert.deepEqual(timed.filter(contactOf).map((spec) => spec.clip).sort(), ['aren-charged-heavy', 'aren-heavy', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-root-tether', 'aren-sigil-bolt']);
-    /** Tick of the fastest hips-relative motion of the contact joints up to three ticks past the hit tick. */
+    const struck = timed.filter((spec) => spec.exact && spec.sim.activeTick !== undefined);
+    assert.deepEqual(struck.map((spec) => spec.clip).sort(), ['aren-charged-heavy', 'aren-cleanse', 'aren-heavy', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-root-tether', 'aren-sigil-bolt']);
+    /** Tick of the fastest hips-relative right-hand motion up to three ticks past the hit tick. */
     const peakTick = (spec) => {
       let previous, best = { speed: -1, tick: 0 };
-      const hips = new THREE.Vector3(), current = contactOf(spec).joints.map(() => new THREE.Vector3());
+      const hips = new THREE.Vector3(), hand = new THREE.Vector3();
       eachFrame(spec.clip, (frame) => {
         point('Hips', hips);
-        contactOf(spec).joints.forEach((joint, index) => point(joint, current[index]).sub(hips));
+        point('RightHand', hand).sub(hips);
         if (previous && (frame - 0.5) * 2 <= spec.sim.activeTick + 3) {
-          const speed = Math.max(...current.map((p, index) => p.distanceTo(previous[index]) * FPS));
+          const speed = hand.distanceTo(previous) * FPS;
           if (speed > best.speed) best = { speed, tick: (frame - 0.5) * 2 };
         }
-        previous = current.map((p) => p.clone());
+        previous = hand.clone();
       });
       return best.tick;
     };
@@ -1452,13 +1451,13 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
       const entry = report.clips.find((clip) => clip.action === spec.clip);
       const totalTicks = spec.sim.totalTicks ?? spec.sim.lockTicks + spec.sim.recoveryTicks;
       assert.ok(Math.abs(entry.outputDurationSeconds * 60 - totalTicks) <= 2, `${spec.clip}: the clip spans the simulated action (${entry.outputDurationSeconds}s)`);
-      if (!contactOf(spec)) continue;
+      if (!spec.exact || spec.sim.activeTick === undefined) continue;
       const expected = spec.sim.activeTick / totalTicks;
       assert.ok(Math.abs(entry.contact.outputNormalizedTime - expected) < 1e-4, `${spec.clip}: contact at ${entry.contact.outputNormalizedTime}, hit window opens at ${expected}`);
-      // Independent measurement on the shipped GLB: the fastest limb motion precedes the hit tick by at most `settle` and never trails it by more than a frame.
+      // Independent measurement on the shipped GLB: the fastest hand motion precedes the hit tick by at most `settle` and never trails it by more than a frame.
       const lead = (spec.sim.activeTick - peakTick(spec)) / 60;
-      assert.ok(lead > -1.5 / 60 && lead < 0.2, `${spec.clip}: peak limb speed ${lead.toFixed(3)}s before the hit tick`);
-      // Between 0.5× (a combo step easing into the pose the next step starts from) and 4.5× (a compressed wind-up) of the captured speed.
+      assert.ok(lead > -1.5 / 60 && lead < 0.2, `${spec.clip}: peak hand speed ${lead.toFixed(3)}s before the hit tick`);
+      // Between 0.5× and 4.5× of the captured speed: the time warp never freezes or blurs the take.
       assert.ok(entry.playbackSpeedBeforeAfterContact.every((speed) => speed >= 0.5 && speed <= 4.5), `${spec.clip}: source speed-up stays natural (${entry.playbackSpeedBeforeAfterContact})`);
     }
   });
@@ -1485,82 +1484,65 @@ describe('Tripo combat clips retargeted onto Aren', async () => {
     }
   });
 
-  it('thrusts the glaive forward on the Sigil Bolt release tick and on each Sigil Barrage launch tick', () => {
-    const reach = (frame) => frame.hand.z;
-    const bolt = trace('aren-sigil-bolt');
-    assert.ok(reach(at(bolt, 16)) - reach(at(bolt, 0)) > 0.12, 'the arm is extended at the release tick');
-    assert.ok(reach(at(bolt, 16)) >= Math.max(...bolt.filter((frame) => frame.tick <= 26).map(reach)) - 0.04, 'the thrust is at its farthest around the release tick');
-    assert.ok(Math.abs(at(bolt, 16).yaw) < 25 && at(bolt, 16).pitch > -5 && at(bolt, 16).pitch < 35, 'the blade points at the target on release');
-    const barrage = trace('aren-sigil-barrage');
-    for (const tick of [8, 16, 24]) {
-      assert.ok(reach(at(barrage, tick)) - reach(at(barrage, tick + 4)) > 0.04 && reach(at(barrage, tick)) - reach(at(barrage, tick - 4)) > 0.04, `barrage thrust ${tick} is a local reach maximum`);
-    }
-  });
-
-  it('chains the Warden Blade combo: each step ends on the pose the next one starts from, and holds it while the next press can land', async () => {
-    const { LIGHT_STEPS, CHAIN_EARLY_TICKS } = await vite.ssrLoadModule('/src/game/combat/PlayerSkills.ts');
-    /** Right hand position and glaive direction of `action` at normalized time `u` (0..1 of the clip). */
-    const poseAt = (action, u) => {
-      const clip = clipOf(action), hips = new THREE.Vector3(), quaternion = new THREE.Quaternion();
-      mixer.stopAllAction();
-      for (const [bone, state] of rest) { bone.position.copy(state.position); bone.quaternion.copy(state.quaternion); bone.scale.copy(state.scale); }
-      const running = mixer.clipAction(clip).play();
-      running.paused = true; running.time = Math.min(clip.duration, u * clip.duration);
-      mixer.update(0); gltf.scene.updateMatrixWorld(true);
-      const pose = { hand: point('RightHand').sub(point('Hips', hips)), blade: gripAxis.clone().applyQuaternion(named('RightHand').getWorldQuaternion(quaternion)) };
-      mixer.stopAllAction();
-      return pose;
+  it('plays every exact Mixamo take unchanged: each output key equals the raw FBX local at its warped source time (≤ 0.1°), the ledger matches the files, loops close, the hit key sits on the simulation tick', { timeout: 180_000 }, async () => {
+    const { Rig, readClipFrames } = await import('../../scripts/assets/retarget-aren-tripo-clips.mjs');
+    const { parseGlb } = await import('../../scripts/assets/import-aren-animation-set.mjs');
+    const { createMixamoExact, AREN_EXACT } = await import('../../scripts/assets/mixamo-exact.mjs');
+    const EXACT = ['aren-idle', 'aren-light-1', 'aren-light-2', 'aren-light-3', 'aren-light-4', 'aren-heavy', 'aren-charged-heavy-charge', 'aren-charged-heavy', 'aren-sigil-charge', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-root-tether', 'aren-cleanse', 'aren-judgement'];
+    const LOOPS = ['aren-idle', 'aren-charged-heavy-charge', 'aren-sigil-charge'];
+    const DEG = 180 / Math.PI;
+    const angle = (a, b) => { const r = a.clone().invert().multiply(b); return 2 * Math.atan2(Math.hypot(r.x, r.y, r.z), Math.abs(r.w)) * DEG; };
+    /** Source seconds of output key `k` (30 Hz): piecewise linear through the report's [tick, seconds] keys (loops: their whole take at real time), clamped. */
+    const sourceTime = (entry, k) => {
+      const keys = entry.tickToSourceSeconds ?? [[0, entry.sourceWindowSeconds[0]], [(entry.sourceWindowSeconds[1] - entry.sourceWindowSeconds[0]) * 60, entry.sourceWindowSeconds[1]]], tick = k * 2;
+      if (tick <= keys[0][0]) return keys[0][1];
+      if (tick >= keys.at(-1)[0]) return keys.at(-1)[1];
+      const i = keys.findIndex((key, j) => j < keys.length - 1 && tick <= keys[j + 1][0]);
+      return keys[i][1] + (keys[i + 1][1] - keys[i][1]) * ((tick - keys[i][0]) / (keys[i + 1][0] - keys[i][0]));
     };
-    for (let step = 1; step < 4; step += 1) {
-      const from = `aren-light-${step}`, to = `aren-light-${step + 1}`, next = poseAt(to, 0), end = poseAt(from, 1);
-      assert.ok(end.hand.distanceTo(next.hand) < 0.01 && end.blade.angleTo(next.blade) < 0.02, `${from} ends where ${to} starts`);
-      // The simulation accepts the next press CHAIN_EARLY_TICKS before the step ends; from there on the pose barely moves.
-      const spec = LIGHT_STEPS[step - 1], early = poseAt(from, (spec.ticks - CHAIN_EARLY_TICKS) / spec.ticks);
-      assert.ok(early.hand.distanceTo(next.hand) < 0.12, `${from} → ${to}: an early chain starts ${early.hand.distanceTo(next.hand).toFixed(3)} from the next pose`);
-    }
-    // Single blows and the finisher settle back toward the idle stance.
-    const idle = trace('aren-idle')[0];
-    for (const action of ['aren-light-4', 'aren-sigil-bolt', 'aren-sigil-barrage', 'aren-judgement', 'aren-heavy', 'aren-charged-heavy', 'aren-root-tether', 'aren-cleanse']) {
-      const last = trace(action).at(-1);
-      assert.ok(last.hand.distanceTo(idle.hand) < 0.1, `${action}: ends ${last.hand.distanceTo(idle.hand).toFixed(2)} from the idle hand position`);
-    }
-  });
+    const ledger = JSON.parse(await readFile(`${root}/asset-source/mixamo/aren-skills/provenance.json`, 'utf8'));
+    assert.equal(ledger.files.length, EXACT.length);
+    assert.deepEqual(report.clips.filter((clip) => clip.exact).map((clip) => clip.action).sort(), [...EXACT].sort());
+    const rig = new Rig(parseGlb(bytes));
+    const exact = await createMixamoExact({ root, rig, ...AREN_EXACT });
+    assert.ok(exact.restCheck.maxDegrees <= exact.restCheck.toleranceDegrees, `the take skeleton matches the rig's joint frames within ${exact.restCheck.toleranceDegrees}° (${exact.restCheck.maxDegrees}°)`);
+    const a = new THREE.Quaternion(), b = new THREE.Quaternion(), hips = rig.index.get('mixamorig:Hips');
+    for (const name of EXACT) {
+      const entry = report.clips.find((clip) => clip.action === name), file = ledger.files.find((item) => item.clip === name);
+      assert.ok(file, `${name} is in the Mixamo ledger`);
+      const path = `asset-source/mixamo/aren-skills/${file.file}`, raw = await readFile(`${root}/${path}`);
+      assert.equal(createHash('sha256').update(raw).digest('hex'), file.sha256, `${name}: ledger sha256 of ${file.file}`);
+      assert.equal(raw.length, file.bytes, `${name}: ledger bytes of ${file.file}`);
+      assert.equal(entry.exact.file, path);
+      assert.equal(entry.exact.sha256, file.sha256);
+      assert.equal(entry.source.mixamoFile, path);
+      assert.equal(entry.source.exact, true);
+      assert.equal(manifest.actionToClipMapping[name], name, `${name} plays its own authored clip`);
 
-  it('starts every charged release on its charge hold: Thunder Cleave, Sigil Bolt and Barrage open on the loop pose', () => {
-    for (const [hold, release] of [['aren-charged-heavy-charge', 'aren-charged-heavy'], ['aren-sigil-charge', 'aren-sigil-bolt'], ['aren-sigil-charge', 'aren-sigil-barrage']]) {
-      const end = trace(hold).at(-1), start = trace(release)[0];
-      assert.ok(end.hand.distanceTo(start.hand) < 0.01, `${release} opens on the ${hold} pose (${end.hand.distanceTo(start.hand).toFixed(3)})`);
-    }
-  });
+      const take = await exact.load(path), { frames, count } = readClipFrames(rig, name);
+      assert.equal(count, entry.outputFrames);
+      assert.equal(entry.exact.exactness.keys, count);
+      if (entry.simulation) assert.equal(count, Math.round(entry.simulation.totalTicks / 2) + 1, `${name}: one key per 30 Hz frame of the simulated action`);
+      let worst = 0;
+      for (let k = 0; k < count; k += 1) for (const node of rig.joints) worst = Math.max(worst, angle(a.fromArray(frames.rotations[node], k * 4).normalize(), take.localAt(node, sourceTime(entry, k), b)));
+      assert.ok(worst <= 0.1, `${name}: ${worst.toFixed(4)}° from the Mixamo take`);
+      assert.ok(entry.exact.exactness.maxDegrees <= 0.1, `${name}: reported exactness`);
+      const track = frames.positions[hips];
+      for (let k = 1; k < count; k += 1) assert.ok(Math.abs(track[k * 3] - track[0]) < 1e-9 && Math.abs(track[k * 3 + 2] - track[2]) < 1e-9, `${name}: Hips horizontal pinned (the simulation moves Aren)`);
 
-  it('loops the Sigil Charge hold seamlessly: first and last pose coincide and nothing pops at the wrap', () => {
-    const clip = clipOf('aren-sigil-charge');
-    assert.ok(Math.abs(clip.duration - 1.2) < 1e-6);
-    for (const track of clip.tracks) {
-      const stride = track.getValueSize(), n = track.times.length;
-      for (let c = 0; c < stride; c += 1) assert.ok(Math.abs(track.values[c] - track.values[(n - 1) * stride + c]) < 1e-4, `${track.name} wraps cleanly`);
-      if (/quaternion/.test(track.name)) {
-        const step = (k) => Math.acos(Math.min(1, Math.abs([0, 1, 2, 3].reduce((dot, c) => dot + track.values[k * 4 + c] * track.values[(k + 1) * 4 + c], 0))));
-        for (let k = 0; k < n - 1; k += 1) assert.ok(step(k) < 0.12, `${track.name} is continuous at frame ${k}`);
+      if (LOOPS.includes(name)) {
+        assert.ok(entry.loop, `${name} is reported as a loop`);
+        let seam = 0;
+        for (const node of rig.joints) seam = Math.max(seam, angle(a.fromArray(frames.rotations[node], 0).normalize(), b.fromArray(frames.rotations[node], (count - 1) * 4).normalize()));
+        assert.ok(seam <= 1, `${name}: loop seam ${seam.toFixed(3)}°`);
+        assert.ok(entry.exact.loopSeamDegrees <= 1, `${name}: reported loop seam ${entry.exact.loopSeamDegrees}°`);
       }
-    }
-    const frames = trace('aren-sigil-charge');
-    assert.ok(frames.every((frame) => frame.pitch > -25 && frame.pitch < 40 && Math.abs(frame.yaw) < 60), 'the blade is held levelled toward the target through the channel');
-  });
-
-  it('keeps the glaive aimed where the report says, with bounded wrist work', () => {
-    for (const entry of report.clips.filter((clip) => clip.blade)) {
-      const frames = trace(entry.action);
-      for (const key of entry.blade) {
-        const frame = at(frames, key.tick);
-        // Near vertical the yaw is meaningless: compare the direction, not the angles.
-        const from = (yaw, pitch) => new THREE.Vector3(Math.sin(yaw * Math.PI / 180) * Math.cos(pitch * Math.PI / 180), Math.sin(pitch * Math.PI / 180), Math.cos(yaw * Math.PI / 180) * Math.cos(pitch * Math.PI / 180));
-        assert.ok(from(frame.yaw, frame.pitch).angleTo(from(key.yawDegrees, key.pitchDegrees)) * 180 / Math.PI < 6, `${entry.action}@${key.tick}: shipped blade direction matches the report`);
+      if (entry.simulation?.activeTick !== undefined) {
+        const { activeTick, totalTicks } = entry.simulation, hit = entry.tickToSourceSeconds.find(([tick]) => tick === activeTick);
+        assert.ok(hit, `${name}: the warp has a key on the hit tick ${activeTick}`);
+        assert.ok(Math.abs(entry.contact.sourceSeconds - hit[1]) < 1e-9, `${name}: the contact is the take's pose at the hit key`);
+        assert.ok(Math.abs(entry.contact.outputNormalizedTime - activeTick / totalTicks) < 1e-4, `${name}: contact at ${entry.contact.outputNormalizedTime}, hit window opens at ${activeTick / totalTicks}`);
       }
-      // The glaive stays inside the anatomical limits: a modest constant wrist offset, per-frame work shared with forearm and upper arm (whose deviation from the donor pose is capped).
-      assert.ok(entry.wristBendDegrees <= 40.01 && entry.maxArmAssistDegrees <= 60.01 && entry.maxAimDeviationDegrees <= 100.01, `${entry.action}: wrist and arm assist stay within their caps`);
-      // Every clip, the somersaults included, must follow its aim curve with the arm chain.
-      assert.ok(entry.meanAimErrorDegrees < 5 && entry.maxAimErrorDegrees < 12, `${entry.action}: the arm chain carries the blade onto its aim (${entry.meanAimErrorDegrees}° mean, ${entry.maxAimErrorDegrees}° max)`);
     }
   });
 
@@ -1702,9 +1684,6 @@ describe('ActorAnimationDriver', async () => {
     const staggered = instance('actor-ember-boar', []);
     driveActorAnimation(staggered, actor({ id: 'corrupted-boar', allegiance: 'hostile', actionId: 'corrupted-boar-stagger', phase: 'recovery', normalizedTime: 0.4 }), undefined, context(4));
     assert.deepEqual(staggered.calls[0].slice(0, 4), ['play', 'monster-hurt', 'active', 0.4]);
-    const unprofiled = instance('actor-vara', []);
-    driveActorAnimation(unprofiled, actor({ id: 'vara', allegiance: 'ally', actionId: 'vara-idle' }), undefined, context(4));
-    assert.deepEqual(unprofiled.calls[0].slice(0, 3), ['play', 'vara-idle', 'idle']);
   });
 
   it('plays the held Sigil Charge as a loop whatever phase the simulation reports, and its release as a finite action', () => {

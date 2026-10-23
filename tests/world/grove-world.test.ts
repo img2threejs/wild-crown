@@ -38,6 +38,16 @@ const polygons = walkables.map((surface) => ({ points: surface.points.map((point
 const distanceToWalkable = (x: number, z: number): number => Math.min(...polygons.map((polygon) => distanceToPolygon(polygon.points, x, z)));
 const exit = region.exits[0]!.from;
 
+/**
+ * One baked grove ground mask, shared by every case that reads it.
+ *
+ * `bakeGroundMask` is a pure function of (region, field, biome): it writes no state back into the region or the
+ * terrain field, and two bakes of the same inputs are byte-identical (verified in the repair's evidence). Baking
+ * it once here removes two redundant full-resolution bakes (each one rasterises a 448x808 weight grid plus a
+ * 896x1616 detail grid) from the file's critical path.
+ */
+const groveMask = bakeGroundMask(region, field, GROVE_BIOME);
+
 function inside(surface: GroundSurfaceDefinition, x: number, z: number): boolean {
   let result = false;
   const points = surface.points;
@@ -191,6 +201,22 @@ test('water and particles render without depth writes, in one draw call, from th
   }
 });
 
+test('Grove ambient particles stay world-grounded through a jump and landing while their horizontal volume streams', () => {
+  const atmosphere = new GroveAtmosphere({ region, field, sunDirection: new Vector3(-0.8, 0.45, 0.2) });
+  try {
+    atmosphere.update(7, { x: 8, y: 0, z: 10 });
+    const groundedAnchor = (atmosphere.points.material.uniforms.uFocus!.value as Vector3).clone();
+    for (const y of [0.6, 1.25, 0.6, 0, -2]) {
+      atmosphere.update(7, { x: 8, y, z: 10 });
+      assert.deepEqual(atmosphere.points.material.uniforms.uFocus!.value, groundedAnchor, 'jumping or falling must not lift the whole particle field');
+    }
+    atmosphere.update(8, { x: 16, y: 1.25, z: 20 });
+    assert.deepEqual(atmosphere.points.material.uniforms.uFocus!.value, new Vector3(16, groundedAnchor.y, 20), 'horizontal streaming must remain independent of airborne altitude');
+  } finally {
+    atmosphere.dispose();
+  }
+});
+
 test('boundary dressing: deterministic, decoration-only, >= 0.6 m from every walkable, off the water, camera-friendly, exactly the contract prop set', () => {
   const authoredProps = region.props.filter((prop) => !prop.id.startsWith(GROVE_BOUNDARY_ID_PREFIX));
   const footprints: Readonly<Record<string, number>> = {
@@ -250,7 +276,7 @@ test('terrain mesh, mask textures, clutter and draw calls stay within Greenwake 
   const reference = buildTerrainMeshData(greenwakeField);
   assert.ok(grove.positions.length <= reference.positions.length, `${grove.positions.length / 3} vs ${reference.positions.length / 3} vertices`);
   assert.ok(grove.indices.length <= reference.indices.length, `${grove.indices.length / 3} vs ${reference.indices.length / 3} triangles`);
-  const mask = bakeGroundMask(region, field, GROVE_BIOME);
+  const mask = groveMask;
   const greenwakeMask = bakeGroundMask(greenwake, greenwakeField, GREENWAKE_BIOME);
   assert.ok(mask.shade.length + mask.detail.length + mask.terrain.length < greenwakeMask.shade.length + greenwakeMask.detail.length + greenwakeMask.terrain.length);
   const clutter = new GroundClutter(region, field, mask, { value: 0 }, GROVE_BIOME);
@@ -277,7 +303,7 @@ test('terrain mesh, mask textures, clutter and draw calls stay within Greenwake 
 });
 
 test('the ground paints the pond bed, the pale trail only along the route, and short sparse meadow cover across the glade', () => {
-  const mask = bakeGroundMask(region, field, GROVE_BIOME);
+  const mask = groveMask;
   const s = createMaskSample();
   assert.ok(sampleMask(mask, GROVE_POND.x, GROVE_POND.z, s).bed >= 0.8, 'pond gravel bed');
   assert.ok(sampleMask(mask, GROVE_POND.x, GROVE_POND.z, s).deck === 0);
@@ -360,7 +386,7 @@ test('the Black Sap field: none south of the first gate, dense in the hollow, th
   const rim = Array.from({ length: 40 }, (_, step) => blightAt(HOLLOW_CENTRE.x + 12 + step * 0.15, HOLLOW_CENTRE.z + step * 0.1));
   assert.ok(Math.max(...rim) - Math.min(...rim) > 0.3, 'the edge of the blight is ragged');
   // The sap-mud patches are real ground: the splat mask paints wet mud there and nowhere in the stage-1 clearing.
-  const mask = bakeGroundMask(region, field, GROVE_BIOME);
+  const mask = groveMask;
   const s = createMaskSample();
   let soaked = 0;
   for (let x = ARENA_CENTRE.x - 12; x <= ARENA_CENTRE.x + 12; x += 1.5) for (let z = ARENA_CENTRE.z - 12; z <= ARENA_CENTRE.z + 12; z += 1.5) if (sampleMask(mask, x, z, s).mud > 0.5) soaked++;

@@ -1,7 +1,7 @@
 {
   "source": "Viggle PINOC text-to-motion (generate_motion), mixamo-glb export: X Bot mesh, 65 mixamorig joints, Y-up, metres; generated and downloaded by the main session from the user's PINOC account",
   "createdAt": "2026-10-19",
-  "usage": "Read by scripts/assets/mixamo-import.mjs (loadMixamoDonor accepts .glb) and played in place by the Aren (retarget-aren-tripo-clips.mjs) and Yara (author-yara-hero-clips.mjs) clip authors. Each request returns 4 samples; only the samples the clips use are kept.",
+  "usage": "Superseded: every take here was removed. Yara's y3-* takes were replaced on 2026-10-20 and Aren's Warden takes on 2026-10-21 by exact Adobe Mixamo takes (asset-source/mixamo/yara-skills, asset-source/mixamo/aren-skills). The ledger is kept as the record of the PINOC requests and credits.",
   "creditsSpent": 177,
   "requests": [
     {
@@ -212,70 +212,80 @@
       "taskId": "9dc002ba-574c-417c-afcc-54ee047699cc",
       "durationSeconds": 4,
       "creditsCharged": 4,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-thornshot",
       "taskId": "a2cf021e-1025-4fbf-bf8e-9f21f7b42573",
       "durationSeconds": 6,
       "creditsCharged": 6,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-root-spike",
       "taskId": "b4a729b9-4892-47a4-8ac1-c2d004b531eb",
       "durationSeconds": 3,
       "creditsCharged": 3,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-root-full",
       "taskId": "84ca3ee3-a15a-4174-9a52-04d230ca032e",
       "durationSeconds": 5,
       "creditsCharged": 5,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-seed-full",
       "taskId": "4f9c91a9-3944-4160-9186-8820172a6033",
       "durationSeconds": 4,
       "creditsCharged": 4,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-seed-storm",
       "taskId": "4cb7a989-6c3e-4e22-81d9-ab600cd656af",
       "durationSeconds": 4,
       "creditsCharged": 4,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-binding-vines",
       "taskId": "f161c328-ff61-43a5-8874-c07bca1599ca",
       "durationSeconds": 3,
       "creditsCharged": 3,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-cleanse",
       "taskId": "8b133a8d-e951-4e28-81cb-15a63f0bde2d",
       "durationSeconds": 4,
       "creditsCharged": 4,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-petal-step",
       "taskId": "de677c14-b2e9-4a5d-aa36-18e135b228dc",
       "durationSeconds": 2,
       "creditsCharged": 2,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "y3-bloom",
       "taskId": "e7a6cb6b-fc36-4294-9720-77b51f1f0579",
       "durationSeconds": 5,
       "creditsCharged": 5,
-      "samples": 4
+      "samples": 4,
+      "superseded": "Takes superseded 2026-10-20 by Adobe Mixamo takes (asset-source/mixamo/yara-skills); the kept sample was removed from the repository."
     },
     {
       "request": "yara2-idle",
@@ -368,7 +378,8 @@
       "prompt": "A warrior performs a continuous four-hit melee combo in place with a long curved glaive held in his right hand, left hand free for balance. Hit 1: a fast horizontal slash from his right to his left, hips leading. Hit 2: flows straight into a rising diagonal backhand cut from low left to high right. Hit 3: a full-body spinning horizontal slash, one complete turn on the balls of the feet. Hit 4: a powerful overhead downward cleave with a step forward, the blade driven to the ground. Each blow has a short wind-up, a sharp strike and a follow-through that sets up the next. He ends in a balanced guard stance. Realistic weight transfer, grounded feet, readable poses.",
       "durationSeconds": 6,
       "sha256": "7ac8ea6315d8de455f3f53dc8b5e00744bd6d1145a0532d3606ad7b238d07076",
-      "bytes": 1993496
+      "bytes": 1993496,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-sigil-full-2.glb",
@@ -379,7 +390,8 @@
       "prompt": "A warrior stands channeling energy for two seconds: a glaive held point-forward at chest height in his right hand, the tip aimed straight ahead, his open left palm raised forward. Then he lunges forward in one sharp level thrust of the glaive straight at the target, holds the extension for a beat, and recovers to the channeling stance. Standing in place facing forward, realistic grounded weight shifts, readable poses.",
       "durationSeconds": 4,
       "sha256": "83251449309546b7d30c732f5b89897054ff699393b4350873a2311474d33a4e",
-      "bytes": 1942612
+      "bytes": 1942612,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-sigil-barrage-b-2.glb",
@@ -390,7 +402,8 @@
       "prompt": "A warrior holding a glaive in his right hand performs exactly three separate sharp forward thrusts, one every half second, each a quick lunge forward and pull back, then settles in a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses.",
       "durationSeconds": 3,
       "sha256": "17be1ce6e90e4fcb014325159c6322f26f46587ba5b68872cb177db3d82b6486",
-      "bytes": 1917116
+      "bytes": 1917116,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-judgement-2.glb",
@@ -401,7 +414,8 @@
       "prompt": "A warrior performs a finishing move with a long glaive: a short crouched gathering, an explosive low dash lunge forward with a thrust, then a rising upward finishing slash, then he recovers upright to guard.",
       "durationSeconds": 3,
       "sha256": "1259e2e64c5f109186e8c6d6a483a42c4dad7206bd05ada2cbe1c7bc9c68301c",
-      "bytes": 1917108
+      "bytes": 1917108,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-heavy-1.glb",
@@ -412,7 +426,8 @@
       "prompt": "A warrior holding a long glaive in his right hand performs one heavy overhead chop: a deliberate wind-up lifting the glaive high over his head with both hands, a step forward and a powerful downward slam, a brief follow-through low, then he recovers to a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
       "durationSeconds": 3,
       "sha256": "3e1497fe0ff7a066c3031cf8216ae59d173fcdf32f477ed2ff409792af0c9715",
-      "bytes": 1917116
+      "bytes": 1917116,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-cleave-charge-1.glb",
@@ -423,7 +438,8 @@
       "prompt": "A warrior braces in a low wide stance holding a long glaive low behind him in his right hand, gathering power, chest breathing, small tension shakes, a steady loopable hold. Slightly lowered stance but upright torso.",
       "durationSeconds": 3,
       "sha256": "243badeacce0bb9e7ccb8961d42fccc722a2f0cd72a26e2d82201eac66c0e9e7",
-      "bytes": 1917124
+      "bytes": 1917124,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-cleave-release-2.glb",
@@ -434,7 +450,8 @@
       "prompt": "From a low braced stance with the glaive held low behind him, a warrior springs upward and brings the glaive over his head in a huge arcing two-handed overhead slam into the ground in front of him, a heavy impact, then straightens back to guard. Realistic weight transfer.",
       "durationSeconds": 3,
       "sha256": "77cf5fa7250ff0a85a30a2a9ece637e3f3d0e4d7bca83c7dd883af47a43422a6",
-      "bytes": 1917120
+      "bytes": 1917120,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-root-tether-3.glb",
@@ -445,7 +462,8 @@
       "prompt": "A warrior lashes a long glaive forward in a whipping overhand strike as if throwing a chain, then yanks it back toward himself with both hands, then returns to guard. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
       "durationSeconds": 3,
       "sha256": "12e30e85efebb689cf77081639724565ba8b94f7cb9ec7e8ec6ed2a75c4e40da",
-      "bytes": 1917116
+      "bytes": 1917116,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/aren-cleanse-2.glb",
@@ -456,7 +474,8 @@
       "prompt": "A warrior plants the tip of a long glaive into the ground in front of him with both hands on the shaft, bows his head and channels for a long moment, then pulls the glaive free and returns to a guard stance. Standing in place facing forward, realistic grounded weight shifts, upright readable poses, no crouching unless stated.",
       "durationSeconds": 3,
       "sha256": "0df80f93145b1ece0ec7d6a9b31205e9580d49af343c532f3e74bf3856f1d55b",
-      "bytes": 1917116
+      "bytes": 1917116,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-idle-1.glb",
@@ -467,7 +486,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A combat-ready idle loop: she stands with weight on her back leg, the staff held diagonally across her front in her right hand with the staff head raised forward at shoulder height, left hand open and ready near her hip, slow breathing, alert. Ends in the same pose it starts.",
       "durationSeconds": 4,
       "sha256": "de51135e929e9bf120aa01f2b1f3ad49fc98e047bc8a0aa009f81f952e678d92",
-      "bytes": 1942620
+      "bytes": 1942620,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-thornshot-1.glb",
@@ -478,7 +500,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A fast three-hit attack combo, each hit flowing straight into the next. Hit 1: she steps forward and thrusts her open left palm straight at the enemy at shoulder height, arm fully extended, the staff held upright in her right hand. Hit 2: she pivots her hips and swings the staff head in a fast horizontal arc from right to left at chest height, both hands on the staff, ending with the staff head pointed at the enemy. Hit 3: she lifts the staff above her head with both hands and whips the staff head down forward, stopping it pointed at the enemy at chest height, front knee bent. Then she recovers to the ready stance.",
       "durationSeconds": 6,
       "sha256": "5ec2df6f60d3ff494b61770cf53699a34a6c5ea7b5f645a01610b12bab0901c9",
-      "bytes": 1993488
+      "bytes": 1993488,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-root-spike-2.glb",
@@ -489,7 +514,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. One heavy strike: she lifts the staff vertically with both hands above her right shoulder, steps forward and stabs the bottom end of the staff down into the ground just in front of her front foot, leaning over it with both hands pressing down, holds for a beat, then pulls it out and returns to ready.",
       "durationSeconds": 3,
       "sha256": "e72dbe2df290297e9d477b98c856606d6b5be8a8c017d5fcd1088d1fb8eea430",
-      "bytes": 1917128
+      "bytes": 1917128,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-root-full-2.glb",
@@ -500,7 +528,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She holds the staff vertically in front of her body with both hands, gathering power, almost still for two seconds with her head lowered; then she jumps slightly, raises the staff high with both hands and slams the bottom end down into the ground in front of her with full force, landing with knees bent, holds the impact pose, then rises to ready.",
       "durationSeconds": 5,
       "sha256": "2fcf3d0222e8a3f60fe097e2c22f7c636945d70e2eb58a61fc754edc5ae8f5c4",
-      "bytes": 1968060
+      "bytes": 1968060,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-seed-full-3.glb",
@@ -511,7 +542,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She aims the staff horizontally at the enemy like a lance at chest height, left hand forward on the shaft and right hand back, sighting along it, holding almost still for two seconds; then she lunges forward and thrusts the staff straight ahead to fire a beam, arms extended, then pulls back to the ready stance.",
       "durationSeconds": 4,
       "sha256": "d69c00bfad7a6a64ef7f97b9ad67a8c4836f037809c7592c7baec69c1af4af8e",
-      "bytes": 1942616
+      "bytes": 1942616,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-seed-storm-3.glb",
@@ -522,7 +556,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She swings the staff in a big circle above her head with her right hand, then points the staff head forward and up at the enemy and sweeps it from left to right three times, each sweep a sharp flick releasing a volley, left arm extended for balance, then returns to ready.",
       "durationSeconds": 4,
       "sha256": "e1038d19356bb0e5ac2c2f3ef1f9b0c1a2d5a04fd40292333fdf2eff2257c07c",
-      "bytes": 1942612
+      "bytes": 1942612,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-binding-vines-2.glb",
@@ -533,7 +570,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She shoots her open left hand forward at the enemy with fingers spread, then clenches the fist and yanks it hard back to her hip as if pulling a rope, leaning back slightly, the staff held upright in her right hand, then returns to ready.",
       "durationSeconds": 3,
       "sha256": "79ac3476762bdfc29c20416bff0851e26a81668bb76c918217409b846d4849fa",
-      "bytes": 1917120
+      "bytes": 1917120,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-cleanse-2.glb",
@@ -544,7 +584,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. She plants the staff upright beside her right foot and holds it, then raises her open left palm forward at chest height and channels steadily, standing tall, then lowers her palm and lifts the staff back to ready.",
       "durationSeconds": 4,
       "sha256": "cd899e6b5929c08c6f7cb83da991fb2f7c5dae06ea3d3d019dda245de1a337ec",
-      "bytes": 1942604
+      "bytes": 1942604,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-petal-step-2.glb",
@@ -555,7 +598,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. A quick evasive dash forward: she takes two fast light steps forward with the staff held across her body in both hands, then lands balanced in the ready stance.",
       "durationSeconds": 2,
       "sha256": "8b34c1820c01840a8859ea1287eab3e249ce3a5d9e3feca293da30f5da269d51",
-      "bytes": 1891632
+      "bytes": 1891632,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     },
     {
       "file": "asset-source/viggle/y3-bloom-1.glb",
@@ -566,7 +612,10 @@
       "prompt": "A beautiful battle sorceress fighting with a tall wooden quarterstaff. Strong, readable combat poses with a clear wind-up, strike and follow-through, but elegant and feminine: upright chest, shoulders back, feet about hip-width apart (front foot steps forward for strikes, never a wide squat), arms kept away from her face. Her right hand always grips the staff near its middle; her left hand either joins it on the shaft or casts with an open palm as described. In place, facing forward. Her ultimate spell: she raises the staff high above her head with both hands and rises onto her toes, holding the raised staff with power for two seconds, then swings the staff down in a big overhead arc and slams the staff head into the ground in front of her with both hands, holding the final pose.",
       "durationSeconds": 5,
       "sha256": "d12f0872303fb65843167e3c1163217f17c6cd46813cb4b3000df744af0d4a81",
-      "bytes": 1968052
+      "bytes": 1968052,
+      "superseded": "Superseded 2026-10-20: Yara's idle, Petal Step and Heartroot skills now play Adobe Mixamo takes exactly as delivered (asset-source/mixamo/yara-skills); this take was removed from the repository, the entry and its credits stay as the ledger.",
+      "removed": true,
+      "status": "removed (superseded by exact Mixamo takes)"
     }
   ]
 }

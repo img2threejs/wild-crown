@@ -54,8 +54,8 @@
     ]
   },
   "sourceHash": "63d647440996e049a01c111359b7cfb536fcd816c964fd6129951804a5e5452d",
-  "outputHash": "29c0d8c1d5735044c829667430ae4e724e2beea3fa349f7ed776b2ec7faa65a3",
-  "operation": "Offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit; the staff arm is authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts; the knockdown / get-up clips additionally retarget four Mixamo FBX takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
+  "outputHash": "69f57ecda9190b84c2247ac5502105a404722f01d6ae5c288fa7c2a8aac3d146",
+  "operation": "Walk, run, jump, hit, cheer, defeat and the second jump: offline Tripo animation retarget with the shared Rig/buildClip/appendClips/limitJoints toolkit, the staff arm authored by a two-bone solve with the fixed-fist grip of src/rendering/NativeHandGrip.ts. Idle, Petal Step and every Heartroot skill: Adobe Mixamo takes exported onto Yara's own character (asset-source/mixamo/yara-skills), played exactly as delivered (bone rotations equal the rig's; only the time warp and the in-place Hips pin). The knockdown / get-up clips retarget Mixamo reaction takes via the reaction-batch loader with rest alignment and heading turn, time-warped onto the simulation timelines and joint-held; original native skinned Yara mesh retained.",
   "grip": {
     "staffDiagonalDegrees": 0,
     "staffToMiddleFingerDegrees": 80.2818820325746,
@@ -90,6 +90,16 @@
       0.281161,
       -0.268186,
       -0.921426
+    ],
+    "knucklesHand": [
+      0.992274,
+      -0.095953,
+      0.078643
+    ],
+    "fingerDirectionHand": [
+      0.106412,
+      0.984146,
+      -0.14189
     ]
   },
   "credits": {
@@ -130,29 +140,132 @@
       "facingDegrees": 90
     }
   },
+  "mixamoYaraSkills": {
+    "asset-source/mixamo/yara-skills/breathing-idle.fbx": {
+      "sha256": "c437b2cff73356d0d07923430a7bab861f75127c24332677f9bdfe0d2f2b74c6",
+      "bytes": 1104208,
+      "durationSeconds": 9.9333,
+      "frames": 299
+    },
+    "asset-source/mixamo/yara-skills/standing-dodge-forward.fbx": {
+      "sha256": "819714c8033bd34b9ee02ca735f4a7e3282ff8923970036b3c81ce0e0e1ba6da",
+      "bytes": 359232,
+      "durationSeconds": 1,
+      "frames": 31
+    },
+    "asset-source/mixamo/yara-skills/standing-1h-magic-attack-01.fbx": {
+      "sha256": "4be2a7e51f64d388ab1e3d7180ddd51858b6a199918b2e848d24d169eea787db",
+      "bytes": 520368,
+      "durationSeconds": 2.3,
+      "frames": 70
+    },
+    "asset-source/mixamo/yara-skills/standing-1h-magic-attack-02.fbx": {
+      "sha256": "89234ee0cdb8f90a5ca20af4556dddb0e750c3ece55dd7c5104494648f8250e4",
+      "bytes": 511504,
+      "durationSeconds": 2.2,
+      "frames": 67
+    },
+    "asset-source/mixamo/yara-skills/standing-1h-magic-attack-03.fbx": {
+      "sha256": "d557e022434d649b3394bbee3c03bb85c0f915d4de9d864a8c078801dac377e3",
+      "bytes": 517872,
+      "durationSeconds": 2.3,
+      "frames": 70
+    },
+    "asset-source/mixamo/yara-skills/standing-melee-attack-downward.fbx": {
+      "sha256": "604563cd4de2e281f37ecaab6432dc7eef85cbec40291a06e4651e20ebf08ae4",
+      "bytes": 482352,
+      "durationSeconds": 2.2667,
+      "frames": 69
+    },
+    "asset-source/mixamo/yara-skills/great-sword-idle.fbx": {
+      "sha256": "f8b0ca03b959f689f57325a85074a21ded99b53d35bf73cb74fdeda4e7e60711",
+      "bytes": 424032,
+      "durationSeconds": 2,
+      "frames": 61
+    },
+    "asset-source/mixamo/yara-skills/great-sword-jump-attack.fbx": {
+      "sha256": "5a6e84bf7f22886f15c04ff327656b86ae9fda082fdb5b6346616d9216325625",
+      "bytes": 513760,
+      "durationSeconds": 2.1667,
+      "frames": 66
+    },
+    "asset-source/mixamo/yara-skills/standing-idle-ready-to-cast.fbx": {
+      "sha256": "2c3a52f827bb0bbda97230eb3719b90c484370878f17075bfa6d379385979602",
+      "bytes": 473712,
+      "durationSeconds": 1.8667,
+      "frames": 57
+    },
+    "asset-source/mixamo/yara-skills/frisbee-throw.fbx": {
+      "sha256": "ff2cba6b6773724a46f86aa04b61a260275d18749b2e0056c72e3451453e98b2",
+      "bytes": 636240,
+      "durationSeconds": 3.3,
+      "frames": 100
+    },
+    "asset-source/mixamo/yara-skills/standing-melee-attack-360-high.fbx": {
+      "sha256": "6bccc48d4391e0b36305db1640269475b71cbfe2f26e97600b29d5f3087d569c",
+      "bytes": 571024,
+      "durationSeconds": 3.1667,
+      "frames": 96
+    },
+    "asset-source/mixamo/yara-skills/casting-spell.fbx": {
+      "sha256": "09259b61f2583b44cbbcc38ac04119b36ae5f530f7ad37fac7d6ba46b8ccd8b3",
+      "bytes": 945472,
+      "durationSeconds": 7.7,
+      "frames": 232
+    },
+    "asset-source/mixamo/yara-skills/magic-heal.fbx": {
+      "sha256": "7ae65acb948a9b6b00fd55b6236ed564a6a8c021441b3b01b353ff3c8f27876f",
+      "bytes": 521232,
+      "durationSeconds": 2.6667,
+      "frames": 81
+    },
+    "asset-source/mixamo/yara-skills/great-sword-casting.fbx": {
+      "sha256": "90ab44b335a3eb96a61124a7383a8877e4d66fc7ee12945098c82eaf983e5de7",
+      "bytes": 590608,
+      "durationSeconds": 4.8,
+      "frames": 145
+    }
+  },
   "creditTotal": 275,
   "evidenceStatus": "blocked",
   "clips": [
     {
       "clip": "aren-idle",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-idle-1.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-idle-1.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/breathing-idle.fbx"
       },
       "sim": {
-        "totalTicks": 240
+        "totalTicks": 596
       },
       "window": [
-        0.3,
-        3.7
+        0,
+        9.9333
       ],
-      "loop": {
-        "overlapSeconds": 0.4
+      "loop": true,
+      "hold": {
+        "follow": 0.35,
+        "hinge": true,
+        "smooth": 4,
+        "loop": true,
+        "keys": [
+          {
+            "t": 0,
+            "hand": [
+              0.1095,
+              -0.199,
+              0.121
+            ],
+            "staff": [
+              -30,
+              74
+            ],
+            "w": 1
+          }
+        ]
       },
-      "limits": "JOINT_LIMITS",
-      "upright": 26,
-      "clearArms": true
+      "limits": "EXACT"
     },
     {
       "clip": "aren-walk",
@@ -246,24 +359,25 @@
     },
     {
       "clip": "aren-forward-left-dive-roll",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-petal-step-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-petal-step-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-dodge-forward.fbx"
       },
       "sim": {
         "totalTicks": 42
       },
-      "window": [
-        0.05,
-        1.9
+      "keys": [
+        [
+          0,
+          0
+        ],
+        [
+          42,
+          1
+        ]
       ],
-      "airborne": true,
-      "upright": 26,
-      "clearStaff": true,
-      "idleBlendTail": 0.25,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "aren-hit",
@@ -598,10 +712,10 @@
     },
     {
       "clip": "yara-thornshot-1",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-thornshot-1.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-01.fbx"
       },
       "sim": {
         "totalTicks": 26,
@@ -610,42 +724,25 @@
       "keys": [
         [
           0,
-          0.42
+          0.47
         ],
         [
           9,
-          0.77
-        ],
-        [
-          22,
-          0.9
+          0.8
         ],
         [
           26,
-          0.93
+          1.2
         ]
       ],
-      "contact": {
-        "joints": [
-          "LeftHand"
-        ],
-        "search": [
-          0.65,
-          0.9
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-thornshot-2",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-thornshot-1.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-02.fbx"
       },
       "sim": {
         "totalTicks": 28,
@@ -654,46 +751,25 @@
       "keys": [
         [
           0,
-          0.93
+          0.3
         ],
         [
           10,
-          1.25
-        ],
-        [
-          24,
-          1.75
+          0.52
         ],
         [
           28,
-          1.8
+          1.03
         ]
       ],
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          1.1,
-          1.35
-        ]
-      },
-      "seamFrom": {
-        "clip": "yara-thornshot-1",
-        "ticks": 4
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-thornshot-3",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-thornshot-1.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-thornshot-1.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-03.fbx"
       },
       "sim": {
         "totalTicks": 34,
@@ -702,43 +778,25 @@
       "keys": [
         [
           0,
-          1.8
+          0.4
         ],
         [
           10,
-          2.23
+          0.93
         ],
         [
           34,
-          3.2
+          1.4
         ]
       ],
-      "contact": {
-        "joints": [
-          "RightHand"
-        ],
-        "search": [
-          2.1,
-          2.35
-        ]
-      },
-      "seamFrom": {
-        "clip": "yara-thornshot-2",
-        "ticks": 4
-      },
-      "idleBlendTail": 0.3,
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-root-spike",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-root-spike-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-root-spike-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-melee-attack-downward.fbx"
       },
       "sim": {
         "totalTicks": 63,
@@ -747,175 +805,42 @@
       "keys": [
         [
           0,
-          0.9
-        ],
-        [
-          17,
-          1.66
+          0.2
         ],
         [
           20,
-          1.78
-        ],
-        [
-          23,
-          1.88
-        ],
-        [
-          40,
-          2.5
+          0.85
         ],
         [
           63,
-          3
+          2.1
         ]
       ],
-      "contact": {
-        "joints": [
-          "LeftHand",
-          "RightHand"
-        ],
-        "search": [
-          1.65,
-          1.9
-        ]
-      },
-      "idleBlendTail": 0.25,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.22,
-              0.02,
-              0.06
-            ],
-            "staff": [
-              0,
-              88
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 0
-          },
-          {
-            "t": 9,
-            "hand": [
-              0.22,
-              0.02,
-              0.06
-            ],
-            "staff": [
-              0,
-              88
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 14,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 17,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 20,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 40,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 63,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-root-charge",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-root-full-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-root-full-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/great-sword-idle.fbx"
       },
       "sim": {
-        "totalTicks": 90
+        "totalTicks": 120
       },
       "window": [
-        0.6,
-        1.4
+        0,
+        2
       ],
-      "loop": {
-        "overlapSeconds": 0.2
-      },
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.22,
-              0.02,
-              0.06
-            ],
-            "staff": [
-              0,
-              88
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "loop": true,
+      "limits": "EXACT"
     },
     {
       "clip": "yara-root-eruption",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-root-spike-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-root-spike-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/great-sword-jump-attack.fbx"
       },
       "sim": {
         "totalTicks": 76,
@@ -924,179 +849,42 @@
       "keys": [
         [
           0,
-          1.2
-        ],
-        [
-          33,
-          1.66
+          0.27
         ],
         [
           36,
-          1.78
-        ],
-        [
-          39,
-          1.88
-        ],
-        [
-          55,
-          2.5
+          1.067
         ],
         [
           76,
-          3
+          2.13
         ]
       ],
-      "contact": {
-        "joints": [
-          "LeftHand",
-          "RightHand"
-        ],
-        "search": [
-          1.65,
-          1.9
-        ]
-      },
-      "seamFrom": {
-        "clip": "yara-root-charge",
-        "ticks": 18
-      },
-      "idleBlendTail": 0.25,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.22,
-              0.02,
-              0.06
-            ],
-            "staff": [
-              0,
-              88
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 24,
-            "hand": [
-              0.22,
-              0.02,
-              0.06
-            ],
-            "staff": [
-              0,
-              88
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 31,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 33,
-            "pose": "high",
-            "hand": [
-              0.26,
-              0.21,
-              0.08
-            ],
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 36,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 58,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 1
-          },
-          {
-            "t": 76,
-            "pose": "plant",
-            "gw": 1,
-            "grip": -0.26,
-            "w": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-seed-charge",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-seed-full-3.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-seed-full-3.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-idle-ready-to-cast.fbx"
       },
       "sim": {
-        "totalTicks": 90
+        "totalTicks": 112
       },
       "window": [
-        0.9,
-        1.7
+        0,
+        1.8667
       ],
-      "loop": {
-        "overlapSeconds": 0.2
-      },
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.2,
-              -0.04,
-              0.06
-            ],
-            "staff": [
-              0,
-              6
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "loop": true,
+      "limits": "EXACT"
     },
     {
       "clip": "yara-sap-lance",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-seed-full-3.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-seed-full-3.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/frisbee-throw.fbx"
       },
       "sim": {
         "totalTicks": 30,
@@ -1105,132 +893,25 @@
       "keys": [
         [
           0,
-          1.75
-        ],
-        [
-          13,
-          2.3
+          0.6
         ],
         [
           16,
-          2.43
-        ],
-        [
-          19,
-          2.52
+          1.3
         ],
         [
           30,
-          3
+          1.95
         ]
       ],
-      "contact": {
-        "joints": [
-          "LeftHand",
-          "RightHand"
-        ],
-        "search": [
-          2.25,
-          2.55
-        ]
-      },
-      "seamFrom": {
-        "clip": "yara-seed-charge",
-        "ticks": 6
-      },
-      "idleBlendTail": 0.3,
-      "arm": {
-        "follow": 0,
-        "keys": [
-          {
-            "t": 0,
-            "hand": [
-              0.2,
-              -0.04,
-              0.06
-            ],
-            "staff": [
-              0,
-              6
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          },
-          {
-            "t": 12,
-            "hand": [
-              0.14,
-              -0.04,
-              0.06
-            ],
-            "staff": [
-              0,
-              6
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          },
-          {
-            "t": 16,
-            "hand": [
-              0.33,
-              0,
-              0.04
-            ],
-            "staff": [
-              0,
-              4
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          },
-          {
-            "t": 22,
-            "hand": [
-              0.33,
-              0,
-              0.04
-            ],
-            "staff": [
-              0,
-              4
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          },
-          {
-            "t": 30,
-            "hand": [
-              0.2,
-              -0.04,
-              0.06
-            ],
-            "staff": [
-              0,
-              6
-            ],
-            "gw": 1,
-            "grip": 0.36,
-            "w": 1
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-seed-storm",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-seed-storm-3.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-seed-storm-3.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/standing-melee-attack-360-high.fbx"
       },
       "sim": {
         "totalTicks": 60
@@ -1238,38 +919,29 @@
       "keys": [
         [
           0,
-          0.4
+          0.27
         ],
         [
           12,
-          0.95
+          0.87
         ],
         [
           42,
-          2.9
+          1.4
         ],
         [
           60,
-          3.4
+          1.8
         ]
       ],
-      "seamFrom": {
-        "clip": "yara-seed-charge",
-        "ticks": 8
-      },
-      "idleBlendTail": 0.25,
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-binding-vines",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-binding-vines-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-binding-vines-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/casting-spell.fbx"
       },
       "sim": {
         "totalTicks": 54,
@@ -1278,92 +950,28 @@
       "keys": [
         [
           0,
-          0.05
+          4.8
         ],
         [
           18,
-          0.37
-        ],
-        [
-          40,
-          2.6
+          5.4
         ],
         [
           54,
-          3
+          6.1
         ]
       ],
-      "contact": {
-        "joints": [
-          "LeftHand"
-        ],
-        "search": [
-          0.25,
-          0.5
-        ]
-      },
-      "idleBlendTail": 0.3,
-      "arm": {
-        "follow": 0.25,
-        "keys": [
-          {
-            "t": 0,
-            "pose": "carry",
-            "w": 0
-          },
-          {
-            "t": 8,
-            "pose": "carry",
-            "w": 1
-          },
-          {
-            "t": 44,
-            "pose": "carry",
-            "w": 1
-          },
-          {
-            "t": 54,
-            "pose": "carry",
-            "w": 0
-          }
-        ]
-      },
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "yara-cleanse",
+      "exact": true,
       "source": {
-        "donor": "mixamo:asset-source/viggle/y3-cleanse-2.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-cleanse-2.glb"
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/magic-heal.fbx"
       },
       "sim": {
         "totalTicks": 108
-      },
-      "window": [
-        0.05,
-        4
-      ],
-      "idleBlendTail": 0.2,
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
-    },
-    {
-      "clip": "yara-heartroot-bloom",
-      "source": {
-        "donor": "mixamo:asset-source/viggle/y3-bloom-1.glb:in-place",
-        "animation": "Armature.001|Scene",
-        "file": "asset-source/viggle/y3-bloom-1.glb"
-      },
-      "sim": {
-        "totalTicks": 156
       },
       "keys": [
         [
@@ -1371,28 +979,49 @@
           0.1
         ],
         [
-          30,
-          1.2
+          35,
+          0.7
         ],
         [
-          124,
-          3.25
+          108,
+          2.6
+        ]
+      ],
+      "limits": "EXACT"
+    },
+    {
+      "clip": "yara-heartroot-bloom",
+      "exact": true,
+      "source": {
+        "donor": "yara-exact",
+        "file": "asset-source/mixamo/yara-skills/great-sword-casting.fbx"
+      },
+      "sim": {
+        "totalTicks": 156
+      },
+      "keys": [
+        [
+          0,
+          0.27
+        ],
+        [
+          40,
+          2.27
+        ],
+        [
+          110,
+          3.47
         ],
         [
           132,
-          3.46
+          4
         ],
         [
           156,
-          4.9
+          4.8
         ]
       ],
-      "idleBlendTail": 0.15,
-      "facing": 28,
-      "upright": 26,
-      "clearStaff": true,
-      "clearArms": true,
-      "limits": "COMBAT_LIMITS"
+      "limits": "EXACT"
     },
     {
       "clip": "aren-air-step",

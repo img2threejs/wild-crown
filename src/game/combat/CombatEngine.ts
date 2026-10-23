@@ -5,7 +5,7 @@ import type { CueCancellationReason, StoryCue } from '../../effects/story-cues.j
 import { ACTORS, INTERACTIONS, REGIONS } from '../../content/campaign.js';
 import { HUB_REGION_IDS, HUB_UPGRADES } from '../../content/hub.js';
 import { MAREK_ASSISTANCE, NURSERY_ESCORT, PACK_PATROL_ACTOR_IDS, SHARED_HUNT_ROUTE } from '../../content/side-quests.js';
-import { COMPANION_ROSTER, type CompanionCommand, type CompanionRosterState, companionActor, companionOwnerMultiplier, commandAvailability as companionAvailability, commandCompanion as commitCompanionCommand, commandTargets as companionTargets, companionSignal, configureCompanionProgress, configureCompanion, configureCompanions, createCompanionState, failCompanionJob, markSnapshot, normalizeCompanionState, shiftCompanionClocks, stepCompanions, targetLabel as companionTargetLabel, tryGuardBlock } from '../companions/CompanionSystem.js';
+import { COMPANION_ROSTER, type CompanionCommand, type CompanionRosterState, companionActor, companionOwnerMultiplier, commandAvailability as companionAvailability, commandCompanion as commitCompanionCommand, commandTargets as companionTargets, companionSignal, configureCompanionProgress, configureCompanion, configureCompanions, createCompanionState, enforceEarnedRoster, failCompanionJob, markSnapshot, normalizeCompanionState, shiftCompanionClocks, stepCompanions, targetLabel as companionTargetLabel, tryGuardBlock } from '../companions/CompanionSystem.js';
 import { ATTACKS, BOSS_ENCOUNTERS, WILDLIFE_ENCOUNTERS, type AttackDefinition, type AttackElement, type BossEncounterDefinition } from './content.js';
 import { ATTACK_TURN_RATE_MAX, CAST_FACING_TOLERANCE, MONSTER_ACCEL, MONSTER_DECEL, CAST_RANGE_MARGIN, MONSTER_PROFILES, ROAR_TICKS, STUCK_TICKS, TRIAL_ENGAGE_RANGE, TRIAL_DISENGAGE_RANGE, TURN_LEAD_TICKS, clampStepToArena, createMonsterMotion, getWildlifePressure, scaleWildlifeAttack, steerMonster, turnTranslationScale, wrapAngle, type WildlifePressureTier, type MonsterMotionState, type MonsterProfile } from './WildlifePressure.js';
 import { EVASION_PROFILES, type EvasionDirection, type EvasionProfile, type EvasionProfileId, type HazardDefinition } from './evasion.js';
@@ -50,6 +50,13 @@ const PLAYER_JUMP_BOOST_APEX = 2.1;
 const PLAYER_JUMP_ANTICIPATION_TICKS = 7;
 const PLAYER_JUMP_FLIGHT_TICKS = 42;
 const PLAYER_JUMP_LANDING_TICKS = 10;
+/**
+ * The planned landing is held this far above the measured ground (m). The arc's clearance sweep interpolates between its
+ * samples, and the last interpolation step lands a few 1e-17 below the endpoint: without the margin the sweep would test a
+ * sample under the arena's floor bound, reject the whole trajectory, and collapse the jump (or a boosted jump) to a hop.
+ * The margin is far below the simulation's own contact tolerance and is removed again when the body touches down.
+ */
+const PLAYER_JUMP_LANDING_MARGIN = 1e-6;
 const PLAYER_MAX_DROP = 3;
 const PLAYER_FALL_GRAVITY = 24;
 const PLAYER_MOVE_ACCEL_TICKS = 7;
@@ -63,6 +70,17 @@ const PLAYER_PIVOT_ACCEL_FLOOR = 0.3;
 /** Locomotion clip by actual planar speed, as a multiple of the hero's walk speed: run is entered above the first and left below the second. */
 const PLAYER_RUN_ENTER = 1.16;
 const PLAYER_RUN_EXIT = 1.05;
+/**
+ * Airborne steering. The body keeps the planar speed its arc already carries and turns its heading toward the requested
+ * steering at the bounded rate the ground uses (`PLAYER_TURN_RATE`), so a mid-air turn, a sprint change or a released key
+ * never steps the velocity: the drawn root, the shadow and the camera all read a continuous velocity.
+ */
+const AIR_TURN_RATE = PLAYER_TURN_RATE;
+/** Airborne speed converges on the requested speed over this many ticks, the same ramp the ground acceleration uses. */
+const AIR_ACCEL_TICKS = PLAYER_MOVE_ACCEL_TICKS;
+const AIR_DECEL_TICKS = PLAYER_MOVE_DECEL_TICKS;
+/** Below this (m/s and rad) an airborne heading or speed difference is not worth replanning the arc for. */
+const AIR_MOTION_EPSILON = 1e-3;
 const PERFECT_DODGE_EFFECTS={worldTimeScale:0.25,slowMotionTicks:12,maxSlowMotionTicks:18,instinctGain:20,petRecoveryReductionTicks:18,playerRecoveryReductionTicks:12,weakPointDurationTicks:36,weakPointDamageMultiplier:1.5,counterWindowTicks:36} as const;
 /** Four extra simulation ticks the player keeps invulnerable when the perfect-dodge window is set to "wide". Captured at dodge start. */
 const PERFECT_DODGE_WIDE_BONUS_TICKS = 4;
@@ -928,7 +946,7 @@ export class CombatEngine {
   /** Valid, stably ordered targets of one command; every entry would be accepted by `commandCompanion`. */
   commandTargets(companionId:CompanionId,command:FieldCommand):readonly CompanionTarget[]{return this.playerIsDown()?[]:companionTargets(this.state,companionId,command);}
   targetLabel(target:CompanionTarget):string{return companionTargetLabel(this.state,target);}
-  /** Narrative relationship tuning is independent of unlocked party access. */
+  /** Applies earned recruitment and relationship progress, removing selections the journey cannot use. */
   configureCompanionProgress(progress:Readonly<Record<CompanionId,CompanionProgress>>):void{configureCompanionProgress(this.state,progress);}
   /** Drains the spatial intents queued since the last call (edge-triggered: one per entered checkpoint/entry trigger). */
   consumeChapterIntents():readonly ChapterSpatialIntent[]{
@@ -1314,6 +1332,8 @@ export class CombatEngine {
     this.state.phaseActionFlags = [...checkpoint.phaseActionFlags];
     this.state.rewardEmitted = checkpoint.rewardEmitted;
     this.state.companionState = normalizeCompanionState(structuredClone(checkpoint.companions));
+    // The restored roster is authoritative: a companion the campaign never earned leaves the party here, not on the next tick.
+    enforceEarnedRoster(this.state);
     shiftCompanionClocks(this.state.companionState,worldOffset);
     this.state.chapter = checkpoint.chapter?structuredClone(checkpoint.chapter):createChapterCombatState();
     this.state.chapter.intents = [];
@@ -1722,6 +1742,8 @@ export class CombatEngine {
     return 1;
   }
   get companions(): CompanionRosterState { return structuredClone(this.state.companionState); }
+  /** The actual rear-threat warning target; read without cloning the companion roster every frame. */
+  get scoutWarningTargetId(): ActorId | undefined { return this.state.companionState.slots.vara?.warning?.targetId; }
   /** Read without cloning a frame: an open panel does not make an engaged fight safe for replacement. */
   get companionChangeBlocked(): boolean {
     const state = this.state;
@@ -2413,18 +2435,28 @@ export class CombatEngine {
       return;
     }
     if(this.state.tick>jump.airStartedAtTick){
-      const steering=this.jumpSteering(input);
+      const wanted=this.jumpSteering(input);
       const boost=(input.jumpPressed||jump.boostQueued)&&!jump.boosted&&this.state.player.mana>=PLAYER_SKILLS.jump.manaCost;
       jump.boostQueued=false;
-      const change=distance2(steering,jump.steering)>.001;
+      const segmentStart=this.state.tick-1;
+      const remaining=landingAt-segmentStart;
+      // The airborne body keeps the speed its arc carries and turns toward the requested steering at the bounded rate the
+      // ground uses, so a mid-air turn, a sprint change or a released key never steps the velocity.
+      const reachLimit=(jump.boosted?PLAYER_JUMP_BOOST_MAX_DISTANCE:PLAYER_JUMP_MAX_DISTANCE)+(jump.airDashUsed?(this.kit?.dodge?.distance??0):0);
+      const speedLimit=Math.max(0,(reachLimit-distance2(jump.origin,player.position))/(remaining*FIXED_STEP_SECONDS));
+      // Mist Blink owns its authored burst; ordinary steering must not brake it back to walking speed.
+      const velocity=jump.airDash&&this.state.tick<jump.airDash.until?wanted:this.airVelocity(jump.steering,wanted,speedLimit);
+      const change=distance2(velocity,jump.steering)>AIR_MOTION_EPSILON;
       if(boost||change){
-        const segmentStart=this.state.tick-1;
-        const remaining=landingAt-segmentStart;
         const fraction=Math.max(0,Math.min(1,(segmentStart-jump.flightStartedAtTick)/jump.flightTicks));
-        const candidate:PlayerJumpState={...jump,from:copy(player.position),flightStartedAtTick:segmentStart,flightTicks:boost?PLAYER_JUMP_FLIGHT_TICKS:remaining,apex:boost?PLAYER_JUMP_BOOST_APEX:jump.apex*(1-fraction)**2,airStartedAtTick:boost?segmentStart:jump.airStartedAtTick,boosted:jump.boosted||!!boost,steering,anticipationFrom:undefined};
+        // A boost extends the flight, but it never rewinds the phase clock: the airborne phase keeps its original start, so the
+        // native pose's rising progress never jumps backwards mid-air.
+        const candidate:PlayerJumpState={...jump,from:copy(player.position),flightStartedAtTick:segmentStart,flightTicks:boost?PLAYER_JUMP_FLIGHT_TICKS:remaining,apex:boost?PLAYER_JUMP_BOOST_APEX:jump.apex*(1-fraction)**2,airStartedAtTick:jump.airStartedAtTick,boosted:jump.boosted||!!boost,steering:velocity,anticipationFrom:undefined};
         const landing=this.planJumpLanding(candidate,player.collisionHeight);
         if(landing){
           candidate.to=landing;
+          // The arc's own cruise is the body's velocity: the plan's endpoint, not the requested steering, sets the speed.
+          candidate.steering=scale(sub(landing,candidate.from),1/(candidate.flightTicks*FIXED_STEP_SECONDS));
           this.state.playerJump=jump=candidate;
           landingAt=jump.flightStartedAtTick+jump.flightTicks;
           if(boost){
@@ -2435,7 +2467,7 @@ export class CombatEngine {
               player.actionEndsTick=this.state.actionUntil;
             }
           }
-          if(Math.hypot(steering.x,steering.z)>.001)player.facing=normalize(steering);
+          if(Math.hypot(candidate.steering.x,candidate.steering.z)>.001)player.facing=normalize(candidate.steering);
         }
       }
     }
@@ -2463,6 +2495,45 @@ export class CombatEngine {
     return scale(this.motionDesired(input),(input.sprintHeld?hero.runSpeed:hero.walkSpeed)*(this.state.playerSlow?.factor??1)*(this.kit?.moveSpeedScale?.()??1)*companionOwnerMultiplier(this.state,'haste'));
   }
 
+  /**
+   * The planar velocity an airborne body flies with this tick. It starts from the speed its arc already carries (`current`),
+   * turns toward the requested direction at the same bounded rate the ground uses and converges on the requested speed over the
+   * same tick ramp, so a mid-air turn, a sprint change or a released key never steps the velocity: the drawn root, the shadow,
+   * the look-ahead and the FOV kick all read one continuous body. `speedLimit` is the speed the remaining reach budget still
+   * allows, so the jump never stretches past its authored distance.
+   */
+  private airVelocity(current:Vec3,wanted:Vec3,speedLimit:number):Vec3{
+    const currentSpeed=Math.hypot(current.x,current.z);
+    const wantedSpeed=Math.hypot(wanted.x,wanted.z);
+    const hero=HERO_COMBAT[this.state.heroId];
+    if(wantedSpeed<=1e-6){
+      // No steering is held: the body keeps its heading and slows on the same ramp the ground uses.
+      if(currentSpeed<=1e-6)return current;
+      let speed=currentSpeed-hero.runSpeed/AIR_DECEL_TICKS;
+      if(speedLimit>0&&speed>speedLimit)speed=speedLimit;
+      if(speed<0)speed=0;
+      return vec(current.x/currentSpeed*speed,0,current.z/currentSpeed*speed);
+    }
+    const wantedYaw=Math.atan2(wanted.x,wanted.z);
+    const currentYaw=currentSpeed>1e-6?Math.atan2(current.x,current.z):wantedYaw;
+    // Turn at the bounded rate: a mid-air turn reads as a pivot, never as an instant heading flip.
+    const error=wrapAngle(wantedYaw-currentYaw);
+    const limit=AIR_TURN_RATE*FIXED_STEP_SECONDS;
+    const angle=Math.abs(error)<=limit?error:Math.sign(error)*limit;
+    const yaw=currentYaw+angle;
+    // A wide heading error is a pivot: the body turns before it accelerates, exactly as it does on the ground.
+    const remaining=Math.max(0,Math.abs(error)-limit);
+    const pivotT=Math.max(0,Math.min(1,(remaining-PLAYER_PIVOT_START)/(Math.PI-PLAYER_PIVOT_START)));
+    const pivot=1-PLAYER_PIVOT_SLOWDOWN*pivotT;
+    const target=wantedSpeed*pivot;
+    const braking=current.x*wanted.x+current.z*wanted.z<0;
+    const maxChange=(wantedSpeed>currentSpeed?hero.runSpeed/AIR_ACCEL_TICKS:hero.runSpeed/AIR_DECEL_TICKS)*(braking?1:Math.max(PLAYER_PIVOT_ACCEL_FLOOR,pivot));
+    let speed=currentSpeed+Math.max(-maxChange,Math.min(maxChange,target-currentSpeed));
+    if(speedLimit>0&&speed>speedLimit)speed=speedLimit;
+    if(speed<0)speed=0;
+    return vec(Math.sin(yaw)*speed,0,Math.cos(yaw)*speed);
+  }
+
   /** Every accepted trajectory has a swept clear arc and a supported landing; a blocked input shortens travel, never teleports. */
   private planJumpLanding(jump:PlayerJumpState,collisionHeight:number):Vec3|undefined{
     const desired=add(jump.from,scale(jump.steering,jump.flightTicks*FIXED_STEP_SECONDS));
@@ -2476,14 +2547,17 @@ export class CombatEngine {
       const x=jump.from.x+(target.x-jump.from.x)*progress,z=jump.from.z+(target.z-jump.from.z)*progress;
       const count=landingHeightsAt(this.state.arena,x,z,query,this.jumpLandings);
       for(let layer=0;layer<count;layer++){
-        const to=vec(x,this.jumpLandings[layer]!,z);
+        // The sweep runs against a landing held a hair above the measured ground, so the arc's last interpolated sample never
+        // dips under the arena's floor bound (a few 1e-17) and rejects the whole trajectory. The arc itself still lands on the
+        // measured ground exactly.
+        const swept=vec(x,this.jumpLandings[layer]!+PLAYER_JUMP_LANDING_MARGIN,z);
         let previous=jump.from,clear=true;
         for(let tick=1;tick<=jump.flightTicks;tick++){
-          const point=jumpPosition(jump.from,to,tick,jump.flightTicks,jump.apex);
+          const point=jumpPosition(jump.from,swept,tick,jump.flightTicks,jump.apex);
           if(!isAerialCirclePathClear(this.state.arena,previous,point,PLAYER_RADIUS,collisionHeight)){clear=false;break;}
           previous=point;
         }
-        if(clear)return to;
+        if(clear)return vec(x,this.jumpLandings[layer]!,z);
       }
     }
     return undefined;
@@ -4822,6 +4896,9 @@ export function hydrateEngineState(seed:EngineStateSeed):EngineState{
   state.companionState=normalizeCompanionState(state.companionState);
   delete (state as EngineState & Record<string,unknown>).companionSlots;
   for(const actor of state.actors)if(actor.id.includes('__party_')&&actor.archetypeId!==state.companionState.companionId)actor.visible=false;
+  // A hydrated state may still carry a companion the campaign never recruited: the earned roster is applied here, so a restored
+  // save never grants a companion the journey did not earn.
+  enforceEarnedRoster(state);
   state.chapter={...createChapterCombatState(),...state.chapter};
   if (state.chapter.traps.some(trap => trap.disarmFact === undefined))
     state.chapter.traps = state.chapter.traps.map(trap => trap.disarmFact === undefined ? { ...trap, disarmFact: TRAP_DISARM_FACT } : trap);
@@ -4919,6 +4996,11 @@ function evasionDistanceProgress(t:number):number{
 }
 function jumpPosition(from:Vec3,to:Vec3,elapsed:number,flightTicks:number,apex:number):Vec3{
   const u=Math.max(0,Math.min(1,elapsed/flightTicks));
+  // The arc's endpoints are exact. A flight that ends on its landing must place the body exactly on it: a floating-point
+  // hair below the floor (the parabola's last sample lands a few 1e-17 under it) is below the arena's floor bound, so the
+  // clearance sweep would reject the whole trajectory and the plan would collapse the jump to a near-zero hop.
+  if(u<=0)return copy(from);
+  if(u>=1)return copy(to);
   return vec(from.x+(to.x-from.x)*u,from.y+(to.y-from.y)*u+4*apex*u*(1-u),from.z+(to.z-from.z)*u);
 }
 function add(a:Vec3,b:Vec3):Vec3{return{x:a.x+b.x,y:a.y+b.y,z:a.z+b.z};}

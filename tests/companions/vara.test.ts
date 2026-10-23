@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'bun:test';
-import type { ActorId, Bounds3, GroundSurfaceDefinition, Vec3 } from '../../src/game/contracts.js';
-import type { CombatActor, EngineState } from '../../src/game/combat/CombatEngine.js';
+import type { ActorId, Bounds3, CompanionId, FieldCommand, GroundSurfaceDefinition, Vec3 } from '../../src/game/contracts.js';
+import { CombatEngine, type CombatActor, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
 import { arenaFromRegion } from '../../src/game/combat/geometry.js';
-import { commandCompanion, createCompanionState, stepCompanions } from '../../src/game/companions/CompanionSystem.js';
+import { commandAvailability, commandCompanion, commandTargets, createCompanionState, stepCompanions } from '../../src/game/companions/CompanionSystem.js';
 
 const bounds: Bounds3 = { min: { x: -5, y: -1, z: -5 }, max: { x: 5, y: 8, z: 5 } };
 const floor: GroundSurfaceDefinition = {
@@ -45,6 +45,75 @@ describe('Vara aerial scout mark', () => {
     expect(state.actors.find(candidate => candidate.id === 'hostile')?.markState?.sourceId).toBe('vara');
     expect(state.actors.find(candidate => candidate.id === 'hostile')?.vitality).toBe(100);
     expect(state.events.some(event => event.actorId === 'vara' && event.message === 'Mark Weakness')).toBe(true);
+  });
+
+  it('finishes the Canopy mark and rear-warning lesson on unengaged wildlife without provoking or damaging it', () => {
+    const engine = new CombatEngine();
+    engine.loadRegion({
+      regionId: 'whispering-canopy', runId: 'wild-scout',
+      presentActorIds: ['canopy-vara', 'canopy-howler'], companionId: 'vara', chapter: 1,
+      playerPosition: { x: -46, y: 0, z: -29 },
+    });
+    const request = { companionId: 'vara', command: 'focus', target: { kind: 'actor', instanceId: 'canopy-howler' } } as const;
+    const before = engine.snapshot().actors.find(candidate => candidate.id === 'canopy-howler')!;
+    expect(before.allegiance).toBe('wild');
+    expect(engine.commandTargets('vara', 'focus')).toContainEqual(request.target);
+    expect(engine.commandCompanion(request)).toBe(true);
+    for (let frame = 0; frame < 24; frame += 1) engine.fixedStep();
+    const marked = engine.snapshot().actors.find(candidate => candidate.id === 'canopy-howler')!;
+    expect(marked.mark?.sourceId).toBe('canopy-vara');
+    expect(engine.scoutWarningTargetId).toBe('canopy-howler');
+    expect(engine.consumeWorldEvents().filter(event => event.type === 'semantic-interaction').map(event => event.interactionId)).toEqual(['bird-mark']);
+    const turn: CombatInput = {
+      tick: 1, move: { x: 0, y: 0, z: -1 }, dodgePressed: false, lightPressed: false,
+      heavyPressed: false, heavyHeld: false, heavyReleased: false, interactPressed: false, lockOnPressed: false, lockOnHeld: false,
+    };
+    for (let frame = 0; frame < 16; frame += 1) engine.fixedStep(turn);
+    expect(engine.consumeWorldEvents().filter(event => event.type === 'semantic-interaction').map(event => event.interactionId)).toEqual(['warning-response']);
+    expect(engine.scoutWarningTargetId).toBeUndefined();
+    for (let frame = 0; frame < 120; frame += 1) engine.fixedStep();
+    const after = engine.snapshot().actors.find(candidate => candidate.id === 'canopy-howler')!;
+    expect(after.allegiance).toBe('wild');
+    expect(after.vitality).toBe(before.vitality);
+    expect(after.position).toEqual(before.position);
+    expect(after.targetId).toBeUndefined();
+    expect(engine.companions.tokens.available).toBe(2);
+    expect(engine.consumeWorldEvents().filter(event => event.type === 'semantic-interaction')).toEqual([]);
+  });
+
+  it('does not make wild combatants valid targets for offensive commands', () => {
+    const cases: readonly [CompanionId, FieldCommand][] = [['vara', 'special'], ['vara', 'distract'], ['koro', 'focus']];
+    for (const [companionId, command] of cases) {
+      const state = warningState();
+      state.actors[1] = actor(companionId, { x: 0, y: 2, z: 0 }, 'ally');
+      state.companionState = createCompanionState(companionId, 1);
+      const target = state.actors[2]!;
+      target.archetypeId = 'canopy-howler';
+      const request = { companionId, command, target: { kind: 'actor', instanceId: target.id } } as const;
+      expect(commandAvailability(state, request).available).toBe(true);
+      target.allegiance = 'wild';
+      expect(commandAvailability(state, request).available).toBe(false);
+      expect(commandTargets(state, companionId, command)).not.toContainEqual(request.target);
+      expect(commandCompanion(state, request)).toBe(false);
+      expect(state.companionState.tokens.available).toBe(2);
+      expect(target.vitality).toBe(100);
+    }
+  });
+
+  it('does not scout ambient animals, allies, hidden, downed or out-of-range wild targets', () => {
+    for (const unavailable of ['ambient', 'ally', 'hidden', 'downed', 'range'] as const) {
+      const state = warningState(), target = state.actors[2]!;
+      target.archetypeId = unavailable === 'ambient' ? 'roost-hornbill' : 'canopy-howler';
+      target.allegiance = unavailable === 'ally' ? 'ally' : 'wild';
+      if (unavailable === 'hidden') target.visible = false;
+      if (unavailable === 'downed') target.downed = true;
+      if (unavailable === 'range') target.position.x = -100;
+      expect(commandCompanion(state, { companionId: 'vara', command: 'focus', target: { kind: 'actor', instanceId: target.id } })).toBe(false);
+      stepCompanions(state);
+      expect(state.companionState.slots.vara?.warning).toBeUndefined();
+      expect(state.worldEvents).toEqual([]);
+      expect(target.markState).toBeUndefined();
+    }
   });
 
   it('requires a real rear warning followed by facing that same live threat; replay emits once', () => {

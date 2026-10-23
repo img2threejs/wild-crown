@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-22T14:48:08.337Z",
+  "problem": "Grove ambient fireflies/pollen/petals rise and fall with the player jump",
+  "hypotheses": [
+    {
+      "mechanism": "Full actor-root position copied into uFocus; vertex shader adds uFocus.y to ambient particle height",
+      "result": "confirmed",
+      "evidence": "Native before measurement: root and focus both rise from 0 to 1.2494614512471847m; regression fails at y=0.6 before fix"
+    },
+    {
+      "mechanism": "Only camera movement creates apparent particle displacement while world height remains fixed",
+      "result": "rejected as sole cause",
+      "evidence": "Actual renderer uFocus.y changes 1:1 with jumping root before fix, independent of projection"
+    }
+  ],
+  "decision": "Anchor Grove particle focus at existing flat world ground y=0; preserve X/Z streaming and world-clock animation. No other biome, light, camera or gameplay changes.",
+  "verification": {
+    "bundle": "http://127.0.0.1:5214/assets/main-CCkPTWuT.js",
+    "before": {
+      "frames": 53,
+      "rootMax": 1.2494614512471847,
+      "focusMin": 0,
+      "focusMax": 1.2494614512471847
+    },
+    "after": {
+      "frames": 118,
+      "rootMax": 1.248962585034013,
+      "focusMin": 0,
+      "focusMax": 0,
+      "landed": true
+    },
+    "scope": "actual compiled Grove journey; trusted Space; explicit browser focus fixture only; no actor, particle, clock, camera or resource mutation"
+  },
+  "tests": {
+    "red": "0 pass / 1 fail: focused new invariant before fix",
+    "green": "16 pass / 0 fail: tests/world/grove-world.test.ts",
+    "build": "tsc -b && vite build passed; 1068 modules; main-CCkPTWuT.js; existing large-chunk warning",
+    "artifact": "artifact://22570",
+    "wallSeconds": 53.57,
+    "finalFocusedIntegration": {
+      "passed": 157,
+      "failed": 1,
+      "total": 158,
+      "files": 12,
+      "wallSeconds": 12.75,
+      "failure": "terrain mesh, mask textures, clutter and draw calls stay within Greenwake budgets timed out at 5017.99ms against its unchanged 5000ms deadline; no failed assertion reported; no pass claimed"
+    }
+  },
+  "recall": "No prior memory store available at /Users/hoainho/.config/opencode/memory",
+  "limits": "Firefly Y values derived from unchanged live shader plus measured uniforms; screenshots visually inspected. Browser focus emulation is an explicit fixture, not physical device/performance qualification."
+}

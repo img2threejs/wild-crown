@@ -195,6 +195,99 @@ describe('canopy monsters', () => {
   }
 });
 
+describe('viper skull integrity', () => {
+  it('has a continuous outward-facing crown, not an exposed underside above the jaw', async () => {
+    const { gltf } = await loadGlb(entry('actor-mire-viper').runtimeUrl);
+    gltf.scene.updateMatrixWorld(true);
+    gltf.scene.traverse(node => {
+      if (node.isSkinnedMesh) node.skeleton.update();
+      if (node.isMesh) node.material.side = THREE.DoubleSide;
+    });
+    const ray = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0));
+    for (const x of [-0.045, 0, 0.045]) for (const z of [-0.4, -0.36, -0.32, -0.28]) {
+      ray.ray.origin.set(x, 1, z);
+      const roof = ray.intersectObject(gltf.scene, true)[0];
+      assert.ok(roof && roof.point.y > 0.47 && roof.point.y < 0.58,
+        `crown is missing or collapsed at ${x},${z}: ${roof?.point.y}`);
+      assert.ok(roof.face.normal.y > 0.1, `underside exposed through crown at ${x},${z}`);
+    }
+  });
+
+  it('moves the complete skull without folding its surface in native clips or crossfades', async () => {
+    const { gltf } = await loadGlb(entry('actor-mire-viper').runtimeUrl);
+    const meshes = [];
+    gltf.scene.traverse(node => { if (node.isSkinnedMesh) meshes.push(node); });
+    gltf.scene.updateMatrixWorld(true);
+    const length = (positions, a, b) => Math.hypot(positions[a * 3] - positions[b * 3],
+      positions[a * 3 + 1] - positions[b * 3 + 1], positions[a * 3 + 2] - positions[b * 3 + 2]);
+    const surfaces = meshes.map(mesh => {
+      const joints = mesh.geometry.getAttribute('skinIndex'), weights = mesh.geometry.getAttribute('skinWeight');
+      const skullBones = new Set(mesh.skeleton.bones.flatMap((bone, index) =>
+        bone.name === sanitize('tripo::Root') || /^tripoHead_\d+$/.test(bone.name) ? [index] : []));
+      const vertices = new Set();
+      for (let vertex = 0; vertex < joints.count; vertex++) {
+        let skullWeight = 0;
+        for (let k = 0; k < 4; k++) if (skullBones.has(joints.getComponent(vertex, k))) skullWeight += weights.getComponent(vertex, k);
+        if (skullWeight >= 1 - 1e-6) vertices.add(vertex);
+      }
+      const point = new THREE.Vector3(), posed = new Float64Array(joints.count * 3);
+      const readSkull = () => {
+        mesh.skeleton.update();
+        for (const vertex of vertices) mesh.getVertexPosition(vertex, point).toArray(posed, vertex * 3);
+      };
+      readSkull();
+      const rest = posed.slice(), edges = [], seen = new Set(), index = mesh.geometry.index;
+      for (let triangle = 0; triangle < index.count; triangle += 3) {
+        for (let side = 0; side < 3; side++) {
+          const a = index.getX(triangle + side), b = index.getX(triangle + (side + 1) % 3);
+          const key = Math.min(a, b) * joints.count + Math.max(a, b), distance = length(rest, a, b);
+          if (vertices.has(a) && vertices.has(b) && !seen.has(key) && distance > 1e-4) {
+            seen.add(key);
+            edges.push([a, b, distance]);
+          }
+        }
+      }
+      return { vertices, posed, rest, edges, readSkull, maximumTravel: 0 };
+    });
+    const mixer = new THREE.AnimationMixer(gltf.scene);
+    let maximumDistortion = 0, worstPose;
+    const measure = label => {
+      gltf.scene.updateMatrixWorld(true);
+      for (const surface of surfaces) {
+        const { vertices, posed, rest, edges, readSkull } = surface;
+        readSkull();
+        for (const vertex of vertices) surface.maximumTravel = Math.max(surface.maximumTravel,
+          Math.hypot(posed[vertex * 3] - rest[vertex * 3], posed[vertex * 3 + 1] - rest[vertex * 3 + 1], posed[vertex * 3 + 2] - rest[vertex * 3 + 2]));
+        for (const [a, b, distance] of edges) {
+          const distortion = Math.abs(length(posed, a, b) / distance - 1);
+          if (distortion > maximumDistortion) { maximumDistortion = distortion; worstPose = label; }
+        }
+      }
+    };
+    for (const clip of gltf.animations) {
+      const action = mixer.clipAction(clip).setLoop(THREE.LoopOnce, 1).play();
+      const frames = Math.ceil(clip.duration * 30);
+      for (let frame = 0; frame <= frames; frame++) {
+        action.time = clip.duration * frame / frames;
+        mixer.update(0);
+        measure(`${clip.name} at ${frame}/${frames}`);
+      }
+      action.stop();
+    }
+    const idle = mixer.clipAction(gltf.animations.find(clip => clip.name === 'monster-idle')).play();
+    const attack = mixer.clipAction(gltf.animations.find(clip => clip.name === 'wild-crown:viper-venom-spit')).play();
+    idle.time = 0.8; attack.time = 1.4;
+    for (const blend of [0.25, 0.5, 0.75]) {
+      idle.setEffectiveWeight(1 - blend); attack.setEffectiveWeight(blend);
+      mixer.update(0);
+      measure(`idle/spit blend ${blend}`);
+    }
+    mixer.stopAllAction();
+    assert.ok(surfaces.every(surface => surface.maximumTravel > 0.01), 'every skull surface must move; freezing the crown is not a repair');
+    assert.ok(maximumDistortion < 0.002, `${worstPose}: skull edge distortion ${(maximumDistortion * 100).toFixed(2)}%`);
+  });
+});
+
 describe('canopy decoration triangle budgets', () => {
   for (const [id, budget] of Object.entries(TRIANGLE_BUDGET)) {
     it(`${id} stays within ${budget} triangles`, async () => {

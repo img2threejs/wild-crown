@@ -8,7 +8,6 @@ import {
 } from './MonsterAnimationProfiles';
 import type { NativeAssetInstance } from './NativeAssetLoader';
 import { vesperClipProgress } from './VesperAnimation';
-import { arenClipProgress } from './ArenAnimation';
 import { companionSkillByAction } from '../game/companions/CompanionSkills';
 
 const LOCOMOTION_RECOVERY_ACTIONS: Readonly<Record<string, true>> = {
@@ -223,8 +222,7 @@ export function driveActorAnimation(instance: NativeAssetInstance, actor: ActorS
   } else state.recoveryActionId = undefined;
   const recoveryActionId = recoveryWeight > 0 ? state.recoveryActionId : undefined;
   const loopPlaybackRate = nativeLocomotionPlaybackRate(instance, manifest, recoveryActionId ?? actor.actionId, actor.velocity, context);
-  const clipTime = instance.assetId === 'actor-vesper-hero' ? vesperClipProgress(clipActionId, normalizedTime)
-    : instance.assetId === 'actor-aren' ? arenClipProgress(clipActionId, normalizedTime) : normalizedTime;
+  const clipTime = instance.assetId === 'actor-vesper-hero' ? vesperClipProgress(clipActionId, normalizedTime) : normalizedTime;
   instance.animation.play(clipActionId, LOOPING_ACTIONS[String(actor.actionId)] ? 'idle' : actor.phase, clipTime, loopTimeSeconds, loopPlaybackRate, recoveryActionId, recoveryWeight);
   return 0;
 }

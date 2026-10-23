@@ -1,5 +1,155 @@
 {
   "schemaVersion": 1,
+  "exactMapping": {
+    "rest": "tpose",
+    "maxDegrees": 0.0258,
+    "worstJoint": "RightHandIndex3",
+    "toleranceDegrees": 0.05,
+    "hipsYawDegrees": 90,
+    "hipsScale": 0.005881737431324106,
+    "takes": {
+      "asset-source/mixamo/yara-skills/breathing-idle.fbx": {
+        "sha256": "c437b2cff73356d0d07923430a7bab861f75127c24332677f9bdfe0d2f2b74c6",
+        "bytes": 1104208,
+        "durationSeconds": 9.9333,
+        "frames": 299
+      },
+      "asset-source/mixamo/yara-skills/standing-dodge-forward.fbx": {
+        "sha256": "819714c8033bd34b9ee02ca735f4a7e3282ff8923970036b3c81ce0e0e1ba6da",
+        "bytes": 359232,
+        "durationSeconds": 1,
+        "frames": 31
+      },
+      "asset-source/mixamo/yara-skills/standing-1h-magic-attack-01.fbx": {
+        "sha256": "4be2a7e51f64d388ab1e3d7180ddd51858b6a199918b2e848d24d169eea787db",
+        "bytes": 520368,
+        "durationSeconds": 2.3,
+        "frames": 70
+      },
+      "asset-source/mixamo/yara-skills/standing-1h-magic-attack-02.fbx": {
+        "sha256": "89234ee0cdb8f90a5ca20af4556dddb0e750c3ece55dd7c5104494648f8250e4",
+        "bytes": 511504,
+        "durationSeconds": 2.2,
+        "frames": 67
+      },
+      "asset-source/mixamo/yara-skills/standing-1h-magic-attack-03.fbx": {
+        "sha256": "d557e022434d649b3394bbee3c03bb85c0f915d4de9d864a8c078801dac377e3",
+        "bytes": 517872,
+        "durationSeconds": 2.3,
+        "frames": 70
+      },
+      "asset-source/mixamo/yara-skills/standing-melee-attack-downward.fbx": {
+        "sha256": "604563cd4de2e281f37ecaab6432dc7eef85cbec40291a06e4651e20ebf08ae4",
+        "bytes": 482352,
+        "durationSeconds": 2.2667,
+        "frames": 69
+      },
+      "asset-source/mixamo/yara-skills/great-sword-idle.fbx": {
+        "sha256": "f8b0ca03b959f689f57325a85074a21ded99b53d35bf73cb74fdeda4e7e60711",
+        "bytes": 424032,
+        "durationSeconds": 2,
+        "frames": 61
+      },
+      "asset-source/mixamo/yara-skills/great-sword-jump-attack.fbx": {
+        "sha256": "5a6e84bf7f22886f15c04ff327656b86ae9fda082fdb5b6346616d9216325625",
+        "bytes": 513760,
+        "durationSeconds": 2.1667,
+        "frames": 66
+      },
+      "asset-source/mixamo/yara-skills/standing-idle-ready-to-cast.fbx": {
+        "sha256": "2c3a52f827bb0bbda97230eb3719b90c484370878f17075bfa6d379385979602",
+        "bytes": 473712,
+        "durationSeconds": 1.8667,
+        "frames": 57
+      },
+      "asset-source/mixamo/yara-skills/frisbee-throw.fbx": {
+        "sha256": "ff2cba6b6773724a46f86aa04b61a260275d18749b2e0056c72e3451453e98b2",
+        "bytes": 636240,
+        "durationSeconds": 3.3,
+        "frames": 100
+      },
+      "asset-source/mixamo/yara-skills/standing-melee-attack-360-high.fbx": {
+        "sha256": "6bccc48d4391e0b36305db1640269475b71cbfe2f26e97600b29d5f3087d569c",
+        "bytes": 571024,
+        "durationSeconds": 3.1667,
+        "frames": 96
+      },
+      "asset-source/mixamo/yara-skills/casting-spell.fbx": {
+        "sha256": "09259b61f2583b44cbbcc38ac04119b36ae5f530f7ad37fac7d6ba46b8ccd8b3",
+        "bytes": 945472,
+        "durationSeconds": 7.7,
+        "frames": 232
+      },
+      "asset-source/mixamo/yara-skills/magic-heal.fbx": {
+        "sha256": "7ae65acb948a9b6b00fd55b6236ed564a6a8c021441b3b01b353ff3c8f27876f",
+        "bytes": 521232,
+        "durationSeconds": 2.6667,
+        "frames": 81
+      },
+      "asset-source/mixamo/yara-skills/great-sword-casting.fbx": {
+        "sha256": "90ab44b335a3eb96a61124a7383a8877e4d66fc7ee12945098c82eaf983e5de7",
+        "bytes": 590608,
+        "durationSeconds": 4.8,
+        "frames": 145
+      }
+    },
+    "exactnessToleranceDegrees": 0.1
+  },
+  "staffProfiles": {
+    "file": "src/rendering/heartroot-staff-profiles.json",
+    "blendSeconds": 0.12,
+    "floorRigUnits": 0.000144,
+    "staffRadiusMetres": 0.012,
+    "bodyCapsules": [
+      [
+        "Hips",
+        "Spine",
+        0.11
+      ],
+      [
+        "Spine",
+        "Spine1",
+        0.11
+      ],
+      [
+        "Spine1",
+        "Spine2",
+        0.12
+      ],
+      [
+        "Spine2",
+        "Neck",
+        0.11
+      ],
+      [
+        "Neck",
+        "Head",
+        0.08
+      ],
+      [
+        "LeftUpLeg",
+        "LeftLeg",
+        0.085
+      ],
+      [
+        "RightUpLeg",
+        "RightLeg",
+        0.085
+      ],
+      [
+        "LeftLeg",
+        "LeftFoot",
+        0.06
+      ],
+      [
+        "RightLeg",
+        "RightFoot",
+        0.06
+      ]
+    ],
+    "handSpanMetres": 0.2,
+    "penetrationEpsilonMetres": 0.001
+  },
   "grip": {
     "staffDiagonalDegrees": 0,
     "staffToMiddleFingerDegrees": 80.2818820325746,
@@ -34,6 +184,16 @@
       0.281161,
       -0.268186,
       -0.921426
+    ],
+    "knucklesHand": [
+      0.992274,
+      -0.095953,
+      0.078643
+    ],
+    "fingerDirectionHand": [
+      0.106412,
+      0.984146,
+      -0.14189
     ]
   },
   "deformationCeiling": {
@@ -49,19 +209,49 @@
   },
   "clips": {
     "aren-idle": {
-      "limits": "JOINT_LIMITS",
-      "peakSwing": 81.6,
-      "peakTwist": 28.2,
-      "corrections": {},
-      "armClearance": {
-        "frames": 121,
-        "peakDegrees": 18.2
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/breathing-idle.fbx",
+        "sha256": "c437b2cff73356d0d07923430a7bab861f75127c24332677f9bdfe0d2f2b74c6"
+      },
+      "hold": {
+        "joints": [
+          "RightArm",
+          "RightForeArm",
+          "RightHand"
+        ],
+        "staffTiltMaxDegrees": 16.7
+      },
+      "exactness": {
+        "maxDegrees": 0.03466,
+        "keys": 299,
+        "toleranceDegrees": 0.1
+      },
+      "loopSeam": {
+        "maxDegrees": 0.0006,
+        "hipsVerticalMillimetres": 0,
+        "blended": false
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0231
+      },
+      "staffClearance": {
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 299,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.44607,
-        "p999": 1.02412,
-        "max": 3.85543,
-        "worstBone": "Neck"
+        "p99": 0.32136,
+        "p999": 1.04297,
+        "max": 5.26349,
+        "worstBone": "RightArm"
       },
       "before": {
         "peakSwing": 33.7,
@@ -172,33 +362,36 @@
       }
     },
     "aren-forward-left-dive-roll": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 95.9,
-      "peakTwist": 65,
-      "corrections": {
-        "mixamorig:Spine1": 0,
-        "mixamorig:LeftShoulder": 0.17,
-        "mixamorig:RightShoulder": 0.64,
-        "mixamorig:LeftHand": 1.79,
-        "mixamorig:RightHand": 0.82
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-dodge-forward.fbx",
+        "sha256": "819714c8033bd34b9ee02ca735f4a7e3282ff8923970036b3c81ce0e0e1ba6da"
       },
-      "armClearance": {
-        "frames": 22,
-        "peakDegrees": 43.1
+      "exactness": {
+        "maxDegrees": 0.03256,
+        "keys": 22,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1735
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.612,
-        "lowestAfterMetres": 0.676,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 1,
-        "largestTurnDegrees": 20
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 22,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.47248,
-        "p999": 1.07536,
-        "max": 3.18126,
-        "worstBone": "Hips"
+        "p99": 0.64224,
+        "p999": 1.34174,
+        "max": 3.15424,
+        "worstBone": "LeftUpLeg"
       },
       "before": {
         "peakSwing": 134.1,
@@ -322,8 +515,8 @@
       },
       "lie": {
         "ticks": 90,
-        "pelvisMetresAtTick0": 0.931,
-        "leanDegreesAtTick0": 9.1,
+        "pelvisMetresAtTick0": 0.94,
+        "leanDegreesAtTick0": 4,
         "pelvisMetresAtTick30": 0.185,
         "lyingFacing": 1,
         "floorLowestVertexCm": {
@@ -365,8 +558,8 @@
         }
       },
       "deformation": {
-        "p99": 0.61493,
-        "p999": 1.43556,
+        "p99": 0.61396,
+        "p999": 1.43576,
         "max": 3.43461,
         "worstBone": "RightHandRing2"
       },
@@ -399,8 +592,8 @@
       },
       "lie": {
         "ticks": 90,
-        "pelvisMetresAtTick0": 0.936,
-        "leanDegreesAtTick0": 9.1,
+        "pelvisMetresAtTick0": 0.944,
+        "leanDegreesAtTick0": 4,
         "pelvisMetresAtTick30": 0.15,
         "lyingFacing": -0.99,
         "floorLowestVertexCm": {
@@ -442,10 +635,10 @@
         }
       },
       "deformation": {
-        "p99": 0.66128,
-        "p999": 1.76561,
-        "max": 3.82239,
-        "worstBone": "RightArm"
+        "p99": 0.66537,
+        "p999": 1.77062,
+        "max": 4.37171,
+        "worstBone": "Spine2"
       },
       "before": {
         "peakSwing": 107.4,
@@ -518,10 +711,10 @@
         },
         "idleEnd": {
           "rotationDegrees": 0,
-          "hipsMillimetres": 0.0136
+          "hipsMillimetres": 0.0018
         },
         "endHipsXZOffsetFromStandingMillimetres": 0,
-        "maxJointStepLastQuarterDegreesPerTick": 10.897,
+        "maxJointStepLastQuarterDegreesPerTick": 9.362,
         "sourceTimeScale": [
           {
             "take": "getting-up-knocked",
@@ -532,8 +725,8 @@
         ]
       },
       "deformation": {
-        "p99": 0.68185,
-        "p999": 1.47423,
+        "p99": 0.6845,
+        "p999": 1.47912,
         "max": 4.1666,
         "worstBone": "Neck"
       },
@@ -601,10 +794,10 @@
         },
         "idleEnd": {
           "rotationDegrees": 0,
-          "hipsMillimetres": 4.3045
+          "hipsMillimetres": 3.5908
         },
         "endHipsXZOffsetFromStandingMillimetres": 0,
-        "maxJointStepLastQuarterDegreesPerTick": 9.918,
+        "maxJointStepLastQuarterDegreesPerTick": 10.675,
         "sourceTimeScale": [
           {
             "take": "getting-up-stomach",
@@ -621,8 +814,8 @@
         ]
       },
       "deformation": {
-        "p99": 0.54205,
-        "p999": 1.28847,
+        "p99": 0.53933,
+        "p999": 1.28332,
         "max": 4.4035,
         "worstBone": "Spine2"
       },
@@ -639,34 +832,36 @@
       }
     },
     "yara-thornshot-1": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 102.5,
-      "peakTwist": 48,
-      "corrections": {
-        "mixamorig:Head": 0.48,
-        "mixamorig:RightShoulder": 0,
-        "mixamorig:LeftHand": 1.75,
-        "mixamorig:RightHand": 0.12,
-        "mixamorig:LeftUpLeg": 0.29,
-        "mixamorig:LeftFoot": 0.57
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-01.fbx",
+        "sha256": "4be2a7e51f64d388ab1e3d7180ddd51858b6a199918b2e848d24d169eea787db"
       },
-      "armClearance": {
-        "frames": 14,
-        "peakDegrees": 31.4
+      "exactness": {
+        "maxDegrees": 0.0158,
+        "keys": 14,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0462
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.357,
-        "lowestAfterMetres": 0.268,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 3,
-        "largestTurnDegrees": 28
+        "profile": {
+          "turnDegrees": 30,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 14,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.6547,
-        "p999": 1.41729,
-        "max": 3.75904,
-        "worstBone": "Hips"
+        "p99": 0.67384,
+        "p999": 1.85299,
+        "max": 3.40603,
+        "worstBone": "RightHandRing1"
       },
       "before": {
         "peakSwing": 112.1,
@@ -681,32 +876,36 @@
       }
     },
     "yara-thornshot-2": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 88.8,
-      "peakTwist": 48.7,
-      "corrections": {
-        "mixamorig:Head": 1.07,
-        "mixamorig:RightShoulder": 0.44,
-        "mixamorig:LeftHand": 1.79,
-        "mixamorig:LeftFoot": 0.6
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-02.fbx",
+        "sha256": "89234ee0cdb8f90a5ca20af4556dddb0e750c3ece55dd7c5104494648f8250e4"
       },
-      "armClearance": {
-        "frames": 15,
-        "peakDegrees": 31
+      "exactness": {
+        "maxDegrees": 0.01771,
+        "keys": 15,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.165
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.158,
-        "lowestAfterMetres": 0.158,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 4,
-        "largestTurnDegrees": 32
+        "profile": {
+          "turnDegrees": -45,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 15,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.65272,
-        "p999": 1.43339,
-        "max": 4.10193,
-        "worstBone": "Hips"
+        "p99": 0.6484,
+        "p999": 1.64848,
+        "max": 3.22096,
+        "worstBone": "LeftUpLeg"
       },
       "before": {
         "peakSwing": 84.2,
@@ -729,32 +928,36 @@
       }
     },
     "yara-thornshot-3": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 109.8,
-      "peakTwist": 48.8,
-      "corrections": {
-        "mixamorig:Head": 1.19,
-        "mixamorig:RightShoulder": 0.06,
-        "mixamorig:LeftHand": 1.79,
-        "mixamorig:LeftFoot": 0.56
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-1h-magic-attack-03.fbx",
+        "sha256": "d557e022434d649b3394bbee3c03bb85c0f915d4de9d864a8c078801dac377e3"
       },
-      "armClearance": {
-        "frames": 18,
-        "peakDegrees": 29.8
+      "exactness": {
+        "maxDegrees": 0.01081,
+        "keys": 18,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.2356
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.323,
-        "lowestAfterMetres": 0.155,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 8,
-        "largestTurnDegrees": 24
+        "profile": {
+          "turnDegrees": -15,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 18,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.59999,
-        "p999": 1.37772,
-        "max": 3.18745,
-        "worstBone": "LeftUpLeg"
+        "p99": 0.70349,
+        "p999": 1.54046,
+        "max": 3.40411,
+        "worstBone": "Hips"
       },
       "before": {
         "peakSwing": 81.7,
@@ -773,35 +976,36 @@
       }
     },
     "yara-root-spike": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 108.8,
-      "peakTwist": 64.9,
-      "staffTiltMax": 83.1,
-      "staffTiltMean": 20.9,
-      "corrections": {
-        "mixamorig:Spine1": 0.09,
-        "mixamorig:LeftShoulder": 0.72,
-        "mixamorig:RightShoulder": 0.72,
-        "mixamorig:LeftHand": 15.35,
-        "mixamorig:LeftToeBase": 0.21
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-melee-attack-downward.fbx",
+        "sha256": "604563cd4de2e281f37ecaab6432dc7eef85cbec40291a06e4651e20ebf08ae4"
       },
-      "armClearance": {
-        "frames": 33,
-        "peakDegrees": 43.2
+      "exactness": {
+        "maxDegrees": 0.00435,
+        "keys": 33,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0556
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.179,
-        "lowestAfterMetres": 0.179,
-        "deepestIntoLimbBeforeMetres": 0.066,
-        "deepestIntoLimbAfterMetres": 0.004,
-        "framesTurned": 6,
-        "largestTurnDegrees": 12
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 33,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.48235,
-        "p999": 1.16299,
-        "max": 3.49881,
-        "worstBone": "Neck"
+        "p99": 0.56875,
+        "p999": 1.3692,
+        "max": 3.82997,
+        "worstBone": "RightArm"
       },
       "before": {
         "peakSwing": 92.7,
@@ -821,31 +1025,40 @@
       }
     },
     "yara-root-charge": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 80.2,
-      "peakTwist": 50,
-      "staffTiltMax": 2,
-      "staffTiltMean": 2,
-      "corrections": {
-        "mixamorig:LeftHand": 13.03,
-        "mixamorig:LeftFoot": 0.58
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/great-sword-idle.fbx",
+        "sha256": "f8b0ca03b959f689f57325a85074a21ded99b53d35bf73cb74fdeda4e7e60711"
       },
-      "armClearance": {
-        "frames": 46,
-        "peakDegrees": 30.8
+      "exactness": {
+        "maxDegrees": 0.03603,
+        "keys": 61,
+        "toleranceDegrees": 0.1
+      },
+      "loopSeam": {
+        "maxDegrees": 0.0199,
+        "hipsVerticalMillimetres": 0.002,
+        "blended": false
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0029
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.545,
-        "lowestAfterMetres": 0.545,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 0,
-        "largestTurnDegrees": 0
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 61,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.4535,
-        "p999": 1.01634,
-        "max": 2.50946,
+        "p99": 0.59803,
+        "p999": 1.25791,
+        "max": 2.79966,
         "worstBone": "Spine2"
       },
       "before": {
@@ -861,35 +1074,36 @@
       }
     },
     "yara-root-eruption": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 92.3,
-      "peakTwist": 65.3,
-      "staffTiltMax": 45.4,
-      "staffTiltMean": 8.9,
-      "corrections": {
-        "mixamorig:Spine1": 0.1,
-        "mixamorig:LeftShoulder": 0.72,
-        "mixamorig:RightShoulder": 0.72,
-        "mixamorig:LeftHand": 15.65,
-        "mixamorig:LeftToeBase": 0.2
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/great-sword-jump-attack.fbx",
+        "sha256": "5a6e84bf7f22886f15c04ff327656b86ae9fda082fdb5b6346616d9216325625"
       },
-      "armClearance": {
-        "frames": 39,
-        "peakDegrees": 34.5
+      "exactness": {
+        "maxDegrees": 0.00003,
+        "keys": 39,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.2838
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.179,
-        "lowestAfterMetres": 0.179,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 2,
-        "largestTurnDegrees": 4
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 39,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.47324,
-        "p999": 1.1439,
-        "max": 3.68993,
-        "worstBone": "RightArm"
+        "p99": 0.67849,
+        "p999": 1.51778,
+        "max": 3.97274,
+        "worstBone": "Neck"
       },
       "before": {
         "peakSwing": 114.8,
@@ -910,32 +1124,41 @@
       }
     },
     "yara-seed-charge": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 88.9,
-      "peakTwist": 56.1,
-      "staffTiltMax": 84,
-      "staffTiltMean": 84,
-      "corrections": {
-        "mixamorig:LeftHand": 32.05,
-        "mixamorig:RightHand": 0.66
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-idle-ready-to-cast.fbx",
+        "sha256": "2c3a52f827bb0bbda97230eb3719b90c484370878f17075bfa6d379385979602"
       },
-      "armClearance": {
-        "frames": 46,
-        "peakDegrees": 24.5
+      "exactness": {
+        "maxDegrees": 0.00002,
+        "keys": 57,
+        "toleranceDegrees": 0.1
+      },
+      "loopSeam": {
+        "maxDegrees": 0,
+        "hipsVerticalMillimetres": 0,
+        "blended": false
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0478
       },
       "staffClearance": {
-        "lowestBeforeMetres": 1.223,
-        "lowestAfterMetres": 1.223,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 0,
-        "largestTurnDegrees": 0
+        "profile": {
+          "turnDegrees": 30,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 57,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.49016,
-        "p999": 1.14333,
-        "max": 2.88015,
-        "worstBone": "LeftUpLeg"
+        "p99": 0.73053,
+        "p999": 1.74032,
+        "max": 2.81208,
+        "worstBone": "Hips"
       },
       "before": {
         "peakSwing": 105.3,
@@ -953,33 +1176,36 @@
       }
     },
     "yara-sap-lance": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 116.1,
-      "peakTwist": 61.4,
-      "staffTiltMax": 86,
-      "staffTiltMean": 84.7,
-      "corrections": {
-        "mixamorig:LeftHand": 32.11,
-        "mixamorig:RightHand": 14.9,
-        "mixamorig:LeftFoot": 0.13
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/frisbee-throw.fbx",
+        "sha256": "ff2cba6b6773724a46f86aa04b61a260275d18749b2e0056c72e3451453e98b2"
       },
-      "armClearance": {
-        "frames": 16,
-        "peakDegrees": 25.5
+      "exactness": {
+        "maxDegrees": 0.0108,
+        "keys": 16,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0686
       },
       "staffClearance": {
-        "lowestBeforeMetres": 1.159,
-        "lowestAfterMetres": 1.159,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 0,
-        "largestTurnDegrees": 0
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 16,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.52354,
-        "p999": 1.22114,
-        "max": 2.84557,
-        "worstBone": "LeftUpLeg"
+        "p99": 0.59912,
+        "p999": 1.55953,
+        "max": 2.96202,
+        "worstBone": "Spine2"
       },
       "before": {
         "peakSwing": 154,
@@ -997,31 +1223,36 @@
       }
     },
     "yara-seed-storm": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 88.9,
-      "peakTwist": 78,
-      "corrections": {
-        "mixamorig:LeftShoulder": 0.1,
-        "mixamorig:RightShoulder": 0.72,
-        "mixamorig:RightArm": 1.8
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/standing-melee-attack-360-high.fbx",
+        "sha256": "6bccc48d4391e0b36305db1640269475b71cbfe2f26e97600b29d5f3087d569c"
       },
-      "armClearance": {
-        "frames": 31,
-        "peakDegrees": 15.5
+      "exactness": {
+        "maxDegrees": 0.01493,
+        "keys": 31,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.1265
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.72,
-        "lowestAfterMetres": 0.72,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 26,
-        "largestTurnDegrees": 32
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 31,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.44621,
-        "p999": 0.98772,
-        "max": 4.20228,
-        "worstBone": "Neck"
+        "p99": 0.7159,
+        "p999": 1.78088,
+        "max": 3.67808,
+        "worstBone": "Spine2"
       },
       "before": {
         "peakSwing": 109.1,
@@ -1042,32 +1273,36 @@
       }
     },
     "yara-binding-vines": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 119.3,
-      "peakTwist": 43.9,
-      "staffTiltMax": 51.3,
-      "staffTiltMean": 13.8,
-      "corrections": {
-        "mixamorig:RightShoulder": 0,
-        "mixamorig:LeftHand": 1.79
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/casting-spell.fbx",
+        "sha256": "09259b61f2583b44cbbcc38ac04119b36ae5f530f7ad37fac7d6ba46b8ccd8b3"
       },
-      "armClearance": {
-        "frames": 18,
-        "peakDegrees": 22.8
+      "exactness": {
+        "maxDegrees": 0.02026,
+        "keys": 28,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0396
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.335,
-        "lowestAfterMetres": 0.335,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 0,
-        "largestTurnDegrees": 0
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.42,
+          "source": "clip"
+        },
+        "frames": 28,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.42828,
-        "p999": 1.05687,
-        "max": 2.91774,
-        "worstBone": "RightArm"
+        "p99": 0.77755,
+        "p999": 1.58801,
+        "max": 3.15697,
+        "worstBone": "LeftUpLeg"
       },
       "before": {
         "peakSwing": 114.4,
@@ -1084,31 +1319,36 @@
       }
     },
     "yara-cleanse": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 121.6,
-      "peakTwist": 43.2,
-      "corrections": {
-        "mixamorig:LeftHand": 1.79,
-        "mixamorig:LeftFoot": 0.39,
-        "mixamorig:RightFoot": 0.5
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/magic-heal.fbx",
+        "sha256": "7ae65acb948a9b6b00fd55b6236ed564a6a8c021441b3b01b353ff3c8f27876f"
       },
-      "armClearance": {
-        "frames": 55,
-        "peakDegrees": 13.4
+      "exactness": {
+        "maxDegrees": 0.01499,
+        "keys": 55,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.0943
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.231,
-        "lowestAfterMetres": 0.231,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 0,
-        "largestTurnDegrees": 0
+        "profile": {
+          "turnDegrees": 30,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 55,
+        "framesIntoBody": 2,
+        "framesIntoFloor": 0,
+        "deepestCm": 2.3
       },
       "deformation": {
-        "p99": 0.4577,
-        "p999": 1.18403,
-        "max": 3.02517,
-        "worstBone": "RightHandThumb1"
+        "p99": 0.61903,
+        "p999": 1.44152,
+        "max": 2.99934,
+        "worstBone": "Spine2"
       },
       "before": {
         "peakSwing": 111.3,
@@ -1129,33 +1369,36 @@
       }
     },
     "yara-heartroot-bloom": {
-      "limits": "COMBAT_LIMITS",
-      "peakSwing": 109.1,
-      "peakTwist": 61.5,
-      "corrections": {
-        "mixamorig:LeftShoulder": 0.72,
-        "mixamorig:RightShoulder": 0.71,
-        "mixamorig:LeftHand": 1.79,
-        "mixamorig:RightHand": 0.12,
-        "mixamorig:LeftFoot": 0.6
+      "limits": "EXACT",
+      "source": {
+        "file": "asset-source/mixamo/yara-skills/great-sword-casting.fbx",
+        "sha256": "90ab44b335a3eb96a61124a7383a8877e4d66fc7ee12945098c82eaf983e5de7"
       },
-      "armClearance": {
-        "frames": 49,
-        "peakDegrees": 23.7
+      "exactness": {
+        "maxDegrees": 0.02059,
+        "keys": 79,
+        "toleranceDegrees": 0.1
+      },
+      "hipsTravel": {
+        "horizontalMetres": 0,
+        "verticalMetres": 0.3833
       },
       "staffClearance": {
-        "lowestBeforeMetres": 0.229,
-        "lowestAfterMetres": 0.264,
-        "deepestIntoLimbBeforeMetres": 0,
-        "deepestIntoLimbAfterMetres": 0,
-        "framesTurned": 75,
-        "largestTurnDegrees": 56
+        "profile": {
+          "turnDegrees": 0,
+          "gripFraction": 0.12,
+          "source": "clip"
+        },
+        "frames": 79,
+        "framesIntoBody": 0,
+        "framesIntoFloor": 0,
+        "deepestCm": 0
       },
       "deformation": {
-        "p99": 0.47463,
-        "p999": 1.09519,
-        "max": 3.89618,
-        "worstBone": "Neck"
+        "p99": 0.7924,
+        "p999": 1.62503,
+        "max": 4.45448,
+        "worstBone": "RightShoulder"
       },
       "before": {
         "peakSwing": 111.5,
@@ -1178,26 +1421,26 @@
     },
     "aren-air-step": {
       "limits": "COMBAT_LIMITS",
-      "peakSwing": 124,
+      "peakSwing": 123.4,
       "peakTwist": 78.3,
-      "staffTiltMax": 124.3,
-      "staffTiltMean": 47.1,
+      "staffTiltMax": 124.4,
+      "staffTiltMean": 46.4,
       "corrections": {
         "mixamorig:Spine": 0,
         "mixamorig:LeftShoulder": 0.71,
         "mixamorig:LeftArm": 2.28,
-        "mixamorig:RightArm": 0.75,
+        "mixamorig:RightArm": 0.71,
         "mixamorig:LeftForeArm": 1.4,
-        "mixamorig:RightForeArm": 0.34,
+        "mixamorig:RightForeArm": 0.44,
         "mixamorig:LeftHand": 0.83,
-        "mixamorig:RightHand": 0.01,
+        "mixamorig:RightHand": 0,
         "mixamorig:LeftFoot": 0,
         "mixamorig:RightFoot": 1.05,
         "mixamorig:LeftToeBase": 0.95,
         "mixamorig:RightToeBase": 0.95
       },
       "armClearance": {
-        "frames": 11,
+        "frames": 13,
         "peakDegrees": 30.8
       },
       "hipsTravel": {
@@ -1205,8 +1448,8 @@
         "verticalMetres": 0.136
       },
       "deformation": {
-        "p99": 0.50694,
-        "p999": 1.15916,
+        "p99": 0.50223,
+        "p999": 1.1465,
         "max": 3.68054,
         "worstBone": "Neck"
       },

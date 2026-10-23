@@ -1,4 +1,4 @@
-import type { GameViewModel, SessionConfig } from '../game/contracts.js';
+import type { AssetPolicy, GameViewModel, SessionConfig } from '../game/contracts.js';
 import { validateSessionConfig } from '../game/contracts.js';
 import { ASSET_PLAYTESTS, GREENWAKE_PLAYTEST, assetPlaytestFromSearch, type AssetPlaytest } from './AssetPlaytests.js';
 
@@ -12,6 +12,12 @@ export const CANDIDATE_CHAPTERS_SESSION: SessionConfig = Object.freeze({ kind: '
 
 export function trialsSession(mapId: string): SessionConfig { return { kind: 'trials', assets: 'candidate', mapId }; }
 
+/** Player practice inherits the campaign's asset policy and has no campaign save repository. */
+export function trainingSession(mapId: string, assets: AssetPolicy): Extract<SessionConfig, { kind: 'training' }> {
+    if (!ASSET_PLAYTESTS.some(map => map.id === mapId)) throw new Error('Unknown Training Grounds map.');
+    return { kind: 'training', assets, mapId };
+}
+
 /** Page loads use the playable campaign in every build. Only DEV accepts the isolated Trials shortcut. */
 export function initialSession(search: string, isDev: boolean): SessionConfig {
     const trial = isDev ? assetPlaytestFromSearch(search) : null;
@@ -19,21 +25,26 @@ export function initialSession(search: string, isDev: boolean): SessionConfig {
     return CANDIDATE_CHAPTERS_SESSION;
 }
 
-/** The Trials map a Trials session names; falls back to the first map for an unknown id. */
+/** DEV fixtures and player practice reuse the same authored combat stages, never their progression or asset policy. */
 export function trialMapOf(session: SessionConfig): AssetPlaytest | null {
-    if (session.kind !== 'trials') return null;
-    return ASSET_PLAYTESTS.find(map => map.id === session.mapId) ?? GREENWAKE_PLAYTEST;
+    if (session.kind === 'chapters') return null;
+    const map = ASSET_PLAYTESTS.find(map => map.id === session.mapId);
+    if (!map && session.kind === 'training') throw new Error('Unknown Training Grounds map.');
+    return map ?? GREENWAKE_PLAYTEST;
 }
 
 export function sessionKindOf(session: SessionConfig): NonNullable<GameViewModel['session']>['kind'] {
-    if (session.kind === 'trials') return 'trials';
+    if (session.kind !== 'chapters') return session.kind;
     return session.saveScope === 'production' ? 'production' : 'chapters';
 }
 
-/** Banner text for the session; null in production. Trials keep their per-map banner. */
-export function bannerOf(session: SessionConfig): string | null {
+/** Candidate evidence notices cannot be hidden. Verified-session presentation is independently configurable. */
+export function bannerOf(session: SessionConfig, showVerifiedBanner = false): string | null {
     if (session.kind === 'trials') return trialMapOf(session)!.banner;
-    return session.assets === 'candidate' ? CANDIDATE_CHAPTERS_BANNER : null;
+    if (session.assets === 'candidate') return session.kind === 'training'
+        ? 'TRAINING GROUNDS · GENERATED ASSETS · NOT RELEASE-VERIFIED'
+        : CANDIDATE_CHAPTERS_BANNER;
+    return showVerifiedBanner ? `${session.kind === 'training' ? 'TRAINING GROUNDS' : 'CAMPAIGN'} · VERIFIED ASSETS` : null;
 }
 
 /** True when the session reads candidate assets and may therefore relax renderer clip/geometry strictness. */

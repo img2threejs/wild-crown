@@ -31,12 +31,23 @@ export function destinationText(destination: NonNullable<ObjectiveHud['destinati
     return destination.distanceMeters === null ? '' : 'Follow the trail · ' + Math.ceil(destination.distanceMeters) + ' m';
 }
 
-/** Chapter objective HUD: quest, step position, the tracked objective, optional counter, interaction hint and destination arrow. */
-export function objectiveHudMarkup(hud: ObjectiveHud, interactKey: string): string {
+/**
+ * Chapter objective HUD: quest, step position, the tracked objective, optional counter, interaction hint and destination arrow.
+ * The panel is one of the three collapsible HUD groups: collapsed it keeps the quest and the current objective as the useful
+ * summary, expanded it adds the step position, the interaction hint, the bearing to the objective and the chapter label.
+ */
+export function objectiveHudMarkup(hud: ObjectiveHud, interactKey: string, options: { expanded?: boolean; toggle?: string } = {}): string {
+    const expanded = options.expanded !== false;
     const destination = hud.destination;
     const arrow = destination && destination.bearingDegrees !== null
         ? `<svg viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${destination.bearingDegrees}deg)"><path d="M12 2 21 21 12 16 3 21Z" fill="currentColor"/></svg>` : '';
-    return `<aside class="wc-panel wc-objective wc-objective--chapter" aria-label="Current objective"><p class="wc-objective__quest"><strong>${esc(hud.questTitle)}</strong>${hud.step ? `<span>Step ${hud.step.index} of ${hud.step.total}</span>` : ''}</p><p class="wc-objective__title">${esc(hud.objectiveTitle)}${hud.counter ? ` <span class="wc-objective__counter">${esc(hud.counter)}</span>` : ''}</p>${hud.interaction ? `<p class="wc-objective__hint">${interactKey ? `<kbd>${esc(interactKey)}</kbd> ` : ''}${esc(hud.interaction)}</p>` : ''}${destination ? `<div class="wc-objective__dest" aria-label="Objective destination">${arrow}<p data-dest-text>${esc(destinationText(destination))}</p></div>` : ''}<p class="wc-objective__chapter">${esc(hud.chapterLabel)}</p></aside>`;
+    // Collapsed, the group keeps the quest and the tracked objective — the summary the player still needs.
+    const summary = `<p class="wc-objective__title">${esc(hud.objectiveTitle)}${hud.counter ? ` <span class="wc-objective__counter">${esc(hud.counter)}</span>` : ''}</p>`;
+    const detail = `${hud.guidance ? `<p class="wc-objective__guidance">${esc(hud.guidance)}</p>` : ''}${hud.interaction ? `<p class="wc-objective__hint">${interactKey ? `<kbd>${esc(interactKey)}</kbd> ` : ''}${esc(hud.interaction)}</p>` : ''}${destination ? `<div class="wc-objective__dest" aria-label="Objective destination">${arrow}<p data-dest-text>${esc(destinationText(destination))}</p></div>` : ''}<p class="wc-objective__chapter">${esc(hud.chapterLabel)}</p>`;
+    return `<aside class="wc-panel wc-objective wc-objective--chapter wc-hud__group" data-hud-group="objective" data-expanded="${expanded}" data-guidance-status="${hud.status ?? 'approach'}" aria-label="Current objective">
+      <div class="wc-objective__head"><p class="wc-objective__quest"><strong>${esc(hud.questTitle)}</strong>${hud.step ? `<span>Step ${hud.step.index} of ${hud.step.total}</span>` : ''}</p>${options.toggle ?? ''}</div>
+      ${summary}<div class="wc-hud__body" id="wc-hud-objective-body"${expanded ? '' : ' hidden'}>${detail}</div>
+    </aside>`;
 }
 
 /** Writes the continuous destination values in place (the HUD is not rebuilt per frame to rotate an arrow). */
@@ -84,7 +95,7 @@ export function partyPanelMarkup(entry: PartyPanel): string {
 /** Individual Bond and Dominion levels (0–100) of one companion; faction covenants are a separate section. */
 export function relationshipMeterMarkup(progress: NonNullable<GameViewModel['companionProgress']>[CompanionId] | undefined): string {
     if (!progress) return '';
-    const story = progress.recruited ? 'Story alliance established.' : 'Available now. Story choices build Bond independently.';
+    const story = progress.recruited ? 'Story alliance established.' : 'This companion has not joined your journey yet.';
     const meter = (label: string, value: number, kind: string) => `<div class="wc-meter wc-meter--${kind}" aria-label="${label} ${value} of 100"><span>${label}</span><span class="wc-meter__track" aria-hidden="true"><i class="wc-meter__fill" style="width:${Math.max(0, Math.min(100, value))}%"></i></span><span>${value}</span></div>`;
     return `<div class="wc-relationship" data-recruited="${progress.recruited}"><p class="wc-meta">${story}</p>${meter('Bond', progress.bond, 'bond')}${meter('Dominion', progress.dominion, 'dominion')}</div>`;
 }

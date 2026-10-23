@@ -1,0 +1,18 @@
+{
+  "source": "asset-source/generated/actor-sable-runtime-01/actor-sable-combat.glb",
+  "sourceSha256": "0a85fc4c9a2ee4664818ed93f80cf26527c52d33354ac9a1d83a9057d36afd3b",
+  "joint": "repair::Jaw",
+  "parent": "tripo::Head_2",
+  "pivot": [
+    -0.002,
+    0.505,
+    -0.325
+  ],
+  "affectedVertices": 1126,
+  "fullyAssignedVertices": 536,
+  "maximumDiscardedInfluence": 0.14004068639388856,
+  "maximumBindPositionError": 1.1972678658565847e-7,
+  "preserved": "Positions, normals, UVs, indices, textures, materials, existing joints and clips. Only lower-muzzle skin weights and the added jaw joint/inverse bind matrix differ.",
+  "output": "asset-source/generated/actor-sable-runtime-01/actor-sable-companion-rig.glb",
+  "sha256": "000d9729b6fba6718ffc87e45d704d7787f789f60b83c3c26486a49c9afede20"
+}

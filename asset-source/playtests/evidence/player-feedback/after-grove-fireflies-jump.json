@@ -1,0 +1,1329 @@
+{
+  "summary": {
+    "bundle": "http://127.0.0.1:5214/assets/main-CCkPTWuT.js",
+    "before": {
+      "frames": 53,
+      "rootMax": 1.2494614512471847,
+      "focusMin": 0,
+      "focusMax": 1.2494614512471847
+    },
+    "after": {
+      "frames": 118,
+      "rootMax": 1.248962585034013,
+      "focusMin": 0,
+      "focusMax": 0,
+      "landed": true
+    },
+    "scope": "actual compiled Grove journey; trusted Space; explicit browser focus fixture only; no actor, particle, clock, camera or resource mutation"
+  },
+  "region": "the-grove",
+  "seed": {
+    "x": 0.09572331607341766,
+    "y": 0.5636094212532043,
+    "z": 0.922934889793396,
+    "w": 0.17555806040763855
+  },
+  "frames": [
+    {
+      "time": 6.95343333333333,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.803759595674868
+    },
+    {
+      "time": 6.9801333333333355,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.812597810768549
+    },
+    {
+      "time": 7.0067333333333375,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8214906563466122
+    },
+    {
+      "time": 7.046833333333332,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8350510096125376
+    },
+    {
+      "time": 7.086833333333331,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8487466662832412
+    },
+    {
+      "time": 7.126833333333337,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8625934692554411
+    },
+    {
+      "time": 7.166833333333337,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8765734750105063
+    },
+    {
+      "time": 7.2068333333333365,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8906685674176478
+    },
+    {
+      "time": 7.246933333333332,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.9048960669637238
+    },
+    {
+      "time": 7.299533333333336,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.9236750785672907
+    },
+    {
+      "time": 7.339833333333331,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.9381282587323114
+    },
+    {
+      "time": 7.393233333333335,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.9573316661864721
+    },
+    {
+      "time": 7.446433333333332,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.9764816980859892
+    },
+    {
+      "time": 7.513633333333339,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0006293566554474
+    },
+    {
+      "time": 7.553633333333337,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0149474144190025
+    },
+    {
+      "time": 7.593733333333333,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0292367841995667
+    },
+    {
+      "time": 7.666666666666667,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0549999816329305
+    },
+    {
+      "time": 7.680466666666656,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0598346600206963
+    },
+    {
+      "time": 7.693766666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.064480390300845
+    },
+    {
+      "time": 7.707066666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0691119222014938
+    },
+    {
+      "time": 7.720366666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0737285921205055
+    },
+    {
+      "time": 7.733766666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.0783642732013607
+    },
+    {
+      "time": 7.773866666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.092135895416817
+    },
+    {
+      "time": 7.800366666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 2.1011473567685424
+    },
+    {
+      "time": 7.85376666666666,
+      "rootY": 0.25045918367343056,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.093419236583674,
+      "fireflyWorldY": 2.1190664914277457
+    },
+    {
+      "time": 7.880466666666658,
+      "rootY": 0.413775510204034,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.140074259799482,
+      "fireflyWorldY": 2.1278955263769035
+    },
+    {
+      "time": 7.907066666666667,
+      "rootY": 0.56163265306123,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.20512066630415,
+      "fireflyWorldY": 2.1365981905682934
+    },
+    {
+      "time": 7.947166666666663,
+      "rootY": 0.7579648526076932,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.33846621114079,
+      "fireflyWorldY": 2.1495305844808907
+    },
+    {
+      "time": 8.01386666666666,
+      "rootY": 1.0113605442176667,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.548162319948489,
+      "fireflyWorldY": 2.170502252823915
+    },
+    {
+      "time": 8.066266666666658,
+      "rootY": 1.147074829931956,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.761351949824114,
+      "fireflyWorldY": 2.186463154970969
+    },
+    {
+      "time": 8.092966666666657,
+      "rootY": 1.193883219954634,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.861810937861616,
+      "fireflyWorldY": 2.194409029925593
+    },
+    {
+      "time": 8.120566666666663,
+      "rootY": 1.2278061224489771,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.95338400071487,
+      "fireflyWorldY": 2.2024836865750603
+    },
+    {
+      "time": 8.160566666666663,
+      "rootY": 1.248962585034013,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.063007856239688,
+      "fireflyWorldY": 2.213925145207962
+    },
+    {
+      "time": 8.200566666666662,
+      "rootY": 1.238180272108847,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.142745074034856,
+      "fireflyWorldY": 2.2250445299447636
+    },
+    {
+      "time": 8.240566666666668,
+      "rootY": 1.193577097505666,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.190930653812792,
+      "fireflyWorldY": 2.2358274316191404
+    },
+    {
+      "time": 8.280566666666667,
+      "rootY": 1.1172278911564604,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.206854083767606,
+      "fireflyWorldY": 2.246259877099712
+    },
+    {
+      "time": 8.333666666666662,
+      "rootY": 0.9653628117914028,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.175335593872006,
+      "fireflyWorldY": 2.259544437059625
+    },
+    {
+      "time": 8.360566666666665,
+      "rootY": 0.8656972789115673,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.140975823242462,
+      "fireflyWorldY": 2.2660197951835563
+    },
+    {
+      "time": 8.400666666666663,
+      "rootY": 0.6911564625850602,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 9.060136828137518,
+      "fireflyWorldY": 2.275344417980963
+    },
+    {
+      "time": 8.439866666666662,
+      "rootY": 0.48770975056691757,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.948564149430482,
+      "fireflyWorldY": 2.2840696580726374
+    },
+    {
+      "time": 8.467266666666662,
+      "rootY": 0.32785714285716927,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.85571068728133,
+      "fireflyWorldY": 2.289933547006825
+    },
+    {
+      "time": 8.506766666666659,
+      "rootY": 0.06903061224494997,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.690469205199376,
+      "fireflyWorldY": 2.298038741058158
+    },
+    {
+      "time": 8.53336666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.572378214177162,
+      "fireflyWorldY": 2.3032606723919535
+    },
+    {
+      "time": 8.573966666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.411015314093712,
+      "fireflyWorldY": 2.310856684362252
+    },
+    {
+      "time": 8.600666666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.325755963959672,
+      "fireflyWorldY": 2.3156013078265425
+    },
+    {
+      "time": 8.640666666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.229194798144558,
+      "fireflyWorldY": 2.3223301333629185
+    },
+    {
+      "time": 8.680466666666655,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.163897019035746,
+      "fireflyWorldY": 2.328566240222615
+    },
+    {
+      "time": 8.734166666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.112855241871245,
+      "fireflyWorldY": 2.336240454364015
+    },
+    {
+      "time": 8.773466666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.088806656520905,
+      "fireflyWorldY": 2.341308869064348
+    },
+    {
+      "time": 8.82736666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.070702929017843,
+      "fireflyWorldY": 2.34749428721647
+    },
+    {
+      "time": 8.867266666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.062419428478831,
+      "fireflyWorldY": 2.3514947607363745
+    },
+    {
+      "time": 8.919866666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.056482353836653,
+      "fireflyWorldY": 2.356007058729788
+    },
+    {
+      "time": 8.973566666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.0533529452055,
+      "fireflyWorldY": 2.3597107600873555
+    },
+    {
+      "time": 9.014166666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.051952121328924,
+      "fireflyWorldY": 2.3619000250943993
+    },
+    {
+      "time": 9.054166666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.051140812341561,
+      "fireflyWorldY": 2.3635392673186226
+    },
+    {
+      "time": 9.094166666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050664214530075,
+      "fireflyWorldY": 2.3646625566847748
+    },
+    {
+      "time": 9.12086666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050462063125924,
+      "fireflyWorldY": 2.365124462183914
+    },
+    {
+      "time": 9.160666666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050268337156208,
+      "fireflyWorldY": 2.3653844837613938
+    },
+    {
+      "time": 9.214166666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050135055302201,
+      "fireflyWorldY": 2.364925504839118
+    },
+    {
+      "time": 9.266666666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050067717102422,
+      "fireflyWorldY": 2.3635747672696787
+    },
+    {
+      "time": 9.293666666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050046578131939,
+      "fireflyWorldY": 2.3625337380769755
+    },
+    {
+      "time": 9.347166666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050023237448139,
+      "fireflyWorldY": 2.359778998203667
+    },
+    {
+      "time": 9.387566666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.0500132212841,
+      "fireflyWorldY": 2.357092531509667
+    },
+    {
+      "time": 9.427466666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050007562508693,
+      "fireflyWorldY": 2.3539310692857516
+    },
+    {
+      "time": 9.480066666666668,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050003747266054,
+      "fireflyWorldY": 2.348998515554936
+    },
+    {
+      "time": 9.547266666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05000185274252,
+      "fireflyWorldY": 2.341448019487074
+    },
+    {
+      "time": 9.587666666666667,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050001047159267,
+      "fireflyWorldY": 2.3362448787352244
+    },
+    {
+      "time": 9.62686666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000601267394,
+      "fireflyWorldY": 2.330727601441826
+    },
+    {
+      "time": 9.66776666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000336650946,
+      "fireflyWorldY": 2.3244864739699223
+    },
+    {
+      "time": 9.694366666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05000023073063,
+      "fireflyWorldY": 2.3201657944788185
+    },
+    {
+      "time": 9.721066666666667,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000157841628,
+      "fireflyWorldY": 2.3156244032387114
+    },
+    {
+      "time": 9.747766666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000107932705,
+      "fireflyWorldY": 2.31088077888268
+    },
+    {
+      "time": 9.77436666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000073879916,
+      "fireflyWorldY": 2.3059565426713338
+    },
+    {
+      "time": 9.813466666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000042289474,
+      "fireflyWorldY": 2.298364804147275
+    },
+    {
+      "time": 9.841066666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000028509665,
+      "fireflyWorldY": 2.292757119145817
+    },
+    {
+      "time": 9.880766666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05000001615812,
+      "fireflyWorldY": 2.2843376805876545
+    },
+    {
+      "time": 9.907666666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000010992925,
+      "fireflyWorldY": 2.2784007444164924
+    },
+    {
+      "time": 9.93446666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000007487123,
+      "fireflyWorldY": 2.2723034385753222
+    },
+    {
+      "time": 9.974366666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000004224078,
+      "fireflyWorldY": 2.262896038324569
+    },
+    {
+      "time": 10.000966666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000002883026,
+      "fireflyWorldY": 2.2564105531681755
+    },
+    {
+      "time": 10.02776666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05000000196152,
+      "fireflyWorldY": 2.24970764287428
+    },
+    {
+      "time": 10.067266666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000001111366,
+      "fireflyWorldY": 2.2395279522639107
+    },
+    {
+      "time": 10.094466666666657,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000751286,
+      "fireflyWorldY": 2.232315935362409
+    },
+    {
+      "time": 10.134466666666656,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000422203,
+      "fireflyWorldY": 2.221420705704154
+    },
+    {
+      "time": 10.17376666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000239544,
+      "fireflyWorldY": 2.210392932030734
+    },
+    {
+      "time": 10.227966666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000116391,
+      "fireflyWorldY": 2.194684265134189
+    },
+    {
+      "time": 10.267666666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000065582,
+      "fireflyWorldY": 2.1828298142660105
+    },
+    {
+      "time": 10.321266666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000031822,
+      "fireflyWorldY": 2.166387312330428
+    },
+    {
+      "time": 10.387966666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05000000001543,
+      "fireflyWorldY": 2.1452775907509296
+    },
+    {
+      "time": 10.427366666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000008719,
+      "fireflyWorldY": 2.1324985310223097
+    },
+    {
+      "time": 10.494066666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000004223,
+      "fireflyWorldY": 2.1103946119130366
+    },
+    {
+      "time": 10.520966666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000002859,
+      "fireflyWorldY": 2.101327763079102
+    },
+    {
+      "time": 10.547966666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000001932,
+      "fireflyWorldY": 2.0921470945806386
+    },
+    {
+      "time": 10.588066666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000001079,
+      "fireflyWorldY": 2.0783756000839917
+    },
+    {
+      "time": 10.627166666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000612,
+      "fireflyWorldY": 2.0648056947968008
+    },
+    {
+      "time": 10.681366666666657,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000296,
+      "fireflyWorldY": 2.045795246598372
+    },
+    {
+      "time": 10.73476666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000143,
+      "fireflyWorldY": 2.0268780921356546
+    },
+    {
+      "time": 10.760766666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000098,
+      "fireflyWorldY": 2.0176133703485726
+    },
+    {
+      "time": 10.814766666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000047,
+      "fireflyWorldY": 1.9982857172025799
+    },
+    {
+      "time": 10.867266666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000022,
+      "fireflyWorldY": 1.9794200480727064
+    },
+    {
+      "time": 10.947466666666658,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000011,
+      "fireflyWorldY": 1.9505543294949965
+    },
+    {
+      "time": 10.987466666666657,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000006,
+      "fireflyWorldY": 1.9361769468898429
+    },
+    {
+      "time": 11.040666666666663,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000002,
+      "fireflyWorldY": 1.917116841965118
+    },
+    {
+      "time": 11.080866666666662,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.050000000000002,
+      "fireflyWorldY": 1.9027853135811414
+    },
+    {
+      "time": 11.107766666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8932399159594022
+    },
+    {
+      "time": 11.174866666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8696260178265813
+    },
+    {
+      "time": 11.21486666666666,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8557098060798585
+    },
+    {
+      "time": 11.241466666666655,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8465330988639312
+    },
+    {
+      "time": 11.268266666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.837356290513179
+    },
+    {
+      "time": 11.308266666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8237997207935817
+    },
+    {
+      "time": 11.334266666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8150852489760192
+    },
+    {
+      "time": 11.361566666666665,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.8060237075716787
+    },
+    {
+      "time": 11.387466666666656,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.7975157002748678
+    },
+    {
+      "time": 11.428166666666664,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.7843320147577624
+    },
+    {
+      "time": 11.454966666666659,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.7757824116746426
+    },
+    {
+      "time": 11.481166666666661,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.7675308058963823
+    },
+    {
+      "time": 11.535066666666667,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.750906129562041
+    },
+    {
+      "time": 11.575066666666668,
+      "rootY": 0,
+      "focus": {
+        "x": 26,
+        "y": 0,
+        "z": 5
+      },
+      "cameraY": 8.05,
+      "fireflyWorldY": 1.7388927745380878
+    }
+  ],
+  "running": false,
+  "shader": "\nattribute vec4 aSeed;\nattribute float aKind;\nuniform float uTime;\nuniform vec3 uFocus;\nuniform vec3 uVolume;\nuniform float uScale;\nuniform float uReduced;\nuniform vec3 uZones[2];\nuniform vec4 uPool;\nvarying vec4 vColor;\nvarying float vPetal;\nvarying float vAngle;\n#include <fog_pars_vertex>\n\nvec3 wrapAround(vec3 local) {\n  vec3 p = local - uFocus;\n  p = mod(p + 0.5 * uVolume, uVolume) - 0.5 * uVolume;\n  return uFocus + p;\n}\n\nvoid main() {\n  vec3 world;\n  float size;\n  vec3 tint;\n  float alpha;\n  float kept = 1.0;\n  vPetal = 0.0;\n  vAngle = 0.0;\n  if (aKind < 0.5) {\n    // Golden pollen: lazy upward drift with a slow lateral sway, glinting as it turns.\n    vec3 base = aSeed.xyz * uVolume;\n    base.x += sin(uTime * (0.25 + aSeed.w * 0.3) + aSeed.y * 40.0) * 1.6 + uTime * 0.12;\n    base.z += cos(uTime * (0.2 + aSeed.w * 0.3) + aSeed.x * 40.0) * 1.6;\n    world = wrapAround(vec3(base.x, 0.0, base.z));\n    world.y = uFocus.y + 0.4 + mod(aSeed.y * uVolume.y + uTime * (0.08 + aSeed.w * 0.1), uVolume.y);\n    size = 0.06 + aSeed.w * 0.05;\n    tint = mix(vec3(1.0, 0.82, 0.38), vec3(1.0, 0.92, 0.6), aSeed.z);\n    alpha = (0.45 + 0.55 * (0.5 + 0.5 * sin(uTime * (1.2 + aSeed.x * 2.0) + aSeed.z * 50.0))) * 0.8;\n    kept = step(aSeed.w, mix(1.0, 0.35, uReduced));\n  } else if (aKind < 1.5) {\n    // Firefly: a wandering green-gold spark that blinks slowly near the ground.\n    vec3 base = aSeed.xyz * uVolume;\n    base.x += sin(uTime * (0.35 + aSeed.w * 0.4) + aSeed.y * 30.0) * 2.2;\n    base.z += cos(uTime * (0.3 + aSeed.w * 0.4) + aSeed.x * 30.0) * 2.2;\n    world = wrapAround(vec3(base.x, 0.0, base.z));\n    world.y = uFocus.y + 0.5 + aSeed.y * 2.6 + sin(uTime * 0.9 + aSeed.z * 20.0) * 0.4;\n    size = 0.1 + aSeed.w * 0.05;\n    tint = vec3(0.78, 1.0, 0.42);\n    float blink = smoothstep(0.35, 0.9, 0.5 + 0.5 * sin(uTime * (0.7 + aSeed.x * 0.8) + aSeed.z * 60.0));\n    alpha = blink * 0.9;\n    kept = 1.0 - uReduced;\n  } else if (aKind < 3.5) {\n    // Black Sap spore: a dark mote rising slowly over the blighted hollow or the Memory Pool arena, fading in and out of sight as it climbs.\n    vec3 zone = aSeed.w < 0.5 ? uZones[0] : uZones[1];\n    float angle = aSeed.x * 6.2832;\n    float radius = sqrt(aSeed.y) * zone.z;\n    float rise = fract(aSeed.z + uTime * (0.05 + aSeed.y * 0.05));\n    world = vec3(zone.x + cos(angle) * radius + sin(uTime * 0.3 + aSeed.z * 20.0) * 0.5, 0.2 + rise * 3.2, zone.y + sin(angle) * radius + cos(uTime * 0.25 + aSeed.x * 20.0) * 0.5);\n    size = 0.15 + aSeed.w * 0.07;\n    // Sickly ochre spores over the hollow, bruised violet ones over the Memory Pool arena.\n    tint = mix(vec3(0.9, 0.74, 0.3), vec3(0.66, 0.44, 0.95), step(0.5, aSeed.w));\n    alpha = sin(rise * 3.1416) * 0.85;\n    kept = step(aSeed.z, mix(1.0, 0.35, uReduced));\n  } else if (aKind < 4.5) {\n    // Heart-light ember: a warm amber spark lifting off the Memory Pool's surface.\n    float rise = fract(aSeed.z + uTime * (0.07 + aSeed.w * 0.06));\n    float angle = aSeed.x * 6.2832;\n    float radius = sqrt(aSeed.y);\n    world = vec3(uPool.x + cos(angle) * radius * uPool.z + sin(uTime * 0.4 + aSeed.x * 40.0) * 0.4, 0.1 + rise * 4.0, uPool.y + sin(angle) * radius * uPool.w);\n    size = 0.1 + aSeed.w * 0.06;\n    tint = mix(vec3(1.0, 0.68, 0.22), vec3(1.0, 0.86, 0.45), aSeed.y);\n    alpha = sin(rise * 3.1416) * 0.9;\n    kept = 1.0 - uReduced;\n  } else {\n    // Petal: slow fall, flutter and tumbling; warm pink and cream.\n    float fall = 0.28 + aSeed.w * 0.3;\n    vec3 base = aSeed.xyz * uVolume;\n    base.y = mod(base.y - uTime * fall, uVolume.y);\n    base.x += sin(uTime * 0.7 + aSeed.z * 31.0) * 1.3 + uTime * 0.2;\n    base.z += cos(uTime * 0.55 + aSeed.x * 27.0) * 1.3;\n    world = wrapAround(vec3(base.x, 0.0, base.z));\n    world.y = uFocus.y + 0.3 + base.y;\n    size = 0.13 + aSeed.y * 0.07;\n    tint = mix(vec3(1.0, 0.7, 0.76), vec3(1.0, 0.93, 0.8), step(0.5, fract(aSeed.x * 7.0)));\n    alpha = 0.85;\n    kept = 1.0 - uReduced;\n    vPetal = 1.0;\n    vAngle = aSeed.x * 6.2832 + uTime * (0.5 + aSeed.y);\n  }\n  vec4 mvPosition = viewMatrix * vec4(world, 1.0);\n  // Nothing may drift into the camera path: fade out inside 11 m of the camera and cull inside 8 m.\n  float cameraDistance = length(world - cameraPosition);\n  alpha *= smoothstep(8.0, 11.0, cameraDistance);\n  kept *= step(8.0, cameraDistance);\n  gl_Position = projectionMatrix * mvPosition;\n  gl_PointSize = min(size * uScale / max(-mvPosition.z, 0.1), 36.0);\n  vColor = vec4(tint, alpha);\n  if (kept < 0.5) {\n    gl_Position = vec4(2.0, 2.0, 2.0, 1.0);\n    gl_PointSize = 0.0;\n  }\n  #include <fog_vertex>\n}",
+  "note": "Actual renderer uniforms and root/camera sampled on RAF. Firefly world height derived from the live vertex shader; no shader or state replacement."
+}

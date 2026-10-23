@@ -1,0 +1,66 @@
+{
+  "description": "How Yara's right fist holds the Heartroot staff in each clip. turnDegrees turns the shaft from the knuckle line (index base minus pinky base) toward the fingers (wrist to middle-finger base); gripFraction is the share of the staff length on the pommel side of the fist. Each skill clip plays a Mixamo take unchanged, so the staff adapts to the hand instead; the values are the zero-penetration choices measured over each clip's played window (body capsules and the floor).",
+  "default": {
+    "turnDegrees": 0,
+    "gripFraction": 0.42
+  },
+  "blendSeconds": 0.12,
+  "clips": {
+    "aren-idle": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "yara-thornshot-1": {
+      "turnDegrees": 30,
+      "gripFraction": 0.42
+    },
+    "yara-thornshot-2": {
+      "turnDegrees": -45,
+      "gripFraction": 0.42
+    },
+    "yara-thornshot-3": {
+      "turnDegrees": -15,
+      "gripFraction": 0.12
+    },
+    "yara-root-spike": {
+      "turnDegrees": 0,
+      "gripFraction": 0.12
+    },
+    "yara-root-charge": {
+      "turnDegrees": 0,
+      "gripFraction": 0.12
+    },
+    "yara-root-eruption": {
+      "turnDegrees": 0,
+      "gripFraction": 0.12
+    },
+    "yara-seed-charge": {
+      "turnDegrees": 30,
+      "gripFraction": 0.42
+    },
+    "yara-sap-lance": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "yara-seed-storm": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "yara-binding-vines": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "yara-cleanse": {
+      "turnDegrees": 30,
+      "gripFraction": 0.12
+    },
+    "yara-heartroot-bloom": {
+      "turnDegrees": 0,
+      "gripFraction": 0.12
+    },
+    "aren-forward-left-dive-roll": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    }
+  }
+}

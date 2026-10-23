@@ -1,0 +1,105 @@
+{
+  "before": {
+    "screen": "game",
+    "focus": true,
+    "active": "wc-input-host",
+    "inputEnabled": true
+  },
+  "after": {
+    "screen": "pause",
+    "focus": false,
+    "active": "wc-action wc-action--primary",
+    "actor": {
+      "id": "aren",
+      "archetypeId": "aren",
+      "species": "human",
+      "allegiance": "player",
+      "position": {
+        "x": -19.347431162541195,
+        "y": 0.43083900226757366,
+        "z": -10.887370090225765
+      },
+      "velocity": {
+        "x": 0,
+        "y": -5.612244897959187,
+        "z": 0
+      },
+      "facing": {
+        "x": -0.5734623443633284,
+        "y": 0,
+        "z": -0.8192319205190405
+      },
+      "actionId": "aren-jump",
+      "phase": "active",
+      "normalizedTime": 0.7627118644067796,
+      "vitality": 120,
+      "maxVitality": 120,
+      "renderVariantId": "actor-aren",
+      "sockets": {
+        "root": {
+          "x": -18,
+          "y": 0,
+          "z": -9
+        },
+        "head": {
+          "x": -18,
+          "y": 1.5,
+          "z": -9
+        }
+      },
+      "interactionRequirements": [],
+      "visible": true,
+      "downed": false,
+      "possessed": false,
+      "weakPointExposed": false,
+      "jumpPhase": "falling",
+      "jumpPhaseProgress": 0.8095238095238095,
+      "jumpBoosted": false
+    }
+  },
+  "events": [
+    {
+      "type": "keydown",
+      "key": " ",
+      "visibility": "visible",
+      "focus": true,
+      "active": "wc-input-host",
+      "trusted": true,
+      "at": 158421.40000003576
+    },
+    {
+      "type": "keyup",
+      "key": " ",
+      "visibility": "visible",
+      "focus": true,
+      "active": "wc-input-host",
+      "trusted": true,
+      "at": 158815
+    },
+    {
+      "type": "blur",
+      "visibility": "visible",
+      "focus": false,
+      "active": "wc-input-host",
+      "trusted": true,
+      "at": 159188.20000004768
+    },
+    {
+      "type": "blur",
+      "visibility": "visible",
+      "focus": false,
+      "active": "wc-action wc-action--primary",
+      "trusted": true,
+      "at": 159220.30000001192
+    }
+  ],
+  "screens": [
+    {
+      "args": [
+        "pause"
+      ],
+      "stack": "Error\n    at a.setScreen (<anonymous>:1:618)\n    at http://127.0.0.1:5214/assets/main-_RbZxzXD.js:2292:196732",
+      "at": 159195.90000003576
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "scope": "Real Journal Track action updates an active objective while its HUD stays collapsed, then pointer expansion shows fresh details. This is tracked-objective selection, not a claim of quest completion or a walked route.",
+  "before": {
+    "screen": "game",
+    "expanded": "false",
+    "text": "THE NIGHT OF A THOUSAND ROARS\nSTEP 1 OF 6\n\nOBJECTIVE\n\nHear the night of a thousand roars",
+    "bodyDisplay": "none",
+    "tick": 8810,
+    "player": {
+      "x": -18,
+      "y": 0,
+      "z": -9
+    },
+    "focus": "wc-input-host"
+  },
+  "trackedCollapsed": {
+    "screen": "game",
+    "trackedObjectiveId": "prologue:tend-vara",
+    "expanded": "false",
+    "title": "Tend to Vara",
+    "step": "Step 2 of 6",
+    "bodyDisplay": "none",
+    "bodyHidden": true,
+    "completedObjectives": [],
+    "runId": "03ead520-81f9-472f-a9a8-8ef89a05be84"
+  },
+  "expanded": {
+    "screen": "game",
+    "expanded": "true",
+    "title": "Tend to Vara",
+    "detail": "Follow the trail · 6 m\n\nPROLOGUE",
+    "bodyDisplay": "block"
+  },
+  "journalShortcutTrace": {
+    "screen": "journal",
+    "events": [
+      {
+        "action": {
+          "type": "resume"
+        },
+        "screen": "pause",
+        "stack": "Error\n    at a.dispatch (<anonymous>:1:231)\n    at Object.onAction (http://127.0.0.1:5210/src/app/GameApplication.ts:290:17)\n    at dispatch (http://127.0.0.1:5210/src/ui/GameUI.ts:481:40)\n    at HTMLDivElement.onClick (http://127.0.0.1:5210/src/ui/GameUI.ts:1117:25)"
+      },
+      {
+        "action": {
+          "type": "open-journal"
+        },
+        "screen": "game",
+        "stack": "Error\n    at a.dispatch (<anonymous>:1:231)\n    at Object.onAction (http://127.0.0.1:5210/src/app/GameApplication.ts:290:17)\n    at dispatch (http://127.0.0.1:5210/src/ui/GameUI.ts:481:40)\n    at HTMLDocument.escKey (http://127.0.0.1:5210/src/ui/GameUI.ts:1506:43)"
+      }
+    ],
+    "inputBindings": {
+      "keyboard": {
+        "moveForward": "w",
+        "moveBack": "s",
+        "moveLeft": "a",
+        "moveRight": "d",
+        "dodge": "f",
+        "jump": "space",
+        "sprint": "shift",
+        "light": "j",
+        "heavy": "k",
+        "ranged": "l",
+        "ultimate": "u",
+        "interact": "e",
+        "ability": "q",
+        "map": "m",
+        "journal": "tab",
+        "companions": "c",
+        "pause": "escape",
+        "commandWheel": "r",
+        "lockOn": "t"
+      },
+      "gamepad": {
+        "dodge": "Gamepad Button 1",
+        "ability": "Gamepad Button 2",
+        "light": "Gamepad Button 3",
+        "interact": "Gamepad Button 4",
+        "map": "Gamepad Button 5",
+        "heavy": "Gamepad Button 6",
+        "ranged": "Gamepad Button 12",
+        "ultimate": "Gamepad Button 11",
+        "commandWheel": "Gamepad Button 7",
+        "journal": "Gamepad Button 8",
+        "companions": "Gamepad Button 9",
+        "pause": "Gamepad Button 10",
+        "jump": "Gamepad Button 13",
+        "sprint": "Gamepad Button 14",
+        "lockOn": "Gamepad Button 16"
+      }
+    },
+    "front": "journal"
+  }
+}

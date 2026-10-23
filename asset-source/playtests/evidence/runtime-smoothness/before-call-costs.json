@@ -1,0 +1,365 @@
+{
+  "details": {
+    "timings": {
+      "app.simulateTick": {
+        "count": 366,
+        "totalMs": 306.6999997496605,
+        "maxMs": 1.600000023841858
+      },
+      "app.model": {
+        "count": 314,
+        "totalMs": 51.39999985694885,
+        "maxMs": 0.40000003576278687
+      },
+      "app.nearestInteraction": {
+        "count": 732,
+        "totalMs": 9.499999761581421,
+        "maxMs": 0.19999998807907104
+      },
+      "app.chapterModels": {
+        "count": 314,
+        "totalMs": 38.299999952316284,
+        "maxMs": 0.30000001192092896
+      },
+      "app.sessionModel": {
+        "count": 314,
+        "totalMs": 1.399999976158142,
+        "maxMs": 0.10000002384185791
+      },
+      "combat.snapshot": {
+        "count": 1098,
+        "totalMs": 238.0999995470047,
+        "maxMs": 0.699999988079071
+      },
+      "ui.render": {
+        "count": 314,
+        "totalMs": 56.89999985694885,
+        "maxMs": 0.40000003576278687
+      },
+      "renderer.sync": {
+        "count": 369,
+        "totalMs": 270.49999964237213,
+        "maxMs": 1.2999999523162842
+      },
+      "renderer.syncActors": {
+        "count": 369,
+        "totalMs": 154.19999992847443,
+        "maxMs": 0.7999999523162842
+      },
+      "renderer.applyActorSnapshot": {
+        "count": 2583,
+        "totalMs": 146.9999998807907,
+        "maxMs": 0.3999999761581421
+      },
+      "renderer.render": {
+        "count": 369,
+        "totalMs": 579.8000000119209,
+        "maxMs": 3.399999976158142
+      },
+      "renderer.updateContactShadows": {
+        "count": 369,
+        "totalMs": 8.800000011920929,
+        "maxMs": 0.10000002384185791
+      },
+      "renderer.updateStaff": {
+        "count": 369,
+        "totalMs": 0.2999999523162842,
+        "maxMs": 0.10000002384185791
+      },
+      "weapon.setClip": {
+        "count": 0,
+        "totalMs": 0,
+        "maxMs": 0
+      },
+      "weapon.applyGrip": {
+        "count": 738,
+        "totalMs": 5.300000011920929,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.yara": {
+        "count": 369,
+        "totalMs": 11.399999797344208,
+        "maxMs": 0.19999998807907104
+      },
+      "animation.update.yara": {
+        "count": 369,
+        "totalMs": 3.2999998927116394,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.vara": {
+        "count": 369,
+        "totalMs": 16.10000044107437,
+        "maxMs": 0.20000004768371582
+      },
+      "animation.update.vara": {
+        "count": 369,
+        "totalMs": 2.5999999046325684,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.corrupted-boar": {
+        "count": 62,
+        "totalMs": 2.200000047683716,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.update.corrupted-boar": {
+        "count": 62,
+        "totalMs": 0.5000000596046448,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.greenwake-sap-stalker": {
+        "count": 62,
+        "totalMs": 3.799999952316284,
+        "maxMs": 0.2999999523162842
+      },
+      "animation.update.greenwake-sap-stalker": {
+        "count": 62,
+        "totalMs": 0.8999999761581421,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.greenwake-root-rammer": {
+        "count": 61,
+        "totalMs": 2.3000000715255737,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.update.greenwake-root-rammer": {
+        "count": 61,
+        "totalMs": 0.2999998927116394,
+        "maxMs": 0.09999996423721313
+      },
+      "animation.play.koro__party_companion": {
+        "count": 369,
+        "totalMs": 17.599999606609344,
+        "maxMs": 0.20000004768371582
+      },
+      "animation.update.koro__party_companion": {
+        "count": 369,
+        "totalMs": 2.099999964237213,
+        "maxMs": 0.10000002384185791
+      },
+      "animation.play.aren": {
+        "count": 369,
+        "totalMs": 52.70000046491623,
+        "maxMs": 0.30000001192092896
+      },
+      "animation.update.aren": {
+        "count": 369,
+        "totalMs": 9.300000011920929,
+        "maxMs": 0.19999998807907104
+      }
+    },
+    "screen": "game",
+    "tick": 4576
+  },
+  "top": [
+    {
+      "name": "(idle)",
+      "url": "",
+      "line": 0,
+      "selfMs": 4468.64
+    },
+    {
+      "name": "(program)",
+      "url": "",
+      "line": 0,
+      "selfMs": 228.609
+    },
+    {
+      "name": "uh",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 107.175
+    },
+    {
+      "name": "uh",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 52.145
+    },
+    {
+      "name": "WH",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 56,
+      "selfMs": 45.37
+    },
+    {
+      "name": "",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 2284,
+      "selfMs": 43.961
+    },
+    {
+      "name": "",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 1,
+      "selfMs": 28.804
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 22.208
+    },
+    {
+      "name": "updateOcclusion",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 152,
+      "selfMs": 21.324
+    },
+    {
+      "name": "get companions",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 1,
+      "selfMs": 20.561
+    },
+    {
+      "name": "applyActorSnapshot",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 2284,
+      "selfMs": 19.938
+    },
+    {
+      "name": "multiplyMatrices",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 19.788
+    },
+    {
+      "name": "setFromRotationMatrix",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 18.415
+    },
+    {
+      "name": "fr",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 18.176
+    },
+    {
+      "name": "update",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 207,
+      "selfMs": 17.425
+    },
+    {
+      "name": "fr",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 13.905
+    },
+    {
+      "name": "slerpFlat",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 13.275
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 13.265
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 12.137
+    },
+    {
+      "name": "ue",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3737,
+      "selfMs": 12.074
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 12.029
+    },
+    {
+      "name": "setValue",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3737,
+      "selfMs": 11.678
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 10.392
+    },
+    {
+      "name": "setValue",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3737,
+      "selfMs": 10.341
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 10.077
+    },
+    {
+      "name": "nearestInteraction",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 2284,
+      "selfMs": 9.348
+    },
+    {
+      "name": "structuredClone",
+      "url": "",
+      "line": 0,
+      "selfMs": 9.208
+    },
+    {
+      "name": "sync",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 2284,
+      "selfMs": 9.18
+    },
+    {
+      "name": "updateMatrixWorld",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 9.053
+    },
+    {
+      "name": "renderBufferDirect",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 8.808
+    },
+    {
+      "name": "get companions",
+      "url": "http://127.0.0.1:5224/assets/main-DJEXJf_6.js",
+      "line": 1,
+      "selfMs": 8.769
+    },
+    {
+      "name": "multiplyMatrices",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 8.729
+    },
+    {
+      "name": "o.<computed>",
+      "url": "",
+      "line": 1,
+      "selfMs": 8.709
+    },
+    {
+      "name": "vh",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 3839,
+      "selfMs": 8.624
+    },
+    {
+      "name": "multiplyMatrices",
+      "url": "http://127.0.0.1:5224/assets/geometry-Cq-zKJc5.js",
+      "line": 5,
+      "selfMs": 8.614
+    }
+  ]
+}

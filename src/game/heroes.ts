@@ -83,6 +83,7 @@ export interface HeroDefinition {
 }
 
 export const YARA_HERO_ASSET_ID = 'actor-yara-hero';
+export const AREN_HERO_ASSET_ID = 'actor-aren';
 export const HEARTROOT_STAFF_ASSET_ID = 'prop-heartroot-focus-staff';
 export const WARDEN_GLAIVE_ASSET_ID = 'prop-warden-glaive';
 export const VESPER_HERO_ASSET_ID = 'actor-vesper-hero';
@@ -237,7 +238,7 @@ export const HEROES: readonly HeroDefinition[] = [
     maxVitality: HERO_COMBAT.yara.maxVitality,
     npcActorId: 'yara',
     portraitUrl: '/asset-source/ui/heroes/yara.png',
-    portraitCrop: '53% 10%',
+    portraitCrop: '62% 18%',
     idleActionId: 'aren-idle',
     revealActionIds: ['yara-sap-lance'],
     skills: [

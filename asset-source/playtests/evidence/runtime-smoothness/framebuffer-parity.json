@@ -1,0 +1,59 @@
+{
+  "method": "Same native scene, transforms, camera and shader uniforms; actual old MSAA2 composer/reference versus new geometry-MSAA2 single-sample composer; default-framebuffer RGBA/UNSIGNED_BYTE readPixels within one synchronous evaluation.",
+  "correctedDiagnostic": "The first attempt incorrectly read RGBA/UNSIGNED_BYTE while an HDR framebuffer was bound; those invalid zero pixels were rejected. This run binds the default framebuffer before every read.",
+  "priorGlError": 1282,
+  "rows": [
+    {
+      "label": "normal",
+      "width": 1440,
+      "height": 900,
+      "changedPixels": 0,
+      "changedRatio": 0,
+      "maxChannelDifference": 0,
+      "meanAbsoluteChannelDifference": 0,
+      "nonBlackPixels": 1296000,
+      "webglError": 0
+    },
+    {
+      "label": "shafts",
+      "width": 1440,
+      "height": 900,
+      "changedPixels": 0,
+      "changedRatio": 0,
+      "maxChannelDifference": 0,
+      "meanAbsoluteChannelDifference": 0,
+      "nonBlackPixels": 1296000,
+      "webglError": 0
+    },
+    {
+      "label": "impulse",
+      "width": 1440,
+      "height": 900,
+      "changedPixels": 0,
+      "changedRatio": 0,
+      "maxChannelDifference": 0,
+      "meanAbsoluteChannelDifference": 0,
+      "nonBlackPixels": 1296000,
+      "webglError": 0
+    },
+    {
+      "label": "shafts-and-impulse",
+      "width": 1440,
+      "height": 900,
+      "changedPixels": 0,
+      "changedRatio": 0,
+      "maxChannelDifference": 0,
+      "meanAbsoluteChannelDifference": 0,
+      "nonBlackPixels": 1296000,
+      "webglError": 0
+    }
+  ],
+  "restored": {
+    "sceneSamples": 2,
+    "postSamples": [
+      0,
+      0
+    ],
+    "renderTarget": true
+  }
+}

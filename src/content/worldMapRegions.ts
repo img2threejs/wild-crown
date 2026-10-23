@@ -1,14 +1,10 @@
 /**
  * Region polygons traced on the illustrated world map (`/ui/world-map-game.webp`).
  *
- * Every region is a closed 0–100 percentage polygon whose vertices sit inside the 8 : 5 aspect-ratio viewport the
- * map is rendered into (object-fit: contain). Polygons are intentionally generous around each region so a player
- * clicking or pressing near the illustration's painted region hits the button, while still being smaller than the
- * illustration's painted footprint. Coordinates are sorted from the existing chip percentages in
- * `game-ui.css:267-287` (centres) and refined by reading the painted boundaries in the webp file.
- *
- * The data is consumed by `worldMapRegionOverlay` (SVG polygons) and the spatial arrow-key navigation in
- * `worldMapSelectMarkup`; no other module imports it.
+ * Both axes use 0–100 percentages of the unchanged 1536×960 artwork. Image-guided coast/biome contours are
+ * inferred gameplay partitions, not artist-authored alpha mattes. The Pixi map uses the same contours for
+ * its independent border nodes and geographic hit areas; the complete painting moves under one camera.
+ * Admission and motion constraints: `.img2pixi2d/reconstruction.json`.
  */
 import type { AssetPlaytestId } from '../app/AssetPlaytests.js';
 
@@ -66,14 +62,9 @@ export const SURVEY_ROUTE: readonly WorldRegionId[] = [
 /**
  * Region polygon table.
  *
- * Coordinates were captured by reading the painted boundaries of `/ui/world-map-game.webp` and cross-referenced with
- * the chip centres in `game-ui.css:267-287`. Coordinates are 0–100 percentages of the 8 : 5 viewport. Vertices are
- * listed clockwise starting from the top of the painted area. The closed polygon is `polygon[0] === polygon[last]`,
- * so the SVG `points` attribute can be fed directly from `polygon.flat().join(' ')`.
- *
- * No polygon overlaps another by more than `POLYGON_OVERLAP_TOLERANCE` square percentage units (the spatial
- * navigation tests pin this); the painted boundaries of adjacent regions leave a small corridor that both the
- * hover and the keyboard focus can ignore.
+ * Contours follow the observed coastlines and biome changes of `/ui/world-map-game.webp`.
+ * Interior divisions on the continuous land mass remain inferred. First and last points coincide.
+ * Refuge remains a route waypoint, not a new selectable chapter.
  */
 export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freeze([
   // Whispering Canopy — the western jungle: rope bridges, top-left waterfall, monkeys/birds.
@@ -84,11 +75,13 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'whispering-canopy',
     name: 'Whispering Canopy',
     label: 'Canopy',
-    centre: [7, 44],
-    chipPosition: [6, 40],
+    centre: [18, 40],
+    chipPosition: [17.65, 40.2],
     polygon: [
-      [0, 30], [3, 32], [12, 32], [13, 38], [11, 44], [13, 50], [12, 58], [7, 60], [2, 58],
-      [0, 52], [0, 30],
+      [6, 26], [10, 23], [15, 25], [19, 28], [23, 30], [26, 32], [29, 33], [30.5, 37],
+      [32.5, 38], [33.5, 42], [32.5, 46], [31.8, 50], [30.6, 54], [29.4, 58], [30.3, 62],
+      [28.8, 65.7], [28.4, 70.8], [25, 69], [21, 67], [17, 66], [13, 65], [10, 64],
+      [7, 62], [4, 61], [2.5, 57], [1.8, 52], [2.5, 47], [2, 42], [3.5, 36], [4.5, 31], [6, 26],
     ],
   },
   // Blood Bamboo Valley — the orange autumn forest in the top-left valley, painted as a triangular
@@ -98,10 +91,13 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'blood-bamboo-valley',
     name: 'Blood Bamboo Valley',
     label: 'Bamboo',
-    centre: [20, 13],
-    chipPosition: [16, 15],
+    centre: [28, 22],
+    chipPosition: [27.8, 20.2],
     polygon: [
-      [13, 4], [24, 5], [30, 9], [29, 16], [26, 22], [20, 24], [15, 21], [13, 14], [13, 4],
+      [13.5, 19], [14, 16], [16.5, 15.6], [18, 12.8], [21, 12.8], [22.7, 9.5], [25.8, 9],
+      [27.2, 8.2], [28.3, 11], [30, 10], [32, 13], [35, 13], [36.5, 15.5], [40, 17.7],
+      [42.8, 21], [43.7, 25], [44.5, 29], [43.6, 31], [42, 32.8], [39, 33.6], [36.7, 35],
+      [34, 33.3], [31.2, 32.4], [28.1, 31], [25, 29], [22, 26], [19, 24], [16, 23], [13.5, 19],
     ],
   },
   // The Grove — the central sanctuary: the Heartroot tree, the glowing pool, southern anchor.
@@ -111,11 +107,13 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'the-grove',
     name: 'The Grove',
     label: 'Grove',
-    centre: [46, 36],
-    chipPosition: [47, 38],
+    centre: [51, 44],
+    chipPosition: [50.9, 43.5],
     polygon: [
-      [38, 28], [44, 26], [50, 26], [53, 30], [53, 36], [50, 40], [45, 42], [41, 40],
-      [38, 35], [38, 28],
+      [39, 37.5], [42, 35], [46, 32], [49, 30], [52, 30.5], [56, 32], [60, 33.5], [63.5, 35],
+      [65, 38], [64, 41], [64, 45], [62.5, 48], [61.6, 52], [59, 54.5], [57, 56.3], [54, 58.7],
+      [49, 60], [46, 59], [43, 57.7], [40, 56], [37.5, 55], [35, 52.8], [34, 49], [34.5, 44.8],
+      [34.8, 41.3], [37, 40], [39, 37.5],
     ],
   },
   // Greenwake — the southern village cluster of thatched roofs on the south coast.
@@ -123,10 +121,13 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'greenwake',
     name: 'Greenwake',
     label: 'Greenwake',
-    centre: [42, 87],
-    chipPosition: [43, 86],
+    centre: [48, 79],
+    chipPosition: [48.3, 78.8],
     polygon: [
-      [33, 82], [50, 82], [54, 88], [50, 94], [42, 97], [34, 94], [31, 88], [33, 82],
+      [35, 66], [38, 64], [41, 62], [44, 61.5], [47, 62], [51, 63.3], [53.5, 64.5], [56, 66.5],
+      [58, 69], [59.3, 72], [61, 75], [61, 78], [60, 81], [59, 85], [57, 88], [54, 91],
+      [51, 93], [47, 94], [43, 93.5], [39.5, 92], [36, 90], [34.3, 87], [33, 83],
+      [32.8, 79], [32.5, 76], [32, 72], [33.5, 68], [35, 66],
     ],
   },
   // Moonpine Ridge — the snowy peaks in the upper-right, the brightest snow line.
@@ -134,10 +135,14 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'moonpine-ridge',
     name: 'Moonpine Ridge',
     label: 'Moonpine',
-    centre: [64, 11],
-    chipPosition: [63, 14],
+    centre: [65, 20],
+    chipPosition: [68.2, 17.6],
     polygon: [
-      [54, 2], [64, 1], [74, 2], [82, 6], [83, 12], [78, 16], [70, 18], [60, 17], [54, 12], [52, 6], [54, 2],
+      [44, 22], [45.8, 18], [49, 17], [51, 15], [53, 12.9], [55, 11.5], [57, 11.5],
+      [59.2, 8.3], [62, 9.8], [63.5, 10.6], [65, 9.9], [67.1, 12.3], [69, 11.3],
+      [71.3, 13.9], [73.4, 15], [76.3, 18.2], [78, 21.5], [77.5, 24], [80, 26.5],
+      [78, 29], [75, 30], [71.6, 30.7], [68.5, 30], [66, 33], [63.2, 33], [60, 31],
+      [57.5, 31], [55, 29], [52, 29], [50, 27], [47, 27], [44, 25], [44, 22],
     ],
   },
   // Mistveil Basin — the foggy river plain, east side, with mist wreaths and root trees.
@@ -145,10 +150,14 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'mistveil-basin',
     name: 'Mistveil Basin',
     label: 'Mistveil',
-    centre: [83, 32],
-    chipPosition: [80, 33],
+    centre: [85, 38],
+    chipPosition: [84.9, 36.9],
     polygon: [
-      [76, 22], [85, 20], [93, 24], [97, 32], [94, 38], [86, 40], [78, 38], [74, 32], [74, 26], [76, 22],
+      [80.2, 25.5], [84, 25], [87, 27], [90, 29], [91.5, 32], [94, 33.2], [96, 36],
+      [97.5, 39], [98.8, 45], [97, 48], [94.5, 50], [91, 51.3], [88, 50.8], [85, 51.9],
+      [81.5, 50.1], [78.1, 50.8], [75.6, 49], [72.3, 49.7], [69, 51.5], [66, 50.1],
+      [64.7, 47], [66, 43.5], [65.7, 39.2], [67.9, 35], [69.1, 33], [72.1, 32],
+      [75.4, 31.5], [78, 29.5], [80.2, 25.5],
     ],
   },
   // Sunmane Expanse — the dry golden savannah, lower-east side, painted as the lion kingdom's
@@ -157,10 +166,15 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'sunmane-expanse',
     name: 'Sunmane Expanse',
     label: 'Sunmane',
-    centre: [84, 65],
-    chipPosition: [75, 59],
+    centre: [82, 67],
+    chipPosition: [82.4, 64.6],
     polygon: [
-      [73, 58], [82, 54], [92, 56], [98, 62], [97, 72], [90, 78], [80, 79], [72, 76], [70, 68], [71, 60], [73, 58],
+      [72.2, 52.4], [76.3, 51], [80, 52], [83, 52.5], [86, 52], [89, 54], [92, 55.5],
+      [94, 58], [96, 60], [96.8, 64], [97.7, 67], [98.1, 71], [96.5, 75], [94.7, 78],
+      [93, 81.2], [91, 83], [90, 87], [87, 90.2], [83, 93], [79, 95.3], [75, 97.2],
+      [72, 97], [69, 95.8], [66.7, 93.7], [65, 90], [64.5, 87], [65.8, 84],
+      [66.5, 80.7], [66, 77.5], [64, 73], [63, 69], [63.5, 65], [65, 61], [68, 59],
+      [69.3, 56], [72.2, 52.4],
     ],
   },
   // Refuge — the painted refuge tower, mid-right plateau between the Grove and Sunmane.
@@ -179,10 +193,13 @@ export const WORLD_REGION_SHAPES: ReadonlyArray<WorldRegionShape> = Object.freez
     id: 'heartroot-hollow',
     name: 'Heartroot Hollow',
     label: 'Hollow',
-    centre: [10, 82],
-    chipPosition: [8, 82],
+    centre: [16, 86],
+    chipPosition: [16.4, 88.5],
     polygon: [
-      [1, 70], [10, 70], [20, 72], [22, 80], [18, 90], [10, 92], [2, 90], [1, 82], [1, 70],
+      [4, 71], [7, 72], [10, 71.5], [12.5, 72.8], [16, 74], [20, 77], [23.5, 80],
+      [26, 83], [29, 84.5], [31, 87], [32, 90], [31.5, 93], [29, 95.2], [26, 96.8],
+      [23, 97], [20, 95], [16, 94.5], [13, 94], [9, 93.2], [5, 92], [2.5, 89.5],
+      [1.8, 86], [1.8, 82], [2.3, 77.5], [3, 74], [4, 71],
     ],
   },
 ]);
@@ -196,11 +213,6 @@ export const REGION_BY_PLAYTEST_ID: Readonly<Record<AssetPlaytestId, WorldRegion
   mistveil: 'mistveil-basin',
 });
 
-/** Maximum squared distance (in percent²) two vertices of different regions are allowed to be apart before the
- *  polygons are considered to overlap. The painted boundaries of adjacent regions in the source illustration
- *  never sit closer than ~6% of the viewport, so 36 percent² (6²) keeps the test strict without flaking on
- *  floating-point noise from tracing the painted boundary. */
-export const POLYGON_OVERLAP_TOLERANCE = 36;
 
 /** Validates a closed polygon is in 0–100 percent and the ring actually closes. Exported as a public API:
  *  the deterministic tests call it directly to pin the polygon contract. */
@@ -216,19 +228,6 @@ export function isClosedPolygon(polygon: ReadonlyArray<readonly [number, number]
   return true;
 }
 
-/** True when any vertex of `a` sits closer than the overlap tolerance to a vertex of `b`. Exported for tests. */
-export function polygonsOverlap(
-  a: ReadonlyArray<readonly [number, number]>,
-  b: ReadonlyArray<readonly [number, number]>,
-  tolerance: number = POLYGON_OVERLAP_TOLERANCE,
-): boolean {
-  for (const [ax, ay] of a) {
-    for (const [bx, by] of b) {
-      if ((ax - bx) ** 2 + (ay - by) ** 2 < tolerance) return true;
-    }
-  }
-  return false;
-}
 
 /** Polygon area in 0–100 percent² units, computed by the shoelace formula. Public API for area calculations. */
 export function polygonArea(polygon: ReadonlyArray<readonly [number, number]>): number {

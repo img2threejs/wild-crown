@@ -8,8 +8,8 @@ import { MOONPINE_TRIAL_SET } from '../game/combat/MoonpineContent.js';
 export type AssetPlaytestId = 'greenwake' | 'canopy' | 'grove' | 'moonpine' | 'mistveil';
 
 /**
- * A DEV-only real-asset playtest (`?assetPlaytest=<id>`): one region variant, its candidate asset manifest and the
- * combat-trial set it hosts. Playtests never grant campaign rewards and never change production asset gating.
+ * Authored combat-stage definitions shared by explicit DEV fixtures and story-earned Training Grounds.
+ * The manifests below are candidate catalogs; verified practice still uses the strict production manifest.
  */
 export interface AssetPlaytest {
   readonly id: AssetPlaytestId;
@@ -23,11 +23,8 @@ export interface AssetPlaytest {
   /** Authored route whose start is the stage goal ring. */
   readonly exitRouteId: string;
   readonly loadingLabel: string;
-  /**
-   * Set when New Game enters the region directly through the campaign director's replay-isolated showcase start (no opening
-   * cinematic); unset for the regular Greenwake run with its opening vision.
-   */
-  readonly showcaseRegionId?: ShowcaseRegionId;
+  /** Replay-isolated fixture start; normal New Game never enters a combat stage. */
+  readonly showcaseRegionId: ShowcaseRegionId;
   /** Map-select image: a capture of the actual playtest scene. */
   readonly thumbnailUrl: string;
   /** Wording for the HUD destination, the trial-complete hint and the stage-complete screen. */
@@ -40,7 +37,7 @@ export const GREENWAKE_PLAYTEST: AssetPlaytest = {
   id: 'greenwake', name: 'Greenwake', regionId: 'greenwake',
   manifestUrl: '/asset-source/playtests/greenwake.json', manifestLabel: 'Greenwake candidate asset playtest manifest',
   banner: banner('Greenwake'), thumbnailUrl: '/asset-source/ui/maps/greenwake.jpg',
-  trialSet: GREENWAKE_TRIAL_SET, exitRouteId: 'greenwake-canopy-out', loadingLabel: 'Beginning the Greenwake encounter',
+  trialSet: GREENWAKE_TRIAL_SET, exitRouteId: 'greenwake-canopy-out', loadingLabel: 'Beginning the Greenwake encounter', showcaseRegionId: 'greenwake',
   stage: { exitName: 'Forest Exit', completeKicker: 'THE FOREST OPENS', completeCopy: 'You reached the Greenwake forest exit.' },
 };
 export const CANOPY_PLAYTEST: AssetPlaytest = {

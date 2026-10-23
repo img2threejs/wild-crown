@@ -30,7 +30,7 @@ function arrivalApp(playtest: AssetPlaytest, position?: { x: number; y: number; 
   cleared.combatTrial = { index: playtest.trialSet.trials.length, status: 'complete' };
   combat.restore(JSON.stringify(cleared));
   const director = new CampaignDirector({ runId: 'arrival-test' });
-  const campaign = playtest.showcaseRegionId ? director.startShowcase('arrival-test', playtest.showcaseRegionId) : director.snapshot();
+  const campaign = director.startShowcase('arrival-test', playtest.showcaseRegionId);
   const goal = new StageGoal(exit);
   const input = { enabled: true, clear() {}, setEnabled(value: boolean) { this.enabled = value; } };
   const progress = new PlaytestProgress(null);

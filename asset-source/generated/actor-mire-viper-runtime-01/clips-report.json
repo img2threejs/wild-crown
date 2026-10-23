@@ -4,13 +4,13 @@
   "generator": "scripts/assets/author-creature-clips.mjs",
   "input": {
     "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper.glb",
-    "sha256": "e155a6a279d77660a5591f5fe13e3db05684d6e0ea13f6d7d939ccb91984c003",
-    "bytes": 7526196
+    "sha256": "920b4e0f2d82f3a3969322715acfc0594a3b4f6decc0519f8bc7c87e60e81fe3",
+    "bytes": 8827632
   },
   "output": {
     "path": "asset-source/generated/actor-mire-viper-runtime-01/actor-mire-viper-animated.glb",
-    "sha256": "98012e7895a706642fccdf78562ba2a2f313f5a9c67691fec87cc5280c2d882f",
-    "bytes": 7774772
+    "sha256": "8a0b19796a097e9cfcfeff16e085e9eaed8311067e013e1c1f04ba9644c72d2a",
+    "bytes": 9076224
   },
   "castSocketBone": "tripo::Head_1",
   "inPlaceAnchorBone": "tripo::Tail_1",
@@ -39,7 +39,7 @@
       "semanticKeyTimes": {},
       "measured": {
         "maxHipsDriftUnits": 0.0075,
-        "maxMeshCentroidWanderUnits": 0.0214,
+        "maxMeshCentroidWanderUnits": 0.0209,
         "maxRootBoneTravelUnits": 0.0689,
         "hipHeightRangeUnits": [
           0,
@@ -67,7 +67,7 @@
       "semanticKeyTimes": {},
       "measured": {
         "maxHipsDriftUnits": 0.0151,
-        "maxMeshCentroidWanderUnits": 0.0505,
+        "maxMeshCentroidWanderUnits": 0.0508,
         "maxRootBoneTravelUnits": 0.0647,
         "hipHeightRangeUnits": [
           0,
@@ -92,7 +92,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.101,
-        "maxMeshCentroidWanderUnits": 0.1233,
+        "maxMeshCentroidWanderUnits": 0.1232,
         "maxRootBoneTravelUnits": 0.3856,
         "hipHeightRangeUnits": [
           -0.0842,
@@ -115,7 +115,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.0083,
-        "maxMeshCentroidWanderUnits": 0.0345,
+        "maxMeshCentroidWanderUnits": 0.0361,
         "maxRootBoneTravelUnits": 0.4572,
         "hipHeightRangeUnits": [
           0,
@@ -140,7 +140,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.008,
-        "maxMeshCentroidWanderUnits": 0.0274,
+        "maxMeshCentroidWanderUnits": 0.0286,
         "maxRootBoneTravelUnits": 0.5067,
         "hipHeightRangeUnits": [
           0,
@@ -162,7 +162,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.0644,
-        "maxMeshCentroidWanderUnits": 0.0878,
+        "maxMeshCentroidWanderUnits": 0.0874,
         "maxRootBoneTravelUnits": 0.065,
         "hipHeightRangeUnits": [
           -0.0385,
@@ -181,7 +181,7 @@
       "semanticKeyTimes": {},
       "measured": {
         "maxHipsDriftUnits": 0.0255,
-        "maxMeshCentroidWanderUnits": 0.07,
+        "maxMeshCentroidWanderUnits": 0.0697,
         "maxRootBoneTravelUnits": 0.061,
         "hipHeightRangeUnits": [
           0,
@@ -206,7 +206,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.0797,
-        "maxMeshCentroidWanderUnits": 0.1186,
+        "maxMeshCentroidWanderUnits": 0.118,
         "maxRootBoneTravelUnits": 0.2287,
         "hipHeightRangeUnits": [
           -0.131,
@@ -229,7 +229,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.0063,
-        "maxMeshCentroidWanderUnits": 0.0326,
+        "maxMeshCentroidWanderUnits": 0.0343,
         "maxRootBoneTravelUnits": 0.4813,
         "hipHeightRangeUnits": [
           0,
@@ -258,7 +258,7 @@
         },
         "heldFromTime": 0.833,
         "maxHipsDriftUnits": 0.0653,
-        "maxMeshCentroidWanderUnits": 0.1272,
+        "maxMeshCentroidWanderUnits": 0.1248,
         "maxRootBoneTravelUnits": 0.4241,
         "hipHeightRangeUnits": [
           -0.0034,
@@ -291,7 +291,7 @@
           "rootOffsetUnits": 0
         },
         "maxHipsDriftUnits": 0.0099,
-        "maxMeshCentroidWanderUnits": 0.0273,
+        "maxMeshCentroidWanderUnits": 0.0269,
         "maxRootBoneTravelUnits": 0.2613,
         "hipHeightRangeUnits": [
           0,
@@ -319,7 +319,7 @@
         },
         "heldFromTime": 0.639,
         "maxHipsDriftUnits": 0.0662,
-        "maxMeshCentroidWanderUnits": 0.1062,
+        "maxMeshCentroidWanderUnits": 0.1038,
         "maxRootBoneTravelUnits": 0.4098,
         "hipHeightRangeUnits": [
           -0.0038,
@@ -352,7 +352,7 @@
           "rootOffsetUnits": 0
         },
         "maxHipsDriftUnits": 0.0798,
-        "maxMeshCentroidWanderUnits": 0.0645,
+        "maxMeshCentroidWanderUnits": 0.061,
         "maxRootBoneTravelUnits": 0.351,
         "hipHeightRangeUnits": [
           -0.0034,
@@ -375,7 +375,7 @@
       },
       "measured": {
         "maxHipsDriftUnits": 0.022,
-        "maxMeshCentroidWanderUnits": 0.0772,
+        "maxMeshCentroidWanderUnits": 0.0778,
         "maxRootBoneTravelUnits": 0.057,
         "hipHeightRangeUnits": [
           0,

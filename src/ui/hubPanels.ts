@@ -21,7 +21,12 @@ export function hubMarkup(viewModel: GameViewModel): string {
     if (!hub) return '';
     const header = `<header class="wc-hub__head"><h1 id="wc-hub-name" class="wc-heading">${esc(hub.name)}</h1><p class="wc-hub__stage"><span class="wc-label">GROWTH STAGE</span> <strong>${esc(hub.stage)}</strong></p></header>`;
     const quick = `<div class="wc-hub__quick"><p class="wc-label">QUICK ACCESS</p><div class="wc-hub__quick-actions">${button('Companions', 'companions', `aria-current="false"`, 'wc-action--quiet')}${button('Journal', 'journal', `aria-current="false"`, 'wc-action--quiet')}</div></div>`;
-    return `<section class="wc-panel wc-sheet wc-hub" aria-labelledby="wc-hub-name">${header}${quick}${practiceSection(hub)}${upgradesSection(hub)}${memoriesSection(hub)}<footer class="wc-hub__foot"><button type="button" class="wc-action wc-action--quiet" data-ui-action="close" data-focus-key="hub-close" aria-label="Back">Esc&nbsp;&nbsp; Back</button></footer></section>`;
+    // The sanctuary is the second way into practice; the reason comes from the same authoritative model as the pause entry.
+    const training = viewModel.training;
+    const trainingSection = training
+        ? `<section class="wc-hub__section wc-hub__training" aria-labelledby="wc-hub-training-heading"><header><h2 id="wc-hub-training-heading" class="wc-heading">Training Grounds</h2><p class="wc-state__copy">Practice in an isolated copy of your journey. Nothing you do there changes the campaign, its saves or its history.</p></header><p class="wc-hub__practice-reason" data-available="${training.available}" id="wc-hub-training-reason">${esc(training.available ? 'Practice is available here.' : training.reason ?? 'Training Grounds are not available right now.')}</p><div class="wc-hub__practice-actions"><button type="button" class="wc-action wc-action--primary" data-ui-action="open-training" data-focus-key="hub-open-training"${training.available ? '' : ' disabled aria-describedby="wc-hub-training-reason"'}>Open Training Grounds</button></div></section>`
+        : '';
+    return `<section class="wc-panel wc-sheet wc-hub" aria-labelledby="wc-hub-name">${header}${quick}${trainingSection}${practiceSection(hub)}${upgradesSection(hub)}${memoriesSection(hub)}<footer class="wc-hub__foot"><button type="button" class="wc-action wc-action--quiet" data-ui-action="close" data-focus-key="hub-close" aria-label="Back">Esc&nbsp;&nbsp; Back</button></footer></section>`;
 }
 
 /** Milestone-earned upgrade rows: title, description, learned/available/locked state, requirement text, dispatchable button. The disabled gate stays in CSS-attached state-attribute so the same row presents Locked and Learned without two builders. */

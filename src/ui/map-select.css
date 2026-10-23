@@ -1,26 +1,15 @@
-/*
- * Wild Crown world map select (src/ui/worldMapSelect.ts).
- *
- * Layout: a full-bleed illustration with an absolutely positioned SVG overlay (polygons + dashed survey route),
- * and a side info panel in the survey-sheet style. Aspect ratio is locked to 8 : 5 to match the painted
- * illustration and the in-game World map (`game-ui.css` `.wc-map-art`). Under reduced motion the screen
- * resolves to a static frame: no zoom transform, no shimmer, no scanline pulse; spatial key navigation
- * still works.
- *
- * The interaction model is CSS-driven and reflected through DOM attributes set by
- * `bindWorldMapSelect(screenRoot, options)`. The root carries `data-inspect-region="<mapId>"` so every
- * region button, polygon, lock badge and side panel can react through attribute selectors (no per-element JS
- * state). The only motion in the file is transform (zoom on the active chip) and opacity (other regions
- * dim and the animated outline pulse on the active polygon). Reduced motion collapses both to instant state
- * changes.
- */
+/* Existing Erya painting and survey-sheet UI. Native Pixi owns the common camera,
+ * geographic hit areas and closed region borders; DOM markers retain semantic input.
+ * The outer selection screen owns scrolling so the map keeps its 8:5 aspect on narrow screens. */
+
+.wc-screen.wc-selection:has(> .wc-map) { scrollbar-gutter: stable; }
 
 .wc-state.wc-map {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
   gap: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   color: var(--wc-frame-text);
   background: var(--wc-frame);
   font: 500 14px/1.45 var(--wc-sans);
@@ -35,10 +24,19 @@
   min-height: 0;
 }
 
+/* Wide layout: the row height is decided by the screen, not by the inspected panel, so a short, long or locked
+   description cannot move the stage, the viewport or the panel's own bounds. The panel scrolls inside that row. */
+@media (min-width: 1101px) {
+  .wc-state.wc-selection.wc-map { height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
+  .wc-map__layout { height: 100%; align-self: stretch; grid-template-rows: minmax(0, 1fr); }
+  .wc-map__stage { align-self: start; max-height: 100%; min-height: 0; overflow-y: auto; }
+}
+
 .wc-map__stage {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto;
+  align-content: start;
   gap: 12px;
   padding: clamp(14px, 1.8vw, 22px);
   --wc-fg: var(--wc-ink);
@@ -53,8 +51,7 @@
 .wc-map__stage > header.wc-sheet__head { padding-bottom: 4px; }
 .wc-map__stage > header.wc-sheet__head .wc-heading { font-size: clamp(22px, 2.2vw, 32px); }
 
-/* The viewport holds the painted map, the SVG overlay and the invisible polygon buttons. Aspect 8 : 5 matches the
- * painted illustration, so object-fit: contain fills it edge-to-edge with no letterbox. */
+/* Image, native canvas and semantic markers share one registered 8:5 artboard. */
 .wc-map__viewport {
   position: relative;
   width: 100%;
@@ -64,7 +61,6 @@
   box-shadow: inset 0 0 0 1px var(--wc-rule-strong);
   overflow: hidden;
   isolation: isolate;
-  --wc-map-zoom: 1;
 }
 
 .wc-map__art {
@@ -74,116 +70,19 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
-  filter: saturate(1.05) brightness(0.96);
   pointer-events: none;
   user-select: none;
-  transition: transform 240ms var(--wc-ease-out, cubic-bezier(.2, .75, .2, 1)), filter 240ms ease;
-  transform: scale(var(--wc-map-zoom, 1));
-  transform-origin: 50% 50%;
+}
+.wc-map__canvas { position: absolute; inset: 0; z-index: 1; }
+.wc-map__canvas canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+.wc-map__viewport:has(.wc-map__canvas[data-ready="true"]) .wc-map__art { visibility: hidden; }
+.wc-map__render-error {
+  margin: 0; padding: 8px 12px;
+  color: var(--wc-ink); background: var(--wc-paper); font: 500 12px/1.4 var(--wc-sans);
 }
 
-.wc-map__overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  overflow: visible;
-}
 
-/* The reusable exported overlay (worldMapRegionOverlay) — only contains polygons + route, no buttons. */
-.wc-map__overlay--interactive {
-  pointer-events: none;
-}
-
-/* Region polygon fills/strokes; data-status drives the colour. The polygons never receive pointer events; the
- * buttons sitting over them do. Every polygon starts at low opacity and lights up when the matching region
- * becomes active (data-active on the button → attribute-selector-driven highlight on the polygon through
- * `data-inspect-region` on the root). */
-.wc-map__shapes .wc-map__shape {
-  fill: rgba(15, 30, 18, 0.05);
-  stroke: var(--wc-rule-strong);
-  stroke-width: 0.6;
-  vector-effect: non-scaling-stroke;
-  transition:
-    fill 220ms ease,
-    stroke 220ms ease,
-    stroke-width 220ms ease,
-    opacity 220ms ease,
-    filter 220ms ease;
-  pointer-events: none;
-}
-.wc-map__shapes .wc-map__shape[data-status="playable"] { stroke: var(--wc-route); }
-.wc-map__shapes .wc-map__shape[data-status="locked"] { stroke: var(--wc-rule-strong); }
-.wc-map__shapes .wc-map__shape[data-status="coming-soon"] { stroke: var(--wc-rule-strong); stroke-dasharray: 1.4 1; }
-
-/* Locked regions get a hatched overlay so they read as inaccessible from a glance. */
-.wc-map__shapes .wc-map__shape[data-status="locked"],
-.wc-map__shapes .wc-map__shape[data-status="coming-soon"] {
-  fill: url(#wc-map-hatch);
-  fill-opacity: 0.45;
-}
-
-/* When ANY region is active on the screen, every non-active polygon dims to 35% and the active one grows
- * + glows. This works without JS for hover (`:hover`/`:focus-visible` on the button) AND for the
- * `data-active` flag set by `bindWorldMapSelect`. */
-/* While a region is inspected, the other land masses sink into shadow and the inspected one is lit: the polygons
- * are near-transparent by default, so the dim is a real dark fill over the painting, not an opacity change. */
-.wc-state.wc-map[data-inspect-region] .wc-map__shapes .wc-map__shape:not([data-active="true"]) {
-  fill: rgba(8, 10, 6, 0.5);
-  fill-opacity: 1;
-  stroke: transparent;
-  filter: none;
-}
-.wc-state.wc-map[data-inspect-region] .wc-map__shapes .wc-map__shape[data-active="true"] {
-  fill: rgba(255, 236, 196, 0.1);
-  fill-opacity: 1;
-  stroke-width: 1.4;
-  filter: drop-shadow(0 0 1.4px rgba(255, 236, 196, 0.9)) drop-shadow(0 0 4px rgba(238, 127, 163, 0.55));
-}
-.wc-map__shapes .wc-map__shape { transition: fill 220ms ease, stroke 220ms ease, filter 220ms ease; }
-
-/* The actual highlight: the matching polygon lights up. The `:hover`/`:focus-visible` rules also work even
- * when the binder isn't attached (e.g. server-rendered first paint in reduced motion). */
-.wc-state.wc-map .wc-map__shapes .wc-map__shape[data-active="true"],
-.wc-state.wc-map .wc-map__shapes .wc-map__shape:has(~ .wc-map__buttons .wc-map__region-btn[data-active="true"][data-region]),
-.wc-map__region-btn[data-active="true"] ~ svg .wc-map__shapes .wc-map__shape[data-region],
-.wc-map__shapes .wc-map__shape:hover,
-.wc-map__shapes .wc-map__shape:has(+ .wc-map__buttons .wc-map__region-btn:hover) {
-  opacity: 1;
-  filter: drop-shadow(0 0 1.2px currentColor) saturate(1.4);
-}
-
-/* Per-status active stroke: a luminous colour that matches the legend, plus an animated outline. */
-@keyframes wc-map-pulse {
-  0%, 100% { stroke-opacity: 0.85; }
-  50% { stroke-opacity: 1; }
-}
-.wc-map__shapes .wc-map__shape[data-active="true"][data-status="playable"] {
-  fill: rgba(168, 23, 79, 0.22);
-  stroke: var(--wc-route);
-  stroke-width: 1.4;
-  animation: wc-map-pulse 1.8s var(--wc-ease-out, ease-in-out) infinite;
-}
-.wc-map__shapes .wc-map__shape[data-active="true"][data-status="locked"] {
-  fill: rgba(100, 95, 78, 0.22);
-  stroke: rgba(180, 160, 130, 0.95);
-  stroke-width: 1.2;
-  stroke-dasharray: 1.2 0.6;
-  animation: wc-map-pulse 1.8s var(--wc-ease-out, ease-in-out) infinite;
-}
-.wc-map__shapes .wc-map__shape[data-active="true"][data-status="coming-soon"] {
-  fill: rgba(140, 90, 43, 0.22);
-  stroke: rgba(220, 175, 110, 0.95);
-  stroke-width: 1.2;
-  stroke-dasharray: 1.2 0.6;
-  animation: wc-map-pulse 1.8s var(--wc-ease-out, ease-in-out) infinite;
-}
-
-/* Buttons: one per region. They cover the polygon, receive focus and clicks, and the SVG behind them paints
- * the hover/focus visual. Locked/coming-soon regions are aria-disabled but stay focusable so the player can
- * still inspect them. */
+/* Real buttons remain available to keyboard/gamepad and while the renderer loads. */
 .wc-map__buttons { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .wc-map__region-btn {
   position: absolute;
@@ -197,15 +96,10 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  /* The button is sized to the polygon's bounding box, set inline via --wc-map-cx, --wc-map-cy, --wc-map-area
-   * (% of the 100x62.5 viewBox). Width/height derived from --wc-map-area. */
-  width: calc(var(--wc-map-area, 5) * 1.6%);
-  height: calc(var(--wc-map-area, 5) * 1%);
-  min-width: 56px;
-  min-height: 44px;
+  width: 44px;
+  height: 44px;
   left: var(--wc-map-cx, 50%);
   top: var(--wc-map-cy, 50%);
-  transition: transform 220ms var(--wc-ease-out, cubic-bezier(.2, .75, .2, 1));
 }
 .wc-map__region-btn[aria-disabled="true"] { cursor: help; }
 
@@ -226,7 +120,6 @@
     background 220ms ease,
     border-color 220ms ease,
     color 220ms ease,
-    transform 220ms var(--wc-ease-out, cubic-bezier(.2, .75, .2, 1)),
     box-shadow 220ms ease,
     opacity 220ms ease;
 }
@@ -240,7 +133,7 @@
   background: var(--wc-route);
   color: #fff;
   border-color: var(--wc-route-bright);
-  box-shadow: 0 0 14px color-mix(in srgb, var(--wc-route) 60%, transparent);
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .55);
 }
 
 /* The full region name only appears on the hovered/focused/active region. This prevents the "double label"
@@ -272,12 +165,16 @@
   transform: translate(-50%, 0);
 }
 
-/* Hover/focus/selected: the active region lights up via the polygon rules above. The pin also lifts. */
-.wc-map__region-btn:hover .wc-map__region-pin,
+/* Marker feedback supports the single geographic camera/outline interaction. Pointer hover is neutral: the route
+   magenta stays reserved for the selected region, and keyboard focus wears the contextual focus token. */
+.wc-map__region-btn:hover .wc-map__region-pin {
+  border-color: var(--wc-frame-text);
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .55);
+}
 .wc-map__region-btn:focus-visible .wc-map__region-pin,
 .wc-map__region-btn[data-active="true"] .wc-map__region-pin {
-  transform: scale(1.18);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--wc-route) 55%, transparent), 0 8px 22px rgba(0, 0, 0, .55);
+  border-color: var(--wc-focus);
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .55);
 }
 .wc-map__region-btn[data-status="locked"]:hover .wc-map__region-pin,
 .wc-map__region-btn[data-status="locked"]:focus-visible .wc-map__region-pin,
@@ -285,52 +182,17 @@
 .wc-map__region-btn[data-status="coming-soon"]:hover .wc-map__region-pin,
 .wc-map__region-btn[data-status="coming-soon"]:focus-visible .wc-map__region-pin,
 .wc-map__region-btn[data-status="coming-soon"][data-active="true"] .wc-map__region-pin {
-  box-shadow: 0 0 18px color-mix(in srgb, rgba(220, 175, 110, 0.55) 55%, transparent), 0 8px 22px rgba(0, 0, 0, .55);
+  border-color: rgba(220, 175, 110, .95);
 }
 
-/* Subtle lift/zoom on the painted art when a region is active: the art scales toward the inspected region
- * via the CSS variable set inline on the button. Under reduced motion the transform is suppressed. */
-.wc-map__region-btn[data-active="true"][data-region] {
-  transform: translate(-50%, -50%) scale(1.04);
-}
 
-/* Focus visibility: a crisp outline around the active region for keyboard users. */
+/* Focus visibility: the contextual focus rim around the active region for keyboard users. */
 .wc-map__region-btn:focus-visible {
-  outline: 2px solid var(--wc-route-bright);
+  outline: 2px solid var(--wc-focus);
   outline-offset: 6px;
   border-radius: 999px;
 }
 
-/* The dashed survey route line follows the journey order; drawn in the same colour as the route overprint. */
-.wc-map__routes .wc-map__route {
-  fill: none;
-  stroke: var(--wc-route);
-  stroke-width: 0.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1.5 1;
-  opacity: .75;
-  vector-effect: non-scaling-stroke;
-}
-
-/* Lock icons rendered on top of the route. They show on locked/coming-soon only; we drive visibility by data. */
-.wc-map__lock-icons .wc-map__lock { display: none; }
-.wc-state.wc-map[data-inspect-region] .wc-map__lock-icons .wc-map__lock {
-  display: block;
-  color: rgba(220, 175, 110, 0.85);
-  opacity: 0.6;
-  transition: opacity 220ms ease;
-}
-.wc-state.wc-map .wc-map__lock-icons .wc-map__lock[data-region] { display: none; }
-.wc-state.wc-map .wc-map__shapes .wc-map__shape[data-status="locked"] ~ .wc-map__lock-icons .wc-map__lock[data-region],
-.wc-state.wc-map .wc-map__shapes .wc-map__shape[data-status="coming-soon"] ~ .wc-map__lock-icons .wc-map__lock[data-region] {
-  display: block;
-  opacity: 0.6;
-}
-.wc-state.wc-map .wc-map__shapes .wc-map__shape[data-active="true"][data-status="locked"] ~ .wc-map__lock-icons .wc-map__lock[data-region],
-.wc-state.wc-map .wc-map__shapes .wc-map__shape[data-active="true"][data-status="coming-soon"] ~ .wc-map__lock-icons .wc-map__lock[data-region] {
-  opacity: 0;
-}
 
 /* Legend under the map. */
 .wc-map__legend {
@@ -377,8 +239,13 @@
   color-scheme: light;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px var(--wc-paper-edge), var(--wc-lift);
+  /* The panel's own height never depends on the inspected content: the layout row keeps its size and the content
+     scrolls inside the panel, so a short or long region description cannot move the map stage or the viewport. */
+  align-self: stretch;
+  max-height: 100%;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
   transition: opacity 180ms ease;
 }
 .wc-map__panel[hidden] { display: none; }
@@ -414,9 +281,8 @@
 }
 .wc-map__thumb--placeholder {
   background-image: url('/ui/world-map-game.webp');
-  background-size: 260%;
-  background-position: 99% 72%;
-  filter: saturate(.35) brightness(.6);
+  background-size: cover;
+  background-position: 50% 50%;
 }
 .wc-map__setting {
   margin: 0;
@@ -476,67 +342,35 @@
 .wc-map__footer .wc-meta { color: var(--wc-frame-faint); }
 .wc-map__return-title { color: var(--wc-frame-soft); }
 
-/* ---------- reduced motion: static frame ---------- */
-.wc-state.wc-map.wc-state--static,
-.wc-map.wc-state--static {
-  --wc-map-zoom: 1;
-}
-.wc-state.wc-map.wc-state--static .wc-map__viewport,
-.wc-map.wc-state--static .wc-map__viewport {
-  transform: none !important;
-  --wc-map-zoom: 1;
-}
-.wc-state--static .wc-map__region-btn:hover,
-.wc-state--static .wc-map__region-btn:focus-visible,
-.wc-state--static .wc-map__region-btn[data-selected="true"],
-.wc-state--static .wc-map__region-btn[data-active="true"] {
-  /* Under reduced motion we still highlight the selected/hovered region but with no transform: scale. */
-  transform: translate(-50%, -50%);
-}
-.wc-state--static .wc-map__region-name {
-  transform: translate(-50%, 0);
-}
-.wc-state--static .wc-map__region-btn:hover .wc-map__region-pin,
-.wc-state--static .wc-map__region-btn:focus-visible .wc-map__region-pin,
-.wc-state--static .wc-map__region-btn[data-active="true"] .wc-map__region-pin {
-  transform: none;
-}
-.wc-state--static .wc-map__shapes .wc-map__shape[data-active="true"] {
-  animation: none !important;
-}
+/* Native camera reduction is handled by the host for both user and system settings. */
+.wc-state--static .wc-map__region-pin,
+.wc-state--static .wc-map__region-name { transition: none; }
 @media (prefers-reduced-motion: reduce) {
-  .wc-state.wc-map,
   .wc-state.wc-map *,
   .wc-state.wc-map *::before,
-  .wc-state.wc-map *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-  .wc-map__viewport { transform: none !important; --wc-map-zoom: 1; }
-  .wc-map__art { transform: none !important; }
-  .wc-map__shapes .wc-map__shape { transition: none !important; }
-  .wc-map__region-chip,
-  .wc-map__region-pin,
-  .wc-map__region-name,
-  .wc-map__region-btn { transition: none !important; }
-  .wc-map__region-btn:hover,
-  .wc-map__region-btn:focus-visible,
-  .wc-map__region-btn[data-active="true"],
-  .wc-map__region-btn[data-selected="true"] { transform: translate(-50%, -50%) !important; }
+  .wc-state.wc-map *::after { animation: none !important; transition: none !important; }
 }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1100px) {
   .wc-map__layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto;
+    grid-template-rows: auto clamp(28rem, 65vh, 42rem);
   }
   .wc-map__panel {
-    max-height: none;
+    height: 100%;
+    max-height: 100%;
   }
 }
 @media (max-width: 700px) {
   .wc-map__region-pin { width: 22px; height: 22px; font-size: 11px; }
   .wc-map__region-name { font-size: 10px; padding: 3px 6px; letter-spacing: .05em; }
   .wc-map__footer { grid-template-columns: 1fr; }
+  .wc-map__region-btn[data-region="blood-bamboo-valley"] .wc-map__region-name,
+  .wc-map__region-btn[data-region="moonpine-ridge"] .wc-map__region-name { top: calc(100% + 4px); bottom: auto; }
+  .wc-map__region-btn[data-region="whispering-canopy"] .wc-map__region-name,
+  .wc-map__region-btn[data-region="heartroot-hollow"] .wc-map__region-name { left: 0; transform: translateY(6px); }
+  .wc-map__region-btn[data-region="mistveil-basin"] .wc-map__region-name,
+  .wc-map__region-btn[data-region="sunmane-expanse"] .wc-map__region-name { left: auto; right: 0; transform: translateY(6px); }
+  .wc-map__region-btn:is([data-region="whispering-canopy"], [data-region="heartroot-hollow"], [data-region="mistveil-basin"], [data-region="sunmane-expanse"]):is(:hover, :focus-visible, [data-active="true"], [data-selected="true"]) .wc-map__region-name { transform: translate(0, 0); }
 }

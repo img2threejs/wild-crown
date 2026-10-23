@@ -1,0 +1,25 @@
+{
+  "scope": "Fresh-process real companion roster revocation on a full serialized EngineState; explicit Vara mark fixture, no mock implementation",
+  "before": {
+    "selected": null,
+    "mark": {
+      "sourceId": "vara",
+      "untilWorldTick": 999,
+      "extended": false
+    },
+    "tokens": {
+      "available": 2,
+      "maximum": 2,
+      "nextAt": 0
+    }
+  },
+  "after": {
+    "selected": null,
+    "mark": null,
+    "tokens": {
+      "available": 2,
+      "maximum": 2,
+      "nextAt": 0
+    }
+  }
+}

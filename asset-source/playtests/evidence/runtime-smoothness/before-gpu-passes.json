@@ -1,0 +1,46 @@
+{
+  "available": true,
+  "disjoint": false,
+  "pending": 0,
+  "targets": {
+    "oneSamples": 2,
+    "twoSamples": 2
+  },
+  "passes": {
+    "0:HQ": {
+      "n": 136,
+      "p50Ms": 9.4995,
+      "p95Ms": 9.804458
+    },
+    "1:Ql": {
+      "n": 136,
+      "p50Ms": 8.530125,
+      "p95Ms": 8.823958
+    },
+    "2:postfx-height-fog": {
+      "n": 136,
+      "p50Ms": 9.676,
+      "p95Ms": 10.118625
+    },
+    "3:postfx-light-shafts": {
+      "n": 0,
+      "p50Ms": null,
+      "p95Ms": null
+    },
+    "4:postfx-impulse": {
+      "n": 0,
+      "p50Ms": null,
+      "p95Ms": null
+    },
+    "5:postfx-color-grade": {
+      "n": 136,
+      "p50Ms": 11.03575,
+      "p95Ms": 11.514458
+    },
+    "6:OutputShader": {
+      "n": 136,
+      "p50Ms": 11.326583,
+      "p95Ms": 11.829958
+    }
+  }
+}

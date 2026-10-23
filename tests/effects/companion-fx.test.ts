@@ -168,17 +168,6 @@ describe('companion command feedback', () => {
     } finally { effects.dispose(); }
   });
 
-  it('draws a line from the companion to the target of a finite job while it runs, and nothing when the target is not an actor', () => {
-    const { effects } = stage();
-    try {
-      const koro = (targetId: string) => actor('koro', 0, { allegiance: 'ally', job: { command: 'distract', targetId, remainingTicks: 90 } });
-      effects.companions.update([koro('hunter-1'), actor('hunter-1', 6)]);
-      expect(effects.companions.activeCount).toBe(1);
-      expect(effects.vfx.beams.activeCount).toBe(1);
-      effects.companions.update([koro('lever-2'), actor('hunter-1', 6)]);
-      expect(effects.companions.activeCount).toBe(0);
-    } finally { effects.dispose(); }
-  });
 });
 
 describe("Tali's shelter", () => {

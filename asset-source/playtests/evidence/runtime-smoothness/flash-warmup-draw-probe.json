@@ -1,0 +1,86 @@
+{
+  "fogBefore": "_Fog",
+  "fogAfter": "_Fog",
+  "links": [
+    {
+      "phase": "warm",
+      "current": "tripo_node_3bba3d62-b3fc-4f7a-8777-a101a9dc0817_material:hit-flash",
+      "ms": 12.600000023841858,
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "current": "tripo_mat_f01c79a6-073b-4a1d-a2ed-8d2b87d4a8dc:hit-flash",
+      "ms": 4.400000035762787,
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "current": "tripo_material_e43e454e-0f8e-4fd9-b284-f838ca4ed685:hit-flash",
+      "ms": 1.9000000357627869,
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "current": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059_material",
+      "ms": 1,
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "current": "tripo_node_79974d6b-9bc0-4781-91c0-a94ed605a059_material",
+      "ms": 0.699999988079071,
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "current": "",
+      "ms": 0.7000000476837158,
+      "fog": "_Fog"
+    }
+  ],
+  "flashDraws": [
+    {
+      "phase": "warm",
+      "material": "tripo_node_3bba3d62-b3fc-4f7a-8777-a101a9dc0817_material:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_node_7fdedf2f-d9bd-45df-bd4c-dca0085e2c9d_material:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_node_f93f896c-4d1c-40cf-9b39-ace27366793b_material:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_node_8a5060d5-40ec-4c95-bfd5-a3fd5f9373a6_material:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_node_8df75891-1004-4ece-96ed-267ef114f5e2_material:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_mat_f01c79a6-073b-4a1d-a2ed-8d2b87d4a8dc:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "warm",
+      "material": "tripo_material_e43e454e-0f8e-4fd9-b284-f838ca4ed685:hit-flash",
+      "fog": "_Fog"
+    },
+    {
+      "phase": "immediate-hit",
+      "material": "tripo_material_e43e454e-0f8e-4fd9-b284-f838ca4ed685:hit-flash",
+      "fog": "_Fog"
+    }
+  ],
+  "totalDraws": 626,
+  "glError": 0
+}

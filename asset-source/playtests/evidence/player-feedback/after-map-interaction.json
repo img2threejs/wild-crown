@@ -1,0 +1,44 @@
+{
+  "keyboard": {
+    "id": "canopy",
+    "ariaDisabled": "true",
+    "outline": [
+      "rgb(44, 58, 36)",
+      "2px",
+      "solid"
+    ],
+    "modality": "keyboard",
+    "canvasSame": true
+  },
+  "lockedEnter": {
+    "screen": "wc-screen wc-state wc-selection",
+    "canvas": true,
+    "loading": false
+  },
+  "focusViews": [
+    {
+      "id": "greenwake",
+      "view": "transform: matrix(1.1, 0, 0, 1.1, -30.0405, -30.9001);",
+      "canvasSame": true
+    },
+    {
+      "id": "chapter-8",
+      "view": "transform: matrix(1.1, 0, 0, 1.1, -4.39171, -34.2064);",
+      "canvasSame": true
+    },
+    {
+      "id": "canopy",
+      "view": "transform: matrix(1.1, 0, 0, 1.1, -4.39171, -15.6456);",
+      "canvasSame": true
+    }
+  ],
+  "longTextStress": {
+    "heightBefore": 732.15625,
+    "heightAfter": 732.15625,
+    "scrollHeight": 4860,
+    "clientHeight": 732,
+    "scrollTop": 4128,
+    "canvasSame": true
+  },
+  "scope": "Native Pixi canvas; actual Tab/Enter and region focus. Native inspect pan/zoom is region-driven (eryaWorldMap.ts), not wheel-driven. Long translated text stress is DOM-only and restored immediately."
+}

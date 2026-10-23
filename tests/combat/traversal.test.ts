@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { CombatEngine, createEngineState, type CombatInput, type EngineState } from '../../src/game/combat/CombatEngine.js';
-import type { RegionColliderDefinition, RegionRouteDefinition } from '../../src/game/contracts.js';
+import type { RegionColliderDefinition, RegionRouteDefinition, WorldAssetPlacement } from '../../src/game/contracts.js';
 import { REGIONS } from '../../src/content/campaign.js';
 import { CHAPTER_ASSET_BINDINGS } from '../../src/content/chapter-assets.js';
 import { solidPropKind } from '../../src/content/solid-props.js';
@@ -174,14 +174,46 @@ describe('contextual traversal lifetime', () => {
       const arcs = region.traversalArcs.filter(arc => arc.traversal);
       if (arcs.length === 0) continue;
       const colliders: RegionColliderDefinition[] = [], supports: SupportField[] = [];
+      const groups = new Map<string, WorldAssetPlacement[]>();
       for (const placement of region.props) {
         if (solidPropKind(placement) === 'decoration') continue;
+        const key = placement.assetId + ':' + solidPropKind(placement);
+        const group = groups.get(key) ?? [];
+        group.push(placement); groups.set(key, group);
+      }
+      for (const placements of groups.values()) {
+        const placement = placements[0]!;
         const binding = CHAPTER_ASSET_BINDINGS[region.id]?.find(item => item.assetId === placement.assetId);
         if (!binding) throw new Error(`Missing native chapter binding: ${region.id}/${placement.assetId}`);
         const playtest = binding.catalogUrl.split('/').at(-1)!.replace(/\.json$/, '');
-        for (const entry of buildStaticPropColliders(glbStaticBatch(playtest, placement), [placement], { ...region, movableObjects: [] })) {
-          colliders.push(entry.collider);
-          if (entry.support) supports.push(entry.support);
+        const batch = glbStaticBatch(playtest, placement);
+        try {
+          for (const entry of buildStaticPropColliders(batch, placements, { ...region, movableObjects: [] })) {
+            colliders.push(entry.collider);
+            if (entry.support) supports.push(entry.support);
+          }
+        } finally { batch.dispose(); }
+      }
+      if (region.id === 'whispering-canopy') {
+        const approach = region.navigation.nodes.find(node => node.id === 'canopy-story-seed-approach')!.position;
+        const waypoints = ['canopy-story-seed-entry', 'canopy-story-seed-alcove']
+          .map(id => region.navigation.nodes.find(node => node.id === id)!.position);
+        for (const id of ['monkey-rescue', 'orchard-seeds', 'seeds-on-the-wind']) {
+          const target = region.entities.find(entity => entity.id === id)!;
+          const e = new CombatEngine();
+          e.loadRegion({ regionId: region.id, runId: 'native-seed-approach', presentActorIds: [], playerPosition: approach });
+          e.setCameraBasis({ forward: v(0, 0, 1), right: v(1) });
+          e.setSceneColliders(colliders, supports);
+          for (const destination of [...waypoints, target.position]) {
+            for (let tick = 0; tick < 360; tick++) {
+              const position = player(e).position;
+              const distance = distance2(position, destination);
+              if (distance < .4) break;
+              e.fixedStep(input({ move: { x: (destination.x - position.x) / distance, y: 0, z: (destination.z - position.z) / distance } }));
+            }
+          }
+          expect(distance2(player(e).position, target.position)).toBeLessThan(1);
+          expect(isSupportedCapsulePose(e.snapshotState().arena, player(e).position, .42, 1.6)).toBe(true);
         }
       }
       for (const arc of arcs) {

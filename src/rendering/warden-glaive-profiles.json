@@ -1,0 +1,58 @@
+{
+  "description": "How Aren's right fist holds the Warden glaive in each clip. turnDegrees turns the shaft from the knuckle line (index base minus pinky base) toward the fingers (wrist to middle-finger base); gripFraction is the share of the glaive length on the pommel side of the fist. Aren's idle and skill clips play Adobe Mixamo takes unchanged, so the glaive adapts to the hand instead. The default (-28.64788975654116 degrees = -0.5 rad, 0.42) is the placement the glaive had before per-clip profiles: the shaft tilted 0.5 rad off the knuckle line toward the wrist.",
+  "default": {
+    "turnDegrees": -28.64788975654116,
+    "gripFraction": 0.42
+  },
+  "blendSeconds": 0.12,
+  "clips": {
+    "aren-idle": {
+      "turnDegrees": -40,
+      "gripFraction": 0.42
+    },
+    "aren-light-1": {
+      "turnDegrees": 16,
+      "gripFraction": 0.24
+    },
+    "aren-light-3": {
+      "turnDegrees": -15,
+      "gripFraction": 0.42
+    },
+    "aren-light-4": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "aren-heavy": {
+      "turnDegrees": -64,
+      "gripFraction": 0.3
+    },
+    "aren-charged-heavy-charge": {
+      "turnDegrees": -60,
+      "gripFraction": 0.48
+    },
+    "aren-charged-heavy": {
+      "turnDegrees": -8,
+      "gripFraction": 0.12
+    },
+    "aren-sigil-charge": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "aren-sigil-bolt": {
+      "turnDegrees": 15,
+      "gripFraction": 0.42
+    },
+    "aren-sigil-barrage": {
+      "turnDegrees": 0,
+      "gripFraction": 0.42
+    },
+    "aren-root-tether": {
+      "turnDegrees": 16,
+      "gripFraction": 0.48
+    },
+    "aren-cleanse": {
+      "turnDegrees": -64,
+      "gripFraction": 0.3
+    }
+  }
+}

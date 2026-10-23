@@ -1,0 +1,238 @@
+{
+  "warmup": {
+    "before": [
+      {
+        "id": "canopy-vara",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "canopy-howler",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "canopy-hornbill",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "canopy-mire-viper",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "asha__party_companion",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "aren",
+        "variant": false,
+        "flashStaged": true
+      },
+      {
+        "id": "aren",
+        "variant": "actor-sakda-hero",
+        "flashStaged": false
+      }
+    ],
+    "warmupMs": 50.299999952316284,
+    "programsBefore": 104,
+    "programsAfter": 105,
+    "player": {
+      "heroId": "sakda",
+      "vitality": 115,
+      "maxVitality": 115,
+      "instinct": 0,
+      "mana": 100,
+      "maxMana": 100
+    },
+    "glError": 0
+  },
+  "measurement": {
+    "label": "diagnostic-canopy-after-loading-only-variant-hit-rim-warmup",
+    "durationMs": 20009.399999976158,
+    "frames": 1189,
+    "frame": {
+      "p50": 13.400000000023283,
+      "p95": 26.79999999998836,
+      "p99": 27.400000000023283,
+      "max": 52.70000000001164,
+      "over25": 308,
+      "over50": 1
+    },
+    "longTasks": [
+      {
+        "start": 375346.09999996424,
+        "duration": 55
+      }
+    ],
+    "viewport": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "bufferWidth": 1440,
+      "bufferHeight": 900,
+      "visibility": "visible"
+    },
+    "screen": "game",
+    "region": "whispering-canopy",
+    "worldClock": {
+      "simulationTick": 1214,
+      "worldTick": 1194,
+      "worldTimeSeconds": 19.9,
+      "timeScale": 1,
+      "policy": "normal"
+    },
+    "player": {
+      "heroId": "sakda",
+      "vitality": 84,
+      "maxVitality": 115,
+      "instinct": 40,
+      "mana": 33,
+      "maxMana": 100
+    },
+    "initialPosition": {
+      "x": -58,
+      "y": 0,
+      "z": -20
+    },
+    "finalPosition": {
+      "x": -45.36388013219505,
+      "y": 0,
+      "z": -28.3652910375855
+    },
+    "actors": 6,
+    "rendererMemory": {
+      "geometries": 188,
+      "textures": 96
+    },
+    "programs": 105,
+    "assetErrors": [],
+    "counters": {
+      "scriptMs": 4658.293,
+      "taskMs": 5868.276,
+      "layoutMs": 44.414,
+      "recalcStyleMs": 425.402,
+      "heapUsedBytes": 103993880,
+      "domNodes": 8883
+    }
+  },
+  "rootCauseEvidence": [
+    {
+      "sampleCount": 29,
+      "fromStartMs": [
+        14720.784,
+        14722.292,
+        14723.793,
+        14725.307,
+        14726.818,
+        14728.326,
+        14729.858,
+        14731.389,
+        14732.875,
+        14734.388,
+        14735.895,
+        14737.4,
+        14738.609,
+        14740.121,
+        14741.272,
+        14742.764,
+        14744.267,
+        14745.359,
+        14746.775,
+        14748.282,
+        14749.787,
+        14751.302,
+        14752.826,
+        14754.067,
+        14755.573,
+        14757.086,
+        14758.572,
+        14760.08,
+        14761.582
+      ],
+      "stack": [
+        {
+          "functionName": "getProgramInfoLog",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        },
+        {
+          "functionName": "onFirstUse",
+          "scriptId": "467",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+          "lineNumber": 12199,
+          "columnNumber": 21
+        },
+        {
+          "functionName": "setProgram",
+          "scriptId": "467",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+          "lineNumber": 17962,
+          "columnNumber": 23
+        },
+        {
+          "functionName": "WebGLRenderer.renderBufferDirect",
+          "scriptId": "467",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+          "lineNumber": 17426,
+          "columnNumber": 38
+        },
+        {
+          "functionName": "renderScene",
+          "scriptId": "467",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+          "lineNumber": 17763,
+          "columnNumber": 24
+        },
+        {
+          "functionName": "WebGLRenderer.render",
+          "scriptId": "467",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/chunk-QYOHZWXJ.js?v=153c6e6e",
+          "lineNumber": 17618,
+          "columnNumber": 26
+        },
+        {
+          "functionName": "render",
+          "scriptId": "560",
+          "url": "http://127.0.0.1:5210/node_modules/.vite/deps/three_addons_postprocessing_RenderPass__js.js?v=153c6e6e",
+          "lineNumber": 22,
+          "columnNumber": 8
+        },
+        {
+          "functionName": "render",
+          "scriptId": "519",
+          "url": "http://127.0.0.1:5210/src/rendering/PostFX.ts?t=1792634942042",
+          "lineNumber": 250,
+          "columnNumber": 8
+        },
+        {
+          "functionName": "render",
+          "scriptId": "481",
+          "url": "http://127.0.0.1:5210/src/rendering/GameRenderer.ts?t=1792634942042",
+          "lineNumber": 881,
+          "columnNumber": 8
+        },
+        {
+          "functionName": "frame",
+          "scriptId": "468",
+          "url": "http://127.0.0.1:5210/src/app/GameApplication.ts?t=1792634942042",
+          "lineNumber": 2368,
+          "columnNumber": 10
+        },
+        {
+          "functionName": "(root)",
+          "scriptId": "0",
+          "url": "",
+          "lineNumber": -1,
+          "columnNumber": -1
+        }
+      ]
+    }
+  ],
+  "limitation": "Loading-only diagnostic on the same real fixture before source implementation; not the final production acceptance run."
+}

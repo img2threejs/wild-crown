@@ -4,6 +4,8 @@ const HAND_NAME = 'mixamorig:RightHand';
 const FINGERS = ['Index', 'Middle', 'Ring', 'Pinky', 'Thumb'] as const;
 
 interface FingerJoint { readonly bone: Bone; readonly grip: Quaternion }
+/** The finger grip quaternions (same order as `HandGrip.joints`) for a shaft turned `radians` from the knuckle line toward the fingers. */
+export interface GripTurn { readonly radians: number; readonly grips: readonly Quaternion[] }
 interface GripThumb {
   readonly pivot: Vector3;
   readonly axis: Vector3;
@@ -51,6 +53,11 @@ export interface HandGrip {
   readonly palm: Vector3;
   readonly shaftRadius: number;
   readonly joints: readonly FingerJoint[];
+  /** Finger-chain hands: unit knuckle line (index base − pinky base) and finger direction (wrist → middle base, knuckle component removed), in hand space. */
+  readonly knuckles?: Vector3;
+  readonly direction?: Vector3;
+  /** Finger-chain hands: the fist precomputed for each requested shaft turn, ascending. */
+  readonly turns?: readonly GripTurn[];
   readonly rigid?: RigidHandShape;
 }
 export interface HandGeometryEdit { readonly mesh: SkinnedMesh; readonly original: BufferGeometry; readonly edited: BufferGeometry }
@@ -243,7 +250,7 @@ function opposedGripThumb(points: readonly Vector3[], shape: RigidHandShape, mid
  * places the weapon's cutting edge (-Y; `curl` is +Y, the spine) about the shaft: the edge direction is cos(edge)·(back of the hand) + sin(edge)·`bend` (the
  * finger direction without its shaft component); otherwise the staff convention applies (`curl` = -palm normal).
  */
-export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: number, edgeRadians?: number): HandGrip {
+export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: number, edgeRadians?: number, wrapTurns: readonly number[] = [], shaftScale = 1): HandGrip {
   let mesh: SkinnedMesh | undefined;
   root.traverse(node => { if (!mesh && node instanceof SkinnedMesh && node.skeleton.getBoneByName(PropertyBinding.sanitizeNodeName(HAND_NAME))) mesh = node; });
   if (!mesh) throw new Error('The hero has no native skinned right hand.');
@@ -315,53 +322,64 @@ export function computeHandGrip(root: Object3D, staff: boolean, tiltRadians: num
   const normal = knuckles.clone().cross(direction).normalize();
   if (normal.dot(thumb) < 0) normal.negate();
   const axis = knuckles.clone().multiplyScalar(Math.cos(tiltRadians)).addScaledVector(direction, -Math.sin(tiltRadians)).normalize();
-  const shaftRadius = width.length() * handScale * .16;
+  // `shaftScale` > 1: a thicker shaft than the anatomical fist (the Heartroot staff keeps a full, even shaft); palm and finger wrap follow it.
+  const shaftRadius = width.length() * handScale * .16 * shaftScale;
   let surface = 0;
   for (const point of palmPoints) if (point.dot(direction) > middle.dot(direction) * .5 && point.dot(direction) < middle.dot(direction)) surface = Math.max(surface, point.dot(normal));
   const palm = middle.clone().multiplyScalar(.92).addScaledVector(normal, surface + shaftRadius / handScale);
-  const joints: FingerJoint[] = [];
   const handRotation = new Quaternion().setFromRotationMatrix(bindWorld(hand));
-  const shaftWorld = axis.clone().applyQuaternion(handRotation);
-  for (const name of FINGERS) {
-    const bones = [1, 2, 3, 4].map(joint => finger(name, joint));
-    const positions = bones.map(local);
-    const center = palm.clone().addScaledVector(axis, positions[0]!.clone().sub(palm).dot(axis));
-    const radial = positions[0]!.clone().sub(center);
-    const xAxis = direction.clone().addScaledVector(axis, -direction.dot(axis)).normalize(), yAxis = normal;
-    const kx = radial.dot(xAxis), ky = radial.dot(yAxis), distance = Math.hypot(kx, ky);
-    const links = positions.slice(1).map((position, index) => position.clone().sub(positions[index]!));
-    const lengths = links.map(link => link.clone().addScaledVector(axis, -link.dot(axis)).length());
-    // A tangent proximal phalanx and circular distal phalanges keep flesh outside
-    // the shaft. Bone lengths and native axial components remain unchanged.
-    const clearance = (shaftRadius + .002) / handScale + lengths[1]! * .35;
-    const tangent = Math.sqrt(Math.max(0, distance * distance - clearance * clearance));
-    let radius = Math.max(Math.hypot(clearance, Math.max(0, lengths[0]! - tangent)), Math.hypot(clearance, lengths[1]! / 2), Math.hypot(clearance, lengths[2]! / 2), distance - lengths[0]! + 1e-5);
-    radius = Math.min(radius, distance + lengths[0]! - 1e-5);
-    const base = (distance * distance + radius * radius - lengths[0]! * lengths[0]!) / (2 * distance);
-    const offset = Math.sqrt(Math.max(0, radius * radius - base * base));
-    const bx = kx / distance * base, by = ky / distance * base;
-    const candidates = [[bx - ky / distance * offset, by + kx / distance * offset], [bx + ky / distance * offset, by - kx / distance * offset]] as const;
-    const firstLink = links[0]!;
-    const score = (candidate: readonly [number, number]): number => (candidate[0] - kx) * firstLink.dot(xAxis) + (candidate[1] - ky) * firstLink.dot(yAxis);
-    const first = score(candidates[0]) > score(candidates[1]) ? candidates[0] : candidates[1];
-    let angle = Math.atan2(first[1], first[0]), px = kx, py = ky, cumulative = 0;
-    const turn = (kx * first[1] - ky * first[0]) >= 0 ? 1 : -1;
-    for (let joint = 0; joint < 3; joint++) {
-      if (joint > 0) angle += turn * 2 * Math.asin(Math.min(1, lengths[joint]! / (2 * radius)));
-      const nx = Math.cos(angle) * radius, ny = Math.sin(angle) * radius;
-      const desired = xAxis.clone().multiplyScalar(nx - px).addScaledVector(yAxis, ny - py).normalize();
-      const original = links[joint]!.clone().addScaledVector(axis, -links[joint]!.dot(axis)).normalize();
-      const next = Math.atan2(axis.dot(original.clone().cross(desired)), original.dot(desired));
-      const target = bones[joint]!, parent = target.parent as Bone;
-      const rotation = new Quaternion().setFromRotationMatrix(bindWorld(target));
-      const parentRotation = parent === hand ? handRotation : new Quaternion().setFromRotationMatrix(bindWorld(parent));
-      const bindLocal = parentRotation.clone().invert().multiply(rotation);
-      const boneAxis = shaftWorld.clone().applyQuaternion(rotation.clone().invert());
-      joints.push({ bone: target, grip: bindLocal.multiply(new Quaternion().setFromAxisAngle(boneAxis, next - cumulative)) });
-      cumulative = next; px = nx; py = ny;
+  /** The grip quaternion of every finger joint that closes the four fingers and the thumb around a shaft lying along `axis` (hand space). */
+  const fingerGrips = (axis: Vector3): FingerJoint[] => {
+    const joints: FingerJoint[] = [];
+    const shaftWorld = axis.clone().applyQuaternion(handRotation);
+    for (const name of FINGERS) {
+      const bones = [1, 2, 3, 4].map(joint => finger(name, joint));
+      const positions = bones.map(local);
+      const center = palm.clone().addScaledVector(axis, positions[0]!.clone().sub(palm).dot(axis));
+      const radial = positions[0]!.clone().sub(center);
+      const xAxis = direction.clone().addScaledVector(axis, -direction.dot(axis)).normalize(), yAxis = normal;
+      const kx = radial.dot(xAxis), ky = radial.dot(yAxis), distance = Math.hypot(kx, ky);
+      const links = positions.slice(1).map((position, index) => position.clone().sub(positions[index]!));
+      const lengths = links.map(link => link.clone().addScaledVector(axis, -link.dot(axis)).length());
+      // A tangent proximal phalanx and circular distal phalanges keep flesh outside
+      // the shaft. Bone lengths and native axial components remain unchanged.
+      const clearance = (shaftRadius + .002) / handScale + lengths[1]! * .35;
+      const tangent = Math.sqrt(Math.max(0, distance * distance - clearance * clearance));
+      let radius = Math.max(Math.hypot(clearance, Math.max(0, lengths[0]! - tangent)), Math.hypot(clearance, lengths[1]! / 2), Math.hypot(clearance, lengths[2]! / 2), distance - lengths[0]! + 1e-5);
+      radius = Math.min(radius, distance + lengths[0]! - 1e-5);
+      const base = (distance * distance + radius * radius - lengths[0]! * lengths[0]!) / (2 * distance);
+      const offset = Math.sqrt(Math.max(0, radius * radius - base * base));
+      const bx = kx / distance * base, by = ky / distance * base;
+      const candidates = [[bx - ky / distance * offset, by + kx / distance * offset], [bx + ky / distance * offset, by - kx / distance * offset]] as const;
+      const firstLink = links[0]!;
+      const score = (candidate: readonly [number, number]): number => (candidate[0] - kx) * firstLink.dot(xAxis) + (candidate[1] - ky) * firstLink.dot(yAxis);
+      const first = score(candidates[0]) > score(candidates[1]) ? candidates[0] : candidates[1];
+      let angle = Math.atan2(first[1], first[0]), px = kx, py = ky, cumulative = 0;
+      const turn = (kx * first[1] - ky * first[0]) >= 0 ? 1 : -1;
+      for (let joint = 0; joint < 3; joint++) {
+        if (joint > 0) angle += turn * 2 * Math.asin(Math.min(1, lengths[joint]! / (2 * radius)));
+        const nx = Math.cos(angle) * radius, ny = Math.sin(angle) * radius;
+        const desired = xAxis.clone().multiplyScalar(nx - px).addScaledVector(yAxis, ny - py).normalize();
+        const original = links[joint]!.clone().addScaledVector(axis, -links[joint]!.dot(axis)).normalize();
+        const next = Math.atan2(axis.dot(original.clone().cross(desired)), original.dot(desired));
+        const target = bones[joint]!, parent = target.parent as Bone;
+        const rotation = new Quaternion().setFromRotationMatrix(bindWorld(target));
+        const parentRotation = parent === hand ? handRotation : new Quaternion().setFromRotationMatrix(bindWorld(parent));
+        const bindLocal = parentRotation.clone().invert().multiply(rotation);
+        const boneAxis = shaftWorld.clone().applyQuaternion(rotation.clone().invert());
+        joints.push({ bone: target, grip: bindLocal.multiply(new Quaternion().setFromAxisAngle(boneAxis, next - cumulative)) });
+        cumulative = next; px = nx; py = ny;
+      }
     }
-  }
-  return { hand, axis, curl: normal.negate(), palm, shaftRadius, joints };
+    return joints;
+  };
+  const joints = fingerGrips(axis);
+  // The same fist for each shaft turn (knuckle line → fingers) a per-clip staff profile asks for; the weapon blends between the nearest two.
+  const turns = [...new Set(wrapTurns)].sort((a, b) => a - b).map((radians): GripTurn => ({
+    radians,
+    grips: fingerGrips(knuckles.clone().multiplyScalar(Math.cos(radians)).addScaledVector(direction, Math.sin(radians)).normalize()).map(joint => joint.grip),
+  }));
+  return { hand, axis, curl: normal.negate(), palm, shaftRadius, joints, knuckles, direction, turns };
 }
 
 /** Copy only referenced vertices: Yara's source has 1,014,289 slots but just 62,494 rendered vertices. */

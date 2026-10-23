@@ -140,11 +140,11 @@ export function serpentAttackPose(a, spec, u) {
   const load = c(u, [[0, 0], [.27, 1], [.35, .8], [.5, 0], [.8, 0], [1, 0]]);
   const hit = c(u, [[0, 0], [.35, 0], [.5, 1, 'in'], [.7, .4], [1, 0]]);
   const release = c(u, [[0, 0], [.27, 0], [.35, 1, 'in'], [.65, .6], [1, 0]]);
-  const ctl = { rear: [12 * load - 4 * hit, 0, 0], head: [6 * load - 3 * hit, 0, 0], wave: { t: u, cycles: 1, amp: 2 * (load + hit), k: .08, taper: 1.5 } };
+  const ctl = { rear: [12 * load - 4 * hit, 0, 0], wave: { t: u, cycles: 1, amp: 2 * (load + hit), k: .08, taper: 1.5 } };
   if (spec.motion === 'tail-lash') {
-    ctl.rear = [2 * load, -6 * load + 7 * hit, 0]; ctl.head = [0, -5 * load + 8 * hit, 0];
+    ctl.rear = [2 * load, -6 * load + 7 * hit, 0];
     ctl.lash = i => (9 * load - 16 * hit) * (.2 + .8 * (i / 9) ** 1.4);
-  } else if (spec.motion === 'venom-spit') { ctl.rear = [15 * load - 2 * release, 0, 0]; ctl.head = [8 * load - 4 * release, 0, 0]; }
+  } else if (spec.motion === 'venom-spit') { ctl.rear = [15 * load - 2 * release, 0, 0]; }
   else if (spec.motion !== 'bite-lunge') throw new Error(`No anatomical serpent attack controls for ${spec.motion}`);
   return viperPose(a.ctx, ctl).pb.solve();
 }

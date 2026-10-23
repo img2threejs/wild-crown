@@ -80,9 +80,16 @@ export function readAccessor(json, bin, id) {
 // Math helpers
 // ---------------------------------------------------------------------------------------------
 const IDENTITY = new Quaternion();
-// Largest pitch (degrees) the planting solver may add about the hips / Root to keep feet reachable.
+/** Largest pitch (degrees) the planting solver may add about the hips / Root to keep feet reachable. */
 const MAX_HIP_COMPENSATION = 14;
 const MAX_ROOT_COMPENSATION = 10;
+/**
+ * The clips whose ground guard measures the head and tail against the body's own vertical travel
+ * (see the GroundGuard class comment). Only the steady locomotion is affected: every other clip
+ * (idle, jump, the attacks, the roar, the reactions, the death and the entrances) keeps the absolute
+ * rest-height floor, so its authored transform is untouched.
+ */
+const LOCOMOTION_FLOOR_CLIPS = new Set(['monster-walk', 'monster-run', 'monster-turn']);
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 const smoothstep = x => { const t = clamp(x, 0, 1); return t * t * (3 - 2 * t); };
 
@@ -723,6 +730,11 @@ const PERSONALITIES = {
     authoredWalk: true, seconds: { 'monster-walk': 0.75, 'monster-run': 0.5 },
     ikGait: { walk: { stride: 0.36, lift: 0.1, duty: 0.65, sway: 5, tailYaw: 16, tailUp: 1, dip: 0.06, bob: 0.01 }, run: { stride: 0.63, lift: 0.2, duty: 0.45, sway: 8, tailYaw: 20, tailUp: 7, dip: 0.06, bob: 0.025 } } },
   'actor-solkar': { label: 'heavy-regal-lion', amp: 0.85, tusk: 1.25, headBias: -2, spine: 0.9, tail: 1, leap: 0.32, mass: 1.4, hold: 1.3, legSwing: 1.2, jumpTuck: 0.85, rigOptions: SOLKAR_RIG, groundGuard: true, strike: 1.4, swing: 1.6, howl: 1.6, yawCap: 0.75,
+    // The mane hangs low over the ground, so the guard's fixed rest-height floor read the walk / run dip as a floor violation and craned the
+    // neck up to answer it: the muzzle pointed at the sky for the whole walk and run (74 and 88 degrees against the idle's 39). With a
+    // body-relative floor the guard measures the head against the body's own travel, so the dip is no longer a violation and the neck
+    // keeps the idle's carriage while a real nose dive is still caught.
+    bodyRelativeFloor: true,
     authoredWalk: true, seconds: { 'monster-walk': 0.8, 'monster-run': 0.55 },
     ikGait: { walk: { stride: 0.35, lift: 0.1, duty: 0.65, sway: 4, tailYaw: 10, tailUp: 2, dip: 0.04, bob: 0.01 }, run: { stride: 0.58, lift: 0.18, duty: 0.5, sway: 6, tailYaw: 15, tailUp: 6, dip: 0.05, bob: 0.02 } } },
   'actor-orun-crowned-beast': { label: 'colossal-root-lion', amp: 0.7, tusk: 1.4, headBias: -4, spine: 0.6, tail: 0.8, leap: 0.22, mass: 1.8, hold: 1.6, legSwing: 1.1, jumpTuck: 0.65, rigOptions: CROWNED_RIG, groundGuard: true, strike: 1.6, swing: 1.8, whip: 1.2, howl: 1.6, yawCap: 0.7,
@@ -1634,10 +1646,22 @@ function readWalk(rig, json, bin, gains) {
 /**
  * Keeps tail and head from digging into the ground (heavy low-slung bodies: tail whips and nose dives would otherwise push
  * skinned vertices below y = 0). Each region's lowest skinned vertex may not drop below its rest height (minus a small
- * tolerance); when it would, the smallest extra pitch that restores it is added to the tail chain or to the neck/head.
+ * tolerance) RELATIVE TO THE BODY'S OWN VERTICAL MOTION; when it would, the smallest extra pitch that restores it is added to
+ * the tail chain or to the neck/head.
+ *
+ * The floor follows the body because a resting floor is only meaningful for a resting body: a gait that dips the whole body
+ * (the authored ikGait `dip` / `bob`) carries the neck base and the tail root down with it, so a fixed rest-height floor would
+ * report that ordinary dip as a floor violation and crane the neck up to answer it. On a rig whose head sits low over the
+ * ground (Solkar's mane) that craning points the muzzle at the sky for the whole walk and run. The reference is the body's own
+ * root travel (the Root's rest height plus its authored vertical offset), so the guard still catches the poses that really do
+ * push the head or tail into the ground (a nose dive, a collapse) and leaves the body's own bounce alone.
+ *
+ * The body-relative floor applies to the locomotion clips only (LOCOMOTION_FLOOR_CLIPS). Every other clip keeps the absolute
+ * rest-height floor, so its authored transform is untouched: a neck correction there would otherwise rotate the hips and swing
+ * the knees, which is a change to a clip the correction never aimed at.
  */
 class GroundGuard {
-  constructor(rig, json, bin, H) {
+  constructor(rig, json, bin, H, bodyRelativeFloor = false) {
     const primitive = json.meshes[0].primitives[0];
     const read = id => {
       const a = json.accessors[id], view = json.bufferViews[a.bufferView], comps = COMPONENTS[a.type];
@@ -1668,6 +1692,7 @@ class GroundGuard {
     }
     this.floor = {};
     for (const region of Object.keys(this.vertices)) this.floor[region] = this.min(rig.restP, rig.restWQ, region) - this.tolerance;
+    this.bodyRelativeFloor = bodyRelativeFloor;
   }
 
   /** Lowest skinned vertex y of a region for world joint transforms P / Q. */
@@ -1697,10 +1722,30 @@ class GroundGuard {
     return { ...ctl, neck: [ctl.neck[0] + degrees * 0.5, ctl.neck[1], ctl.neck[2]], head: [ctl.head[0] + degrees * 0.5, ctl.head[1], ctl.head[2]] };
   }
 
-  solve(ctl) {
+  /**
+   * The floor a region's lowest vertex must stay above, in world height, for the given solve.
+   *
+   * With `bodyRelativeFloor` the reference is the body's own vertical travel: the solved Root's height against its rest height.
+   * The rest floor was measured in the bind pose, where the Root sat at its rest height, so adding the Root's travel to it keeps
+   * the floor at the height the region would occupy if the body had not moved. A gait that dips the body therefore no longer
+   * reads as a floor violation, and a pose that really does push the head or tail into the ground still does. Without the option
+   * the floor is the fixed rest height, as before.
+   */
+  floorFor(solved, region) {
+    if (!this.bodyRelativeFloor) return this.floor[region];
+    const root = this.rig.rootJoint;
+    const travel = solved.P[root].y - this.rig.restP[root].y;
+    return this.floor[region] + travel;
+  }
+
+  solve(ctl, clipName) {
     let current = ctl, solved = this.rig.solve(ctl);
+    // Only the locomotion clips use the body-relative floor; every other clip (idle, jump, the attacks,
+    // the roar, the reactions, the death and the entrances) keeps the absolute rest-height floor, so its
+    // authored transform is untouched.
+    const relative = this.bodyRelativeFloor && LOCOMOTION_FLOOR_CLIPS.has(clipName);
     for (const region of Object.keys(this.vertices)) {
-      const ok = s => this.min(s.P, s.Q, region) >= this.floor[region];
+      const ok = s => this.min(s.P, s.Q, region) >= (relative ? this.floorFor(s, region) : this.floor[region]);
       if (ok(solved)) continue;
       const trial = degrees => { const c = this.lift(current, region, degrees); return { c, s: this.rig.solve(c) }; };
       let lo = 0, hi = 70;
@@ -1782,13 +1827,13 @@ function liftSoles(solve, ctl, level, context) {
  * Ruun's chain links) is lifted through its Root's child joints (ctl.bodyUp), never the Root, and its death settles: every frame is lowered or
  * raised until the lowest skinned body vertex touches the rest ground exactly (the chain links stay on the ground).
  */
-function solveFrameCore(rig, ctlIn, def, context, u = 0) {
+function solveFrameCore(rig, ctlIn, def, context, u = 0, clipName = '') {
   // The entrance's last tenth (and the get-up's, from GETUP_SETTLE) is the idle clip's own first frame: it uses the idle guard and no floor lift, so it ends on that pose exactly.
   const settling = (def === CLIPS['monster-spawn'] && u >= 0.9) || (def === CLIPS['monster-getup'] && u >= GETUP_SETTLE);
   // The knockdown and get-up rest on the ground to within 0.1% of the body height over every skinned vertex (head and tail included); the death / entrance may dip 1% below it.
   const onGround = def === CLIPS['monster-knockdown'] || def === CLIPS['monster-getup'];
   const guard = def.floor && !settling ? (onGround ? context.groundGuard : context.floorGuard) : context.guard;
-  const solve = c => (guard ? guard.solve(c) : rig.solve(c));
+  const solve = c => (guard ? guard.solve(c, clipName) : rig.solve(c));
   const settle = Boolean(context.rootFixed) && def === CLIPS['monster-death'];
   const level = settle ? context.groundY : def === CLIPS['monster-knockdown'] ? context.groundFine - context.groundSlack : def === CLIPS['monster-getup'] ? context.groundFine - context.groundSlack + context.idleDip * smoothstep((u - 0.6) / 0.3) : context.floorY;
   const ctl = onGround && def.floor && !settling ? liftSoles(solve, ctlIn, level, context) : ctlIn;
@@ -1828,9 +1873,9 @@ function solveFrameCore(rig, ctlIn, def, context, u = 0) {
  * root joint) so a deeply folded leg can never flip its fold between frames, and a frame whose controls equal the previous frame's (the held lie, and the
  * get-up's first frame after the knockdown's last) IS the previous frame's solve, bit for bit. The get-up's settle hands over to the idle's own solve.
  */
-function solveFrame(rig, ctl, def, context, u = 0) {
+function solveFrame(rig, ctl, def, context, u = 0, clipName = '') {
   const onGround = def === CLIPS['monster-knockdown'] || def === CLIPS['monster-getup'];
-  if (!onGround || (def === CLIPS['monster-getup'] && u >= GETUP_SETTLE)) return solveFrameCore(rig, ctl, def, context, u);
+  if (!onGround || (def === CLIPS['monster-getup'] && u >= GETUP_SETTLE)) return solveFrameCore(rig, ctl, def, context, u, clipName);
   if (def === CLIPS['monster-knockdown'] && u === 0) { context.warm = context.previous = undefined; context.lastLift = 0; }
   const key = JSON.stringify(ctl);
   if (context.previous?.key === key) return context.previous.solved;
@@ -1838,7 +1883,7 @@ function solveFrame(rig, ctl, def, context, u = 0) {
   const toIdle = def === CLIPS['monster-getup'] ? smoothstep((u - 0.7) / 0.3) : 0;
   const startOf = leg => toIdle > 0 ? context.warm[leg].map((offset, i) => offset.clone().lerp(context.idleChain[leg][i], toIdle)) : context.warm[leg];
   const warmed = context.warm ? { ...ctl, legs: Object.fromEntries(Object.entries(ctl.legs).map(([leg, spec]) => [leg, { ...spec, warm: startOf(leg) }])) } : ctl;
-  const solved = solveFrameCore(rig, warmed, def, context, u);
+  const solved = solveFrameCore(rig, warmed, def, context, u, clipName);
   context.warm = Object.fromEntries(rig.legKeys.map(leg => [leg, rig.legs[leg].chain.slice(1, -1).map(joint => solved.P[joint].clone().sub(solved.P[rig.legs[leg].chain[0]]))]));
   context.previous = { key, solved };
   return solved;
@@ -1847,7 +1892,7 @@ function solveFrame(rig, ctl, def, context, u = 0) {
 function sampleClip(rig, name, def, context) {
   const frames = Math.round((context.seconds?.[name] ?? def.seconds) * FPS);
   const count = def.loop ? frames : frames + 1;
-  const solved = Array.from({ length: count }, (_, f) => solveFrame(rig, frameControls(def, context, f / frames), def, context, f / frames));
+  const solved = Array.from({ length: count }, (_, f) => solveFrame(rig, frameControls(def, context, f / frames), def, context, f / frames, name));
   const poses = solved.map(s => ({ locals: s.locals, rootT: s.rootT, bodyUp: s.bodyUp, P: s.P, Q: s.Q, compensation: s.compensation }));
   if (def.loop) poses.push(poses[0]);
   return { name, def, frames, poses };
@@ -2054,7 +2099,9 @@ export function author(assetId, { write = true } = {}) {
     strike: 1, swing: 1, whip: clamp(personality.tail ?? 1, 0.9, 1.5),
     ...personality,
   };
-  if (personality.groundGuard) context.guard = new GroundGuard(rig, source.json, source.bin, H);
+  // The locomotion guard measures the head and tail against their REST height, so a rig whose head hangs low over the ground needs the
+  // body-relative floor (see the GroundGuard class comment): otherwise the walk / run dip reads as a floor violation.
+  if (personality.groundGuard) context.guard = new GroundGuard(rig, source.json, source.bin, H, personality.bodyRelativeFloor === true);
   // Floor contact of the one-shot collapse / entrance poses: the rest pose's lowest skinned vertex (feet and belly) is the ground level,
   // and a pose may dip 1% of the body height below it (idle leans and sole rotations dip a toe a hair under the rest sole).
   // Skin weights as they ship: Ruun's ground-anchored chain pieces are bound to the Root alone (cleanWeights) and are ignored as ground attachments.
