@@ -6,3 +6,11 @@ dist
 .vite
 __pycache__/
 *.py[cod]
+
+# Redundant copies and local diagnostics; canonical assets/evidence remain tracked.
+/.img2pixi2d/reference/original.webp
+/asset-source/playtests/evidence/player-feedback/native-koro-earned-equipped-settled-r6.png
+/asset-source/playtests/evidence/player-feedback/viper-head-isolation-diagnostic-r10.png
+/asset-source/playtests/evidence/player-feedback/viper-head-native-comparison-r10.png
+/asset-source/playtests/evidence/player-feedback/before-built-save-inventory.json
+/asset-source/playtests/evidence/player-feedback/vesper-floor-runtime-r4.cpuprofile

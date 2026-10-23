@@ -75,6 +75,7 @@ When the world is ready after an intro, the application calls `renderer.beginEst
 ## Approved image use
 
 - `public/ui/world-map-game.webp` is a player-facing 1536×960 crop of the concept-approved M01 map; it preserves geography and region labels while excluding the editorial concept footer. The source approval is recorded in `ENGLISH-IMAGE-AUDIT.json` and `IMAGE-MEASUREMENTS.json`.
+  The map admission in `.img2pixi2d/intake.json` points to this canonical WebP rather than a duplicate original; `.img2pixi2d/reference/working.png` remains the normalized comparison image.
 - `public/ui/map-journal-illustration.webp` is a 490×290 crop of the hunter-camp illustration in `docs/production/visual-review/plates/U03.png` at source box `[1160, 190, 1650, 480]`. It is a small approved still illustration in the map side panel, not a gameplay background.
 - Party portraits are direct, label-free crops of the approved English character boards, encoded as 512×512 WebP: Asha/Koro/Vara from C02; Sable from C03; Nyra/Solkar from C04. HUD portraits use circular cover framing; U04 party cards show the complete crop in a rectangular frame. No atlas-offset fallback is used.
 
