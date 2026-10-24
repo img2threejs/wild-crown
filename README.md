@@ -44,6 +44,8 @@ Publish the **entire `dist/` directory** at the root of a static HTTPS site, inc
 
 The CI build artifact is a playable **candidate beta**, not a strict release artifact. GitHub workflows build/upload artifacts but do not deploy a live site. The strict release workflow remains gated on asset acceptance and measured release evidence.
 
+For the requested itch.io free-beta launch, use the [external-link publishing packet](docs/execution/itchio-beta-publishing.md): draft project settings, paste-ready English copy, a 630×500 cover candidate, screenshot pointers and rights/hosting/payment checks. The measured current build exceeds itch.io's default extracted HTML5 size limit, and its root-only asset paths are not an itch.io subpath build. No project has been published and no donations have been enabled.
+
 | URL | Purpose |
 |---|---|
 | `http://127.0.0.1:5173/` | Beta Title/New Game/Continue/Load Game; candidate story chapters with isolated browser saves and a not-release-verified banner. |
