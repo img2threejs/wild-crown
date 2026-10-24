@@ -227,6 +227,16 @@
       "earlierGuidanceBuild": "TypeScript/Vite passed before the final Hold-T and Next-heading copy adjustments; 39.49 seconds.",
       "finalBunBuild": "180-second timeout.",
       "finalNode24Build": "TypeScript passed; the subsequent Vite transformation reached the 180-second command deadline.",
+      "finalNode22Build": {
+        "status": "passed",
+        "runtimePathVersion": "22.22.3",
+        "command": "node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build",
+        "entry": "assets/main-C20Xv3te.js",
+        "viteReportedDuration": "2m 35s",
+        "wallSeconds": 281.72,
+        "warning": "Existing large-chunk warning remains.",
+        "inventory": { "files": 432, "logicalBytes": 881101962, "largestFileBytes": 93648764, "pathsOver240": 0 }
+      },
       "qualification": "Do not infer a final production-build pass from the earlier bundle or native development smoke."
     },
     "uiDetector": {

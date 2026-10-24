@@ -10,7 +10,7 @@ The repository homepage names that URL. On 2026-10-24, anonymous HTTP probes ret
 
 ### Why not upload the current HTML5 ZIP?
 
-Measured guidance-candidate `dist/` inventory (`main-CKDq8kfo.js`, before the final HUD wording adjustments): **432 files, 881,101,912 logical bytes (840.28 MiB)**. Largest file: 93,648,764 bytes; no relative path exceeds 240 characters. The count and largest file fit itch.io's published defaults, but the extracted total exceeds its **500 MB** HTML5 limit. Compression does not fix an extracted-size limit. This is a measured artifact, not a promised size for future builds; remeasure any future HTML5 ZIP.
+Measured final Node-22 guidance-candidate `dist/` inventory (`main-C20Xv3te.js`): **432 files, 881,101,962 logical bytes (840.28 MiB)**. Largest file: 93,648,764 bytes; no relative path exceeds 240 characters. The count and largest file fit itch.io's published defaults, but the extracted total exceeds its **500 MB** HTML5 limit. Compression does not fix an extracted-size limit. This is a measured artifact, not a promised size for future builds; remeasure any future HTML5 ZIP.
 
 Also, `vite.config.ts` uses `base: '/'`; README explicitly does not support a project subpath. itch.io hosts HTML5 assets under a subdirectory and requires relative paths. A future native itch.io browser build needs a separately approved size/subpath cutover and real iframe, asset, save and input verification. Do not upload only `index.html` or remove chapters/assets to make the ZIP fit. Support may consider limit exceptions; none has been obtained.
 
