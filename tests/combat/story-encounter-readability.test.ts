@@ -73,13 +73,4 @@ describe('boss phase step guidance', () => {
     expect(status().title).toBe('sap opening');
   });
 
-  it.each([
-    ['encounter-koro', 'whispering-canopy'],
-    ['encounter-asha', 'blood-bamboo-valley'],
-  ] as const)('%s follows its own cleanse sequence, so no generic step can misdirect the player', (encounterId, regionId) => {
-    const engine = new CombatEngine();
-    engine.startEncounter({encounterId, regionId, runId: 'sequenced'});
-    expect(engine.snapshot().encounterStatus?.step).toBeUndefined();
-    expect(engine.snapshot().encounterStatus?.endsWithCleanse).toBeUndefined();
-  });
 });

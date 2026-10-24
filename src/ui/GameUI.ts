@@ -186,6 +186,46 @@ function encounterStepMarkup(viewModel: GameViewModel, step: NonNullable<NonNull
       : `${attacks} to expose its corruption, then Cleanse${key('ability')} · ${PLAYER_SKILLS.cleanse.manaCost} mana`;
   return `<p class="wc-encounter__step" data-step="${step.action}" data-done="${step.done}">${text}</p>`;
 }
+/** Persistent next step from the engine's authored sequence, not a one-off toast or an inferred HP threshold. */
+function sequenceGuideMarkup(viewModel: GameViewModel): string {
+  const { hud } = viewModel, sequence = hud.encounterStatus?.sequence;
+  if (!sequence) return '';
+  const copy = playerCopy.guidance, koro = sequence.kind === 'koro-thorn', action = sequence.action;
+  const key = (binding: string) => `<kbd>${esc(controlBindingLabel(viewModel, binding) || 'unbound')}</kbd>`;
+  let title = action === 'attack' ? koro ? copy.koro_attack_title : copy.asha_attack_title
+    : action === 'tether' ? koro ? copy.koro_tether_title : copy.asha_tether_title
+    : action === 'cleanse' ? koro ? copy.koro_cleanse_title : copy.asha_cleanse_title
+    : action === 'bundle' ? copy.asha_bundle_title : copy.asha_failed_title;
+  let instruction = action === 'attack' ? koro ? copy.koro_attack : copy.asha_attack
+    : action === 'tether' ? koro ? copy.koro_tether : copy.asha_tether
+    : action === 'cleanse' ? copy.cleanse : action === 'bundle' ? copy.asha_bundle : copy.asha_failed;
+  const ability = action === 'tether' || action === 'cleanse';
+  const skill = ability ? hud.skills.find(item => item.id === (action === 'tether' ? 'root_tether' : 'cleanse')) : undefined;
+  const mana = action === 'tether' ? PLAYER_SKILLS.root_tether.manaCost + PLAYER_SKILLS.cleanse.manaCost
+    : action === 'cleanse' ? PLAYER_SKILLS.cleanse.manaCost : 0;
+  let actionLine = action === 'attack' ? `${key('light')} ${key('heavy')} ${esc(copy.attack_action)}`
+    : action === 'tether' ? `${key('ability')} ${esc(copy.tether_action)}`
+    : action === 'cleanse' ? `${key('ability')} ${esc(copy.cleanse_action)}`
+    : action === 'bundle' ? `${key('heavy')} ${esc(copy.bundle_action)}` : '';
+  if (ability && hud.targetId !== hud.boss?.actorId) {
+    actionLine = `${esc(copy.hold)} ${key('lockOn')} — ${esc(copy.lock_action)}`;
+  } else if (skill?.reason === 'Recovering') {
+    instruction = copy.recover;
+    actionLine = '';
+  } else if (mana && hud.mana < mana) {
+    title = copy.refill_title;
+    instruction = copy.refill;
+    actionLine = '';
+  } else if (skill && !skill.available) {
+    actionLine = esc(skill.reason);
+  }
+  const timer = sequence.secondsRemaining === undefined ? '' : `<p class="wc-encounter__timer" role="timer" aria-live="off">${esc(sequence.step === 'tethered' ? copy.tether_time : copy.exposure_time)}: <strong>${sequence.secondsRemaining}s</strong></p>`;
+  return `<div class="wc-encounter__guide" data-sequence-step="${sequence.step}" data-next-action="${action}">
+    <div role="status"><h3>${esc(title)}</h3><p>${esc(instruction)}</p>${actionLine ? `<p class="wc-encounter__action">${actionLine}</p>` : ''}</div>
+    ${mana ? `<p class="wc-encounter__mana">${esc(action === 'tether' ? copy.combo_cost : copy.cleanse_cost)}: <strong>${Math.floor(hud.mana)} / ${mana}</strong></p>` : ''}${timer}
+  </div>`;
+}
+
 /** A how-to-play card shown over the frozen world; every key comes from the player's current bindings. */
 function tutorialMarkup(viewModel: GameViewModel, id: TutorialId): string {
   const key = (actionId: string) => `<kbd>${esc(controlBindingLabel(viewModel, actionId) || 'unbound')}</kbd>`;
@@ -310,7 +350,7 @@ function gameUiSignature(viewModel: GameViewModel): string {
   return JSON.stringify([
     viewModel.screen, viewModel.canOpenWorldPanels, viewModel.loading, viewModel.error, viewModel.playtestStage, viewModel.playtestSelection, hud.heroId,
     [hud.vitality, hud.maxVitality, Math.floor(hud.mana), hud.maxMana, hud.skills, hud.instinct, hud.boss, hud.targetId, hud.target?.id, hud.target?.weakPointExposed, hud.interaction, hud.destination?.label,
-      hud.encounterStatus && [hud.encounterStatus.title, hud.encounterStatus.step?.action, hud.encounterStatus.step?.done, hud.encounterStatus.monsters, hud.encounterStatus.trial]],
+      hud.encounterStatus && [hud.encounterStatus.title, hud.encounterStatus.step?.action, hud.encounterStatus.step?.done, hud.encounterStatus.endsWithCleanse, hud.encounterStatus.sequence, hud.encounterStatus.monsters, hud.encounterStatus.trial]],
     viewModel.trackedObjectiveId, viewModel.tutorial,
     campaign && [campaign.runId, campaign.revision, campaign.chapter, campaign.chapterId, campaign.regionId, campaign.activeQuestIds, campaign.completedQuestIds, campaign.activeObjectiveIds, campaign.completedObjectiveIds, campaign.fragments, campaign.ending],
     viewModel.journal.region, viewModel.journal.quests.map(quest => [quest.id, quest.title, quest.description, quest.objectives.map(objective => [objective.id, objective.title, objective.description, objective.optional])]),
@@ -320,7 +360,7 @@ function gameUiSignature(viewModel: GameViewModel): string {
     [viewModel.saves.continueSlotId, viewModel.saves.slots.map(slot => [slot.slotId, slot.label, slot.exists, slot.updatedAt, slot.chapter, slot.regionId, slot.scope, slot.heroId, slot.segmentId, slot.checkpointId, slot.autosave])],
     viewModel.session, viewModel.dialogueChoice, viewModel.partyPanel, viewModel.companionProgress, viewModel.chapterAct, viewModel.hasCandidateSaves,
     viewModel.training && [viewModel.training.active, viewModel.training.available, viewModel.training.reason, viewModel.training.maps.map(map => [map.id, map.name, map.unlocked, map.reason, map.thumbnailUrl])],
-    viewModel.objectiveHud && [viewModel.objectiveHud.chapterLabel, viewModel.objectiveHud.questTitle, viewModel.objectiveHud.objectiveTitle, viewModel.objectiveHud.counter, viewModel.objectiveHud.interaction, viewModel.objectiveHud.interactionInputHint, viewModel.objectiveHud.guidance, viewModel.objectiveHud.status,
+    viewModel.objectiveHud && [viewModel.objectiveHud.chapterLabel, viewModel.objectiveHud.questTitle, viewModel.objectiveHud.objectiveTitle, viewModel.objectiveHud.counter, viewModel.objectiveHud.interaction, viewModel.objectiveHud.interactionInputHint, viewModel.objectiveHud.guidance, viewModel.objectiveHud.instruction, viewModel.objectiveHud.status,
       viewModel.objectiveHud.destination && [viewModel.objectiveHud.destination.label, viewModel.objectiveHud.destination.hint, viewModel.objectiveHud.destination.distanceMeters === null, viewModel.objectiveHud.destination.bearingDegrees === null]],
     viewModel.hub && [viewModel.hub.name, viewModel.hub.stage, viewModel.hub.upgrades.map(u => [u.id, u.learned, u.available, u.requirement]),
       viewModel.hub.memories.map(m => [m.id, m.title, m.lines.map(l => [l.speaker, l.text])]),
@@ -525,9 +565,10 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     const { hud, campaign } = vm;
     const party = vm.party ?? campaign?.party ?? null;
     const { quest, objective } = currentObjective();
-    const boss = hud.boss;
-    const encounter = hud.encounterStatus;
+    const status = hud.encounterStatus;
+    const encounter = status?.trial || status?.monsters.some(monster => monster.active) ? status : undefined;
     const trial = encounter?.trial;
+    const boss = !status || encounter ? hud.boss : undefined;
     const activeMonster = encounter?.monsters.find(monster => monster.active);
     const controlsHint = controlHints(vm);
     const companions: CompanionId[] = party?.companionId ? [party.companionId] : [];
@@ -558,7 +599,8 @@ export function mountGameUI(root: HTMLElement, options: GameUIOptions): GameUIIn
     return containerScreen('wc-screen--game', `<div class="wc-hud" data-hero="${hero.id}" style="--wc-hero-accent:${esc(hero.accent)}" aria-label="Exploration and combat HUD">
       ${heroGroup}
       ${boss && !trial ? `<section class="wc-panel wc-boss" aria-label="Boss status"><p class="wc-boss__title">${boss.actorId === 'asha' ? 'ASHA — THE BROKEN FANG' : esc(boss.actorId.toString().replaceAll('-', ' ').toUpperCase())}</p>${meter(playerCopy.hud.ferocity, boss.ferocity, boss.maxFerocity, 'ferocity', playerCopy.hud.ferocity_description)}${meter(playerCopy.hud.corruption, boss.corruption, 100, 'corruption', playerCopy.hud.corruption_description)}<div class="wc-boss__cores">${boss.exposed ? playerCopy.hud.corruption_exposed : ''}</div></section>` : ''}
-      ${encounter ? `<aside class="wc-panel wc-encounter" aria-label="Combat stage"><h2>${esc(encounter.title)}</h2>${encounter.step && !trial ? encounterStepMarkup(vm, encounter.step) : ''}
+      ${encounter ? `<aside class="wc-panel wc-encounter" aria-label="Combat stage"><h2>${esc(encounter.sequence ? playerCopy.guidance.next : encounter.title)}</h2>${encounter.sequence ? sequenceGuideMarkup(vm) : encounter.step && !trial ? encounterStepMarkup(vm, encounter.step) : ''}
+        ${encounter.endsWithCleanse ? `<p class="wc-encounter__nonlethal">${esc(playerCopy.guidance.nonlethal)}</p>` : ''}
         ${trial ? `<div class="wc-trial-progress" data-trial-status="${trial.status}"><strong>${trial.complete ? 'All gates open' : `Stage ${trial.stage} / ${trial.totalStages} · Defeat the monster`}</strong>
           ${trial.complete ? `<p>Reach the ${esc(vm.playtestStage?.exitName ?? 'exit')} waystone.</p>` : ''}</div>` : ''}
         ${activeMonster ? `<div class="wc-encounter__monster"><strong>${esc(activeMonster.name)}</strong>${activeMonster.boss || trial?.boss ? BOSS_CHIP : ''}${monsterHealth(activeMonster.name, activeMonster.vitality, activeMonster.maxVitality, Boolean(activeMonster.boss || trial?.boss))}<p title="${esc(activeMonster.skills.join(' · '))}">${esc(activeMonster.skills.join(' · '))}</p></div>` : ''}</aside>` : ''}

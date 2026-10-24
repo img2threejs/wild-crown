@@ -1569,8 +1569,19 @@ export class CombatEngine {
       :finalStand?{action:'cleanse',done:this.state.rewardEmitted}
       :required?{action:required,done:true}
       :{action:'wear-down',done:false};
-    const endsWithCleanse=Boolean(driven&&(encounter.cleanseOnly||encounter.phases.some(candidate=>candidate.requiredAction==='cleanse')));
-    return {title:phase?.id.replaceAll('-',' ')??'Encounter',step,...(endsWithCleanse?{endsWithCleanse}:{}),monsters:encounter.actorIds.filter(id=>id!==this.state.playerId).map(id=>{
+    const endsWithCleanse=Boolean((driven||encounter.sequence)&&(encounter.cleanseOnly||encounter.phases.some(candidate=>candidate.requiredAction==='cleanse')));
+    const sequence=this.state.chapter.sequence;
+    const sequenceBoss=sequence?.kind==='asha-cub'?this.currentBoss():undefined;
+    const sequenceStatus:EncounterStatusSnapshot['sequence']=sequence?{
+      kind:sequence.kind,step:sequence.step,
+      action:sequence.step==='failed'?'retry'
+        :sequence.step==='tethered'?'cleanse'
+        :sequence.step==='thorn-exposed'||sequence.step==='exposed'?'tether'
+        :sequence.step==='announce'||sequence.step==='danger'?'bundle'
+        :sequenceBoss&&this.snapshotBossExposed(sequenceBoss)&&this.cleanseBlockFor(sequenceBoss)===null?'cleanse':'attack',
+      ...((sequence.step==='tethered'||sequence.step==='exposed')?{secondsRemaining:Math.max(0,Math.ceil((sequence.until-this.state.worldTick)/60))}:{}),
+    }:undefined;
+    return {title:phase?.id.replaceAll('-',' ')??'Encounter',step,...(endsWithCleanse?{endsWithCleanse}:{}),...(sequenceStatus?{sequence:sequenceStatus}:{}),monsters:encounter.actorIds.filter(id=>id!==this.state.playerId).map(id=>{
       const actor=this.state.actors.find(candidate=>candidate.id===id);
       return {id,name:id.replaceAll('-',' '),skills:(phase?.attackIds??[]).filter(attack=>ATTACKS[attack]?.bossId===id).map(attackName),active:!this.state.rewardEmitted,cleared:this.state.rewardEmitted,vitality:actor?.vitality,maxVitality:actor?.maxVitality};
     })};
@@ -1619,7 +1630,7 @@ export class CombatEngine {
     const finalCleanse=target&&encounter?.cleanseOnly&&!encounter.sequence&&target.id===encounter.bossId
       &&!this.state.chapter.orun&&!this.state.chapter.fall&&this.cleanseBlockFor(target)===null;
     const contextual:PlayerSkillId=(target&&((target.corruption??0)>0||target.possessed)
-      &&(this.snapshotBossExposed(target)||finalCleanse))?'cleanse':'root_tether';
+      &&!acceptsTether(this.state,target)&&(this.snapshotBossExposed(target)||finalCleanse))?'cleanse':'root_tether';
     const charging=this.state.heavyChargeStartTick!==null;
     const heavy:PlayerSkillId=charging&&this.state.tick-this.state.heavyChargeStartTick!>=THUNDER_CLEAVE.holdTicks?'charged_heavy':'heavy';
     const sigilCharge=this.state.sigilCharge;

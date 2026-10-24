@@ -496,6 +496,12 @@
 .wc-encounter__step { margin: 0 0 8px; color: var(--wc-fg); font-size: 12px; line-height: 1.45; }
 .wc-encounter__step kbd { font-size: 10px; }
 .wc-encounter__step[data-done="true"] { color: var(--wc-fg-soft); }
+.wc-encounter__guide h3 { margin: 8px 0 5px; color: var(--wc-route-bright); font: 600 18px/1.15 var(--wc-display); }
+.wc-encounter__guide p { margin: 5px 0; color: var(--wc-fg); font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+.wc-encounter__guide .wc-encounter__action { margin-top: 10px; font-weight: 600; }
+.wc-encounter__action kbd { font-size: 12px; }
+.wc-encounter__guide :is(.wc-encounter__mana, .wc-encounter__timer) { color: var(--wc-fg-soft); font-size: 12px; font-variant-numeric: tabular-nums; }
+.wc-encounter__nonlethal { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--wc-rule); color: var(--wc-fg-soft); font-size: 12px; line-height: 1.4; }
 .wc-trial-progress { display: grid; gap: 4px; font-size: 11px; font-variant-numeric: tabular-nums; }
 .wc-trial-progress p { margin: 0; color: var(--wc-fg-soft); }
 .wc-encounter__monster { margin-top: 9px; }
