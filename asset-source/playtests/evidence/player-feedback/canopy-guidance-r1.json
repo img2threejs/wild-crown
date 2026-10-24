@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "verification": "bounded-native-opening-and-ui-conditions",
+  "native": {
+    "scope": "Prepared 1-HP exposed/stunned Koro in the real Canopy application. Earlier story is authored-event fixture; only Koro and hero present, at prepared courtyard poses; native solid/support collision retained. Not a full earned campaign.",
+    "runId": "guide-confirm-1792814131302",
+    "startedAt": "2026-10-24T03:55:45.958Z",
+    "opening": {
+      "hero": {
+        "x": 51.78,
+        "y": 0,
+        "z": -24
+      },
+      "boss": {
+        "x": 49.78,
+        "y": 0,
+        "z": -24
+      },
+      "mana": 50,
+      "vitality": 1
+    },
+    "before": {
+      "sequence": {
+        "kind": "koro-thorn",
+        "step": "thorn-exposed",
+        "action": "tether"
+      },
+      "target": "koro",
+      "skill": {
+        "id": "root_tether",
+        "label": "Root Tether",
+        "binding": "ability",
+        "manaCost": 20,
+        "available": false,
+        "reason": "Recovering"
+      },
+      "guide": "Stop attacking. Tether Koro.\n\nLet your current action finish, then press your ability. Do not keep attacking.\n\nMana for Tether + Cleanse: 50 / 50"
+    },
+    "tethered": {
+      "sequence": {
+        "kind": "koro-thorn",
+        "step": "tethered",
+        "action": "cleanse",
+        "secondsRemaining": 6
+      },
+      "mana": 30,
+      "guide": "Cleanse Koro's thorn\n\nLet your current action finish, then press your ability. Do not keep attacking.\n\nMana for Cleanse: 30 / 30\n\nTime before the tether breaks: 6s"
+    },
+    "after": {
+      "screen": "dialogue",
+      "sequence": {
+        "kind": "koro-thorn",
+        "step": "settled",
+        "action": "attack"
+      },
+      "mana": 0,
+      "koro": "ally",
+      "body": "Dialogue\n\nECHO\n\n1 / 2\n\nThe thorn lets go. Koro sags, then straightens. The Branchbreaker is gone; the macaque who leads the canopy looks at you.\n\nContinue\nSkip Cinematic\nAREN\nWARDEN OF THE WILD\nHERO\nVitality\nMana\n\n0 / 100\nMove to Restore Mana\n\nInstinct\n\nTHE EMPTY ORCHARD\nSTEP 6 OF 8\n\nOBJECTIVE\n\nReceive the Canopy fragment\n\nAt the marker\nE Receive the Canopy fragment\n\nFollow the trail · 9 m\n\nTake the fragment Koro carried, now that he is himself again. Follow the fireflies, then press Interact: Receive the Canopy fragment.\n\nCHAPTER 1 · WHISPERING CANOPY\n\nSKILLS\nF\n25 MP\nDive\nRecovering\nSPACE\n8 MP\nJump\nRecovering\nJ\nFREE\nWarden Blade\nRecovering\nK\n12 / 20 MP\nHeavy\nRecovering\nL\n15 / 35 MP\nSigil Bolt\nRecovering\nQ\n20 MP\nRoot Tether\nCooldown 4s\nU\nINSTINCT\nJudgement\nRecovering\nW A S D / ARROWS MOVE · SHIFT RUN · F DIVE · SPACE ×2 DOUBLE JUMP · PAUSE ESC\nEcho: The thorn lets go. Koro sags, then straightens. The Branchbreaker is gone; the macaque who leads the canopy looks at you.\nCANDIDATE CHAPTERS · GENERATED ASSETS · NOT RELEASE-VERIFIED",
+      "buttons": [
+        {
+          "text": "Continue",
+          "action": "dialogue-next"
+        },
+        {
+          "text": "Skip Cinematic",
+          "action": "skip-cinematic"
+        },
+        {
+          "text": "HERO",
+          "action": "hud-toggle"
+        },
+        {
+          "text": "OBJECTIVE",
+          "action": "hud-toggle"
+        },
+        {
+          "text": "SKILLS",
+          "action": "hud-toggle"
+        }
+      ]
+    }
+  },
+  "postBoss": {
+    "screen": "game",
+    "bossPanel": false,
+    "encounterPanel": false,
+    "objective": "THE EMPTY ORCHARD\nSTEP 6 OF 8\n\nOBJECTIVE\n\nReceive the Canopy fragment\n\nAt the marker\nE Receive the Canopy fragment\n\nFollow the trail · 9 m",
+    "expanded": "false",
+    "bodyHidden": true,
+    "viewport": {
+      "width": 1206,
+      "height": 794
+    },
+    "objectiveRect": {
+      "x": 892.140625,
+      "y": 16.671875,
+      "width": 300,
+      "height": 168.46875
+    },
+    "overflow": false
+  },
+  "additionalUiConditions": {
+    "scope": "Additional UI-only prepared state projections through the actual application/UI/engine with its RAF stopped. The compact resize clears the frozen scene canvas, so that image proves HUD layout only, not a native scene or additional gameplay.",
+    "lowMana": "Refill mana before the next step\n\nWalk or run on the ground to refill mana. Standing still does not restore it.\n\nMana for Tether + Cleanse: 10 / 50",
+    "remapped": "Stop attacking. Tether Koro.\n\nThe thorn is exposed. Get close, then press and release your ability to tether him.\n\nX Press, then release: Tether\n\nMana for Tether + Cleanse: 50 / 50",
+    "lockHint": "Stop attacking. Tether Koro.\n\nThe thorn is exposed. Get close, then press and release your ability to tether him.\n\nHold T — Face the creature and lock on\n\nMana for Tether + Cleanse: 50 / 50",
+    "timerBefore": 6,
+    "timerAfter": 5,
+    "cleanseGuide": "Cleanse Koro's thorn\n\nLet your current action finish, then press your ability. Do not keep attacking.\n\nMana for Cleanse: 30 / 30\n\nTime before the tether breaks: 5s",
+    "layout": {
+      "width": 960,
+      "height": 720,
+      "overflow": false,
+      "panels": [
+        {
+          "label": "Boss status",
+          "x": 345.6015625,
+          "y": 52,
+          "width": 268.796875,
+          "height": 109.8125
+        },
+        {
+          "label": "Combat stage",
+          "x": 698.96875,
+          "y": 46,
+          "width": 250,
+          "height": 312.875
+        }
+      ]
+    }
+  },
+  "console": {
+    "entries": [
+      {
+        "seq": 7,
+        "ts": 1792814146560,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5215/audio/music/layer-corrupted.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5215/audio/music/layer-corrupted.ogg"
+      },
+      {
+        "seq": 8,
+        "ts": 1792814146750,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5215/audio/music/boss.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5215/audio/music/boss.ogg"
+      },
+      {
+        "seq": 9,
+        "ts": 1792814146751,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5215/audio/music/boss.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5215/audio/music/boss.ogg"
+      },
+      {
+        "seq": 10,
+        "ts": 1792814146752,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5215/audio/music/boss.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5215/audio/music/boss.ogg"
+      },
+      {
+        "seq": 11,
+        "ts": 1792814146752,
+        "type": "requestfailed",
+        "level": "error",
+        "text": "GET http://127.0.0.1:5215/audio/music/boss.ogg: net::ERR_ABORTED",
+        "location": "http://127.0.0.1:5215/audio/music/boss.ogg"
+      }
+    ],
+    "nextSeq": 11,
+    "dropped": 0
+  },
+  "screenshots": [
+    "canopy-guidance-opening-r1.webp",
+    "canopy-guidance-tether-r1.webp",
+    "canopy-guidance-postboss-r1.webp",
+    "canopy-guidance-compact-r1.webp"
+  ],
+  "limitations": [
+    "Earlier campaign progress was an authored-event fixture, not a new physical campaign playthrough.",
+    "Only hero and Koro were retained for the successful native encounter, at prepared courtyard positions; native solid/support colliders remained enabled.",
+    "An earlier crowded prepared pose spent Tether mana without resolving Koro; it is not counted as passing native evidence.",
+    "Additional mana/remap/lock/countdown/layout checks are UI-only state fixtures, not additional native gameplay.",
+    "Five music requests were aborted during setup; no JavaScript exception appears in the captured error report. Audio, physical controllers, reference performance and release qualification are not established."
+  ],
+  "localGates": {
+    "focused": {
+      "command": "bun test tests/ui tests/app/ChapterGuidance.test.ts tests/combat/sequence-ability.test.ts tests/combat/story-encounter-readability.test.ts",
+      "passed": 113,
+      "failed": 0,
+      "expectCalls": 1575,
+      "files": 9,
+      "runnerSeconds": 1.59,
+      "wallSeconds": 1.8
+    },
+    "broadRun": {
+      "command": "bun test tests/ui tests/app tests/combat",
+      "status": "timed-out",
+      "deadlineSeconds": 300,
+      "wallSeconds": 303.05,
+      "observedTestTimeouts": 2,
+      "finalCounts": null
+    },
+    "isolatedBranchControl": {
+      "command": "bun test tests/combat/moonpine-trials.test.ts tests/combat/fall-engine.test.ts",
+      "passed": 38,
+      "failedByExistingTestDeadline": 4,
+      "runnerSeconds": 99.48,
+      "wallSeconds": 101.07
+    },
+    "unmodifiedMainControl": {
+      "commit": "2e2cfba47cdeda7e881f4ab6466617a81487187b",
+      "method": "Separate detached checkout; same two files, Bun version and unchanged individual test deadlines; no native binary qualification.",
+      "passed": 41,
+      "failedByExistingTestDeadline": 1,
+      "failure": "moonpine attacks at runtime > only the two ice attacks raise obstacles; the other seven leave the arena clear",
+      "runnerSeconds": 59.17,
+      "wallSeconds": 66.44,
+      "limit": "Establishes this timeout on unchanged main, not that all branch-only timeout variation is explained."
+    },
+    "buildAttempts": {
+      "earlierGuidanceBuild": "TypeScript/Vite passed before the final Hold-T and Next-heading copy adjustments; 39.49 seconds.",
+      "finalBunBuild": "180-second timeout.",
+      "finalNode24Build": "TypeScript passed; the subsequent Vite transformation reached the 180-second command deadline.",
+      "finalNode22Build": {
+        "status": "passed",
+        "runtimePathVersion": "22.22.3",
+        "command": "node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build",
+        "entry": "assets/main-C20Xv3te.js",
+        "viteReportedDuration": "2m 35s",
+        "wallSeconds": 281.72,
+        "warning": "Existing large-chunk warning remains.",
+        "inventory": { "files": 432, "logicalBytes": 881101962, "largestFileBytes": 93648764, "pathsOver240": 0 }
+      },
+      "qualification": "Do not infer a final production-build pass from the earlier bundle or native development smoke."
+    },
+    "uiDetector": {
+      "exitCode": 2,
+      "finding": "Existing .wc-legend i has a three-pixel route stroke and rounded line ends; retained semantic map legend, not a new decorative card border."
+    }
+  },
+  "usage": {
+    "scope": "main-only",
+    "requestCounters": null,
+    "freshInputTokens": null,
+    "cachedInputTokens": null,
+    "outputTokens": null
+  }
+}

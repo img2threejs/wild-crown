@@ -14,8 +14,10 @@
 .wc-objective__counter { margin-left: 4px; color: var(--wc-route-bright); font-variant-numeric: tabular-nums; }
 .wc-objective__guidance { margin: 8px 0; color: var(--wc-fg-soft); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .wc-objective--chapter[data-guidance-status="ready"] .wc-objective__hint { color: var(--wc-route-bright); }
-.wc-objective__hint { color: var(--wc-fg-soft); }
+.wc-objective__hint { display: grid; gap: 4px; margin: 8px 0 0; color: var(--wc-fg); font-size: 13px; line-height: 1.4; }
+.wc-objective__hint > strong { color: var(--wc-fg-soft); font-size: 11px; font-weight: 500; }
 .wc-objective__hint kbd { margin-right: 4px; }
+.wc-objective__instruction { margin: 8px 0 0; color: var(--wc-fg); font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 .wc-objective__dest { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--wc-rule); }
 .wc-objective__dest svg { width: 20px; height: 20px; flex: none; color: var(--wc-route-bright); }
 .wc-objective__dest p { margin: 0; color: var(--wc-fg-soft); font-size: 12px; font-variant-numeric: tabular-nums; }

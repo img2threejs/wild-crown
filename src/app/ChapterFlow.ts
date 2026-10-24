@@ -209,6 +209,7 @@ interface ObjectiveGuidance {
     readonly cueId: string;
     readonly status: CueStatus;
     readonly guidance: string;
+    readonly instruction: string;
 }
 
 /** One answer to "where and how": the HUD, the area map and the world cue all read it, so they can never disagree. */
@@ -219,7 +220,7 @@ function objectiveGuidanceOf(input: ObjectiveHudInput, quest: QuestDefinition, o
         if (input.snapshot.party.companionId !== 'vara') {
             return {
                 quest, objective, escorting: false, cueId: objective.id, action: 'Equip Vara in Companions', inputHint: 'companions',
-                target: null, status: 'blocked',
+                target: null, status: 'blocked', instruction: 'Equip Vara before giving her a command.',
                 guidance: `${objective.description} Open Companions and equip Vara first. Standing at a world marker cannot perform a companion command.`,
             };
         }
@@ -229,11 +230,15 @@ function objectiveGuidanceOf(input: ObjectiveHudInput, quest: QuestDefinition, o
                 : objective.targetIds.includes(actor.id) || objective.targetIds.includes(actor.archetypeId))) : undefined;
         if (!target) {
             return { quest, objective, escorting: false, cueId: objective.id, action: null, inputHint: undefined, target: null, status: 'blocked',
+                instruction: 'Find a living threat for Vara to observe.',
                 guidance: `${objective.description} This lesson needs a present, living threat; there is no interaction to press here.` };
         }
         return {
             quest, objective, escorting: false, cueId: objective.id, action: mark ? 'Mark Weakness' : null, inputHint: mark ? 'commandWheel' : undefined,
             target: target.position, status: 'approach',
+            instruction: mark ? 'Keep the threat in view. Hold the command wheel, choose Mark Weakness, then release.'
+                : input.scoutWarningTargetId ? 'Turn your hero toward the indicated threat now.'
+                    : 'Face away from the nearby threat; turn back when Vara warns.',
             guidance: `${objective.description} ${mark
                 ? 'Follow the fireflies to the threat and keep it in view. Hold Command Wheel, choose Mark Weakness, then release. This is not an Interact action.'
                 : input.scoutWarningTargetId
@@ -283,7 +288,7 @@ function objectiveGuidanceOf(input: ObjectiveHudInput, quest: QuestDefinition, o
     } else {
         tail = 'Follow the fireflies.';
     }
-    return { quest, objective, escorting, action: actionable?.promptLabel ?? null, inputHint: actionable?.inputHint, target, cueId, status, guidance: `${story} ${tail}` };
+    return { quest, objective, escorting, action: actionable?.promptLabel ?? null, inputHint: actionable?.inputHint, target, cueId, status, instruction: tail, guidance: `${story} ${tail}` };
 }
 
 function bearingOf(input: ObjectiveHudInput, target: Vec3, label: string, hint: string | null): NonNullable<ObjectiveHud['destination']> | null {
@@ -370,6 +375,7 @@ export function objectiveHudOf(input: ObjectiveHudInput): ObjectiveHud | undefin
                 ? `This chapter is complete and the way to ${exit.destination} is open. ${ready ? 'Press Interact: Travel to ' + exit.destination + '.' : 'Follow the fireflies to the route, then press Interact to travel.'}`
                 : `The route to ${exit.destination} is open. ${ready ? 'Press Interact: Travel to ' + exit.destination + '.' : 'Follow the fireflies to the route, then press Interact to travel.'}`,
             status: ready ? 'ready' : 'approach',
+            instruction: ready ? 'Use Interact to travel to the next region.' : 'Follow the fireflies to the open exit.',
             destination: bearingOf(input, exit.route.from, 'Path to ' + exit.destination, null),
         };
     }
@@ -391,6 +397,7 @@ export function objectiveHudOf(input: ObjectiveHudInput): ObjectiveHud | undefin
         interaction: guided.action,
         interactionInputHint: guided.inputHint,
         guidance: guided.guidance,
+        instruction: guided.instruction,
         status: guided.status,
         destination,
     };

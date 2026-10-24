@@ -329,6 +329,13 @@ export interface EncounterStatusSnapshot {
   readonly step?: { readonly action: 'wear-down' | 'tether' | 'counter' | 'cleanse'; readonly done: boolean };
   /** True when this story encounter is resolved by cleansing its boss rather than by defeating or subduing it. */
   readonly endsWithCleanse?: boolean;
+  /** Live authored cleanse sequence; presentation must not substitute generic damage-phase instructions. */
+  readonly sequence?: {
+    readonly kind: 'koro-thorn' | 'asha-cub';
+    readonly action: 'attack' | 'tether' | 'cleanse' | 'bundle' | 'retry';
+    readonly step: 'sealed' | 'thorn-exposed' | 'tethered' | 'settled' | 'stalking' | 'rage' | 'announce' | 'danger' | 'exposed' | 'failed';
+    readonly secondsRemaining?: number;
+  };
   readonly monsters: readonly { id: ActorId; name: string; skills: readonly string[]; active: boolean; cleared: boolean; vitality?: number; maxVitality?: number; boss?: boolean }[];
   readonly trial?: {
     readonly stage: number;
@@ -1461,6 +1468,8 @@ export interface GameViewModel {
     interactionInputHint: InteractionDefinition['inputHint'] | 'companions' | 'commandWheel';
     /** Authored story context and honest approach/requirement instructions. */
     guidance?: string;
+    /** Short next action or prerequisite, visible even when optional story details are collapsed. */
+    instruction?: string;
     status?: "approach" | "ready" | "blocked";
     destination: { label: string; distanceMeters: number | null; bearingDegrees: number | null; hint: string | null } | null;
   };

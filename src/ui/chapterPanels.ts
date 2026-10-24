@@ -1,3 +1,4 @@
+import playerCopy from '../../docs/production/content/PLAYER-COPY.en.json' with { type: 'json' };
 import type { CompanionId, FieldCommand, GameViewModel, SaveSlotViewModel } from '../game/contracts.js';
 import { esc, button } from './markup.js';
 import { icon, type IconName } from './icons.js';
@@ -31,22 +32,20 @@ export function destinationText(destination: NonNullable<ObjectiveHud['destinati
     return destination.distanceMeters === null ? '' : 'Follow the trail · ' + Math.ceil(destination.distanceMeters) + ' m';
 }
 
-/**
- * Chapter objective HUD: quest, step position, the tracked objective, optional counter, interaction hint and destination arrow.
- * The panel is one of the three collapsible HUD groups: collapsed it keeps the quest and the current objective as the useful
- * summary, expanded it adds the step position, the interaction hint, the bearing to the objective and the chapter label.
- */
+/** The next action and destination remain visible; only optional story context collapses. */
 export function objectiveHudMarkup(hud: ObjectiveHud, interactKey: string, options: { expanded?: boolean; toggle?: string } = {}): string {
     const expanded = options.expanded !== false;
     const destination = hud.destination;
     const arrow = destination && destination.bearingDegrees !== null
         ? `<svg viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${destination.bearingDegrees}deg)"><path d="M12 2 21 21 12 16 3 21Z" fill="currentColor"/></svg>` : '';
-    // Collapsed, the group keeps the quest and the tracked objective — the summary the player still needs.
+    const copy = playerCopy.guidance;
     const summary = `<p class="wc-objective__title">${esc(hud.objectiveTitle)}${hud.counter ? ` <span class="wc-objective__counter">${esc(hud.counter)}</span>` : ''}</p>`;
-    const detail = `${hud.guidance ? `<p class="wc-objective__guidance">${esc(hud.guidance)}</p>` : ''}${hud.interaction ? `<p class="wc-objective__hint">${interactKey ? `<kbd>${esc(interactKey)}</kbd> ` : ''}${esc(hud.interaction)}</p>` : ''}${destination ? `<div class="wc-objective__dest" aria-label="Objective destination">${arrow}<p data-dest-text>${esc(destinationText(destination))}</p></div>` : ''}<p class="wc-objective__chapter">${esc(hud.chapterLabel)}</p>`;
+    const needsInstruction = !hud.interaction || hud.status === 'blocked' || hud.interactionInputHint === 'commandWheel';
+    const next = `${needsInstruction && hud.instruction ? `<p class="wc-objective__instruction">${esc(hud.instruction)}</p>` : ''}${hud.interaction ? `<p class="wc-objective__hint"><strong>${esc(hud.status === 'ready' ? copy.now : hud.status === 'blocked' ? copy.next : copy.at_marker)}</strong><span>${hud.interactionInputHint === 'commandWheel' ? `${esc(copy.hold)} ` : ''}${interactKey ? `<kbd>${esc(interactKey)}</kbd> ` : ''}${esc(hud.interaction)}</span></p>` : ''}${destination ? `<div class="wc-objective__dest" aria-label="Objective destination">${arrow}<p data-dest-text>${esc(destinationText(destination))}</p></div>` : ''}`;
+    const detail = `${hud.guidance ? `<p class="wc-objective__guidance">${esc(hud.guidance)}</p>` : ''}<p class="wc-objective__chapter">${esc(hud.chapterLabel)}</p>`;
     return `<aside class="wc-panel wc-objective wc-objective--chapter wc-hud__group" data-hud-group="objective" data-expanded="${expanded}" data-guidance-status="${hud.status ?? 'approach'}" aria-label="Current objective">
       <div class="wc-objective__head"><p class="wc-objective__quest"><strong>${esc(hud.questTitle)}</strong>${hud.step ? `<span>Step ${hud.step.index} of ${hud.step.total}</span>` : ''}</p>${options.toggle ?? ''}</div>
-      ${summary}<div class="wc-hud__body" id="wc-hud-objective-body"${expanded ? '' : ' hidden'}>${detail}</div>
+      ${summary}${next}<div class="wc-hud__body" id="wc-hud-objective-body"${expanded ? '' : ' hidden'}>${detail}</div>
     </aside>`;
 }
 
